@@ -120,3 +120,9 @@ describe('monster aggro tiers task4', () => {
     expect(aggroRangeFor('LOW', 'fog')).toBeCloseTo(5.6, 0);
   });
 });
+
+describe('shield regen rule task5', () => {
+  it('full absorb leaves hp untouched', () => {
+    expect(absorbShieldFirst(50, 80, 30)).toEqual({ shield: 20, hp: 80 });
+  });
+});

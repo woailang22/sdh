@@ -1101,6 +1101,7 @@ export class IsometricEngine {
     this.player.isDashing = true;
     this.player.dashTimer = 0.22;
     this.player.stamina -= 30;
+    this.invulnUntil = this.gameTime + 0.22;
     for (let i = 0; i < 6; i++) {
       this.particles.push({
         x: this.player.x + (Math.random() - 0.5) * 0.4,
@@ -1665,6 +1666,15 @@ export class IsometricEngine {
       const regenRate = this.player.satiety <= 0 ? 6 : 20;
       this.player.stamina = Math.min(this.player.maxStamina, this.player.stamina + regenRate * dt);
     }
+
+    // 护盾延迟回复：脱战5s后每秒回8点，酸雨天不回复反腐蚀
+    if (this.currentWeather === 'acid_rain') {
+      this.player.shield = Math.max(0, this.player.shield - 1.5 * dt);
+    } else if (this.gameTime >= this.shieldRegenAt && this.player.shield < this.player.maxShield) {
+      this.player.shield = Math.min(this.player.maxShield, this.player.shield + 8 * dt);
+    }
+    if (this.shake > 0) this.shake = Math.max(0, this.shake - 30 * dt);
+    if (this.hurtFlash > 0) this.hurtFlash = Math.max(0, this.hurtFlash - dt);
 
     // 饱食度：随时间流失；归零扣HP；高饱食缓慢回血
     this.gatherCooldown = Math.max(0, this.gatherCooldown - dt);
@@ -5285,6 +5295,11 @@ export class IsometricEngine {
         sunGrad.addColorStop(1, 'rgba(0, 0, 0, 0)');
         this.ctx.fillStyle = sunGrad;
         this.ctx.fillRect(0, 0, this.width, this.height);
+        // 受击红屏（combat Task 5）：明亮模式晴天路径
+        if (this.hurtFlash > 0) {
+          this.ctx.fillStyle = `rgba(239, 68, 68, ${Math.min(0.28, this.hurtFlash * 0.6)})`;
+          this.ctx.fillRect(0, 0, this.width, this.height);
+        }
         this.ctx.restore();
         return;
       }
@@ -5293,6 +5308,11 @@ export class IsometricEngine {
       this.ctx.save();
       this.ctx.fillStyle = weatherTint((this.currentWeather as string) === 'clear' ? 'clear' : 'rain');
       this.ctx.fillRect(0, 0, this.width, this.height);
+      // 受击红屏（combat Task 5）：明亮模式天气路径
+      if (this.hurtFlash > 0) {
+        this.ctx.fillStyle = `rgba(239, 68, 68, ${Math.min(0.28, this.hurtFlash * 0.6)})`;
+        this.ctx.fillRect(0, 0, this.width, this.height);
+      }
       this.ctx.restore();
       return;
     }
@@ -5350,6 +5370,16 @@ export class IsometricEngine {
     this.ctx.beginPath();
     this.ctx.arc(playerPos.x, playerPos.y - 18, 240, 0, Math.PI * 2);
     this.ctx.fill();
+
+    // 受击红屏 + 震屏平移（combat Task 5）：暗夜路径需先切回 source-over 再罩红
+    this.ctx.globalCompositeOperation = 'source-over';
+    if (this.hurtFlash > 0) {
+      this.ctx.fillStyle = `rgba(239, 68, 68, ${Math.min(0.28, this.hurtFlash * 0.6)})`;
+      this.ctx.fillRect(0, 0, this.width, this.height);
+    }
+    if (this.shake > 0) {
+      this.ctx.translate((Math.random() - 0.5) * this.shake, (Math.random() - 0.5) * this.shake);
+    }
 
     this.ctx.restore();
   }
