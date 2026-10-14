@@ -1,5 +1,6 @@
 @echo off
-echo 正在停止《坍界行者》服务器...
-powershell -NoProfile -Command "Get-CimInstance Win32_Process -Filter \"Name='node.exe'\" | Where-Object { $_.CommandLine -like '*server.ts*' } | ForEach-Object { Stop-Process -Id $_.ProcessId -Force; echo 已停止进程 $_.ProcessId }"
-echo 完成
+chcp 65001 >nul
+echo Stopping game server (node server.ts)...
+powershell -NoProfile -Command "$p = Get-CimInstance Win32_Process -Filter \"Name='node.exe'\" | Where-Object { $_.CommandLine -like '*server.ts*' }; if (-not $p) { echo 'No game server running.' } else { $p | ForEach-Object { $id = $_.ProcessId; try { Stop-Process -Id $id -Force -ErrorAction Stop; echo (\"Stopped PID \" + $id) } catch { echo (\"Already exited PID \" + $id) } } }"
+echo Done
 pause

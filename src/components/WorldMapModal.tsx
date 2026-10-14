@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { X, MapPin, Skull, Eye, EyeOff, Navigation } from 'lucide-react';
 import { MapZoneId, MonsterEntity, RegionId } from '../types/game';
 import { REGIONS, SUBMAPS, MAP_IDS, mapsOfRegion, regionOf, displayName } from '../game/maps';
+import { themeAccent as themeAccentVisual } from '../game/visualTheme';
 import { soundManager } from '../audio/soundManager';
 
 interface WorldMapModalProps {
@@ -24,10 +25,10 @@ const RISK_STYLE: Record<string, string> = {
 };
 
 const THEME_COLOR: Record<string, string> = {
-  camp: '#34d399', plaza: '#94a3b8', field: '#4ade80',
-  urban: '#f59e0b', ruins: '#a16207',
-  forest: '#16a34a', quarry: '#94a3b8',
-  lake: '#38bdf8', marsh: '#2dd4bf', rift: '#c026d3',
+  camp: themeAccentVisual('camp'), plaza: themeAccentVisual('plaza'), field: themeAccentVisual('field'),
+  urban: themeAccentVisual('urban'), ruins: themeAccentVisual('ruins'),
+  forest: themeAccentVisual('forest'), quarry: themeAccentVisual('quarry'),
+  lake: themeAccentVisual('lake'), marsh: themeAccentVisual('marsh'), rift: themeAccentVisual('rift'),
 };
 
 const TYPE_ICON: Record<string, string> = {
@@ -172,6 +173,13 @@ export const WorldMapModal: React.FC<WorldMapModalProps> = ({
                     <span className={`text-[10px] font-mono font-bold px-1.5 py-0.5 rounded border shrink-0 ${RISK_STYLE[m.risk]}`}>
                       {m.risk}
                     </span>
+                  </div>
+
+                  {/* Theme thumbnail strip */}
+                  <div className="mt-2 h-8 rounded-lg border border-slate-800 overflow-hidden flex" title={m.theme}>
+                    <div className="flex-1" style={{ background: `linear-gradient(135deg, ${THEME_COLOR[m.theme]}55, transparent)` }} />
+                    <div className="flex-1 opacity-60" style={{ background: THEME_COLOR[m.theme] ?? '#64748b' }} />
+                    <div className="flex-1" style={{ background: `linear-gradient(225deg, ${THEME_COLOR[m.theme]}88, transparent)` }} />
                   </div>
 
                   {/* POI chips */}

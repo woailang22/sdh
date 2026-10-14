@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { MonsterEntity } from '../types/game';
 import { soundManager } from '../audio/soundManager';
 import { Map } from 'lucide-react';
+import { radarDotColor } from '../game/visualTheme';
 
 interface RadarMinimapProps {
   playerPos: { x: number; y: number; angle: number };
@@ -108,7 +109,7 @@ export const RadarMinimap: React.FC<RadarMinimapProps> = ({
         const dx = (b.x - playerPos.x) * scale;
         const dy = (b.y - playerPos.y) * scale;
         if (Math.hypot(dx, dy) < radius - 6) {
-          ctx.fillStyle = '#38bdf8';
+          ctx.fillStyle = radarDotColor('building');
           ctx.fillRect(cx + dx - 2, cy + dy - 2, 4, 4);
         }
       });
@@ -118,7 +119,7 @@ export const RadarMinimap: React.FC<RadarMinimapProps> = ({
         const dx = (item.x - playerPos.x) * scale;
         const dy = (item.y - playerPos.y) * scale;
         if (Math.hypot(dx, dy) < radius - 6) {
-          ctx.fillStyle = '#f59e0b';
+          ctx.fillStyle = radarDotColor('interactable');
           ctx.beginPath();
           ctx.moveTo(cx + dx, cy + dy - 3);
           ctx.lineTo(cx + dx + 3, cy + dy);
@@ -134,7 +135,7 @@ export const RadarMinimap: React.FC<RadarMinimapProps> = ({
         const dx = (tm.x - playerPos.x) * scale;
         const dy = (tm.y - playerPos.y) * scale;
         if (Math.hypot(dx, dy) < radius - 6) {
-          ctx.fillStyle = '#10b981';
+          ctx.fillStyle = radarDotColor('teammate');
           ctx.beginPath();
           ctx.arc(cx + dx, cy + dy, 3.5, 0, Math.PI * 2);
           ctx.fill();
@@ -147,12 +148,26 @@ export const RadarMinimap: React.FC<RadarMinimapProps> = ({
         const dx = (m.x - playerPos.x) * scale;
         const dy = (m.y - playerPos.y) * scale;
         if (Math.hypot(dx, dy) < radius - 6) {
-          ctx.fillStyle = '#ef4444';
+          ctx.fillStyle = radarDotColor('monster');
           ctx.beginPath();
           ctx.arc(cx + dx, cy + dy, 3.5, 0, Math.PI * 2);
           ctx.fill();
         }
       });
+
+      // North tick (N always up, world -Y)
+      ctx.fillStyle = '#e2e8f0';
+      ctx.font = 'bold 9px monospace';
+      ctx.textAlign = 'center';
+      ctx.fillText('N', cx, cy - radius + 10);
+      // Range fade ring
+      const fade = ctx.createRadialGradient(cx, cy, radius * 0.55, cx, cy, radius);
+      fade.addColorStop(0, 'rgba(0,0,0,0)');
+      fade.addColorStop(1, 'rgba(0,0,0,0.35)');
+      ctx.fillStyle = fade;
+      ctx.beginPath();
+      ctx.arc(cx, cy, radius, 0, Math.PI * 2);
+      ctx.fill();
 
       // 5. Center Player Arrow (Cyan)
       ctx.save();
