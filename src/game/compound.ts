@@ -96,6 +96,7 @@ export function isEnclosed(buildings: BuildingEntity[]): boolean {
   const x1 = Math.max(...xs);
   const y0 = Math.min(...ys);
   const y1 = Math.max(...ys);
+  if (x1 <= x0 || y1 <= y0) return false;
   for (let x = x0; x <= x1; x++) {
     if (!pts.has(`${x},${y0}`)) return false;
     if (!pts.has(`${x},${y1}`)) return false;

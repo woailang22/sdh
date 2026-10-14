@@ -40,4 +40,8 @@ describe('compound walls', () => {
     const f = compoundFoundation(6, 6, 4, 3, 'foundation');
     expect(f).toEqual({ x: 6, y: 6, w: 6, h: 5, type: 'foundation' });
   });
+  it('degenerate inputs are not enclosed', () => {
+    expect(isEnclosed([])).toBe(false);
+    expect(isEnclosed([{ id: 'x', type: 'stone_wall', name: 's', x: 0, y: 0, hp: 1, maxHp: 1, level: 1, ownerName: 't' } as any])).toBe(false);
+  });
 });
