@@ -32,6 +32,7 @@ const M = (
 ): MonsterEntity => ({
   id, name, x, y, hp, maxHp: hp, speed, damage,
   state: 'roam', animTime: Math.random(), attackCooldown: 0,
+  spawnX: x, spawnY: y, windup: 0,
 });
 
 const woodLoot = (n: number, name = '优质原木') => [{ itemId: 'wood', name, count: n }];

@@ -695,7 +695,7 @@ const M = (
                 this.player.hp = Math.max(0, res.hp);
                 this.shake = Math.min(10, this.shake + 4);
                 this.hurtFlash = 0.35;
-                this.player.shieldRegenAt = this.gameTime + 5;
+                this.shieldRegenAt = this.gameTime + 5;
                 this.callbacks.onPlayerDamage(dmg);
                 this.lastHurtAt = this.gameTime;
                 this.addTextParticle(this.player.x, this.player.y - 0.8, `-${dmg}`, '#ef4444');

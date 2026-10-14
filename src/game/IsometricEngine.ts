@@ -130,6 +130,10 @@ export class IsometricEngine {
   public toolKind: 'none' | 'axe' | 'pick' | 'rod' = 'none'; // 星露谷式工具分化：斧砍树/镐采矿/竿钓鱼
   public meleeDamage: number = 12; // 徒手12 / 持工具22
   public armorReduction: number = 0; // 防弹背心 0.15 减伤
+  public shieldRegenAt: number = 0; // 护盾延迟回复起点（受伤后+5s，Task 5 接回复逻辑）
+  public invulnUntil: number = -99; // 冲刺无敌帧结束时间点（Task 5 接 performDash）
+  public shake: number = 0; // 受击震屏强度，每帧衰减（Task 5 接渲染）
+  public hurtFlash: number = 0; // 受击红屏剩余秒数（Task 5 接渲染）
   // 采集技能产量加成（App 按伐木/采矿/垂钓等级同步）
   public skillWood: number = 1;
   public skillStone: number = 1;
@@ -1918,15 +1922,50 @@ export class IsometricEngine {
     this.monsters.forEach((m) => {
       if (m.state === 'dead') return;
       m.animTime += dt;
+      if (m.windup === undefined) m.windup = 0;
+      if (m.spawnX === undefined) m.spawnX = m.x;
+      if (m.spawnY === undefined) m.spawnY = m.y;
+
+      // 回拉：追出出生点 14 格则脱战回血回家
+      const homeDist = Math.hypot(m.x - m.spawnX, m.y - m.spawnY);
+      if (homeDist > 14) {
+        m.state = 'roam';
+        m.windup = 0;
+        m.hp = Math.min(m.maxHp, m.hp + m.maxHp * 0.1 * dt * 10);
+        m.x += (m.spawnX - m.x) * Math.min(1, 1.5 * dt);
+        m.y += (m.spawnY - m.y) * Math.min(1, 1.5 * dt);
+        return;
+      }
 
       const dx = this.player.x - m.x;
       const dy = this.player.y - m.y;
       const dist = Math.hypot(dx, dy);
+      const risk = this.currentMapId.startsWith('marsh_rift') ? 'EXTREME'
+        : this.currentMapId.startsWith('town_ruins') || this.currentMapId.startsWith('mtn_deep') || this.currentMapId.startsWith('marsh_bog') ? 'HIGH'
+        : this.currentMapId.startsWith('camp') ? 'SAFE' : 'LOW';
+      const aggro = aggroRangeFor(risk, this.currentWeather);
 
-      if (dist < 8.0) {
+      if (dist < aggro && aggro > 0) {
+        // 狂暴：血量<30% 移速+30% 伤害+25%
+        const enraged = isEnraged(m.hp, m.maxHp);
+        const spd = m.speed * (enraged ? 1.3 : 1);
         m.state = 'chase';
-        m.x += (dx / dist) * m.speed * dt;
-        m.y += (dy / dist) * m.speed * dt;
+        if (dist > 0.001) {
+          m.x += (dx / dist) * spd * dt;
+          m.y += (dy / dist) * spd * dt;
+        }
+
+        // 分离：同类挤在一起时互相推开，防叠罗汉
+        for (const o of this.monsters) {
+          if (o === m || o.state === 'dead') continue;
+          const ox = m.x - o.x;
+          const oy = m.y - o.y;
+          const od = Math.hypot(ox, oy);
+          if (od < 0.9 && od > 0.001) {
+            m.x += (ox / od) * 1.2 * dt;
+            m.y += (oy / od) * 1.2 * dt;
+          }
+        }
 
         this.buildings.forEach((b) => {
           if ((b.type === 'iron_wall' || (b.type === 'door' && !b.isOpen)) && Math.hypot(b.x - m.x, b.y - m.y) < 1.1) {
@@ -1938,24 +1977,43 @@ export class IsometricEngine {
         });
 
         if (dist < 1.4) {
-          m.attackCooldown -= dt;
-          if (m.attackCooldown <= 0) {
-            m.attackCooldown = 1.2;
-            // 护甲减伤（防弹背心 -15%）
-            const dmg = Math.max(1, Math.floor(m.damage * (1 - this.armorReduction)));
-            soundManager.playHit(false);
-            if (this.player.shield > 0) {
-              this.player.shield = Math.max(0, this.player.shield - dmg);
-            } else {
-              this.player.hp = Math.max(0, this.player.hp - dmg);
+          // 前摇：首次进入先预警 0.35s，期间只闪红不扣血
+          if (m.attackCooldown <= 0 && (m.windup ?? 0) <= 0) {
+            m.windup = 0.35;
+            m.state = 'attack';
+            this.addTextParticle(m.x, m.y - 1.4, '!', '#f87171');
+          } else if ((m.windup ?? 0) > 0) {
+            m.windup = Math.max(0, (m.windup ?? 0) - dt);
+            if (m.windup === 0) {
+              m.attackCooldown = 1.2;
+              const raw = m.damage * (enraged ? 1.25 : 1);
+              const dmg = calcMonsterHit(raw, this.armorReduction);
+              const res = absorbShieldFirst(this.player.shield, this.player.hp, dmg);
+              // 冲刺无敌帧：invulnUntil 内免伤（Task 5 接 performDash 写入）
+              if (this.gameTime < this.invulnUntil) {
+                this.addTextParticle(this.player.x, this.player.y - 0.8, '闪避!', '#38bdf8');
+              } else {
+                this.player.shield = Math.max(0, res.shield);
+                this.player.hp = Math.max(0, res.hp);
+                this.shake = Math.min(10, this.shake + 4);
+                this.hurtFlash = 0.35;
+                this.shieldRegenAt = this.gameTime + 5;
+                this.callbacks.onPlayerDamage(dmg);
+                this.lastHurtAt = this.gameTime;
+                this.addTextParticle(this.player.x, this.player.y - 0.8, `-${dmg}`, '#ef4444');
+                soundManager.playHit(false);
+              }
             }
-            this.callbacks.onPlayerDamage(dmg);
-            this.lastHurtAt = this.gameTime;
-            this.addTextParticle(this.player.x, this.player.y - 0.8, `-${dmg}`, '#ef4444');
+          } else {
+            m.attackCooldown -= dt;
           }
+        } else {
+          m.windup = 0;
+          m.attackCooldown -= dt;
         }
       } else {
         m.state = 'roam';
+        m.windup = 0;
         m.x += Math.cos(m.animTime * 0.8) * 0.4 * dt;
         m.y += Math.sin(m.animTime * 0.8) * 0.4 * dt;
       }

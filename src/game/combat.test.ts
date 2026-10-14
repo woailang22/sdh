@@ -112,3 +112,11 @@ describe('melee arc rule task3', () => {
     expect(MELEE.knockback).toBeGreaterThanOrEqual(1);
   });
 });
+
+describe('monster aggro tiers task4', () => {
+  it('low aggro 8, extreme 12, fog shrinks', () => {
+    expect(aggroRangeFor('LOW', 'clear')).toBe(8);
+    expect(aggroRangeFor('EXTREME', 'clear')).toBe(12);
+    expect(aggroRangeFor('LOW', 'fog')).toBeCloseTo(5.6, 0);
+  });
+});
