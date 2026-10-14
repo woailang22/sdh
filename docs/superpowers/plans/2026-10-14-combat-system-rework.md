@@ -472,7 +472,7 @@ Expected: 首次 PASS（常量已在 Task 1 锁定）——本步作为回归锁
                 size: 5,
                 type: 'spark',
               });
-              if (target.hp <= 0 && target.state !== 'dead') {
+              if (target.hp <= 0) {
                 target.state = 'dead';
                 this.addTextParticle(target.x, target.y - 1.5, '已击杀', '#ec4899');
                 this.callbacks.onMonsterKilled(target.name);
