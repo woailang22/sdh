@@ -19,7 +19,7 @@ export interface GameCallbacks {
   onLootFound: (item: string, count: number, resourceType?: 'wood' | 'stone' | 'scrap' | 'parts' | 'food' | 'ammo' | 'c4' | 'medical' | 'weapon' | 'armor' | 'credits' | 'shard' | 'blueprint' | 'pack') => void;
   // 三角洲式开箱：读条完成后打开搜刮面板，由玩家挑选（不再自动全拿）
   onOpenLootPanel?: (target: { id: string; name: string; items: { itemId: string; name: string; count: number }[] }) => void;
-  onMonsterKilled: (monsterName: string) => void;
+  onMonsterKilled: (monsterName: string, monsterMaxHp?: number) => void;
   onPlayerDamage: (damage: number) => void;
   onUpdateSquadStatus: (members: SquadMember[]) => void;
   onBuildingPlaced: (type: string, costWood: number, costStone: number, costScrap: number, costParts: number) => boolean;
@@ -1806,7 +1806,7 @@ export class IsometricEngine {
               if (target.hp <= 0) {
                 target.state = 'dead';
                 this.addTextParticle(target.x, target.y - 1.5, '已击杀', '#ec4899');
-                this.callbacks.onMonsterKilled(target.name);
+                this.callbacks.onMonsterKilled(target.name, target.maxHp);
                 const mx = target.spawnX ?? 3.0;
                 const my = target.spawnY ?? -4.0;
                 const dead = target;
@@ -1875,7 +1875,7 @@ export class IsometricEngine {
 
             if (target.hp <= 0) {
               target.state = 'dead';
-              this.callbacks.onMonsterKilled(target.name);
+              this.callbacks.onMonsterKilled(target.name, target.maxHp);
             }
           }
         }
@@ -2048,7 +2048,7 @@ export class IsometricEngine {
         this.addTextParticle(nearbyMonster.x, nearbyMonster.y - 1.2, '-35 破拆重锤', '#f59e0b');
         if (nearbyMonster.hp <= 0) {
           nearbyMonster.state = 'dead';
-          this.callbacks.onMonsterKilled(nearbyMonster.name);
+          this.callbacks.onMonsterKilled(nearbyMonster.name, nearbyMonster.maxHp);
         }
       }
     }
@@ -2081,7 +2081,7 @@ export class IsometricEngine {
         });
         if (monsterTarget.hp <= 0) {
           monsterTarget.state = 'dead';
-          this.callbacks.onMonsterKilled(monsterTarget.name);
+          this.callbacks.onMonsterKilled(monsterTarget.name, monsterTarget.maxHp);
         }
       }
       // Periodic tactical nano-shield maintenance aura
@@ -2108,7 +2108,7 @@ export class IsometricEngine {
           this.addTextParticle(target.x, target.y - 1.0, '-20 伴飞激光', '#38bdf8');
           if (target.hp <= 0) {
             target.state = 'dead';
-            this.callbacks.onMonsterKilled(target.name);
+            this.callbacks.onMonsterKilled(target.name, target.maxHp);
           }
         }
       } else {
@@ -2285,7 +2285,7 @@ export class IsometricEngine {
         if (m.hp <= 0) {
           m.state = 'dead';
           this.addTextParticle(m.x, m.y - 1.5, '已击杀', '#ec4899');
-          this.callbacks.onMonsterKilled(m.name);
+          this.callbacks.onMonsterKilled(m.name, m.maxHp);
           const mx = m.spawnX ?? 3.0;
           const my = m.spawnY ?? -4.0;
           const dead = m;

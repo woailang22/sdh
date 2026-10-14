@@ -126,3 +126,9 @@ describe('shield regen rule task5', () => {
     expect(absorbShieldFirst(50, 80, 30)).toEqual({ shield: 20, hp: 80 });
   });
 });
+
+describe('kill reward curve task6', () => {
+  it('450hp brute gives xp 90 credits 45 shards 1', () => {
+    expect(killReward(450)).toEqual({ xp: 90, credits: 45, shards: 1 });
+  });
+});

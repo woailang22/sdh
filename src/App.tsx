@@ -25,6 +25,7 @@ import { InventoryModal } from './components/InventoryModal';
 import { MapEditorModal } from './components/MapEditorModal';
 import { LootPanel, LootEntry } from './components/LootPanel';
 import { lootResourceOf, RARITY, skillLevel, skillYieldMult, LootResource } from './game/maps';
+import { killReward } from './game/combat';
 import { CraftOrder } from './components/WorkbenchModal';
 import { RaidModal } from './components/RaidModal';
 import { OnlinePlayersModal } from './components/OnlinePlayersModal';
@@ -811,9 +812,10 @@ export default function App() {
           items: target.items.map((i) => ({ ...i, taken: false })),
         });
       },
-      onMonsterKilled: (monsterName: string) => {
+      onMonsterKilled: (monsterName: string, monsterMaxHp?: number) => {
         setKillCount((prev) => prev + 1);
-        const xpGained = 60;
+        const reward = killReward(monsterMaxHp ?? 300);
+        const xpGained = reward.xp;
 
         // Level-up logic（求生数值：升级+10生命/+5护盾）
         setPlayerStats((prev) => {
@@ -832,16 +834,27 @@ export default function App() {
               hp: prev.maxHp + 10,
               maxShield: prev.maxShield + 5,
               shield: prev.maxShield + 5,
-              credits: prev.credits + 100,
+              credits: prev.credits + reward.credits,
             };
           }
           return {
             ...prev,
             xp: nextXp,
-            credits: prev.credits + 20,
-            shards: prev.shards + 1,
+            credits: prev.credits + reward.credits,
+            shards: prev.shards + reward.shards,
           };
         });
+        // 击杀掉落：按强度概率掉弹药/医疗（进背包，满则转文字提示）
+        if (engineRef.current) {
+          const eng = engineRef.current;
+          const roll = Math.random();
+          if ((monsterMaxHp ?? 0) >= 1000 || roll < 0.25) {
+            eng.player.reserveAmmo += 12;
+            eng.addTextParticle(eng.player.x, eng.player.y - 1.8, '+12 步枪弹药（按R装填）', '#38bdf8');
+          } else if (roll < 0.4) {
+            addItemToHotbar({ id: 'med_亚麻绷带', name: '亚麻绷带', category: 'medical', icon: '🩹', count: 1, maxCount: 10, desc: '点击使用，恢复30点生命。', rarity: 2 });
+          }
+        }
       },
       onPlayerDamage: (dmg: number) => {},
       onUpdateSquadStatus: (_members: SquadMember[]) => {
