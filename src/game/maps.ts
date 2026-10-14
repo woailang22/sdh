@@ -191,12 +191,13 @@ export const SUBMAPS: Record<string, SubMapDef> = {
       M('tg2', '辐射畸变狂暴猎犬', -8, -6, 320, 2.7, 22),
     ],
     buildings: [
-      // 加油站办公室残 shell：合金墙 + 电控门 + 物资储物箱
-      { id: 'gas_office_w1', type: 'iron_wall', name: '加油站办公室残墙', x: -8, y: -12, hp: 850, maxHp: 850, level: 1, ownerName: '废土遗迹' },
-      { id: 'gas_office_w2', type: 'iron_wall', name: '加油站办公室残墙', x: -4, y: -12, hp: 850, maxHp: 850, level: 1, ownerName: '废土遗迹' },
-      { id: 'gas_office_d', type: 'door', name: '办公室电控门', x: -6, y: -12, hp: 650, maxHp: 650, level: 1, isOpen: false, isLocked: false, ownerName: '废土遗迹' },
+      ...buildCompoundWalls({
+        idPrefix: 'gas_office', cx: -6, cy: -13, w: 4, h: 2,
+        wallType: 'iron_wall', wallName: '加油站办公室残墙', ownerName: '废土遗迹',
+        doorSide: 'S', doorType: 'door', doorName: '办公室电控门',
+      }),
       {
-        id: 'gas_office_box', type: 'storage_box', name: '办公室保险储物箱', x: -6, y: -14, hp: 400, maxHp: 400, level: 1, ownerName: '废土遗迹',
+        id: 'gas_office_box', type: 'storage_box', name: '办公室保险储物箱', x: -6, y: -13, hp: 400, maxHp: 400, level: 1, ownerName: '废土遗迹',
         storedLoot: [
           { name: '战术能量合剂', count: 6, icon: '🥩' },
           { name: '精炼优质废铁', count: 15, icon: '⚙️' },
@@ -205,8 +206,8 @@ export const SUBMAPS: Record<string, SubMapDef> = {
       },
     ],
     deco: [
-      { x: 4, y: -13, w: 12, h: 8, type: 'foundation' },
-      { x: -6, y: -13, w: 8, h: 6, type: 'foundation' },
+      { x: -6, y: -13, w: 6, h: 4, type: 'foundation' },
+      { x: 8, y: -13, w: 10, h: 7, type: 'foundation' },
       { x: -14, y: 6, w: 7, h: 5, type: 'crater' },
     ],
   },
@@ -219,7 +220,7 @@ export const SUBMAPS: Record<string, SubMapDef> = {
       { x: 0, y: 30, targetMap: 'town_ruins', targetX: 0, targetY: -30, name: '南穿居民区', icon: '🧱', desc: '前往废墟居民区' },
     ],
     interactables: [
-      I('st_hardware', '五金工具店', 'shelves', -10, -8, '[E/F 搜刮五金店]', [
+      I('st_hardware', '五金工具店', 'shelves', -10, -10, '[E/F 搜刮五金店]', [
         { itemId: 'part', name: '五金紧固件', count: 6 },
         { itemId: 'scrap', name: '货架角钢', count: 25 },
       ], 1.6),
@@ -251,18 +252,24 @@ export const SUBMAPS: Record<string, SubMapDef> = {
       M('st3', '辐射畸变狂暴猎犬', 0, 14, 320, 2.7, 22),
     ],
     buildings: [
-      // 五金店门面：条石墙 + 门洞（店内 loot 点即房间物资）
-      { id: 'st_hw_w1', type: 'stone_wall', name: '五金店残墙', x: -12, y: -6, hp: 600, maxHp: 600, level: 1, ownerName: '废土遗迹', facing: 'ew' },
-      { id: 'st_hw_w2', type: 'stone_wall', name: '五金店残墙', x: -8, y: -6, hp: 600, maxHp: 600, level: 1, ownerName: '废土遗迹', facing: 'ew' },
-      { id: 'st_hw_d', type: 'door', name: '五金店卷帘门', x: -10, y: -6, hp: 650, maxHp: 650, level: 1, isOpen: true, isLocked: false, ownerName: '废土遗迹', facing: 'ew' },
-      // 餐馆门面：木墙 + 门洞
-      { id: 'st_dn_w1', type: 'wood_wall', name: '餐馆木板墙', x: 10, y: 8, hp: 350, maxHp: 350, level: 1, ownerName: '废土遗迹', facing: 'ew' },
-      { id: 'st_dn_w2', type: 'wood_wall', name: '餐馆木板墙', x: 14, y: 8, hp: 350, maxHp: 350, level: 1, ownerName: '废土遗迹', facing: 'ew' },
-      { id: 'st_dn_d', type: 'door', name: '餐馆后门', x: 12, y: 8, hp: 650, maxHp: 650, level: 1, isOpen: true, isLocked: false, ownerName: '废土遗迹', facing: 'ew' },
+      ...buildCompoundWalls({
+        idPrefix: 'st_hw', cx: -10, cy: -8, w: 4, h: 2,
+        wallType: 'stone_wall', wallName: '五金店残墙', ownerName: '废土遗迹',
+        doorSide: 'S', doorType: 'door', doorName: '五金店卷帘门',
+        doorExtra: { isOpen: true, isLocked: false },
+      }),
+      { id: 'st_hw_box', type: 'storage_box', name: '五金店里间零件箱', x: -10, y: -8, hp: 400, maxHp: 400, level: 1, ownerName: '废土遗迹' },
+      ...buildCompoundWalls({
+        idPrefix: 'st_dn', cx: 12, cy: 6, w: 4, h: 2,
+        wallType: 'wood_wall', wallName: '餐馆木板墙', ownerName: '废土遗迹',
+        doorSide: 'S', doorType: 'door', doorName: '餐馆后门',
+        doorExtra: { isOpen: true, isLocked: false },
+      }),
+      { id: 'st_dn_box', type: 'storage_box', name: '餐馆里间食储箱', x: 12, y: 6, hp: 400, maxHp: 400, level: 1, ownerName: '废土遗迹' },
     ],
     deco: [
-      { x: -10, y: -8, w: 10, h: 7, type: 'foundation' },
-      { x: 12, y: 6, w: 9, h: 7, type: 'foundation' },
+      { x: -10, y: -8, w: 6, h: 4, type: 'foundation' },
+      { x: 12, y: 6, w: 6, h: 4, type: 'foundation' },
       { x: 0, y: 18, w: 8, h: 6, type: 'rubble' },
     ],
   },
@@ -297,11 +304,12 @@ export const SUBMAPS: Record<string, SubMapDef> = {
       M('ru3', '变异公路漫游暴徒', 6, 14, 450, 2.0, 26),
     ],
     buildings: [
-      // 塌楼断墙（半血，冒烟警示）+ 居民物资箱
-      { id: 'ru_cw_1', type: 'stone_wall', name: '塌楼断墙', x: -14, y: -10, hp: 250, maxHp: 600, level: 1, ownerName: '废土遗迹' },
-      { id: 'ru_cw_2', type: 'stone_wall', name: '塌楼断墙', x: -12, y: -10, hp: 250, maxHp: 600, level: 1, ownerName: '废土遗迹' },
-      { id: 'ru_cw_3', type: 'stone_wall', name: '塌楼断墙', x: 6, y: 8, hp: 200, maxHp: 600, level: 1, ownerName: '废土遗迹' },
-      { id: 'ru_cw_4', type: 'stone_wall', name: '塌楼断墙', x: 8, y: 8, hp: 200, maxHp: 600, level: 1, ownerName: '废土遗迹' },
+      // 塌楼断墙：故意残缺 U 形（北+东西，无南，半血讲故事，不判闭合）
+      { id: 'ru_cw_1', type: 'stone_wall', name: '塌楼断墙', x: -15, y: -15, hp: 250, maxHp: 600, level: 1, ownerName: '废土遗迹', facing: 'ew' },
+      { id: 'ru_cw_2', type: 'stone_wall', name: '塌楼断墙', x: -14, y: -15, hp: 250, maxHp: 600, level: 1, ownerName: '废土遗迹', facing: 'ew' },
+      { id: 'ru_cw_3', type: 'stone_wall', name: '塌楼断墙', x: -13, y: -15, hp: 250, maxHp: 600, level: 1, ownerName: '废土遗迹', facing: 'ew' },
+      { id: 'ru_cw_4', type: 'stone_wall', name: '塌楼断墙', x: -15, y: -14, hp: 250, maxHp: 600, level: 1, ownerName: '废土遗迹', facing: 'ns' },
+      { id: 'ru_cw_5', type: 'stone_wall', name: '塌楼断墙', x: -13, y: -14, hp: 200, maxHp: 600, level: 1, ownerName: '废土遗迹', facing: 'ns' },
       {
         id: 'ru_cache_box', type: 'storage_box', name: '居民逃难物资箱', x: 0, y: 18, hp: 400, maxHp: 400, level: 1, ownerName: '废土遗迹',
         storedLoot: [
@@ -310,24 +318,26 @@ export const SUBMAPS: Record<string, SubMapDef> = {
           { name: '汽车废铁', count: 12, icon: '⚙️' },
         ],
       },
-      {
-        id: 'wild_safe_gate_alpha', type: 'safe_door', name: '裂隙铁血掠夺者 · 重装防爆安全门 [4200HP 可突袭]',
-        x: 22.0, y: -6.0, hp: 4200, maxHp: 6000, level: 2, isOpen: false, isLocked: true,
-        ownerId: 'npc_raider_boss', ownerName: '裂隙铁血掠夺者联盟', mapId: 'town_ruins', material: 'iron',
-        storedLoot: [
-          { name: '坍界暗物质晶核', count: 20, icon: '💎' },
-          { name: '军用钛合金复合装甲板', count: 10, icon: '🛡️' },
-          { name: '破界级等离子步枪蓝图', count: 1, icon: '📜' },
-          { name: '废土高级信用点', count: 3200, icon: '💰' },
-        ],
-      },
-      { id: 'rebel_wall_1', type: 'iron_wall', name: '重装合金墙', x: 20.0, y: -6.0, hp: 850, maxHp: 850, level: 1, ownerName: '掠夺者前哨' },
-      { id: 'rebel_wall_2', type: 'iron_wall', name: '重装合金墙', x: 24.0, y: -6.0, hp: 850, maxHp: 850, level: 1, ownerName: '掠夺者前哨' },
-      { id: 'rebel_chest', type: 'storage_box', name: '掠夺者军火大储物箱', x: 22.0, y: -8.0, hp: 500, maxHp: 500, level: 1, ownerName: '掠夺者前哨' },
+      ...buildCompoundWalls({
+        idPrefix: 'rebel_post', cx: 22, cy: -6, w: 4, h: 2,
+        wallType: 'iron_wall', wallName: '重装合金墙', ownerName: '掠夺者前哨',
+        doorSide: 'S', doorType: 'safe_door', doorName: '裂隙铁血掠夺者 · 重装防爆安全门 [4200HP 可突袭]',
+        doorExtra: {
+          hp: 4200, maxHp: 6000, level: 2, isOpen: false, isLocked: true,
+          ownerId: 'npc_raider_boss', ownerName: '裂隙铁血掠夺者联盟', mapId: 'town_ruins', material: 'iron',
+          storedLoot: [
+            { name: '坍界暗物质晶核', count: 20, icon: '💎' },
+            { name: '军用钛合金复合装甲板', count: 10, icon: '🛡️' },
+            { name: '破界级等离子步枪蓝图', count: 1, icon: '📜' },
+            { name: '废土高级信用点', count: 3200, icon: '💰' },
+          ],
+        },
+      }),
+      { id: 'rebel_chest', type: 'storage_box', name: '掠夺者军火大储物箱', x: 22, y: -6, hp: 500, maxHp: 500, level: 1, ownerName: '掠夺者前哨' },
     ],
     deco: [
-      { x: -14, y: -14, w: 11, h: 8, type: 'foundation' },
-      { x: 8, y: 10, w: 10, h: 8, type: 'foundation' },
+      { x: -14, y: -14, w: 6, h: 5, type: 'foundation' },
+      { x: 22, y: -6, w: 6, h: 4, type: 'foundation' },
       { x: 0, y: 0, w: 9, h: 7, type: 'crater' },
       { x: -4, y: 18, w: 7, h: 5, type: 'rubble' },
     ],
