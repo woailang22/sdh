@@ -1862,6 +1862,16 @@ export class IsometricEngine {
           if (victim.hp <= 0) {
             victim.state = 'dead';
             this.callbacks.onMonsterKilled(victim.name, victim.maxHp);
+            const mx = victim.spawnX ?? 3.0;
+            const my = victim.spawnY ?? -4.0;
+            const dead = victim;
+            setTimeout(() => {
+              dead.hp = dead.maxHp;
+              dead.state = 'roam';
+              dead.windup = 0;
+              dead.x = mx + (Math.random() - 0.5) * 6;
+              dead.y = my + (Math.random() - 0.5) * 4;
+            }, 12000);
           }
         }
       }
@@ -2392,6 +2402,11 @@ export class IsometricEngine {
   // --- RENDER ENGINE ---
   private render() {
     this.ctx.clearRect(0, 0, this.width, this.height);
+    // 受击震屏（combat）：帧级平移，restore 在方法末尾
+    this.ctx.save();
+    if (this.shake > 0) {
+      this.ctx.translate((Math.random() - 0.5) * this.shake, (Math.random() - 0.5) * this.shake);
+    }
 
     // 1. Comprehensive Map-Specific Seamless Isometric Tile Ground!
     this.renderMapGround();
@@ -2550,6 +2565,7 @@ export class IsometricEngine {
 
     // 8. Zone Transition Banner
     this.renderZoneTransitionBanner();
+    this.ctx.restore();
   }
 
   // --- SEAMLESS HIGH-FIDELITY ISOMETRIC GROUND RENDERER BY MAP ZONE ---
@@ -5393,14 +5409,12 @@ export class IsometricEngine {
     this.ctx.arc(playerPos.x, playerPos.y - 18, 240, 0, Math.PI * 2);
     this.ctx.fill();
 
-    // 受击红屏 + 震屏平移（combat Task 5）：暗夜路径需先切回 source-over 再罩红
+    // 受击红屏（combat Task 5）：暗夜路径需先切回 source-over 再罩红
+    // 注：震屏平移已移至 render() 帧级，此处不再 translate（此前为 no-op）
     this.ctx.globalCompositeOperation = 'source-over';
     if (this.hurtFlash > 0) {
       this.ctx.fillStyle = `rgba(239, 68, 68, ${Math.min(0.28, this.hurtFlash * 0.6)})`;
       this.ctx.fillRect(0, 0, this.width, this.height);
-    }
-    if (this.shake > 0) {
-      this.ctx.translate((Math.random() - 0.5) * this.shake, (Math.random() - 0.5) * this.shake);
     }
 
     this.ctx.restore();
