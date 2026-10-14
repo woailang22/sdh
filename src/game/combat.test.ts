@@ -103,3 +103,12 @@ describe('ranged falloff rounding', () => {
     expect(calcRangedDamage(124, 6.0, 12.0, false, 1.3)).toBe(93);
   });
 });
+
+describe('melee arc rule task3', () => {
+  it('arc is wider than 1 radian so side targets count', () => {
+    expect(MELEE.arc).toBeGreaterThan(1);
+  });
+  it('knockback displaces at least 1 tile', () => {
+    expect(MELEE.knockback).toBeGreaterThanOrEqual(1);
+  });
+});

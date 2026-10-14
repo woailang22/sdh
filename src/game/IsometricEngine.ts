@@ -1754,42 +1754,61 @@ export class IsometricEngine {
           }
         }
       }
-      // Melee：徒手12 / 持镐22，近距离挥击，耗4体力
+      // Melee：扇形挥击 + 击退，落空也耗体力防空挥刷怪
       if (this.player.isFiring && !this.isBuildMode && !this.hasRangedWeapon) {
         this.meleeTimer -= dt;
-        if (this.meleeTimer <= 0 && this.player.stamina >= 4) {
-          const target = this.monsters.find(
-            (m) => m.state !== 'dead' && Math.hypot(m.x - this.player.x, m.y - this.player.y) < 1.8
-          );
-          if (target) {
-            this.meleeTimer = 0.5;
-            this.player.stamina -= 4;
-            target.hp -= this.meleeDamage;
-            target.state = 'chase';
-            soundManager.playHit(false);
-            this.addTextParticle(target.x, target.y - 1.2, `-${this.meleeDamage}`, '#fdba74');
-            this.particles.push({
-              x: target.x,
-              y: target.y,
-              vx: (Math.random() - 0.5) * 2,
-              vy: (Math.random() - 0.5) * 2,
-              life: 0.25,
-              maxLife: 0.25,
-              color: '#fdba74',
-              size: 5,
-              type: 'spark',
-            });
-            if (target.hp <= 0) {
-              target.state = 'dead';
-              this.addTextParticle(target.x, target.y - 1.5, '已击杀', '#ec4899');
-              this.callbacks.onMonsterKilled(target.name);
-              setTimeout(() => {
-                target.hp = target.maxHp;
-                target.state = 'roam';
-                target.x = 3.0 + (Math.random() - 0.5) * 6;
-                target.y = -4.0 + (Math.random() - 0.5) * 4;
-              }, 12000);
+        if (this.meleeTimer <= 0 && this.player.stamina >= MELEE.stamina) {
+          const targets = this.monsters.filter((m) => {
+            if (m.state === 'dead') return false;
+            const dist = Math.hypot(m.x - this.player.x, m.y - this.player.y);
+            if (dist > MELEE.range) return false;
+            const ang = Math.atan2(m.y - this.player.y, m.x - this.player.x);
+            let diff = Math.abs(this.player.angle - ang);
+            if (diff > Math.PI) diff = Math.PI * 2 - diff;
+            return diff < MELEE.arc;
+          });
+          if (targets.length > 0) {
+            this.meleeTimer = MELEE.cooldown;
+            this.player.stamina -= MELEE.stamina;
+            for (const target of targets.slice(0, 3)) {
+              target.hp -= this.meleeDamage;
+              target.state = 'chase';
+              const d = Math.max(0.001, Math.hypot(target.x - this.player.x, target.y - this.player.y));
+              target.x += ((target.x - this.player.x) / d) * MELEE.knockback;
+              target.y += ((target.y - this.player.y) / d) * MELEE.knockback;
+              soundManager.playHit(false);
+              this.addTextParticle(target.x, target.y - 1.2, `-${this.meleeDamage}`, '#fdba74');
+              this.particles.push({
+                x: target.x,
+                y: target.y,
+                vx: (Math.random() - 0.5) * 2,
+                vy: (Math.random() - 0.5) * 2,
+                life: 0.25,
+                maxLife: 0.25,
+                color: '#fdba74',
+                size: 5,
+                type: 'spark',
+              });
+              if (target.hp <= 0) {
+                target.state = 'dead';
+                this.addTextParticle(target.x, target.y - 1.5, '已击杀', '#ec4899');
+                this.callbacks.onMonsterKilled(target.name);
+                const mx = target.spawnX ?? 3.0;
+                const my = target.spawnY ?? -4.0;
+                const dead = target;
+                setTimeout(() => {
+                  dead.hp = dead.maxHp;
+                  dead.state = 'roam';
+                  dead.windup = 0;
+                  dead.x = mx + (Math.random() - 0.5) * 6;
+                  dead.y = my + (Math.random() - 0.5) * 4;
+                }, 12000);
+              }
             }
+          } else {
+            // 挥空：短CD + 照样扣体力
+            this.meleeTimer = 0.25;
+            this.player.stamina -= 2;
           }
         }
       }
