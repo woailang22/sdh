@@ -517,7 +517,7 @@ export const SUBMAPS: Record<string, SubMapDef> = {
         { itemId: 'scrap', name: '轻量船用铝板', count: 35 },
         { itemId: 'battery', name: '高耐腐蚀电池', count: 2 },
       ], 2.0),
-      I('dock_poplar', '湖畔白杨', 'tree', 10, -6, '[E/F 砍伐白杨]', woodLoot(30, '白杨木'), 1.6),
+      I('dock_poplar', '湖畔白杨', 'tree', 9, -9, '[E/F 砍伐白杨]', woodLoot(30, '白杨木'), 1.6),
       I('dock_rock', '滩涂岩', 'boulder', -4, -14, '[E/F 敲取滩涂岩]', stoneLoot(25, '滩涂碎石'), 1.8),
     ],
     monsters: [
@@ -525,16 +525,22 @@ export const SUBMAPS: Record<string, SubMapDef> = {
       M('dk2', '蚀体·泥沼潜伏者', 8, 14, 440, 1.6, 24),
     ],
     buildings: [
-      // 渔民小屋：木墙 + 鱼获储物箱
-      { id: 'dock_hut_w1', type: 'wood_wall', name: '渔民小屋木墙', x: 12, y: -8, hp: 350, maxHp: 350, level: 1, ownerName: '废土遗迹', facing: 'ns' },
-      { id: 'dock_hut_w2', type: 'wood_wall', name: '渔民小屋木墙', x: 12, y: -4, hp: 350, maxHp: 350, level: 1, ownerName: '废土遗迹', facing: 'ns' },
+      ...buildCompoundWalls({
+        idPrefix: 'dock_hut', cx: 12, cy: -6, w: 4, h: 2,
+        wallType: 'wood_wall', wallName: '渔民小屋木墙', ownerName: '废土遗迹',
+        doorSide: 'E', doorType: 'door', doorName: '渔屋湖门',
+        doorExtra: { isOpen: true, isLocked: false },
+      }),
       {
-        id: 'dock_hut_box', type: 'storage_box', name: '渔民鱼获箱', x: 14, y: -6, hp: 400, maxHp: 400, level: 1, ownerName: '废土遗迹',
+        id: 'dock_hut_box', type: 'storage_box', name: '渔民鱼获箱', x: 12, y: -6, hp: 400, maxHp: 400, level: 1, ownerName: '废土遗迹',
         storedLoot: [
           { name: '异变青鱼', count: 4, icon: '🐟' },
           { name: '防水医疗包', count: 1, icon: '💉' },
         ],
       },
+    ],
+    deco: [
+      { x: 12, y: -6, w: 6, h: 4, type: 'foundation' },
     ],
   },
   marsh_bog: {
@@ -565,15 +571,22 @@ export const SUBMAPS: Record<string, SubMapDef> = {
       M('bg3', '水泽蚀化妖', 0, -12, 380, 2.0, 20),
     ],
     buildings: [
-      // 高脚屋残柱 + 猎人储物
-      { id: 'bog_post', type: 'wood_wall', name: '高脚屋残柱', x: -8, y: 2, hp: 350, maxHp: 350, level: 1, ownerName: '废土遗迹' },
+      ...buildCompoundWalls({
+        idPrefix: 'bog_hut', cx: -8, cy: 3, w: 4, h: 2,
+        wallType: 'wood_wall', wallName: '高脚屋木墙', ownerName: '废土遗迹',
+        doorSide: 'S', doorType: 'door', doorName: '高脚屋活门',
+        doorExtra: { isOpen: true, isLocked: false },
+      }),
       {
-        id: 'bog_hunter_box', type: 'storage_box', name: '猎人防水箱', x: -8, y: 4, hp: 400, maxHp: 400, level: 1, ownerName: '废土遗迹',
+        id: 'bog_hunter_box', type: 'storage_box', name: '猎人防水箱', x: -8, y: 3, hp: 400, maxHp: 400, level: 1, ownerName: '废土遗迹',
         storedLoot: [
           { name: '防水绷带', count: 3, icon: '🩹' },
           { name: '熏鱼干', count: 6, icon: '🥩' },
         ],
       },
+    ],
+    deco: [
+      { x: -8, y: 3, w: 6, h: 4, type: 'foundation' },
     ],
   },
   marsh_rift: {
@@ -608,8 +621,15 @@ export const SUBMAPS: Record<string, SubMapDef> = {
       M('rf4', '虚空撕裂幼体', -8, -16, 320, 2.6, 20),
     ],
     buildings: [
-      // 先锋队最后的掩体（半血）
-      { id: 'rift_cover', type: 'iron_wall', name: '先锋队掩体残墙', x: 6, y: 6, hp: 300, maxHp: 850, level: 1, ownerName: '遗落先锋' },
+      { id: 'rift_cover_n1', type: 'iron_wall', name: '先锋队掩体残墙', x: 5, y: 5, hp: 300, maxHp: 850, level: 1, ownerName: '遗落先锋', facing: 'ew' },
+      { id: 'rift_cover_n2', type: 'iron_wall', name: '先锋队掩体残墙', x: 6, y: 5, hp: 300, maxHp: 850, level: 1, ownerName: '遗落先锋', facing: 'ew' },
+      { id: 'rift_cover_n3', type: 'iron_wall', name: '先锋队掩体残墙', x: 7, y: 5, hp: 300, maxHp: 850, level: 1, ownerName: '遗落先锋', facing: 'ew' },
+      { id: 'rift_cover_w', type: 'iron_wall', name: '先锋队掩体残墙', x: 5, y: 6, hp: 300, maxHp: 850, level: 1, ownerName: '遗落先锋', facing: 'ns' },
+      { id: 'rift_cover_e', type: 'iron_wall', name: '先锋队掩体残墙', x: 7, y: 6, hp: 300, maxHp: 850, level: 1, ownerName: '遗落先锋', facing: 'ns' },
+    ],
+    deco: [
+      { x: 6, y: 6, w: 5, h: 4, type: 'foundation' },
+      { x: 10, y: 10, w: 7, h: 5, type: 'crater' },
     ],
   },
 };
