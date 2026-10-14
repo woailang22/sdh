@@ -138,3 +138,12 @@ describe('turret damage task7', () => {
     expect(calcMonsterHit(45, 0)).toBe(45);
   });
 });
+
+describe('weapon sync table task8', () => {
+  it('crude spread wider than rifle spread', () => {
+    expect(WEAPONS['crude_gun'].spread).toBeGreaterThan(WEAPONS['rifle'].spread);
+  });
+  it('unknown armor defaults to 0 via fallback', () => {
+    expect(ARMOR_REDUCTION['unknown_xyz'] ?? 0).toBe(0);
+  });
+});

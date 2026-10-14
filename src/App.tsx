@@ -25,7 +25,7 @@ import { InventoryModal } from './components/InventoryModal';
 import { MapEditorModal } from './components/MapEditorModal';
 import { LootPanel, LootEntry } from './components/LootPanel';
 import { lootResourceOf, RARITY, skillLevel, skillYieldMult, LootResource } from './game/maps';
-import { killReward } from './game/combat';
+import { killReward, WEAPONS, ARMOR_REDUCTION } from './game/combat';
 import { CraftOrder } from './components/WorkbenchModal';
 import { RaidModal } from './components/RaidModal';
 import { OnlinePlayersModal } from './components/OnlinePlayersModal';
@@ -986,7 +986,13 @@ export default function App() {
       const eq = equipmentRef.current;
       if (eq.weapon) {
         eng.hasRangedWeapon = true;
-        eng.rangedDamage = eq.weapon.id === 'crude_gun' ? 55 : 124;
+        const def = WEAPONS[eq.weapon.id] ?? WEAPONS['rifle'];
+        eng.rangedDamage = def.damage;
+        eng.rangedRange = def.range;
+        eng.rangedSpread = def.spread;
+        eng.rangedCritChance = def.critChance;
+        eng.rangedCritMult = def.critMult;
+        eng.player.fireRate = def.fireRate;
       } else {
         eng.hasRangedWeapon = false;
         eng.rangedDamage = 0;
@@ -995,7 +1001,7 @@ export default function App() {
       const tid = eq.tool?.id ?? '';
       eng.toolKind = tid.includes('pickaxe') ? 'pick' : tid.includes('axe') ? 'axe' : tid.includes('rod') ? 'rod' : 'none';
       eng.meleeDamage = eng.toolKind !== 'none' ? 22 : 12;
-      eng.armorReduction = eq.armor && eq.armor.id === 'armor_vest' ? 0.15 : 0;
+      eng.armorReduction = eq.armor ? (ARMOR_REDUCTION[eq.armor.id] ?? 0) : 0;
       // 上限同步（升级/护甲加成进引擎，否则治疗会被旧上限卡住）
       const ps = playerStatsRef.current;
       eng.player.maxHp = ps.maxHp;
