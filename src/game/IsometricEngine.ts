@@ -1,5 +1,7 @@
-import { soundManager } from '../audio/soundManager';
+﻿import { soundManager } from '../audio/soundManager';
+import { calcRangedDamage, rollCrit, weatherCritBonus, MELEE, aggroRangeFor, isEnraged, calcMonsterHit, absorbShieldFirst } from './combat';
 import { SUBMAPS, displayName, regionOf, lootResourceOf } from './maps';
+import { groundBaseColor, hash2 as hash2Pure, withAlpha, themeAccent, drawSoftShadow, healthBarColor, weatherTint } from './visualTheme';
 import {
   MonsterEntity,
   InteractableEntity,
@@ -69,7 +71,7 @@ export class IsometricEngine {
   private syncTimer: number = 0;
 
   // Brightness setting (default high for crystal clear visibility)
-  public brightnessMultiplier: number = 1.4;
+  public brightnessMultiplier: number = 1.12;
   public isBrightMode: boolean = true;
 
   // Player Placed Floors (key: `${wx},${wy}`)
@@ -121,6 +123,10 @@ export class IsometricEngine {
   // 求生装备加成（由 App 按装备栏每帧同步）
   public hasRangedWeapon: boolean = false; // 装备武器才能射击，否则左键为徒手/工具近战
   public rangedDamage: number = 124; // 土铳55 / 步枪124
+  public rangedRange: number = 12; // 土铳10 / 步枪12，由 App 按装备同步
+  public rangedSpread: number = 0.03; // 土铳0.09 / 步枪0.03
+  public rangedCritChance: number = 0.25; // 基础暴击，雷暴天气+0.2
+  public rangedCritMult: number = 1.3; // 步枪1.3 / 土铳1.5
   public toolKind: 'none' | 'axe' | 'pick' | 'rod' = 'none'; // 星露谷式工具分化：斧砍树/镐采矿/竿钓鱼
   public meleeDamage: number = 12; // 徒手12 / 持工具22
   public armorReduction: number = 0; // 防弹背心 0.15 减伤
@@ -2141,7 +2147,8 @@ export class IsometricEngine {
   }
 
   private fireBullet(startX: number, startY: number, angle: number) {
-    const range = 12.0;
+    const range = this.rangedRange;
+    const spread = this.rangedSpread;
 
     this.particles.push({
       x: startX,
@@ -2159,12 +2166,15 @@ export class IsometricEngine {
       if (m.state === 'dead') continue;
       const dist = Math.hypot(m.x - startX, m.y - startY);
       const angleToMonster = Math.atan2(m.y - startY, m.x - startX);
-      const angleDiff = Math.abs(angle - angleToMonster);
+      let angleDiff = Math.abs(angle - angleToMonster);
+      if (angleDiff > Math.PI) angleDiff = Math.PI * 2 - angleDiff;
+      // 散布：土铳容差大但要求近，步枪容差小但射程远
+      const tolerance = 0.28 + spread;
 
-      if (dist < range && (angleDiff < 0.28 || dist < 1.2)) {
-        const isCrit = Math.random() < 0.25;
-        const base = this.rangedDamage;
-        const damage = isCrit ? Math.floor(base * 1.3) : base;
+      if (dist < range && (angleDiff < tolerance || dist < 1.2)) {
+        const critChance = Math.min(0.6, this.rangedCritChance + weatherCritBonus(this.currentWeather));
+        const isCrit = rollCrit(critChance);
+        const damage = calcRangedDamage(this.rangedDamage, dist, range, isCrit, this.rangedCritMult);
         m.hp -= damage;
         m.state = 'chase';
         soundManager.playHit(isCrit);
@@ -2189,11 +2199,15 @@ export class IsometricEngine {
           m.state = 'dead';
           this.addTextParticle(m.x, m.y - 1.5, '已击杀', '#ec4899');
           this.callbacks.onMonsterKilled(m.name);
+          const mx = m.spawnX ?? 3.0;
+          const my = m.spawnY ?? -4.0;
+          const dead = m;
           setTimeout(() => {
-            m.hp = m.maxHp;
-            m.state = 'roam';
-            m.x = 3.0 + (Math.random() - 0.5) * 6;
-            m.y = -4.0 + (Math.random() - 0.5) * 4;
+            dead.hp = dead.maxHp;
+            dead.state = 'roam';
+            dead.windup = 0;
+            dead.x = mx + (Math.random() - 0.5) * 6;
+            dead.y = my + (Math.random() - 0.5) * 4;
           }, 12000);
         }
         break;
@@ -2534,160 +2548,56 @@ export class IsometricEngine {
           }
         }
 
-        // B. Natural Map Terrain By Zone (theme-driven):
+        // B. Natural Map Terrain By Zone (theme-driven, low-contrast):
+        const gkey = (theme === 'camp' || theme === 'plaza' || theme === 'field' || theme === 'urban' || theme === 'ruins' || theme === 'forest' || theme === 'quarry' || theme === 'lake' || theme === 'marsh' || theme === 'rift') ? theme : 'camp';
         if (theme === 'camp') {
-          // Sanctuary Base:
           const inLivingBase = wx >= -6 && wx <= 6 && wy >= -5 && wy <= 5;
           const distToCenter = Math.hypot(wx, wy);
-
           if (distToCenter < 3.8) {
-            // Central fortified stone plaza with rune pavers
-            this.ctx.fillStyle = (wx + wy) % 2 === 0 ? '#64748b' : '#526275';
+            this.ctx.fillStyle = groundBaseColor('plaza', wx, wy);
           } else if (inLivingBase) {
-            // Warm crafted wood plank living quarter floor
-            this.ctx.fillStyle = (wx + wy) % 2 === 0 ? '#a77348' : '#94633a';
-          } else if (Math.abs(wx - wy) < 2.0 || Math.abs(wx + wy) < 2.0) {
-            // Cobblestone packed highway / path connecting to outposts
-            this.ctx.fillStyle = (wx + wy) % 2 === 0 ? '#635343' : '#534435';
+            this.ctx.fillStyle = groundBaseColor('forest', wx, wy);
           } else {
-            // Meadow: 草甸+泥土斑块+苔藓（哈希噪点，外圈不再一整片纯色）
-            const n = this.hash2(wx, wy);
-            if (n > 0.84) {
-              // 踩出的泥土斑
-              this.ctx.fillStyle = (wx + wy) % 2 === 0 ? '#5e4c36' : '#52422e';
-            } else if (n > 0.68) {
-              // 深色苔藓
-              this.ctx.fillStyle = (wx + wy) % 2 === 0 ? '#2c5a38' : '#254e30';
-            } else {
-              // Vibrant wasteland grass with lush mossy patches
-              this.ctx.fillStyle = (wx + wy) % 2 === 0 ? '#386944' : '#2e5a39';
-            }
+            this.ctx.fillStyle = groundBaseColor('camp', wx, wy);
           }
         } else if (theme === 'plaza') {
-          // 工坊水泥大院：整块混凝土 + 伸缩缝
-          this.ctx.fillStyle = (wx + wy) % 2 === 0 ? '#6b7686' : '#5c6675';
+          this.ctx.fillStyle = groundBaseColor('plaza', wx, wy);
         } else if (theme === 'field') {
-          // 农圩草甸：草 + 泥土斑（农田条纹由 deco 绘制）
-          const n = this.hash2(wx, wy);
-          if (n > 0.8) {
-            this.ctx.fillStyle = (wx + wy) % 2 === 0 ? '#5e4c36' : '#52422e';
-          } else if (n > 0.62) {
-            this.ctx.fillStyle = (wx + wy) % 2 === 0 ? '#416b35' : '#385c2e';
-          } else {
-            this.ctx.fillStyle = (wx + wy) % 2 === 0 ? '#386944' : '#2e5a39';
-          }
+          this.ctx.fillStyle = groundBaseColor('field', wx, wy);
         } else if (theme === 'urban' || theme === 'ruins') {
-          // Highway: Broad 2-lane asphalt expressway across the whole span
           const distToExpressway = Math.abs(wx + wy);
           if (distToExpressway < 4.8) {
-            // Asphalt bitumen road surface
-            this.ctx.fillStyle = (wx + wy) % 2 === 0 ? '#333b47' : '#2b323c';
-          } else if (wx > 1 && wy < -1 && wx < 7 && wy > -7) {
-            // Gas station concrete forecourt apron
-            this.ctx.fillStyle = (wx + wy) % 2 === 0 ? '#718096' : '#5f6d80';
+            this.ctx.fillStyle = groundBaseColor('urban', wx, wy);
           } else if (distToExpressway < 7.2) {
-            // Road shoulder coarse crushed gravel
-            this.ctx.fillStyle = (wx + wy) % 2 === 0 ? '#615446' : '#524639';
+            this.ctx.fillStyle = groundBaseColor('ruins', wx, wy);
           } else {
-            // 荒漠：龟裂土 + 城市废墟碎石堆 + 干土（山地/城郊质感）
-            const n = this.hash2(wx, wy);
-            if (n > 0.8) {
-              // 混凝土碎块
-              this.ctx.fillStyle = (wx + wy) % 2 === 0 ? '#4e4e58' : '#43434c';
-            } else if (n > 0.62) {
-              // 干裂深土
-              this.ctx.fillStyle = (wx + wy) % 2 === 0 ? '#54432f' : '#483927';
-            } else {
-              // Dusty wasteland cracked desert soil
-              this.ctx.fillStyle = (wx + wy) % 2 === 0 ? '#483c30' : '#3c3126';
-            }
+            this.ctx.fillStyle = groundBaseColor('ruins', wx, wy);
           }
         } else if (theme === 'lake') {
-          // Clearwater Pond (Creator's Fishery):
-          const isDock =
-            (wx >= -2 && wx <= 4 && (wy === 0 || wy === -2 || wy === 2)) ||
-            (wx >= 1 && wx <= 3 && wy >= -3 && wy <= 3);
-
+          const isDock = (wx >= -2 && wx <= 4 && (wy === 0 || wy === -2 || wy === 2)) || (wx >= 1 && wx <= 3 && wy >= -3 && wy <= 3);
           if (isDock) {
-            // Heavy wooden fishing boardwalk with warm teak finish
-            this.ctx.fillStyle = (wx + wy) % 2 === 0 ? '#a16d3f' : '#8f5e33';
+            this.ctx.fillStyle = groundBaseColor('forest', wx, wy);
           } else if (wx < 3) {
-            // Open sparkling lake water with wave oscillations
             const wave = Math.sin(this.gameTime * 2.4 + wx * 0.8 + wy * 0.8);
-            this.ctx.fillStyle = wave > 0 ? '#0284c7' : '#0369a1';
-          } else if (wx <= 5) {
-            // Wet golden shoreline sand
-            this.ctx.fillStyle = (wx + wy) % 2 === 0 ? '#786c5e' : '#695e51';
+            this.ctx.fillStyle = wave > 0 ? '#0370ab' : '#0369a1';
           } else {
-            // 泥炭草甸：湿草 + 泥沼斑 + 沙土
-            const n = this.hash2(wx, wy);
-            if (n > 0.8) {
-              this.ctx.fillStyle = (wx + wy) % 2 === 0 ? '#4a5a3a' : '#3f4d32';
-            } else if (n > 0.64) {
-              this.ctx.fillStyle = (wx + wy) % 2 === 0 ? '#6b6252' : '#5d5546';
-            } else {
-              // Wetland peat turf
-              this.ctx.fillStyle = (wx + wy) % 2 === 0 ? '#385c40' : '#2d4b33';
-            }
+            this.ctx.fillStyle = groundBaseColor('marsh', wx, wy);
           }
         } else if (theme === 'marsh') {
-          // 沼泽：泥炭 + 积水洼 + 污泥
-          const n = this.hash2(wx * 1.3 + 5, wy * 1.1 + 2);
-          if (n > 0.78) {
-            // 积水洼（静态深色 + 微波）
-            const wave = Math.sin(this.gameTime * 1.8 + wx + wy);
-            this.ctx.fillStyle = wave > 0 ? '#0e5a7d' : '#0b4a68';
-          } else if (n > 0.6) {
-            this.ctx.fillStyle = (wx + wy) % 2 === 0 ? '#4a4438' : '#3f3a30';
-          } else {
-            this.ctx.fillStyle = (wx + wy) % 2 === 0 ? '#33523b' : '#2b4532';
-          }
+          this.ctx.fillStyle = groundBaseColor('marsh', wx, wy);
         } else if (theme === 'quarry') {
-          // 采石场：整片裸露岩床 + 碎石斑
-          const qn = this.hash2(wx, wy);
-          if (qn > 0.72) {
-            this.ctx.fillStyle = (wx + wy) % 2 === 0 ? '#565b66' : '#4a4f59';
-          } else if (qn > 0.55) {
-            this.ctx.fillStyle = (wx + wy) % 2 === 0 ? '#6e5a40' : '#5f4d36';
-          } else {
-            this.ctx.fillStyle = (wx + wy) % 2 === 0 ? '#6b7c91' : '#57677a';
-          }
+          this.ctx.fillStyle = groundBaseColor('quarry', wx, wy);
         } else if (theme === 'forest') {
-          // Pine Forest & Quarry:
-          if (wx > 1) {
-            // Exposed terraced granite quarry bedrock
-            this.ctx.fillStyle = (wx + wy) % 2 === 0 ? '#6b7c91' : '#57677a';
-          } else if (Math.abs(wx - wy) < 1.8) {
-            // Forestry cart dirt path
-            this.ctx.fillStyle = (wx + wy) % 2 === 0 ? '#6e4b31' : '#5c3d26';
-          } else {
-            // 密林腐殖层：针叶沃土 + 苔藓 + 裸岩（山地质感）
-            const n = this.hash2(wx, wy);
-            if (n > 0.82) {
-              this.ctx.fillStyle = (wx + wy) % 2 === 0 ? '#5c5c66' : '#4e4e58';
-            } else if (n > 0.64) {
-              this.ctx.fillStyle = (wx + wy) % 2 === 0 ? '#3d5c26' : '#334d1f';
-            } else {
-              // Deep pine needle loam forest humus bedding
-              this.ctx.fillStyle = (wx + wy) % 2 === 0 ? '#543118' : '#452611';
-            }
-          }
+          this.ctx.fillStyle = groundBaseColor('forest', wx, wy);
         } else if (theme === 'rift') {
-          // Rift Red Zone:
           if (Math.abs(wx - wy) < 1.8 || Math.abs(wx + wy) < 1.4) {
-            // Branching pulsating violet magma fissures
             const pulse = (Math.sin(this.gameTime * 4.5 + wx * 1.2 + wy * 1.2) + 1) * 0.5;
-            this.ctx.fillStyle = pulse > 0.5 ? '#d946ef' : '#9333ea';
+            this.ctx.fillStyle = pulse > 0.5 ? '#7e22ce' : '#6b21a8';
           } else {
-            // 黑曜石荒原：双色玄武岩 + 余烬斑点
-            const n = this.hash2(wx, wy);
-            if (n > 0.86) {
-              this.ctx.fillStyle = (wx + wy) % 2 === 0 ? '#3a1548' : '#2f1139';
-            } else {
-              // Jet-black basalt obsidian rock
-              this.ctx.fillStyle = (wx + wy) % 2 === 0 ? '#260c38' : '#1c072b';
-            }
+            this.ctx.fillStyle = groundBaseColor('rift', wx, wy);
           }
+        } else {
+          this.ctx.fillStyle = groundBaseColor(gkey as 'camp', wx, wy);
         }
 
         this.ctx.fill();
@@ -2733,14 +2643,18 @@ export class IsometricEngine {
               this.ctx.fillRect(s.x - 2, s.y - 3, 2, 4);
               this.ctx.fillRect(s.x + 1, s.y - 4, 2, 5);
             }
-            // 野花与小石子（哈希分布）
-            const wildN = this.hash2(wy * 3 + 11, wx * 5 + 7);
-            if (wildN > 0.95) {
-              this.ctx.fillStyle = wildN > 0.975 ? '#f9a8d4' : '#fde68a';
-              this.ctx.fillRect(s.x + 6, s.y - 2, 2.5, 2.5);
-            } else if (wildN < 0.05) {
-              this.ctx.fillStyle = '#94a3b8';
-              this.ctx.fillRect(s.x - 7, s.y + 2, 2, 2);
+            // 野花与小石子：统一用 withAlpha 低饱和点，不再用纯 #f9a8d4 高饱和方块
+            const wildN = hash2Pure(wy * 3 + 11, wx * 5 + 7);
+            if (wildN > 0.955) {
+              this.ctx.fillStyle = withAlpha('#fde68a', 0.55);
+              this.ctx.beginPath();
+              this.ctx.arc(s.x + 6, s.y - 2, 1.6, 0, Math.PI * 2);
+              this.ctx.fill();
+            } else if (wildN < 0.045) {
+              this.ctx.fillStyle = withAlpha('#94a3b8', 0.5);
+              this.ctx.beginPath();
+              this.ctx.arc(s.x - 7, s.y + 2, 1.4, 0, Math.PI * 2);
+              this.ctx.fill();
             }
           }
         }
@@ -3137,10 +3051,10 @@ export class IsometricEngine {
     this.ctx.fillStyle = '#78716c';
     this.ctx.fillRect(s.x - W / 2, s.y - H, 4, H);
     this.ctx.fillRect(s.x + W / 2 - 4, s.y - H, 4, H);
-    this.ctx.fillStyle = 'rgba(255,255,255,0.25)';
+    this.ctx.fillStyle = withAlpha('#fde68a', 0.8);
     this.ctx.fillRect(s.x - W / 2 + 5, s.y - H + 2, 3, H - 4);
     // 锁扣
-    this.ctx.fillStyle = '#facc15';
+    this.ctx.fillStyle = withAlpha('#fde68a', 0.8);
     this.ctx.strokeStyle = '#713f12';
     this.ctx.lineWidth = 1.5;
     this.ctx.beginPath();
@@ -3265,11 +3179,7 @@ export class IsometricEngine {
 
   // 确定性 tile 哈希（地形噪点/饰品分布用，无随机闪烁）
   private hash2(x: number, y: number): number {
-    let h = (Math.floor(x) * 374761393 + Math.floor(y) * 668265263) | 0;
-    h = (h ^ (h >> 13)) | 0;
-    h = Math.imul(h, 1274126177);
-    h = (h ^ (h >> 16)) >>> 0;
-    return h / 4294967295;
+    return hash2Pure(x, y);
   }
 
   // --- 可交互物统一绘制：按类型调用对应模型 + 悬浮标记 + 名牌 ---
@@ -3405,6 +3315,7 @@ export class IsometricEngine {
 
   private drawBuilding(b: BuildingEntity) {
     const s = this.toScreen(b.x, b.y);
+    drawSoftShadow(this.ctx, s.x, s.y, b.type === 'anchor_core' ? 32 : 24);
     this.ctx.save();
     const facing = b.facing ?? 'ew';
 
@@ -3738,15 +3649,16 @@ export class IsometricEngine {
   }
 
   private drawBuildingHp(x: number, y: number, hp: number, maxHp: number) {
-    const w = 32;
-    const h = 4;
+    const barW = 46;
+    const barH = 5;
     this.ctx.fillStyle = 'rgba(15, 23, 42, 0.8)';
-    this.ctx.fillRect(x - w / 2, y, w, h);
-    this.ctx.fillStyle = hp / maxHp > 0.4 ? '#10b981' : '#f87171';
-    this.ctx.fillRect(x - w / 2, y, w * (hp / maxHp), h);
+    this.ctx.fillRect(x - barW / 2, y, barW, barH);
+    const ratio = Math.max(0, Math.min(1, hp / maxHp));
+    this.ctx.fillStyle = healthBarColor(ratio);
+    this.ctx.fillRect(x - barW / 2, y, barW * ratio, 5);
     this.ctx.strokeStyle = '#0f172a';
     this.ctx.lineWidth = 1;
-    this.ctx.strokeRect(x - w / 2, y, w, h);
+    this.ctx.strokeRect(x - barW / 2, y, barW, barH);
   }
 
   private drawBuildGhost() {
@@ -3783,10 +3695,7 @@ export class IsometricEngine {
     this.ctx.save();
 
     // Natural ambient soft ground shadow
-    this.ctx.fillStyle = 'rgba(0, 0, 0, 0.38)';
-    this.ctx.beginPath();
-    this.ctx.ellipse(s.x + 4, s.y + 4, 32, 16, -0.2, 0, Math.PI * 2);
-    this.ctx.fill();
+    drawSoftShadow(this.ctx, s.x + 4, s.y + 4, 28);
 
     // Realistic gnarled pine trunk with bark crevices and root flare
     this.ctx.fillStyle = '#3a2013';
@@ -3799,7 +3708,7 @@ export class IsometricEngine {
     this.ctx.fill();
 
     // Trunk bark highlights
-    this.ctx.strokeStyle = '#5a351f';
+    this.ctx.strokeStyle = withAlpha('#d6a97c', 0.6);
     this.ctx.lineWidth = 1.5;
     this.ctx.beginPath();
     this.ctx.moveTo(s.x - 2, s.y - 4);
@@ -3888,7 +3797,7 @@ export class IsometricEngine {
       this.ctx.lineWidth = 1.5;
       this.ctx.stroke();
       // 受光面高光
-      this.ctx.fillStyle = 'rgba(134, 239, 172, 0.45)';
+      this.ctx.fillStyle = withAlpha('#86efac', 0.45);
       this.ctx.beginPath();
       this.ctx.arc(s.x + c.ox - c.r * 0.25, s.y + c.oy - c.r * 0.3, c.r * 0.45, 0, Math.PI * 2);
       this.ctx.fill();
@@ -3980,12 +3889,20 @@ export class IsometricEngine {
   public drawWastelandShrub(wx: number, wy: number) {
     const s = this.toScreen(wx, wy);
     this.ctx.save();
-    this.ctx.fillStyle = '#57534e';
+    drawSoftShadow(this.ctx, s.x, s.y, 14);
+    // 主丛：冷灰绿，左上受光
+    this.ctx.fillStyle = '#4b5548';
     this.ctx.beginPath();
     this.ctx.ellipse(s.x, s.y - 6, 14, 8, 0, 0, Math.PI * 2);
     this.ctx.fill();
-    this.ctx.strokeStyle = '#292524';
+    this.ctx.fillStyle = withAlpha('#a7c4a0', 0.7);
+    this.ctx.beginPath();
+    this.ctx.ellipse(s.x - 4, s.y - 9, 7, 4, -0.3, 0, Math.PI * 2);
+    this.ctx.fill();
+    this.ctx.strokeStyle = '#1c1917';
     this.ctx.lineWidth = 1.2;
+    this.ctx.beginPath();
+    this.ctx.ellipse(s.x, s.y - 6, 14, 8, 0, 0, Math.PI * 2);
     this.ctx.stroke();
     this.ctx.restore();
   }
@@ -4194,19 +4111,11 @@ export class IsometricEngine {
     const s = this.toScreen(m.x, m.y);
     this.ctx.save();
 
-    // 1. Soft Realistic Ground Ambient Shadow
+    // 1. Unified soft shadow (visualTheme)
     const isBoss = m.name.includes('首领') || m.name.includes('巨怪') || m.maxHp > 600;
     const isBrute = m.name.includes('暴民') || m.name.includes('破拆');
     const shadowR = isBoss ? 32 : isBrute ? 24 : 18;
-
-    const shadowGrad = this.ctx.createRadialGradient(s.x, s.y, 2, s.x, s.y, shadowR);
-    shadowGrad.addColorStop(0, 'rgba(0, 0, 0, 0.55)');
-    shadowGrad.addColorStop(0.7, 'rgba(0, 0, 0, 0.25)');
-    shadowGrad.addColorStop(1, 'rgba(0, 0, 0, 0)');
-    this.ctx.fillStyle = shadowGrad;
-    this.ctx.beginPath();
-    this.ctx.ellipse(s.x, s.y, shadowR, shadowR * 0.48, 0, 0, Math.PI * 2);
-    this.ctx.fill();
+    drawSoftShadow(this.ctx, s.x, s.y, shadowR);
 
     const anim = m.animTime;
 
@@ -4436,28 +4345,14 @@ export class IsometricEngine {
     const barW = isBoss ? 64 : 46;
     const barH = isBoss ? 6 : 5;
     const by = isBoss ? s.y - 100 : isBrute ? s.y - 74 : s.y - 50;
-
-    // Dark HUD Backplate
     this.ctx.fillStyle = 'rgba(15, 23, 42, 0.9)';
     this.ctx.fillRect(s.x - barW / 2 - 2, by - 2, barW + 4, barH + 4);
     this.ctx.strokeStyle = '#334155';
     this.ctx.lineWidth = 1;
     this.ctx.strokeRect(s.x - barW / 2 - 2, by - 2, barW + 4, barH + 4);
-
-    // HP Fill Gradient
-    const hpGrad = this.ctx.createLinearGradient(s.x - barW / 2, by, s.x + barW / 2, by);
-    if (isBoss) {
-      hpGrad.addColorStop(0, '#f43f5e');
-      hpGrad.addColorStop(1, '#9333ea');
-    } else {
-      hpGrad.addColorStop(0, '#ef4444');
-      hpGrad.addColorStop(1, '#f97316');
-    }
-    this.ctx.fillStyle = hpGrad;
     const currentHpRatio = Math.max(0, Math.min(1, m.hp / m.maxHp));
+    this.ctx.fillStyle = healthBarColor(currentHpRatio);
     this.ctx.fillRect(s.x - barW / 2, by, barW * currentHpRatio, barH);
-
-    // Threat Category & Name Label
     this.ctx.fillStyle = '#ffffff';
     this.ctx.font = 'bold 10px sans-serif';
     this.ctx.textAlign = 'center';
@@ -4470,6 +4365,8 @@ export class IsometricEngine {
   private drawPlayer() {
     const s = this.toScreen(this.player.x, this.player.y);
     this.ctx.save();
+    // 全局光：左上轮廓光预设（描边色，不影响碰撞/伤害）
+    const PLAYER_OUTLINE = '#e0f2fe';
 
     const isMoving = Math.hypot(this.player.vx, this.player.vy) > 0.15;
     const walkCycle = isMoving ? Math.sin(this.gameTime * 12) : 0;
@@ -4747,6 +4644,12 @@ export class IsometricEngine {
     this.ctx.font = 'bold 9px sans-serif';
     this.ctx.textAlign = 'center';
     this.ctx.fillText('先锋干员 (你)', s.x, s.y - 56 - bodyBob);
+
+    this.ctx.strokeStyle = withAlpha(PLAYER_OUTLINE, 0.85);
+    this.ctx.lineWidth = 1.5;
+    this.ctx.beginPath();
+    this.ctx.ellipse(s.x, s.y - 30, 16, 26, 0, 0, Math.PI * 2);
+    this.ctx.stroke();
 
     this.ctx.restore();
   }
@@ -5301,7 +5204,7 @@ export class IsometricEngine {
           this.height * 0.5,
           this.width * 0.8
         );
-        sunGrad.addColorStop(0, 'rgba(254, 240, 138, 0.04)');
+        sunGrad.addColorStop(0, 'rgba(254, 240, 138, 0.06)');
         sunGrad.addColorStop(1, 'rgba(0, 0, 0, 0)');
         this.ctx.fillStyle = sunGrad;
         this.ctx.fillRect(0, 0, this.width, this.height);
@@ -5311,7 +5214,7 @@ export class IsometricEngine {
 
       // In rain/thunder/fog during bright mode: only minimal atmospheric tint (0.04)
       this.ctx.save();
-      this.ctx.fillStyle = 'rgba(15, 23, 42, 0.04)';
+      this.ctx.fillStyle = weatherTint((this.currentWeather as string) === 'clear' ? 'clear' : 'rain');
       this.ctx.fillRect(0, 0, this.width, this.height);
       this.ctx.restore();
       return;
@@ -5554,11 +5457,11 @@ export class IsometricEngine {
 
     // 1. Ground holographic teleport pad
     const padRadius = 26;
-    const pulse = Math.sin(this.gameTime * 4) * 4;
-
-    this.ctx.strokeStyle = isNearby ? '#10b981' : '#06b6d4';
-    this.ctx.lineWidth = 2.5;
-    this.ctx.shadowColor = isNearby ? '#34d399' : '#38bdf8';
+    const pulse = (Math.sin(this.gameTime * 3 + wp.x) + 1) * 0.5;
+    this.ctx.strokeStyle = withAlpha(themeAccent('rift'), 0.55 + pulse * 0.35);
+    this.ctx.lineWidth = 2;
+    this.ctx.fillStyle = withAlpha('#f5d0fe', 0.35 + pulse * 0.3);
+    this.ctx.shadowColor = themeAccent('rift');
     this.ctx.shadowBlur = 16;
 
     this.ctx.beginPath();
@@ -5647,3 +5550,4 @@ export class IsometricEngine {
     this.ctx.restore();
   }
 }
+

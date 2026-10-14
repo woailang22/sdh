@@ -49,6 +49,9 @@ export interface MonsterEntity {
   targetX?: number;
   targetY?: number;
   attackCooldown: number;
+  spawnX?: number; // 出生锚点：回拉用
+  spawnY?: number; // 出生锚点：回拉用
+  windup?: number; // 攻击前摇剩余秒数，>0 时闪红预警不造成伤害
 }
 
 export interface InteractableEntity {

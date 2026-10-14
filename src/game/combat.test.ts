@@ -97,3 +97,9 @@ describe('isEnraged and weatherCritBonus', () => {
     expect(weatherCritBonus('clear')).toBe(0);
   });
 });
+
+describe('ranged falloff rounding', () => {
+  it('rifle at 6 of 12 range deals 93', () => {
+    expect(calcRangedDamage(124, 6.0, 12.0, false, 1.3)).toBe(93);
+  });
+});
