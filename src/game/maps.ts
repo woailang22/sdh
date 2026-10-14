@@ -372,17 +372,22 @@ export const SUBMAPS: Record<string, SubMapDef> = {
       M('lg2', '蚀化幼体', 14, 12, 260, 2.3, 16),
     ],
     buildings: [
-      // 伐木工棚：原木墙 + 储物（木/零件）
-      { id: 'lg_cabin_w1', type: 'wood_wall', name: '伐木工棚木墙', x: -16, y: -2, hp: 350, maxHp: 350, level: 1, ownerName: '废土遗迹' },
-      { id: 'lg_cabin_w2', type: 'wood_wall', name: '伐木工棚木墙', x: -14, y: -2, hp: 350, maxHp: 350, level: 1, ownerName: '废土遗迹' },
-      { id: 'lg_cabin_d', type: 'door', name: '工棚木门', x: -15, y: -2, hp: 650, maxHp: 650, level: 1, isOpen: true, isLocked: false, ownerName: '废土遗迹' },
+      ...buildCompoundWalls({
+        idPrefix: 'lg_cabin', cx: -15, cy: -3, w: 4, h: 2,
+        wallType: 'wood_wall', wallName: '伐木工棚木墙', ownerName: '废土遗迹',
+        doorSide: 'S', doorType: 'door', doorName: '工棚木门',
+        doorExtra: { isOpen: true, isLocked: false },
+      }),
       {
-        id: 'lg_cabin_box', type: 'storage_box', name: '伐木工储物箱', x: -15, y: -4, hp: 400, maxHp: 400, level: 1, ownerName: '废土遗迹',
+        id: 'lg_cabin_box', type: 'storage_box', name: '伐木工储物箱', x: -15, y: -3, hp: 400, maxHp: 400, level: 1, ownerName: '废土遗迹',
         storedLoot: [
           { name: '优质云杉木', count: 12, icon: '🪵' },
           { name: '油锯链条', count: 3, icon: '🔧' },
         ],
       },
+    ],
+    deco: [
+      { x: -15, y: -3, w: 6, h: 4, type: 'foundation' },
     ],
   },
   mtn_quarry: {
@@ -413,12 +418,14 @@ export const SUBMAPS: Record<string, SubMapDef> = {
       M('q2', '蚀化幼体', 0, -16, 260, 2.3, 16),
     ],
     buildings: [
-      // 矿场值班室残部：条石墙 + 工具储物
-      { id: 'q_office_w1', type: 'stone_wall', name: '矿场值班室残墙', x: -10, y: 0, hp: 600, maxHp: 600, level: 1, ownerName: '废土遗迹' },
-      { id: 'q_office_w2', type: 'stone_wall', name: '矿场值班室残墙', x: -6, y: 0, hp: 600, maxHp: 600, level: 1, ownerName: '废土遗迹' },
-      { id: 'q_office_d', type: 'door', name: '值班室铁门', x: -8, y: 0, hp: 650, maxHp: 650, level: 1, isOpen: false, isLocked: false, ownerName: '废土遗迹' },
+      ...buildCompoundWalls({
+        idPrefix: 'q_office', cx: -8, cy: -1, w: 4, h: 2,
+        wallType: 'stone_wall', wallName: '矿场值班室残墙', ownerName: '废土遗迹',
+        doorSide: 'S', doorType: 'door', doorName: '值班室铁门',
+        doorExtra: { isOpen: false, isLocked: false },
+      }),
       {
-        id: 'q_office_box', type: 'storage_box', name: '矿场工具柜', x: -8, y: -2, hp: 400, maxHp: 400, level: 1, ownerName: '废土遗迹',
+        id: 'q_office_box', type: 'storage_box', name: '矿场工具柜', x: -8, y: -1, hp: 400, maxHp: 400, level: 1, ownerName: '废土遗迹',
         storedLoot: [
           { name: '液压千斤顶活塞', count: 3, icon: '🔧' },
           { name: '耐磨特种锰钢板', count: 20, icon: '⚙️' },
@@ -426,6 +433,7 @@ export const SUBMAPS: Record<string, SubMapDef> = {
       },
     ],
     deco: [
+      { x: -8, y: -1, w: 6, h: 4, type: 'foundation' },
       { x: 12, y: -10, w: 8, h: 6, type: 'rockery' },
     ],
   },
@@ -456,26 +464,30 @@ export const SUBMAPS: Record<string, SubMapDef> = {
       M('dp3', '蚀化幼体', 14, 12, 260, 2.3, 16),
     ],
     buildings: [
-      // 佣兵前哨补给点：弹药储物
       {
-        id: 'deep_cache_box', type: 'storage_box', name: '佣兵前哨补给箱', x: 2, y: -2, hp: 500, maxHp: 500, level: 1, ownerName: '深林佣兵兵团',
+        id: 'deep_cache_box', type: 'storage_box', name: '佣兵前哨补给箱', x: -16, y: 8, hp: 500, maxHp: 500, level: 1, ownerName: '深林佣兵兵团',
         storedLoot: [
           { name: '步枪弹药', count: 4, icon: '🎯' },
           { name: '军用战术急救针剂', count: 3, icon: '💉' },
         ],
       },
-      {
-        id: 'wild_safe_gate_beta', type: 'safe_door', name: '深林佣兵前哨密封安全门 [5500HP 可突袭]',
-        x: -16.0, y: 8.0, hp: 5500, maxHp: 5500, level: 2, isOpen: false, isLocked: true,
-        ownerId: 'npc_forest_syndicate', ownerName: '深林佣兵兵团', mapId: 'mtn_deep', material: 'iron',
-        storedLoot: [
-          { name: '军用战术急救针剂', count: 12, icon: '💉' },
-          { name: '坍界高纯晶石', count: 16, icon: '💎' },
-          { name: '高聚合爆破炸药', count: 5, icon: '🧨' },
-        ],
-      },
-      { id: 'forest_wall_1', type: 'stone_wall', name: '重条石防线', x: -14.0, y: 8.0, hp: 600, maxHp: 600, level: 1, ownerName: '佣兵哨卡' },
-      { id: 'forest_wall_2', type: 'stone_wall', name: '重条石防线', x: -18.0, y: 8.0, hp: 600, maxHp: 600, level: 1, ownerName: '佣兵哨卡' },
+      ...buildCompoundWalls({
+        idPrefix: 'forest_post', cx: -16, cy: 8, w: 4, h: 2,
+        wallType: 'stone_wall', wallName: '重条石防线', ownerName: '佣兵哨卡',
+        doorSide: 'S', doorType: 'safe_door', doorName: '深林佣兵前哨密封安全门 [5500HP 可突袭]',
+        doorExtra: {
+          hp: 5500, maxHp: 5500, level: 2, isOpen: false, isLocked: true,
+          ownerId: 'npc_forest_syndicate', ownerName: '深林佣兵兵团', mapId: 'mtn_deep', material: 'iron',
+          storedLoot: [
+            { name: '军用战术急救针剂', count: 12, icon: '💉' },
+            { name: '坍界高纯晶石', count: 16, icon: '💎' },
+            { name: '高聚合爆破炸药', count: 5, icon: '🧨' },
+          ],
+        },
+      }),
+    ],
+    deco: [
+      { x: -16, y: 8, w: 6, h: 4, type: 'foundation' },
     ],
   },
 
