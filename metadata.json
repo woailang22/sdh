@@ -1,0 +1,6 @@
+{
+  "name": "坍界行者：裂隙边缘",
+  "description": "多人实时联机MMORPG与废土领地攻防游戏，支持多人实时移动射击与练级、开阔平坦地带领地建造、高耐久安全门偷袭破拆（物资爆破与随机暴击）、野外动态天气演变与主机级战术HUD。",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
