@@ -132,3 +132,9 @@ describe('kill reward curve task6', () => {
     expect(killReward(450)).toEqual({ xp: 90, credits: 45, shards: 1 });
   });
 });
+
+describe('turret damage task7', () => {
+  it('turret 45 base is flat, no armor', () => {
+    expect(calcMonsterHit(45, 0)).toBe(45);
+  });
+});

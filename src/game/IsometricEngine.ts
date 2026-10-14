@@ -1849,15 +1849,37 @@ export class IsometricEngine {
       });
     }
 
-    // Turret AI
+    // Turret AI：集火最近的怪；尖刺： standing 怪每秒掉血
     this.buildings.forEach((b) => {
+      if (b.type === 'spikes') {
+        const victim = this.monsters.find((m) => m.state !== 'dead' && Math.hypot(m.x - b.x, m.y - b.y) < 1.0);
+        if (victim) {
+          victim.hp -= 20 * dt;
+          victim.state = 'chase';
+          if (Math.random() < 0.1) {
+            this.addTextParticle(victim.x, victim.y - 1.0, '-20 铁刺', '#f59e0b');
+          }
+          if (victim.hp <= 0) {
+            victim.state = 'dead';
+            this.callbacks.onMonsterKilled(victim.name, victim.maxHp);
+          }
+        }
+      }
       if (b.type === 'turret') {
         b.fireCooldown = (b.fireCooldown || 0) - dt;
         if ((b.fireCooldown || 0) <= 0) {
-          const target = this.monsters.find(m => m.state !== 'dead' && Math.hypot(m.x - b.x, m.y - b.y) < 7.0);
-          if (target) {
+          let best: typeof this.monsters[number] | null = null;
+          let bestD = 7.0;
+          for (const m of this.monsters) {
+            if (m.state === 'dead') continue;
+            const d = Math.hypot(m.x - b.x, m.y - b.y);
+            if (d < bestD) { bestD = d; best = m; }
+          }
+          if (best) {
+            const target = best;
             b.fireCooldown = 1.0;
             target.hp -= 45;
+            target.state = 'chase';
             soundManager.playHit(true);
             this.addTextParticle(target.x, target.y - 1.2, '-45 电击', '#06b6d4');
 
