@@ -7,6 +7,7 @@ import type {
   MonsterEntity,
   BuildingEntity,
 } from '../types/game';
+import { buildCompoundWalls } from './compound';
 
 export const REGIONS: RegionDef[] = [
   { id: 'camp', name: '恒界营地', icon: '🏕️', desc: '安全区：建造/制造大本营，不产野外物资' },
@@ -59,7 +60,7 @@ export const SUBMAPS: Record<string, SubMapDef> = {
       { id: 'camp_storage_1', type: 'storage_box', name: '前哨公共储物箱', x: -3.0, y: 0.5, hp: 800, maxHp: 800, level: 2, ownerName: '恒界开拓团' },
     ],
     deco: [
-      { x: 0, y: 0, w: 9, h: 7, type: 'rockery' },
+      { x: 0, y: 0, w: 11, h: 9, type: 'foundation' },
     ],
   },
   camp_workshop: {
@@ -79,15 +80,30 @@ export const SUBMAPS: Record<string, SubMapDef> = {
     ],
     monsters: [],
     buildings: [
-      { id: 'ws_storage', type: 'storage_box', name: '工坊材料仓', x: 6, y: 4, hp: 800, maxHp: 800, level: 2, ownerName: '恒界开拓团' },
-      { id: 'ws_turret', type: 'turret', name: '工坊防卫塔', x: -8, y: -6, hp: 1200, maxHp: 1200, level: 2, fireCooldown: 0, ownerName: '恒界开拓团' },
+      // 教学 U 形：北边 7 段 + 东西各 2 段，南边开敞（故意不封，教玩家补南墙）
+      { id: 'ws_demo_n_-3', type: 'stone_wall', name: '工坊示范条石墙', x: -3, y: -1, hp: 600, maxHp: 600, level: 1, ownerName: '恒界开拓团', facing: 'ew' },
+      { id: 'ws_demo_n_-2', type: 'stone_wall', name: '工坊示范条石墙', x: -2, y: -1, hp: 600, maxHp: 600, level: 1, ownerName: '恒界开拓团', facing: 'ew' },
+      { id: 'ws_demo_n_-1', type: 'stone_wall', name: '工坊示范条石墙', x: -1, y: -1, hp: 600, maxHp: 600, level: 1, ownerName: '恒界开拓团', facing: 'ew' },
+      { id: 'ws_demo_n_0', type: 'stone_wall', name: '工坊示范条石墙', x: 0, y: -1, hp: 600, maxHp: 600, level: 1, ownerName: '恒界开拓团', facing: 'ew' },
+      { id: 'ws_demo_n_1', type: 'stone_wall', name: '工坊示范条石墙', x: 1, y: -1, hp: 600, maxHp: 600, level: 1, ownerName: '恒界开拓团', facing: 'ew' },
+      { id: 'ws_demo_n_2', type: 'stone_wall', name: '工坊示范条石墙', x: 2, y: -1, hp: 600, maxHp: 600, level: 1, ownerName: '恒界开拓团', facing: 'ew' },
+      { id: 'ws_demo_n_3', type: 'stone_wall', name: '工坊示范条石墙', x: 3, y: -1, hp: 600, maxHp: 600, level: 1, ownerName: '恒界开拓团', facing: 'ew' },
+      { id: 'ws_demo_w_0', type: 'stone_wall', name: '工坊示范条石墙', x: -3, y: 0, hp: 600, maxHp: 600, level: 1, ownerName: '恒界开拓团', facing: 'ns' },
+      { id: 'ws_demo_w_1', type: 'stone_wall', name: '工坊示范条石墙', x: -3, y: 1, hp: 600, maxHp: 600, level: 1, ownerName: '恒界开拓团', facing: 'ns' },
+      { id: 'ws_demo_e_0', type: 'stone_wall', name: '工坊示范条石墙', x: 3, y: 0, hp: 600, maxHp: 600, level: 1, ownerName: '恒界开拓团', facing: 'ns' },
+      { id: 'ws_demo_e_1', type: 'stone_wall', name: '工坊示范条石墙', x: 3, y: 1, hp: 600, maxHp: 600, level: 1, ownerName: '恒界开拓团', facing: 'ns' },
+      { id: 'ws_storage', type: 'storage_box', name: '工坊材料仓', x: 0, y: 1, hp: 800, maxHp: 800, level: 2, ownerName: '恒界开拓团' },
+      { id: 'ws_turret', type: 'turret', name: '工坊防卫塔', x: -5, y: -3, hp: 1200, maxHp: 1200, level: 2, fireCooldown: 0, ownerName: '恒界开拓团' },
       {
-        id: 'ws_parts_bin', type: 'storage_box', name: '工坊零件箱', x: 0, y: 10, hp: 400, maxHp: 400, level: 1, ownerName: '恒界开拓团',
+        id: 'ws_parts_bin', type: 'storage_box', name: '工坊零件箱', x: 1, y: 1, hp: 400, maxHp: 400, level: 1, ownerName: '恒界开拓团',
         storedLoot: [
           { name: '特种机械轴承', count: 4, icon: '🔧' },
           { name: '精炼优质废铁', count: 12, icon: '⚙️' },
         ],
       },
+    ],
+    deco: [
+      { x: 0, y: 1, w: 9, h: 6, type: 'foundation' },
     ],
   },
   camp_outskirts: {
@@ -106,18 +122,27 @@ export const SUBMAPS: Record<string, SubMapDef> = {
     ],
     monsters: [],
     buildings: [
-      { id: 'demo_safe_door', type: 'safe_door', name: '行者【夜刃】领地防爆安全门 [5000HP 可突袭]', x: 18.0, y: -4.0, hp: 5000, maxHp: 5000, level: 2, isOpen: false, isLocked: true, ownerId: 'demo_player_nightblade', ownerName: '夜刃 · 狂野猎手', mapId: 'camp_outskirts', material: 'iron', storedLoot: [
-        { name: '高聚合爆破C4装药', count: 4, icon: '💣' },
-        { name: '坍界高纯晶核', count: 15, icon: '💎' },
-        { name: '废土高级信用点', count: 2800, icon: '💰' },
-      ] },
-      { id: 'demo_wall_1', type: 'iron_wall', name: '战术重合金铁墙', x: 16.0, y: -4.0, hp: 850, maxHp: 850, level: 1, ownerName: '夜刃 · 狂野猎手' },
-      { id: 'demo_wall_2', type: 'iron_wall', name: '战术重合金铁墙', x: 20.0, y: -4.0, hp: 850, maxHp: 850, level: 1, ownerName: '夜刃 · 狂野猎手' },
-      { id: 'demo_chest', type: 'storage_box', name: '夜刃的私人战备保险箱', x: 18.0, y: -6.0, hp: 600, maxHp: 600, level: 1, ownerName: '夜刃 · 狂野猎手' },
+      ...buildCompoundWalls({
+        idPrefix: 'demo_yard', cx: 18, cy: -4, w: 4, h: 2,
+        wallType: 'iron_wall', wallName: '战术重合金铁墙', ownerName: '夜刃 · 狂野猎手',
+        doorSide: 'S', doorType: 'safe_door', doorName: '行者【夜刃】领地防爆安全门 [5000HP 可突袭]',
+        doorExtra: {
+          hp: 5000, maxHp: 5000, level: 2, isOpen: false, isLocked: true,
+          ownerId: 'demo_player_nightblade', ownerName: '夜刃 · 狂野猎手',
+          mapId: 'camp_outskirts', material: 'iron',
+          storedLoot: [
+            { name: '高聚合爆破C4装药', count: 4, icon: '💣' },
+            { name: '坍界高纯晶核', count: 15, icon: '💎' },
+            { name: '废土高级信用点', count: 2800, icon: '💰' },
+          ],
+        },
+      }),
+      { id: 'demo_chest', type: 'storage_box', name: '夜刃的私人战备保险箱', x: 18.0, y: -4.0, hp: 600, maxHp: 600, level: 1, ownerName: '夜刃 · 狂野猎手' },
     ],
     deco: [
       { x: -12, y: -10, w: 10, h: 8, type: 'farm' },
       { x: 8, y: 12, w: 8, h: 6, type: 'farm' },
+      { x: 18, y: -4, w: 6, h: 4, type: 'foundation' },
     ],
   },
 
