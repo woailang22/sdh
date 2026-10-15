@@ -12,6 +12,7 @@ interface TopMenuBarProps {
   mapName?: string;
   coords?: { x: number; y: number };
   isGM?: boolean;
+  dailyRedDot?: boolean;
 }
 
 export const TopMenuBar: React.FC<TopMenuBarProps> = ({
@@ -24,6 +25,7 @@ export const TopMenuBar: React.FC<TopMenuBarProps> = ({
   mapName = '恒界营地 · 营地广场',
   coords = { x: 0, y: 0 },
   isGM = false,
+  dailyRedDot = false,
 }) => {
   const [secondsLeft, setSecondsLeft] = useState(9912); // 02:45:12
   const [isMuted, setIsMuted] = useState(soundManager.getMuted());
@@ -143,6 +145,7 @@ export const TopMenuBar: React.FC<TopMenuBarProps> = ({
           >
             <User className="w-3.5 h-3.5 text-amber-400 shrink-0" />
             <span>档案</span>
+            {dailyRedDot && <span className="ml-1 w-2 h-2 rounded-full bg-red-500" />}
           </button>
 
           {/* 地图编辑 Editor（仅 GM 可见） */}

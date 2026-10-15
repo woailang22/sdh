@@ -29,6 +29,7 @@ import { ITEM_DEFS, getItemDef, makeItem, WEAPON_DAMAGE, ARMOR_BONUS_TABLE, MED_
 import { killReward, WEAPONS, ARMOR_REDUCTION } from './game/combat';
 import { calcDeathDrop } from './game/death';
 import { ALL_QUESTS } from './game/quests';
+import { dayKey, isNextDay } from './game/daily';
 import { BASE_PLOTS } from './game/spawn';
 import { homeMapIdFor } from './game/home';
 import { CraftOrder } from './components/WorkbenchModal';
@@ -78,6 +79,16 @@ export default function App() {
 
   // Online Players Modal (Tab)
   const [isOnlinePlayersOpen, setIsOnlinePlayersOpen] = useState<boolean>(false);
+
+  // 每日签到红点：跨天置 true
+  const [dailyRedDot, setDailyRedDot] = useState(false);
+  useEffect(() => {
+    try {
+      const today = dayKey(new Date());
+      const last = localStorage.getItem('sdc_daily_last') ?? today;
+      if (isNextDay(last, today)) setDailyRedDot(true);
+    } catch { /* ignore */ }
+  }, []);
 
   // Build Mode State
   const [isBuildMode, setIsBuildMode] = useState<boolean>(false);
@@ -1849,6 +1860,7 @@ export default function App() {
         ping={ping}
         onOpenOnlinePlayers={() => setIsOnlinePlayersOpen(true)}
         isGM={isGM}
+        dailyRedDot={dailyRedDot}
         mapName={engineRef.current?.getMapName(currentMapId) || '恒界营地 · 营地广场'}
         coords={radarEntities.playerPos}
         weatherWidget={
