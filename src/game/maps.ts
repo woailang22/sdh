@@ -42,6 +42,25 @@ const stoneLoot = (n: number, name = '花岗石料') => [{ itemId: 'stone', name
 /** 4区域 × 12图（旧ID已退役，不在此表） */
 export const SUBMAPS: Record<string, SubMapDef> = {
   // ================= 恒界营地 =================
+  home_base: {
+    id: 'home_base', region: 'camp', name: '个人营地（模板）', theme: 'field',
+    desc: '模板：实际进入的是 home_<你的ID> 独立实例，从零自建，可被突袭',
+    risk: 'SAFE',
+    gates: [
+      { x: 0, y: -42, targetMap: 'camp_plaza', targetX: 0, targetY: 9, name: '回中立营地广场', icon: '🏕️', desc: '返回公共营地' },
+    ],
+    interactables: [
+      I('home_rubble', '营地荒地碎石堆', 'boulder', 10, 8, '[E/F 敲取开荒石料]', stoneLoot(25, '开荒碎石'), 1.8),
+      I('home_deadwood', '营地枯木', 'tree', -10, 8, '[E/F 砍伐开荒枯木]', woodLoot(25, '开荒枯木'), 1.6),
+    ],
+    monsters: [],
+    buildings: [
+      { id: 'home_anchor_tpl', type: 'anchor_core', name: '残破锚点残核（Lv.1·需重建）', x: 0.0, y: -6.0, hp: 1200, maxHp: 1200, level: 1, ownerName: '待认领' },
+    ],
+    deco: [
+      { x: 0, y: 0, w: 14, h: 12, type: 'foundation' },
+    ],
+  },
   camp_plaza: {
     id: 'camp_plaza', region: 'camp', name: '营地广场', theme: 'camp',
     desc: '开拓团主营：锚点核心/公共储物/防卫塔',

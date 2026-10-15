@@ -39,3 +39,17 @@ describe('diplomacy hostile core', () => {
     expect(isCampMap('marsh_rift')).toBe(false);
   });
 });
+
+describe('diplomacy home instance patch', () => {
+  it('visitor is hostile to owner buildings inside owner home', async () => {
+    const { isHostile } = await import('./diplomacy');
+    expect(isHostile('player_b', 'player_a', 'home_player_a' as any)).toBe(true);
+    expect(isHostile('player_a', 'player_a', 'home_player_a' as any)).toBe(false);
+    expect(isHostile('player_a', 'player_b', 'home_player_a' as any)).toBe(false);
+  });
+  it('camp neutral still holds for 3 public maps', async () => {
+    const { isCampMap } = await import('./diplomacy');
+    expect(isCampMap('camp_plaza' as any)).toBe(true);
+    expect(isCampMap('home_player_a' as any)).toBe(false);
+  });
+});

@@ -17,12 +17,16 @@ function isNeutralOwner(ownerId?: string): boolean {
   return false;
 }
 
-/** 野外异ID即敌对；营地永远不敌对；同ID不敌对；中立布景不敌对 */
+/** 野外异ID即敌对；营地永远不敌对；个人营地内只对实例主人敌对；同ID不敌对；中立布景不敌对 */
 export function isHostile(viewerId: string, ownerId: string | undefined, mapId: MapZoneId): boolean {
   if (!ownerId) return false;
   if (viewerId === ownerId) return false;
   if (isNeutralOwner(ownerId)) return false;
   if (isCampMap(mapId)) return false;
+  const homeOwner = parseHomeOwnerId(String(mapId));
+  if (homeOwner) {
+    return ownerId === homeOwner;
+  }
   return true;
 }
 
@@ -32,12 +36,16 @@ export function canOperateDoor(viewerId: string, b: { ownerId?: string; type: st
   return !!b.ownerId && b.ownerId === viewerId;
 }
 
-/** 建筑伤害：营地一律不允许；野外只允许打敌对；自己/中立不允许 */
+/** 建筑伤害：公共营地一律不允许；个人营地内只允许打实例主人建筑；野外只允许打敌对；自己/中立不允许 */
 export function canDamageBuilding(viewerId: string, ownerId: string | undefined, mapId: MapZoneId): boolean {
   if (isCampMap(mapId)) return false;
   if (!ownerId) return false;
   if (viewerId === ownerId) return false;
   if (isNeutralOwner(ownerId)) return false;
+  const homeOwner = parseHomeOwnerId(String(mapId));
+  if (homeOwner) {
+    return ownerId === homeOwner;
+  }
   return true;
 }
 
@@ -46,4 +54,12 @@ export function canLootBox(viewerId: string, ownerId?: string): boolean {
   if (!ownerId) return true;
   if (isNeutralOwner(ownerId)) return true;
   return viewerId === ownerId;
+}
+
+/** 个人营地实例归属：`home_<ownerId>` 解析，模板与非实例返回 null */
+export function parseHomeOwnerId(mapId: string): string | null {
+  if (mapId === 'home_base') return null;
+  if (!mapId.startsWith('home_')) return null;
+  const owner = mapId.slice(5);
+  return owner.length > 0 ? owner : null;
 }
