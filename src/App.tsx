@@ -26,6 +26,7 @@ import { MapEditorModal } from './components/MapEditorModal';
 import { LootPanel, LootEntry } from './components/LootPanel';
 import { lootResourceOf, RARITY, skillLevel, skillYieldMult, LootResource } from './game/maps';
 import { killReward, WEAPONS, ARMOR_REDUCTION } from './game/combat';
+import { BASE_PLOTS } from './game/spawn';
 import { CraftOrder } from './components/WorkbenchModal';
 import { RaidModal } from './components/RaidModal';
 import { OnlinePlayersModal } from './components/OnlinePlayersModal';
@@ -195,6 +196,14 @@ export default function App() {
   const [movedFar, setMovedFar] = useState(false);
   const [workbenchBuilt, setWorkbenchBuilt] = useState(false);
   const [pickaxeCrafted, setPickaxeCrafted] = useState(false);
+  const [safeDoorBuilt, setSafeDoorBuilt] = useState(false);
+  const [turretBuilt, setTurretBuilt] = useState(false);
+  const [rifleOwned, setRifleOwned] = useState(false);
+  const [raidHit, setRaidHit] = useState(false);
+  const [eliteKilled, setEliteKilled] = useState(false);
+  const [bossKilled, setBossKilled] = useState(false);
+  const [darkCoreGot, setDarkCoreGot] = useState(false);
+  const [claimedPlot, setClaimedPlot] = useState(false);
   const movedRef = useRef(false);
   const grantedQuestsRef = useRef<Set<string>>(new Set());
   const currentMapIdRef = useRef(currentMapId);
@@ -713,6 +722,7 @@ export default function App() {
           );
         }
         soundManager.playHit(raidEvent.isCritical);
+        if ((raidEvent as any)?.targetId) setRaidHit(true);
 
         // Update active raid modal door if open
         setRaidDoor((prev) => {
@@ -817,6 +827,9 @@ export default function App() {
       },
       onMonsterKilled: (monsterName: string, monsterMaxHp?: number) => {
         setKillCount((prev) => prev + 1);
+        if ((monsterMaxHp ?? 0) >= 550) setEliteKilled(true);
+        if (monsterName.includes('深渊霸主') || monsterName.includes('领主BOSS')) setBossKilled(true);
+        if (monsterName.includes('蚀骸巨兽')) setBossKilled(true);
         const reward = killReward(monsterMaxHp ?? 300);
         const xpGained = reward.xp;
 
@@ -880,6 +893,8 @@ export default function App() {
         if (costParts > 0) setPlayerParts((prev) => Math.max(0, prev - costParts));
         grantXp(20);
         if (type === 'workbench') setWorkbenchBuilt(true);
+        if (type === 'safe_door') setSafeDoorBuilt(true);
+        if (type === 'turret') setTurretBuilt(true);
 
         // Broadcast to multiplayer server
         if (netManagerRef.current && engineRef.current) {
@@ -1041,6 +1056,9 @@ export default function App() {
           icon: w.icon,
         })),
       });
+      setRifleOwned((v) => v || hotbarSlotsRef.current.some((s) => s?.id === 'rifle'));
+      setDarkCoreGot((v) => v || playerStatsRef.current.shards >= 12);
+      setClaimedPlot((v) => v || BASE_PLOTS.some((p) => Math.hypot(eng.player.x - p.x, eng.player.y - p.y) < 3));
 
       setSquadMembers((prev) => [
         {
@@ -1471,7 +1489,7 @@ export default function App() {
     }
   }, [pushSystemMsg]);
 
-  // 新手引路 8 步
+  // 三幕18步：Act1新手8 + Act2领地6 + Act3领主4
   const questSteps: QuestStep[] = [
     {
       id: 'move',
@@ -1529,6 +1547,76 @@ export default function App() {
       progressText: `${Math.min(killCount, 1)}/1`,
       done: killCount >= 1,
     },
+    {
+      id: 'claim',
+      title: '圈一块野外地',
+      desc: '去8大地块任选一块站上去3秒（M看地图，渔港/伐木场/商业街都有地）。',
+      progressText: claimedPlot ? '1/1' : '0/1',
+      done: claimedPlot,
+    },
+    {
+      id: 'safedoor',
+      title: '立起防爆安全门',
+      desc: '[B]建造→安全门（10石+20废铁+4零件），野外基地从此可守可被突袭。',
+      progressText: safeDoorBuilt ? '1/1' : '0/1',
+      done: safeDoorBuilt,
+    },
+    {
+      id: 'rifle',
+      title: '造出战术步枪',
+      desc: '工作台+搜刮攒出步枪（rifle），土铳不算毕业。',
+      progressText: rifleOwned ? '1/1' : '0/1',
+      done: rifleOwned,
+    },
+    {
+      id: 'raid_npc',
+      title: '首次突袭NPC据点',
+      desc: '带C4对废墟/深林NPC安全门造成任意伤害。',
+      progressText: raidHit ? '1/1' : '0/1',
+      done: raidHit,
+    },
+    {
+      id: 'elite',
+      title: '猎杀精英蚀体',
+      desc: '击杀1只≥550HP精英（恶瘴魑/巨熊/工厂精英）。',
+      progressText: eliteKilled ? '1/1' : '0/1',
+      done: eliteKilled,
+    },
+    {
+      id: 'turret',
+      title: '架起防御塔',
+      desc: '[B]建造→电击塔（15废铁+2零件）。',
+      progressText: turretBuilt ? '1/1' : '0/1',
+      done: turretBuilt,
+    },
+    {
+      id: 'boss1',
+      title: '直面深渊霸主',
+      desc: '去裂隙前线击杀深渊霸主（1600HP），组队更稳。',
+      progressText: bossKilled ? '1/1' : '0/1',
+      done: bossKilled,
+    },
+    {
+      id: 'darkcore',
+      title: '带回暗物质晶核',
+      desc: '开深渊箱/破门缴获，晶石≥12。',
+      progressText: darkCoreGot ? '1/1' : '0/1',
+      done: darkCoreGot,
+    },
+    {
+      id: 'level10',
+      title: '成长为Lv.10行者',
+      desc: '野外练级+交任务升到10级。',
+      progressText: `Lv.${playerStats.level}/10`,
+      done: playerStats.level >= 10,
+    },
+    {
+      id: 'fortress',
+      title: '要塞守住一夜',
+      desc: '同时拥有安全门+防御塔+精英击杀，即毕业。',
+      progressText: safeDoorBuilt && turretBuilt && eliteKilled ? '1/1' : '0/1',
+      done: safeDoorBuilt && turretBuilt && eliteKilled,
+    },
   ];
 
   // 任务完成自动发奖
@@ -1561,6 +1649,16 @@ export default function App() {
         });
         setPlayerStats((p) => (p.title === '废土流浪者' ? { ...p, title: '见习拾荒者' } : p));
       },
+      claim: () => grantXp(60),
+      safedoor: () => { grantXp(120); setPlayerStats((p) => ({ ...p, credits: p.credits + 200 })); },
+      rifle: () => grantXp(120),
+      raid_npc: () => { grantXp(150); setPlayerStats((p) => ({ ...p, shards: p.shards + 3 })); },
+      elite: () => { grantXp(200); setPlayerStats((p) => ({ ...p, credits: p.credits + 300 })); },
+      turret: () => grantXp(120),
+      boss1: () => { grantXp(500); setPlayerStats((p) => ({ ...p, credits: p.credits + 1000, shards: p.shards + 6 })); },
+      darkcore: () => grantXp(300),
+      level10: () => { grantXp(300); setPlayerStats((p) => ({ ...p, title: '裂隙行者' })); },
+      fortress: () => { grantXp(500); pushSystemMsg('🎓 三幕毕业！你是真正的裂隙领主，深渊裂口等你常驻。'); },
     };
     for (const step of questSteps) {
       if (step.done && !grantedQuestsRef.current.has(step.id)) {
@@ -1579,7 +1677,7 @@ export default function App() {
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [movedFar, totalWood, totalStone, totalScrap, workbenchBuilt, pickaxeCrafted, ateFood, killCount]);
+  }, [movedFar, totalWood, totalStone, totalScrap, workbenchBuilt, pickaxeCrafted, ateFood, killCount, safeDoorBuilt, turretBuilt, rifleOwned, raidHit, eliteKilled, bossKilled, darkCoreGot, claimedPlot, playerStats.level]);
 
   return (
     <div className="relative w-screen h-screen overflow-hidden bg-slate-950 font-sans select-none">
