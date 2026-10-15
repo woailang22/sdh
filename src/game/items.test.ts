@@ -44,3 +44,45 @@ describe('items registry skeleton', () => {
     expect(MED_HEAL['med_medkit']).toBe(60);
   });
 });
+describe('stardew crops/seeds/ores', () => {
+  it('has 5 seeds, 6 crops, 4 ores with correct categories', async () => {
+    const { ITEM_DEFS } = await import('./items');
+    for (const id of ['seed_parsnip','seed_potato','seed_corn','seed_pumpkin','seed_starfruit']) {
+      expect(ITEM_DEFS[id]).toBeDefined();
+      expect(ITEM_DEFS[id].category).toBe('material');
+    }
+    expect(ITEM_DEFS['seed_parsnip'].rarity).toBe(1);
+    expect(ITEM_DEFS['seed_potato'].rarity).toBe(1);
+    expect(ITEM_DEFS['seed_corn'].rarity).toBe(2);
+    expect(ITEM_DEFS['seed_pumpkin'].rarity).toBe(2);
+    expect(ITEM_DEFS['seed_starfruit'].rarity).toBe(4);
+    for (const id of ['crop_parsnip','crop_potato','crop_corn','crop_pumpkin','crop_starfruit','crop_blueberry']) {
+      expect(ITEM_DEFS[id]).toBeDefined();
+      expect(ITEM_DEFS[id].category).toBe('food');
+    }
+    for (const id of ['ore_copper','ore_silver','ore_gold','ore_iridium']) {
+      expect(ITEM_DEFS[id]).toBeDefined();
+      expect(ITEM_DEFS[id].category).toBe('material');
+    }
+    expect(ITEM_DEFS['ore_iridium'].rarity).toBe(5);
+    expect(ITEM_DEFS['crop_starfruit'].sellPrice).toBeGreaterThan(ITEM_DEFS['crop_parsnip'].sellPrice);
+  });
+  it('seed loot maps to seed resource, crops to food, ores to parts', async () => {
+    const { lootResourceOfNew } = await import('./items');
+    expect(lootResourceOfNew('seed_parsnip')).toBe('seed');
+    expect(lootResourceOfNew('crop_corn')).toBe('food');
+    expect(lootResourceOfNew('ore_copper')).toBe('parts');
+    expect(lootResourceOfNew('ore_iridium')).toBe('parts');
+  });
+  it('every seed has a workbench grow path (usefulness lock, no decoration seeds)', async () => {
+    const { SEED_GROW, ITEM_DEFS } = await import('./items');
+    for (const seed of ['seed_parsnip','seed_potato','seed_corn','seed_pumpkin','seed_starfruit']) {
+      const g = SEED_GROW[seed];
+      expect(g, `${seed} grow missing`).toBeDefined();
+      expect(ITEM_DEFS[g.cropId]).toBeDefined();
+      expect(ITEM_DEFS[g.cropId].category).toBe('food');
+      expect(g.outCount).toBeGreaterThanOrEqual(2);
+    }
+    expect(SEED_GROW['seed_starfruit'].cropId).toBe('crop_starfruit');
+  });
+});

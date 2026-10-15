@@ -46,17 +46,45 @@ export const ITEM_DEFS: Record<string, ItemDef> = {
   vest: { id: 'vest', name: '军用防弹背心', category: 'armor', icon: '🦺', rarity: 5, maxCount: 1, desc: '护盾上限+50，受伤减免15%。', buyPrice: 900, sellPrice: 600, shield: 50 },
   pack_canvas: { id: 'pack_canvas', name: '帆布背包', category: 'pack', icon: '🎒', rarity: 3, maxCount: 1, desc: '背包格+2。', buyPrice: 200, sellPrice: 140 },
   pack_tactical: { id: 'pack_tactical', name: '战术携行具', category: 'pack', icon: '🧳', rarity: 4, maxCount: 1, desc: '背包格+4。', buyPrice: 500, sellPrice: 350 },
+  seed_parsnip: { id: 'seed_parsnip', name: '防风草种子×5', category: 'material', icon: '🌱', rarity: 1, maxCount: 99, desc: '农圩种植，4天成熟，星露谷开局菜。', buyPrice: 20, sellPrice: 8 },
+  seed_potato: { id: 'seed_potato', name: '土豆种子×5', category: 'material', icon: '🌱', rarity: 1, maxCount: 99, desc: '农圩种植，6天成熟，产量大。', buyPrice: 35, sellPrice: 12 },
+  seed_corn: { id: 'seed_corn', name: '玉米种子×5', category: 'material', icon: '🌱', rarity: 2, maxCount: 99, desc: '夏秋两季作物，连续收获。', buyPrice: 60, sellPrice: 20 },
+  seed_pumpkin: { id: 'seed_pumpkin', name: '南瓜种子×3', category: 'material', icon: '🌱', rarity: 2, maxCount: 99, desc: '秋季巨型作物，单价高。', buyPrice: 80, sellPrice: 28 },
+  seed_starfruit: { id: 'seed_starfruit', name: '星果种子×1', category: 'material', icon: '✨', rarity: 4, maxCount: 20, desc: '沙漠商人限定，毕业经济作物。', buyPrice: 400, sellPrice: 150 },
+  crop_parsnip: { id: 'crop_parsnip', name: '防风草', category: 'food', icon: '🥕', rarity: 1, maxCount: 99, desc: '恢复20饱食，银星以上更值钱。', buyPrice: 35, sellPrice: 35, satiety: 20, heal: 2 },
+  crop_potato: { id: 'crop_potato', name: '土豆', category: 'food', icon: '🥔', rarity: 1, maxCount: 99, desc: '恢复25饱食，量大管饱。', buyPrice: 50, sellPrice: 50, satiety: 25, heal: 3 },
+  crop_corn: { id: 'crop_corn', name: '玉米', category: 'food', icon: '🌽', rarity: 2, maxCount: 99, desc: '恢复30饱食，可加工爆米花。', buyPrice: 75, sellPrice: 75, satiety: 30, heal: 5 },
+  crop_pumpkin: { id: 'crop_pumpkin', name: '南瓜', category: 'food', icon: '🎃', rarity: 2, maxCount: 99, desc: '恢复40饱食+10生命，秋收之王。', buyPrice: 160, sellPrice: 160, satiety: 40, heal: 10 },
+  crop_starfruit: { id: 'crop_starfruit', name: '星果', category: 'food', icon: '🌟', rarity: 4, maxCount: 99, desc: '恢复60饱食+20生命，酿酒暴利。', buyPrice: 750, sellPrice: 750, satiety: 60, heal: 20 },
+  crop_blueberry: { id: 'crop_blueberry', name: '蓝莓×3', category: 'food', icon: '🫐', rarity: 2, maxCount: 99, desc: '一次收三颗，果酱原料。', buyPrice: 90, sellPrice: 90, satiety: 35, heal: 8 },
+  ore_copper: { id: 'ore_copper', name: '铜矿石', category: 'material', icon: '🟤', rarity: 2, maxCount: 999, desc: '升级铜制农具，伐木场工具棚产出。', buyPrice: 30, sellPrice: 20 },
+  ore_silver: { id: 'ore_silver', name: '银矿石', category: 'material', icon: '⬜', rarity: 3, maxCount: 999, desc: '升级钢制工具，采石场伴生。', buyPrice: 80, sellPrice: 60 },
+  ore_gold: { id: 'ore_gold', name: '金矿石', category: 'material', icon: '🟡', rarity: 4, maxCount: 999, desc: '升级金制工具，雪峰富矿产出。', buyPrice: 180, sellPrice: 140 },
+  ore_iridium: { id: 'ore_iridium', name: '铱矿石', category: 'material', icon: '🟪', rarity: 5, maxCount: 999, desc: '升级铱制工具，深渊裂口限定。', buyPrice: 400, sellPrice: 320 },
 };
 
 export const WEAPON_DAMAGE: Record<string, number> = { rifle: 124, crude_gun: 55 };
 export const ARMOR_BONUS_TABLE: Record<string, number> = { armor_cloth: 25, armor_vest: 50, vest: 50 };
 export const MED_HEAL: Record<string, number> = { med_bandage: 30, bandage: 30, med_medkit: 60, medkit: 60, antidote: 10 };
 export const THROW_DAMAGE: Record<string, number> = { c4_explosive: 400, thermite_charge: 250 };
+export const SEED_GROW: Record<string, { cropId: string; outCount: number }> = {
+  seed_parsnip: { cropId: 'crop_parsnip', outCount: 4 },
+  seed_potato: { cropId: 'crop_potato', outCount: 4 },
+  seed_corn: { cropId: 'crop_corn', outCount: 4 },
+  seed_pumpkin: { cropId: 'crop_pumpkin', outCount: 3 },
+  seed_starfruit: { cropId: 'crop_starfruit', outCount: 2 },
+};
 export const FOOD_VALUE: Record<string, { satiety: number; heal: number }> = {
   food: { satiety: 35, heal: 0 },
   fish: { satiety: 30, heal: 5 },
   fish2: { satiety: 40, heal: 10 },
   water: { satiety: 15, heal: 0 },
+  crop_parsnip: { satiety: 20, heal: 2 },
+  crop_potato: { satiety: 25, heal: 3 },
+  crop_corn: { satiety: 30, heal: 5 },
+  crop_pumpkin: { satiety: 40, heal: 10 },
+  crop_starfruit: { satiety: 60, heal: 20 },
+  crop_blueberry: { satiety: 35, heal: 8 },
 };
 
 export function getItemDef(id: string): ItemDef {
@@ -85,6 +113,9 @@ export function qualitySellPrice(id: string, quality: ItemQuality): number {
 export type LootResourceNew = 'wood' | 'stone' | 'scrap' | 'parts' | 'food' | 'ammo' | 'c4' | 'medical' | 'weapon' | 'armor' | 'credits' | 'shard' | 'blueprint' | 'pack' | 'throwable' | 'valuable' | 'seed';
 
 export function lootResourceOfNew(itemId: string): LootResourceNew {
+  if (itemId.startsWith('seed_')) return 'seed';
+  if (itemId.startsWith('crop_') || itemId.startsWith('cook_') || itemId.startsWith('jam_') || itemId.startsWith('wine_') || itemId.startsWith('pickle_') || itemId.startsWith('cheese_') || itemId.startsWith('honey_')) return 'food';
+  if (itemId.startsWith('ore_')) return 'parts';
   if (itemId === 'wood') return 'wood';
   if (itemId === 'stone') return 'stone';
   if (itemId === 'part' || itemId === 'battery' || itemId === 'iron_ore' || itemId === 'fuel') return 'parts';
