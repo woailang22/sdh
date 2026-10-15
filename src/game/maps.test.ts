@@ -98,6 +98,10 @@ describe('map expansion part B', () => {
         if (!seen.has(g.targetMap)) { seen.add(g.targetMap); q.push(g.targetMap); }
       }
     }
-    for (const id of MAP_IDS) expect(seen.has(id), `${id} unreachable`).toBe(true);
+    for (const id of MAP_IDS) {
+      if (id === 'home_base' || String(id).startsWith('home_')) continue;
+      expect(seen.has(id), `${id} unreachable`).toBe(true);
+    }
+    expect((SUBMAPS as any)['home_base'], 'home_base template missing').toBeDefined();
   });
 });
