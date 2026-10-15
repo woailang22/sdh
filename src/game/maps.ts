@@ -8,6 +8,7 @@ import type {
   BuildingEntity,
 } from '../types/game';
 import { buildCompoundWalls } from './compound';
+import { ITEM_DEFS, lootResourceOfNew } from './items';
 
 export const REGIONS: RegionDef[] = [
   { id: 'camp', name: '恒界营地', icon: '🏕️', desc: '安全区：建造/制造大本营，不产野外物资' },
@@ -151,6 +152,8 @@ export const SUBMAPS: Record<string, SubMapDef> = {
     interactables: [
       I('outskirts_well', '圩田水井', 'box', -10, 12, '[E/F 打水]', [
         { itemId: 'water', name: '高纯度饮用水', count: 4 },
+        { itemId: 'seed_corn', name: '玉米种子×5', count: 2 },
+        { itemId: 'crop_potato', name: '土豆', count: 4 },
       ], 1.2),
     ],
     monsters: [],
@@ -306,6 +309,8 @@ export const SUBMAPS: Record<string, SubMapDef> = {
       I('st_pharmacy', '药房', 'med_cabinet', 16, -6, '[E/F 搜刮药房]', [
         { itemId: 'medkit', name: '急救包', count: 2 },
         { itemId: 'bandage', name: '绷带卷', count: 4 },
+        { itemId: 'med_surgery', name: '野战手术包', count: 1 },
+        { itemId: 'vest_t2', name: '2级轻型背心', count: 1 },
       ], 1.8),
     ],
     monsters: [
@@ -383,6 +388,8 @@ export const SUBMAPS: Record<string, SubMapDef> = {
       I('fac_ammo', '工厂警卫弹药库', 'ammo_crate', 20, 14, '[E/F 破译弹药库]', [
         { itemId: 'ammo', name: '7.62mm 步枪穿甲弹药包', count: 60 },
         { itemId: 'c4_explosive', name: '高爆C4炸药', count: 2 },
+        { itemId: 'ammo_556', name: '5.56mm步枪弹×30', count: 2 },
+        { itemId: 'wp_p1911', name: 'P1911手枪', count: 1 },
       ], 1.8),
       I('fac_med', '工厂医务室', 'med_cabinet', -20, 12, '[E/F 搜刮医务室]', [
         { itemId: 'medkit', name: '纳米急救箱', count: 2 },
@@ -445,6 +452,8 @@ export const SUBMAPS: Record<string, SubMapDef> = {
       I('ru_basement', '塌楼地下室', 'box', -14, -14, '[E/F 搜刮地下室]', [
         { itemId: 'credits', name: '发霉旧钞', count: 800 },
         { itemId: 'food', name: '封存罐头', count: 6 },
+        { itemId: 'collect_watch', name: '金表', count: 1 },
+        { itemId: 'key_blue', name: '蓝色房卡', count: 1 },
       ], 2.0),
     ],
     monsters: [
@@ -528,6 +537,7 @@ export const SUBMAPS: Record<string, SubMapDef> = {
       I('log_toolshed', '伐木工具棚', 'box', -14, 4, '[E/F 搜刮工具棚]', [
         { itemId: 'part', name: '油锯链条', count: 4 },
         { itemId: 'scrap', name: '棚架角铁', count: 20 },
+        { itemId: 'ore_copper', name: '铜矿石', count: 4 },
       ], 1.6),
     ],
     monsters: [
@@ -589,6 +599,7 @@ export const SUBMAPS: Record<string, SubMapDef> = {
       I('q_powder', '采石炸药库', 'ammo_crate', -12, 8, '[E/F 搜刮炸药库]', [
         { itemId: 'c4_explosive', name: '采石乳化炸药', count: 3 },
         { itemId: 'ammo', name: '信号枪弹', count: 20 },
+        { itemId: 'throw_frag', name: '破片手雷×2', count: 1 },
       ], 1.8),
     ],
     monsters: [
@@ -710,6 +721,7 @@ export const SUBMAPS: Record<string, SubMapDef> = {
       I('dock_1', '一号深水钓台', 'pond', 0, 6, '[E/F 抛竿垂钓]', [
         { itemId: 'fish', name: '变异黄颡鱼', count: 2 },
         { itemId: 'fish2', name: '裂隙荧光金鳟', count: 1 },
+        { itemId: 'fish_bass', name: '大嘴鲈鱼', count: 2 },
       ]),
       I('dock_2', '二号浅滩钓台', 'pond', -6, 12, '[E/F 抛竿垂钓]', [
         { itemId: 'fish', name: '异变青鱼', count: 2 },
@@ -934,6 +946,7 @@ export const SUBMAPS: Record<string, SubMapDef> = {
       I('aby_scrap', '坠毁无人机堆', 'car', -12, -16, '[E/F 拆解无人机]', [
         { itemId: 'scrap', name: '航空铝废料', count: 40 },
         { itemId: 'part', name: '无人机飞控芯片', count: 4 },
+        { itemId: 'collect_circuit', name: '军用电路板', count: 2 },
       ], 2.0),
     ],
     monsters: [
@@ -957,46 +970,24 @@ export const MAP_IDS = Object.keys(SUBMAPS) as MapZoneId[];
 
 export const regionOf = (id: MapZoneId): RegionId => SUBMAPS[id]?.region ?? 'camp';
 
-// ---------- 三角洲式稀有度（1白2绿3蓝4紫5金） ----------
-export const RARITY: Record<string, number> = {
-  wood: 1, stone: 1, scrap: 1, box: 1,
-  food: 2, fish: 2, fish2: 2, water: 2, bandage: 2, credits: 2,
-  ammo: 3, antidote: 3, part: 3, battery: 3, iron_ore: 3, fuel: 3, pack_canvas: 3,
-  c4_explosive: 4, thermite_charge: 4, medkit: 4, shard: 4, pack_tactical: 4,
-  rifle: 5, vest: 5, blueprint: 5, dark_core: 5, plasma: 5,
-};
+// ---------- 三角洲式稀有度（1白2绿3蓝4紫5金，代理 items.ts 注册表） ----------
+export const RARITY: Record<string, number> = Object.fromEntries(
+  Object.values(ITEM_DEFS).map((d) => [d.id, d.rarity]),
+);
 
 export const RARITY_COLOR: Record<number, string> = {
   1: '#94a3b8', 2: '#4ade80', 3: '#38bdf8', 4: '#c084fc', 5: '#fbbf24',
 };
 
-export const ITEM_ICON: Record<string, string> = {
-  wood: '🪵', stone: '🪨', scrap: '⚙️', part: '🔧', battery: '🔋', iron_ore: '⛏️',
-  ammo: '🎯', c4_explosive: '💣', thermite_charge: '🔥',
-  medkit: '💉', bandage: '🩹', antidote: '💊',
-  food: '🥩', fish: '🐟', fish2: '🐟', water: '💧', fuel: '🛢️',
-  credits: '💰', shard: '💎', plasma: '🟣', blueprint: '📜', dark_core: '🕳️',
-  rifle: '🔫', vest: '🦺', box: '📦', pack_canvas: '🎒', pack_tactical: '🧳',
-};
+export const ITEM_ICON: Record<string, string> = Object.fromEntries(
+  Object.values(ITEM_DEFS).map((d) => [d.id, d.icon]),
+);
 
-export type LootResource = 'wood' | 'stone' | 'scrap' | 'parts' | 'food' | 'ammo' | 'c4' | 'medical' | 'weapon' | 'armor' | 'credits' | 'shard' | 'blueprint' | 'pack';
+export type LootResource = 'wood' | 'stone' | 'scrap' | 'parts' | 'food' | 'ammo' | 'c4' | 'medical' | 'weapon' | 'armor' | 'credits' | 'shard' | 'blueprint' | 'pack' | 'throwable' | 'valuable' | 'seed';
 
-// 掉落物归类（引擎与App共用，保持一致）
+// 掉落物归类（引擎与App共用，保持一致，代理 items.ts）
 export function lootResourceOf(itemId: string): LootResource {
-  if (itemId === 'wood') return 'wood';
-  if (itemId === 'stone') return 'stone';
-  if (itemId === 'part' || itemId === 'battery' || itemId === 'iron_ore') return 'parts';
-  if (itemId === 'food' || itemId === 'fish' || itemId === 'fish2' || itemId === 'water') return 'food';
-  if (itemId === 'ammo') return 'ammo';
-  if (itemId === 'c4_explosive' || itemId === 'thermite_charge') return 'c4';
-  if (itemId === 'medkit' || itemId === 'bandage' || itemId === 'antidote') return 'medical';
-  if (itemId === 'rifle') return 'weapon';
-  if (itemId === 'vest') return 'armor';
-  if (itemId === 'credits') return 'credits';
-  if (itemId === 'shard' || itemId === 'plasma' || itemId === 'dark_core') return 'shard';
-  if (itemId === 'blueprint') return 'blueprint';
-  if (itemId === 'pack_canvas' || itemId === 'pack_tactical') return 'pack';
-  return 'scrap';
+  return lootResourceOfNew(itemId) as LootResource;
 }
 
 // 采集技能：累计经验 → 等级（星露谷式）

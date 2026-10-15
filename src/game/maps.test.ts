@@ -105,3 +105,28 @@ describe('map expansion part B', () => {
     expect((SUBMAPS as any)['home_base'], 'home_base template missing').toBeDefined();
   });
 });
+describe('item expansion wiring', () => {
+  it('RARITY/ITEM_ICON cover new ids and lootResourceOf delegates', async () => {
+    const { RARITY, ITEM_ICON, lootResourceOf } = await import('./maps');
+    for (const id of ['seed_corn','crop_starfruit','ore_iridium','fish_legend','wine_starfruit','ammo_762','wp_svd','vest_t5','med_surgery','throw_frag','att_scope4x','key_red','collect_mandel']) {
+      expect(RARITY[id], `${id} rarity`).toBeDefined();
+      expect(ITEM_ICON[id], `${id} icon`).toBeDefined();
+    }
+    expect(RARITY['ore_iridium']).toBe(5);
+    expect(RARITY['fish_legend']).toBe(5);
+    expect(RARITY['wp_p1911']).toBe(2);
+    expect(lootResourceOf('seed_parsnip')).toBe('seed');
+    expect(lootResourceOf('ammo_762')).toBe('ammo');
+    expect(lootResourceOf('wp_akm')).toBe('weapon');
+    expect(lootResourceOf('throw_frag')).toBe('throwable');
+    expect(lootResourceOf('collect_mandel')).toBe('valuable');
+  });
+  it('at least 8 interactables drop new items', async () => {
+    const { SUBMAPS } = await import('./maps');
+    const all = Object.values(SUBMAPS).flatMap((m) => m.interactables).flatMap((e) => e.lootTable ?? []);
+    const ids = new Set(all.map((l) => l.itemId));
+    for (const id of ['seed_corn','ore_copper','fish_bass','ammo_556','wp_p1911','vest_t2','med_surgery','collect_circuit']) {
+      expect(ids.has(id), `${id} not placed`).toBe(true);
+    }
+  });
+});
