@@ -4,7 +4,8 @@ import { WebSocketServer, WebSocket } from 'ws';
 import path from 'path';
 import fs from 'fs';
 import { fileURLToPath } from 'url';
-import { createDb } from './server/db.js';
+import { createDb, createMemoryDb } from './server/db.js';
+import type { DbHandle } from './server/db.js';
 import type {
   OnlinePlayer,
   BuildingEntity,
@@ -35,14 +36,21 @@ app.get('/api/health', (req, res) => {
 });
 
 // SQLite persistence (Task 1: 重启不丢档，只存 players+buildings)
+// DB 打不开则降级内存模式：worldBuildings 保持下方5种子，不 crash
 const DB_PATH = process.env.DB_PATH || 'data/sdc.sqlite';
-fs.mkdirSync(path.dirname(DB_PATH), { recursive: true });
-const db = createDb(DB_PATH);
-// meta 版本兜底（db 层已幂等 ensure，此处再确认一次供后续升级用）
+let db: DbHandle;
 try {
-  if (!db.getMeta('version')) db.setMeta('version', '1');
+  fs.mkdirSync(path.dirname(DB_PATH), { recursive: true });
+  db = createDb(DB_PATH);
+  // meta 版本兜底（db 层已幂等 ensure，此处再确认一次供后续升级用）
+  try {
+    if (!db.getMeta('version')) db.setMeta('version', '1');
+  } catch (e) {
+    console.error('[db] ensure meta version failed', e);
+  }
 } catch (e) {
-  console.error('[db] ensure meta version failed', e);
+  console.error('[db] open failed, continuing in memory mode', e);
+  db = createMemoryDb();
 }
 
 // Server State
@@ -262,6 +270,7 @@ setInterval(() => {
 
 // WebSocket Connection Handling
 wss.on('connection', (ws: WebSocket, req) => {
+  // Phase1: playerId 随机，getPlayer 保留给二期账号系统，本期只保 buildings。
   const playerId = 'player_' + Math.random().toString(36).substring(2, 9);
   const randomNameIndex = Math.floor(Math.random() * PREFAB_NAMES.length);
   const assignedName = `${PREFAB_NAMES[randomNameIndex]} #${Math.floor(100 + Math.random() * 900)}`;
@@ -708,6 +717,11 @@ wss.on('connection', (ws: WebSocket, req) => {
     const leaving = clients.get(playerId);
     clients.delete(playerId);
     if (leaving) {
+      try {
+        db.savePlayer(leaving.player);
+      } catch (e) {
+        console.error('[db] savePlayer on close failed', e);
+      }
       broadcast({
         type: 'player_left',
         payload: { playerId, name: leaving.player.name },
@@ -726,6 +740,26 @@ wss.on('connection', (ws: WebSocket, req) => {
       });
     }
   });
+});
+
+// 退出 flush：SIGINT/SIGTERM 时全量回写在线玩家（逐个 try/catch，一个失败不影响其他）
+function flushAllPlayers(signal: string) {
+  for (const client of clients.values()) {
+    try {
+      db.savePlayer(client.player);
+    } catch (e) {
+      console.error(`[db] savePlayer on ${signal} failed`, e);
+    }
+  }
+  console.log(`[db] flushed ${clients.size} players on ${signal}`);
+}
+process.on('SIGINT', () => {
+  flushAllPlayers('SIGINT');
+  process.exit(0);
+});
+process.on('SIGTERM', () => {
+  flushAllPlayers('SIGTERM');
+  process.exit(0);
 });
 
 // Setup Vite middlewares in development or static serve in production

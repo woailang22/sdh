@@ -11,25 +11,47 @@ export interface DbHandle {
 }
 
 export function createDb(path: string): DbHandle {
-  const db = new Database(path);
-  db.exec(`CREATE TABLE IF NOT EXISTS buildings (id TEXT PRIMARY KEY, data TEXT NOT NULL);
+  try {
+    const db = new Database(path);
+    db.exec(`CREATE TABLE IF NOT EXISTS buildings (id TEXT PRIMARY KEY, data TEXT NOT NULL);
     CREATE TABLE IF NOT EXISTS players (id TEXT PRIMARY KEY, data TEXT NOT NULL);
     CREATE TABLE IF NOT EXISTS meta (k TEXT PRIMARY KEY, v TEXT NOT NULL);`);
-  const upsertB = db.prepare(`INSERT INTO buildings (id, data) VALUES (@id, @data) ON CONFLICT(id) DO UPDATE SET data=excluded.data`);
-  const allB = db.prepare(`SELECT data FROM buildings`);
-  const upsertP = db.prepare(`INSERT INTO players (id, data) VALUES (@id, @data) ON CONFLICT(id) DO UPDATE SET data=excluded.data`);
-  const oneP = db.prepare(`SELECT data FROM players WHERE id = ?`);
-  const getM = db.prepare(`SELECT v FROM meta WHERE k = ?`);
-  const upsertM = db.prepare(`INSERT INTO meta (k, v) VALUES (@k, @v) ON CONFLICT(k) DO UPDATE SET v=excluded.v`);
-  // meta 版本：供后续 schema 升级用，初始版本为 1（幂等，已存在则保持原值）
-  const existingVersion = getM.get('version') as any;
-  if (!existingVersion) upsertM.run({ k: 'version', v: '1' });
+    const upsertB = db.prepare(`INSERT INTO buildings (id, data) VALUES (@id, @data) ON CONFLICT(id) DO UPDATE SET data=excluded.data`);
+    const allB = db.prepare(`SELECT data FROM buildings`);
+    const upsertP = db.prepare(`INSERT INTO players (id, data) VALUES (@id, @data) ON CONFLICT(id) DO UPDATE SET data=excluded.data`);
+    const oneP = db.prepare(`SELECT data FROM players WHERE id = ?`);
+    const getM = db.prepare(`SELECT v FROM meta WHERE k = ?`);
+    const upsertM = db.prepare(`INSERT INTO meta (k, v) VALUES (@k, @v) ON CONFLICT(k) DO UPDATE SET v=excluded.v`);
+    // meta 版本：供后续 schema 升级用，初始版本为 1（幂等，已存在则保持原值）
+    const existingVersion = getM.get('version') as any;
+    if (!existingVersion) upsertM.run({ k: 'version', v: '1' });
+    return {
+      saveBuilding(b: any) { upsertB.run({ id: b.id, data: JSON.stringify(b) }); },
+      listBuildings() { return (allB.all() as any[]).map((r) => JSON.parse(r.data)); },
+      savePlayer(p: any) { upsertP.run({ id: p.id, data: JSON.stringify(p) }); },
+      getPlayer(id: string) { const r = oneP.get(id) as any; return r ? JSON.parse(r.data) : null; },
+      getMeta(k: string) { const r = getM.get(k) as any; return r ? String(r.v) : null; },
+      setMeta(k: string, v: string) { upsertM.run({ k, v }); },
+    };
+  } catch (e) {
+    throw new Error(`[db] open failed: ${(e as Error)?.message ?? String(e)} (path=${path})`);
+  }
+}
+
+// 内存兜底：磁盘 DB 打不开时用内存模式继续，不 crash（进程内 Map 实现同样接口）
+export function createMemoryDb(): DbHandle {
+  const buildings = new Map<string, any>();
+  const players = new Map<string, any>();
+  const meta = new Map<string, string>([['version', '1']]);
   return {
-    saveBuilding(b: any) { upsertB.run({ id: b.id, data: JSON.stringify(b) }); },
-    listBuildings() { return (allB.all() as any[]).map((r) => JSON.parse(r.data)); },
-    savePlayer(p: any) { upsertP.run({ id: p.id, data: JSON.stringify(p) }); },
-    getPlayer(id: string) { const r = oneP.get(id) as any; return r ? JSON.parse(r.data) : null; },
-    getMeta(k: string) { const r = getM.get(k) as any; return r ? String(r.v) : null; },
-    setMeta(k: string, v: string) { upsertM.run({ k, v }); },
+    saveBuilding(b: any) { buildings.set(b.id, JSON.parse(JSON.stringify(b))); },
+    listBuildings() { return [...buildings.values()].map((b) => JSON.parse(JSON.stringify(b))); },
+    savePlayer(p: any) { players.set(p.id, JSON.parse(JSON.stringify(p))); },
+    getPlayer(id: string) {
+      const v = players.get(id);
+      return v ? JSON.parse(JSON.stringify(v)) : null;
+    },
+    getMeta(k: string) { return meta.has(k) ? String(meta.get(k)) : null; },
+    setMeta(k: string, v: string) { meta.set(k, v); },
   };
 }

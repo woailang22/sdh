@@ -17,4 +17,21 @@ describe('sqlite persistence', () => {
     db.setMeta('foo', 'bar');
     expect(db.getMeta('foo')).toBe('bar');
   });
+  it('player save/get roundtrip', () => {
+    const db = createDb(':memory:');
+    db.savePlayer({ id: 'p1', name: '影刃', level: 3, x: 1.5, y: -2.5 } as any);
+    const got = db.getPlayer('p1');
+    expect(got?.name).toBe('影刃');
+    expect(got?.level).toBe(3);
+    expect(db.getPlayer('missing')).toBeNull();
+  });
+  it('building upsert overwrites', () => {
+    const db = createDb(':memory:');
+    db.saveBuilding({ id: 'b2', type: 'wall', name: '墙', x: 0, y: 0, hp: 1000, maxHp: 1000, level: 1, ownerId: 'p1', mapId: 'camp_plaza' } as any);
+    db.saveBuilding({ id: 'b2', type: 'wall', name: '墙', x: 0, y: 0, hp: 500, maxHp: 1000, level: 2, ownerId: 'p1', mapId: 'camp_plaza' } as any);
+    const rows = db.listBuildings();
+    expect(rows.filter((b) => b.id === 'b2')).toHaveLength(1);
+    expect(rows.find((b) => b.id === 'b2')?.hp).toBe(500);
+    expect(rows.find((b) => b.id === 'b2')?.level).toBe(2);
+  });
 });
