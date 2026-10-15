@@ -3,6 +3,7 @@ import { calcRangedDamage, rollCrit, weatherCritBonus, MELEE, aggroRangeFor, isE
 import { SUBMAPS, displayName, regionOf, lootResourceOf } from './maps';
 import { groundBaseColor, hash2 as hash2Pure, withAlpha, themeAccent, drawSoftShadow, healthBarColor, weatherTint } from './visualTheme';
 import { groupBuildingsIntoHouses, houseCorners, HOUSE_WALL_H } from './house';
+import { isHostile, canOperateDoor } from './diplomacy';
 import {
   MonsterEntity,
   InteractableEntity,
@@ -1087,6 +1088,29 @@ export class IsometricEngine {
     return { x: wx, y: wy };
   }
 
+  public applyPvpHit(damage: number, attackerName: string) {
+    const now = this.gameTime;
+    if (now < this.invulnUntil) return;
+    const reduced = Math.max(1, Math.floor(damage * (1 - this.armorReduction)));
+    if (this.player.shield > 0) {
+      const soaked = Math.min(this.player.shield, reduced);
+      this.player.shield -= soaked;
+      this.player.hp -= (reduced - soaked);
+    } else {
+      this.player.hp -= reduced;
+    }
+    this.hurtFlash = 0.6;
+    this.shake = Math.min(8, this.shake + 4);
+    this.shieldRegenAt = now + 5;
+    this.addTextParticle(this.player.x, this.player.y - 1.6, `-${reduced}! 来自 ${attackerName}`, '#f87171');
+    if (this.player.hp <= 0) {
+      this.player.hp = this.player.maxHp;
+      this.player.shield = this.player.maxShield;
+      this.warpToMap('camp_plaza', 0, 9, '被击倒·营地苏醒');
+      this.addTextParticle(0, 8, '你被敌对玩家击倒，已在营地苏醒（物品保留）', '#facc15');
+    }
+  }
+
   public reloadWeapon() {
     if (this.player.ammo < this.player.maxAmmo && this.player.reserveAmmo > 0) {
       soundManager.playReload();
@@ -1208,6 +1232,15 @@ export class IsometricEngine {
 
     if (this.nearestBuilding) {
       if (this.nearestBuilding.type === 'door') {
+        if (this.nearestBuilding.ownerId && this.nearestBuilding.ownerId !== this.localPlayerId && !isHostile(this.localPlayerId, this.nearestBuilding.ownerId, this.currentMapId)) {
+          this.addTextParticle(this.nearestBuilding.x, this.nearestBuilding.y - 1.0, '中立建筑，无需破拆', '#94a3b8');
+          return;
+        }
+        if (this.nearestBuilding.ownerId && this.nearestBuilding.ownerId !== this.localPlayerId && isHostile(this.localPlayerId, this.nearestBuilding.ownerId, this.currentMapId)) {
+          soundManager.playClick();
+          this.callbacks.onOpenRaidModal?.(this.nearestBuilding);
+          return;
+        }
         this.nearestBuilding.isOpen = !this.nearestBuilding.isOpen;
         soundManager.playClick();
         this.addTextParticle(
@@ -1219,7 +1252,7 @@ export class IsometricEngine {
         return;
       }
       if (this.nearestBuilding.type === 'safe_door') {
-        const isOwner = this.nearestBuilding.ownerId === this.localPlayerId;
+        const isOwner = canOperateDoor(this.localPlayerId, { ownerId: this.nearestBuilding.ownerId, type: 'safe_door' });
         if (isOwner) {
           this.nearestBuilding.isOpen = !this.nearestBuilding.isOpen;
           this.nearestBuilding.isLocked = !this.nearestBuilding.isOpen;
@@ -3544,6 +3577,13 @@ export class IsometricEngine {
 
   private drawBuilding(b: BuildingEntity) {
     const s = this.toScreen(b.x, b.y);
+    if (isHostile(this.localPlayerId, b.ownerId, this.currentMapId) && (b.type === 'safe_door' || b.type.includes('wall') || b.type === 'turret')) {
+      this.ctx.save();
+      this.ctx.strokeStyle = 'rgba(239,68,68,0.9)';
+      this.ctx.lineWidth = 2;
+      this.ctx.strokeRect(s.x - 18, s.y - 52, 36, 40);
+      this.ctx.restore();
+    }
     drawSoftShadow(this.ctx, s.x, s.y, b.type === 'anchor_core' ? 32 : 24);
     this.ctx.save();
     const facing = b.facing ?? 'ew';

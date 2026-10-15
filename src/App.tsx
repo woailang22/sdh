@@ -757,6 +757,9 @@ export default function App() {
           pushSystemMsg(`GM 登录失败${error ? `：${error}` : '：口令错误'}。`);
         }
       },
+      onPvpHit: (hit) => {
+        engineRef.current?.applyPvpHit(hit.damage, hit.attackerName);
+      },
     });
 
     netManager.connect();
