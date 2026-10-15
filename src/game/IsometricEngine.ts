@@ -3508,6 +3508,14 @@ export class IsometricEngine {
       this.ctx.fillStyle = door.isOpen ? '#34d399' : '#ef4444';
       this.ctx.fillRect(cx + w / 2 - 6, baseY - h - 6, 5, 5);
     }
+    const winW = Math.max(8, (gBottom.x - gLeft.x) * 0.1);
+    const winH = wallH * 0.28;
+    const winCx = (gBottom.x + gRight.x) / 2;
+    const winBaseY = (gBottom.y + gRight.y) / 2 - wallH * 0.45;
+    this.ctx.fillStyle = '#0f172a';
+    this.ctx.fillRect(winCx - winW / 2 - 1, winBaseY - winH - 1, winW + 2, winH + 2);
+    this.ctx.fillStyle = '#fde68a';
+    this.ctx.fillRect(winCx - winW / 2, winBaseY - winH, winW, winH);
     this.ctx.restore();
     const s = this.toScreen((x0 + x1) / 2, y1);
     const ref = door ?? first;
@@ -3602,17 +3610,19 @@ export class IsometricEngine {
     this.ctx.ellipse(s.x, s.y + 3, 26, 12, 0, 0, Math.PI * 2);
     this.ctx.fill();
 
+    const isRuin = b.hp < b.maxHp;
+    const ruinH = b.type === 'iron_wall' ? (isRuin ? 22 : 40) : (isRuin ? 20 : 36);
     if (b.type === 'wood_wall') {
       // 加固原木围墙：低矮原木段（朝向决定对角线方向）
       drawWallSeg(s.x, s.y, facing, 34, 13, 30, '#b07a3f', '#7c4a1e', '#5a3413', 'logs');
       this.drawBuildingHp(s.x, s.y - 44, b.hp, b.maxHp);
     } else if (b.type === 'stone_wall') {
       // 厚重条石墙
-      drawWallSeg(s.x, s.y, facing, 36, 15, 36, '#8b99ad', '#64748b', '#475569', 'mortar');
+      drawWallSeg(s.x, s.y, facing, 36, 15, ruinH, '#8b99ad', '#64748b', '#475569', 'mortar');
       this.drawBuildingHp(s.x, s.y - 50, b.hp, b.maxHp);
     } else if (b.type === 'iron_wall') {
       // 战术重合金墙
-      drawWallSeg(s.x, s.y, facing, 36, 14, 40, '#5b6b80', '#475569', '#2f3b4d', 'hazard');
+      drawWallSeg(s.x, s.y, facing, 36, 14, ruinH, '#5b6b80', '#475569', '#2f3b4d', 'hazard');
       this.drawBuildingHp(s.x, s.y - 54, b.hp, b.maxHp);
     } else if (b.type === 'glass_wall') {
       // 钢化玻璃观察墙
