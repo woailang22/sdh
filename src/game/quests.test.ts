@@ -22,4 +22,9 @@ describe('quests three acts', () => {
     expect(nextQuestId(new Set(['move']))).toBe('wood');
     expect(nextQuestId(new Set(ALL_QUESTS.map((q) => q.id)))).toBeNull();
   });
+  it('act1 every quest has reward', () => {
+    for (const q of ACT1_QUESTS) {
+      expect((q as any).reward.xp).toBeGreaterThan(0);
+    }
+  });
 });

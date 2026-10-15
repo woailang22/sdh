@@ -7,6 +7,7 @@ export interface QuestStep {
   desc: string;
   progressText: string;
   done: boolean;
+  rewardText?: string;
 }
 
 interface QuestPanelProps {
@@ -58,6 +59,9 @@ export const QuestPanel: React.FC<QuestPanelProps> = ({ steps }) => {
                 </div>
                 {(s.done || isCurrent) && (
                   <div className="mt-0.5 text-[10px] opacity-80">{s.desc}</div>
+                )}
+                {(s.done || isCurrent) && s.rewardText && (
+                  <div className="mt-0.5 text-[10px] font-mono text-emerald-300/90">🎁 {s.rewardText}</div>
                 )}
               </div>
             );

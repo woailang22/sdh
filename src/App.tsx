@@ -28,6 +28,7 @@ import { lootResourceOf, RARITY, skillLevel, skillYieldMult, LootResource } from
 import { ITEM_DEFS, getItemDef, makeItem, WEAPON_DAMAGE, ARMOR_BONUS_TABLE, MED_HEAL, FOOD_VALUE } from './game/items';
 import { killReward, WEAPONS, ARMOR_REDUCTION } from './game/combat';
 import { calcDeathDrop } from './game/death';
+import { ALL_QUESTS } from './game/quests';
 import { BASE_PLOTS } from './game/spawn';
 import { homeMapIdFor } from './game/home';
 import { CraftOrder } from './components/WorkbenchModal';
@@ -211,6 +212,8 @@ export default function App() {
   const grantedQuestsRef = useRef<Set<string>>(new Set());
   const currentMapIdRef = useRef(currentMapId);
   currentMapIdRef.current = currentMapId;
+  const pickaxeCraftedRef = useRef(pickaxeCrafted);
+  pickaxeCraftedRef.current = pickaxeCrafted;
   const [currentStance, setCurrentStance] = useState('combat');
 
   // Radar Minimap Entities Sync
@@ -994,6 +997,14 @@ export default function App() {
         setWeatherState(w);
       },
       onMapZoneChange: (mapId: MapZoneId) => {
+        const from = String(currentMapIdRef.current);
+        const to = String(mapId);
+        const fromCamp = from.startsWith('camp_');
+        const toWild = !to.startsWith('camp_') && !to.startsWith('home_') && to !== 'sanctuary';
+        // 新手卡点：没做出开山镐就出境只提示不硬锁
+        if (fromCamp && toWild && !pickaxeCraftedRef.current) {
+          pushSystemMsg('⛏️ 出境前先回营地工作台做出开山镐吧（8木+6石，采石效率+60%），野外才好混！');
+        }
         setCurrentMapId(mapId);
         setLootPanel(null); // 切图关箱
       },
@@ -1616,6 +1627,11 @@ export default function App() {
   }, [pushSystemMsg]);
 
   // 三幕18步：Act1新手8 + Act2领地6 + Act3领主4
+  const questRewardText = (id: string): string | undefined => {
+    const r = ALL_QUESTS.find((q) => q.id === id)?.reward;
+    if (!r) return undefined;
+    return `+${r.xp}经验${r.credits > 0 ? ` +${r.credits}币` : ''}`;
+  };
   const questSteps: QuestStep[] = [
     {
       id: 'move',
@@ -1623,6 +1639,7 @@ export default function App() {
       desc: 'WASD/方向键或右键点地移动，离开出生点。',
       progressText: movedFar ? '1/1' : '0/1',
       done: movedFar,
+      rewardText: questRewardText('move'),
     },
     {
       id: 'wood',
@@ -1630,6 +1647,7 @@ export default function App() {
       desc: '去黑松伐木场/商业街枯树/渔港白杨按 E 砍伐（营地不产物资，每棵树有采集上限）。',
       progressText: `${Math.min(totalWood, 10)}/10`,
       done: totalWood >= 10,
+      rewardText: questRewardText('wood'),
     },
     {
       id: 'stone',
@@ -1637,6 +1655,7 @@ export default function App() {
       desc: '去北岭采石场/渔港滩涂岩按 E 开采（节点采空要等恢复）。',
       progressText: `${Math.min(totalStone, 10)}/10`,
       done: totalStone >= 10,
+      rewardText: questRewardText('stone'),
     },
     {
       id: 'scrap',
@@ -1644,6 +1663,7 @@ export default function App() {
       desc: '去加油站/商业街拆事故车/翻货架，工作台和枪都靠它。',
       progressText: `${Math.min(totalScrap, 10)}/10`,
       done: totalScrap >= 10,
+      rewardText: questRewardText('scrap'),
     },
     {
       id: 'workbench',
@@ -1651,6 +1671,7 @@ export default function App() {
       desc: '[B]进入建造→设施→工作台（8废铁+1零件），放下去。',
       progressText: workbenchBuilt ? '1/1' : '0/1',
       done: workbenchBuilt,
+      rewardText: questRewardText('workbench'),
     },
     {
       id: 'pickaxe',
@@ -1658,6 +1679,7 @@ export default function App() {
       desc: '靠近工作台按 F：8木+6石，采石效率+60%（砍树要另做石斧）。',
       progressText: pickaxeCrafted ? '1/1' : '0/1',
       done: pickaxeCrafted,
+      rewardText: questRewardText('pickaxe'),
     },
     {
       id: 'eat',
@@ -1665,6 +1687,7 @@ export default function App() {
       desc: '钓鱼/烤肉干，点击快捷栏进食回饱食。饿到0会掉血！',
       progressText: ateFood ? '1/1' : '0/1',
       done: ateFood,
+      rewardText: questRewardText('eat'),
     },
     {
       id: 'kill',
@@ -1672,6 +1695,7 @@ export default function App() {
       desc: '做把土铳+弹药，去公路/密林外围猎杀1只。死了会被救回营地，物品保留。',
       progressText: `${Math.min(killCount, 1)}/1`,
       done: killCount >= 1,
+      rewardText: questRewardText('kill'),
     },
     {
       id: 'claim',
@@ -1745,30 +1769,37 @@ export default function App() {
     },
   ];
 
-  // 任务完成自动发奖
+  // 任务完成自动发奖（xp/币以 quests.ts QuestDef.reward 为准，道具/称号为额外添头）
   useEffect(() => {
+    const questRewardOf = (id: string) => ALL_QUESTS.find((q) => q.id === id)?.reward;
+    const grantQuestReward = (id: string) => {
+      const r = questRewardOf(id);
+      if (!r) return;
+      grantXp(r.xp);
+      if (r.credits > 0) setPlayerStats((p) => ({ ...p, credits: p.credits + r.credits }));
+    };
     const rewards: Record<string, () => void> = {
-      move: () => grantXp(30),
-      wood: () => { grantXp(40); setPlayerStats((p) => ({ ...p, credits: p.credits + 50 })); },
-      stone: () => grantXp(40),
+      move: () => grantQuestReward('move'),
+      wood: () => grantQuestReward('wood'),
+      stone: () => grantQuestReward('stone'),
       scrap: () => {
-        grantXp(40);
+        grantQuestReward('scrap');
         addItemToHotbar({
           id: 'med_亚麻绷带', name: '亚麻绷带', category: 'medical', icon: '🩹',
           count: 1, maxCount: 10, desc: '点击使用，恢复30点生命。',
         });
       },
       workbench: () => {
-        grantXp(60);
+        grantQuestReward('workbench');
         addItemToHotbar({
           id: 'food_烤肉干', name: '烤肉干', category: 'food', icon: '🍖',
           count: 2, maxCount: 99, desc: '点击食用，恢复35点饱食。',
         });
       },
-      pickaxe: () => grantXp(60),
-      eat: () => { grantXp(40); setPlayerStats((p) => ({ ...p, credits: p.credits + 100 })); },
+      pickaxe: () => grantQuestReward('pickaxe'),
+      eat: () => grantQuestReward('eat'),
       kill: () => {
-        grantXp(100);
+        grantQuestReward('kill');
         addItemToHotbar({
           id: 'med_纳米医疗包', name: '纳米医疗包', category: 'medical', icon: '💉',
           count: 1, maxCount: 10, desc: '点击使用，恢复60点生命。',
