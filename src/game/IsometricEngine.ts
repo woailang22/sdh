@@ -2,7 +2,7 @@
 import { calcRangedDamage, rollCrit, weatherCritBonus, MELEE, aggroRangeFor, isEnraged, calcMonsterHit, absorbShieldFirst } from './combat';
 import { SUBMAPS, displayName, regionOf, lootResourceOf } from './maps';
 import { groundBaseColor, hash2 as hash2Pure, withAlpha, themeAccent, drawSoftShadow, healthBarColor, weatherTint } from './visualTheme';
-import { groupBuildingsIntoHouses, houseCorners, HOUSE_WALL_H, HOUSE_PEAK_H } from './house';
+import { groupBuildingsIntoHouses, houseCorners, HOUSE_WALL_H } from './house';
 import {
   MonsterEntity,
   InteractableEntity,
@@ -3463,14 +3463,15 @@ export class IsometricEngine {
     const first = members[0];
     const isWood = first.type === 'wood_wall';
     const isStone = first.type === 'stone_wall';
-    const cLeft = isWood ? '#8a5a2b' : isStone ? '#9aa5b5' : '#6b7d94';
-    const cRight = isWood ? '#5a3413' : isStone ? '#5b6675' : '#3d4a5e';
-    const cRoofL = isWood ? '#a4713d' : isStone ? '#7d8aa0' : '#54687f';
-    const cRoofR = isWood ? '#6e4520' : isStone ? '#525d70' : '#33405280';
+    // 参考案例配色（平顶 concrete box）：左墙亮、右墙暗、顶面深色
+    const cLeft = isWood ? '#8a5a2b' : isStone ? '#9aa5b5' : '#9aa0a8';
+    const cRight = isWood ? '#5a3413' : isStone ? '#5b6675' : '#5b6067';
+    const cRoof = isWood ? '#33291f' : isStone ? '#2a2e36' : '#22262d';
     const wallH = HOUSE_WALL_H;
     const gLeft = this.toScreen(x0, y1);
     const gBottom = this.toScreen(x1, y1);
     const gRight = this.toScreen(x1, y0);
+    const gTop = this.toScreen(x0, y0);
     const up = (p: { x: number; y: number }, dy: number) => ({ x: p.x, y: p.y - dy });
     this.ctx.save();
     drawSoftShadow(this.ctx, (gLeft.x + gRight.x) / 2, gBottom.y + 4, 40);
@@ -3483,24 +3484,47 @@ export class IsometricEngine {
     };
     quad(gLeft, gBottom, up(gBottom, wallH), up(gLeft, wallH), cLeft);
     quad(gBottom, gRight, up(gRight, wallH), up(gBottom, wallH), cRight);
+    // 平顶：深色菱形 + 薄浅色描边 + 轻微出檐（参考案例做法）
     const tLeft = up(gLeft, wallH);
     const tBottom = up(gBottom, wallH);
     const tRight = up(gRight, wallH);
-    const apex = { x: tBottom.x, y: tBottom.y - HOUSE_PEAK_H };
-    this.ctx.fillStyle = cRoofL;
+    const tTop = up(gTop, wallH);
+    const rcx = (tLeft.x + tRight.x) / 2;
+    const rcy = (tLeft.y + tRight.y) / 2;
+    const overhang = (p: { x: number; y: number }) => {
+      const dx = p.x - rcx;
+      const dy = p.y - rcy;
+      const len = Math.hypot(dx, dy) || 1;
+      return { x: p.x + (dx / len) * 4, y: p.y + (dy / len) * 4 };
+    };
+    const r1 = overhang(tLeft);
+    const r2 = overhang(tBottom);
+    const r3 = overhang(tRight);
+    const r4 = overhang(tTop);
+    this.ctx.fillStyle = cRoof;
     this.ctx.beginPath();
-    this.ctx.moveTo(tLeft.x, tLeft.y); this.ctx.lineTo(tBottom.x, tBottom.y); this.ctx.lineTo(apex.x, apex.y);
-    this.ctx.closePath(); this.ctx.fill(); this.ctx.stroke();
-    this.ctx.fillStyle = cRoofR;
-    this.ctx.beginPath();
-    this.ctx.moveTo(tBottom.x, tBottom.y); this.ctx.lineTo(tRight.x, tRight.y); this.ctx.lineTo(apex.x, apex.y);
-    this.ctx.closePath(); this.ctx.fill(); this.ctx.stroke();
+    this.ctx.moveTo(r1.x, r1.y); this.ctx.lineTo(r2.x, r2.y); this.ctx.lineTo(r3.x, r3.y); this.ctx.lineTo(r4.x, r4.y);
+    this.ctx.closePath(); this.ctx.fill();
+    this.ctx.strokeStyle = '#c9ced6'; this.ctx.lineWidth = 1.5; this.ctx.stroke();
+    // 门画在左墙面中央（参考案例：门在左墙）；东/西门画在右墙面
     const doorOnSouth = door && door.y === y1;
+    const doorOnEastWest = door && (door.x === x0 || door.x === x1) && door.y !== y1;
     if (doorOnSouth && door) {
       const w = Math.max(10, (gBottom.x - gLeft.x) * 0.16);
       const h = wallH * 0.62;
       const cx = (gLeft.x + gBottom.x) / 2;
       const baseY = (gLeft.y + gBottom.y) / 2;
+      this.ctx.fillStyle = '#0f172a';
+      this.ctx.fillRect(cx - w / 2 - 2, baseY - h - 2, w + 4, h + 4);
+      this.ctx.fillStyle = door.type === 'safe_door' ? '#3f5c50' : '#5b7a99';
+      this.ctx.fillRect(cx - w / 2, baseY - h, w, h);
+      this.ctx.fillStyle = door.isOpen ? '#34d399' : '#ef4444';
+      this.ctx.fillRect(cx + w / 2 - 6, baseY - h - 6, 5, 5);
+    } else if (doorOnEastWest && door) {
+      const w = Math.max(10, (gRight.x - gBottom.x) * 0.3);
+      const h = wallH * 0.62;
+      const cx = (gBottom.x + gRight.x) / 2;
+      const baseY = (gBottom.y + gRight.y) / 2;
       this.ctx.fillStyle = '#0f172a';
       this.ctx.fillRect(cx - w / 2 - 2, baseY - h - 2, w + 4, h + 4);
       this.ctx.fillStyle = door.type === 'safe_door' ? '#3f5c50' : '#5b7a99';
@@ -3519,7 +3543,7 @@ export class IsometricEngine {
     this.ctx.restore();
     const s = this.toScreen((x0 + x1) / 2, y1);
     const ref = door ?? first;
-    this.drawBuildingHp(s.x, s.y - wallH - HOUSE_PEAK_H - 12, ref.hp, ref.maxHp);
+    this.drawBuildingHp(s.x, s.y - wallH - 12, ref.hp, ref.maxHp);
   }
 
   private drawBuilding(b: BuildingEntity) {
