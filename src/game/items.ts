@@ -75,9 +75,24 @@ export const ITEM_DEFS: Record<string, ItemDef> = {
   cook_stirfry: { id: 'cook_stirfry', name: '蔬菜炒', category: 'food', icon: '🥗', rarity: 2, maxCount: 50, desc: '烹饪锅制作，恢复45饱食+10生命。', buyPrice: 110, sellPrice: 110, satiety: 45, heal: 10 },
   cook_fishsoup: { id: 'cook_fishsoup', name: '鱼汤', category: 'food', icon: '🍲', rarity: 3, maxCount: 50, desc: '鲈鱼+莲藕熬制，恢复60饱食+20生命。', buyPrice: 220, sellPrice: 220, satiety: 60, heal: 20 },
   cook_energybar: { id: 'cook_energybar', name: '能量棒', category: 'food', icon: '🍫', rarity: 3, maxCount: 50, desc: '蜂蜜+鲶鱼干粮，恢复55饱食+30体力感。', buyPrice: 200, sellPrice: 200, satiety: 55, heal: 15 },
+  ammo_556: { id: 'ammo_556', name: '5.56mm步枪弹×30', category: 'material', icon: '🎯', rarity: 3, maxCount: 999, desc: 'M4/AK通用中口径，工厂警卫库产出。', buyPrice: 45, sellPrice: 30 },
+  ammo_762: { id: 'ammo_762', name: '7.62mm穿甲弹×30', category: 'material', icon: '🎯', rarity: 4, maxCount: 999, desc: '高穿甲，SVD/重机枪用，掠夺者军火箱产出。', buyPrice: 80, sellPrice: 55 },
+  ammo_9mm: { id: 'ammo_9mm', name: '9mm手枪弹×30', category: 'material', icon: '🎯', rarity: 2, maxCount: 999, desc: 'MP5/1911用，便利店/民居常见。', buyPrice: 25, sellPrice: 16 },
+  ammo_shell: { id: 'ammo_shell', name: '12号霰弹×10', category: 'material', icon: '🎯', rarity: 3, maxCount: 200, desc: 'M870近战爆发，汽修铺/工厂产出。', buyPrice: 50, sellPrice: 34 },
+  ammo_signal: { id: 'ammo_signal', name: '信号枪弹×10', category: 'material', icon: '🎯', rarity: 2, maxCount: 200, desc: '采石场/雪峰通用信号弹。', buyPrice: 20, sellPrice: 12 },
+  wp_p1911: { id: 'wp_p1911', name: 'P1911手枪', category: 'weapon', icon: '🔫', rarity: 2, maxCount: 1, desc: '单发38，开荒自卫枪。', buyPrice: 300, sellPrice: 200, damage: 38 },
+  wp_mp5: { id: 'wp_mp5', name: 'MP5冲锋枪', category: 'weapon', icon: '🔫', rarity: 3, maxCount: 1, desc: '单发52，近战扫射王。', buyPrice: 650, sellPrice: 430, damage: 52 },
+  wp_akm: { id: 'wp_akm', name: 'AKM突击步枪', category: 'weapon', icon: '🔫', rarity: 4, maxCount: 1, desc: '单发98，高后座高伤害。', buyPrice: 950, sellPrice: 640, damage: 98 },
+  wp_m4a1: { id: 'wp_m4a1', name: 'M4A1突击步枪', category: 'weapon', icon: '🔫', rarity: 4, maxCount: 1, desc: '单发110，稳定之王。', buyPrice: 1100, sellPrice: 730, damage: 110 },
+  wp_m870: { id: 'wp_m870', name: 'M870霰弹枪', category: 'weapon', icon: '🔫', rarity: 4, maxCount: 1, desc: '单发140×碎片，贴脸秒精英。', buyPrice: 1000, sellPrice: 660, damage: 140 },
+  wp_svd: { id: 'wp_svd', name: 'SVD狙击步枪', category: 'weapon', icon: '🔫', rarity: 5, maxCount: 1, desc: '单发220，红区点名。', buyPrice: 1800, sellPrice: 1200, damage: 220 },
+  wp_plasma: { id: 'wp_plasma', name: '破界等离子步枪', category: 'weapon', icon: '🔫', rarity: 5, maxCount: 1, desc: '单发320，蓝图毕业枪。', buyPrice: 3000, sellPrice: 2000, damage: 320 },
 };
 
-export const WEAPON_DAMAGE: Record<string, number> = { rifle: 124, crude_gun: 55 };
+export const WEAPON_DAMAGE: Record<string, number> = {
+  rifle: 124, crude_gun: 55,
+  wp_p1911: 38, wp_mp5: 52, wp_akm: 98, wp_m4a1: 110, wp_m870: 140, wp_svd: 220, wp_plasma: 320,
+};
 export const ARMOR_BONUS_TABLE: Record<string, number> = { armor_cloth: 25, armor_vest: 50, vest: 50 };
 export const MED_HEAL: Record<string, number> = { med_bandage: 30, bandage: 30, med_medkit: 60, medkit: 60, antidote: 10 };
 export const THROW_DAMAGE: Record<string, number> = { c4_explosive: 400, thermite_charge: 250 };
@@ -158,6 +173,8 @@ export function lootResourceOfNew(itemId: string): LootResourceNew {
   if (itemId === 'part' || itemId === 'battery' || itemId === 'iron_ore' || itemId === 'fuel') return 'parts';
   if (itemId === 'food' || itemId === 'fish' || itemId === 'fish2' || itemId === 'water') return 'food';
   if (itemId === 'ammo') return 'ammo';
+  if (itemId.startsWith('ammo_')) return 'ammo';
+  if (itemId.startsWith('wp_')) return 'weapon';
   if (itemId === 'c4_explosive' || itemId === 'thermite_charge') return 'c4';
   if (itemId === 'medkit' || itemId === 'bandage' || itemId === 'antidote') return 'medical';
   if (itemId === 'rifle') return 'weapon';

@@ -118,3 +118,21 @@ describe('stardew fish/artisan/cooking', () => {
     expect(COOK_SOURCE['wine_starfruit'].materials.some((m) => m.itemId === 'crop_starfruit')).toBe(true);
   });
 });
+describe('delta ammo and guns', () => {
+  it('has 5 ammo calibers and 7 guns with damage ladder', async () => {
+    const { ITEM_DEFS, WEAPON_DAMAGE, lootResourceOfNew } = await import('./items');
+    for (const id of ['ammo_556','ammo_762','ammo_9mm','ammo_shell','ammo_signal']) {
+      expect(ITEM_DEFS[id]).toBeDefined();
+      expect(lootResourceOfNew(id)).toBe('ammo');
+    }
+    expect(WEAPON_DAMAGE['wp_p1911']).toBe(38);
+    expect(WEAPON_DAMAGE['wp_mp5']).toBe(52);
+    expect(WEAPON_DAMAGE['wp_akm']).toBe(98);
+    expect(WEAPON_DAMAGE['wp_m4a1']).toBe(110);
+    expect(WEAPON_DAMAGE['wp_m870']).toBe(140);
+    expect(WEAPON_DAMAGE['wp_svd']).toBe(220);
+    expect(WEAPON_DAMAGE['wp_plasma']).toBe(320);
+    expect(ITEM_DEFS['wp_svd'].rarity).toBe(5);
+    expect(ITEM_DEFS['wp_p1911'].rarity).toBe(2);
+  });
+});
