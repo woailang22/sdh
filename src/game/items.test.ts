@@ -184,3 +184,16 @@ describe('app wiring contract', () => {
     }
   });
 });
+describe('item expansion finale', () => {
+  it('registry has 85+ defs, rarities cover 1-5, no empty icons', async () => {
+    const { ITEM_DEFS } = await import('./items');
+    const ids = Object.keys(ITEM_DEFS);
+    expect(ids.length).toBeGreaterThanOrEqual(85);
+    const rarities = new Set(Object.values(ITEM_DEFS).map((d) => d.rarity));
+    for (const r of [1,2,3,4,5]) expect(rarities.has(r as 1)).toBe(true);
+    for (const d of Object.values(ITEM_DEFS)) {
+      expect(d.icon.length).toBeGreaterThan(0);
+      expect(d.maxCount).toBeGreaterThanOrEqual(1);
+    }
+  });
+});

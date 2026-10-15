@@ -1281,6 +1281,9 @@ const EQUIP_META: Record<'weapon' | 'armor' | 'tool' | 'pack', { name: string; i
       if (!it) return '无：徒手采集';
       if (it.id === 'throw_frag') return '破片 · 范围300';
       if (it.id === 'throw_molly') return '燃烧 · 持续120';
+      if (it.id === 'throw_smoke') return '烟雾 · 遮蔽脱战';
+      if (it.id === 'throw_flash') return '闪光 · 致盲3秒';
+      if (it.id === 'thermite_charge') return '铝热 · 无声熔切';
       if (it.id === 'c4_explosive') return 'C4 · 破拆400';
       return '石镐 · 采集+60%/近战22';
     },

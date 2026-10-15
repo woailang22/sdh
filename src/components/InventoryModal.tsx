@@ -19,17 +19,47 @@ const EQUIP_META: Record<'weapon' | 'armor' | 'tool' | 'pack', { name: string; i
   weapon: {
     name: '武器',
     icon: <Sword className="w-4 h-4 text-rose-400" />,
-    bonus: (it) => (!it ? '无：左键为徒手近战' : it.id === 'crude_gun' ? '土铳 · 单发55' : '步枪 · 单发124'),
+    bonus: (it) => {
+      if (!it) return '无：左键为徒手近战';
+      if (it.id === 'crude_gun') return '土铳 · 单发55';
+      if (it.id === 'wp_p1911') return 'P1911 · 单发38';
+      if (it.id === 'wp_mp5') return 'MP5 · 单发52';
+      if (it.id === 'wp_akm') return 'AKM · 单发98';
+      if (it.id === 'wp_m4a1') return 'M4A1 · 单发110';
+      if (it.id === 'wp_m870') return 'M870 · 单发140';
+      if (it.id === 'wp_svd') return 'SVD · 单发220';
+      if (it.id === 'wp_plasma') return '等离子 · 单发320';
+      return '步枪 · 单发124';
+    },
   },
   armor: {
     name: '护甲',
     icon: <Shirt className="w-4 h-4 text-sky-400" />,
-    bonus: (it) => (!it ? '无：只有基础护盾' : it.id === 'armor_vest' ? '防弹背心 · 护盾+50/减伤15%' : '粗布护甲 · 护盾+25'),
+    bonus: (it) => {
+      if (!it) return '无：只有基础护盾';
+      if (it.id === 'armor_vest' || it.id === 'vest' || it.id === 'vest_t3') return '防弹背心 · 护盾+50/减伤15%';
+      if (it.id === 'vest_t2') return '轻型背心 · 护盾+25';
+      if (it.id === 'vest_t4') return '重型背心 · 护盾+80/减伤20%';
+      if (it.id === 'vest_t5') return '钛合金 · 护盾+110/减伤25%';
+      if (it.id === 'helmet_t2') return '头盔 · 护盾+15';
+      if (it.id === 'helmet_t3') return '头盔 · 护盾+30';
+      if (it.id === 'helmet_t4') return '头盔 · 护盾+50';
+      return '粗布护甲 · 护盾+25';
+    },
   },
   tool: {
     name: '工具',
     icon: <Wrench className="w-4 h-4 text-amber-400" />,
-    bonus: (it) => (!it ? '无：徒手采集' : '石镐 · 采集+60%/近战22'),
+    bonus: (it) => {
+      if (!it) return '无：徒手采集';
+      if (it.id === 'throw_frag') return '破片 · 范围300';
+      if (it.id === 'throw_molly') return '燃烧 · 持续120';
+      if (it.id === 'throw_smoke') return '烟雾 · 遮蔽脱战';
+      if (it.id === 'throw_flash') return '闪光 · 致盲3秒';
+      if (it.id === 'thermite_charge') return '铝热 · 无声熔切';
+      if (it.id === 'c4_explosive') return 'C4 · 破拆400';
+      return '石镐 · 采集+60%/近战22';
+    },
   },
   pack: {
     name: '背包',
