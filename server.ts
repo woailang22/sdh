@@ -38,6 +38,12 @@ app.get('/api/health', (req, res) => {
 const DB_PATH = process.env.DB_PATH || 'data/sdc.sqlite';
 fs.mkdirSync(path.dirname(DB_PATH), { recursive: true });
 const db = createDb(DB_PATH);
+// meta 版本兜底（db 层已幂等 ensure，此处再确认一次供后续升级用）
+try {
+  if (!db.getMeta('version')) db.setMeta('version', '1');
+} catch (e) {
+  console.error('[db] ensure meta version failed', e);
+}
 
 // Server State
 interface ConnectedClient {
@@ -145,12 +151,27 @@ let worldBuildings: BuildingEntity[] = [
   },
 ];
 
-// 重启恢复：DB 非空则覆盖内存默认值
+// 重启恢复：DB 非空则覆盖内存默认值；为空则将内存5种子回写 DB；异常则沿用内存种子
 {
-  const savedBuildings = db.listBuildings() as BuildingEntity[];
+  let savedBuildings: BuildingEntity[] = [];
+  try {
+    savedBuildings = db.listBuildings() as BuildingEntity[];
+  } catch (e) {
+    console.error('[db] listBuildings failed, fallback to in-memory seeds', e);
+    savedBuildings = [];
+  }
   if (savedBuildings.length > 0) {
     worldBuildings = savedBuildings;
     console.log(`[db] restored ${savedBuildings.length} buildings from ${DB_PATH}`);
+  } else {
+    for (const b of worldBuildings) {
+      try {
+        db.saveBuilding(b);
+      } catch (e) {
+        console.error('[db] seed saveBuilding failed', e);
+      }
+    }
+    console.log(`[db] seeded ${worldBuildings.length} buildings to ${DB_PATH}`);
   }
 }
 
@@ -346,10 +367,14 @@ wss.on('connection', (ws: WebSocket, req) => {
           if (msg.payload.currentAction !== undefined) p.currentAction = msg.payload.currentAction;
           p.lastSeen = Date.now();
 
-          // SQLite 节流持久化：每客户端 5 秒最多写一次
+          // SQLite 节流持久化：每客户端 5 秒最多写一次（写保护：失败只打日志，不抛不踢人）
           if (Date.now() - client.lastDbSave > 5000) {
             client.lastDbSave = Date.now();
-            db.savePlayer(client.player);
+            try {
+              db.savePlayer(client.player);
+            } catch (e) {
+              console.error('[db] savePlayer failed', e);
+            }
           }
 
           // Broadcast to other players in the room
@@ -408,7 +433,11 @@ wss.on('connection', (ws: WebSocket, req) => {
           }
 
           worldBuildings.push(newBuilding);
-          db.saveBuilding(newBuilding);
+          try {
+            db.saveBuilding(newBuilding);
+          } catch (e) {
+            console.error('[db] saveBuilding failed', e);
+          }
 
           broadcast({
             type: 'building_placed',
@@ -538,6 +567,12 @@ wss.on('connection', (ws: WebSocket, req) => {
           if (isBreached) {
             target.isOpen = true;
             target.isLocked = false;
+          }
+          // raid 落盘：hp/isOpen/isLocked 变更后即时持久化（写保护：失败只打日志；手动验证：突袭后重启服务端，门血量应保持）
+          try {
+            db.saveBuilding(target);
+          } catch (e) {
+            console.error('[db] saveBuilding (raid) failed', e);
           }
 
           // Broadcast raid result to all players

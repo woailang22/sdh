@@ -9,4 +9,12 @@ describe('sqlite persistence', () => {
     const rows = db.listBuildings();
     expect(rows.find((b) => b.id === 'b1')?.hp).toBe(5000);
   });
+  it('meta version read/write', () => {
+    const db = createDb(':memory:');
+    expect(db.getMeta('version')).toBe('1');
+    db.setMeta('version', '1');
+    expect(db.getMeta('version')).toBe('1');
+    db.setMeta('foo', 'bar');
+    expect(db.getMeta('foo')).toBe('bar');
+  });
 });
