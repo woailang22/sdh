@@ -1,0 +1,102 @@
+import type { Item } from '../types/game';
+
+export type ItemQuality = 0 | 1 | 2 | 3;
+
+export interface ItemDef {
+  id: string;
+  name: string;
+  category: 'weapon' | 'tool' | 'medical' | 'food' | 'material' | 'armor' | 'pack';
+  icon: string;
+  rarity: 1 | 2 | 3 | 4 | 5;
+  maxCount: number;
+  desc: string;
+  buyPrice: number;
+  sellPrice: number;
+  heal?: number;
+  satiety?: number;
+  damage?: number;
+  shield?: number;
+}
+
+export const ITEM_DEFS: Record<string, ItemDef> = {
+  wood: { id: 'wood', name: '优质原木', category: 'material', icon: '🪵', rarity: 1, maxCount: 999, desc: '砍树产出，建造与制造基底。', buyPrice: 5, sellPrice: 3 },
+  stone: { id: 'stone', name: '花岗石料', category: 'material', icon: '🪨', rarity: 1, maxCount: 999, desc: '采石产出，墙体与工具原料。', buyPrice: 5, sellPrice: 3 },
+  scrap: { id: 'scrap', name: '特种废铁', category: 'material', icon: '⚙️', rarity: 1, maxCount: 999, desc: '拆车/废墟产出，工作台核心材料。', buyPrice: 15, sellPrice: 12 },
+  box: { id: 'box', name: '水下锈蚀铁盒', category: 'material', icon: '📦', rarity: 1, maxCount: 20, desc: '开出随机废料，开盒惊喜。', buyPrice: 30, sellPrice: 18 },
+  part: { id: 'part', name: '机械零件', category: 'material', icon: '🔧', rarity: 3, maxCount: 999, desc: '搜刮产出，枪械/载具关键件。', buyPrice: 40, sellPrice: 28 },
+  battery: { id: 'battery', name: '高耐腐蚀电池', category: 'material', icon: '🔋', rarity: 3, maxCount: 20, desc: '汽修铺/快艇残骸产出。', buyPrice: 60, sellPrice: 42 },
+  iron_ore: { id: 'iron_ore', name: '伴生铁矿', category: 'material', icon: '⛏️', rarity: 3, maxCount: 999, desc: '采石场伴生，加固墙体用。', buyPrice: 35, sellPrice: 24 },
+  fuel: { id: 'fuel', name: '高纯度燃油', category: 'material', icon: '🛢️', rarity: 3, maxCount: 50, desc: '油罐车/加油站产出。', buyPrice: 45, sellPrice: 30 },
+  food: { id: 'food', name: '战术能量肉排', category: 'food', icon: '🥩', rarity: 2, maxCount: 99, desc: '点击食用，恢复35点饱食。', buyPrice: 12, sellPrice: 8, satiety: 35, heal: 0 },
+  fish: { id: 'fish', name: '变异黄颡鱼', category: 'food', icon: '🐟', rarity: 2, maxCount: 99, desc: '一号钓台常见鱼，烤制更香。', buyPrice: 20, sellPrice: 14, satiety: 30, heal: 5 },
+  fish2: { id: 'fish2', name: '裂隙荧光金鳟', category: 'food', icon: '🐟', rarity: 2, maxCount: 99, desc: '裂隙水域荧光鱼，售价更高。', buyPrice: 45, sellPrice: 32, satiety: 40, heal: 10 },
+  water: { id: 'water', name: '高纯度饮用水', category: 'food', icon: '💧', rarity: 2, maxCount: 99, desc: '水井/餐馆产出，恢复15点饱食。', buyPrice: 8, sellPrice: 5, satiety: 15, heal: 0 },
+  ammo: { id: 'ammo', name: '7.62mm步枪弹药包', category: 'material', icon: '🎯', rarity: 3, maxCount: 999, desc: '通用步枪备弹，按R装填。', buyPrice: 10, sellPrice: 6 },
+  c4_explosive: { id: 'c4_explosive', name: '高爆C4塑胶炸药', category: 'tool', icon: '💣', rarity: 4, maxCount: 20, desc: '突袭破拆高耐久安全门。', buyPrice: 150, sellPrice: 100 },
+  thermite_charge: { id: 'thermite_charge', name: '微型铝热熔切弹', category: 'tool', icon: '🔥', rarity: 4, maxCount: 20, desc: '无声熔切，破拆不拉警报。', buyPrice: 180, sellPrice: 120 },
+  medkit: { id: 'medkit', name: '纳米急救箱', category: 'medical', icon: '💉', rarity: 4, maxCount: 10, desc: '点击使用，恢复60点生命。', buyPrice: 120, sellPrice: 95, heal: 60 },
+  bandage: { id: 'bandage', name: '草药绷带', category: 'medical', icon: '🩹', rarity: 2, maxCount: 10, desc: '点击使用，恢复30点生命。', buyPrice: 30, sellPrice: 20, heal: 30 },
+  antidote: { id: 'antidote', name: '抗酸蚀解毒剂', category: 'medical', icon: '💊', rarity: 3, maxCount: 10, desc: '解除酸雨/毒雾持续掉血。', buyPrice: 80, sellPrice: 55, heal: 10 },
+  credits: { id: 'credits', name: '废土信用点', category: 'material', icon: '💰', rarity: 2, maxCount: 999999, desc: '货币，直接进钱包。', buyPrice: 1, sellPrice: 1 },
+  shard: { id: 'shard', name: '高纯度紫晶石', category: 'material', icon: '💎', rarity: 4, maxCount: 999, desc: '裂隙产出，高阶制造与货币。', buyPrice: 320, sellPrice: 280 },
+  plasma: { id: 'plasma', name: '虚空高能等离子聚合体', category: 'material', icon: '🟣', rarity: 5, maxCount: 999, desc: '异象核心提取，毕业材料。', buyPrice: 500, sellPrice: 420 },
+  dark_core: { id: 'dark_core', name: '坍界暗物质晶核', category: 'material', icon: '🕳️', rarity: 5, maxCount: 999, desc: 'BOSS掉落，最硬通货之一。', buyPrice: 600, sellPrice: 500 },
+  blueprint: { id: 'blueprint', name: '破界级等离子步枪蓝图', category: 'material', icon: '📜', rarity: 5, maxCount: 10, desc: '鉴定后换500信用点（后续开图纸解锁）。', buyPrice: 500, sellPrice: 500 },
+  rifle: { id: 'rifle', name: '战术突击步枪', category: 'weapon', icon: '🔫', rarity: 5, maxCount: 1, desc: '单发124伤害，装填步枪弹药（R）。', buyPrice: 1200, sellPrice: 800, damage: 124 },
+  vest: { id: 'vest', name: '军用防弹背心', category: 'armor', icon: '🦺', rarity: 5, maxCount: 1, desc: '护盾上限+50，受伤减免15%。', buyPrice: 900, sellPrice: 600, shield: 50 },
+  pack_canvas: { id: 'pack_canvas', name: '帆布背包', category: 'pack', icon: '🎒', rarity: 3, maxCount: 1, desc: '背包格+2。', buyPrice: 200, sellPrice: 140 },
+  pack_tactical: { id: 'pack_tactical', name: '战术携行具', category: 'pack', icon: '🧳', rarity: 4, maxCount: 1, desc: '背包格+4。', buyPrice: 500, sellPrice: 350 },
+};
+
+export const WEAPON_DAMAGE: Record<string, number> = { rifle: 124, crude_gun: 55 };
+export const ARMOR_BONUS_TABLE: Record<string, number> = { armor_cloth: 25, armor_vest: 50, vest: 50 };
+export const MED_HEAL: Record<string, number> = { med_bandage: 30, bandage: 30, med_medkit: 60, medkit: 60, antidote: 10 };
+export const THROW_DAMAGE: Record<string, number> = { c4_explosive: 400, thermite_charge: 250 };
+export const FOOD_VALUE: Record<string, { satiety: number; heal: number }> = {
+  food: { satiety: 35, heal: 0 },
+  fish: { satiety: 30, heal: 5 },
+  fish2: { satiety: 40, heal: 10 },
+  water: { satiety: 15, heal: 0 },
+};
+
+export function getItemDef(id: string): ItemDef {
+  const d = ITEM_DEFS[id];
+  if (!d) throw new Error(`unknown item: ${id}`);
+  return d;
+}
+
+export function makeItem(id: string, count: number): Item {
+  const d = getItemDef(id);
+  return {
+    id: d.id, name: d.name, category: d.category, icon: d.icon,
+    count: Math.max(1, Math.min(d.maxCount, count)), maxCount: d.maxCount,
+    desc: d.desc, rarity: d.rarity,
+  };
+}
+
+export function qualitySellPrice(id: string, quality: ItemQuality): number {
+  const base = getItemDef(id).sellPrice;
+  if (quality === 1) return Math.floor(base * 1.25);
+  if (quality === 2) return Math.floor(base * 1.5);
+  if (quality === 3) return base * 2;
+  return base;
+}
+
+export type LootResourceNew = 'wood' | 'stone' | 'scrap' | 'parts' | 'food' | 'ammo' | 'c4' | 'medical' | 'weapon' | 'armor' | 'credits' | 'shard' | 'blueprint' | 'pack' | 'throwable' | 'valuable' | 'seed';
+
+export function lootResourceOfNew(itemId: string): LootResourceNew {
+  if (itemId === 'wood') return 'wood';
+  if (itemId === 'stone') return 'stone';
+  if (itemId === 'part' || itemId === 'battery' || itemId === 'iron_ore' || itemId === 'fuel') return 'parts';
+  if (itemId === 'food' || itemId === 'fish' || itemId === 'fish2' || itemId === 'water') return 'food';
+  if (itemId === 'ammo') return 'ammo';
+  if (itemId === 'c4_explosive' || itemId === 'thermite_charge') return 'c4';
+  if (itemId === 'medkit' || itemId === 'bandage' || itemId === 'antidote') return 'medical';
+  if (itemId === 'rifle') return 'weapon';
+  if (itemId === 'vest') return 'armor';
+  if (itemId === 'credits') return 'credits';
+  if (itemId === 'shard' || itemId === 'plasma' || itemId === 'dark_core') return 'shard';
+  if (itemId === 'blueprint') return 'blueprint';
+  if (itemId === 'pack_canvas' || itemId === 'pack_tactical') return 'pack';
+  return 'scrap';
+}
