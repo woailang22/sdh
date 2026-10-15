@@ -61,6 +61,20 @@ export const ITEM_DEFS: Record<string, ItemDef> = {
   ore_silver: { id: 'ore_silver', name: '银矿石', category: 'material', icon: '⬜', rarity: 3, maxCount: 999, desc: '升级钢制工具，采石场伴生。', buyPrice: 80, sellPrice: 60 },
   ore_gold: { id: 'ore_gold', name: '金矿石', category: 'material', icon: '🟡', rarity: 4, maxCount: 999, desc: '升级金制工具，雪峰富矿产出。', buyPrice: 180, sellPrice: 140 },
   ore_iridium: { id: 'ore_iridium', name: '铱矿石', category: 'material', icon: '🟪', rarity: 5, maxCount: 999, desc: '升级铱制工具，深渊裂口限定。', buyPrice: 400, sellPrice: 320 },
+  fish_carp: { id: 'fish_carp', name: '星露鲤鱼', category: 'food', icon: '🐟', rarity: 1, maxCount: 99, desc: '渔港浅滩常见鱼，新手练级鱼。', buyPrice: 30, sellPrice: 30, satiety: 25, heal: 3 },
+  fish_bass: { id: 'fish_bass', name: '大嘴鲈鱼', category: 'food', icon: '🐟', rarity: 2, maxCount: 99, desc: '湖心深水鱼，鱼汤原料。', buyPrice: 60, sellPrice: 60, satiety: 35, heal: 6 },
+  fish_eel: { id: 'fish_eel', name: '沼泽鳗鱼', category: 'food', icon: '🐍', rarity: 3, maxCount: 99, desc: '雨天沼泽限定，烹饪高档料。', buyPrice: 120, sellPrice: 120, satiety: 45, heal: 10 },
+  fish_catfish: { id: 'fish_catfish', name: '裂隙鲶鱼', category: 'food', icon: '🐟', rarity: 3, maxCount: 99, desc: '裂隙水域大物，能量棒原料。', buyPrice: 150, sellPrice: 150, satiety: 50, heal: 12 },
+  fish_crimson: { id: 'fish_crimson', name: '绯红锦鲤', category: 'food', icon: '🔴', rarity: 4, maxCount: 20, desc: '深渊荧光苔附近，深红传说前兆。', buyPrice: 400, sellPrice: 400, satiety: 60, heal: 20 },
+  fish_legend: { id: 'fish_legend', name: '传说之鱼', category: 'food', icon: '👑', rarity: 5, maxCount: 5, desc: '全图唯一大物，售价封顶，神话藏品。', buyPrice: 2000, sellPrice: 2000, satiety: 100, heal: 50 },
+  jam_berry: { id: 'jam_berry', name: '蓝莓果酱', category: 'food', icon: '🫙', rarity: 3, maxCount: 99, desc: '果酱桶加工，售价翻倍，恢复45饱食。', buyPrice: 180, sellPrice: 180, satiety: 45, heal: 10 },
+  pickle_veg: { id: 'pickle_veg', name: '腌南瓜', category: 'food', icon: '🥒', rarity: 3, maxCount: 99, desc: '腌菜瓮加工，恢复40饱食。', buyPrice: 320, sellPrice: 320, satiety: 40, heal: 12 },
+  cheese_goat: { id: 'cheese_goat', name: '羊奶酪', category: 'food', icon: '🧀', rarity: 3, maxCount: 99, desc: '奶酪机加工，恢复50饱食+15生命。', buyPrice: 240, sellPrice: 240, satiety: 50, heal: 15 },
+  wine_starfruit: { id: 'wine_starfruit', name: '星果酒', category: 'food', icon: '🍷', rarity: 5, maxCount: 50, desc: '木桶陈酿90天，毕业暴利单品。', buyPrice: 2250, sellPrice: 2250, satiety: 40, heal: 30 },
+  honey_wild: { id: 'honey_wild', name: '野蜂蜜', category: 'food', icon: '🍯', rarity: 2, maxCount: 99, desc: '蜂箱采集，恢复30饱食+能量棒原料。', buyPrice: 100, sellPrice: 100, satiety: 30, heal: 8 },
+  cook_stirfry: { id: 'cook_stirfry', name: '蔬菜炒', category: 'food', icon: '🥗', rarity: 2, maxCount: 50, desc: '烹饪锅制作，恢复45饱食+10生命。', buyPrice: 110, sellPrice: 110, satiety: 45, heal: 10 },
+  cook_fishsoup: { id: 'cook_fishsoup', name: '鱼汤', category: 'food', icon: '🍲', rarity: 3, maxCount: 50, desc: '鲈鱼+莲藕熬制，恢复60饱食+20生命。', buyPrice: 220, sellPrice: 220, satiety: 60, heal: 20 },
+  cook_energybar: { id: 'cook_energybar', name: '能量棒', category: 'food', icon: '🍫', rarity: 3, maxCount: 50, desc: '蜂蜜+鲶鱼干粮，恢复55饱食+30体力感。', buyPrice: 200, sellPrice: 200, satiety: 55, heal: 15 },
 };
 
 export const WEAPON_DAMAGE: Record<string, number> = { rifle: 124, crude_gun: 55 };
@@ -74,6 +88,15 @@ export const SEED_GROW: Record<string, { cropId: string; outCount: number }> = {
   seed_pumpkin: { cropId: 'crop_pumpkin', outCount: 3 },
   seed_starfruit: { cropId: 'crop_starfruit', outCount: 2 },
 };
+export const COOK_SOURCE: Record<string, { materials: { itemId: string; count: number }[] }> = {
+  cook_stirfry: { materials: [{ itemId: 'crop_corn', count: 2 }, { itemId: 'crop_parsnip', count: 2 }] },
+  cook_fishsoup: { materials: [{ itemId: 'fish_bass', count: 2 }, { itemId: 'water', count: 2 }] },
+  cook_energybar: { materials: [{ itemId: 'honey_wild', count: 2 }, { itemId: 'fish_catfish', count: 1 }] },
+  jam_berry: { materials: [{ itemId: 'crop_blueberry', count: 3 }] },
+  pickle_veg: { materials: [{ itemId: 'crop_pumpkin', count: 2 }] },
+  cheese_goat: { materials: [{ itemId: 'crop_corn', count: 2 }, { itemId: 'honey_wild', count: 1 }] },
+  wine_starfruit: { materials: [{ itemId: 'crop_starfruit', count: 3 }] },
+};
 export const FOOD_VALUE: Record<string, { satiety: number; heal: number }> = {
   food: { satiety: 35, heal: 0 },
   fish: { satiety: 30, heal: 5 },
@@ -85,6 +108,20 @@ export const FOOD_VALUE: Record<string, { satiety: number; heal: number }> = {
   crop_pumpkin: { satiety: 40, heal: 10 },
   crop_starfruit: { satiety: 60, heal: 20 },
   crop_blueberry: { satiety: 35, heal: 8 },
+  fish_carp: { satiety: 25, heal: 3 },
+  fish_bass: { satiety: 35, heal: 6 },
+  fish_eel: { satiety: 45, heal: 10 },
+  fish_catfish: { satiety: 50, heal: 12 },
+  fish_crimson: { satiety: 60, heal: 20 },
+  fish_legend: { satiety: 100, heal: 50 },
+  jam_berry: { satiety: 45, heal: 10 },
+  pickle_veg: { satiety: 40, heal: 12 },
+  cheese_goat: { satiety: 50, heal: 15 },
+  wine_starfruit: { satiety: 40, heal: 30 },
+  honey_wild: { satiety: 30, heal: 8 },
+  cook_stirfry: { satiety: 45, heal: 10 },
+  cook_fishsoup: { satiety: 60, heal: 20 },
+  cook_energybar: { satiety: 55, heal: 15 },
 };
 
 export function getItemDef(id: string): ItemDef {
@@ -114,7 +151,7 @@ export type LootResourceNew = 'wood' | 'stone' | 'scrap' | 'parts' | 'food' | 'a
 
 export function lootResourceOfNew(itemId: string): LootResourceNew {
   if (itemId.startsWith('seed_')) return 'seed';
-  if (itemId.startsWith('crop_') || itemId.startsWith('cook_') || itemId.startsWith('jam_') || itemId.startsWith('wine_') || itemId.startsWith('pickle_') || itemId.startsWith('cheese_') || itemId.startsWith('honey_')) return 'food';
+  if (itemId.startsWith('crop_') || itemId.startsWith('fish_') || itemId.startsWith('cook_') || itemId.startsWith('jam_') || itemId.startsWith('wine_') || itemId.startsWith('pickle_') || itemId.startsWith('cheese_') || itemId.startsWith('honey_')) return 'food';
   if (itemId.startsWith('ore_')) return 'parts';
   if (itemId === 'wood') return 'wood';
   if (itemId === 'stone') return 'stone';

@@ -357,7 +357,7 @@ Expected: FAIL with `expected undefined to be defined`（seed_parsnip 缺失）�
 
 ```typescript
   if (itemId.startsWith('seed_')) return 'seed';
-  if (itemId.startsWith('crop_') || itemId.startsWith('cook_') || itemId.startsWith('jam_') || itemId.startsWith('wine_') || itemId.startsWith('pickle_') || itemId.startsWith('cheese_') || itemId.startsWith('honey_')) return 'food';
+  if (itemId.startsWith('fish_') || itemId.startsWith('crop_') || itemId.startsWith('cook_') || itemId.startsWith('jam_') || itemId.startsWith('wine_') || itemId.startsWith('pickle_') || itemId.startsWith('cheese_') || itemId.startsWith('honey_')) return 'food';
   if (itemId.startsWith('ore_')) return 'parts';
 ```
 

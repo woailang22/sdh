@@ -86,3 +86,35 @@ describe('stardew crops/seeds/ores', () => {
     expect(SEED_GROW['seed_starfruit'].cropId).toBe('crop_starfruit');
   });
 });
+describe('stardew fish/artisan/cooking', () => {
+  it('has 6 new fish, 5 artisan, 3 cooked with food values', async () => {
+    const { ITEM_DEFS, FOOD_VALUE, lootResourceOfNew } = await import('./items');
+    for (const id of ['fish_carp','fish_bass','fish_eel','fish_catfish','fish_legend','fish_crimson']) {
+      expect(ITEM_DEFS[id]).toBeDefined();
+      expect(ITEM_DEFS[id].category).toBe('food');
+      expect(FOOD_VALUE[id]).toBeDefined();
+    }
+    for (const id of ['jam_berry','pickle_veg','cheese_goat','wine_starfruit','honey_wild']) {
+      expect(ITEM_DEFS[id]).toBeDefined();
+    }
+    for (const id of ['cook_stirfry','cook_fishsoup','cook_energybar']) {
+      expect(ITEM_DEFS[id]).toBeDefined();
+      expect(FOOD_VALUE[id].satiety).toBeGreaterThanOrEqual(35);
+    }
+    expect(ITEM_DEFS['fish_legend'].rarity).toBe(5);
+    expect(ITEM_DEFS['wine_starfruit'].sellPrice).toBeGreaterThan(ITEM_DEFS['crop_starfruit'].sellPrice);
+    expect(lootResourceOfNew('fish_legend')).toBe('food');
+    expect(lootResourceOfNew('wine_starfruit')).toBe('food');
+  });
+  it('every cooked/processed item has a material source (no decoration food)', async () => {
+    const { COOK_SOURCE, ITEM_DEFS } = await import('./items');
+    for (const id of ['cook_stirfry','cook_fishsoup','cook_energybar','jam_berry','pickle_veg','cheese_goat','wine_starfruit']) {
+      const s = COOK_SOURCE[id];
+      expect(s, `${id} source missing`).toBeDefined();
+      expect(s.materials.length).toBeGreaterThanOrEqual(1);
+      for (const m of s.materials) expect(ITEM_DEFS[m.itemId], `${id} needs ${m.itemId}`).toBeDefined();
+    }
+    expect(COOK_SOURCE['cook_fishsoup'].materials.some((m) => m.itemId === 'fish_bass')).toBe(true);
+    expect(COOK_SOURCE['wine_starfruit'].materials.some((m) => m.itemId === 'crop_starfruit')).toBe(true);
+  });
+});
