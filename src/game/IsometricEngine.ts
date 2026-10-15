@@ -40,6 +40,7 @@ export interface GameCallbacks {
     isFiring: boolean;
     isDashing: boolean;
   }) => void;
+  onPlayerDeathDrop?: (mapId: string) => void;
 }
 
 export interface MapWaypoint {
@@ -1124,6 +1125,7 @@ export class IsometricEngine {
     if (this.player.hp <= 0) {
       this.player.hp = this.player.maxHp;
       this.player.shield = this.player.maxShield;
+      this.callbacks.onPlayerDeathDrop?.(this.currentMapId);
       this.warpToMap('camp_plaza', 0, 9, '被击倒·营地苏醒');
       this.addTextParticle(0, 8, '你被敌对玩家击倒，已在营地苏醒（物品保留）', '#facc15');
     }
@@ -1750,8 +1752,9 @@ export class IsometricEngine {
       this.player.satiety = 40;
       this.player.stamina = this.player.maxStamina;
       this.player.ammo = 0;
+      this.callbacks.onPlayerDeathDrop?.(this.currentMapId);
       this.warpToMap('camp_plaza', 0, 0, '重伤获救');
-      this.addTextParticle(0, -1.5, '你在废土上倒下…被巡逻队救回（物品保留）', '#f87171');
+      this.addTextParticle(0, -1.5, '你在废土上倒下…掉落部分背包（30s可回捡）', '#f87171');
     }
 
     if (this.player.isDashing) {

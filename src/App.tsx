@@ -27,6 +27,7 @@ import { LootPanel, LootEntry } from './components/LootPanel';
 import { lootResourceOf, RARITY, skillLevel, skillYieldMult, LootResource } from './game/maps';
 import { ITEM_DEFS, getItemDef, makeItem, WEAPON_DAMAGE, ARMOR_BONUS_TABLE, MED_HEAL, FOOD_VALUE } from './game/items';
 import { killReward, WEAPONS, ARMOR_REDUCTION } from './game/combat';
+import { calcDeathDrop } from './game/death';
 import { BASE_PLOTS } from './game/spawn';
 import { homeMapIdFor } from './game/home';
 import { CraftOrder } from './components/WorkbenchModal';
@@ -1006,6 +1007,13 @@ export default function App() {
             level: playerStats.level,
           });
         }
+      },
+      onPlayerDeathDrop: (mapId) => {
+        const cur = [...hotbarSlotsRef.current];
+        const r = calcDeathDrop(cur, mapId);
+        if (r.clearReserveAmmo && engineRef.current) engineRef.current.player.reserveAmmo = 0;
+        for (const i of r.droppedIndexes) cur[i] = null;
+        setHotbarSlots(cur);
       },
     });
 
