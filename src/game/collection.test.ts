@@ -29,3 +29,12 @@ describe('collection codex', () => {
     expect(COLLECT_DEFS['collect_mandel'].source).toContain('红房');
   });
 });
+describe('pioneer set is completable', () => {
+  it('needs unique members only', async () => {
+    const { COLLECT_SETS, setBonusCredits } = await import('./collection');
+    const members = COLLECT_SETS['pioneer'].members;
+    expect(new Set(members).size).toBe(members.length);
+    expect(setBonusCredits('pioneer', new Set(['collect_dogtag', 'key_blue']))).toBe(1200);
+    expect(setBonusCredits('pioneer', new Set(['collect_dogtag']))).toBe(0);
+  });
+});

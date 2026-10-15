@@ -129,4 +129,11 @@ describe('item expansion wiring', () => {
       expect(ids.has(id), `${id} not placed`).toBe(true);
     }
   });
+  it('every non-recipe item has a loot source (H1 closure)', async () => {
+    const { SUBMAPS } = await import('./maps');
+    const ids = new Set(Object.values(SUBMAPS).flatMap((m) => m.interactables).flatMap((e) => e.lootTable ?? []).map((l) => l.itemId));
+    for (const id of ['ore_silver','ore_gold','ore_iridium','fish_carp','fish_eel','fish_catfish','fish_crimson','fish_legend','seed_parsnip','seed_potato','seed_pumpkin','seed_starfruit','crop_blueberry','honey_wild','ammo_762','ammo_9mm','ammo_shell','ammo_signal','wp_mp5','wp_akm','wp_m870','wp_svd','wp_plasma','helmet_t2','helmet_t3','helmet_t4','vest_t3','vest_t4','vest_t5','med_medkit','med_bloodbag','med_painkiller','throw_smoke','throw_flash','throw_molly','att_suppressor','att_foregrip','att_extmag','key_red','collect_dogtag']) {
+      expect(ids.has(id), `${id} still sourceless`).toBe(true);
+    }
+  });
 });

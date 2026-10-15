@@ -96,6 +96,7 @@ export const SUBMAPS: Record<string, SubMapDef> = {
       I('ws_crate', '工坊材料箱', 'box', 8, -6, '[E/F 领取开工料]', [
         { itemId: 'scrap', name: '开工废铁', count: 10 },
         { itemId: 'wood', name: '开工原木', count: 8 },
+        { itemId: 'seed_parsnip', name: '防风草种子×5', count: 2 },
       ], 1.2),
     ],
     monsters: [],
@@ -154,6 +155,7 @@ export const SUBMAPS: Record<string, SubMapDef> = {
         { itemId: 'water', name: '高纯度饮用水', count: 4 },
         { itemId: 'seed_corn', name: '玉米种子×5', count: 2 },
         { itemId: 'crop_potato', name: '土豆', count: 4 },
+        { itemId: 'seed_pumpkin', name: '南瓜种子×3', count: 1 },
       ], 1.2),
     ],
     monsters: [],
@@ -211,6 +213,7 @@ export const SUBMAPS: Record<string, SubMapDef> = {
         { itemId: 'fuel', name: '重载高纯度柴油罐', count: 4 },
         { itemId: 'c4_explosive', name: '高爆C4塑胶炸药', count: 2 },
         { itemId: 'scrap', name: '精炼车身钢板', count: 40 },
+        { itemId: 'wp_m870', name: 'M870霰弹枪', count: 1 },
       ], 2.2),
       I('gas_shelves', '便利店破损货架', 'shelves', 8, -14, '[E/F 搜刮便利店货架]', [
         { itemId: 'food', name: '战术能量肉排', count: 12 },
@@ -229,6 +232,7 @@ export const SUBMAPS: Record<string, SubMapDef> = {
       I('gas_tanker', '翻倒油罐车', 'car', 15, 4, '[E/F 搜刮燃油板材]', [
         { itemId: 'fuel', name: '高纯度燃油', count: 6 },
         { itemId: 'scrap', name: '厚重防爆钢板', count: 35 },
+        { itemId: 'throw_molly', name: '燃烧瓶×2', count: 1 },
       ], 2.0),
       I('gas_ammo', '路障军用弹药箱', 'ammo_crate', -16, -4, '[E/F 破译搜刮弹药箱]', [
         { itemId: 'ammo', name: '7.62mm 步枪穿甲弹药包', count: 60 },
@@ -305,12 +309,16 @@ export const SUBMAPS: Record<string, SubMapDef> = {
         { itemId: 'scrap', name: '公交车架钢', count: 45 },
         { itemId: 'food', name: '乘客遗落干粮', count: 8 },
         { itemId: 'pack_canvas', name: '帆布背包', count: 1 },
+        { itemId: 'wp_mp5', name: 'MP5冲锋枪', count: 1 },
       ], 2.2),
       I('st_pharmacy', '药房', 'med_cabinet', 16, -6, '[E/F 搜刮药房]', [
         { itemId: 'medkit', name: '急救包', count: 2 },
         { itemId: 'bandage', name: '绷带卷', count: 4 },
         { itemId: 'med_surgery', name: '野战手术包', count: 1 },
         { itemId: 'vest_t2', name: '2级轻型背心', count: 1 },
+        { itemId: 'med_medkit', name: '纳米医疗包', count: 1 },
+        { itemId: 'med_painkiller', name: '止痛药', count: 2 },
+        { itemId: 'helmet_t2', name: '2级战术头盔', count: 1 },
       ], 1.8),
     ],
     monsters: [
@@ -384,12 +392,19 @@ export const SUBMAPS: Record<string, SubMapDef> = {
       I('fac_shelves', '工厂配件货架', 'shelves', 16, -18, '[E/F 搜刮配件架]', [
         { itemId: 'part', name: '精密轴承', count: 6 },
         { itemId: 'scrap', name: '货架角钢', count: 25 },
+        { itemId: 'att_extmag', name: '扩容弹匣', count: 1 },
       ], 1.6),
       I('fac_ammo', '工厂警卫弹药库', 'ammo_crate', 20, 14, '[E/F 破译弹药库]', [
         { itemId: 'ammo', name: '7.62mm 步枪穿甲弹药包', count: 60 },
         { itemId: 'c4_explosive', name: '高爆C4炸药', count: 2 },
         { itemId: 'ammo_556', name: '5.56mm步枪弹×30', count: 2 },
         { itemId: 'wp_p1911', name: 'P1911手枪', count: 1 },
+        { itemId: 'ammo_762', name: '7.62mm穿甲弹×30', count: 2 },
+        { itemId: 'ammo_9mm', name: '9mm手枪弹×30', count: 2 },
+        { itemId: 'ammo_shell', name: '12号霰弹×10', count: 1 },
+        { itemId: 'ammo_signal', name: '信号枪弹×10', count: 2 },
+        { itemId: 'helmet_t3', name: '3级防弹头盔', count: 1 },
+        { itemId: 'vest_t3', name: '3级防弹背心', count: 1 },
       ], 1.8),
       I('fac_med', '工厂医务室', 'med_cabinet', -20, 12, '[E/F 搜刮医务室]', [
         { itemId: 'medkit', name: '纳米急救箱', count: 2 },
@@ -538,6 +553,7 @@ export const SUBMAPS: Record<string, SubMapDef> = {
         { itemId: 'part', name: '油锯链条', count: 4 },
         { itemId: 'scrap', name: '棚架角铁', count: 20 },
         { itemId: 'ore_copper', name: '铜矿石', count: 4 },
+        { itemId: 'att_foregrip', name: '垂直握把', count: 1 },
       ], 1.6),
     ],
     monsters: [
@@ -590,6 +606,7 @@ export const SUBMAPS: Record<string, SubMapDef> = {
       I('q_stone_1', '大型露天花岗岩矿床', 'boulder', 12, -10, '[E/F 镐击开采花岗岩]', [
         { itemId: 'stone', name: '重装花岗石块', count: 40 },
         { itemId: 'iron_ore', name: '伴生铁矿', count: 6 },
+        { itemId: 'ore_silver', name: '银矿石', count: 4 },
       ], 1.8),
       I('q_stone_2', '次生采石场岩壁', 'boulder', 4, 16, '[E/F 开采石料]', stoneLoot(40), 1.8),
       I('q_dozer', '重型采石推土机残骸', 'car', 8, 6, '[E/F 破拆工程机械]', [
@@ -600,6 +617,8 @@ export const SUBMAPS: Record<string, SubMapDef> = {
         { itemId: 'c4_explosive', name: '采石乳化炸药', count: 3 },
         { itemId: 'ammo', name: '信号枪弹', count: 20 },
         { itemId: 'throw_frag', name: '破片手雷×2', count: 1 },
+        { itemId: 'throw_smoke', name: '烟雾弹×2', count: 1 },
+        { itemId: 'throw_flash', name: '闪光弹×2', count: 1 },
       ], 1.8),
     ],
     monsters: [
@@ -655,10 +674,13 @@ export const SUBMAPS: Record<string, SubMapDef> = {
         { itemId: 'c4_explosive', name: '高爆C4炸药', count: 3 },
         { itemId: 'thermite_charge', name: '微型铝热熔切弹', count: 4 },
         { itemId: 'vest', name: '军用防弹背心', count: 1 },
+        { itemId: 'wp_akm', name: 'AKM突击步枪', count: 1 },
+        { itemId: 'vest_t4', name: '4级重型背心', count: 1 },
       ], 1.8),
       I('deep_herb', '佣兵草药包', 'box', 14, 10, '[E/F 搜刮草药]', [
         { itemId: 'bandage', name: '草药绷带', count: 4 },
         { itemId: 'food', name: '山菌肉干', count: 6 },
+        { itemId: 'crop_blueberry', name: '蓝莓×3', count: 2 },
       ], 1.6),
     ],
     monsters: [
@@ -726,10 +748,14 @@ export const SUBMAPS: Record<string, SubMapDef> = {
       I('dock_2', '二号浅滩钓台', 'pond', -6, 12, '[E/F 抛竿垂钓]', [
         { itemId: 'fish', name: '异变青鱼', count: 2 },
         { itemId: 'box', name: '水下锈蚀铁盒', count: 1 },
+        { itemId: 'fish_carp', name: '星露鲤鱼', count: 2 },
       ]),
       I('dock_chest', '渔港栈道补给木箱', 'box', 4, 2, '[E/F 搜索补给箱]', [
         { itemId: 'medkit', name: '防水医疗包', count: 2 },
         { itemId: 'ammo', name: '防水步枪弹药', count: 40 },
+        { itemId: 'fish_eel', name: '沼泽鳗鱼', count: 1 },
+        { itemId: 'fish_catfish', name: '裂隙鲶鱼', count: 1 },
+        { itemId: 'med_bloodbag', name: '血袋', count: 1 },
       ], 1.4),
       I('dock_boat', '搁浅快艇残骸', 'car', -12, 16, '[E/F 破拆快艇残骸]', [
         { itemId: 'scrap', name: '轻量船用铝板', count: 35 },
@@ -795,6 +821,8 @@ export const SUBMAPS: Record<string, SubMapDef> = {
       I('bog_cache', '猎人干粮窖', 'box', 4, 14, '[E/F 搜刮干粮窖]', [
         { itemId: 'food', name: '熏鱼干', count: 8 },
         { itemId: 'bandage', name: '防水绷带', count: 3 },
+        { itemId: 'seed_potato', name: '土豆种子×5', count: 2 },
+        { itemId: 'honey_wild', name: '野蜂蜜', count: 2 },
       ], 1.6),
     ],
     monsters: [
@@ -847,6 +875,7 @@ export const SUBMAPS: Record<string, SubMapDef> = {
       I('peak_ore', '雪峰富铁矿脉', 'boulder', -20, -18, '[E/F 开采富铁矿]', [
         { itemId: 'stone', name: '雪峰花岗石', count: 40 },
         { itemId: 'iron_ore', name: '高品位铁矿', count: 10 },
+        { itemId: 'ore_gold', name: '金矿石', count: 4 },
       ], 1.8),
       I('peak_wood', '雪线枯松', 'tree', 18, -14, '[E/F 砍伐雪松]', woodLoot(35, '雪松硬木'), 1.6),
       I('peak_cache', '登山队遗留补给箱', 'box', 0, 20, '[E/F 搜刮登山箱]', [
@@ -901,6 +930,12 @@ export const SUBMAPS: Record<string, SubMapDef> = {
         { itemId: 'credits', name: '高级信用凭证', count: 2500 },
         { itemId: 'rifle', name: '战术突击步枪', count: 1 },
         { itemId: 'vest', name: '军用防弹背心', count: 1 },
+        { itemId: 'seed_starfruit', name: '星果种子×1', count: 1 },
+        { itemId: 'wp_svd', name: 'SVD狙击步枪', count: 1 },
+        { itemId: 'key_red', name: '红色房卡', count: 1 },
+        { itemId: 'helmet_t4', name: '4级重型头盔', count: 1 },
+        { itemId: 'vest_t5', name: '5级钛合金背心', count: 1 },
+        { itemId: 'fish_legend', name: '传说之鱼', count: 1 },
       ], 2.2),
     ],
     monsters: [
@@ -933,20 +968,25 @@ export const SUBMAPS: Record<string, SubMapDef> = {
       I('aby_core', '深渊小异象', 'crystal', 0, 0, '[E/F 提取深渊原晶]', [
         { itemId: 'shard', name: '深渊紫晶', count: 5 },
         { itemId: 'plasma', name: '虚空高能等离子聚合体', count: 3 },
+        { itemId: 'ore_iridium', name: '铱矿石', count: 2 },
       ], 2.5),
       I('aby_cache', '深渊遗落补给箱', 'box', 16, 16, '[E/F 解锁深渊箱]', [
         { itemId: 'dark_core', name: '坍界暗物质晶核', count: 8 },
         { itemId: 'credits', name: '高级信用凭证', count: 1800 },
         { itemId: 'rifle', name: '战术突击步枪', count: 1 },
+        { itemId: 'wp_plasma', name: '破界等离子步枪', count: 1 },
+        { itemId: 'collect_dogtag', name: '阵亡者身份牌', count: 1 },
       ], 2.2),
       I('aby_herb', '深渊荧光苔', 'box', -16, 12, '[E/F 采集荧光苔]', [
         { itemId: 'bandage', name: '荧光止血苔', count: 4 },
         { itemId: 'food', name: '荧光菌菇', count: 6 },
+        { itemId: 'fish_crimson', name: '绯红锦鲤', count: 1 },
       ], 1.6),
       I('aby_scrap', '坠毁无人机堆', 'car', -12, -16, '[E/F 拆解无人机]', [
         { itemId: 'scrap', name: '航空铝废料', count: 40 },
         { itemId: 'part', name: '无人机飞控芯片', count: 4 },
         { itemId: 'collect_circuit', name: '军用电路板', count: 2 },
+        { itemId: 'att_suppressor', name: '消音器', count: 1 },
       ], 2.0),
     ],
     monsters: [

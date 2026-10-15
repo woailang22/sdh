@@ -1500,6 +1500,179 @@ git commit -m "feat(items): add collection codex with tiers/sets/display"
 
 ---
 
+---
+
+### Task 11: 可达性补齐（Rev D，终审 H1-H5/M1 修复）
+
+**背景：** 终审确认 94 注册表 + 全链路无回归，但约40新ID无获取途径（H1）、`surgery_craft` 要 `med_bandage` 而绷带配方发 `med_亚麻绷带`（H2）、`gun_upgrade_m4` 未耗AKM（H3）、`pioneer` 套装 `Set<string>` 永远凑不齐 `dogtag×2`（H4）、`pickaxe_copper` 未进注册表（H5）、黑市×5/×2 货名与发货不符（M1）。本任务只做加法修复，不动已验证逻辑。
+
+**Files:**
+- Modify: `src/game/items.ts`（+pickaxe_copper 1条）
+- Modify: `src/game/items.test.ts`（+pickaxe断言）
+- Modify: `src/App.tsx`（绷带发货改注册ID、M4升级耗AKM、+4加工烹饪配方发货、黑市包量发货）
+- Modify: `src/components/WorkbenchModal.tsx`（+4配方、surgery desc修正）
+- Modify: `src/components/MarketModal.tsx`（不动，包量在App侧修）
+- Modify: `src/components/InventoryModal.tsx`（tool bonus +铜镐分支）
+- Modify: `src/game/collection.ts`（pioneer去重）
+- Modify: `src/game/collection.test.ts`（+pioneer用例）
+- Modify: `src/game/maps.ts`（约20处掉落追加，只追加不改旧行）
+- Modify: `src/game/maps.test.ts`（placement断言扩到全量H1表）
+
+- [ ] **Step 1: Write the failing test**
+
+在 `src/game/items.test.ts` 末尾追加：
+
+```typescript
+describe('reachability patch (rev D)', () => {
+  it('pickaxe_copper is a registered tool', async () => {
+    const { ITEM_DEFS, lootResourceOfNew } = await import('./items');
+    expect(ITEM_DEFS['pickaxe_copper']).toBeDefined();
+    expect(ITEM_DEFS['pickaxe_copper'].category).toBe('tool');
+    expect(lootResourceOfNew('pickaxe_copper')).toBe('scrap');
+  });
+});
+```
+
+在 `src/game/collection.test.ts` 末尾追加：
+
+```typescript
+describe('pioneer set is completable', () => {
+  it('needs unique members only', async () => {
+    const { COLLECT_SETS, setBonusCredits } = await import('./collection');
+    const members = COLLECT_SETS['pioneer'].members;
+    expect(new Set(members).size).toBe(members.length);
+    expect(setBonusCredits('pioneer', new Set(['collect_dogtag', 'key_blue']))).toBe(1200);
+    expect(setBonusCredits('pioneer', new Set(['collect_dogtag']))).toBe(0);
+  });
+});
+```
+
+在 `src/game/maps.test.ts` 的 `at least 8 interactables` 用例之后追加：
+
+```typescript
+  it('every non-recipe item has a loot source (H1 closure)', async () => {
+    const { SUBMAPS } = await import('./maps');
+    const ids = new Set(Object.values(SUBMAPS).flatMap((m) => m.interactables).flatMap((e) => e.lootTable ?? []).map((l) => l.itemId));
+    for (const id of ['ore_silver','ore_gold','ore_iridium','fish_carp','fish_eel','fish_catfish','fish_crimson','fish_legend','seed_parsnip','seed_potato','seed_pumpkin','seed_starfruit','crop_blueberry','honey_wild','ammo_762','ammo_9mm','ammo_shell','ammo_signal','wp_mp5','wp_akm','wp_m870','wp_svd','wp_plasma','helmet_t2','helmet_t3','helmet_t4','vest_t3','vest_t4','vest_t5','med_medkit','med_bloodbag','med_painkiller','throw_smoke','throw_flash','throw_molly','att_suppressor','att_foregrip','att_extmag','key_red','collect_dogtag']) {
+      expect(ids.has(id), `${id} still sourceless`).toBe(true);
+    }
+  });
+```
+
+- [ ] **Step 2: Run test to verify it fails**
+
+Run: `npx vitest run src/game/items.test.ts -t "reachability patch" -v`
+Expected: FAIL with `pickaxe_copper` undefined。
+
+Run: `npx vitest run src/game/collection.test.ts -t "pioneer" -v`
+Expected: FAIL（members有重复，`new Set(members).size` 不等于length）。
+
+- [ ] **Step 3: Write minimal implementation**
+
+3a. `src/game/items.ts` 在 `throw_molly` 行之后插入：
+
+```typescript
+  pickaxe_copper: { id: 'pickaxe_copper', name: '铜镐', category: 'tool', icon: '⛏️', rarity: 3, maxCount: 1, desc: '采矿专用：采石效率+60%，铜矿升级。', buyPrice: 350, sellPrice: 230 },
+```
+
+（引擎 `App.tsx:1048` 按 `includes('pickaxe')` 判 `toolKind='pick'`，自动吃+60%与近战22，无需改引擎。）
+
+3b. `src/App.tsx` 绷带配方发货改注册ID（`handleCraftSuccess` 的 `case 'bandage':` 整块替换）：
+
+```typescript
+          case 'bandage':
+            return grantItem(makeItem('med_bandage', 2));
+```
+
+3c. `src/App.tsx` 的 `case 'gun_upgrade_m4':` 保持发货 `makeItem('wp_m4a1', 1)`，其 `cost.extra` 由 WorkbenchModal 侧追加 `wp_akm`（见3e），App 侧 extra 扣料循环通用，无需改代码。
+
+3d. `src/App.tsx` 的 `applyResult` 在 `case 'ammo_reload':` 之前插入4条：
+
+```typescript
+          case 'pickle_pot':
+            return grantItem(makeItem('pickle_veg', 2));
+          case 'cheese_press':
+            return grantItem(makeItem('cheese_goat', 1));
+          case 'stirfry_pan':
+            return grantItem(makeItem('cook_stirfry', 2));
+          case 'energy_mix':
+            return grantItem(makeItem('cook_energybar', 2));
+```
+
+3e. `src/components/WorkbenchModal.tsx` 的 `RECIPES` 在 `gun_upgrade_m4` 项之后追加5条（4加工烹饪+M4耗枪修正——M4项整行替换，加 `wp_akm`）：
+
+```typescript
+  { id: 'gun_upgrade_m4', name: '改装：M4A1（耗AKM+扩容匣）', resultName: 'M4A1', icon: '🔫', category: '武器打造', desc: 'AKM+扩容弹匣→M4A1（110伤），旧枪折价。', cost: { wood: 0, stone: 0, scrap: 15, parts: 2, extra: [{ itemId: 'att_extmag', count: 1 }, { itemId: 'wp_akm', count: 1 }] } },
+  { id: 'pickle_pot', name: '腌南瓜 ×2', resultName: '腌南瓜', icon: '🥒', category: '食物加工', desc: '南瓜×2→腌菜×2。', cost: { wood: 4, stone: 0, scrap: 4, parts: 0, extra: [{ itemId: 'crop_pumpkin', count: 2 }] } },
+  { id: 'cheese_press', name: '羊奶酪 ×1', resultName: '羊奶酪', icon: '🧀', category: '食物加工', desc: '玉米×2+蜂蜜×1→奶酪。', cost: { wood: 4, stone: 0, scrap: 6, parts: 0, extra: [{ itemId: 'crop_corn', count: 2 }, { itemId: 'honey_wild', count: 1 }] } },
+  { id: 'stirfry_pan', name: '蔬菜炒 ×2', resultName: '蔬菜炒', icon: '🥗', category: '食物加工', desc: '玉米×2+防风草×2→蔬菜炒。', cost: { wood: 4, stone: 0, scrap: 4, parts: 0, extra: [{ itemId: 'crop_corn', count: 2 }, { itemId: 'crop_parsnip', count: 2 }] } },
+  { id: 'energy_mix', name: '能量棒 ×2', resultName: '能量棒', icon: '🍫', category: '食物加工', desc: '蜂蜜×2+裂隙鲶鱼×1→能量棒。', cost: { wood: 4, stone: 0, scrap: 4, parts: 0, extra: [{ itemId: 'honey_wild', count: 2 }, { itemId: 'fish_catfish', count: 1 }] } },
+```
+
+并删除旧的 `gun_upgrade_m4` 单extra行（整行替换，不可留两条同id）。`surgery_craft` 的 desc 改为 `'绷带×2+零件×1，恢复100生命。'`（与 extra 一致）。
+
+3f. `src/App.tsx` 黑市包量发货（`handleBuyMarketItem` 通用分支的 count 表达式替换）：
+
+```typescript
+count: def.id.startsWith('seed_') ? 2 * quantity : def.id === 'ore_copper' ? 5 * quantity : def.id === 'throw_frag' ? 2 * quantity : 1 * quantity,
+```
+
+3g. `src/components/InventoryModal.tsx` tool bonus 在 `throw_flash` 行之后（Task 9 补丁行之后）追加：
+
+```typescript
+      if (it.id === 'pickaxe_copper') return '铜镐 · 采集+60%';
+```
+
+3h. `src/game/collection.ts` 的 `pioneer` 行替换为：
+
+```typescript
+  pioneer: { id: 'pioneer', name: '先锋遗落', members: ['collect_dogtag', 'key_blue'], bonusCredits: 1200 },
+```
+
+3i. `src/game/maps.ts` 掉落追加（只在已有数组末尾 append，不改旧行）：
+- `ws_crate` += `{ itemId: 'seed_parsnip', name: '防风草种子×5', count: 2 }`
+- `outskirts_well` += `{ itemId: 'seed_pumpkin', name: '南瓜种子×3', count: 1 }`
+- `bog_cache` += `{ itemId: 'seed_potato', name: '土豆种子×5', count: 2 }, { itemId: 'honey_wild', name: '野蜂蜜', count: 2 }`
+- `rift_cache` += `{ itemId: 'seed_starfruit', name: '星果种子×1', count: 1 }, { itemId: 'wp_svd', name: 'SVD狙击步枪', count: 1 }, { itemId: 'key_red', name: '红色房卡', count: 1 }, { itemId: 'helmet_t4', name: '4级重型头盔', count: 1 }, { itemId: 'vest_t5', name: '5级钛合金背心', count: 1 }, { itemId: 'fish_legend', name: '传说之鱼', count: 1 }`
+- `log_toolshed` += `{ itemId: 'att_foregrip', name: '垂直握把', count: 1 }`
+- `dock_2`（二号浅滩钓台） += `{ itemId: 'fish_carp', name: '星露鲤鱼', count: 2 }`
+- `dock_chest` += `{ itemId: 'fish_eel', name: '沼泽鳗鱼', count: 1 }, { itemId: 'fish_catfish', name: '裂隙鲶鱼', count: 1 }, { itemId: 'med_bloodbag', name: '血袋', count: 1 }`
+- `aby_herb` += `{ itemId: 'fish_crimson', name: '绯红锦鲤', count: 1 }`
+- `fac_shelves` += `{ itemId: 'att_extmag', name: '扩容弹匣', count: 1 }`
+- `fac_ammo` += `{ itemId: 'ammo_762', name: '7.62mm穿甲弹×30', count: 2 }, { itemId: 'ammo_9mm', name: '9mm手枪弹×30', count: 2 }, { itemId: 'ammo_shell', name: '12号霰弹×10', count: 1 }, { itemId: 'ammo_signal', name: '信号枪弹×10', count: 2 }, { itemId: 'helmet_t3', name: '3级防弹头盔', count: 1 }, { itemId: 'vest_t3', name: '3级防弹背心', count: 1 }`
+- `st_bus`（侧翻公交车） += `{ itemId: 'wp_mp5', name: 'MP5冲锋枪', count: 1 }`
+- `gas_van`（站长货车） += `{ itemId: 'wp_m870', name: 'M870霰弹枪', count: 1 }`
+- `deep_ammo` += `{ itemId: 'wp_akm', name: 'AKM突击步枪', count: 1 }, { itemId: 'vest_t4', name: '4级重型背心', count: 1 }`
+- `aby_cache` += `{ itemId: 'wp_plasma', name: '破界等离子步枪', count: 1 }, { itemId: 'collect_dogtag', name: '阵亡者身份牌', count: 1 }`
+- `st_pharmacy` += `{ itemId: 'med_medkit', name: '纳米医疗包', count: 1 }, { itemId: 'med_painkiller', name: '止痛药', count: 2 }, { itemId: 'helmet_t2', name: '2级战术头盔', count: 1 }`
+- `q_powder` += `{ itemId: 'throw_smoke', name: '烟雾弹×2', count: 1 }, { itemId: 'throw_flash', name: '闪光弹×2', count: 1 }`
+- `gas_tanker` += `{ itemId: 'throw_molly', name: '燃烧瓶×2', count: 1 }`
+- `aby_scrap` += `{ itemId: 'att_suppressor', name: '消音器', count: 1 }`
+- `q_stone_1`（大型露天花岗岩矿床） += `{ itemId: 'ore_silver', name: '银矿石', count: 4 }`
+- `peak_ore` += `{ itemId: 'ore_gold', name: '金矿石', count: 4 }`
+- `aby_core` += `{ itemId: 'ore_iridium', name: '铱矿石', count: 2 }`
+- `deep_herb`（佣兵草药包） += `{ itemId: 'crop_blueberry', name: '蓝莓×3', count: 2 }`
+
+- [ ] **Step 4: Run test to verify it passes**
+
+Run: `npx vitest run src/game/items.test.ts src/game/collection.test.ts src/game/maps.test.ts -v`
+Expected: PASS（items 16 + collection 4 + maps 17）。
+
+Run: `npx tsc --noEmit`
+Expected: PASS，无输出。
+
+Run: `npx vitest run -v`
+Expected: PASS，全量 11 文件 110+ 通过。
+
+- [ ] **Step 5: Commit**
+
+```bash
+git add src/game/items.ts src/game/items.test.ts src/game/collection.ts src/game/collection.test.ts src/game/maps.ts src/game/maps.test.ts src/App.tsx src/components/WorkbenchModal.tsx src/components/InventoryModal.tsx docs/superpowers/plans/2026-10-15-item-expansion-stardew-delta.md
+git commit -m "fix(items): close reachability gaps from final review"
+```
+
+---
+
 ## Self-Review
 
 **1. Spec coverage：**

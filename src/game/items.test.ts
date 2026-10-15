@@ -197,3 +197,11 @@ describe('item expansion finale', () => {
     }
   });
 });
+describe('reachability patch (rev D)', () => {
+  it('pickaxe_copper is a registered tool', async () => {
+    const { ITEM_DEFS, lootResourceOfNew } = await import('./items');
+    expect(ITEM_DEFS['pickaxe_copper']).toBeDefined();
+    expect(ITEM_DEFS['pickaxe_copper'].category).toBe('tool');
+    expect(lootResourceOfNew('pickaxe_copper')).toBe('scrap');
+  });
+});

@@ -33,7 +33,7 @@ export interface CollectSet {
 
 export const COLLECT_SETS: Record<string, CollectSet> = {
   decent: { id: 'decent', name: '废土体面人', members: ['collect_watch', 'collect_circuit'], bonusCredits: 500 },
-  pioneer: { id: 'pioneer', name: '先锋遗落', members: ['collect_dogtag', 'collect_dogtag', 'key_blue'], bonusCredits: 1200 },
+  pioneer: { id: 'pioneer', name: '先锋遗落', members: ['collect_dogtag', 'key_blue'], bonusCredits: 1200 },
   mandel: { id: 'mandel', name: '曼德尔传奇', members: ['collect_mandel', 'key_red', 'fish_legend'], bonusCredits: 3000, title: '曼德尔收藏家' },
 };
 

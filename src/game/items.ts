@@ -103,6 +103,7 @@ export const ITEM_DEFS: Record<string, ItemDef> = {
   throw_smoke: { id: 'throw_smoke', name: '烟雾弹×2', category: 'tool', icon: '💨', rarity: 2, maxCount: 10, desc: '遮蔽视野，脱战/摸箱用。', buyPrice: 60, sellPrice: 40 },
   throw_flash: { id: 'throw_flash', name: '闪光弹×2', category: 'tool', icon: '✨', rarity: 3, maxCount: 10, desc: '致盲3秒，越级打精英。', buyPrice: 80, sellPrice: 54 },
   throw_molly: { id: 'throw_molly', name: '燃烧瓶×2', category: 'tool', icon: '🔥', rarity: 3, maxCount: 10, desc: '持续120灼烧，封路守门。', buyPrice: 90, sellPrice: 60 },
+  pickaxe_copper: { id: 'pickaxe_copper', name: '铜镐', category: 'tool', icon: '⛏️', rarity: 3, maxCount: 1, desc: '采矿专用：采石效率+60%，铜矿升级。', buyPrice: 350, sellPrice: 230 },
   att_scope4x: { id: 'att_scope4x', name: '4倍战术瞄具', category: 'material', icon: '🔭', rarity: 4, maxCount: 5, desc: 'SVD/M4配件，工厂/掠夺者产出。', buyPrice: 400, sellPrice: 280 },
   att_suppressor: { id: 'att_suppressor', name: '消音器', category: 'material', icon: '🔇', rarity: 4, maxCount: 5, desc: '开火无声，摸金必备。', buyPrice: 450, sellPrice: 300 },
   att_extmag: { id: 'att_extmag', name: '扩容弹匣', category: 'material', icon: '🎒', rarity: 3, maxCount: 5, desc: '备弹+50%，持续火力。', buyPrice: 250, sellPrice: 170 },

@@ -155,9 +155,13 @@ const RECIPES: Recipe[] = [
   { id: 'cook_pot', name: '鱼汤 ×2', resultName: '鱼汤', icon: '🍲', category: '食物加工', desc: '鲈鱼×2+水感废料，恢复60饱食。', cost: { wood: 6, stone: 0, scrap: 4, parts: 0, extra: [{ itemId: 'fish_bass', count: 2 }] } },
   { id: 'copper_pickaxe', name: '铜镐', resultName: '铜镐', icon: '⛏️', category: '工具打造', desc: '铜矿×8，采矿效率+120%。', cost: { wood: 6, stone: 0, scrap: 8, parts: 0, extra: [{ itemId: 'ore_copper', count: 8 }] } },
   { id: 'ammo_reload', name: '复装弹药 ×30', resultName: '复装弹药', icon: '🎯', category: '弹药制造', desc: '废铁×10+零件×1，通用备弹+30。', cost: { wood: 0, stone: 0, scrap: 10, parts: 1 } },
-  { id: 'surgery_craft', name: '野战手术包 ×1', resultName: '野战手术包', icon: '💉', category: '医疗合成', desc: '血袋感+零件，恢复100生命。', cost: { wood: 0, stone: 0, scrap: 14, parts: 1, extra: [{ itemId: 'med_bandage', count: 2 }] } },
+  { id: 'surgery_craft', name: '野战手术包 ×1', resultName: '野战手术包', icon: '💉', category: '医疗合成', desc: '绷带×2+零件×1，恢复100生命。', cost: { wood: 0, stone: 0, scrap: 14, parts: 1, extra: [{ itemId: 'med_bandage', count: 2 }] } },
   { id: 'star_wine', name: '星果酒 ×1', resultName: '星果酒', icon: '🍷', category: '食物加工', desc: '星果×3陈酿，毕业暴利。', cost: { wood: 10, stone: 0, scrap: 8, parts: 1, extra: [{ itemId: 'crop_starfruit', count: 3 }] } },
-  { id: 'gun_upgrade_m4', name: '改装：M4A1（耗扩容匣）', resultName: 'M4A1', icon: '🔫', category: '武器打造', desc: 'AKM+扩容弹匣→M4A1（110伤）。', cost: { wood: 0, stone: 0, scrap: 15, parts: 2, extra: [{ itemId: 'att_extmag', count: 1 }] } },
+  { id: 'gun_upgrade_m4', name: '改装：M4A1（耗AKM+扩容匣）', resultName: 'M4A1', icon: '🔫', category: '武器打造', desc: 'AKM+扩容弹匣→M4A1（110伤），旧枪折价。', cost: { wood: 0, stone: 0, scrap: 15, parts: 2, extra: [{ itemId: 'att_extmag', count: 1 }, { itemId: 'wp_akm', count: 1 }] } },
+  { id: 'pickle_pot', name: '腌南瓜 ×2', resultName: '腌南瓜', icon: '🥒', category: '食物加工', desc: '南瓜×2→腌菜×2。', cost: { wood: 4, stone: 0, scrap: 4, parts: 0, extra: [{ itemId: 'crop_pumpkin', count: 2 }] } },
+  { id: 'cheese_press', name: '羊奶酪 ×1', resultName: '羊奶酪', icon: '🧀', category: '食物加工', desc: '玉米×2+蜂蜜×1→奶酪。', cost: { wood: 4, stone: 0, scrap: 6, parts: 0, extra: [{ itemId: 'crop_corn', count: 2 }, { itemId: 'honey_wild', count: 1 }] } },
+  { id: 'stirfry_pan', name: '蔬菜炒 ×2', resultName: '蔬菜炒', icon: '🥗', category: '食物加工', desc: '玉米×2+防风草×2→蔬菜炒。', cost: { wood: 4, stone: 0, scrap: 4, parts: 0, extra: [{ itemId: 'crop_corn', count: 2 }, { itemId: 'crop_parsnip', count: 2 }] } },
+  { id: 'energy_mix', name: '能量棒 ×2', resultName: '能量棒', icon: '🍫', category: '食物加工', desc: '蜂蜜×2+裂隙鲶鱼×1→能量棒。', cost: { wood: 4, stone: 0, scrap: 4, parts: 0, extra: [{ itemId: 'honey_wild', count: 2 }, { itemId: 'fish_catfish', count: 1 }] } },
 ];
 
 function costText(cost: CraftCost): string {

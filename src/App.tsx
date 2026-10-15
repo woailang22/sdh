@@ -1228,7 +1228,7 @@ export default function App() {
       const def = (() => { try { return getItemDef(item.id); } catch { return null; } })();
       if (def) {
         if (def.category === 'food' || def.category === 'medical' || def.category === 'material' || def.category === 'tool') {
-          ok = addItemToHotbar({ id: def.id, name: def.name, category: def.category === 'material' && (def.id.startsWith('att_') || def.id.startsWith('key_') || def.id.startsWith('collect_') || def.id.startsWith('ore_') || def.id.startsWith('seed_')) ? 'material' : def.category, icon: def.icon, count: def.id.startsWith('seed_') ? 2 * quantity : 1 * quantity, maxCount: def.maxCount, desc: def.desc, rarity: def.rarity });
+          ok = addItemToHotbar({ id: def.id, name: def.name, category: def.category === 'material' && (def.id.startsWith('att_') || def.id.startsWith('key_') || def.id.startsWith('collect_') || def.id.startsWith('ore_') || def.id.startsWith('seed_')) ? 'material' : def.category, icon: def.icon, count: def.id.startsWith('seed_') ? 2 * quantity : def.id === 'ore_copper' ? 5 * quantity : def.id === 'throw_frag' ? 2 * quantity : 1 * quantity, maxCount: def.maxCount, desc: def.desc, rarity: def.rarity });
         } else if (def.category === 'weapon' || def.category === 'armor') {
           ok = addItemToHotbar({ id: def.id, name: def.name, category: def.category, icon: def.icon, count: 1, maxCount: 1, desc: def.desc, rarity: def.rarity });
         }
@@ -1357,15 +1357,7 @@ export default function App() {
               desc: '单发55伤害，装填步枪弹药（R）。',
             });
           case 'bandage':
-            return grantItem({
-              id: 'med_亚麻绷带',
-              name: '亚麻绷带',
-              category: 'medical',
-              icon: '🩹',
-              count: 2,
-              maxCount: 10,
-              desc: '点击使用，恢复30点生命。',
-            });
+            return grantItem(makeItem('med_bandage', 2));
           case 'dried_fish':
             return grantItem({
               id: 'food_烤肉干',
@@ -1452,6 +1444,14 @@ export default function App() {
             return grantItem(makeItem('wine_starfruit', 1));
           case 'gun_upgrade_m4':
             return grantItem(makeItem('wp_m4a1', 1));
+          case 'pickle_pot':
+            return grantItem(makeItem('pickle_veg', 2));
+          case 'cheese_press':
+            return grantItem(makeItem('cheese_goat', 1));
+          case 'stirfry_pan':
+            return grantItem(makeItem('cook_stirfry', 2));
+          case 'energy_mix':
+            return grantItem(makeItem('cook_energybar', 2));
           case 'ammo_reload':
             eng.player.reserveAmmo += 30;
             eng.addTextParticle(eng.player.x, eng.player.y - 1.2, '+30 复装弹药（按R装填）', '#38bdf8');
