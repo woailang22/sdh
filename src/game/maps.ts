@@ -493,9 +493,9 @@ export const SUBMAPS: Record<string, SubMapDef> = {
     desc: '伐木场：原木主产区，兼有运材车可拆',
     risk: 'LOW',
     gates: [
-      { x: 30, y: 0, targetMap: 'camp_outskirts', targetX: -30, targetY: 0, name: '南下外圩', icon: '🌾', desc: '返回城墙外圩' },
-      { x: 0, y: -28, targetMap: 'mtn_quarry', targetX: 0, targetY: 28, name: '北上采石场', icon: '🪨', desc: '前往采石场' },
-      { x: 28, y: 8, targetMap: 'mtn_deep', targetX: -28, targetY: -8, name: '林间小道', icon: '🌲', desc: '深入黑松深林' },
+      { x: 44, y: 0, targetMap: 'camp_outskirts', targetX: -44, targetY: 0, name: '南下外圩', icon: '🌾', desc: '返回城墙外圩' },
+      { x: 0, y: -42, targetMap: 'mtn_quarry', targetX: 0, targetY: 42, name: '北上采石场', icon: '🪨', desc: '前往采石场' },
+      { x: 42, y: 12, targetMap: 'mtn_deep', targetX: -42, targetY: -12, name: '林间小道', icon: '🌲', desc: '深入黑松深林' },
     ],
     interactables: [
       I('log_tree_1', '高耸红松古木', 'tree', -6, -8, '[E/F 砍伐红松]', woodLoot(30, '优质红松木'), 1.6),
@@ -553,8 +553,9 @@ export const SUBMAPS: Record<string, SubMapDef> = {
     desc: '露天矿场：石料/铁矿主产区，大型机械可拆',
     risk: 'LOW',
     gates: [
-      { x: 0, y: 28, targetMap: 'mtn_logging', targetX: 0, targetY: -28, name: '南下伐木场', icon: '🌲', desc: '返回黑松伐木场' },
-      { x: 28, y: 0, targetMap: 'mtn_deep', targetX: -28, targetY: 0, name: '东进深林', icon: '🌲', desc: '深入黑松深林' },
+      { x: 0, y: 42, targetMap: 'mtn_logging', targetX: 0, targetY: -42, name: '南下伐木场', icon: '🌲', desc: '返回黑松伐木场' },
+      { x: 42, y: 0, targetMap: 'mtn_deep', targetX: -42, targetY: 0, name: '东进深林', icon: '🌲', desc: '深入黑松深林' },
+      { x: 0, y: -42, targetMap: 'mtn_peak', targetX: 0, targetY: 42, name: '北攀雪峰垭口', icon: '🏔️', desc: '攀登黑松雪峰（新·高危）' },
     ],
     interactables: [
       I('q_stone_1', '大型露天花岗岩矿床', 'boulder', 12, -10, '[E/F 镐击开采花岗岩]', [
@@ -683,8 +684,8 @@ export const SUBMAPS: Record<string, SubMapDef> = {
     desc: '钓场与补给：食物主产区',
     risk: 'LOW',
     gates: [
-      { x: 0, y: -30, targetMap: 'camp_outskirts', targetX: 0, targetY: 30, name: '北岭渡口归营', icon: '🏕️', desc: '返回城墙外圩' },
-      { x: 28, y: 0, targetMap: 'marsh_bog', targetX: -28, targetY: 0, name: '东侧沼泽小径', icon: '🌊', desc: '前往沼泽' },
+      { x: 0, y: -42, targetMap: 'camp_outskirts', targetX: 0, targetY: 42, name: '北岭渡口归营', icon: '🏕️', desc: '返回城墙外圩' },
+      { x: 42, y: 0, targetMap: 'marsh_bog', targetX: -42, targetY: 0, name: '东侧沼泽小径', icon: '🌊', desc: '前往沼泽' },
     ],
     interactables: [
       I('dock_1', '一号深水钓台', 'pond', 0, 6, '[E/F 抛竿垂钓]', [
@@ -803,14 +804,57 @@ export const SUBMAPS: Record<string, SubMapDef> = {
       { x: -8, y: 3, w: 6, h: 4, type: 'foundation' },
     ],
   },
+  mtn_peak: {
+    id: 'mtn_peak', region: 'mountain', name: '黑松雪峰', theme: 'quarry',
+    desc: '雪线垭口：石料/铁矿富区，巨熊与精英盘踞',
+    risk: 'HIGH',
+    gates: [
+      { x: 0, y: 42, targetMap: 'mtn_quarry', targetX: 0, targetY: -42, name: '南下采石场', icon: '🪨', desc: '返回北岭采石场' },
+      { x: 42, y: 0, targetMap: 'mtn_deep', targetX: -42, targetY: 0, name: '东进深林', icon: '🌲', desc: '深入黑松深林' },
+    ],
+    interactables: [
+      I('peak_ore', '雪峰富铁矿脉', 'boulder', -20, -18, '[E/F 开采富铁矿]', [
+        { itemId: 'stone', name: '雪峰花岗石', count: 40 },
+        { itemId: 'iron_ore', name: '高品位铁矿', count: 10 },
+      ], 1.8),
+      I('peak_wood', '雪线枯松', 'tree', 18, -14, '[E/F 砍伐雪松]', woodLoot(35, '雪松硬木'), 1.6),
+      I('peak_cache', '登山队遗留补给箱', 'box', 0, 20, '[E/F 搜刮登山箱]', [
+        { itemId: 'food', name: '高能登山口粮', count: 8 },
+        { itemId: 'bandage', name: '防冻绷带', count: 4 },
+      ], 1.6),
+      I('peak_powder', '雪峰炸药棚', 'ammo_crate', -16, 16, '[E/F 搜刮炸药棚]', [
+        { itemId: 'c4_explosive', name: '雪峰开山炸药', count: 3 },
+        { itemId: 'ammo', name: '信号枪弹', count: 20 },
+      ], 1.8),
+    ],
+    monsters: [
+      M('pk1', '密林蚀化狂暴巨熊', -12, -6, 720, 1.9, 38),
+      M('pk2', '蚀体·恶瘴魑精英', 10, -8, 620, 1.8, 34),
+      M('pk3', '蚀化幼体', 0, 14, 260, 2.3, 16),
+    ],
+    buildings: [
+      ...buildCompoundWalls({
+        idPrefix: 'peak_hut', cx: 12, cy: 10, w: 4, h: 2,
+        wallType: 'stone_wall', wallName: '雪峰石屋残墙', ownerName: '废土遗迹',
+        doorSide: 'S', doorType: 'door', doorName: '石屋铁门',
+        doorExtra: { isOpen: true, isLocked: false },
+      }),
+      { id: 'peak_hut_box', type: 'storage_box', name: '雪峰石屋储物箱', x: 12, y: 10, hp: 400, maxHp: 400, level: 1, ownerName: '废土遗迹' },
+    ],
+    deco: [
+      { x: 12, y: 10, w: 6, h: 4, type: 'foundation' },
+      { x: -20, y: -18, w: 8, h: 6, type: 'rockery' },
+    ],
+  },
   marsh_rift: {
     id: 'marsh_rift', region: 'marsh', name: '裂隙前线', theme: 'rift',
     desc: '红区：晶石/首领/遗落宝箱，富贵险中求',
     risk: 'EXTREME',
     gates: [
-      { x: 0, y: -28, targetMap: 'marsh_bog', targetX: 0, targetY: 28, name: '北撤沼泽', icon: '🌊', desc: '撤回泥沼泽' },
-      { x: -30, y: 0, targetMap: 'town_ruins', targetX: 30, targetY: 0, name: '省道断桥', icon: '🧱', desc: '撤往废墟居民区' },
-      { x: -20, y: 20, targetMap: 'camp_plaza', targetX: 0, targetY: 0, name: '空间锚定跃迁', icon: '🏕️', desc: '紧急跃迁回营地广场' },
+      { x: 0, y: -42, targetMap: 'marsh_bog', targetX: 0, targetY: 42, name: '北撤沼泽', icon: '🌊', desc: '撤回泥沼泽' },
+      { x: -44, y: 0, targetMap: 'town_ruins', targetX: 44, targetY: 0, name: '省道断桥', icon: '🧱', desc: '撤往废墟居民区' },
+      { x: -30, y: 30, targetMap: 'camp_plaza', targetX: 0, targetY: 0, name: '空间锚定跃迁', icon: '🏕️', desc: '紧急跃迁回营地广场' },
+      { x: 30, y: 30, targetMap: 'marsh_abyss', targetX: -30, targetY: -30, name: '下潜深渊裂口', icon: '🕳️', desc: '下潜深渊裂隙（新·极危）' },
     ],
     interactables: [
       I('rift_core', '坍界裂隙异象核心', 'crystal', 0, 0, '[E/F 提取异象原晶]', [
@@ -844,6 +888,48 @@ export const SUBMAPS: Record<string, SubMapDef> = {
     deco: [
       { x: 6, y: 6, w: 5, h: 4, type: 'foundation' },
       { x: 10, y: 10, w: 7, h: 5, type: 'crater' },
+    ],
+  },
+  marsh_abyss: {
+    id: 'marsh_abyss', region: 'marsh', name: '深渊裂口', theme: 'rift',
+    desc: '第二红区：晶石/暗核/次级领主，毕业前哨战',
+    risk: 'EXTREME',
+    gates: [
+      { x: -30, y: -30, targetMap: 'marsh_rift', targetX: 30, targetY: 30, name: '北撤裂隙前线', icon: '⚠️', desc: '返回裂隙前线' },
+      { x: 30, y: 0, targetMap: 'camp_plaza', targetX: 0, targetY: 0, name: '空间锚定跃迁', icon: '🏕️', desc: '紧急跃迁回营地' },
+    ],
+    interactables: [
+      I('aby_core', '深渊小异象', 'crystal', 0, 0, '[E/F 提取深渊原晶]', [
+        { itemId: 'shard', name: '深渊紫晶', count: 5 },
+        { itemId: 'plasma', name: '虚空高能等离子聚合体', count: 3 },
+      ], 2.5),
+      I('aby_cache', '深渊遗落补给箱', 'box', 16, 16, '[E/F 解锁深渊箱]', [
+        { itemId: 'dark_core', name: '坍界暗物质晶核', count: 8 },
+        { itemId: 'credits', name: '高级信用凭证', count: 1800 },
+        { itemId: 'rifle', name: '战术突击步枪', count: 1 },
+      ], 2.2),
+      I('aby_herb', '深渊荧光苔', 'box', -16, 12, '[E/F 采集荧光苔]', [
+        { itemId: 'bandage', name: '荧光止血苔', count: 4 },
+        { itemId: 'food', name: '荧光菌菇', count: 6 },
+      ], 1.6),
+      I('aby_scrap', '坠毁无人机堆', 'car', -12, -16, '[E/F 拆解无人机]', [
+        { itemId: 'scrap', name: '航空铝废料', count: 40 },
+        { itemId: 'part', name: '无人机飞控芯片', count: 4 },
+      ], 2.0),
+    ],
+    monsters: [
+      M('ab1', '深渊亚领主·蚀骸巨兽 (次级BOSS)', 0, -8, 1200, 2.2, 42),
+      M('ab2', '多足蚀化潜行兽', -14, 8, 480, 2.5, 28),
+      M('ab3', '虚空撕裂幼体', 12, -10, 320, 2.6, 20),
+    ],
+    buildings: [
+      { id: 'aby_cover_1', type: 'iron_wall', name: '深渊掩体残墙', x: 6, y: 6, hp: 300, maxHp: 850, level: 1, ownerName: '遗落先锋', facing: 'ew' },
+      { id: 'aby_cover_2', type: 'iron_wall', name: '深渊掩体残墙', x: 7, y: 6, hp: 300, maxHp: 850, level: 1, ownerName: '遗落先锋', facing: 'ew' },
+      { id: 'aby_cover_3', type: 'iron_wall', name: '深渊掩体残墙', x: 6, y: 7, hp: 300, maxHp: 850, level: 1, ownerName: '遗落先锋', facing: 'ns' },
+    ],
+    deco: [
+      { x: 6, y: 6, w: 5, h: 4, type: 'foundation' },
+      { x: 0, y: 0, w: 9, h: 7, type: 'crater' },
     ],
   },
 };

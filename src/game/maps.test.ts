@@ -75,3 +75,29 @@ describe('map expansion part A', () => {
     }
   });
 });
+describe('map expansion part B', () => {
+  it('mtn_peak and marsh_abyss exist with 2+ gates each', async () => {
+    const { SUBMAPS } = await import('./maps');
+    for (const id of ['mtn_peak', 'marsh_abyss'] as const) {
+      const def = (SUBMAPS as any)[id];
+      expect(def, `${id} missing`).toBeDefined();
+      expect(def.gates.length).toBeGreaterThanOrEqual(2);
+      expect(def.monsters.length).toBeGreaterThanOrEqual(3);
+      expect(def.interactables.length).toBeGreaterThanOrEqual(4);
+    }
+  });
+  it('all maps are mutually reachable via gates', async () => {
+    const { SUBMAPS, MAP_IDS } = await import('./maps');
+    const seen = new Set<string>(['camp_plaza']);
+    const q = ['camp_plaza'];
+    while (q.length) {
+      const cur = q.pop()!;
+      const def = (SUBMAPS as any)[cur];
+      if (!def) continue;
+      for (const g of def.gates) {
+        if (!seen.has(g.targetMap)) { seen.add(g.targetMap); q.push(g.targetMap); }
+      }
+    }
+    for (const id of MAP_IDS) expect(seen.has(id), `${id} unreachable`).toBe(true);
+  });
+});
