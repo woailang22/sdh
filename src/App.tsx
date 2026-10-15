@@ -25,6 +25,7 @@ import { InventoryModal } from './components/InventoryModal';
 import { MapEditorModal } from './components/MapEditorModal';
 import { LootPanel, LootEntry } from './components/LootPanel';
 import { lootResourceOf, RARITY, skillLevel, skillYieldMult, LootResource } from './game/maps';
+import { ITEM_DEFS, getItemDef, makeItem, WEAPON_DAMAGE, ARMOR_BONUS_TABLE, MED_HEAL, FOOD_VALUE } from './game/items';
 import { killReward, WEAPONS, ARMOR_REDUCTION } from './game/combat';
 import { BASE_PLOTS } from './game/spawn';
 import { homeMapIdFor } from './game/home';
@@ -153,7 +154,7 @@ export default function App() {
     6 + (eq.pack?.id === 'pack_tactical' ? 4 : eq.pack?.id === 'pack_canvas' ? 2 : 0);
 
   // 护甲加成表
-  const ARMOR_BONUS: Record<string, number> = { armor_cloth: 25, armor_vest: 50 };
+  const ARMOR_BONUS: Record<string, number> = { armor_cloth: 25, armor_vest: 50, ...ARMOR_BONUS_TABLE };
 
   const [activeSlot, setActiveSlot] = useState<number>(1);
 
@@ -516,15 +517,19 @@ export default function App() {
         setPlayerParts((prev) => prev + count);
         return true;
       case 'food': {
-        const icon = name.includes('鱼') || name.includes('鳟') ? '🐟' : name.includes('水') ? '💧' : '🥩';
-        return addItemToHotbar({ id: `food_${name}`, name, category: 'food', icon, count, maxCount: 99, desc: '点击快捷栏食用，恢复35点饱食。', rarity });
+        const def = (() => { try { return getItemDef(itemId); } catch { return null; } })();
+        const fv = FOOD_VALUE[itemId];
+        const icon = def?.icon ?? (name.includes('鱼') || name.includes('鳟') ? '🐟' : name.includes('水') ? '💧' : '🥩');
+        const dname = def?.name ?? name;
+        return addItemToHotbar({ id: itemId.startsWith('food_') || itemId.startsWith('fish') || itemId.startsWith('crop_') || itemId.startsWith('cook_') || itemId.startsWith('jam_') || itemId.startsWith('wine_') || itemId.startsWith('pickle_') || itemId.startsWith('cheese_') || itemId.startsWith('honey_') ? itemId : `food_${name}`, name: dname, category: 'food', icon, count, maxCount: 99, desc: def?.desc ?? '点击快捷栏食用，恢复35点饱食。', rarity });
       }
       case 'ammo': {
         if (engineRef.current) {
-          engineRef.current.player.reserveAmmo += count;
+          const mult = itemId === 'ammo_762' ? 30 : itemId === 'ammo_556' ? 30 : itemId === 'ammo_9mm' ? 30 : itemId === 'ammo_shell' ? 10 : itemId === 'ammo_signal' ? 10 : count;
+          engineRef.current.player.reserveAmmo += mult;
           engineRef.current.addTextParticle(
             engineRef.current.player.x, engineRef.current.player.y - 1.8,
-            '记得按 R 装填！', '#38bdf8'
+            `+${mult} 备弹（R装填）`, '#38bdf8'
           );
         }
         return true;
@@ -532,13 +537,19 @@ export default function App() {
       case 'c4':
         return addItemToHotbar({ id: 'c4_explosive', name: '高爆C4塑胶炸药', category: 'tool', icon: '💣', count, maxCount: 20, desc: '突袭破拆敌方领地高耐久安全门的利器。', rarity });
       case 'medical': {
-        const isBandage = name.includes('绷带');
-        return addItemToHotbar({ id: `med_${name}`, name, category: 'medical', icon: isBandage ? '🩹' : '💉', count, maxCount: 10, desc: isBandage ? '点击使用，恢复30点生命。' : '点击使用，恢复60点生命。', rarity });
+        const def = (() => { try { return getItemDef(itemId); } catch { return null; } })();
+        const heal = MED_HEAL[itemId] ?? (name.includes('绷带') ? 30 : 60);
+        const isBandage = (def?.name ?? name).includes('绷带');
+        return addItemToHotbar({ id: def?.id ?? `med_${name}`, name: def?.name ?? name, category: 'medical', icon: def?.icon ?? (isBandage ? '🩹' : '💉'), count, maxCount: 10, desc: def?.desc ?? (isBandage ? '点击使用，恢复30点生命。' : `点击使用，恢复${heal}点生命。`), rarity });
       }
-      case 'weapon':
-        return addItemToHotbar({ id: 'rifle', name: '战术突击步枪', category: 'weapon', icon: '🔫', count: 1, maxCount: 1, desc: '单发124伤害，装填步枪弹药（R）。', rarity });
-      case 'armor':
-        return addItemToHotbar({ id: 'armor_vest', name: '军用防弹背心', category: 'armor', icon: '🦺', count: 1, maxCount: 1, desc: '护盾上限+50，受伤减免15%。', rarity });
+      case 'weapon': {
+        const def = getItemDef(itemId);
+        return addItemToHotbar({ id: def.id, name: def.name, category: 'weapon', icon: def.icon, count: 1, maxCount: 1, desc: `${def.desc}（单发${WEAPON_DAMAGE[itemId] ?? 50}伤）`, rarity: def.rarity });
+      }
+      case 'armor': {
+        const def = getItemDef(itemId);
+        return addItemToHotbar({ id: def.id, name: def.name, category: 'armor', icon: def.icon, count: 1, maxCount: 1, desc: `${def.desc}（护盾+${ARMOR_BONUS_TABLE[itemId] ?? ARMOR_BONUS_TABLE[def.id] ?? 0}）`, rarity: def.rarity });
+      }
       case 'credits':
         setPlayerStats((prev) => ({ ...prev, credits: prev.credits + count }));
         return true;
@@ -566,6 +577,18 @@ export default function App() {
           desc: isTactical ? '背包格 +4。' : '背包格 +2。',
           rarity,
         });
+      }
+      case 'throwable': {
+        const def = getItemDef(itemId);
+        return addItemToHotbar({ id: def.id, name: def.name, category: 'tool', icon: def.icon, count, maxCount: def.maxCount, desc: def.desc, rarity: def.rarity });
+      }
+      case 'valuable': {
+        const def = getItemDef(itemId);
+        return addItemToHotbar({ id: def.id, name: def.name, category: 'material', icon: def.icon, count, maxCount: def.maxCount, desc: def.desc + `（黑市可售${def.sellPrice}点）`, rarity: def.rarity });
+      }
+      case 'seed': {
+        const def = getItemDef(itemId);
+        return addItemToHotbar({ id: def.id, name: def.name, category: 'material', icon: def.icon, count, maxCount: def.maxCount, desc: def.desc, rarity: def.rarity });
       }
       default:
         setPlayerScrap((prev) => prev + count);
@@ -1095,14 +1118,17 @@ export default function App() {
     const eng = engineRef.current;
 
     if (item.category === 'food') {
-      eng.player.satiety = Math.min(eng.player.maxSatiety, eng.player.satiety + 35);
+      const fv = FOOD_VALUE[item.id] ?? { satiety: 35, heal: 0 };
+      eng.player.satiety = Math.min(eng.player.maxSatiety, eng.player.satiety + fv.satiety);
       eng.player.stamina = Math.min(eng.player.maxStamina, eng.player.stamina + 20);
+      if (fv.heal > 0) eng.player.hp = Math.min(eng.player.maxHp, eng.player.hp + fv.heal);
       soundManager.playUseMedical();
-      eng.addTextParticle(eng.player.x, eng.player.y - 1.4, '+35 饱食', '#fb923c');
+      eng.addTextParticle(eng.player.x, eng.player.y - 1.4, `+${fv.satiety} 饱食${fv.heal > 0 ? ` +${fv.heal}生命` : ''}`, '#fb923c');
       setAteFood(true);
     } else if (item.category === 'medical') {
-      const heal = item.name.includes('绷带') ? 30 : 60;
+      const heal = MED_HEAL[item.id] ?? (item.name.includes('绷带') ? 30 : 60);
       eng.player.hp = Math.min(eng.player.maxHp, eng.player.hp + heal);
+      if (item.id === 'med_painkiller') eng.player.stamina = Math.min(eng.player.maxStamina, eng.player.stamina + 20);
       soundManager.playUseMedical();
       eng.addTextParticle(eng.player.x, eng.player.y - 1.4, `+${heal} 生命`, '#4ade80');
     } else {
@@ -1197,6 +1223,16 @@ export default function App() {
       });
     } else if (item.id === 'rift_shard') {
       setPlayerStats((prev) => ({ ...prev, shards: prev.shards + 1 * quantity }));
+    } else {
+      // 新增通用商品（种子/铜矿/配件/房卡/藏品/手术包/手雷/星果酒）
+      const def = (() => { try { return getItemDef(item.id); } catch { return null; } })();
+      if (def) {
+        if (def.category === 'food' || def.category === 'medical' || def.category === 'material' || def.category === 'tool') {
+          ok = addItemToHotbar({ id: def.id, name: def.name, category: def.category === 'material' && (def.id.startsWith('att_') || def.id.startsWith('key_') || def.id.startsWith('collect_') || def.id.startsWith('ore_') || def.id.startsWith('seed_')) ? 'material' : def.category, icon: def.icon, count: def.id.startsWith('seed_') ? 2 * quantity : 1 * quantity, maxCount: def.maxCount, desc: def.desc, rarity: def.rarity });
+        } else if (def.category === 'weapon' || def.category === 'armor') {
+          ok = addItemToHotbar({ id: def.id, name: def.name, category: def.category, icon: def.icon, count: 1, maxCount: 1, desc: def.desc, rarity: def.rarity });
+        }
+      }
     }
     if (!ok) {
       pushSystemMsg('背包满了，本次购买未扣钱。按 I 整理后再来。');
@@ -1245,6 +1281,25 @@ export default function App() {
     } else if (item.id === 'rift_shard') {
       if (playerStatsRef.current.shards < 1 * quantity) { deny('没有紫晶可卖。'); return false; }
       setPlayerStats((prev) => ({ ...prev, shards: prev.shards - 1 * quantity }));
+    } else {
+      const sdef = (() => { try { return getItemDef(item.id); } catch { return null; } })();
+      if (sdef) {
+        const cur = [...hotbarSlotsRef.current];
+        let need = quantity;
+        for (let i = 0; i < cur.length && need > 0; i++) {
+          const s = cur[i];
+          if (s && s.id === item.id && s.count > 0) {
+            const take = Math.min(need, s.count);
+            need -= take;
+            cur[i] = s.count - take <= 0 ? null : { ...s, count: s.count - take };
+          }
+        }
+        if (need > 0) { deny(`没有足够的${sdef.name}可卖。`); return false; }
+        setHotbarSlots(cur);
+        setPlayerStats((prev) => ({ ...prev, credits: prev.credits + item.sellPrice * quantity }));
+        soundManager.playLoot();
+        return true;
+      }
     }
     setPlayerStats((prev) => ({ ...prev, credits: prev.credits + revenue }));
     soundManager.playLoot();
@@ -1375,6 +1430,32 @@ export default function App() {
               maxCount: 1,
               desc: '背包格 +4。',
             });
+          case 'grow_parsnip':
+            return grantItem(makeItem('crop_parsnip', 4));
+          case 'grow_potato':
+            return grantItem(makeItem('crop_potato', 4));
+          case 'grow_corn':
+            return grantItem(makeItem('crop_corn', 4));
+          case 'grow_pumpkin':
+            return grantItem(makeItem('crop_pumpkin', 3));
+          case 'grow_starfruit':
+            return grantItem(makeItem('crop_starfruit', 2));
+          case 'jam_pot':
+            return grantItem(makeItem('jam_berry', 2));
+          case 'cook_pot':
+            return grantItem(makeItem('cook_fishsoup', 2));
+          case 'copper_pickaxe':
+            return grantItem({ id: 'pickaxe_copper', name: '铜镐', category: 'tool', icon: '⛏️', count: 1, maxCount: 1, desc: '采矿效率+120%，采石专用。', rarity: 3 });
+          case 'surgery_craft':
+            return grantItem(makeItem('med_surgery', 1));
+          case 'star_wine':
+            return grantItem(makeItem('wine_starfruit', 1));
+          case 'gun_upgrade_m4':
+            return grantItem(makeItem('wp_m4a1', 1));
+          case 'ammo_reload':
+            eng.player.reserveAmmo += 30;
+            eng.addTextParticle(eng.player.x, eng.player.y - 1.2, '+30 复装弹药（按R装填）', '#38bdf8');
+            return true;
           default:
             return true;
         }
@@ -1385,6 +1466,22 @@ export default function App() {
       if (order.cost.stone > 0) setPlayerStone((prev) => Math.max(0, prev - order.cost.stone));
       if (order.cost.scrap > 0) setPlayerScrap((prev) => Math.max(0, prev - order.cost.scrap));
       if (order.cost.parts > 0) setPlayerParts((prev) => Math.max(0, prev - order.cost.parts));
+      for (const e of order.cost.extra ?? []) {
+        setHotbarSlots((prev) => {
+          const next = [...prev];
+          let need = e.count;
+          for (let i = 0; i < next.length && need > 0; i++) {
+            const s = next[i];
+            if (s && s.id === e.itemId) {
+              const take = Math.min(s.count, need);
+              need -= take;
+              const left = s.count - take;
+              next[i] = left <= 0 ? null : { ...s, count: left };
+            }
+          }
+          return next;
+        });
+      }
       if (order.id === 'stone_pickaxe') setPickaxeCrafted(true);
       grantXp(30);
       soundManager.playCraft();
@@ -1894,6 +1991,12 @@ export default function App() {
         playerScrap={playerScrap}
         playerParts={playerParts}
         onCraftSuccess={handleCraftSuccess}
+        hasExtra={(itemId, count) => {
+          let have = 0;
+          for (const s of hotbarSlotsRef.current) if (s && s.id === itemId) have += s.count;
+          if (itemId === 'water') have += 999; // 水感：水井/餐馆易得，首版免校验只收废铁木料，防卡死
+          return have >= count;
+        }}
       />
 
       <RiftModal

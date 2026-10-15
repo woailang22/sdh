@@ -172,3 +172,15 @@ describe('delta attachments/keys/valuables', () => {
     expect(qualitySellPrice('collect_mandel', 0)).toBe(1500);
   });
 });
+describe('app wiring contract', () => {
+  it('every weapon/armor/med/throw has damage/heal/shield entry', async () => {
+    const { ITEM_DEFS, WEAPON_DAMAGE, ARMOR_BONUS_TABLE, MED_HEAL, THROW_DAMAGE, FOOD_VALUE } = await import('./items');
+    for (const d of Object.values(ITEM_DEFS)) {
+      if (d.category === 'weapon') expect(WEAPON_DAMAGE[d.id], d.id).toBeDefined();
+      if (d.category === 'armor') expect(ARMOR_BONUS_TABLE[d.id] ?? ARMOR_BONUS_TABLE[d.id.replace('helmet_','helmet_').replace('vest_','vest_')], d.id).toBeDefined();
+      if (d.category === 'medical') expect(MED_HEAL[d.id] ?? MED_HEAL[d.id.replace('med_','med_')], d.id).toBeDefined();
+      if (d.id.startsWith('throw_')) expect(THROW_DAMAGE[d.id], d.id).toBeDefined();
+      if (d.category === 'food') expect(FOOD_VALUE[d.id] ?? FOOD_VALUE[d.id.replace('crop_','crop_')], d.id).toBeDefined();
+    }
+  });
+});

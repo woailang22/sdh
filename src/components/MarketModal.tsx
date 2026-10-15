@@ -71,6 +71,14 @@ export const MarketModal: React.FC<MarketModalProps> = ({
       stock: 8,
       description: '从恶瘴魑体内凝结的高能量晶体，用于驱动高阶下锚发生器。',
     },
+    { id: 'seed_corn', name: '玉米种子包', category: '物资', buyPrice: 60, sellPrice: 20, icon: '🌱', stock: 60, description: '农圩可种，连续收获，星露谷入门包。' },
+    { id: 'ore_copper', name: '铜矿石 ×5', category: '物资', buyPrice: 150, sellPrice: 100, icon: '🟤', stock: 40, description: '铜镐升级材料，工具棚/矿场产出。' },
+    { id: 'att_scope4x', name: '4倍战术瞄具', category: '装备', buyPrice: 400, sellPrice: 280, icon: '🔭', stock: 6, description: 'SVD/M4配件，三角洲摸金标配。' },
+    { id: 'key_blue', name: '蓝色房卡', category: '稀有材料', buyPrice: 600, sellPrice: 450, icon: '🟦', stock: 3, description: '开加油站办公室/渔港小屋，内有高价值箱。' },
+    { id: 'collect_mandel', name: '曼德尔砖', category: '稀有材料', buyPrice: 2000, sellPrice: 1500, icon: '🧱', stock: 1, description: '三角洲头号藏品，红区房卡房限定。' },
+    { id: 'med_surgery', name: '野战手术包', category: '裂隙药剂', buyPrice: 300, sellPrice: 220, icon: '💉', stock: 5, description: '恢复100生命，BOSS战救命。' },
+    { id: 'throw_frag', name: '破片手雷 ×2', category: '装备', buyPrice: 120, sellPrice: 80, icon: '💣', stock: 12, description: '范围300伤害，清群怪。' },
+    { id: 'wine_starfruit', name: '星果酒', category: '稀有材料', buyPrice: 2250, sellPrice: 2250, icon: '🍷', stock: 2, description: '星果陈酿，毕业暴利，食用回40饱食+30生命。' },
   ]);
 
   if (!isOpen) return null;

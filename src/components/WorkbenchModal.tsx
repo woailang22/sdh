@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { X, Wrench, Hammer, ShieldCheck } from 'lucide-react';
 import { soundManager } from '../audio/soundManager';
+import { getItemDef } from '../game/items';
 
 export interface CraftCost {
   wood: number;
   stone: number;
   scrap: number;
   parts: number;
+  extra?: { itemId: string; count: number }[];
 }
 
 export interface CraftOrder {
@@ -22,6 +24,7 @@ interface WorkbenchModalProps {
   playerScrap: number;
   playerParts: number;
   onCraftSuccess: (order: CraftOrder) => void;
+  hasExtra?: (itemId: string, count: number) => boolean;
 }
 
 interface Recipe {
@@ -143,6 +146,18 @@ const RECIPES: Recipe[] = [
     desc: '护盾上限+50，受伤减免15%。穿上它再去红区。',
     cost: { wood: 0, stone: 0, scrap: 20, parts: 2 },
   },
+  { id: 'grow_parsnip', name: '种植：防风草 ×4', resultName: '防风草', icon: '🥕', category: '农圩种植', desc: '种子×1农圩种植，工作台浓缩为12秒。', cost: { wood: 2, stone: 0, scrap: 0, parts: 0, extra: [{ itemId: 'seed_parsnip', count: 1 }] } },
+  { id: 'grow_potato', name: '种植：土豆 ×4', resultName: '土豆', icon: '🥔', category: '农圩种植', desc: '种子×1，量大管饱。', cost: { wood: 2, stone: 0, scrap: 2, parts: 0, extra: [{ itemId: 'seed_potato', count: 1 }] } },
+  { id: 'grow_corn', name: '种植：玉米 ×4', resultName: '玉米', icon: '🌽', category: '农圩种植', desc: '种子×1，鱼汤原料。', cost: { wood: 4, stone: 0, scrap: 2, parts: 0, extra: [{ itemId: 'seed_corn', count: 1 }] } },
+  { id: 'grow_pumpkin', name: '种植：南瓜 ×3', resultName: '南瓜', icon: '🎃', category: '农圩种植', desc: '种子×1，腌菜原料。', cost: { wood: 4, stone: 0, scrap: 4, parts: 0, extra: [{ itemId: 'seed_pumpkin', count: 1 }] } },
+  { id: 'grow_starfruit', name: '种植：星果 ×2', resultName: '星果', icon: '🌟', category: '农圩种植', desc: '种子×1，酿酒暴利。', cost: { wood: 6, stone: 0, scrap: 6, parts: 1, extra: [{ itemId: 'seed_starfruit', count: 1 }] } },
+  { id: 'jam_pot', name: '蓝莓果酱 ×2', resultName: '蓝莓果酱', icon: '🫙', category: '食物加工', desc: '蓝莓×3→果酱×2，售价翻倍。', cost: { wood: 4, stone: 0, scrap: 6, parts: 0, extra: [{ itemId: 'crop_blueberry', count: 3 }] } },
+  { id: 'cook_pot', name: '鱼汤 ×2', resultName: '鱼汤', icon: '🍲', category: '食物加工', desc: '鲈鱼×2+水感废料，恢复60饱食。', cost: { wood: 6, stone: 0, scrap: 4, parts: 0, extra: [{ itemId: 'fish_bass', count: 2 }] } },
+  { id: 'copper_pickaxe', name: '铜镐', resultName: '铜镐', icon: '⛏️', category: '工具打造', desc: '铜矿×8，采矿效率+120%。', cost: { wood: 6, stone: 0, scrap: 8, parts: 0, extra: [{ itemId: 'ore_copper', count: 8 }] } },
+  { id: 'ammo_reload', name: '复装弹药 ×30', resultName: '复装弹药', icon: '🎯', category: '弹药制造', desc: '废铁×10+零件×1，通用备弹+30。', cost: { wood: 0, stone: 0, scrap: 10, parts: 1 } },
+  { id: 'surgery_craft', name: '野战手术包 ×1', resultName: '野战手术包', icon: '💉', category: '医疗合成', desc: '血袋感+零件，恢复100生命。', cost: { wood: 0, stone: 0, scrap: 14, parts: 1, extra: [{ itemId: 'med_bandage', count: 2 }] } },
+  { id: 'star_wine', name: '星果酒 ×1', resultName: '星果酒', icon: '🍷', category: '食物加工', desc: '星果×3陈酿，毕业暴利。', cost: { wood: 10, stone: 0, scrap: 8, parts: 1, extra: [{ itemId: 'crop_starfruit', count: 3 }] } },
+  { id: 'gun_upgrade_m4', name: '改装：M4A1（耗扩容匣）', resultName: 'M4A1', icon: '🔫', category: '武器打造', desc: 'AKM+扩容弹匣→M4A1（110伤）。', cost: { wood: 0, stone: 0, scrap: 15, parts: 2, extra: [{ itemId: 'att_extmag', count: 1 }] } },
 ];
 
 function costText(cost: CraftCost): string {
@@ -151,6 +166,10 @@ function costText(cost: CraftCost): string {
   if (cost.stone > 0) parts.push(`条石x${cost.stone}`);
   if (cost.scrap > 0) parts.push(`废铁x${cost.scrap}`);
   if (cost.parts > 0) parts.push(`零件x${cost.parts}`);
+  for (const e of cost.extra ?? []) {
+    try { parts.push(`${getItemDef(e.itemId).name}x${e.count}`); }
+    catch { parts.push(`${e.itemId}x${e.count}`); }
+  }
   return parts.join(' · ');
 }
 
@@ -162,19 +181,22 @@ export const WorkbenchModal: React.FC<WorkbenchModalProps> = ({
   playerScrap,
   playerParts,
   onCraftSuccess,
+  hasExtra,
 }) => {
   const [craftingId, setCraftingId] = useState<string | null>(null);
 
   if (!isOpen) return null;
 
-  const canAfford = (cost: CraftCost) =>
+  const hasExtraFn = hasExtra ?? (() => true);
+  const canAfford = (cost: CraftCost, hasExtra: (itemId: string, count: number) => boolean) =>
     playerWood >= cost.wood &&
     playerStone >= cost.stone &&
     playerScrap >= cost.scrap &&
-    playerParts >= cost.parts;
+    playerParts >= cost.parts &&
+    (cost.extra ?? []).every((e) => hasExtra(e.itemId, e.count));
 
   const handleStartCraft = (recipe: Recipe) => {
-    if (!canAfford(recipe.cost) || craftingId) return;
+    if (!canAfford(recipe.cost, hasExtraFn) || craftingId) return;
 
     setCraftingId(recipe.id);
     soundManager.playCraft();
@@ -226,7 +248,7 @@ export const WorkbenchModal: React.FC<WorkbenchModalProps> = ({
         {/* Recipe List */}
         <div className="flex-1 overflow-y-auto p-6 space-y-3">
           {RECIPES.map((r) => {
-            const affordable = canAfford(r.cost);
+            const affordable = canAfford(r.cost, hasExtraFn);
             const isCrafting = craftingId === r.id;
 
             return (

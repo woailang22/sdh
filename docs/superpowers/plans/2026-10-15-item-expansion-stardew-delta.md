@@ -1096,10 +1096,25 @@ const canAfford = (cost: CraftCost, hasExtra: (itemId: string, count: number) =>
 ```typescript
     const sdef = (() => { try { return getItemDef(item.id); } catch { return null; } })();
     if (sdef) {
+      const cur = [...hotbarSlotsRef.current];
+      let need = quantity;
+      for (let i = 0; i < cur.length && need > 0; i++) {
+        const s = cur[i];
+        if (s && s.id === item.id && s.count > 0) {
+          const take = Math.min(need, s.count);
+          need -= take;
+          cur[i] = s.count - take <= 0 ? null : { ...s, count: s.count - take };
+        }
+      }
+      if (need > 0) { deny(`没有足够的${sdef.name}可卖。`); return false; }
+      setHotbarSlots(cur);
       setPlayerStats((prev) => ({ ...prev, credits: prev.credits + item.sellPrice * quantity }));
+      soundManager.playLoot();
       return true;
     }
 ```
+
+（Rev C 补丁：卖侧通用块必须包在 legacy 链的 terminal `else` 内并先按 `item.id` 扣背包再加钱——否则新商品可空手刷钱，且旧 `scrap`/`medkit`（注册表ID碰撞）会扣货不给钱/双扣。买侧同理包在 `else` 内，防旧商品双发货。）
 
 （注：完整扣货逻辑沿用旧函数内已有的背包扫描，新增分支只负责加钱，扣货走原 `hotbarSlots` 查找 `item.id` 逻辑，不另起炉灶。）
 
