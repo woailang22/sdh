@@ -156,3 +156,19 @@ describe('delta armor/medical/throwable', () => {
     expect(lootResourceOfNew('throw_frag')).toBe('throwable');
   });
 });
+describe('delta attachments/keys/valuables', () => {
+  it('has 4 attachments, 2 keycards, 4 valuables mapped to valuable', async () => {
+    const { ITEM_DEFS, lootResourceOfNew, qualitySellPrice } = await import('./items');
+    for (const id of ['att_scope4x','att_suppressor','att_extmag','att_foregrip']) {
+      expect(ITEM_DEFS[id]).toBeDefined();
+      expect(ITEM_DEFS[id].category).toBe('material');
+      expect(lootResourceOfNew(id)).toBe('valuable');
+    }
+    expect(ITEM_DEFS['key_red']).toBeDefined();
+    expect(ITEM_DEFS['key_red'].rarity).toBe(5);
+    expect(lootResourceOfNew('key_red')).toBe('valuable');
+    expect(lootResourceOfNew('collect_mandel')).toBe('valuable');
+    expect(ITEM_DEFS['collect_mandel'].sellPrice).toBe(1500);
+    expect(qualitySellPrice('collect_mandel', 0)).toBe(1500);
+  });
+});

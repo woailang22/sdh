@@ -103,6 +103,16 @@ export const ITEM_DEFS: Record<string, ItemDef> = {
   throw_smoke: { id: 'throw_smoke', name: '烟雾弹×2', category: 'tool', icon: '💨', rarity: 2, maxCount: 10, desc: '遮蔽视野，脱战/摸箱用。', buyPrice: 60, sellPrice: 40 },
   throw_flash: { id: 'throw_flash', name: '闪光弹×2', category: 'tool', icon: '✨', rarity: 3, maxCount: 10, desc: '致盲3秒，越级打精英。', buyPrice: 80, sellPrice: 54 },
   throw_molly: { id: 'throw_molly', name: '燃烧瓶×2', category: 'tool', icon: '🔥', rarity: 3, maxCount: 10, desc: '持续120灼烧，封路守门。', buyPrice: 90, sellPrice: 60 },
+  att_scope4x: { id: 'att_scope4x', name: '4倍战术瞄具', category: 'material', icon: '🔭', rarity: 4, maxCount: 5, desc: 'SVD/M4配件，工厂/掠夺者产出。', buyPrice: 400, sellPrice: 280 },
+  att_suppressor: { id: 'att_suppressor', name: '消音器', category: 'material', icon: '🔇', rarity: 4, maxCount: 5, desc: '开火无声，摸金必备。', buyPrice: 450, sellPrice: 300 },
+  att_extmag: { id: 'att_extmag', name: '扩容弹匣', category: 'material', icon: '🎒', rarity: 3, maxCount: 5, desc: '备弹+50%，持续火力。', buyPrice: 250, sellPrice: 170 },
+  att_foregrip: { id: 'att_foregrip', name: '垂直握把', category: 'material', icon: '🔧', rarity: 3, maxCount: 5, desc: '后座-30%，AKM救星。', buyPrice: 220, sellPrice: 150 },
+  key_red: { id: 'key_red', name: '红色房卡', category: 'material', icon: '🟥', rarity: 5, maxCount: 3, desc: '废弃工厂核心实验室门卡，开曼德尔砖。', buyPrice: 1200, sellPrice: 900 },
+  key_blue: { id: 'key_blue', name: '蓝色房卡', category: 'material', icon: '🟦', rarity: 4, maxCount: 3, desc: '加油站办公室/渔港小屋门卡。', buyPrice: 600, sellPrice: 450 },
+  collect_mandel: { id: 'collect_mandel', name: '曼德尔砖', category: 'material', icon: '🧱', rarity: 5, maxCount: 5, desc: '三角洲头号藏品，红区房卡房产出。', buyPrice: 2000, sellPrice: 1500 },
+  collect_dogtag: { id: 'collect_dogtag', name: '阵亡者身份牌', category: 'material', icon: '🎖️', rarity: 4, maxCount: 20, desc: 'BOSS/精英掉落，黑市高价回收。', buyPrice: 500, sellPrice: 380 },
+  collect_watch: { id: 'collect_watch', name: '金表', category: 'material', icon: '⌚', rarity: 4, maxCount: 10, desc: '居民区/餐馆搜刮，体面人的遗产。', buyPrice: 450, sellPrice: 340 },
+  collect_circuit: { id: 'collect_circuit', name: '军用电路板', category: 'material', icon: '💾', rarity: 4, maxCount: 20, desc: '无人机/汽修/工厂产出，改枪材料。', buyPrice: 380, sellPrice: 280 },
 };
 
 export const WEAPON_DAMAGE: Record<string, number> = {
@@ -204,6 +214,7 @@ export function lootResourceOfNew(itemId: string): LootResourceNew {
   if (itemId.startsWith('helmet_') || itemId.startsWith('vest_')) return 'armor';
   if (itemId.startsWith('med_')) return 'medical';
   if (itemId.startsWith('throw_')) return 'throwable';
+  if (itemId.startsWith('att_') || itemId.startsWith('key_') || itemId.startsWith('collect_')) return 'valuable';
   if (itemId === 'c4_explosive' || itemId === 'thermite_charge') return 'c4';
   if (itemId === 'medkit' || itemId === 'bandage' || itemId === 'antidote') return 'medical';
   if (itemId === 'rifle') return 'weapon';
