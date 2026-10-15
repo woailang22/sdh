@@ -58,3 +58,20 @@ describe('maps enclosure regression', () => {
     }
   });
 });
+
+describe('map expansion part A', () => {
+  it('town_factory exists, HIGH risk, enclosed yard', async () => {
+    const { SUBMAPS } = await import('./maps');
+    const def = SUBMAPS['town_factory' as any];
+    expect(def, 'town_factory missing').toBeDefined();
+    expect(def.gates.length).toBeGreaterThanOrEqual(2);
+  });
+  it('town gates are expanded outward (>=40)', async () => {
+    const { SUBMAPS } = await import('./maps');
+    for (const id of ['town_gas', 'town_street', 'town_ruins']) {
+      const def = SUBMAPS[id];
+      const maxAbs = Math.max(...def.gates.map((g) => Math.max(Math.abs(g.x), Math.abs(g.y))));
+      expect(maxAbs).toBeGreaterThanOrEqual(40);
+    }
+  });
+});

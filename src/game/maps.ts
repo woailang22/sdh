@@ -180,9 +180,9 @@ export const SUBMAPS: Record<string, SubMapDef> = {
     desc: '省道加油站：便利店/油罐/弹药，城镇入口',
     risk: 'LOW',
     gates: [
-      { x: -30, y: 0, targetMap: 'camp_workshop', targetX: 30, targetY: 0, name: '西侧营地检查站', icon: '🏕️', desc: '返回工坊区' },
-      { x: 30, y: 0, targetMap: 'town_street', targetX: -30, targetY: 0, name: '东进商业街', icon: '🏙️', desc: '前往商业街' },
-      { x: 10, y: 28, targetMap: 'town_ruins', targetX: -10, targetY: -28, name: '南下居民区', icon: '🧱', desc: '前往废墟居民区' },
+      { x: -44, y: 0, targetMap: 'camp_workshop', targetX: 44, targetY: 0, name: '西侧营地检查站', icon: '🏕️', desc: '返回工坊区' },
+      { x: 44, y: 0, targetMap: 'town_street', targetX: -44, targetY: 0, name: '东进商业街', icon: '🏙️', desc: '前往商业街' },
+      { x: 14, y: 42, targetMap: 'town_ruins', targetX: -14, targetY: -42, name: '南下居民区', icon: '🧱', desc: '前往废墟居民区' },
     ],
     interactables: [
       I('gas_van', '77号站长运载货车', 'van', 4, -10, '[E/F 破拆搜刮站长货车]', [
@@ -258,8 +258,9 @@ export const SUBMAPS: Record<string, SubMapDef> = {
     desc: '战前商铺一条街：食品/五金/汽修，怪多货也多',
     risk: 'LOW',
     gates: [
-      { x: -30, y: 0, targetMap: 'town_gas', targetX: 30, targetY: 0, name: '西返加油站', icon: '⛽', desc: '返回77号加油站' },
-      { x: 0, y: 30, targetMap: 'town_ruins', targetX: 0, targetY: -30, name: '南穿居民区', icon: '🧱', desc: '前往废墟居民区' },
+      { x: -44, y: 0, targetMap: 'town_gas', targetX: 44, targetY: 0, name: '西返加油站', icon: '⛽', desc: '返回77号加油站' },
+      { x: 0, y: 42, targetMap: 'town_ruins', targetX: 0, targetY: -42, name: '南穿居民区', icon: '🧱', desc: '前往废墟居民区' },
+      { x: 44, y: 0, targetMap: 'town_factory', targetX: -44, targetY: 0, name: '东进废弃工厂', icon: '🏭', desc: '前往废弃重工厂（新）' },
     ],
     interactables: [
       I('st_hardware', '五金工具店', 'shelves', -10, -10, '[E/F 搜刮五金店]', [
@@ -343,15 +344,74 @@ export const SUBMAPS: Record<string, SubMapDef> = {
       { x: 0, y: 18, w: 8, h: 6, type: 'rubble' },
     ],
   },
+  town_factory: {
+    id: 'town_factory', region: 'town', name: '废弃重工厂', theme: 'urban',
+    desc: '重工业废墟：废铁/零件/弹药富区，高危',
+    risk: 'HIGH',
+    gates: [
+      { x: -44, y: 0, targetMap: 'town_street', targetX: 44, targetY: 0, name: '西返商业街', icon: '🏙️', desc: '返回商业街' },
+      { x: 44, y: 0, targetMap: 'town_ruins', targetX: -44, targetY: 0, name: '东进居民区', icon: '🧱', desc: '前往废墟居民区' },
+    ],
+    interactables: [
+      I('fac_press', '万吨冲压机残骸', 'car', -18, -16, '[E/F 破拆冲压机]', [
+        { itemId: 'scrap', name: '重型冲压钢板', count: 50 },
+        { itemId: 'part', name: '液压传动齿轮', count: 5 },
+      ], 2.2),
+      I('fac_shelves', '工厂配件货架', 'shelves', 16, -18, '[E/F 搜刮配件架]', [
+        { itemId: 'part', name: '精密轴承', count: 6 },
+        { itemId: 'scrap', name: '货架角钢', count: 25 },
+      ], 1.6),
+      I('fac_ammo', '工厂警卫弹药库', 'ammo_crate', 20, 14, '[E/F 破译弹药库]', [
+        { itemId: 'ammo', name: '7.62mm 步枪穿甲弹药包', count: 60 },
+        { itemId: 'c4_explosive', name: '高爆C4炸药', count: 2 },
+      ], 1.8),
+      I('fac_med', '工厂医务室', 'med_cabinet', -20, 12, '[E/F 搜刮医务室]', [
+        { itemId: 'medkit', name: '纳米急救箱', count: 2 },
+        { itemId: 'bandage', name: '工业绷带', count: 4 },
+      ], 1.8),
+      I('fac_truck', '厂区重卡', 'car', 0, 20, '[E/F 破拆厂区重卡]', [
+        { itemId: 'scrap', name: '重卡废铁', count: 40 },
+        { itemId: 'part', name: '发动机缸体', count: 3 },
+      ], 2.0),
+      I('fac_tree', '厂区枯杨', 'tree', -8, 24, '[E/F 砍伐枯杨]', woodLoot(30, '干枯厂杨木'), 1.6),
+    ],
+    monsters: [
+      M('fac1', '变异公路漫游暴徒', -10, 0, 450, 2.0, 26),
+      M('fac2', '蚀体·恶瘴魑精英', 12, -6, 620, 1.8, 34),
+      M('fac3', '辐射畸变狂暴猎犬', 4, 18, 320, 2.7, 22),
+    ],
+    buildings: [
+      ...buildCompoundWalls({
+        idPrefix: 'fac_yard', cx: 0, cy: 0, w: 4, h: 2,
+        wallType: 'iron_wall', wallName: '工厂铁围墙', ownerName: '废土遗迹',
+        doorSide: 'S', doorType: 'door', doorName: '工厂铁门',
+        doorExtra: { isOpen: true, isLocked: false },
+      }),
+      { id: 'fac_yard_box', type: 'storage_box', name: '工厂门卫储物箱', x: 0, y: 0, hp: 400, maxHp: 400, level: 1, ownerName: '废土遗迹' },
+      {
+        id: 'fac_yard_parts', type: 'storage_box', name: '工厂零件箱', x: -1, y: 0, hp: 400, maxHp: 400, level: 1, ownerName: '废土遗迹',
+        storedLoot: [
+          { name: '精密轴承', count: 5, icon: '🔧' },
+          { name: '重型冲压钢板', count: 15, icon: '⚙️' },
+        ],
+      },
+    ],
+    deco: [
+      { x: 0, y: 0, w: 6, h: 4, type: 'foundation' },
+      { x: -18, y: -16, w: 8, h: 6, type: 'rubble' },
+      { x: 18, y: 16, w: 9, h: 7, type: 'crater' },
+    ],
+  },
   town_ruins: {
     id: 'town_ruins', region: 'town', name: '废墟居民区', theme: 'ruins',
     desc: '掠夺者盘踞的塌楼区：高耐久安全门可突袭',
     risk: 'HIGH',
     gates: [
-      { x: -10, y: -28, targetMap: 'town_gas', targetX: 10, targetY: 28, name: '北返加油站', icon: '⛽', desc: '返回77号加油站' },
-      { x: 0, y: -28, targetMap: 'town_street', targetX: 0, targetY: 30, name: '北返商业街', icon: '🏙️', desc: '返回商业街' },
-      { x: 30, y: 0, targetMap: 'marsh_rift', targetX: -30, targetY: 0, name: '省道断桥裂缝口', icon: '⚠️', desc: '深入裂隙前线（红区）' },
-      { x: 20, y: -28, targetMap: 'mtn_deep', targetX: 8, targetY: 28, name: '翻山小道', icon: '⛰️', desc: '翻山前往黑松深林' },
+      { x: -14, y: -42, targetMap: 'town_gas', targetX: 14, targetY: 42, name: '北返加油站', icon: '⛽', desc: '返回77号加油站' },
+      { x: 0, y: -42, targetMap: 'town_street', targetX: 0, targetY: 42, name: '北返商业街', icon: '🏙️', desc: '返回商业街' },
+      { x: 44, y: 0, targetMap: 'marsh_rift', targetX: -44, targetY: 0, name: '省道断桥裂缝口', icon: '⚠️', desc: '深入裂隙前线（红区）' },
+      { x: 28, y: -42, targetMap: 'mtn_deep', targetX: 12, targetY: 42, name: '翻山小道', icon: '⛰️', desc: '翻山前往黑松深林' },
+      { x: -44, y: 0, targetMap: 'town_factory', targetX: 44, targetY: 0, name: '西进废弃工厂', icon: '🏭', desc: '前往废弃重工厂（新）' },
     ],
     interactables: [
       I('ru_truck', '废弃重卡车头', 'car', -6, 2, '[E/F 搜寻重卡备件]', [

@@ -197,6 +197,7 @@ export type MapZoneId =
   | 'town_gas' | 'town_street' | 'town_ruins'
   | 'mtn_logging' | 'mtn_quarry' | 'mtn_deep'
   | 'marsh_docks' | 'marsh_bog' | 'marsh_rift'
+  | 'town_factory' | 'mtn_peak' | 'marsh_abyss'
   // 旧ID（兼容遗留代码，运行时不再使用）
   | 'sanctuary' | 'highway' | 'pond' | 'forest' | 'rift_core';
 

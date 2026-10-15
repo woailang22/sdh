@@ -2672,6 +2672,9 @@ export class IsometricEngine {
       pond: '#0c3652',
       forest: '#382518',
       rift_core: '#260d36',
+      town_factory: '#3f4a5a',
+      mtn_peak: '#6b7d94',
+      marsh_abyss: '#3b0a3b',
     };
     this.ctx.fillStyle = bgColors[this.currentMapId] || '#244332';
     this.ctx.fillRect(0, 0, this.width, this.height);
