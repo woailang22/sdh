@@ -2,6 +2,7 @@ import React from 'react';
 import { X, Backpack, Sword, Shirt, Wrench, ArrowDownToLine, Trash2, Hand, Briefcase } from 'lucide-react';
 import { soundManager } from '../audio/soundManager';
 import { Item, Equipment } from '../types/game';
+import { COLLECT_DEFS, COLLECT_SETS, TIER_COLOR, setProgress } from '../game/collection';
 
 interface InventoryModalProps {
   isOpen: boolean;
@@ -83,6 +84,7 @@ export const InventoryModal: React.FC<InventoryModalProps> = ({
 
   const canUse = (it: Item) => it.category === 'food' || it.category === 'medical';
   const canEquip = (it: Item) => it.category === 'weapon' || it.category === 'armor' || it.category === 'tool' || it.category === 'pack';
+  const ownedIds = new Set((hotbar ?? []).filter((x): x is Item => !!x).map((x) => x.id));
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-sm p-4 select-none">
@@ -197,6 +199,28 @@ export const InventoryModal: React.FC<InventoryModalProps> = ({
                   </div>
                 </div>
               ))}
+            </div>
+          </div>
+
+          <div>
+            <div className="text-xs font-bold text-slate-300 mb-2">藏品图鉴（集齐套装黑市领加成）</div>
+            <div className="grid grid-cols-4 gap-2">
+              {Object.values(COLLECT_DEFS).map((c) => {
+                const got = ownedIds.has(c.id);
+                return (
+                  <div key={c.id} title={c.source} className={`rounded-xl border p-2 flex flex-col items-center gap-1 ${got ? '' : 'opacity-40 grayscale'}`} style={{ borderColor: TIER_COLOR[c.tier] }}>
+                    <div className="text-2xl">{got ? c.icon : '❓'}</div>
+                    <div className="text-[10px] text-slate-300">{c.name}</div>
+                    <div className="text-[10px] font-mono" style={{ color: TIER_COLOR[c.tier] }}>{c.tier}</div>
+                  </div>
+                );
+              })}
+            </div>
+            <div className="text-[11px] font-mono text-slate-400 mt-2">
+              {Object.values(COLLECT_SETS).map((s) => {
+                const p = setProgress(s.id, ownedIds);
+                return <div key={s.id}>{s.name} {p.owned}/{p.total} · 集齐+{s.bonusCredits}点{s.title ? `+称号${s.title}` : ''}</div>;
+              })}
             </div>
           </div>
 

@@ -2,6 +2,7 @@ import React from 'react';
 import { X, PackageOpen, Hand, PackageCheck } from 'lucide-react';
 import { soundManager } from '../audio/soundManager';
 import { RARITY, RARITY_COLOR, ITEM_ICON } from '../game/maps';
+import { COLLECT_DEFS } from '../game/collection';
 
 export interface LootEntry {
   itemId: string;
@@ -47,10 +48,11 @@ export const LootPanel: React.FC<LootPanelProps> = ({ target, onTake, onTakeAll,
           {target.items.map((it) => {
             const r = RARITY[it.itemId] ?? 1;
             const color = RARITY_COLOR[r] ?? '#94a3b8';
+            const isMythic = !!COLLECT_DEFS[it.itemId] && (COLLECT_DEFS[it.itemId].tier === 'mythic' || COLLECT_DEFS[it.itemId].tier === 'heirloom');
             return (
               <div
                 key={it.itemId}
-                className="flex items-center gap-2.5 p-2 rounded-xl bg-slate-950/60 border transition-all"
+                className={`flex items-center gap-2.5 p-2 rounded-xl bg-slate-950/60 border transition-all${isMythic ? ' ring-2 ring-amber-400 shadow-[0_0_18px_rgba(251,191,36,0.5)]' : ''}`}
                 style={{ borderColor: it.taken ? '#1e293b' : color + '66', opacity: it.taken ? 0.45 : 1 }}
               >
                 <div

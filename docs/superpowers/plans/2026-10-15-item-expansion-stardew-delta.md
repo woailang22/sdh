@@ -1396,7 +1396,7 @@ export const COLLECT_DEFS: Record<string, CollectDef> = {
   collect_circuit: { id: 'collect_circuit', name: '军用电路板', icon: '💾', tier: 'memorial', sellPrice: 280, source: '无人机堆/汽修铺/工厂配件架掉落，纪念级入门藏品' },
   collect_watch: { id: 'collect_watch', name: '金表', icon: '⌚', tier: 'fine', sellPrice: 340, source: '居民区地下室/餐馆里间掉落，精品级' },
   collect_dogtag: { id: 'collect_dogtag', name: '阵亡者身份牌', icon: '🎖️', tier: 'fine', sellPrice: 380, source: '精英怪/佣兵前哨掉落，精品级' },
-  collect_mandel: { id: 'collect_mandel', name: '曼德尔砖', icon: '🧱', tier: 'heirloom', sellPrice: 1500, source: '红色房卡房（工厂核心实验室）限定，传家级' },
+  collect_mandel: { id: 'collect_mandel', name: '曼德尔砖', icon: '🧱', tier: 'heirloom', sellPrice: 1500, source: '红房（工厂核心实验室，持红色房卡开启）限定，传家级' },
   key_red: { id: 'key_red', name: '红色房卡', icon: '🟥', tier: 'heirloom', sellPrice: 900, source: '掠夺者前哨/深渊宝箱掉落，传家级钥匙' },
   key_blue: { id: 'key_blue', name: '蓝色房卡', icon: '🟦', tier: 'fine', sellPrice: 450, source: '居民区地下室/加油站办公室掉落' },
   fish_legend: { id: 'fish_legend', name: '传说之鱼', icon: '👑', tier: 'mythic', sellPrice: 2000, source: '翠湖深水+荧光苔，全图唯一，神话级' },
