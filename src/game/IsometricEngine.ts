@@ -2,6 +2,7 @@
 import { calcRangedDamage, rollCrit, weatherCritBonus, MELEE, aggroRangeFor, isEnraged, calcMonsterHit, absorbShieldFirst } from './combat';
 import { SUBMAPS, displayName, regionOf, lootResourceOf } from './maps';
 import { groundBaseColor, hash2 as hash2Pure, withAlpha, themeAccent, drawSoftShadow, healthBarColor, weatherTint } from './visualTheme';
+import { groupBuildingsIntoHouses, houseCorners, HOUSE_WALL_H, HOUSE_PEAK_H } from './house';
 import {
   MonsterEntity,
   InteractableEntity,
@@ -3438,6 +3439,62 @@ export class IsometricEngine {
     this.ctx.restore();
   }
 
+  private drawHouse(members: BuildingEntity[], door: BuildingEntity | null) {
+    const { x0, x1, y0, y1 } = houseCorners(members);
+    const first = members[0];
+    const isWood = first.type === 'wood_wall';
+    const isStone = first.type === 'stone_wall';
+    const cLeft = isWood ? '#8a5a2b' : isStone ? '#9aa5b5' : '#6b7d94';
+    const cRight = isWood ? '#5a3413' : isStone ? '#5b6675' : '#3d4a5e';
+    const cRoofL = isWood ? '#a4713d' : isStone ? '#7d8aa0' : '#54687f';
+    const cRoofR = isWood ? '#6e4520' : isStone ? '#525d70' : '#33405280';
+    const wallH = HOUSE_WALL_H;
+    const gLeft = this.toScreen(x0, y1);
+    const gBottom = this.toScreen(x1, y1);
+    const gRight = this.toScreen(x1, y0);
+    const up = (p: { x: number; y: number }, dy: number) => ({ x: p.x, y: p.y - dy });
+    this.ctx.save();
+    drawSoftShadow(this.ctx, (gLeft.x + gRight.x) / 2, gBottom.y + 4, 40);
+    const quad = (a: { x: number; y: number }, b2: { x: number; y: number }, c2: { x: number; y: number }, d: { x: number; y: number }, fill: string) => {
+      this.ctx.fillStyle = fill;
+      this.ctx.beginPath();
+      this.ctx.moveTo(a.x, a.y); this.ctx.lineTo(b2.x, b2.y); this.ctx.lineTo(c2.x, c2.y); this.ctx.lineTo(d.x, d.y);
+      this.ctx.closePath(); this.ctx.fill();
+      this.ctx.strokeStyle = 'rgba(0,0,0,0.45)'; this.ctx.lineWidth = 1.5; this.ctx.stroke();
+    };
+    quad(gLeft, gBottom, up(gBottom, wallH), up(gLeft, wallH), cLeft);
+    quad(gBottom, gRight, up(gRight, wallH), up(gBottom, wallH), cRight);
+    const tLeft = up(gLeft, wallH);
+    const tBottom = up(gBottom, wallH);
+    const tRight = up(gRight, wallH);
+    const apex = { x: tBottom.x, y: tBottom.y - HOUSE_PEAK_H };
+    this.ctx.fillStyle = cRoofL;
+    this.ctx.beginPath();
+    this.ctx.moveTo(tLeft.x, tLeft.y); this.ctx.lineTo(tBottom.x, tBottom.y); this.ctx.lineTo(apex.x, apex.y);
+    this.ctx.closePath(); this.ctx.fill(); this.ctx.stroke();
+    this.ctx.fillStyle = cRoofR;
+    this.ctx.beginPath();
+    this.ctx.moveTo(tBottom.x, tBottom.y); this.ctx.lineTo(tRight.x, tRight.y); this.ctx.lineTo(apex.x, apex.y);
+    this.ctx.closePath(); this.ctx.fill(); this.ctx.stroke();
+    const doorOnSouth = door && door.y === y1;
+    if (doorOnSouth && door) {
+      const w = Math.max(10, (gBottom.x - gLeft.x) * 0.16);
+      const h = wallH * 0.62;
+      const cx = (gLeft.x + gBottom.x) / 2;
+      const baseY = (gLeft.y + gBottom.y) / 2;
+      this.ctx.fillStyle = '#0f172a';
+      this.ctx.fillRect(cx - w / 2 - 2, baseY - h - 2, w + 4, h + 4);
+      this.ctx.fillStyle = door.type === 'safe_door' ? '#3f5c50' : '#5b7a99';
+      this.ctx.fillRect(cx - w / 2, baseY - h, w, h);
+      this.ctx.fillStyle = door.isOpen ? '#34d399' : '#ef4444';
+      this.ctx.fillRect(cx + w / 2 - 6, baseY - h - 6, 5, 5);
+    }
+    this.ctx.restore();
+    const s = this.toScreen((x0 + x1) / 2, y1);
+    const ref = door ?? first;
+    this.drawBuildingHp(s.x, s.y - wallH - HOUSE_PEAK_H - 12, ref.hp, ref.maxHp);
+  }
+
   private drawBuilding(b: BuildingEntity) {
     const s = this.toScreen(b.x, b.y);
     drawSoftShadow(this.ctx, s.x, s.y, b.type === 'anchor_core' ? 32 : 24);
@@ -3526,6 +3583,9 @@ export class IsometricEngine {
     this.ctx.ellipse(s.x, s.y + 3, 26, 12, 0, 0, Math.PI * 2);
     this.ctx.fill();
 
+    if ((b.type === 'iron_wall' || b.type === 'stone_wall' || b.type === 'wood_wall' || b.type === 'door' || b.type === 'safe_door') && b.id.startsWith('gas_office')) {
+      return;
+    }
     if (b.type === 'wood_wall') {
       // 加固原木围墙：低矮原木段（朝向决定对角线方向）
       drawWallSeg(s.x, s.y, facing, 34, 13, 30, '#b07a3f', '#7c4a1e', '#5a3413', 'logs');
