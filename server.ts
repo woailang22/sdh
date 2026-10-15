@@ -2,7 +2,9 @@ import express from 'express';
 import http from 'http';
 import { WebSocketServer, WebSocket } from 'ws';
 import path from 'path';
+import fs from 'fs';
 import { fileURLToPath } from 'url';
+import { createDb } from './server/db.js';
 import type {
   OnlinePlayer,
   BuildingEntity,
@@ -32,12 +34,18 @@ app.get('/api/health', (req, res) => {
   });
 });
 
+// SQLite persistence (Task 1: 重启不丢档，只存 players+buildings)
+const DB_PATH = process.env.DB_PATH || 'data/sdc.sqlite';
+fs.mkdirSync(path.dirname(DB_PATH), { recursive: true });
+const db = createDb(DB_PATH);
+
 // Server State
 interface ConnectedClient {
   ws: WebSocket;
   playerId: string;
   player: OnlinePlayer;
   isGM: boolean;
+  lastDbSave: number;
 }
 
 // GM 口令（环境变量覆盖）：地图编辑器天气控制等 GM 操作需要先 gm_auth
@@ -136,6 +144,15 @@ let worldBuildings: BuildingEntity[] = [
     ],
   },
 ];
+
+// 重启恢复：DB 非空则覆盖内存默认值
+{
+  const savedBuildings = db.listBuildings() as BuildingEntity[];
+  if (savedBuildings.length > 0) {
+    worldBuildings = savedBuildings;
+    console.log(`[db] restored ${savedBuildings.length} buildings from ${DB_PATH}`);
+  }
+}
 
 // Dynamic Weather State
 const WILD_WEATHERS: { type: WeatherType; name: string; icon: string; desc: string; effectLabel: string }[] = [
@@ -257,7 +274,7 @@ wss.on('connection', (ws: WebSocket, req) => {
     spawnIndex,
   };
 
-  clients.set(playerId, { ws, playerId, player: newPlayer, isGM: false });
+  clients.set(playerId, { ws, playerId, player: newPlayer, isGM: false, lastDbSave: 0 });
 
   // Send initial state to the connecting client
   const allPlayers = Array.from(clients.values()).map((c) => c.player);
@@ -329,6 +346,12 @@ wss.on('connection', (ws: WebSocket, req) => {
           if (msg.payload.currentAction !== undefined) p.currentAction = msg.payload.currentAction;
           p.lastSeen = Date.now();
 
+          // SQLite 节流持久化：每客户端 5 秒最多写一次
+          if (Date.now() - client.lastDbSave > 5000) {
+            client.lastDbSave = Date.now();
+            db.savePlayer(client.player);
+          }
+
           // Broadcast to other players in the room
           broadcast(
             {
@@ -385,6 +408,7 @@ wss.on('connection', (ws: WebSocket, req) => {
           }
 
           worldBuildings.push(newBuilding);
+          db.saveBuilding(newBuilding);
 
           broadcast({
             type: 'building_placed',
