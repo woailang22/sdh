@@ -136,3 +136,23 @@ describe('delta ammo and guns', () => {
     expect(ITEM_DEFS['wp_p1911'].rarity).toBe(2);
   });
 });
+describe('delta armor/medical/throwable', () => {
+  it('armor bonus ladder, med heal ladder, throw damage ladder', async () => {
+    const { ITEM_DEFS, ARMOR_BONUS_TABLE, MED_HEAL, THROW_DAMAGE, lootResourceOfNew } = await import('./items');
+    expect(ARMOR_BONUS_TABLE['helmet_t2']).toBe(15);
+    expect(ARMOR_BONUS_TABLE['vest_t4']).toBe(80);
+    expect(ARMOR_BONUS_TABLE['vest_t5']).toBe(110);
+    expect(MED_HEAL['med_surgery']).toBe(100);
+    expect(MED_HEAL['med_bloodbag']).toBe(80);
+    expect(MED_HEAL['med_painkiller']).toBe(5);
+    expect(THROW_DAMAGE['throw_frag']).toBe(300);
+    expect(THROW_DAMAGE['throw_molly']).toBe(120);
+    expect(ITEM_DEFS['helmet_t4']).toBeDefined();
+    expect(ITEM_DEFS['helmet_t4'].category).toBe('armor');
+    expect(ITEM_DEFS['med_surgery'].category).toBe('medical');
+    expect(ITEM_DEFS['throw_frag'].category).toBe('tool');
+    expect(lootResourceOfNew('vest_t4')).toBe('armor');
+    expect(lootResourceOfNew('med_surgery')).toBe('medical');
+    expect(lootResourceOfNew('throw_frag')).toBe('throwable');
+  });
+});

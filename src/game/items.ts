@@ -87,15 +87,41 @@ export const ITEM_DEFS: Record<string, ItemDef> = {
   wp_m870: { id: 'wp_m870', name: 'M870霰弹枪', category: 'weapon', icon: '🔫', rarity: 4, maxCount: 1, desc: '单发140×碎片，贴脸秒精英。', buyPrice: 1000, sellPrice: 660, damage: 140 },
   wp_svd: { id: 'wp_svd', name: 'SVD狙击步枪', category: 'weapon', icon: '🔫', rarity: 5, maxCount: 1, desc: '单发220，红区点名。', buyPrice: 1800, sellPrice: 1200, damage: 220 },
   wp_plasma: { id: 'wp_plasma', name: '破界等离子步枪', category: 'weapon', icon: '🔫', rarity: 5, maxCount: 1, desc: '单发320，蓝图毕业枪。', buyPrice: 3000, sellPrice: 2000, damage: 320 },
+  helmet_t2: { id: 'helmet_t2', name: '2级战术头盔', category: 'armor', icon: '🪖', rarity: 2, maxCount: 1, desc: '护盾+15，便利店/五金店产出。', buyPrice: 250, sellPrice: 170, shield: 15 },
+  helmet_t3: { id: 'helmet_t3', name: '3级防弹头盔', category: 'armor', icon: '🪖', rarity: 3, maxCount: 1, desc: '护盾+30，工厂警卫库产出。', buyPrice: 450, sellPrice: 300, shield: 30 },
+  helmet_t4: { id: 'helmet_t4', name: '4级重型头盔', category: 'armor', icon: '🪖', rarity: 4, maxCount: 1, desc: '护盾+50，掠夺者前哨产出。', buyPrice: 800, sellPrice: 530, shield: 50 },
+  vest_t2: { id: 'vest_t2', name: '2级轻型背心', category: 'armor', icon: '🦺', rarity: 2, maxCount: 1, desc: '护盾+25，粗布护甲同级。', buyPrice: 300, sellPrice: 200, shield: 25 },
+  vest_t3: { id: 'vest_t3', name: '3级防弹背心', category: 'armor', icon: '🦺', rarity: 3, maxCount: 1, desc: '护盾+50，军用标准。', buyPrice: 600, sellPrice: 400, shield: 50 },
+  vest_t4: { id: 'vest_t4', name: '4级重型背心', category: 'armor', icon: '🦺', rarity: 4, maxCount: 1, desc: '护盾+80，减伤20%，红区门票。', buyPrice: 1100, sellPrice: 730, shield: 80 },
+  vest_t5: { id: 'vest_t5', name: '5级钛合金背心', category: 'armor', icon: '🦺', rarity: 5, maxCount: 1, desc: '护盾+110，减伤25%，毕业甲。', buyPrice: 2000, sellPrice: 1350, shield: 110 },
+  med_bandage: { id: 'med_bandage', name: '亚麻绷带', category: 'medical', icon: '🩹', rarity: 2, maxCount: 10, desc: '恢复30生命，工作台可造。', buyPrice: 30, sellPrice: 20, heal: 30 },
+  med_medkit: { id: 'med_medkit', name: '纳米医疗包', category: 'medical', icon: '💉', rarity: 4, maxCount: 10, desc: '恢复60生命，红区必备。', buyPrice: 120, sellPrice: 95, heal: 60 },
+  med_surgery: { id: 'med_surgery', name: '野战手术包', category: 'medical', icon: '💉', rarity: 5, maxCount: 5, desc: '恢复100生命，BOSS战救命。', buyPrice: 300, sellPrice: 220, heal: 100 },
+  med_painkiller: { id: 'med_painkiller', name: '止痛药', category: 'medical', icon: '💊', rarity: 2, maxCount: 10, desc: '恢复5生命+20体力，跑图神器。', buyPrice: 40, sellPrice: 26, heal: 5 },
+  med_bloodbag: { id: 'med_bloodbag', name: '血袋', category: 'medical', icon: '🩸', rarity: 4, maxCount: 5, desc: '恢复80生命，医疗箱稀有。', buyPrice: 200, sellPrice: 140, heal: 80 },
+  throw_frag: { id: 'throw_frag', name: '破片手雷×2', category: 'tool', icon: '💣', rarity: 3, maxCount: 10, desc: '范围300伤害，清群怪。', buyPrice: 120, sellPrice: 80 },
+  throw_smoke: { id: 'throw_smoke', name: '烟雾弹×2', category: 'tool', icon: '💨', rarity: 2, maxCount: 10, desc: '遮蔽视野，脱战/摸箱用。', buyPrice: 60, sellPrice: 40 },
+  throw_flash: { id: 'throw_flash', name: '闪光弹×2', category: 'tool', icon: '✨', rarity: 3, maxCount: 10, desc: '致盲3秒，越级打精英。', buyPrice: 80, sellPrice: 54 },
+  throw_molly: { id: 'throw_molly', name: '燃烧瓶×2', category: 'tool', icon: '🔥', rarity: 3, maxCount: 10, desc: '持续120灼烧，封路守门。', buyPrice: 90, sellPrice: 60 },
 };
 
 export const WEAPON_DAMAGE: Record<string, number> = {
   rifle: 124, crude_gun: 55,
   wp_p1911: 38, wp_mp5: 52, wp_akm: 98, wp_m4a1: 110, wp_m870: 140, wp_svd: 220, wp_plasma: 320,
 };
-export const ARMOR_BONUS_TABLE: Record<string, number> = { armor_cloth: 25, armor_vest: 50, vest: 50 };
-export const MED_HEAL: Record<string, number> = { med_bandage: 30, bandage: 30, med_medkit: 60, medkit: 60, antidote: 10 };
-export const THROW_DAMAGE: Record<string, number> = { c4_explosive: 400, thermite_charge: 250 };
+export const ARMOR_BONUS_TABLE: Record<string, number> = {
+  armor_cloth: 25, armor_vest: 50, vest: 50,
+  helmet_t2: 15, helmet_t3: 30, helmet_t4: 50,
+  vest_t2: 25, vest_t3: 50, vest_t4: 80, vest_t5: 110,
+};
+export const MED_HEAL: Record<string, number> = {
+  med_bandage: 30, bandage: 30, med_medkit: 60, medkit: 60, antidote: 10,
+  med_surgery: 100, med_painkiller: 5, med_bloodbag: 80,
+};
+export const THROW_DAMAGE: Record<string, number> = {
+  c4_explosive: 400, thermite_charge: 250,
+  throw_frag: 300, throw_smoke: 0, throw_flash: 0, throw_molly: 120,
+};
 export const SEED_GROW: Record<string, { cropId: string; outCount: number }> = {
   seed_parsnip: { cropId: 'crop_parsnip', outCount: 4 },
   seed_potato: { cropId: 'crop_potato', outCount: 4 },
@@ -175,6 +201,9 @@ export function lootResourceOfNew(itemId: string): LootResourceNew {
   if (itemId === 'ammo') return 'ammo';
   if (itemId.startsWith('ammo_')) return 'ammo';
   if (itemId.startsWith('wp_')) return 'weapon';
+  if (itemId.startsWith('helmet_') || itemId.startsWith('vest_')) return 'armor';
+  if (itemId.startsWith('med_')) return 'medical';
+  if (itemId.startsWith('throw_')) return 'throwable';
   if (itemId === 'c4_explosive' || itemId === 'thermite_charge') return 'c4';
   if (itemId === 'medkit' || itemId === 'bandage' || itemId === 'antidote') return 'medical';
   if (itemId === 'rifle') return 'weapon';
