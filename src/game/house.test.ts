@@ -30,3 +30,13 @@ describe('houseCorners', () => {
     expect(HOUSE_WALL_H).toBe(44);
   });
 });
+
+describe('house label rule', () => {
+  it('scattered walls stay separate houses', () => {
+    const bs = [
+      { id: 'ru_cw_1', type: 'stone_wall', name: '断墙', x: -15, y: -15, hp: 250, maxHp: 600, level: 1, ownerName: '遗迹' },
+      { id: 'rift_cover_n1', type: 'iron_wall', name: '残墙', x: 5, y: 5, hp: 300, maxHp: 850, level: 1, ownerName: '先锋' },
+    ];
+    expect(groupBuildingsIntoHouses(bs as any)).toHaveLength(2);
+  });
+});

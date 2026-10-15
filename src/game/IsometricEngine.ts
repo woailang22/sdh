@@ -2477,11 +2477,30 @@ export class IsometricEngine {
     });
 
     // Buildings
-    this.buildings.forEach((b) => {
-      renderList.push({
-        yDepth: b.x + b.y,
-        render: () => this.drawBuilding(b),
-      });
+    const houseGroups = groupBuildingsIntoHouses(this.buildings);
+    houseGroups.forEach((g) => {
+      const isSingleWall = g.members.length === 1 && g.door === null;
+      const isClosedHouse = g.members.length >= 8;
+      if (isClosedHouse) {
+        const depths = g.members.map((m) => m.x + m.y);
+        renderList.push({
+          yDepth: Math.max(...depths),
+          render: () => this.drawHouse(g.members, g.door),
+        });
+      } else if (isSingleWall) {
+        const b = g.members[0];
+        renderList.push({
+          yDepth: b.x + b.y,
+          render: () => this.drawBuilding(b),
+        });
+      } else {
+        g.members.forEach((b) => {
+          renderList.push({
+            yDepth: b.x + b.y,
+            render: () => this.drawBuilding(b),
+          });
+        });
+      }
     });
 
     // Monsters
@@ -3583,9 +3602,6 @@ export class IsometricEngine {
     this.ctx.ellipse(s.x, s.y + 3, 26, 12, 0, 0, Math.PI * 2);
     this.ctx.fill();
 
-    if ((b.type === 'iron_wall' || b.type === 'stone_wall' || b.type === 'wood_wall' || b.type === 'door' || b.type === 'safe_door') && b.id.startsWith('gas_office')) {
-      return;
-    }
     if (b.type === 'wood_wall') {
       // 加固原木围墙：低矮原木段（朝向决定对角线方向）
       drawWallSeg(s.x, s.y, facing, 34, 13, 30, '#b07a3f', '#7c4a1e', '#5a3413', 'logs');
@@ -3810,7 +3826,7 @@ export class IsometricEngine {
     }
 
     // 通用名牌：名称 + 归属 + 等级（安全门已有专属大战报式名牌，此处补通用版）
-    if (b.type !== 'safe_door') {
+    if (b.type !== 'safe_door' && this.nearestBuilding?.id === b.id) {
       const label = b.ownerName ? `${b.name} · ${b.ownerName}` : b.name;
       const lvl = b.level > 1 ? ` Lv.${b.level}` : '';
       this.ctx.font = 'bold 9px sans-serif';
