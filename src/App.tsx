@@ -27,6 +27,7 @@ import { LootPanel, LootEntry } from './components/LootPanel';
 import { lootResourceOf, RARITY, skillLevel, skillYieldMult, LootResource } from './game/maps';
 import { killReward, WEAPONS, ARMOR_REDUCTION } from './game/combat';
 import { BASE_PLOTS } from './game/spawn';
+import { homeMapIdFor } from './game/home';
 import { CraftOrder } from './components/WorkbenchModal';
 import { RaidModal } from './components/RaidModal';
 import { OnlinePlayersModal } from './components/OnlinePlayersModal';
@@ -910,6 +911,10 @@ export default function App() {
             mapId: currentMapId,
           });
         }
+        const eb = engineRef.current as any;
+        if (eb && Array.isArray(eb._serverBuildings)) {
+          eb._serverBuildings.push({ id: `b_${Date.now()}`, type, x: Math.round(eb.mouse.worldX), y: Math.round(eb.mouse.worldY), mapId: currentMapId, ownerId: selfId });
+        }
         return true;
       },
       onOpenStorageBox: (building) => {
@@ -1058,7 +1063,7 @@ export default function App() {
       });
       setRifleOwned((v) => v || hotbarSlotsRef.current.some((s) => s?.id === 'rifle'));
       setDarkCoreGot((v) => v || playerStatsRef.current.shards >= 12);
-      setClaimedPlot((v) => v || BASE_PLOTS.some((p) => Math.hypot(eng.player.x - p.x, eng.player.y - p.y) < 3));
+      setClaimedPlot((v) => v || String(currentMapIdRef.current).startsWith('home_'));
 
       setSquadMembers((prev) => [
         {
@@ -1144,12 +1149,28 @@ export default function App() {
   );
 
   const handleSelectMapZone = useCallback((zoneId: MapZoneId) => {
-    setCurrentMapId(zoneId);
+    setCurrentMapId(zoneId as MapZoneId);
     if (engineRef.current) {
       engineRef.current.warpToMap(zoneId, 0, 0, '战术折跃');
     }
     setActiveModal(null);
   }, []);
+
+  const handleGoHome = useCallback(() => {
+    if (!selfId) return;
+    const hid = homeMapIdFor(selfId) as MapZoneId;
+    setCurrentMapId(hid);
+    if (engineRef.current) engineRef.current.warpToMap(hid, 0, 9, '回家·个人营地');
+    netManagerRef.current?.goHome(selfId);
+  }, [selfId]);
+
+  const handleVisitHome = useCallback((targetId: string, targetName: string) => {
+    const hid = homeMapIdFor(targetId) as MapZoneId;
+    setCurrentMapId(hid);
+    if (engineRef.current) engineRef.current.warpToMap(hid, 0, 9, `突袭·${targetName}的营地`);
+    netManagerRef.current?.visitHome(targetId);
+    pushSystemMsg(`⚠️ 已潜入 [${targetName}] 的个人营地实例，只能破拆不能建造，祝好运。`);
+  }, [pushSystemMsg]);
 
   // 黑市买入：先扣钱后发货，发货失败（背包满）则不扣钱
   const handleBuyMarketItem = useCallback((item: MarketItem, quantity: number): boolean => {
@@ -1550,14 +1571,14 @@ export default function App() {
     {
       id: 'claim',
       title: '圈一块野外地',
-      desc: '去8大地块任选一块站上去3秒（M看地图，渔港/伐木场/商业街都有地）。',
+      desc: '点“回家”进入你的 home_ 独立营地（从零开始，只有一座残核），站上去即认领。',
       progressText: claimedPlot ? '1/1' : '0/1',
       done: claimedPlot,
     },
     {
       id: 'safedoor',
       title: '立起防爆安全门',
-      desc: '[B]建造→安全门（10石+20废铁+4零件），野外基地从此可守可被突袭。',
+      desc: '在自家营地内[B]建造→安全门（10石+20废铁+4零件），访客只能破拆。',
       progressText: safeDoorBuilt ? '1/1' : '0/1',
       done: safeDoorBuilt,
     },
@@ -1613,7 +1634,7 @@ export default function App() {
     {
       id: 'fortress',
       title: '要塞守住一夜',
-      desc: '同时拥有安全门+防御塔+精英击杀，即毕业。',
+      desc: '自家营地内同时拥有安全门+防御塔+精英击杀，即毕业。',
       progressText: safeDoorBuilt && turretBuilt && eliteKilled ? '1/1' : '0/1',
       done: safeDoorBuilt && turretBuilt && eliteKilled,
     },
@@ -1838,6 +1859,7 @@ export default function App() {
           onInviteToSquad={(p) => {
             handleSendMessage(`已向 [${p.name}] 发送小队战术协同邀请！`, 'team');
           }}
+          onVisitHome={handleVisitHome}
         />
       )}
 
@@ -1851,6 +1873,7 @@ export default function App() {
         monsters={radarEntities.monsters}
         waypoints={radarEntities.waypoints}
         onSelectMapZone={handleSelectMapZone}
+        onGoHome={handleGoHome}
       />
 
       {/* Interactive Modals */}

@@ -15,6 +15,7 @@ interface WorldMapModalProps {
   waypoints?: { x: number; y: number; name: string; targetMap: string; icon?: string }[];
   onFastTravel?: (targetX: number, targetY: number) => void;
   onSelectMapZone?: (zoneId: MapZoneId, targetX?: number, targetY?: number) => void;
+  onGoHome?: () => void;
 }
 
 const RISK_STYLE: Record<string, string> = {
@@ -45,6 +46,7 @@ export const WorldMapModal: React.FC<WorldMapModalProps> = ({
   monsters = [],
   waypoints = [],
   onSelectMapZone,
+  onGoHome,
 }) => {
   const [region, setRegion] = useState<RegionId>(regionOf(currentMapId));
   const [hideBoss, setHideBoss] = useState(false);
@@ -96,6 +98,13 @@ export const WorldMapModal: React.FC<WorldMapModalProps> = ({
               >
                 {hideBoss ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
                 {hideBoss ? '显示BOSS' : '隐藏BOSS'}
+              </button>
+              <button
+                onClick={() => { (onGoHome as any)?.(); }}
+                className="px-2.5 py-1.5 rounded-lg bg-emerald-800 hover:bg-emerald-700 text-emerald-100 text-xs font-bold transition-colors"
+                title="回自己的独立营地实例"
+              >
+                🏠我的营地
               </button>
               <button
                 onClick={() => { soundManager.playClick(); onClose(); }}

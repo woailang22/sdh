@@ -11,6 +11,7 @@ interface OnlinePlayersModalProps {
   isConnected: boolean;
   onClose: () => void;
   onInviteToSquad?: (player: OnlinePlayer) => void;
+  onVisitHome?: (targetId: string, targetName: string) => void;
 }
 
 export function OnlinePlayersModal({
@@ -20,6 +21,7 @@ export function OnlinePlayersModal({
   isConnected,
   onClose,
   onInviteToSquad,
+  onVisitHome,
 }: OnlinePlayersModalProps) {
 
   return (
@@ -115,6 +117,15 @@ export function OnlinePlayersModal({
                     >
                       <UserPlus className="w-3.5 h-3.5" />
                       邀请入队
+                    </button>
+                  )}
+                  {!isSelf && (
+                    <button
+                      onClick={() => (onVisitHome as any)?.(p.id, p.name)}
+                      className="px-2 py-1 rounded bg-red-900/60 border border-red-500/40 text-red-200 text-[11px] font-bold hover:bg-red-800/60"
+                      title="潜入TA的个人营地实例，只能破拆不能建造"
+                    >
+                      🚩突袭TA营地
                     </button>
                   )}
                 </div>

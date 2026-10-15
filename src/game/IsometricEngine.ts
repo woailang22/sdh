@@ -266,12 +266,14 @@ export class IsometricEngine {
 
   private initEntitiesForMap(mapId: MapZoneId) {
     // 数据驱动：实体/门/怪/建筑全部来自 maps.ts（地图编辑器改的就是这份数据）
-    const def = SUBMAPS[mapId] ?? SUBMAPS['camp_plaza'];
+    const isHomeInst = String(mapId).startsWith('home_') && String(mapId) !== 'home_base';
+    const tplId = isHomeInst ? 'home_base' : mapId;
+    const def = (SUBMAPS as any)[tplId] ?? SUBMAPS['camp_plaza'];
     const clone = <T>(v: T): T => JSON.parse(JSON.stringify(v));
     this.interactables = clone(def.interactables);
     this.monsters = clone(def.monsters);
     this.buildings = clone(def.buildings);
-    this.mapWaypoints = clone(def.gates).map((g) => ({
+    this.mapWaypoints = clone(def.gates).map((g: any) => ({
       targetMap: g.targetMap,
       name: g.name,
       x: g.x,
@@ -281,6 +283,22 @@ export class IsometricEngine {
       targetX: g.targetX,
       targetY: g.targetY,
     }));
+    if (isHomeInst) {
+      const instOwner = String(mapId).slice(5);
+      for (const b of this.buildings) {
+        if (b.id === 'home_anchor_tpl') {
+          b.ownerId = instOwner;
+          b.ownerName = instOwner === this.localPlayerId ? '我的营地' : `玩家营地·${instOwner.slice(-4)}`;
+        }
+      }
+      const cached = (this as any)._serverBuildings as import('../types/game').BuildingEntity[] | undefined;
+      if (cached) {
+        const mine = cached.filter((x) => String(x.mapId) === String(mapId));
+        for (const m of mine) {
+          if (!this.buildings.some((x) => x.id === m.id)) this.buildings.push({ ...m });
+        }
+      }
+    }
 
     // 编辑器覆盖（localStorage）：只替换采集物与建筑，怪按数据刷
     try {
@@ -1218,6 +1236,9 @@ export class IsometricEngine {
     };
 
     this.buildings.push(newBuilding);
+    const sb = ((this as any)._serverBuildings ?? []) as import('../types/game').BuildingEntity[];
+    sb.push({ ...newBuilding });
+    (this as any)._serverBuildings = sb;
     soundManager.playCraft();
     this.addTextParticle(placeX, placeY - 1.0, `建造成功: ${costInfo.name}`, '#10b981');
   }

@@ -180,6 +180,13 @@ export class NetworkManager {
     this.send({ type: 'pvp_hit', payload: { targetId, damage } });
   }
 
+  public visitHome(targetPlayerId: string) {
+    this.send({ type: 'player_sync', payload: { mapId: `home_${targetPlayerId}` as any, x: 0, y: 9 } });
+  }
+  public goHome(selfId: string) {
+    this.send({ type: 'player_sync', payload: { mapId: `home_${selfId}` as any, x: 0, y: 9 } });
+  }
+
   private handleMessage(msg: NetMessage) {
     switch (msg.type) {
       case 'init': {

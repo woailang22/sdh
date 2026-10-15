@@ -371,6 +371,18 @@ wss.on('connection', (ws: WebSocket, req) => {
           if (CAMP.includes(String(newBuilding.mapId)) && newBuilding.type === 'safe_door') {
             newBuilding.name = (bData.name || '防御建筑') + '（中立·不可突袭）';
           }
+          const isHomeInst = String(newBuilding.mapId).startsWith('home_') && String(newBuilding.mapId) !== 'home_base';
+          if (isHomeInst) {
+            const instOwner = String(newBuilding.mapId).slice(5);
+            if (instOwner !== playerId) {
+              ws.send(JSON.stringify({ type: 'raid_result', payload: { error: '只能在自己营地建造，去突袭页进入对方营地只能破拆' } }));
+              return;
+            }
+          }
+          if (String(newBuilding.mapId) === 'home_base') {
+            ws.send(JSON.stringify({ type: 'raid_result', payload: { error: '模板不可建造，请回自己的 home_ 实例' } }));
+            return;
+          }
 
           worldBuildings.push(newBuilding);
 
@@ -419,6 +431,19 @@ wss.on('connection', (ws: WebSocket, req) => {
           if (CAMP_MAPS.includes(String(target.mapId))) {
             ws.send(JSON.stringify({ type: 'raid_result', payload: { error: '营地为中立区，不可突袭' } }));
             return;
+          }
+          const targetMapStr = String(target.mapId);
+          const isHomeTarget = targetMapStr.startsWith('home_') && targetMapStr !== 'home_base';
+          if (isHomeTarget) {
+            const instOwner = targetMapStr.slice(5);
+            if (target.ownerId !== instOwner) {
+              ws.send(JSON.stringify({ type: 'raid_result', payload: { error: '该建筑不属于该营地实例主人' } }));
+              return;
+            }
+            if (playerId === instOwner) {
+              ws.send(JSON.stringify({ type: 'raid_result', payload: { error: '不能突袭自己的营地，用 F 直接开关' } }));
+              return;
+            }
           }
 
           // Calculate damage with randomness and critical hits
@@ -552,6 +577,7 @@ wss.on('connection', (ws: WebSocket, req) => {
           if (target.player.mapId !== client.player.mapId) break;
           const CAMP_PVP = ['camp_plaza', 'camp_workshop', 'camp_outskirts'];
           if (CAMP_PVP.includes(String(client.player.mapId))) break;
+          if (String(client.player.mapId) === 'home_base') break;
           if (target.ws.readyState === WebSocket.OPEN) {
             target.ws.send(JSON.stringify({
               type: 'pvp_hit',
