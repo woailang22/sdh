@@ -2476,19 +2476,36 @@ export class IsometricEngine {
       });
     });
 
-    // Buildings
+    // Buildings（闭合院与屋内箱子一次画完，箱子压在上层保证可见）
     const houseGroups = groupBuildingsIntoHouses(this.buildings);
+    const interiorIds = new Set<string>();
+    houseGroups.forEach((g) => {
+      if (g.members.length >= 8) {
+        const { x0, x1, y0, y1 } = houseCorners(g.members);
+        this.buildings.forEach((b) => {
+          if ((b.type === 'storage_box' || b.type === 'workbench') && b.x > x0 && b.x < x1 && b.y > y0 && b.y < y1) {
+            interiorIds.add(b.id);
+          }
+        });
+      }
+    });
     houseGroups.forEach((g) => {
       const isSingleWall = g.members.length === 1 && g.door === null;
       const isClosedHouse = g.members.length >= 8;
       if (isClosedHouse) {
         const depths = g.members.map((m) => m.x + m.y);
+        const { x0, x1, y0, y1 } = houseCorners(g.members);
+        const inside = this.buildings.filter((b) => interiorIds.has(b.id) && b.x > x0 && b.x < x1 && b.y > y0 && b.y < y1);
         renderList.push({
           yDepth: Math.max(...depths),
-          render: () => this.drawHouse(g.members, g.door),
+          render: () => {
+            this.drawHouse(g.members, g.door);
+            inside.forEach((b) => this.drawBuilding(b));
+          },
         });
       } else if (isSingleWall) {
         const b = g.members[0];
+        if (interiorIds.has(b.id)) return;
         renderList.push({
           yDepth: b.x + b.y,
           render: () => this.drawBuilding(b),
@@ -3466,7 +3483,6 @@ export class IsometricEngine {
     // 参考案例配色（平顶 concrete box）：左墙亮、右墙暗、顶面深色
     const cLeft = isWood ? '#8a5a2b' : isStone ? '#9aa5b5' : '#9aa0a8';
     const cRight = isWood ? '#5a3413' : isStone ? '#5b6675' : '#5b6067';
-    const cRoof = isWood ? '#33291f' : isStone ? '#2a2e36' : '#22262d';
     const wallH = HOUSE_WALL_H;
     const gLeft = this.toScreen(x0, y1);
     const gBottom = this.toScreen(x1, y1);
@@ -3482,30 +3498,10 @@ export class IsometricEngine {
       this.ctx.closePath(); this.ctx.fill();
       this.ctx.strokeStyle = 'rgba(0,0,0,0.45)'; this.ctx.lineWidth = 1.5; this.ctx.stroke();
     };
+    // 敞口院：无屋顶，先画浅色室内地坪，院内物资由 render 层随后画在上层
+    quad(gLeft, gBottom, gRight, gTop, 'rgba(226, 232, 240, 0.12)');
     quad(gLeft, gBottom, up(gBottom, wallH), up(gLeft, wallH), cLeft);
     quad(gBottom, gRight, up(gRight, wallH), up(gBottom, wallH), cRight);
-    // 平顶：深色菱形 + 薄浅色描边 + 轻微出檐（参考案例做法）
-    const tLeft = up(gLeft, wallH);
-    const tBottom = up(gBottom, wallH);
-    const tRight = up(gRight, wallH);
-    const tTop = up(gTop, wallH);
-    const rcx = (tLeft.x + tRight.x) / 2;
-    const rcy = (tLeft.y + tRight.y) / 2;
-    const overhang = (p: { x: number; y: number }) => {
-      const dx = p.x - rcx;
-      const dy = p.y - rcy;
-      const len = Math.hypot(dx, dy) || 1;
-      return { x: p.x + (dx / len) * 4, y: p.y + (dy / len) * 4 };
-    };
-    const r1 = overhang(tLeft);
-    const r2 = overhang(tBottom);
-    const r3 = overhang(tRight);
-    const r4 = overhang(tTop);
-    this.ctx.fillStyle = cRoof;
-    this.ctx.beginPath();
-    this.ctx.moveTo(r1.x, r1.y); this.ctx.lineTo(r2.x, r2.y); this.ctx.lineTo(r3.x, r3.y); this.ctx.lineTo(r4.x, r4.y);
-    this.ctx.closePath(); this.ctx.fill();
-    this.ctx.strokeStyle = '#c9ced6'; this.ctx.lineWidth = 1.5; this.ctx.stroke();
     // 门画在左墙面中央（参考案例：门在左墙）；东/西门画在右墙面
     const doorOnSouth = door && door.y === y1;
     const doorOnEastWest = door && (door.x === x0 || door.x === x1) && door.y !== y1;

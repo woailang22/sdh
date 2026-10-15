@@ -101,6 +101,20 @@ export const SUBMAPS: Record<string, SubMapDef> = {
           { name: '精炼优质废铁', count: 12, icon: '⚙️' },
         ],
       },
+      {
+        id: 'ws_scrap_bin', type: 'storage_box', name: '工坊废铁箱', x: -1, y: 0, hp: 400, maxHp: 400, level: 1, ownerName: '恒界开拓团',
+        storedLoot: [
+          { name: '精炼车身钢板', count: 15, icon: '⚙️' },
+          { name: '货架角钢', count: 10, icon: '⚙️' },
+        ],
+      },
+      {
+        id: 'ws_food_bin', type: 'storage_box', name: '工坊干粮箱', x: 1, y: 0, hp: 400, maxHp: 400, level: 1, ownerName: '恒界开拓团',
+        storedLoot: [
+          { name: '战术能量肉排', count: 6, icon: '🥩' },
+          { name: '高纯度饮用水', count: 4, icon: '💧' },
+        ],
+      },
     ],
     deco: [
       { x: 0, y: 1, w: 9, h: 6, type: 'foundation' },
@@ -138,6 +152,20 @@ export const SUBMAPS: Record<string, SubMapDef> = {
         },
       }),
       { id: 'demo_chest', type: 'storage_box', name: '夜刃的私人战备保险箱', x: 18.0, y: -4.0, hp: 600, maxHp: 600, level: 1, ownerName: '夜刃 · 狂野猎手' },
+      {
+        id: 'demo_ammo', type: 'storage_box', name: '夜刃的备用弹药箱', x: 17.0, y: -4.0, hp: 600, maxHp: 600, level: 1, ownerName: '夜刃 · 狂野猎手',
+        storedLoot: [
+          { name: '7.62mm 步枪穿甲弹药包', count: 30, icon: '🎯' },
+          { name: '防水步枪弹药', count: 20, icon: '🎯' },
+        ],
+      },
+      {
+        id: 'demo_med', type: 'storage_box', name: '夜刃的医疗包', x: 19.0, y: -4.0, hp: 600, maxHp: 600, level: 1, ownerName: '夜刃 · 狂野猎手',
+        storedLoot: [
+          { name: '纳米急救箱', count: 2, icon: '💉' },
+          { name: '防水绷带', count: 3, icon: '🩹' },
+        ],
+      },
     ],
     deco: [
       { x: -12, y: -10, w: 10, h: 8, type: 'farm' },
@@ -204,6 +232,20 @@ export const SUBMAPS: Record<string, SubMapDef> = {
           { name: '废土信用凭证', count: 800, icon: '💰' },
         ],
       },
+      {
+        id: 'gas_office_med', type: 'storage_box', name: '办公室急救箱', x: -7, y: -13, hp: 400, maxHp: 400, level: 1, ownerName: '废土遗迹',
+        storedLoot: [
+          { name: '纳米急救箱', count: 2, icon: '💉' },
+          { name: '抗酸蚀解毒剂', count: 2, icon: '💊' },
+        ],
+      },
+      {
+        id: 'gas_office_ammo', type: 'storage_box', name: '办公室弹药箱', x: -5, y: -13, hp: 400, maxHp: 400, level: 1, ownerName: '废土遗迹',
+        storedLoot: [
+          { name: '7.62mm 步枪穿甲弹药包', count: 30, icon: '🎯' },
+          { name: '信号枪弹', count: 10, icon: '🎯' },
+        ],
+      },
     ],
     deco: [
       { x: -6, y: -13, w: 6, h: 4, type: 'foundation' },
@@ -259,6 +301,20 @@ export const SUBMAPS: Record<string, SubMapDef> = {
         doorExtra: { isOpen: true, isLocked: false },
       }),
       { id: 'st_hw_box', type: 'storage_box', name: '五金店里间零件箱', x: -10, y: -8, hp: 400, maxHp: 400, level: 1, ownerName: '废土遗迹' },
+      {
+        id: 'st_hw_tools', type: 'storage_box', name: '五金店工具箱', x: -11, y: -8, hp: 400, maxHp: 400, level: 1, ownerName: '废土遗迹',
+        storedLoot: [
+          { name: '五金紧固件', count: 6, icon: '🔧' },
+          { name: '油锯链条', count: 2, icon: '🔧' },
+        ],
+      },
+      {
+        id: 'st_hw_scrap', type: 'storage_box', name: '五金店废铁箱', x: -9, y: -8, hp: 400, maxHp: 400, level: 1, ownerName: '废土遗迹',
+        storedLoot: [
+          { name: '货架角钢', count: 20, icon: '⚙️' },
+          { name: '车身钢板', count: 10, icon: '⚙️' },
+        ],
+      },
       ...buildCompoundWalls({
         idPrefix: 'st_dn', cx: 12, cy: 6, w: 4, h: 2,
         wallType: 'wood_wall', wallName: '餐馆木板墙', ownerName: '废土遗迹',
@@ -266,6 +322,20 @@ export const SUBMAPS: Record<string, SubMapDef> = {
         doorExtra: { isOpen: true, isLocked: false },
       }),
       { id: 'st_dn_box', type: 'storage_box', name: '餐馆里间食储箱', x: 12, y: 6, hp: 400, maxHp: 400, level: 1, ownerName: '废土遗迹' },
+      {
+        id: 'st_dn_food', type: 'storage_box', name: '餐馆风干肉箱', x: 11, y: 6, hp: 400, maxHp: 400, level: 1, ownerName: '废土遗迹',
+        storedLoot: [
+          { name: '风干肉排', count: 8, icon: '🥩' },
+          { name: '熏鱼干', count: 4, icon: '🥩' },
+        ],
+      },
+      {
+        id: 'st_dn_water', type: 'storage_box', name: '餐馆桶装水箱', x: 13, y: 6, hp: 400, maxHp: 400, level: 1, ownerName: '废土遗迹',
+        storedLoot: [
+          { name: '桶装水', count: 6, icon: '💧' },
+          { name: '高纯度饮用水', count: 4, icon: '💧' },
+        ],
+      },
     ],
     deco: [
       { x: -10, y: -8, w: 6, h: 4, type: 'foundation' },
@@ -334,6 +404,20 @@ export const SUBMAPS: Record<string, SubMapDef> = {
         },
       }),
       { id: 'rebel_chest', type: 'storage_box', name: '掠夺者军火大储物箱', x: 22, y: -6, hp: 500, maxHp: 500, level: 1, ownerName: '掠夺者前哨' },
+      {
+        id: 'rebel_med', type: 'storage_box', name: '掠夺者医疗箱', x: 21, y: -6, hp: 500, maxHp: 500, level: 1, ownerName: '掠夺者前哨',
+        storedLoot: [
+          { name: '军用战术急救针剂', count: 4, icon: '💉' },
+          { name: '草药绷带', count: 4, icon: '🩹' },
+        ],
+      },
+      {
+        id: 'rebel_credits', type: 'storage_box', name: '掠夺者赃款箱', x: 23, y: -6, hp: 500, maxHp: 500, level: 1, ownerName: '掠夺者前哨',
+        storedLoot: [
+          { name: '废土高级信用点', count: 1200, icon: '💰' },
+          { name: '发霉旧钞', count: 400, icon: '💰' },
+        ],
+      },
     ],
     deco: [
       { x: -14, y: -14, w: 6, h: 5, type: 'foundation' },
@@ -385,6 +469,20 @@ export const SUBMAPS: Record<string, SubMapDef> = {
           { name: '油锯链条', count: 3, icon: '🔧' },
         ],
       },
+      {
+        id: 'lg_cabin_wood', type: 'storage_box', name: '工棚原木堆', x: -16, y: -3, hp: 400, maxHp: 400, level: 1, ownerName: '废土遗迹',
+        storedLoot: [
+          { name: '优质红松木', count: 12, icon: '🪵' },
+          { name: '干燥枯木', count: 8, icon: '🪵' },
+        ],
+      },
+      {
+        id: 'lg_cabin_food', type: 'storage_box', name: '伐木工干粮箱', x: -14, y: -3, hp: 400, maxHp: 400, level: 1, ownerName: '废土遗迹',
+        storedLoot: [
+          { name: '山菌肉干', count: 6, icon: '🥩' },
+          { name: '战术能量肉排', count: 4, icon: '🥩' },
+        ],
+      },
     ],
     deco: [
       { x: -15, y: -3, w: 6, h: 4, type: 'foundation' },
@@ -431,6 +529,20 @@ export const SUBMAPS: Record<string, SubMapDef> = {
           { name: '耐磨特种锰钢板', count: 20, icon: '⚙️' },
         ],
       },
+      {
+        id: 'q_office_stone', type: 'storage_box', name: '值班室石料箱', x: -9, y: -1, hp: 400, maxHp: 400, level: 1, ownerName: '废土遗迹',
+        storedLoot: [
+          { name: '重装花岗石块', count: 20, icon: '🪨' },
+          { name: '伴生铁矿', count: 4, icon: '⛏️' },
+        ],
+      },
+      {
+        id: 'q_office_powder', type: 'storage_box', name: '值班室炸药箱', x: -7, y: -1, hp: 400, maxHp: 400, level: 1, ownerName: '废土遗迹',
+        storedLoot: [
+          { name: '采石乳化炸药', count: 2, icon: '🧨' },
+          { name: '信号枪弹', count: 10, icon: '🎯' },
+        ],
+      },
     ],
     deco: [
       { x: -8, y: -1, w: 6, h: 4, type: 'foundation' },
@@ -469,6 +581,20 @@ export const SUBMAPS: Record<string, SubMapDef> = {
         storedLoot: [
           { name: '步枪弹药', count: 4, icon: '🎯' },
           { name: '军用战术急救针剂', count: 3, icon: '💉' },
+        ],
+      },
+      {
+        id: 'deep_parts_box', type: 'storage_box', name: '佣兵零件箱', x: -17, y: 8, hp: 500, maxHp: 500, level: 1, ownerName: '深林佣兵兵团',
+        storedLoot: [
+          { name: '传动轴齿轮', count: 3, icon: '🔧' },
+          { name: '防水电机', count: 2, icon: '🔧' },
+        ],
+      },
+      {
+        id: 'deep_food_box', type: 'storage_box', name: '佣兵口粮箱', x: -15, y: 8, hp: 500, maxHp: 500, level: 1, ownerName: '深林佣兵兵团',
+        storedLoot: [
+          { name: '熏鱼干', count: 6, icon: '🥩' },
+          { name: '封存罐头', count: 4, icon: '🥩' },
         ],
       },
       ...buildCompoundWalls({
@@ -538,6 +664,20 @@ export const SUBMAPS: Record<string, SubMapDef> = {
           { name: '防水医疗包', count: 1, icon: '💉' },
         ],
       },
+      {
+        id: 'dock_tackle_box', type: 'storage_box', name: '渔具零件箱', x: 11, y: -6, hp: 400, maxHp: 400, level: 1, ownerName: '废土遗迹',
+        storedLoot: [
+          { name: '芦苇纤维', count: 8, icon: '🪵' },
+          { name: '高耐腐蚀电池', count: 1, icon: '🔋' },
+        ],
+      },
+      {
+        id: 'dock_food_box', type: 'storage_box', name: '渔港干粮箱', x: 13, y: -6, hp: 400, maxHp: 400, level: 1, ownerName: '废土遗迹',
+        storedLoot: [
+          { name: '熏鱼干', count: 6, icon: '🥩' },
+          { name: '防水绷带', count: 2, icon: '🩹' },
+        ],
+      },
     ],
     deco: [
       { x: 12, y: -6, w: 6, h: 4, type: 'foundation' },
@@ -582,6 +722,20 @@ export const SUBMAPS: Record<string, SubMapDef> = {
         storedLoot: [
           { name: '防水绷带', count: 3, icon: '🩹' },
           { name: '熏鱼干', count: 6, icon: '🥩' },
+        ],
+      },
+      {
+        id: 'bog_food_box', type: 'storage_box', name: '猎人莲藕箱', x: -9, y: 3, hp: 400, maxHp: 400, level: 1, ownerName: '废土遗迹',
+        storedLoot: [
+          { name: '沼泽莲藕', count: 6, icon: '🥩' },
+          { name: '芦苇纤维', count: 8, icon: '🪵' },
+        ],
+      },
+      {
+        id: 'bog_ammo_box', type: 'storage_box', name: '猎人弹药箱', x: -7, y: 3, hp: 400, maxHp: 400, level: 1, ownerName: '废土遗迹',
+        storedLoot: [
+          { name: '防水步枪弹药', count: 20, icon: '🎯' },
+          { name: '信号枪弹', count: 10, icon: '🎯' },
         ],
       },
     ],
