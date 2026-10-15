@@ -24,6 +24,7 @@ export interface NetworkCallbacks {
   onChatMessage: (msg: any) => void;
   onConnectionChange: (connected: boolean, ping: number) => void;
   onGMStatus: (ok: boolean, error?: string) => void;
+  onPvpHit?: (hit: { attackerId: string; attackerName: string; damage: number }) => void;
 }
 
 export class NetworkManager {
@@ -175,6 +176,10 @@ export class NetworkManager {
     this.send({ type: 'weather_set', payload: { weather } });
   }
 
+  public sendPvpHit(targetId: string, damage: number) {
+    this.send({ type: 'pvp_hit', payload: { targetId, damage } });
+  }
+
   private handleMessage(msg: NetMessage) {
     switch (msg.type) {
       case 'init': {
@@ -228,6 +233,10 @@ export class NetworkManager {
           this.ping = Math.max(12, Date.now() - this.lastPingSent);
           this.callbacks.onConnectionChange(true, this.ping);
         }
+        break;
+      }
+      case 'pvp_hit': {
+        this.callbacks.onPvpHit?.(msg.payload);
         break;
       }
     }

@@ -228,14 +228,18 @@ wss.on('connection', (ws: WebSocket, req) => {
   const randomNameIndex = Math.floor(Math.random() * PREFAB_NAMES.length);
   const assignedName = `${PREFAB_NAMES[randomNameIndex]} #${Math.floor(100 + Math.random() * 900)}`;
 
+  const spawnIndex = clients.size % 8;
+  const SPAWN_XY: [number, number][] = [[-6, -6], [6, -6], [-6, 6], [6, 6], [0, -9], [0, 9], [-9, 0], [9, 0]];
+  const [sx, sy] = SPAWN_XY[spawnIndex % SPAWN_XY.length];
+
   const newPlayer: OnlinePlayer = {
     id: playerId,
     name: assignedName,
     level: 1,
     title: '废土流浪者',
     avatarSeed: playerId,
-    x: (Math.random() - 0.5) * 3,
-    y: (Math.random() - 0.5) * 3,
+    x: sx,
+    y: sy,
     angle: 0,
     mapId: 'camp_plaza',
     hp: 100,
@@ -250,6 +254,7 @@ wss.on('connection', (ws: WebSocket, req) => {
     ping: 28,
     lastSeen: Date.now(),
     currentAction: '徒手求生',
+    spawnIndex,
   };
 
   clients.set(playerId, { ws, playerId, player: newPlayer, isGM: false });
@@ -362,6 +367,11 @@ wss.on('connection', (ws: WebSocket, req) => {
             ] : undefined,
           };
 
+          const CAMP = ['camp_plaza', 'camp_workshop', 'camp_outskirts'];
+          if (CAMP.includes(String(newBuilding.mapId)) && newBuilding.type === 'safe_door') {
+            newBuilding.name = (bData.name || '防御建筑') + '（中立·不可突袭）';
+          }
+
           worldBuildings.push(newBuilding);
 
           broadcast({
@@ -398,6 +408,16 @@ wss.on('connection', (ws: WebSocket, req) => {
               type: 'raid_result',
               payload: { error: '目标建筑不存在或已瓦解' },
             }));
+            return;
+          }
+
+          const CAMP_MAPS = ['camp_plaza', 'camp_workshop', 'camp_outskirts'];
+          if (target.ownerId === playerId) {
+            ws.send(JSON.stringify({ type: 'raid_result', payload: { error: '不能突袭自己的门，用 F 直接开关' } }));
+            return;
+          }
+          if (CAMP_MAPS.includes(String(target.mapId))) {
+            ws.send(JSON.stringify({ type: 'raid_result', payload: { error: '营地为中立区，不可突袭' } }));
             return;
           }
 
@@ -522,6 +542,23 @@ wss.on('connection', (ws: WebSocket, req) => {
             senderId: playerId,
             timestamp: Date.now(),
           });
+          break;
+        }
+
+        case 'pvp_hit': {
+          const { targetId, damage } = msg.payload || {};
+          const target = clients.get(targetId);
+          if (!target) break;
+          if (target.player.mapId !== client.player.mapId) break;
+          const CAMP_PVP = ['camp_plaza', 'camp_workshop', 'camp_outskirts'];
+          if (CAMP_PVP.includes(String(client.player.mapId))) break;
+          if (target.ws.readyState === WebSocket.OPEN) {
+            target.ws.send(JSON.stringify({
+              type: 'pvp_hit',
+              payload: { attackerId: playerId, attackerName: client.player.name, damage: Math.max(1, Math.floor(damage || 10)) },
+              timestamp: Date.now(),
+            }));
+          }
           break;
         }
 

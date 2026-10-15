@@ -299,6 +299,7 @@ export interface OnlinePlayer {
   ping: number;
   lastSeen: number;
   currentAction?: string;
+  spawnIndex?: number;
 }
 
 export interface RaidSupply {
@@ -363,7 +364,8 @@ export type NetMessageType =
   | 'monster_sync'
   | 'monster_killed'
   | 'ping'
-  | 'pong';
+  | 'pong'
+  | 'pvp_hit';
 
 export interface NetMessage {
   type: NetMessageType;
