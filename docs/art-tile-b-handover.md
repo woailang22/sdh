@@ -3,6 +3,12 @@
 > 2026-10-16｜项目 `D:\workspace-ai\sdc`（Vite + React 19 + TS，Canvas2D 引擎）
 > 前置阅读：`docs/superpowers/plans/2026-10-16-tiles-phase5a.md`（A 版已接入并全量验证通过：131 tests / tsc 干净 / build OK）
 
+> **已实施（as-built, 2026-10-19）：本文 Task 1/2 的做法已被更好的方案取代，勿再照做。**
+> - 贴图改为**按需懒加载**（引擎删除了预载清单，新增 `artImage`/`warmArtCache`）→ B 不需要进 preload，因此没有"补预载表"这一步；
+> - 选型用**低概率散点**而非严格棋盘：`hash2Pure(wx * 31 + 7, wy * 17 + 3) < 0.22 ? 'b' : 'a'`；
+> - 每格 `save/clip/restore` 改为**预烘菱形贴片**（`tilePatch` + `tilePatchCache`，49 个采样位/主题变体）。
+> 下方 Task 1/2 仅作历史记录；Task 3（验证清单）仍然适用。
+
 ## TL;DR
 
 B 版 10 张地砖已生成并验收合格（512×512、全不透明、接缝干净、主题一致）。但要真正在游戏里生效，**还差两处改动**：
