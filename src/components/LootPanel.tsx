@@ -2,6 +2,8 @@ import React from 'react';
 import { X, PackageOpen, Hand, PackageCheck } from 'lucide-react';
 import { soundManager } from '../audio/soundManager';
 import { RARITY, RARITY_COLOR, ITEM_ICON } from '../game/maps';
+import { ItemIcon } from './ItemIcon';
+import { RarityFrame } from './RarityFrame';
 import { COLLECT_DEFS } from '../game/collection';
 
 export interface LootEntry {
@@ -59,7 +61,9 @@ export const LootPanel: React.FC<LootPanelProps> = ({ target, onTake, onTakeAll,
                   className="w-10 h-10 rounded-lg bg-slate-900 flex items-center justify-center text-2xl shrink-0 border"
                   style={{ borderColor: color + '88' }}
                 >
-                  {ITEM_ICON[it.itemId] ?? '📦'}
+                  <RarityFrame rarity={r} size={36}>
+                    <ItemIcon id={it.itemId} emoji={ITEM_ICON[it.itemId] ?? '📦'} size={24} />
+                  </RarityFrame>
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-1.5">

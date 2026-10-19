@@ -1,0 +1,259 @@
+{
+  "mode": "built-in image_gen",
+  "source": "docs/art-prompts-tiles-and-props.md",
+  "notes": [
+    "Opaque seamless tiles export at 512x512; transparent entities export at 1024x1024.",
+    "B variants edit the corresponding A image to subtly reduce overall brightness while preserving the pattern.",
+    "No drone dust cloud: the global isolated alpha/no-ground rule takes precedence.",
+    "Source images are preserved under Codex generated_images; final size-normalized PNGs are saved into public/art.",
+    "Existing art and runtime code remain outside this asset-generation change."
+  ],
+  "assets": [
+    {
+      "file": "tile-camp-a.png",
+      "type": "tile",
+      "theme": "camp",
+      "variant": "a",
+      "size": 512,
+      "transparent": false,
+      "prompt": "Use case: stylized-concept. Asset type: opaque game ground texture. Deliver one full-bleed square image intended for 512x512 export. Seamless tileable game ground texture, hand-painted muted wasteland style, low saturation, soft top-left micro-relief lighting, strictly orthographic top-down surface. Uniform distribution of small surface details only; no overall lighting gradient, vignette, focal point, horizon or perspective. Match a restrained gray-olive, gray-brown, slate palette and broad hand-painted brushwork of the existing wasteland game art. No buildings, people, large objects, text, letters, labels, watermark, UI or photo realism. Texture continues naturally through opposite edges; do not draw a border or make a single centered object.\nPrimary request: packed dirt camp ground, khaki-olive dust, small pebbles and straw bits, faint footprints, base tone #6e6e50\nVariant: A, standard base brightness. One square tile only; no comparison, collage or A/B labels."
+    },
+    {
+      "file": "tile-camp-b.png",
+      "type": "tile",
+      "theme": "camp",
+      "variant": "b",
+      "size": 512,
+      "transparent": false,
+      "reference": "tile-camp-a.png",
+      "prompt": "Use case: lighting-weather. Asset type: alternate brightness version of one seamless 512x512 game ground texture.\nInput image 1 is the edit target: tile-camp-a.png.\nChange ONLY overall brightness: make the entire texture evenly about 8% darker, a subtle but clearly visible difference when placed beside the original. Keep the same hue, saturation, exact texture layout, all tiny surface marks, their positions, scale, perspective and every edge feature. Do not redraw, repaint, sharpen, blur, add, remove or move any details. Preserve the seamless tile pattern and uniform full-bleed opaque square canvas. No gradient, vignette, text, labels, borders, watermarks or UI. Output only the darker tile; no comparisons or collage."
+    },
+    {
+      "file": "tile-plaza-a.png",
+      "type": "tile",
+      "theme": "plaza",
+      "variant": "a",
+      "size": 512,
+      "transparent": false,
+      "prompt": "Use case: stylized-concept. Asset type: opaque game ground texture. Deliver one full-bleed square image intended for 512x512 export. Seamless tileable game ground texture, hand-painted muted wasteland style, low saturation, soft top-left micro-relief lighting, strictly orthographic top-down surface. Uniform distribution of small surface details only; no overall lighting gradient, vignette, focal point, horizon or perspective. Match a restrained gray-olive, gray-brown, slate palette and broad hand-painted brushwork of the existing wasteland game art. No buildings, people, large objects, text, letters, labels, watermark, UI or photo realism. Texture continues naturally through opposite edges; do not draw a border or make a single centered object.\nPrimary request: worn concrete slabs ground, warm gray, faint slab seams and fine cracks, dust in crevices. Concrete slab seams are understated repeating material detail, no pavement perspective.\nVariant: A, standard base brightness. One square tile only; no comparison, collage or A/B labels."
+    },
+    {
+      "file": "tile-plaza-b.png",
+      "type": "tile",
+      "theme": "plaza",
+      "variant": "b",
+      "size": 512,
+      "transparent": false,
+      "reference": "tile-plaza-a.png",
+      "prompt": "Use case: lighting-weather. Asset type: alternate brightness version of one seamless 512x512 game ground texture.\nInput image 1 is the edit target: tile-plaza-a.png.\nChange ONLY overall brightness: make the entire texture evenly about 8% darker, a subtle but clearly visible difference when placed beside the original. Keep the same hue, saturation, exact texture layout, all tiny surface marks, their positions, scale, perspective and every edge feature. Do not redraw, repaint, sharpen, blur, add, remove or move any details. Preserve the seamless tile pattern and uniform full-bleed opaque square canvas. No gradient, vignette, text, labels, borders, watermarks or UI. Output only the darker tile; no comparisons or collage."
+    },
+    {
+      "file": "tile-field-a.png",
+      "type": "tile",
+      "theme": "field",
+      "variant": "a",
+      "size": 512,
+      "transparent": false,
+      "prompt": "Use case: stylized-concept. Asset type: opaque game ground texture. Deliver one full-bleed square image intended for 512x512 export. Seamless tileable game ground texture, hand-painted muted wasteland style, low saturation, soft top-left micro-relief lighting, strictly orthographic top-down surface. Uniform distribution of small surface details only; no overall lighting gradient, vignette, focal point, horizon or perspective. Match a restrained gray-olive, gray-brown, slate palette and broad hand-painted brushwork of the existing wasteland game art. No buildings, people, large objects, text, letters, labels, watermark, UI or photo realism. Texture continues naturally through opposite edges; do not draw a border or make a single centered object.\nPrimary request: dry farmland soil, shallow low-relief furrows, small clods and dry straw, subdued brown-tan. Fine irregular shallow furrows, not deep high-contrast stripes.\nVariant: A, standard base brightness. One square tile only; no comparison, collage or A/B labels."
+    },
+    {
+      "file": "tile-field-b.png",
+      "type": "tile",
+      "theme": "field",
+      "variant": "b",
+      "size": 512,
+      "transparent": false,
+      "reference": "tile-field-a.png",
+      "prompt": "Use case: lighting-weather. Asset type: alternate brightness version of one seamless 512x512 game ground texture.\nInput image 1 is the edit target: tile-field-a.png.\nChange ONLY overall brightness: make the entire texture evenly about 8% darker, a subtle but clearly visible difference when placed beside the original. Keep the same hue, saturation, exact texture layout, all tiny surface marks, their positions, scale, perspective and every edge feature. Do not redraw, repaint, sharpen, blur, add, remove or move any details. Preserve the seamless tile pattern and uniform full-bleed opaque square canvas. No gradient, vignette, text, labels, borders, watermarks or UI. Output only the darker tile; no comparisons or collage."
+    },
+    {
+      "file": "tile-urban-a.png",
+      "type": "tile",
+      "theme": "urban",
+      "variant": "a",
+      "size": 512,
+      "transparent": false,
+      "prompt": "Use case: stylized-concept. Asset type: opaque game ground texture. Deliver one full-bleed square image intended for 512x512 export. Seamless tileable game ground texture, hand-painted muted wasteland style, low saturation, soft top-left micro-relief lighting, strictly orthographic top-down surface. Uniform distribution of small surface details only; no overall lighting gradient, vignette, focal point, horizon or perspective. Match a restrained gray-olive, gray-brown, slate palette and broad hand-painted brushwork of the existing wasteland game art. No buildings, people, large objects, text, letters, labels, watermark, UI or photo realism. Texture continues naturally through opposite edges; do not draw a border or make a single centered object.\nPrimary request: dusty asphalt street surface, fine cracks and patches, tiny faded lane-paint specks only, gray with warm dust film. No entire road markings, symbols, lane line or large colored bands.\nVariant: A, standard base brightness. One square tile only; no comparison, collage or A/B labels."
+    },
+    {
+      "file": "tile-urban-b.png",
+      "type": "tile",
+      "theme": "urban",
+      "variant": "b",
+      "size": 512,
+      "transparent": false,
+      "reference": "tile-urban-a.png",
+      "prompt": "Use case: lighting-weather. Asset type: alternate brightness version of one seamless 512x512 game ground texture.\nInput image 1 is the edit target: tile-urban-a.png.\nChange ONLY overall brightness: make the entire texture evenly about 8% darker, a subtle but clearly visible difference when placed beside the original. Keep the same hue, saturation, exact texture layout, all tiny surface marks, their positions, scale, perspective and every edge feature. Do not redraw, repaint, sharpen, blur, add, remove or move any details. Preserve the seamless tile pattern and uniform full-bleed opaque square canvas. No gradient, vignette, text, labels, borders, watermarks or UI. Output only the darker tile; no comparisons or collage."
+    },
+    {
+      "file": "tile-ruins-a.png",
+      "type": "tile",
+      "theme": "ruins",
+      "variant": "a",
+      "size": 512,
+      "transparent": false,
+      "prompt": "Use case: stylized-concept. Asset type: opaque game ground texture. Deliver one full-bleed square image intended for 512x512 export. Seamless tileable game ground texture, hand-painted muted wasteland style, low saturation, soft top-left micro-relief lighting, strictly orthographic top-down surface. Uniform distribution of small surface details only; no overall lighting gradient, vignette, focal point, horizon or perspective. Match a restrained gray-olive, gray-brown, slate palette and broad hand-painted brushwork of the existing wasteland game art. No buildings, people, large objects, text, letters, labels, watermark, UI or photo realism. Texture continues naturally through opposite edges; do not draw a border or make a single centered object.\nPrimary request: rubble ground, scattered small broken concrete chips, tiny rebar fragments and tan-gray dust. Keep all rubble small and evenly distributed, no large rock, pile, structure or isolated object.\nVariant: A, standard base brightness. One square tile only; no comparison, collage or A/B labels."
+    },
+    {
+      "file": "tile-ruins-b.png",
+      "type": "tile",
+      "theme": "ruins",
+      "variant": "b",
+      "size": 512,
+      "transparent": false,
+      "reference": "tile-ruins-a.png",
+      "prompt": "Use case: lighting-weather. Asset type: alternate brightness version of one seamless 512x512 game ground texture.\nInput image 1 is the edit target: tile-ruins-a.png.\nChange ONLY overall brightness: make the entire texture evenly about 8% darker, a subtle but clearly visible difference when placed beside the original. Keep the same hue, saturation, exact texture layout, all tiny surface marks, their positions, scale, perspective and every edge feature. Do not redraw, repaint, sharpen, blur, add, remove or move any details. Preserve the seamless tile pattern and uniform full-bleed opaque square canvas. No gradient, vignette, text, labels, borders, watermarks or UI. Output only the darker tile; no comparisons or collage."
+    },
+    {
+      "file": "tile-forest-a.png",
+      "type": "tile",
+      "theme": "forest",
+      "variant": "a",
+      "size": 512,
+      "transparent": false,
+      "prompt": "Use case: stylized-concept. Asset type: opaque game ground texture. Deliver one full-bleed square image intended for 512x512 export. Seamless tileable game ground texture, hand-painted muted wasteland style, low saturation, soft top-left micro-relief lighting, strictly orthographic top-down surface. Uniform distribution of small surface details only; no overall lighting gradient, vignette, focal point, horizon or perspective. Match a restrained gray-olive, gray-brown, slate palette and broad hand-painted brushwork of the existing wasteland game art. No buildings, people, large objects, text, letters, labels, watermark, UI or photo realism. Texture continues naturally through opposite edges; do not draw a border or make a single centered object.\nPrimary request: forest floor duff, brown-gray humus, fine pine needles, tiny twigs and moss specks. Flat uniformly scattered surface texture, no tree, branch, stump or plant.\nVariant: A, standard base brightness. One square tile only; no comparison, collage or A/B labels."
+    },
+    {
+      "file": "tile-forest-b.png",
+      "type": "tile",
+      "theme": "forest",
+      "variant": "b",
+      "size": 512,
+      "transparent": false,
+      "reference": "tile-forest-a.png",
+      "prompt": "Use case: lighting-weather. Asset type: alternate brightness version of one seamless 512x512 game ground texture.\nInput image 1 is the edit target: tile-forest-a.png.\nChange ONLY overall brightness: make the entire texture evenly about 8% darker, a subtle but clearly visible difference when placed beside the original. Keep the same hue, saturation, exact texture layout, all tiny surface marks, their positions, scale, perspective and every edge feature. Do not redraw, repaint, sharpen, blur, add, remove or move any details. Preserve the seamless tile pattern and uniform full-bleed opaque square canvas. No gradient, vignette, text, labels, borders, watermarks or UI. Output only the darker tile; no comparisons or collage."
+    },
+    {
+      "file": "tile-quarry-a.png",
+      "type": "tile",
+      "theme": "quarry",
+      "variant": "a",
+      "size": 512,
+      "transparent": false,
+      "prompt": "Use case: stylized-concept. Asset type: opaque game ground texture. Deliver one full-bleed square image intended for 512x512 export. Seamless tileable game ground texture, hand-painted muted wasteland style, low saturation, soft top-left micro-relief lighting, strictly orthographic top-down surface. Uniform distribution of small surface details only; no overall lighting gradient, vignette, focal point, horizon or perspective. Match a restrained gray-olive, gray-brown, slate palette and broad hand-painted brushwork of the existing wasteland game art. No buildings, people, large objects, text, letters, labels, watermark, UI or photo realism. Texture continues naturally through opposite edges; do not draw a border or make a single centered object.\nPrimary request: pale gray limestone rock ground, small gravel and chipped stone, subtle thin strata lines. Uniform pale gray dusty surface, no large boulders, walls or perspective.\nVariant: A, standard base brightness. One square tile only; no comparison, collage or A/B labels."
+    },
+    {
+      "file": "tile-quarry-b.png",
+      "type": "tile",
+      "theme": "quarry",
+      "variant": "b",
+      "size": 512,
+      "transparent": false,
+      "reference": "tile-quarry-a.png",
+      "prompt": "Use case: lighting-weather. Asset type: alternate brightness version of one seamless 512x512 game ground texture.\nInput image 1 is the edit target: tile-quarry-a.png.\nChange ONLY overall brightness: make the entire texture evenly about 8% darker, a subtle but clearly visible difference when placed beside the original. Keep the same hue, saturation, exact texture layout, all tiny surface marks, their positions, scale, perspective and every edge feature. Do not redraw, repaint, sharpen, blur, add, remove or move any details. Preserve the seamless tile pattern and uniform full-bleed opaque square canvas. No gradient, vignette, text, labels, borders, watermarks or UI. Output only the darker tile; no comparisons or collage."
+    },
+    {
+      "file": "tile-lake-a.png",
+      "type": "tile",
+      "theme": "lake",
+      "variant": "a",
+      "size": 512,
+      "transparent": false,
+      "prompt": "Use case: stylized-concept. Asset type: opaque game ground texture. Deliver one full-bleed square image intended for 512x512 export. Seamless tileable game ground texture, hand-painted muted wasteland style, low saturation, soft top-left micro-relief lighting, strictly orthographic top-down surface. Uniform distribution of small surface details only; no overall lighting gradient, vignette, focal point, horizon or perspective. Match a restrained gray-olive, gray-brown, slate palette and broad hand-painted brushwork of the existing wasteland game art. No buildings, people, large objects, text, letters, labels, watermark, UI or photo realism. Texture continues naturally through opposite edges; do not draw a border or make a single centered object.\nPrimary request: slate blue-gray lake water surface, subtle low-contrast horizontal ripples. Uniform overhead water only, no horizon, sky, shore, reflections of objects, foam bands, sunlight spot, lily pads or other objects.\nVariant: A, standard base brightness. One square tile only; no comparison, collage or A/B labels."
+    },
+    {
+      "file": "tile-lake-b.png",
+      "type": "tile",
+      "theme": "lake",
+      "variant": "b",
+      "size": 512,
+      "transparent": false,
+      "reference": "tile-lake-a.png",
+      "prompt": "Use case: lighting-weather. Asset type: alternate brightness version of one seamless 512x512 game ground texture.\nInput image 1 is the edit target: tile-lake-a.png.\nChange ONLY overall brightness: make the entire texture evenly about 8% darker, a subtle but clearly visible difference when placed beside the original. Keep the same hue, saturation, exact texture layout, all tiny surface marks, their positions, scale, perspective and every edge feature. Do not redraw, repaint, sharpen, blur, add, remove or move any details. Preserve the seamless tile pattern and uniform full-bleed opaque square canvas. No gradient, vignette, text, labels, borders, watermarks or UI. Output only the darker tile; no comparisons or collage."
+    },
+    {
+      "file": "tile-marsh-a.png",
+      "type": "tile",
+      "theme": "marsh",
+      "variant": "a",
+      "size": 512,
+      "transparent": false,
+      "prompt": "Use case: stylized-concept. Asset type: opaque game ground texture. Deliver one full-bleed square image intended for 512x512 export. Seamless tileable game ground texture, hand-painted muted wasteland style, low saturation, soft top-left micro-relief lighting, strictly orthographic top-down surface. Uniform distribution of small surface details only; no overall lighting gradient, vignette, focal point, horizon or perspective. Match a restrained gray-olive, gray-brown, slate palette and broad hand-painted brushwork of the existing wasteland game art. No buildings, people, large objects, text, letters, labels, watermark, UI or photo realism. Texture continues naturally through opposite edges; do not draw a border or make a single centered object.\nPrimary request: muddy marsh ground, olive mud, small shallow puddle specks and reed root bits. Uniform flat surface, no tall reeds, plants, large water pools or vegetation clumps.\nVariant: A, standard base brightness. One square tile only; no comparison, collage or A/B labels."
+    },
+    {
+      "file": "tile-marsh-b.png",
+      "type": "tile",
+      "theme": "marsh",
+      "variant": "b",
+      "size": 512,
+      "transparent": false,
+      "reference": "tile-marsh-a.png",
+      "prompt": "Use case: lighting-weather. Asset type: alternate brightness version of one seamless 512x512 game ground texture.\nInput image 1 is the edit target: tile-marsh-a.png.\nChange ONLY overall brightness: make the entire texture evenly about 8% darker, a subtle but clearly visible difference when placed beside the original. Keep the same hue, saturation, exact texture layout, all tiny surface marks, their positions, scale, perspective and every edge feature. Do not redraw, repaint, sharpen, blur, add, remove or move any details. Preserve the seamless tile pattern and uniform full-bleed opaque square canvas. No gradient, vignette, text, labels, borders, watermarks or UI. Output only the darker tile; no comparisons or collage."
+    },
+    {
+      "file": "tile-rift-a.png",
+      "type": "tile",
+      "theme": "rift",
+      "variant": "a",
+      "size": 512,
+      "transparent": false,
+      "prompt": "Use case: stylized-concept. Asset type: opaque game ground texture. Deliver one full-bleed square image intended for 512x512 export. Seamless tileable game ground texture, hand-painted muted wasteland style, low saturation, soft top-left micro-relief lighting, strictly orthographic top-down surface. Uniform distribution of small surface details only; no overall lighting gradient, vignette, focal point, horizon or perspective. Match a restrained gray-olive, gray-brown, slate palette and broad hand-painted brushwork of the existing wasteland game art. No buildings, people, large objects, text, letters, labels, watermark, UI or photo realism. Texture continues naturally through opposite edges; do not draw a border or make a single centered object.\nPrimary request: volcanic ash ground, gray-brown fine dust, small hairline cracks and very sparse dim ember specks. NO violet glow, NO purple, NO luminous cracks, NO lava channels; the game adds glow separately.\nVariant: A, standard base brightness. One square tile only; no comparison, collage or A/B labels."
+    },
+    {
+      "file": "tile-rift-b.png",
+      "type": "tile",
+      "theme": "rift",
+      "variant": "b",
+      "size": 512,
+      "transparent": false,
+      "reference": "tile-rift-a.png",
+      "prompt": "Use case: lighting-weather. Asset type: alternate brightness version of one seamless 512x512 game ground texture.\nInput image 1 is the edit target: tile-rift-a.png.\nChange ONLY overall brightness: make the entire texture evenly about 8% darker, a subtle but clearly visible difference when placed beside the original. Keep the same hue, saturation, exact texture layout, all tiny surface marks, their positions, scale, perspective and every edge feature. Do not redraw, repaint, sharpen, blur, add, remove or move any details. Preserve the seamless tile pattern and uniform full-bleed opaque square canvas. No gradient, vignette, text, labels, borders, watermarks or UI. Output only the darker tile; no comparisons or collage."
+    },
+    {
+      "file": "veh-van.png",
+      "type": "entity",
+      "size": 1024,
+      "transparent": true,
+      "prompt": "Use case: stylized-concept. Asset type: single transparent game sprite, square canvas intended for 1024x1024 PNG export. Hand-painted muted wasteland style, low saturation, soft top-left light, gray-olive / worn brown / slate palette. Isometric game sprite, 3/4 side view from a 30-degree elevated oblique camera, same front-right camera angle and painterly style as a worn wasteland survivor and wrecked sedan. Exactly one entire subject centered with generous truly transparent margins on all four sides. Subject fits within the central 78% of canvas. Clean silhouette readable at distant gameplay scale, restrained texture detail, no photo realism. Actual alpha transparency; no solid background, backdrop, matte, painted checkerboard, ground surface, cast shadow, contact shadow, drop shadow, glow outline, halo, scenery, pedestal not requested, cell border, labels, text, logos, numerals, watermark or UI.\nPrimary request: A single wrecked delivery van, compact medium size, rusted panels, flat tires, broken windows and dusty faded gray-olive body. Low compact isometric silhouette, full vehicle and all remaining wheels visible, no loose debris around it, no cargo, no road or ground beneath. Vehicle is broader than tall but does not stretch across the whole canvas."
+    },
+    {
+      "file": "veh-truck.png",
+      "type": "entity",
+      "size": 1024,
+      "transparent": true,
+      "prompt": "Use case: stylized-concept. Asset type: single transparent game sprite, square canvas intended for 1024x1024 PNG export. Hand-painted muted wasteland style, low saturation, soft top-left light, gray-olive / worn brown / slate palette. Isometric game sprite, 3/4 side view from a 30-degree elevated oblique camera, same front-right camera angle and painterly style as a worn wasteland survivor and wrecked sedan. Exactly one entire subject centered with generous truly transparent margins on all four sides. Subject fits within the central 78% of canvas. Clean silhouette readable at distant gameplay scale, restrained texture detail, no photo realism. Actual alpha transparency; no solid background, backdrop, matte, painted checkerboard, ground surface, cast shadow, contact shadow, drop shadow, glow outline, halo, scenery, pedestal not requested, cell border, labels, text, logos, numerals, watermark or UI.\nPrimary request: A single wrecked pickup truck with a short open cargo bed, medium compact size, rusted dusty panels and missing front bumper. Full vehicle and wheels visible, low compact isometric silhouette, subdued warm gray and rust, no cargo, no loose surrounding debris, no road or ground beneath."
+    },
+    {
+      "file": "prop-scrap.png",
+      "type": "entity",
+      "size": 1024,
+      "transparent": true,
+      "prompt": "Use case: stylized-concept. Asset type: single transparent game sprite, square canvas intended for 1024x1024 PNG export. Hand-painted muted wasteland style, low saturation, soft top-left light, gray-olive / worn brown / slate palette. Isometric game sprite, 3/4 side view from a 30-degree elevated oblique camera, same front-right camera angle and painterly style as a worn wasteland survivor and wrecked sedan. Exactly one entire subject centered with generous truly transparent margins on all four sides. Subject fits within the central 78% of canvas. Clean silhouette readable at distant gameplay scale, restrained texture detail, no photo realism. Actual alpha transparency; no solid background, backdrop, matte, painted checkerboard, ground surface, cast shadow, contact shadow, drop shadow, glow outline, halo, scenery, pedestal not requested, cell border, labels, text, logos, numerals, watermark or UI.\nPrimary request: One small low mound of rusty scrap metal, twisted short pipes, gears and irregular metal plates. Readable compact silhouette, rusty gray-brown, not a huge heap. All scrap belongs to the same compact pile; no scattered pieces outside its silhouette and no ground patch beneath."
+    },
+    {
+      "file": "prop-pond.png",
+      "type": "entity",
+      "size": 1024,
+      "transparent": true,
+      "prompt": "Use case: stylized-concept. Asset type: single transparent game sprite, square canvas intended for 1024x1024 PNG export. Hand-painted muted wasteland style, low saturation, soft top-left light, gray-olive / worn brown / slate palette. Isometric game sprite, 3/4 side view from a 30-degree elevated oblique camera, same front-right camera angle and painterly style as a worn wasteland survivor and wrecked sedan. Exactly one entire subject centered with generous truly transparent margins on all four sides. Subject fits within the central 78% of canvas. Clean silhouette readable at distant gameplay scale, restrained texture detail, no photo realism. Actual alpha transparency; no solid background, backdrop, matte, painted checkerboard, ground surface, cast shadow, contact shadow, drop shadow, glow outline, halo, scenery, pedestal not requested, cell border, labels, text, logos, numerals, watermark or UI.\nPrimary request: One small weathered wooden pier dock section made of planks on short visible posts, with a compact coil of plain rope resting on the planks. Full isolated structure in isometric view, low compact profile. NO water, mud, sand, shoreline or landscape base; water is supplied by the game ground tile."
+    },
+    {
+      "file": "prop-crystal-cluster.png",
+      "type": "entity",
+      "size": 1024,
+      "transparent": true,
+      "prompt": "Use case: stylized-concept. Asset type: single transparent game sprite, square canvas intended for 1024x1024 PNG export. Hand-painted muted wasteland style, low saturation, soft top-left light, gray-olive / worn brown / slate palette. Isometric game sprite, 3/4 side view from a 30-degree elevated oblique camera, same front-right camera angle and painterly style as a worn wasteland survivor and wrecked sedan. Exactly one entire subject centered with generous truly transparent margins on all four sides. Subject fits within the central 78% of canvas. Clean silhouette readable at distant gameplay scale, restrained texture detail, no photo realism. Actual alpha transparency; no solid background, backdrop, matte, painted checkerboard, ground surface, cast shadow, contact shadow, drop shadow, glow outline, halo, scenery, pedestal not requested, cell border, labels, text, logos, numerals, watermark or UI.\nPrimary request: One small mineable cluster of several violet crystal points growing directly from a compact natural gray rock base. Restrained faint inner violet light contained entirely inside the crystals. Small irregular mineral cluster, clearly distinct from a large crystal anchor: no metal machinery, cage, tower, anchor device, orb, energy ring or external glow. No ground patch or cast shadow."
+    },
+    {
+      "file": "npc-allen.png",
+      "type": "entity",
+      "size": 1024,
+      "transparent": true,
+      "prompt": "Use case: stylized-concept. Asset type: single transparent game sprite, square canvas intended for 1024x1024 PNG export. Hand-painted muted wasteland style, low saturation, soft top-left light, gray-olive / worn brown / slate palette. Isometric game sprite, 3/4 side view from a 30-degree elevated oblique camera, same front-right camera angle and painterly style as a worn wasteland survivor and wrecked sedan. Exactly one entire subject centered with generous truly transparent margins on all four sides. Subject fits within the central 78% of canvas. Clean silhouette readable at distant gameplay scale, restrained texture detail, no photo realism. Actual alpha transparency; no solid background, backdrop, matte, painted checkerboard, ground surface, cast shadow, contact shadow, drop shadow, glow outline, halo, scenery, pedestal not requested, cell border, labels, text, logos, numerals, watermark or UI.\nPrimary request: One adult male wasteland engineer worker, full body standing in a relaxed work stance, facing front-right. Worn muted olive-gray work overalls, dusty brown boots, plain work shirt, one wrench held naturally in one hand. Natural adult human proportions matching the existing hooded survivor sprite, compact readable silhouette. Hands and feet fully visible, no helmet obscuring the face, no text, badges or printed symbols on clothing, no extra tools or props."
+    },
+    {
+      "file": "npc-vivian.png",
+      "type": "entity",
+      "size": 1024,
+      "transparent": true,
+      "prompt": "Use case: stylized-concept. Asset type: single transparent game sprite, square canvas intended for 1024x1024 PNG export. Hand-painted muted wasteland style, low saturation, soft top-left light, gray-olive / worn brown / slate palette. Isometric game sprite, 3/4 side view from a 30-degree elevated oblique camera, same front-right camera angle and painterly style as a worn wasteland survivor and wrecked sedan. Exactly one entire subject centered with generous truly transparent margins on all four sides. Subject fits within the central 78% of canvas. Clean silhouette readable at distant gameplay scale, restrained texture detail, no photo realism. Actual alpha transparency; no solid background, backdrop, matte, painted checkerboard, ground surface, cast shadow, contact shadow, drop shadow, glow outline, halo, scenery, pedestal not requested, cell border, labels, text, logos, numerals, watermark or UI.\nPrimary request: One adult female wasteland technician, full body standing in a relaxed work stance facing front-right. Worn muted olive-gray jacket, practical work trousers and dusty brown boots, holding one compact tablet naturally in both hands. Tablet screen is blank dark slate, with no UI, text or icons. Natural adult human proportions matching the existing hooded survivor sprite, compact readable silhouette. Hands and feet visible; no extra props or scenery."
+    },
+    {
+      "file": "drone.png",
+      "type": "entity",
+      "size": 1024,
+      "transparent": true,
+      "prompt": "Use case: stylized-concept. Asset type: single transparent game sprite, square canvas intended for 1024x1024 PNG export. Hand-painted muted wasteland style, low saturation, soft top-left light, gray-olive / worn brown / slate palette. Isometric game sprite, 3/4 side view from a 30-degree elevated oblique camera, same front-right camera angle and painterly style as a worn wasteland survivor and wrecked sedan. Exactly one entire subject centered with generous truly transparent margins on all four sides. Subject fits within the central 78% of canvas. Clean silhouette readable at distant gameplay scale, restrained texture detail, no photo realism. Actual alpha transparency; no solid background, backdrop, matte, painted checkerboard, ground surface, cast shadow, contact shadow, drop shadow, glow outline, halo, scenery, pedestal not requested, cell border, labels, text, logos, numerals, watermark or UI.\nPrimary request: One small compact hovering quadcopter drone with exactly four rotor arms, seen from top-down oblique 30-degree isometric angle. Dusty muted gray-olive casing, a single tiny indicator light rendered within the casing; implied blinking without an external light halo. Full drone including all rotors visible. Tiny gameplay-scale proportions, clean silhouette. NO dust cloud below, NO shadow, NO landing pad, NO ground, NO external light cone; these effects are drawn by the game."
+    }
+  ]
+}

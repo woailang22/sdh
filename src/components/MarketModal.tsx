@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { MarketItem } from '../types/game';
 import { X, ShoppingBag, Coins, TrendingUp } from 'lucide-react';
 import { soundManager } from '../audio/soundManager';
+import { ItemIcon } from './ItemIcon';
 
 interface MarketModalProps {
   isOpen: boolean;
@@ -130,7 +131,7 @@ export const MarketModal: React.FC<MarketModalProps> = ({
             >
               <div className="flex items-center gap-3 min-w-0">
                 <div className="w-12 h-12 rounded-xl bg-slate-900 border border-cyan-500/30 flex items-center justify-center text-2xl shrink-0">
-                  {item.icon}
+                  <ItemIcon id={item.id} emoji={item.icon} size={32} />
                 </div>
                 <div className="min-w-0">
                   <div className="flex items-center gap-2">

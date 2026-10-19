@@ -1,8 +1,10 @@
 ﻿import { soundManager } from '../audio/soundManager';
 import { calcRangedDamage, rollCrit, weatherCritBonus, MELEE, aggroRangeFor, isEnraged, calcMonsterHit, absorbShieldFirst } from './combat';
 import { SUBMAPS, displayName, regionOf, lootResourceOf } from './maps';
-import { groundBaseColor, hash2 as hash2Pure, withAlpha, themeAccent, drawSoftShadow, healthBarColor, weatherTint } from './visualTheme';
+import { groundBaseColor, hash2 as hash2Pure, withAlpha, themeAccent, drawSoftShadow, healthBarColor, weatherTint, themeHaze } from './visualTheme';
+import type { GroundTheme } from './visualTheme';
 import { groupBuildingsIntoHouses, houseCorners, HOUSE_WALL_H } from './house';
+import { frameContent, angleToSurvivorFrame, interactableSprite, buildingSprite } from './art';
 import { isHostile, canOperateDoor } from './diplomacy';
 import {
   MonsterEntity,
@@ -76,6 +78,12 @@ export class IsometricEngine {
   // Brightness setting (default high for crystal clear visibility)
   public brightnessMultiplier: number = 1.12;
   public isBrightMode: boolean = true;
+
+  // Art sprite cache (/art/*, lazy-load on first use; missing/failed -> procedural fallback)
+  public artImages: Map<string, HTMLImageElement> = new Map();
+
+  // 预烘菱形地砖贴片缓存（64×64，key = theme+variant:px:py）：把逐格 clip 变成一次性预烘 + 每格 1 次 drawImage
+  private tilePatchCache: Map<string, HTMLCanvasElement> = new Map();
 
   // Player Placed Floors (key: `${wx},${wy}`)
   public placedFloors: Map<string, { x: number; y: number; type: 'wood_floor' | 'stone_floor' | 'iron_floor' }> = new Map();
@@ -208,7 +216,187 @@ export class IsometricEngine {
     this.initWeather();
     this.setupListeners();
     this.resize();
+    // 贴图全部改为按需懒加载 + 启动后渐进预热（见 artImage / warmArtCache）：
   }
+
+  /**
+   * 按需懒加载 /art 贴图：首次访问即创建并缓存（decoding=async）。
+   * 取代首屏一次性预载全部素材（~20MB PNG 在启动瞬间把主线程解码线程占满 = 打开页面卡顿主因）。
+   */
+  private artImage(file: string): HTMLImageElement | null {
+    if (typeof Image === 'undefined') return null;
+    const src = `/art/${file}`;
+    let img = this.artImages.get(src);
+    if (!img) {
+      img = new Image();
+      img.decoding = 'async';
+      img.src = src;
+      this.artImages.set(src, img);
+    }
+    return img;
+  }
+
+  /**
+   * 渐进预热：启动后按空闲时间逐张加载世界贴图。首帧立即可用（procedural 回退），贴图随后平滑替换，
+   * 不再与首屏绘制争抢主线程。
+   */
+  private warmArtCache() {
+    const themes = ['camp', 'plaza', 'field', 'urban', 'ruins', 'forest', 'quarry', 'lake', 'marsh', 'rift'];
+    const queue = [
+      'texture-ground.png', 'nature-trees.png', 'char-survivor.png', 'monster-pack.png', 'prop-wreck.png',
+      'building-facility.png', 'veh-van.png', 'veh-truck.png', 'prop-scrap.png', 'prop-pond.png',
+      'prop-crystal-cluster.png', 'npc-allen.png', 'npc-vivian.png', 'drone.png',
+      ...themes.map((t) => `tile-${t}-a.png`),
+      ...themes.map((t) => `tile-${t}-b.png`),
+    ];
+    const ric = (window as unknown as { requestIdleCallback?: (cb: () => void, opts: { timeout: number }) => void }).requestIdleCallback;
+    const idle: (cb: () => void) => void = ric
+      ? (cb) => ric(cb, { timeout: 400 })
+      : (cb) => window.setTimeout(cb, 90);
+    const step = () => {
+      const file = queue.shift();
+      if (!file) return;
+      this.artImage(file);
+      idle(step);
+    };
+    step();
+  }
+
+  /**
+   * 贴图帧绘制：成功返回 true；图片未就绪/无帧/异常返回 false，
+   * 调用方必须回退 procedural 绘制，保证首屏与离线可用。
+   */
+  private drawArtFrame(file: string, frame: string, dx: number, dy: number, dw: number, dh: number, inset = 0): boolean {
+    const img = this.artImage(file);
+    const r = frameContent(file, frame);
+    if (!img || !r || !img.complete || img.naturalWidth === 0) return false;
+    try {
+      this.ctx.drawImage(img, r.x + inset, r.y + inset, r.width - inset * 2, r.height - inset * 2, dx, dy, dw, dh);
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
+  /**
+   * 世界坐标贴图：底部锚定在 (wx,wy) 地面点 + yOff，失败返回 false（调用方回退 procedural）。
+   */
+  private drawWorldSprite(file: string, frame: string, wx: number, wy: number, w: number, h: number, yOff = 0, alpha = 1): boolean {
+    const s = this.toScreen(wx, wy);
+    if (alpha !== 1) {
+      this.ctx.save();
+      this.ctx.globalAlpha = alpha;
+    }
+    const ok = this.drawArtFrame(file, frame, s.x - w / 2, s.y - h + yOff, w, h);
+    if (alpha !== 1) this.ctx.restore();
+    return ok;
+  }
+
+  /** 交互物贴图尝试：有规格表则画，无则返回 false。 */
+  private tryInteractableSprite(type: string, wx: number, wy: number): boolean {
+    const sp = interactableSprite(type);
+    if (!sp) return false;
+    return this.drawWorldSprite(sp.file, sp.frame, wx, wy, sp.w, sp.h, sp.yOff, sp.alpha);
+  }
+
+  /** 建筑贴图尝试：有规格表则画，无则返回 false（血条/名牌由调用方照常画）。 */
+  private tryBuildingSprite(type: string, wx: number, wy: number): boolean {
+    const sp = buildingSprite(type);
+    if (!sp) return false;
+    return this.drawWorldSprite(sp.file, sp.frame, wx, wy, sp.w, sp.h, sp.yOff, sp.alpha);
+  }
+
+  /** 本地玩家身体贴图（四向；枪械/名牌仍 procedural）。 */
+  private drawSurvivorSprite(px: number, pyFeet: number, angle: number): boolean {
+    const frame = angleToSurvivorFrame(angle);
+    return this.drawArtFrame('char-survivor.png', frame, px - 17, pyFeet - 78, 34, 78);
+  }
+
+  /**
+   * 地砖贴图主题：与地面 fill 分支同逻辑（camp 中心 plaza、活水/裂缝返回 null 走程序动画）。
+   */
+  private tileTextureKey(wx: number, wy: number, theme: string): string | null {
+    if (theme === 'camp') {
+      if (Math.hypot(wx, wy) < 3.8) return 'plaza';
+      if (wx >= -6 && wx <= 6 && wy >= -5 && wy <= 5) return 'forest';
+      return 'camp';
+    }
+    if (theme === 'urban' || theme === 'ruins') {
+      return Math.abs(wx + wy) < 4.8 ? 'urban' : 'ruins';
+    }
+    if (theme === 'lake') {
+      const isDock = (wx >= -2 && wx <= 4 && (wy === 0 || wy === -2 || wy === 2)) || (wx >= 1 && wx <= 3 && wy >= -3 && wy <= 3);
+      if (isDock) return 'forest';
+      if (wx < 3) return null;
+      return 'marsh';
+    }
+    if (theme === 'marsh') return 'marsh';
+    if (theme === 'quarry') return 'quarry';
+    if (theme === 'forest') return 'forest';
+    if (theme === 'field') return 'field';
+    if (theme === 'plaza') return 'plaza';
+    if (theme === 'rift') {
+      if (Math.abs(wx - wy) < 1.8 || Math.abs(wx + wy) < 1.4) return null;
+      return 'rift';
+    }
+    return 'camp';
+  }
+
+  /** 地砖图：B 缺失/未解码回退 A；都不在返回 null。 */
+  private tileImage(theme: string, variant: 'a' | 'b'): HTMLImageElement | null {
+    const get = (v: string) => this.artImage(`tile-${theme}-${v}.png`);
+    const ok = (img: HTMLImageElement | null): img is HTMLImageElement =>
+      !!img && img.complete && img.naturalWidth > 0;
+    const primary = get(variant);
+    if (ok(primary)) return primary;
+    if (variant !== 'a') {
+      const fallback = get('a');
+      if (ok(fallback)) return fallback;
+    }
+    return null;
+  }
+
+  /**
+   * 预烘菱形贴片：clip 只在预烘时发生一次（每种主题/变体 7×7=49 个采样位，64px 步进），
+   * 逐格渲染只剩 1 次 drawImage —— 消除此前每格 save/clip/restore 的开销。
+   */
+  private tilePatch(theme: string, variant: 'a' | 'b', px: number, py: number): HTMLCanvasElement | null {
+    const ck = `${theme}${variant}:${px}:${py}`;
+    const hit = this.tilePatchCache.get(ck);
+    if (hit) return hit;
+    const img = this.tileImage(theme, variant);
+    if (!img || typeof document === 'undefined') return null;
+    const c = document.createElement('canvas');
+    c.width = 64;
+    c.height = 64;
+    const g = c.getContext('2d');
+    if (!g) return null;
+    g.beginPath();
+    g.moveTo(32, 0);
+    g.lineTo(64, 32);
+    g.lineTo(32, 64);
+    g.lineTo(0, 32);
+    g.closePath();
+    g.clip();
+    g.drawImage(img, px, py, 64, 64, 0, 0, 64, 64);
+    this.tilePatchCache.set(ck, c);
+    return c;
+  }
+
+  /** 地砖贴图：世界锁定采样 + A/B 低概率散点混铺（B 是更暗变体，散点读作湿/磨损而非棋盘）。 */
+  private drawTileTexture(wx: number, wy: number, sx: number, sy: number, theme: string) {
+    const key = this.tileTextureKey(wx, wy, theme);
+    if (!key) return;
+    const variant = hash2Pure(wx * 31 + 7, wy * 17 + 3) < 0.22 ? 'b' : 'a';
+    const snap = (v: number) => Math.floor(v / 64) * 64;
+    const px = snap((((wx * 32) % 448) + 448) % 448);
+    const py = snap((((wy * 32) % 448) + 448) % 448);
+    const patch = this.tilePatch(key, variant, px, py);
+    if (!patch) return;
+    this.ctx.drawImage(patch, sx - 32, sy - 32);
+  }
+
+  private groundPattern: CanvasPattern | null = null;
 
   // Switch / Load Map Zone
   public loadMapZone(mapId: MapZoneId, targetX: number = 0, targetY: number = 0) {
@@ -1580,6 +1768,7 @@ export class IsometricEngine {
 
   public start() {
     this.lastTime = performance.now();
+    this.warmArtCache();
     const loop = (time: number) => {
       const dt = Math.min((time - this.lastTime) / 1000, 0.1);
       this.lastTime = time;
@@ -2654,6 +2843,9 @@ export class IsometricEngine {
     // 6. Weather
     this.renderWeather();
 
+    // 6.5 Theme atmosphere veil (map-*.jpg mood, always on)
+    this.renderThemeAtmosphere();
+
     // 7. Interaction Prompts
     this.renderInteractionHUD();
 
@@ -2677,30 +2869,30 @@ export class IsometricEngine {
     const minWY = Math.floor(Math.min(tl.y, bl.y, tr.y, br.y)) - 3;
     const maxWY = Math.ceil(Math.max(tl.y, bl.y, tr.y, br.y)) + 3;
 
-    // Rich comic-wasteland background tone based on map theme
+    // Dusty wasteland background tone based on map theme (matches map-*.jpg previews)
     const bgColors: { [key in MapZoneId]: string } = {
-      camp_plaza: '#244332',
-      camp_workshop: '#2b3542',
-      camp_outskirts: '#2e4a2e',
-      town_gas: '#343c48',
-      town_street: '#3a3f4a',
-      town_ruins: '#3d3630',
-      mtn_logging: '#382518',
-      mtn_quarry: '#3a3f4a',
-      mtn_deep: '#2e2018',
-      marsh_docks: '#0c3652',
-      marsh_bog: '#1a3038',
-      marsh_rift: '#260d36',
-      sanctuary: '#244332',
-      highway: '#343c48',
-      pond: '#0c3652',
-      forest: '#382518',
-      rift_core: '#260d36',
-      town_factory: '#3f4a5a',
-      mtn_peak: '#6b7d94',
-      marsh_abyss: '#3b0a3b',
+      camp_plaza: '#4a4a3c',
+      camp_workshop: '#4e4e48',
+      camp_outskirts: '#505040',
+      town_gas: '#4c4b46',
+      town_street: '#4e4d48',
+      town_ruins: '#524a3e',
+      mtn_logging: '#4a4438',
+      mtn_quarry: '#6e7276',
+      mtn_deep: '#454034',
+      marsh_docks: '#3d4a52',
+      marsh_bog: '#4c4c38',
+      marsh_rift: '#40363a',
+      sanctuary: '#4a4a3c',
+      highway: '#4c4b46',
+      pond: '#3d4a52',
+      forest: '#4a4438',
+      rift_core: '#40363a',
+      town_factory: '#50504a',
+      mtn_peak: '#7d8894',
+      marsh_abyss: '#453a40',
     };
-    this.ctx.fillStyle = bgColors[this.currentMapId] || '#244332';
+    this.ctx.fillStyle = bgColors[this.currentMapId] || '#4a4a3c';
     this.ctx.fillRect(0, 0, this.width, this.height);
 
     const theme = this.getGroundTheme();
@@ -2801,7 +2993,7 @@ export class IsometricEngine {
             this.ctx.fillStyle = groundBaseColor('forest', wx, wy);
           } else if (wx < 3) {
             const wave = Math.sin(this.gameTime * 2.4 + wx * 0.8 + wy * 0.8);
-            this.ctx.fillStyle = wave > 0 ? '#0370ab' : '#0369a1';
+            this.ctx.fillStyle = wave > 0 ? '#4a5862' : '#46545e';
           } else {
             this.ctx.fillStyle = groundBaseColor('marsh', wx, wy);
           }
@@ -2823,6 +3015,9 @@ export class IsometricEngine {
         }
 
         this.ctx.fill();
+
+        // 地砖贴图（tile-*-a/b 世界锁定采样；无图/水波/裂缝静默跳过 = 纯 flat）
+        this.drawTileTexture(wx, wy, s.x, s.y, theme);
 
         // Only draw construction seams on human-made placed floors or camp central stonework, NEVER on natural lake/soil
         if (placed || (theme === 'camp' && Math.hypot(wx, wy) < 3.8)) {
@@ -3107,6 +3302,27 @@ export class IsometricEngine {
             this.ctx.stroke();
           }
         }
+      }
+    }
+
+    // 地表噪点罩染（texture-ground.png 全屏平铺 alpha 0.08，图案相位跟随镜头 = 世界锁定）
+    const gtex = this.artImage('texture-ground.png');
+    if (gtex && gtex.complete && gtex.naturalWidth > 0) {
+      try {
+        if (!this.groundPattern) this.groundPattern = this.ctx.createPattern(gtex, 'repeat');
+      } catch {
+        this.groundPattern = null;
+      }
+      if (this.groundPattern) {
+        const TW = 1254;
+        const px = ((this.camera.x % TW) + TW) % TW;
+        const py = ((this.camera.y % TW) + TW) % TW;
+        this.ctx.save();
+        this.ctx.globalAlpha = 0.08;
+        this.ctx.translate(-px, -py);
+        this.ctx.fillStyle = this.groundPattern;
+        this.ctx.fillRect(px, py, this.width, this.height);
+        this.ctx.restore();
       }
     }
 
@@ -3437,63 +3653,67 @@ export class IsometricEngine {
         markerH = 138;
         break;
       case 'boulder':
-        this.drawQuarryBoulders(it.x, it.y);
+        if (!this.tryInteractableSprite('boulder', it.x, it.y)) this.drawQuarryBoulders(it.x, it.y);
         markerIcon = '🪨';
         markerH = 92;
         break;
       case 'car':
-        this.drawCarAndWelder(it.x, it.y);
+        if (!this.tryInteractableSprite('car', it.x, it.y)) this.drawCarAndWelder(it.x, it.y);
         markerIcon = '🚗';
         markerH = 84;
         break;
-      case 'van':
-        this.drawTruck(it.x, it.y);
+      case 'van': {
+        const wreckKey = this.hash2(it.x, it.y) > 0.5 ? 'van2' : 'van';
+        if (!this.tryInteractableSprite(wreckKey, it.x, it.y)) this.drawTruck(it.x, it.y);
+      }
         markerIcon = '🚚';
         markerH = 92;
         break;
       case 'scrap':
-        this.drawScrapPile(it.x, it.y);
+        if (!this.tryInteractableSprite('scrap', it.x, it.y)) this.drawScrapPile(it.x, it.y);
         markerIcon = '⚙️';
         markerH = 66;
         break;
       case 'shelves':
-        this.drawSupplyChest(it.x, it.y);
+        if (!this.tryInteractableSprite('shelves', it.x, it.y)) this.drawSupplyChest(it.x, it.y);
         markerIcon = '🗄️';
         markerH = 62;
         break;
       case 'med_cabinet':
-        this.drawSupplyChest(it.x, it.y);
+        if (!this.tryInteractableSprite('med_cabinet', it.x, it.y)) this.drawSupplyChest(it.x, it.y);
         markerIcon = '💊';
         markerH = 62;
         break;
       case 'ammo_crate':
-        this.drawSupplyChest(it.x, it.y);
+        if (!this.tryInteractableSprite('ammo_crate', it.x, it.y)) this.drawSupplyChest(it.x, it.y);
         markerIcon = '🎯';
         markerH = 62;
         break;
       case 'box':
-        this.drawSupplyChest(it.x, it.y);
+        if (!this.tryInteractableSprite('box', it.x, it.y)) this.drawSupplyChest(it.x, it.y);
         markerIcon = '📦';
         markerH = 62;
         break;
       case 'workbench':
-        this.drawWorkbench(it.x, it.y);
+        if (!this.tryInteractableSprite('workbench', it.x, it.y)) this.drawWorkbench(it.x, it.y);
         markerIcon = '🛠️';
         markerH = 66;
         break;
       case 'campfire':
-        this.drawCampfire(it.x, it.y);
+        if (!this.tryInteractableSprite('campfire', it.x, it.y)) this.drawCampfire(it.x, it.y);
         markerIcon = '🔥';
         markerH = 84;
         break;
       case 'pond':
-        this.drawPierDock(it.x, it.y, 2);
+        if (!this.tryInteractableSprite('pond', it.x, it.y)) this.drawPierDock(it.x, it.y, 2);
         markerIcon = '🎣';
         markerH = 66;
         break;
       case 'crystal':
-        if (this.hash2(it.y, it.x) > 0.5) this.drawRiftSpire(it.x, it.y);
-        else this.drawRiftCrystallineFlora(it.x, it.y);
+        if (!this.tryInteractableSprite('crystal', it.x, it.y)) {
+          if (this.hash2(it.y, it.x) > 0.5) this.drawRiftSpire(it.x, it.y);
+          else this.drawRiftCrystallineFlora(it.x, it.y);
+        }
         markerIcon = '💎';
         markerH = 104;
         break;
@@ -3801,6 +4021,7 @@ export class IsometricEngine {
       this.ctx.fillText(b.ownerName ? `[${b.ownerName}]` : '安全防爆闸门', s.x, s.y - 58);
       this.drawBuildingHp(s.x, s.y - 54, b.hp, b.maxHp);
     } else if (b.type === 'storage_box') {
+      if (!this.tryBuildingSprite('storage_box', b.x, b.y)) {
       // Territory Storage Chest
       this.ctx.fillStyle = '#1e3a5f';
       this.ctx.strokeStyle = '#0284c7';
@@ -3813,8 +4034,10 @@ export class IsometricEngine {
       // Gold lock latch
       this.ctx.fillStyle = '#facc15';
       this.ctx.fillRect(s.x - 4, s.y - 13, 8, 9);
+      }
       this.drawBuildingHp(s.x, s.y - 26, b.hp, b.maxHp);
     } else if (b.type === 'workbench') {
+      if (!this.tryBuildingSprite('workbench', b.x, b.y)) {
       // Engineering Workbench
       this.ctx.fillStyle = '#451a03';
       this.ctx.strokeStyle = '#27170b';
@@ -3827,6 +4050,7 @@ export class IsometricEngine {
       this.ctx.fillRect(s.x - 12, s.y - 22, 8, 6);
       this.ctx.fillStyle = '#38bdf8';
       this.ctx.fillRect(s.x + 2, s.y - 20, 10, 4);
+      }
       this.drawBuildingHp(s.x, s.y - 26, b.hp, b.maxHp);
     } else if (b.type === 'electric_core') {
       // Electromagnetic Shock Core
@@ -3867,6 +4091,7 @@ export class IsometricEngine {
       this.ctx.fill();
       this.drawBuildingHp(s.x, s.y - 38, b.hp, b.maxHp);
     } else if (b.type === 'turret') {
+      if (!this.tryBuildingSprite('turret', b.x, b.y)) {
       // Automated Turret
       this.ctx.fillStyle = '#1e293b';
       this.ctx.fillRect(s.x - 14, s.y - 10, 28, 10);
@@ -3888,6 +4113,7 @@ export class IsometricEngine {
       this.ctx.beginPath();
       this.ctx.arc(s.x, s.y - 22, 4, 0, Math.PI * 2);
       this.ctx.fill();
+      }
       this.drawBuildingHp(s.x, s.y - 36, b.hp, b.maxHp);
     } else if (b.type === 'spikes') {
       // Ground Spikes
@@ -3902,6 +4128,7 @@ export class IsometricEngine {
       }
       this.drawBuildingHp(s.x, s.y - 22, b.hp, b.maxHp);
     } else if (b.type === 'anchor_core') {
+      if (!this.tryBuildingSprite('anchor_core', b.x, b.y)) {
       this.ctx.fillStyle = '#0369a1';
       this.ctx.strokeStyle = '#38bdf8';
       this.ctx.lineWidth = 2;
@@ -3920,6 +4147,7 @@ export class IsometricEngine {
       this.ctx.beginPath();
       this.ctx.arc(s.x, s.y - 58 + floatH, 6, 0, Math.PI * 2);
       this.ctx.fill();
+      }
     }
 
     // 通用名牌：名称 + 归属 + 等级（安全门已有专属大战报式名牌，此处补通用版）
@@ -3990,6 +4218,11 @@ export class IsometricEngine {
   // --- HIGH-FIDELITY ISOMETRIC FLORA & PROPS RENDERING ---
   public drawPineTree(wx: number, wy: number) {
     const s = this.toScreen(wx, wy);
+    // 美术贴图优先（nature-trees.png pine 帧；inset 1 吃掉切图红边），失败回退 procedural
+    if (this.drawArtFrame('nature-trees.png', 'pine', s.x - 32, s.y - 96, 64, 96, 0)) {
+      drawSoftShadow(this.ctx, s.x + 4, s.y + 4, 28);
+      return;
+    }
     this.ctx.save();
 
     // Natural ambient soft ground shadow
@@ -4061,6 +4294,14 @@ export class IsometricEngine {
 
   public drawOakTree(wx: number, wy: number) {
     const s = this.toScreen(wx, wy);
+    // 美术贴图优先（nature-trees.png oak 帧；inset 1 吃掉切图红边），失败回退 procedural
+    if (this.drawArtFrame('nature-trees.png', 'oak', s.x - 38, s.y - 88, 76, 88, 0)) {
+      this.ctx.fillStyle = 'rgba(0, 0, 0, 0.35)';
+      this.ctx.beginPath();
+      this.ctx.ellipse(s.x, s.y, 38, 18, 0, 0, Math.PI * 2);
+      this.ctx.fill();
+      return;
+    }
     this.ctx.save();
 
     // Ground shadow
@@ -4186,6 +4427,10 @@ export class IsometricEngine {
 
   public drawWastelandShrub(wx: number, wy: number) {
     const s = this.toScreen(wx, wy);
+    if (this.drawWorldSprite('nature-trees.png', 'dry-grass', wx, wy, 36, 34, 2)) {
+      drawSoftShadow(this.ctx, s.x, s.y, 14);
+      return;
+    }
     this.ctx.save();
     drawSoftShadow(this.ctx, s.x, s.y, 14);
     // 主丛：冷灰绿，左上受光
@@ -4420,6 +4665,8 @@ export class IsometricEngine {
     if (isBoss) {
       // --- A. COLOSSAL VOID BEHEMOTH (深渊巨兽) ---
       const breath = Math.sin(anim * 3.5) * 4;
+      const bossSprite = this.drawWorldSprite('monster-pack.png', 'huge-boss', m.x, m.y, 106, 100, breath);
+      if (!bossSprite) {
 
       // Colossal Obsidian Armor Carapace
       this.ctx.fillStyle = '#180728';
@@ -4489,11 +4736,14 @@ export class IsometricEngine {
       this.ctx.beginPath();
       this.ctx.ellipse(s.x, s.y, 34 + (anim % 1) * 20, 16 + (anim % 1) * 10, 0, 0, Math.PI * 2);
       this.ctx.stroke();
+      }
 
     } else if (isBrute) {
       // --- B. MUTANT SCAVENGER BRUTE (辐射畸变狂暴者) ---
       const walkCycle = Math.sin(anim * 8);
       const bob = Math.abs(walkCycle) * 3;
+      const bruteSprite = this.drawWorldSprite('monster-pack.png', 'medium-armored', m.x, m.y, 88, 72, bob);
+      if (!bruteSprite) {
 
       // Heavy Hunched Asymmetric Torso
       this.ctx.fillStyle = '#44403c';
@@ -4569,10 +4819,13 @@ export class IsometricEngine {
       this.ctx.fillStyle = '#1c1917';
       this.ctx.fillRect(s.x - 14, s.y - 14 + walkCycle * 4, 10, 14);
       this.ctx.fillRect(s.x + 4, s.y - 14 - walkCycle * 4, 10, 14);
+      }
 
     } else {
       // --- C. MULTI-LEGGED VOID STALKER (裂隙潜行兽) ---
       const legWalk = Math.sin(anim * 11) * 7;
+      const stalkerSprite = this.drawWorldSprite('monster-pack.png', 'small-fast', m.x, m.y, 84, 60);
+      if (!stalkerSprite) {
 
       // Segmented Chitinous Carapace Body
       this.ctx.fillStyle = '#170624';
@@ -4637,6 +4890,7 @@ export class IsometricEngine {
       this.ctx.moveTo(s.x + 6, s.y - 18);
       this.ctx.lineTo(s.x + 3, s.y - 12);
       this.ctx.stroke();
+      }
     }
 
     // --- TACTICAL HEALTH BAR & IDENTIFIER HUD ---
@@ -4681,6 +4935,9 @@ export class IsometricEngine {
     this.ctx.ellipse(s.x, s.y, 18, 9, 0, 0, Math.PI * 2);
     this.ctx.fill();
 
+    // 玩家身体美术优先（char-survivor 四向；枪械/名牌仍 procedural，保证瞄准可读）
+    const survivorSpriteDrawn = this.drawSurvivorSprite(s.x, s.y - bodyBob, this.player.angle);
+    if (!survivorSpriteDrawn) {
     // 2. Sculpted Heavy Combat Boots (Lug Soles, Ankle Support, Laces)
     const drawTacticalBoot = (bx: number, by: number) => {
       // Vibram rubber sole
@@ -4864,6 +5121,7 @@ export class IsometricEngine {
     this.ctx.lineTo(s.x - 5, s.y - 41 - bodyBob);
     this.ctx.closePath();
     this.ctx.fill();
+    }
 
     // 7. Tactical Assault Rifle & Hands (Realistic 2.5D C-Clamp Grip)
     this.ctx.save();
@@ -4990,6 +5248,16 @@ export class IsometricEngine {
     const bodyBob = Math.abs(walkAnim) * 2;
     const accentColor = op.color || '#38bdf8';
 
+    const remoteSprite = this.drawSurvivorSprite(s.x, s.y - bodyBob, op.angle || 0);
+    if (remoteSprite) {
+      // 联机身份色脚环（替代护甲 accent，供认人）
+      this.ctx.strokeStyle = accentColor;
+      this.ctx.lineWidth = 2;
+      this.ctx.beginPath();
+      this.ctx.ellipse(s.x, s.y, 20, 10, 0, 0, Math.PI * 2);
+      this.ctx.stroke();
+    }
+    if (!remoteSprite) {
     // 2. Tactical Boots
     this.ctx.fillStyle = '#0f172a';
     this.ctx.fillRect(s.x - 7, s.y - 5 + walkAnim * 2, 5.5, 6);
@@ -5039,6 +5307,7 @@ export class IsometricEngine {
     this.ctx.roundRect(s.x - 5, s.y - 44 - bodyBob, 10, 4, 1);
     this.ctx.fill();
     this.ctx.shadowBlur = 0;
+    }
 
     // 6. Tactical Rifle & Aim Angle
     this.ctx.save();
@@ -5116,6 +5385,8 @@ export class IsometricEngine {
     this.ctx.ellipse(s.x, s.y, 20, 10, 0, 0, Math.PI * 2);
     this.ctx.fill();
 
+    const allenSprite = this.drawWorldSprite('npc-allen.png', 'full', tm.x, tm.y, 35, 84);
+    if (!allenSprite) {
     // 2. Heavy Pneumatic Exoskeleton Boots
     this.ctx.fillStyle = '#1c1917';
     this.ctx.fillRect(s.x - 9, s.y - 5, 8, 6);
@@ -5194,6 +5465,7 @@ export class IsometricEngine {
     this.ctx.roundRect(s.x - 5.5, s.y - 45, 11, 4.5, 1.5);
     this.ctx.fill();
     this.ctx.shadowBlur = 0;
+    }
 
     // 6. Two-Handed Heavy Kinetic Breaching Maul (气动重锤)
     // Heavy Alloy Shaft
@@ -5245,6 +5517,8 @@ export class IsometricEngine {
     this.ctx.ellipse(s.x, s.y, 16, 8, 0, 0, Math.PI * 2);
     this.ctx.fill();
 
+    const vivianSprite = this.drawWorldSprite('npc-vivian.png', 'full', tm.x, tm.y, 28, 84);
+    if (!vivianSprite) {
     // 2. Sleek Tactical Speed Boots
     this.ctx.fillStyle = '#0f172a';
     this.ctx.fillRect(s.x - 7, s.y - 5, 5.5, 6);
@@ -5337,6 +5611,7 @@ export class IsometricEngine {
     this.ctx.arc(s.x - 11, s.y - 35, 4 + holoPulse * 2, 0, Math.PI * 2);
     this.ctx.stroke();
     this.ctx.shadowBlur = 0;
+    }
 
     // 8. Tactical Identifier Badge
     this.ctx.fillStyle = '#99f6e4';
@@ -5372,6 +5647,7 @@ export class IsometricEngine {
     this.ctx.lineTo(s.x + 18, s.y);
     this.ctx.stroke();
 
+    if (!this.drawWorldSprite('drone.png', 'full', wx, wy, 56, 40, -18 + hoverOffset * 22)) {
     // 2. Carbon-Fiber Stealth Aerofoil Chassis
     this.ctx.fillStyle = '#0f172a';
     this.ctx.strokeStyle = '#0284c7';
@@ -5422,6 +5698,7 @@ export class IsometricEngine {
     this.ctx.fillStyle = '#ffffff';
     this.ctx.fillRect(s.x - 1, dy + 1, 1.5, 1.5);
 
+    }
     // 4. Aviation Strobe Navigation Lights (Port Red, Starboard Green)
     const strobe = (Math.sin(this.gameTime * 8) + 1) * 0.5 > 0.5;
     if (strobe) {
@@ -5594,6 +5871,14 @@ export class IsometricEngine {
   }
 
   // --- WEATHER EFFECTS ---
+  // --- THEME ATMOSPHERE（预览图式尘雾罩染：每主题固定色，与地图预览情绪一致） ---
+  private renderThemeAtmosphere() {
+    this.ctx.save();
+    this.ctx.fillStyle = themeHaze(this.getGroundTheme() as GroundTheme);
+    this.ctx.fillRect(0, 0, this.width, this.height);
+    this.ctx.restore();
+  }
+
   private renderWeather() {
     this.ctx.save();
 

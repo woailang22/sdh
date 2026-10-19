@@ -1,0 +1,1213 @@
+{
+  "source": "docs/art-prompts-for-chatgpt.md",
+  "generator": "built-in image_gen",
+  "coordinateConvention": "Top-left origin; integer pixels; rect uses transparent gutter midpoints, contentBounds uses alpha > 32. Use rect for cropping. Sprite rows do not require equal-width slicing.",
+  "assets": [
+    {
+      "file": "keyart-dawn.jpg",
+      "url": "/art/keyart-dawn.jpg",
+      "width": 1672,
+      "height": 941,
+      "bytes": 199444,
+      "sha256": "6c2e01bb4a31370cb4698effdc3a7865b67fc40d52985f9d8bb82ffd0d4e4ed2",
+      "hasTransparency": false,
+      "transparentPixelPercent": 0.0,
+      "partialAlphaPixelPercent": 0.0,
+      "expectedFrames": 0,
+      "frames": []
+    },
+    {
+      "file": "map-camp.jpg",
+      "url": "/art/map-camp.jpg",
+      "width": 1672,
+      "height": 941,
+      "bytes": 389884,
+      "sha256": "d68a497801ba95c43fe9e3aa8424b0d88b2efce385d51f933400a37d47424f7c",
+      "hasTransparency": false,
+      "transparentPixelPercent": 0.0,
+      "partialAlphaPixelPercent": 0.0,
+      "expectedFrames": 0,
+      "frames": []
+    },
+    {
+      "file": "map-wild.jpg",
+      "url": "/art/map-wild.jpg",
+      "width": 1672,
+      "height": 941,
+      "bytes": 411324,
+      "sha256": "3f8a6b0278b5df036a2a50eb05c457cd9a6d278a603670c94b7973db24bec530",
+      "hasTransparency": false,
+      "transparentPixelPercent": 0.0,
+      "partialAlphaPixelPercent": 0.0,
+      "expectedFrames": 0,
+      "frames": []
+    },
+    {
+      "file": "map-water.jpg",
+      "url": "/art/map-water.jpg",
+      "width": 1672,
+      "height": 941,
+      "bytes": 325194,
+      "sha256": "c2ed14569f0a38d4078af3642a045331984efe8653ccac57f6a5ed6ec8f6ff4b",
+      "hasTransparency": false,
+      "transparentPixelPercent": 0.0,
+      "partialAlphaPixelPercent": 0.0,
+      "expectedFrames": 0,
+      "frames": []
+    },
+    {
+      "file": "map-rift.jpg",
+      "url": "/art/map-rift.jpg",
+      "width": 1672,
+      "height": 941,
+      "bytes": 340674,
+      "sha256": "f1a3fe61ff3cb84569765380cd8ce56ab02a5d716bbad88eb949867e4df47922",
+      "hasTransparency": false,
+      "transparentPixelPercent": 0.0,
+      "partialAlphaPixelPercent": 0.0,
+      "expectedFrames": 0,
+      "frames": []
+    },
+    {
+      "file": "texture-ground.png",
+      "url": "/art/texture-ground.png",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 2783949,
+      "sha256": "2b20a710912ff42470ba6ac32c1c0970018f7d25ae03b2f0ac53794c6269d2be",
+      "hasTransparency": false,
+      "transparentPixelPercent": 0.0,
+      "partialAlphaPixelPercent": 0.0,
+      "expectedFrames": 0,
+      "frames": []
+    },
+    {
+      "file": "char-survivor.png",
+      "url": "/art/char-survivor.png",
+      "width": 2172,
+      "height": 724,
+      "bytes": 959299,
+      "sha256": "b46d70b06d22256cad5f908dd6885b34b004467aa07c72dda30ec2facc78a6ff",
+      "hasTransparency": true,
+      "transparentPixelPercent": 75.331,
+      "partialAlphaPixelPercent": 24.627,
+      "expectedFrames": 4,
+      "frames": [
+        {
+          "id": "southeast",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 562,
+            "height": 724
+          },
+          "contentBounds": {
+            "x": 183,
+            "y": 61,
+            "width": 261,
+            "height": 595
+          }
+        },
+        {
+          "id": "southwest",
+          "rect": {
+            "x": 562,
+            "y": 0,
+            "width": 524,
+            "height": 724
+          },
+          "contentBounds": {
+            "x": 680,
+            "y": 60,
+            "width": 268,
+            "height": 596
+          }
+        },
+        {
+          "id": "northwest",
+          "rect": {
+            "x": 1086,
+            "y": 0,
+            "width": 531,
+            "height": 724
+          },
+          "contentBounds": {
+            "x": 1224,
+            "y": 59,
+            "width": 271,
+            "height": 602
+          }
+        },
+        {
+          "id": "northeast",
+          "rect": {
+            "x": 1617,
+            "y": 0,
+            "width": 555,
+            "height": 724
+          },
+          "contentBounds": {
+            "x": 1739,
+            "y": 57,
+            "width": 280,
+            "height": 603
+          }
+        }
+      ]
+    },
+    {
+      "file": "monster-pack.png",
+      "url": "/art/monster-pack.png",
+      "width": 2021,
+      "height": 778,
+      "bytes": 1355531,
+      "sha256": "48db64ef4817578ba051e4e66933c275f21a854f4fe84f88171c3f0b6714194f",
+      "hasTransparency": true,
+      "transparentPixelPercent": 61.761,
+      "partialAlphaPixelPercent": 38.225,
+      "expectedFrames": 3,
+      "frames": [
+        {
+          "id": "small-fast",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 527,
+            "height": 778
+          },
+          "contentBounds": {
+            "x": 33,
+            "y": 382,
+            "width": 469,
+            "height": 332
+          }
+        },
+        {
+          "id": "medium-armored",
+          "rect": {
+            "x": 527,
+            "y": 0,
+            "width": 681,
+            "height": 778
+          },
+          "contentBounds": {
+            "x": 553,
+            "y": 201,
+            "width": 633,
+            "height": 521
+          }
+        },
+        {
+          "id": "huge-boss",
+          "rect": {
+            "x": 1208,
+            "y": 0,
+            "width": 813,
+            "height": 778
+          },
+          "contentBounds": {
+            "x": 1231,
+            "y": 13,
+            "width": 767,
+            "height": 726
+          }
+        }
+      ]
+    },
+    {
+      "file": "building-walls.png",
+      "url": "/art/building-walls.png",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 1640082,
+      "sha256": "80e2a3641672ef7087e6f0b32ec9ac664d980f94f3f6e86fb76784d47b6a49c3",
+      "hasTransparency": true,
+      "transparentPixelPercent": 59.199,
+      "partialAlphaPixelPercent": 40.726,
+      "expectedFrames": 9,
+      "frames": [
+        {
+          "id": "wood-wall",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 404,
+            "height": 450
+          },
+          "contentBounds": {
+            "x": 70,
+            "y": 36,
+            "width": 265,
+            "height": 380
+          }
+        },
+        {
+          "id": "stone-wall",
+          "rect": {
+            "x": 404,
+            "y": 0,
+            "width": 440,
+            "height": 450
+          },
+          "contentBounds": {
+            "x": 473,
+            "y": 43,
+            "width": 310,
+            "height": 384
+          }
+        },
+        {
+          "id": "alloy-wall",
+          "rect": {
+            "x": 844,
+            "y": 0,
+            "width": 410,
+            "height": 450
+          },
+          "contentBounds": {
+            "x": 905,
+            "y": 40,
+            "width": 284,
+            "height": 382
+          }
+        },
+        {
+          "id": "wood-floor",
+          "rect": {
+            "x": 0,
+            "y": 450,
+            "width": 419,
+            "height": 302
+          },
+          "contentBounds": {
+            "x": 33,
+            "y": 478,
+            "width": 359,
+            "height": 262
+          }
+        },
+        {
+          "id": "stone-floor",
+          "rect": {
+            "x": 419,
+            "y": 450,
+            "width": 412,
+            "height": 302
+          },
+          "contentBounds": {
+            "x": 446,
+            "y": 476,
+            "width": 361,
+            "height": 261
+          }
+        },
+        {
+          "id": "metal-grid-floor",
+          "rect": {
+            "x": 831,
+            "y": 450,
+            "width": 423,
+            "height": 302
+          },
+          "contentBounds": {
+            "x": 856,
+            "y": 474,
+            "width": 365,
+            "height": 268
+          }
+        },
+        {
+          "id": "wood-door",
+          "rect": {
+            "x": 0,
+            "y": 752,
+            "width": 417,
+            "height": 502
+          },
+          "contentBounds": {
+            "x": 101,
+            "y": 769,
+            "width": 231,
+            "height": 409
+          }
+        },
+        {
+          "id": "armored-door",
+          "rect": {
+            "x": 417,
+            "y": 752,
+            "width": 412,
+            "height": 502
+          },
+          "contentBounds": {
+            "x": 502,
+            "y": 768,
+            "width": 247,
+            "height": 420
+          }
+        },
+        {
+          "id": "bunker-door",
+          "rect": {
+            "x": 829,
+            "y": 752,
+            "width": 425,
+            "height": 502
+          },
+          "contentBounds": {
+            "x": 909,
+            "y": 762,
+            "width": 271,
+            "height": 432
+          }
+        }
+      ]
+    },
+    {
+      "file": "building-facility.png",
+      "url": "/art/building-facility.png",
+      "width": 2172,
+      "height": 724,
+      "bytes": 1021100,
+      "sha256": "207f6abb85413511d745a4e8cc6b13eb45527c2bd30a8636fe3181b95f5e96a6",
+      "hasTransparency": true,
+      "transparentPixelPercent": 70.143,
+      "partialAlphaPixelPercent": 29.841,
+      "expectedFrames": 5,
+      "frames": [
+        {
+          "id": "watch-turret",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 441,
+            "height": 724
+          },
+          "contentBounds": {
+            "x": 43,
+            "y": 118,
+            "width": 372,
+            "height": 470
+          }
+        },
+        {
+          "id": "workbench",
+          "rect": {
+            "x": 441,
+            "y": 0,
+            "width": 510,
+            "height": 724
+          },
+          "contentBounds": {
+            "x": 468,
+            "y": 215,
+            "width": 457,
+            "height": 375
+          }
+        },
+        {
+          "id": "storage-crate",
+          "rect": {
+            "x": 951,
+            "y": 0,
+            "width": 398,
+            "height": 724
+          },
+          "contentBounds": {
+            "x": 976,
+            "y": 276,
+            "width": 351,
+            "height": 312
+          }
+        },
+        {
+          "id": "campfire",
+          "rect": {
+            "x": 1349,
+            "y": 0,
+            "width": 424,
+            "height": 724
+          },
+          "contentBounds": {
+            "x": 1372,
+            "y": 269,
+            "width": 371,
+            "height": 329
+          }
+        },
+        {
+          "id": "crystal-anchor",
+          "rect": {
+            "x": 1773,
+            "y": 0,
+            "width": 399,
+            "height": 724
+          },
+          "contentBounds": {
+            "x": 1804,
+            "y": 162,
+            "width": 323,
+            "height": 432
+          }
+        }
+      ]
+    },
+    {
+      "file": "nature-trees.png",
+      "url": "/art/nature-trees.png",
+      "width": 2172,
+      "height": 724,
+      "bytes": 1304439,
+      "sha256": "2793b0a8dc80c876aa38879194b9c705244dcb7e4503a67846660fa1f5e52a30",
+      "hasTransparency": true,
+      "transparentPixelPercent": 59.134,
+      "partialAlphaPixelPercent": 40.859,
+      "expectedFrames": 4,
+      "frames": [
+        {
+          "id": "pine",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 505,
+            "height": 724
+          },
+          "contentBounds": {
+            "x": 46,
+            "y": 17,
+            "width": 438,
+            "height": 681
+          }
+        },
+        {
+          "id": "oak",
+          "rect": {
+            "x": 505,
+            "y": 0,
+            "width": 661,
+            "height": 724
+          },
+          "contentBounds": {
+            "x": 526,
+            "y": 58,
+            "width": 609,
+            "height": 635
+          }
+        },
+        {
+          "id": "boulder",
+          "rect": {
+            "x": 1166,
+            "y": 0,
+            "width": 497,
+            "height": 724
+          },
+          "contentBounds": {
+            "x": 1198,
+            "y": 253,
+            "width": 421,
+            "height": 437
+          }
+        },
+        {
+          "id": "dry-grass",
+          "rect": {
+            "x": 1663,
+            "y": 0,
+            "width": 509,
+            "height": 724
+          },
+          "contentBounds": {
+            "x": 1708,
+            "y": 312,
+            "width": 393,
+            "height": 375
+          }
+        }
+      ]
+    },
+    {
+      "file": "prop-wreck.png",
+      "url": "/art/prop-wreck.png",
+      "width": 2172,
+      "height": 724,
+      "bytes": 1080084,
+      "sha256": "2dad8c85139144a1ba3d2bbffb504ef2b68da29369bb7f06e2b467a95dd43656",
+      "hasTransparency": true,
+      "transparentPixelPercent": 71.716,
+      "partialAlphaPixelPercent": 28.236,
+      "expectedFrames": 5,
+      "frames": [
+        {
+          "id": "wrecked-sedan",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 579,
+            "height": 724
+          },
+          "contentBounds": {
+            "x": 38,
+            "y": 195,
+            "width": 527,
+            "height": 343
+          }
+        },
+        {
+          "id": "concrete-ruin",
+          "rect": {
+            "x": 579,
+            "y": 0,
+            "width": 428,
+            "height": 724
+          },
+          "contentBounds": {
+            "x": 594,
+            "y": 129,
+            "width": 388,
+            "height": 414
+          }
+        },
+        {
+          "id": "ammo-crate",
+          "rect": {
+            "x": 1007,
+            "y": 0,
+            "width": 401,
+            "height": 724
+          },
+          "contentBounds": {
+            "x": 1032,
+            "y": 269,
+            "width": 336,
+            "height": 274
+          }
+        },
+        {
+          "id": "medical-cabinet",
+          "rect": {
+            "x": 1408,
+            "y": 0,
+            "width": 343,
+            "height": 724
+          },
+          "contentBounds": {
+            "x": 1448,
+            "y": 152,
+            "width": 256,
+            "height": 382
+          }
+        },
+        {
+          "id": "wooden-box",
+          "rect": {
+            "x": 1751,
+            "y": 0,
+            "width": 421,
+            "height": 724
+          },
+          "contentBounds": {
+            "x": 1799,
+            "y": 251,
+            "width": 331,
+            "height": 280
+          }
+        }
+      ]
+    },
+    {
+      "file": "icon-weapons.png",
+      "url": "/art/icon-weapons.png",
+      "width": 2172,
+      "height": 724,
+      "bytes": 1275327,
+      "sha256": "4c3063334a780345a1dbc3ebd0009b94aff7064499fd076c974f7612e6adcc19",
+      "hasTransparency": true,
+      "transparentPixelPercent": 46.494,
+      "partialAlphaPixelPercent": 53.394,
+      "expectedFrames": 5,
+      "frames": [
+        {
+          "id": "assault-rifle",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 438,
+            "height": 724
+          },
+          "contentBounds": {
+            "x": 15,
+            "y": 129,
+            "width": 415,
+            "height": 401
+          }
+        },
+        {
+          "id": "submachine-gun",
+          "rect": {
+            "x": 438,
+            "y": 0,
+            "width": 432,
+            "height": 724
+          },
+          "contentBounds": {
+            "x": 447,
+            "y": 129,
+            "width": 415,
+            "height": 400
+          }
+        },
+        {
+          "id": "shotgun",
+          "rect": {
+            "x": 870,
+            "y": 0,
+            "width": 432,
+            "height": 724
+          },
+          "contentBounds": {
+            "x": 879,
+            "y": 129,
+            "width": 415,
+            "height": 401
+          }
+        },
+        {
+          "id": "sniper-rifle",
+          "rect": {
+            "x": 1302,
+            "y": 0,
+            "width": 431,
+            "height": 724
+          },
+          "contentBounds": {
+            "x": 1310,
+            "y": 129,
+            "width": 415,
+            "height": 400
+          }
+        },
+        {
+          "id": "pistol",
+          "rect": {
+            "x": 1733,
+            "y": 0,
+            "width": 439,
+            "height": 724
+          },
+          "contentBounds": {
+            "x": 1742,
+            "y": 129,
+            "width": 415,
+            "height": 401
+          }
+        }
+      ]
+    },
+    {
+      "file": "icon-gear.png",
+      "url": "/art/icon-gear.png",
+      "width": 2172,
+      "height": 724,
+      "bytes": 1518748,
+      "sha256": "712fcca017cd9eaa60190bf7e09d734f108599870481affad472a0fe91aa537f",
+      "hasTransparency": true,
+      "transparentPixelPercent": 45.026,
+      "partialAlphaPixelPercent": 54.928,
+      "expectedFrames": 5,
+      "frames": [
+        {
+          "id": "helmet",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 437,
+            "height": 724
+          },
+          "contentBounds": {
+            "x": 17,
+            "y": 135,
+            "width": 409,
+            "height": 412
+          }
+        },
+        {
+          "id": "plate-vest",
+          "rect": {
+            "x": 437,
+            "y": 0,
+            "width": 433,
+            "height": 724
+          },
+          "contentBounds": {
+            "x": 448,
+            "y": 135,
+            "width": 411,
+            "height": 412
+          }
+        },
+        {
+          "id": "backpack",
+          "rect": {
+            "x": 870,
+            "y": 0,
+            "width": 432,
+            "height": 724
+          },
+          "contentBounds": {
+            "x": 882,
+            "y": 135,
+            "width": 409,
+            "height": 412
+          }
+        },
+        {
+          "id": "pickaxe",
+          "rect": {
+            "x": 1302,
+            "y": 0,
+            "width": 434,
+            "height": 724
+          },
+          "contentBounds": {
+            "x": 1313,
+            "y": 135,
+            "width": 412,
+            "height": 412
+          }
+        },
+        {
+          "id": "axe",
+          "rect": {
+            "x": 1736,
+            "y": 0,
+            "width": 436,
+            "height": 724
+          },
+          "contentBounds": {
+            "x": 1747,
+            "y": 135,
+            "width": 409,
+            "height": 412
+          }
+        }
+      ]
+    },
+    {
+      "file": "icon-throwable.png",
+      "url": "/art/icon-throwable.png",
+      "width": 2172,
+      "height": 724,
+      "bytes": 1309489,
+      "sha256": "f2292e28d598d40d621493e8e30b04cc865023df9c361aed12c58b99a666db75",
+      "hasTransparency": true,
+      "transparentPixelPercent": 44.412,
+      "partialAlphaPixelPercent": 55.478,
+      "expectedFrames": 5,
+      "frames": [
+        {
+          "id": "explosive-block",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 446,
+            "height": 724
+          },
+          "contentBounds": {
+            "x": 28,
+            "y": 126,
+            "width": 410,
+            "height": 420
+          }
+        },
+        {
+          "id": "molotov",
+          "rect": {
+            "x": 446,
+            "y": 0,
+            "width": 427,
+            "height": 724
+          },
+          "contentBounds": {
+            "x": 454,
+            "y": 126,
+            "width": 411,
+            "height": 421
+          }
+        },
+        {
+          "id": "smoke-can",
+          "rect": {
+            "x": 873,
+            "y": 0,
+            "width": 427,
+            "height": 724
+          },
+          "contentBounds": {
+            "x": 882,
+            "y": 126,
+            "width": 410,
+            "height": 421
+          }
+        },
+        {
+          "id": "flash-grenade",
+          "rect": {
+            "x": 1300,
+            "y": 0,
+            "width": 428,
+            "height": 724
+          },
+          "contentBounds": {
+            "x": 1309,
+            "y": 127,
+            "width": 411,
+            "height": 420
+          }
+        },
+        {
+          "id": "frag-grenade",
+          "rect": {
+            "x": 1728,
+            "y": 0,
+            "width": 444,
+            "height": 724
+          },
+          "contentBounds": {
+            "x": 1736,
+            "y": 127,
+            "width": 410,
+            "height": 420
+          }
+        }
+      ]
+    },
+    {
+      "file": "icon-medical-food.png",
+      "url": "/art/icon-medical-food.png",
+      "width": 2172,
+      "height": 724,
+      "bytes": 1225767,
+      "sha256": "b40fc50a4453f24ba23920045bbf414f945ddf5dccc0eb80b98533f93d559c83",
+      "hasTransparency": true,
+      "transparentPixelPercent": 55.93,
+      "partialAlphaPixelPercent": 44.057,
+      "expectedFrames": 6,
+      "frames": [
+        {
+          "id": "bandage",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 364,
+            "height": 724
+          },
+          "contentBounds": {
+            "x": 13,
+            "y": 179,
+            "width": 341,
+            "height": 335
+          }
+        },
+        {
+          "id": "medkit",
+          "rect": {
+            "x": 364,
+            "y": 0,
+            "width": 361,
+            "height": 724
+          },
+          "contentBounds": {
+            "x": 375,
+            "y": 179,
+            "width": 340,
+            "height": 335
+          }
+        },
+        {
+          "id": "pills",
+          "rect": {
+            "x": 725,
+            "y": 0,
+            "width": 362,
+            "height": 724
+          },
+          "contentBounds": {
+            "x": 736,
+            "y": 179,
+            "width": 341,
+            "height": 335
+          }
+        },
+        {
+          "id": "meat",
+          "rect": {
+            "x": 1087,
+            "y": 0,
+            "width": 361,
+            "height": 724
+          },
+          "contentBounds": {
+            "x": 1097,
+            "y": 179,
+            "width": 341,
+            "height": 335
+          }
+        },
+        {
+          "id": "fish",
+          "rect": {
+            "x": 1448,
+            "y": 0,
+            "width": 361,
+            "height": 724
+          },
+          "contentBounds": {
+            "x": 1459,
+            "y": 179,
+            "width": 340,
+            "height": 335
+          }
+        },
+        {
+          "id": "jam",
+          "rect": {
+            "x": 1809,
+            "y": 0,
+            "width": 363,
+            "height": 724
+          },
+          "contentBounds": {
+            "x": 1820,
+            "y": 179,
+            "width": 340,
+            "height": 335
+          }
+        }
+      ]
+    },
+    {
+      "file": "icon-material.png",
+      "url": "/art/icon-material.png",
+      "width": 2172,
+      "height": 724,
+      "bytes": 1302938,
+      "sha256": "89ab7eec3798b82ad669e2c6e3d6548c9a3be1539b53df40abc860518c9f3585",
+      "hasTransparency": true,
+      "transparentPixelPercent": 52.853,
+      "partialAlphaPixelPercent": 47.136,
+      "expectedFrames": 6,
+      "frames": [
+        {
+          "id": "wood",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 365,
+            "height": 724
+          },
+          "contentBounds": {
+            "x": 11,
+            "y": 173,
+            "width": 348,
+            "height": 349
+          }
+        },
+        {
+          "id": "stone",
+          "rect": {
+            "x": 365,
+            "y": 0,
+            "width": 361,
+            "height": 724
+          },
+          "contentBounds": {
+            "x": 372,
+            "y": 173,
+            "width": 347,
+            "height": 349
+          }
+        },
+        {
+          "id": "scrap-gear",
+          "rect": {
+            "x": 726,
+            "y": 0,
+            "width": 360,
+            "height": 724
+          },
+          "contentBounds": {
+            "x": 733,
+            "y": 173,
+            "width": 347,
+            "height": 349
+          }
+        },
+        {
+          "id": "circuit-part",
+          "rect": {
+            "x": 1086,
+            "y": 0,
+            "width": 362,
+            "height": 724
+          },
+          "contentBounds": {
+            "x": 1093,
+            "y": 173,
+            "width": 348,
+            "height": 349
+          }
+        },
+        {
+          "id": "battery",
+          "rect": {
+            "x": 1448,
+            "y": 0,
+            "width": 361,
+            "height": 724
+          },
+          "contentBounds": {
+            "x": 1455,
+            "y": 173,
+            "width": 347,
+            "height": 349
+          }
+        },
+        {
+          "id": "crystal",
+          "rect": {
+            "x": 1809,
+            "y": 0,
+            "width": 363,
+            "height": 724
+          },
+          "contentBounds": {
+            "x": 1816,
+            "y": 173,
+            "width": 347,
+            "height": 349
+          }
+        }
+      ]
+    },
+    {
+      "file": "ui-chrome.png",
+      "url": "/art/ui-chrome.png",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 1321353,
+      "sha256": "aaf893ad2e72b3fad5a9058b6a3b3128d21bc0c61c945b8248cff06d519585bc",
+      "hasTransparency": true,
+      "transparentPixelPercent": 50.122,
+      "partialAlphaPixelPercent": 49.74,
+      "expectedFrames": 7,
+      "frames": [
+        {
+          "id": "panel",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1254,
+            "height": 640
+          },
+          "contentBounds": {
+            "x": 24,
+            "y": 165,
+            "width": 1207,
+            "height": 447
+          }
+        },
+        {
+          "id": "primary-button",
+          "rect": {
+            "x": 0,
+            "y": 640,
+            "width": 1254,
+            "height": 222
+          },
+          "contentBounds": {
+            "x": 266,
+            "y": 668,
+            "width": 721,
+            "height": 156
+          }
+        },
+        {
+          "id": "rarity-common",
+          "rect": {
+            "x": 0,
+            "y": 862,
+            "width": 254,
+            "height": 392
+          },
+          "contentBounds": {
+            "x": 23,
+            "y": 900,
+            "width": 220,
+            "height": 226
+          }
+        },
+        {
+          "id": "rarity-uncommon",
+          "rect": {
+            "x": 254,
+            "y": 862,
+            "width": 246,
+            "height": 392
+          },
+          "contentBounds": {
+            "x": 265,
+            "y": 901,
+            "width": 224,
+            "height": 225
+          }
+        },
+        {
+          "id": "rarity-rare",
+          "rect": {
+            "x": 500,
+            "y": 862,
+            "width": 247,
+            "height": 392
+          },
+          "contentBounds": {
+            "x": 512,
+            "y": 900,
+            "width": 225,
+            "height": 226
+          }
+        },
+        {
+          "id": "rarity-epic",
+          "rect": {
+            "x": 747,
+            "y": 862,
+            "width": 248,
+            "height": 392
+          },
+          "contentBounds": {
+            "x": 758,
+            "y": 900,
+            "width": 225,
+            "height": 226
+          }
+        },
+        {
+          "id": "rarity-mythic",
+          "rect": {
+            "x": 995,
+            "y": 862,
+            "width": 259,
+            "height": 392
+          },
+          "contentBounds": {
+            "x": 1008,
+            "y": 900,
+            "width": 225,
+            "height": 227
+          }
+        }
+      ]
+    }
+  ]
+}

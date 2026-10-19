@@ -32,6 +32,14 @@ const THEME_COLOR: Record<string, string> = {
   lake: themeAccentVisual('lake'), marsh: themeAccentVisual('marsh'), rift: themeAccentVisual('rift'),
 };
 
+const MAP_PREVIEW: Record<string, string> = {
+  camp: '/art/map-camp.jpg', plaza: '/art/map-camp.jpg', urban: '/art/map-camp.jpg',
+  ruins: '/art/map-camp.jpg', field: '/art/map-camp.jpg',
+  forest: '/art/map-wild.jpg', quarry: '/art/map-wild.jpg',
+  lake: '/art/map-water.jpg', marsh: '/art/map-water.jpg',
+  rift: '/art/map-rift.jpg',
+};
+
 const TYPE_ICON: Record<string, string> = {
   tree: '🌲', boulder: '🪨', scrap: '⚙️', car: '🚗', van: '🚚',
   shelves: '🗄️', med_cabinet: '💊', ammo_crate: '🎯', box: '📦',
@@ -184,12 +192,15 @@ export const WorldMapModal: React.FC<WorldMapModalProps> = ({
                     </span>
                   </div>
 
-                  {/* Theme thumbnail strip */}
-                  <div className="mt-2 h-8 rounded-lg border border-slate-800 overflow-hidden flex" title={m.theme}>
-                    <div className="flex-1" style={{ background: `linear-gradient(135deg, ${THEME_COLOR[m.theme]}55, transparent)` }} />
-                    <div className="flex-1 opacity-60" style={{ background: THEME_COLOR[m.theme] ?? '#64748b' }} />
-                    <div className="flex-1" style={{ background: `linear-gradient(225deg, ${THEME_COLOR[m.theme]}88, transparent)` }} />
-                  </div>
+                  {/* Theme preview (generated art, lazy) + color strip fallback */}
+                  <img
+                    src={MAP_PREVIEW[m.theme] ?? '/art/map-camp.jpg'}
+                    alt={m.theme}
+                    loading="lazy"
+                    className="mt-2 h-20 w-full object-cover rounded-lg border border-slate-800"
+                    onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
+                  />
+                  <div className="mt-1 h-1.5 rounded-full opacity-70" style={{ background: THEME_COLOR[m.theme] ?? '#64748b' }} title={m.theme} />
 
                   {/* POI chips */}
                   <div className="flex flex-wrap gap-1 mt-2">

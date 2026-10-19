@@ -9,8 +9,8 @@ describe('visualTheme', () => {
     const a = groundBaseColor('camp', 0, 0);
     const b = groundBaseColor('camp', 1, 0);
     expect(a).not.toBe(b);
-    // 两色必须是同色系微差：直接断言我们锁定的色板值
-    expect([a, b].sort().join(',')).toBe('#3a6b47,#3d704b');
+    // 两色必须是同色系微差：直接断言我们锁定的色板值（dusty 橄榄，向预览看齐）
+    expect([a, b].sort().join(',')).toBe('#6e6e50,#727254');
   });
   it('hash2 is deterministic in [0,1)', () => {
     expect(hash2(3, 7)).toBe(hash2(3, 7));
@@ -32,10 +32,10 @@ describe('visualTheme', () => {
 });
 
 describe('ground texture rules', () => {
-  it('urban road center uses asphalt pair, not concrete gray', () => {
-    // 约束：urban 主 tile 必须是深沥青系，由 groundBaseColor 保证
-    expect(groundBaseColor('urban', 0, 0)).toBe('#333b47');
-    expect(groundBaseColor('urban', 1, 0)).toBe('#353d49');
+  it('urban road center uses dusty concrete pair', () => {
+    // 约束：urban 主 tile 必须是 dusty 混凝土系，由 groundBaseColor 保证
+    expect(groundBaseColor('urban', 0, 0)).toBe('#54534e');
+    expect(groundBaseColor('urban', 1, 0)).toBe('#585751');
   });
 });
 
@@ -80,5 +80,16 @@ describe('minimap colors', () => {
   it('radar dots use shared palette', () => {
     expect(radarDotColor('monster')).toBe('#ef4444');
     expect(radarDotColor('interactable')).toBe('#f59e0b');
+  });
+});
+
+import { themeHaze } from './visualTheme';
+describe('theme atmosphere', () => {
+  it('every theme has a haze veil matching preview mood', () => {
+    const themes = ['camp', 'plaza', 'field', 'urban', 'ruins', 'forest', 'quarry', 'lake', 'marsh', 'rift'] as const;
+    for (const t of themes) {
+      expect(themeHaze(t).startsWith('rgba(')).toBe(true);
+    }
+    expect(themeHaze('forest')).not.toBe(themeHaze('rift'));
   });
 });

@@ -24,7 +24,7 @@ import { QuestPanel, QuestStep } from './components/QuestPanel';
 import { InventoryModal } from './components/InventoryModal';
 import { MapEditorModal } from './components/MapEditorModal';
 import { LootPanel, LootEntry } from './components/LootPanel';
-import { lootResourceOf, RARITY, skillLevel, skillYieldMult, LootResource } from './game/maps';
+import { lootResourceOf, RARITY, skillLevel, skillYieldMult, LootResource, SUBMAPS, displayName } from './game/maps';
 import { ITEM_DEFS, getItemDef, makeItem, WEAPON_DAMAGE, ARMOR_BONUS_TABLE, MED_HEAL, FOOD_VALUE } from './game/items';
 import { killReward, WEAPONS, ARMOR_REDUCTION } from './game/combat';
 import { calcDeathDrop } from './game/death';
@@ -52,6 +52,15 @@ import {
   Equipment,
 } from './types/game';
 
+// 切图 splash 用图（与 WorldMapModal MAP_PREVIEW 同表，改一处记得改另一处）
+const THEME_SPLASH_IMG: Record<string, string> = {
+  camp: '/art/map-camp.jpg', plaza: '/art/map-camp.jpg', urban: '/art/map-camp.jpg',
+  ruins: '/art/map-camp.jpg', field: '/art/map-camp.jpg',
+  forest: '/art/map-wild.jpg', quarry: '/art/map-wild.jpg',
+  lake: '/art/map-water.jpg', marsh: '/art/map-water.jpg',
+  rift: '/art/map-rift.jpg',
+};
+
 export default function App() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const engineRef = useRef<IsometricEngine | null>(null);
@@ -59,6 +68,13 @@ export default function App() {
 
   // Active Map Zone
   const [currentMapId, setCurrentMapId] = useState<MapZoneId>('camp_plaza');
+
+  // Boot splash（keyart 开屏，点进入废土关闭）
+  const [showBoot, setShowBoot] = useState(true);
+
+  // 切图 splash（预览图 bridge，2.4s 后消失；z-40 在 boot z-50 之下）
+  const [zoneSplash, setZoneSplash] = useState<{ mapId: MapZoneId; nonce: number } | null>(null);
+  const splashTimer = useRef<number>(0);
 
   // Active Modals
   const [activeModal, setActiveModal] = useState<
@@ -819,9 +835,9 @@ export default function App() {
     };
   }, []);
 
-  // Init Engine
+  // Init Engine（等开屏关闭后再初始化：首屏只加载 splash 图，引擎与贴图解压不阻塞页面打开）
   useEffect(() => {
-    if (!canvasRef.current) return;
+    if (showBoot || !canvasRef.current) return;
 
     const engine = new IsometricEngine(canvasRef.current, {
       onOpenWorkbench: () => {
@@ -1018,6 +1034,10 @@ export default function App() {
         }
         setCurrentMapId(mapId);
         setLootPanel(null); // 切图关箱
+        // 切图 splash：预览图 bridge（2.4s），所见即所得的心理锚点
+        window.clearTimeout(splashTimer.current);
+        setZoneSplash({ mapId, nonce: Date.now() });
+        splashTimer.current = window.setTimeout(() => setZoneSplash(null), 2400);
       },
       onOpenRaidModal: (doorBuilding: BuildingEntity) => {
         setRaidDoor(doorBuilding);
@@ -1131,7 +1151,7 @@ export default function App() {
       clearInterval(syncInterval);
       engine.stop();
     };
-  }, []);
+  }, [showBoot]);
 
   const handleSelectSlot = useCallback((slotIdx: number) => {
     setActiveSlot(slotIdx);
@@ -1852,6 +1872,42 @@ export default function App() {
       {/* 2.5D Isometric Canvas Engine */}
       <canvas ref={canvasRef} className="absolute inset-0 w-full h-full cursor-crosshair" />
 
+      {/* Boot splash：keyart 开屏，点进入废土关闭 */}
+      {showBoot && (
+        <div
+          className="absolute inset-0 z-50 flex items-center justify-center cursor-pointer"
+          onClick={() => { soundManager.playClick(); setShowBoot(false); }}
+        >
+          <img src="/art/keyart-dawn.jpg" alt="" className="absolute inset-0 w-full h-full object-cover" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/40" />
+          <div className="relative text-center px-6">
+            <h1 className="text-4xl sm:text-5xl font-black text-amber-300 tracking-widest drop-shadow-[0_2px_12px_rgba(0,0,0,0.9)]">坍界行者</h1>
+            <p className="mt-2 text-sm text-slate-200 tracking-[0.5em]">边缘黎明</p>
+            <div className="mt-8 inline-block px-8 py-3 rounded-xl bg-amber-500/90 hover:bg-amber-400 text-slate-950 font-black tracking-widest transition-colors">进入废土</div>
+            <p className="mt-3 text-[11px] text-slate-400 font-mono">WASD 移动 · 鼠标瞄准 · 点击开火</p>
+          </div>
+        </div>
+      )}
+
+      {/* 切图 splash：地图预览图 bridge，2.4s 后消失 */}
+      {zoneSplash && (
+        <div className="absolute inset-0 z-40 flex items-center justify-center pointer-events-none">
+          <img
+            key={zoneSplash.nonce}
+            src={THEME_SPLASH_IMG[SUBMAPS[zoneSplash.mapId]?.theme ?? 'camp'] ?? '/art/map-camp.jpg'}
+            alt=""
+            className="absolute inset-0 w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-black/50" />
+          <div className="relative text-center px-6">
+            <p className="text-[11px] font-mono text-cyan-300 tracking-[0.4em]">正在进入</p>
+            <h2 className="mt-1 text-3xl font-black text-slate-100 tracking-widest">{displayName(zoneSplash.mapId)}</h2>
+          </div>
+        </div>
+      )}
+
+      {/* HUD 区域：开屏期间 display:none，HUD 图标/Panel 贴图（~7MB）延后到进入游戏才加载 */}
+      <div hidden={showBoot}>
       {/* Top Menu Bar with Weather Widget, Online Ping & Roster Button */}
       <TopMenuBar
         onOpenModal={(modal) => setActiveModal(modal)}
@@ -2123,6 +2179,7 @@ export default function App() {
         mapName={engineRef.current?.getMapName(currentMapId) || currentMapId}
         onSetWeather={handleEditorWeather}
       />
+      </div>
     </div>
   );
 }

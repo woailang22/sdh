@@ -3,6 +3,8 @@ import { X, Backpack, Sword, Shirt, Wrench, ArrowDownToLine, Trash2, Hand, Brief
 import { soundManager } from '../audio/soundManager';
 import { Item, Equipment } from '../types/game';
 import { COLLECT_DEFS, COLLECT_SETS, TIER_COLOR, setProgress } from '../game/collection';
+import { ItemIcon } from './ItemIcon';
+import { RarityFrame } from './RarityFrame';
 
 interface InventoryModalProps {
   isOpen: boolean;
@@ -129,7 +131,7 @@ export const InventoryModal: React.FC<InventoryModalProps> = ({
                       <span>{meta.name}</span>
                     </div>
                     <div className="h-12 flex items-center justify-center text-3xl">
-                      {it ? it.icon : <span className="text-slate-700 text-xl">空</span>}
+                      {it ? <RarityFrame rarity={it.rarity} size={44}><ItemIcon id={it.id} emoji={it.icon} size={30} /></RarityFrame> : <span className="text-slate-700 text-xl">空</span>}
                     </div>
                     <div className="text-[10px] text-slate-400 text-center leading-tight min-h-7">
                       {it ? it.name : '—'}
@@ -164,7 +166,7 @@ export const InventoryModal: React.FC<InventoryModalProps> = ({
                   }`}
                 >
                   <div className="w-10 h-10 rounded-lg bg-slate-900 border border-slate-700 flex items-center justify-center text-2xl shrink-0">
-                    {it ? it.icon : <span className="text-slate-700 text-sm">{idx + 1}</span>}
+                    {it ? <RarityFrame rarity={it.rarity} size={38}><ItemIcon id={it.id} emoji={it.icon} size={26} /></RarityFrame> : <span className="text-slate-700 text-sm">{idx + 1}</span>}
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="text-xs font-bold text-slate-200 truncate">

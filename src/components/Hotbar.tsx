@@ -1,6 +1,8 @@
 import React from 'react';
 import { Item } from '../types/game';
 import { soundManager } from '../audio/soundManager';
+import { ItemIcon } from './ItemIcon';
+import { RarityFrame } from './RarityFrame';
 
 interface HotbarProps {
   slots: (Item | null)[];
@@ -64,7 +66,9 @@ export const Hotbar: React.FC<HotbarProps> = ({
               {/* Item Graphic Representation */}
               {item ? (
                 <div className="flex flex-col items-center justify-center pointer-events-none">
-                  <span className="text-xl leading-none">{item.icon}</span>
+                  <RarityFrame rarity={item.rarity} size={40}>
+                    <ItemIcon id={item.id} emoji={item.icon} size={26} />
+                  </RarityFrame>
 
                   {/* Quantity / Ammo count */}
                   {item.category === 'weapon' && (

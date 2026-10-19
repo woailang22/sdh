@@ -12,22 +12,41 @@ function hexToRgb(hex: string): [number, number, number] {
   return [parseInt(v.slice(0, 2), 16), parseInt(v.slice(2, 4), 16), parseInt(v.slice(4, 6), 16)];
 }
 
-// camp 主色微差对（ΔL 约 4%，测试锁死这两个值）
-const CAMP_A = '#3a6b47';
-const CAMP_B = '#3d704b';
+// camp 主色微差对（dusty 橄榄，向 map-camp.jpg 预览看齐；ΔL 约 4%，测试锁死这两个值）
+const CAMP_A = '#6e6e50';
+const CAMP_B = '#727254';
 
+// 全主题 dusty 化（实测自 public/art/map-*.jpg：灰调雾霾废土，去饱和）
 const BASE_PAIRS: Record<GroundTheme, [string, string]> = {
   camp: [CAMP_A, CAMP_B],
-  plaza: ['#666f7e', '#6a7382'],
-  field: ['#3a6b47', '#3d6f4a'],
-  urban: ['#333b47', '#353d49'],
-  ruins: ['#463c31', '#493e33'],
-  forest: ['#4a3a24', '#4d3d26'],
-  quarry: ['#646b78', '#676e7b'],
-  lake: ['#0369a1', '#0370ab'],
-  marsh: ['#2f4f3a', '#314f3b'],
-  rift: ['#241033', '#261239'],
+  plaza: ['#6f6e68', '#73726c'],
+  field: ['#6b6247', '#6f664b'],
+  urban: ['#54534e', '#585751'],
+  ruins: ['#5b5145', '#5f5548'],
+  forest: ['#57503f', '#5b5343'],
+  quarry: ['#8a8d90', '#8e9194'],
+  lake: ['#46545e', '#4a5862'],
+  marsh: ['#5c5a41', '#605e45'],
+  rift: ['#4c423a', '#50463e'],
 };
+
+const HAZE: Record<GroundTheme, string> = {
+  camp: 'rgba(196,180,142,0.07)',
+  plaza: 'rgba(170,168,160,0.08)',
+  field: 'rgba(192,182,142,0.06)',
+  urban: 'rgba(165,162,155,0.08)',
+  ruins: 'rgba(172,162,142,0.09)',
+  forest: 'rgba(150,160,165,0.12)',
+  quarry: 'rgba(172,177,182,0.10)',
+  lake: 'rgba(150,165,175,0.12)',
+  marsh: 'rgba(162,166,150,0.12)',
+  rift: 'rgba(122,92,152,0.10)',
+};
+
+/** 每主题尘雾罩染（预览图式雾霾情绪，森林/湖灰蓝雾、裂隙紫灰、营地暖尘）。 */
+export function themeHaze(theme: GroundTheme): string {
+  return HAZE[theme] ?? HAZE.camp;
+}
 
 const ACCENTS: Record<GroundTheme, string> = {
   camp: '#34d399', plaza: '#94a3b8', field: '#4ade80',

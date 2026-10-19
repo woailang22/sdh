@@ -1,0 +1,675 @@
+{
+  "source": "docs/art-prompts-tiles-and-props.md",
+  "generator": "built-in image_gen",
+  "coordinateConvention": "Top-left origin, source pixel coordinates; per-entity contentBounds and bottom-center anchor.",
+  "expectedCount": 28,
+  "actualCount": 28,
+  "missing": [],
+  "issues": [],
+  "brightnessPairs": [
+    {
+      "theme": "camp",
+      "bToABrightnessRatio": 0.7001,
+      "patternCorrelation": 0.9071
+    },
+    {
+      "theme": "plaza",
+      "bToABrightnessRatio": 0.7463,
+      "patternCorrelation": 0.9091
+    },
+    {
+      "theme": "field",
+      "bToABrightnessRatio": 0.7535,
+      "patternCorrelation": 0.9426
+    },
+    {
+      "theme": "urban",
+      "bToABrightnessRatio": 0.6878,
+      "patternCorrelation": 0.8606
+    },
+    {
+      "theme": "ruins",
+      "bToABrightnessRatio": 0.7537,
+      "patternCorrelation": 0.8868
+    },
+    {
+      "theme": "forest",
+      "bToABrightnessRatio": 0.6912,
+      "patternCorrelation": 0.9113
+    },
+    {
+      "theme": "quarry",
+      "bToABrightnessRatio": 0.7808,
+      "patternCorrelation": 0.9163
+    },
+    {
+      "theme": "lake",
+      "bToABrightnessRatio": 0.6788,
+      "patternCorrelation": 0.9586
+    },
+    {
+      "theme": "marsh",
+      "bToABrightnessRatio": 0.7062,
+      "patternCorrelation": 0.9246
+    },
+    {
+      "theme": "rift",
+      "bToABrightnessRatio": 0.7522,
+      "patternCorrelation": 0.8959
+    }
+  ],
+  "assets": [
+    {
+      "file": "tile-camp-a.png",
+      "url": "/art/tile-camp-a.png",
+      "type": "tile",
+      "width": 512,
+      "height": 512,
+      "bytes": 551434,
+      "sha256": "d5d963bf5e119ae5f842eeb0a17c570731f856ed71807fed419a1ed063eac4e5",
+      "transparentPixelPercent": 0.0,
+      "partialAlphaPixelPercent": 0.0,
+      "meanLuma": 100.93,
+      "lumaStdev": 13.153,
+      "theme": "camp",
+      "variant": "a",
+      "seamMetrics": {
+        "leftRightRgbMae": 7.794,
+        "topBottomRgbMae": 7.179,
+        "adjacentRgbMae": 7.175,
+        "note": "Diagnostics only; inspect repeat previews for visible seams."
+      }
+    },
+    {
+      "file": "tile-camp-b.png",
+      "url": "/art/tile-camp-b.png",
+      "type": "tile",
+      "width": 512,
+      "height": 512,
+      "bytes": 542188,
+      "sha256": "285d1f5dc206ccb8d85ec83dccdb520f534a012756f451c81cc2aa3769cc8030",
+      "transparentPixelPercent": 0.0,
+      "partialAlphaPixelPercent": 0.0,
+      "meanLuma": 70.66,
+      "lumaStdev": 12.09,
+      "theme": "camp",
+      "variant": "b",
+      "seamMetrics": {
+        "leftRightRgbMae": 7.809,
+        "topBottomRgbMae": 7.025,
+        "adjacentRgbMae": 6.105,
+        "note": "Diagnostics only; inspect repeat previews for visible seams."
+      }
+    },
+    {
+      "file": "tile-plaza-a.png",
+      "url": "/art/tile-plaza-a.png",
+      "type": "tile",
+      "width": 512,
+      "height": 512,
+      "bytes": 548764,
+      "sha256": "56ff90d000e15182af02f7918975fb570a3765d4a9aedc5a4fdc33790ebb372d",
+      "transparentPixelPercent": 0.0,
+      "partialAlphaPixelPercent": 0.0,
+      "meanLuma": 110.459,
+      "lumaStdev": 13.326,
+      "theme": "plaza",
+      "variant": "a",
+      "seamMetrics": {
+        "leftRightRgbMae": 10.305,
+        "topBottomRgbMae": 8.24,
+        "adjacentRgbMae": 7.955,
+        "note": "Diagnostics only; inspect repeat previews for visible seams."
+      }
+    },
+    {
+      "file": "tile-plaza-b.png",
+      "url": "/art/tile-plaza-b.png",
+      "type": "tile",
+      "width": 512,
+      "height": 512,
+      "bytes": 509660,
+      "sha256": "ad3a3dc964b88d887804288d7478bdb027952687b720110d5c889b5f89f71f36",
+      "transparentPixelPercent": 0.0,
+      "partialAlphaPixelPercent": 0.0,
+      "meanLuma": 82.433,
+      "lumaStdev": 10.54,
+      "theme": "plaza",
+      "variant": "b",
+      "seamMetrics": {
+        "leftRightRgbMae": 9.134,
+        "topBottomRgbMae": 7.79,
+        "adjacentRgbMae": 6.135,
+        "note": "Diagnostics only; inspect repeat previews for visible seams."
+      }
+    },
+    {
+      "file": "tile-field-a.png",
+      "url": "/art/tile-field-a.png",
+      "type": "tile",
+      "width": 512,
+      "height": 512,
+      "bytes": 579274,
+      "sha256": "7ec3e12f0436b6588ac30b0ec6e0e51ff325e65c52ec0cf539c7a0ebea7dd78d",
+      "transparentPixelPercent": 0.0,
+      "partialAlphaPixelPercent": 0.0,
+      "meanLuma": 99.382,
+      "lumaStdev": 18.127,
+      "theme": "field",
+      "variant": "a",
+      "seamMetrics": {
+        "leftRightRgbMae": 11.581,
+        "topBottomRgbMae": 11.816,
+        "adjacentRgbMae": 9.998,
+        "note": "Diagnostics only; inspect repeat previews for visible seams."
+      }
+    },
+    {
+      "file": "tile-field-b.png",
+      "url": "/art/tile-field-b.png",
+      "type": "tile",
+      "width": 512,
+      "height": 512,
+      "bytes": 553084,
+      "sha256": "36c87c2b15ce5cd0312de066a5c2c2eb67e3b8e4a097eff9e5f1a2aef3be3b57",
+      "transparentPixelPercent": 0.0,
+      "partialAlphaPixelPercent": 0.0,
+      "meanLuma": 74.882,
+      "lumaStdev": 15.537,
+      "theme": "field",
+      "variant": "b",
+      "seamMetrics": {
+        "leftRightRgbMae": 10.597,
+        "topBottomRgbMae": 11.817,
+        "adjacentRgbMae": 7.889,
+        "note": "Diagnostics only; inspect repeat previews for visible seams."
+      }
+    },
+    {
+      "file": "tile-urban-a.png",
+      "url": "/art/tile-urban-a.png",
+      "type": "tile",
+      "width": 512,
+      "height": 512,
+      "bytes": 569988,
+      "sha256": "d8345d5a0ddfb8ea44265463b7855e127aa04519bedf79f0b5fb229f08283d54",
+      "transparentPixelPercent": 0.0,
+      "partialAlphaPixelPercent": 0.0,
+      "meanLuma": 102.136,
+      "lumaStdev": 14.6,
+      "theme": "urban",
+      "variant": "a",
+      "seamMetrics": {
+        "leftRightRgbMae": 12.043,
+        "topBottomRgbMae": 13.027,
+        "adjacentRgbMae": 10.595,
+        "note": "Diagnostics only; inspect repeat previews for visible seams."
+      }
+    },
+    {
+      "file": "tile-urban-b.png",
+      "url": "/art/tile-urban-b.png",
+      "type": "tile",
+      "width": 512,
+      "height": 512,
+      "bytes": 526468,
+      "sha256": "553489df2ee0669284612664ec1d8c1c46cefc8f10ba360a3d5704addfdcfa56",
+      "transparentPixelPercent": 0.0,
+      "partialAlphaPixelPercent": 0.0,
+      "meanLuma": 70.247,
+      "lumaStdev": 11.237,
+      "theme": "urban",
+      "variant": "b",
+      "seamMetrics": {
+        "leftRightRgbMae": 9.914,
+        "topBottomRgbMae": 10.22,
+        "adjacentRgbMae": 7.595,
+        "note": "Diagnostics only; inspect repeat previews for visible seams."
+      }
+    },
+    {
+      "file": "tile-ruins-a.png",
+      "url": "/art/tile-ruins-a.png",
+      "type": "tile",
+      "width": 512,
+      "height": 512,
+      "bytes": 646046,
+      "sha256": "ebb6622521301c9f34337695543db17234ae958d729b459a60f84f00d0f86213",
+      "transparentPixelPercent": 0.0,
+      "partialAlphaPixelPercent": 0.0,
+      "meanLuma": 100.008,
+      "lumaStdev": 24.105,
+      "theme": "ruins",
+      "variant": "a",
+      "seamMetrics": {
+        "leftRightRgbMae": 18.454,
+        "topBottomRgbMae": 19.743,
+        "adjacentRgbMae": 16.513,
+        "note": "Diagnostics only; inspect repeat previews for visible seams."
+      }
+    },
+    {
+      "file": "tile-ruins-b.png",
+      "url": "/art/tile-ruins-b.png",
+      "type": "tile",
+      "width": 512,
+      "height": 512,
+      "bytes": 605125,
+      "sha256": "6689f95c0d67397a1f2a806ae1d43d76191bb50bba8432b6fae2db2f8f6820d2",
+      "transparentPixelPercent": 0.0,
+      "partialAlphaPixelPercent": 0.0,
+      "meanLuma": 75.373,
+      "lumaStdev": 19.618,
+      "theme": "ruins",
+      "variant": "b",
+      "seamMetrics": {
+        "leftRightRgbMae": 16.992,
+        "topBottomRgbMae": 15.311,
+        "adjacentRgbMae": 12.871,
+        "note": "Diagnostics only; inspect repeat previews for visible seams."
+      }
+    },
+    {
+      "file": "tile-forest-a.png",
+      "url": "/art/tile-forest-a.png",
+      "type": "tile",
+      "width": 512,
+      "height": 512,
+      "bytes": 666706,
+      "sha256": "7ca5fb1f1b78bd6ece7cb793cba777cc9b2670e5a52b1b95ba82138a49a436df",
+      "transparentPixelPercent": 0.0,
+      "partialAlphaPixelPercent": 0.0,
+      "meanLuma": 71.34,
+      "lumaStdev": 21.423,
+      "theme": "forest",
+      "variant": "a",
+      "seamMetrics": {
+        "leftRightRgbMae": 13.392,
+        "topBottomRgbMae": 17.553,
+        "adjacentRgbMae": 13.615,
+        "note": "Diagnostics only; inspect repeat previews for visible seams."
+      }
+    },
+    {
+      "file": "tile-forest-b.png",
+      "url": "/art/tile-forest-b.png",
+      "type": "tile",
+      "width": 512,
+      "height": 512,
+      "bytes": 616351,
+      "sha256": "d1d7088228d1718186b74dac8ea482d89cdc3c685744f9f04d8697422e5c5938",
+      "transparentPixelPercent": 0.0,
+      "partialAlphaPixelPercent": 0.0,
+      "meanLuma": 49.31,
+      "lumaStdev": 16.133,
+      "theme": "forest",
+      "variant": "b",
+      "seamMetrics": {
+        "leftRightRgbMae": 11.113,
+        "topBottomRgbMae": 14.518,
+        "adjacentRgbMae": 9.951,
+        "note": "Diagnostics only; inspect repeat previews for visible seams."
+      }
+    },
+    {
+      "file": "tile-quarry-a.png",
+      "url": "/art/tile-quarry-a.png",
+      "type": "tile",
+      "width": 512,
+      "height": 512,
+      "bytes": 561945,
+      "sha256": "86c081203e152e810527aae6cb3f782a48d21b51dde0e1cd30229eefcc2ea00e",
+      "transparentPixelPercent": 0.0,
+      "partialAlphaPixelPercent": 0.0,
+      "meanLuma": 146.192,
+      "lumaStdev": 17.005,
+      "theme": "quarry",
+      "variant": "a",
+      "seamMetrics": {
+        "leftRightRgbMae": 13.123,
+        "topBottomRgbMae": 13.852,
+        "adjacentRgbMae": 10.693,
+        "note": "Diagnostics only; inspect repeat previews for visible seams."
+      }
+    },
+    {
+      "file": "tile-quarry-b.png",
+      "url": "/art/tile-quarry-b.png",
+      "type": "tile",
+      "width": 512,
+      "height": 512,
+      "bytes": 538950,
+      "sha256": "e96ff5d72441259269b56342d368eedca5d5512ab335d91c57cb6b881d26e032",
+      "transparentPixelPercent": 0.0,
+      "partialAlphaPixelPercent": 0.0,
+      "meanLuma": 114.141,
+      "lumaStdev": 14.427,
+      "theme": "quarry",
+      "variant": "b",
+      "seamMetrics": {
+        "leftRightRgbMae": 12.184,
+        "topBottomRgbMae": 13.109,
+        "adjacentRgbMae": 8.028,
+        "note": "Diagnostics only; inspect repeat previews for visible seams."
+      }
+    },
+    {
+      "file": "tile-lake-a.png",
+      "url": "/art/tile-lake-a.png",
+      "type": "tile",
+      "width": 512,
+      "height": 512,
+      "bytes": 379053,
+      "sha256": "9b62f06ea900b587235f0b63f1239f23202840f7d6189279d1f1db17875181b2",
+      "transparentPixelPercent": 0.0,
+      "partialAlphaPixelPercent": 0.0,
+      "meanLuma": 80.029,
+      "lumaStdev": 7.441,
+      "theme": "lake",
+      "variant": "a",
+      "seamMetrics": {
+        "leftRightRgbMae": 3.11,
+        "topBottomRgbMae": 4.41,
+        "adjacentRgbMae": 2.65,
+        "note": "Diagnostics only; inspect repeat previews for visible seams."
+      }
+    },
+    {
+      "file": "tile-lake-b.png",
+      "url": "/art/tile-lake-b.png",
+      "type": "tile",
+      "width": 512,
+      "height": 512,
+      "bytes": 357935,
+      "sha256": "bc70677f1bb54b64317a85c33328aa8253589e1eecd5eb5943df8490008a317e",
+      "transparentPixelPercent": 0.0,
+      "partialAlphaPixelPercent": 0.0,
+      "meanLuma": 54.32,
+      "lumaStdev": 6.43,
+      "theme": "lake",
+      "variant": "b",
+      "seamMetrics": {
+        "leftRightRgbMae": 3.383,
+        "topBottomRgbMae": 4.18,
+        "adjacentRgbMae": 2.473,
+        "note": "Diagnostics only; inspect repeat previews for visible seams."
+      }
+    },
+    {
+      "file": "tile-marsh-a.png",
+      "url": "/art/tile-marsh-a.png",
+      "type": "tile",
+      "width": 512,
+      "height": 512,
+      "bytes": 534614,
+      "sha256": "985f4a60cbcf8392151dc690d38650a02fedccf040dd3bf6eaf6d92262aac81e",
+      "transparentPixelPercent": 0.0,
+      "partialAlphaPixelPercent": 0.0,
+      "meanLuma": 80.55,
+      "lumaStdev": 10.786,
+      "theme": "marsh",
+      "variant": "a",
+      "seamMetrics": {
+        "leftRightRgbMae": 6.148,
+        "topBottomRgbMae": 6.272,
+        "adjacentRgbMae": 5.566,
+        "note": "Diagnostics only; inspect repeat previews for visible seams."
+      }
+    },
+    {
+      "file": "tile-marsh-b.png",
+      "url": "/art/tile-marsh-b.png",
+      "type": "tile",
+      "width": 512,
+      "height": 512,
+      "bytes": 515456,
+      "sha256": "5c8f2972a75f6683c5ba1126a371b52b173725033cae394777a04c3d0239810f",
+      "transparentPixelPercent": 0.0,
+      "partialAlphaPixelPercent": 0.0,
+      "meanLuma": 56.884,
+      "lumaStdev": 9.658,
+      "theme": "marsh",
+      "variant": "b",
+      "seamMetrics": {
+        "leftRightRgbMae": 6.554,
+        "topBottomRgbMae": 5.689,
+        "adjacentRgbMae": 4.827,
+        "note": "Diagnostics only; inspect repeat previews for visible seams."
+      }
+    },
+    {
+      "file": "tile-rift-a.png",
+      "url": "/art/tile-rift-a.png",
+      "type": "tile",
+      "width": 512,
+      "height": 512,
+      "bytes": 508249,
+      "sha256": "2ea8e85c4e3e8eafb331449495ff2da929765c0f1a2ea6d792ba2c0cea639011",
+      "transparentPixelPercent": 0.0,
+      "partialAlphaPixelPercent": 0.0,
+      "meanLuma": 72.776,
+      "lumaStdev": 12.838,
+      "theme": "rift",
+      "variant": "a",
+      "seamMetrics": {
+        "leftRightRgbMae": 10.136,
+        "topBottomRgbMae": 11.258,
+        "adjacentRgbMae": 8.48,
+        "note": "Diagnostics only; inspect repeat previews for visible seams."
+      }
+    },
+    {
+      "file": "tile-rift-b.png",
+      "url": "/art/tile-rift-b.png",
+      "type": "tile",
+      "width": 512,
+      "height": 512,
+      "bytes": 461078,
+      "sha256": "0a8a8a85e39653c5b718a391ae9d613271e4e6d0fe28a5d6bfd101a32155c9d3",
+      "transparentPixelPercent": 0.0,
+      "partialAlphaPixelPercent": 0.0,
+      "meanLuma": 54.742,
+      "lumaStdev": 9.194,
+      "theme": "rift",
+      "variant": "b",
+      "seamMetrics": {
+        "leftRightRgbMae": 7.852,
+        "topBottomRgbMae": 8.466,
+        "adjacentRgbMae": 5.493,
+        "note": "Diagnostics only; inspect repeat previews for visible seams."
+      }
+    },
+    {
+      "file": "veh-van.png",
+      "url": "/art/veh-van.png",
+      "type": "entity",
+      "width": 1024,
+      "height": 1024,
+      "bytes": 1061774,
+      "sha256": "338f87632b51eb626e33ec3b9a82a45a1eaa850c482f842b805af96a9c5d0ba6",
+      "transparentPixelPercent": 66.265,
+      "partialAlphaPixelPercent": 33.66,
+      "meanLuma": 88.796,
+      "lumaStdev": 43.57,
+      "contentBounds": {
+        "x": 97,
+        "y": 218,
+        "width": 844,
+        "height": 615
+      },
+      "anchor": {
+        "x": 519.0,
+        "y": 833,
+        "note": "bottom-center of contentBounds; pixel coordinates on source canvas"
+      }
+    },
+    {
+      "file": "veh-truck.png",
+      "url": "/art/veh-truck.png",
+      "type": "entity",
+      "width": 1024,
+      "height": 1024,
+      "bytes": 1144855,
+      "sha256": "32a41c37db88d44e39e58b0208ef8dc3371b861c46c1f76022d4d0d4131ec72a",
+      "transparentPixelPercent": 64.957,
+      "partialAlphaPixelPercent": 34.95,
+      "meanLuma": 76.614,
+      "lumaStdev": 45.541,
+      "contentBounds": {
+        "x": 34,
+        "y": 221,
+        "width": 952,
+        "height": 630
+      },
+      "anchor": {
+        "x": 510.0,
+        "y": 851,
+        "note": "bottom-center of contentBounds; pixel coordinates on source canvas"
+      }
+    },
+    {
+      "file": "prop-scrap.png",
+      "url": "/art/prop-scrap.png",
+      "type": "entity",
+      "width": 1024,
+      "height": 1024,
+      "bytes": 761935,
+      "sha256": "d6a19ca0fc02ef92df698dad8979727b7efad132691b4e75e1789bd0c8bbb368",
+      "transparentPixelPercent": 76.609,
+      "partialAlphaPixelPercent": 23.285,
+      "meanLuma": 66.967,
+      "lumaStdev": 37.084,
+      "contentBounds": {
+        "x": 134,
+        "y": 280,
+        "width": 766,
+        "height": 493
+      },
+      "anchor": {
+        "x": 517.0,
+        "y": 773,
+        "note": "bottom-center of contentBounds; pixel coordinates on source canvas"
+      }
+    },
+    {
+      "file": "prop-pond.png",
+      "url": "/art/prop-pond.png",
+      "type": "entity",
+      "width": 1024,
+      "height": 1024,
+      "bytes": 828591,
+      "sha256": "f081b51b61d677afcf68bb99e98a82e63b2e9e32ab0287e54c6f248f4cd6c55c",
+      "transparentPixelPercent": 75.455,
+      "partialAlphaPixelPercent": 24.442,
+      "meanLuma": 82.771,
+      "lumaStdev": 44.117,
+      "contentBounds": {
+        "x": 116,
+        "y": 192,
+        "width": 807,
+        "height": 656
+      },
+      "anchor": {
+        "x": 519.5,
+        "y": 848,
+        "note": "bottom-center of contentBounds; pixel coordinates on source canvas"
+      }
+    },
+    {
+      "file": "prop-crystal-cluster.png",
+      "url": "/art/prop-crystal-cluster.png",
+      "type": "entity",
+      "width": 1024,
+      "height": 1024,
+      "bytes": 701693,
+      "sha256": "9ea87b01ee005edb46f628abfc7ec5ef691a4bbbabd7009530e649461953af69",
+      "transparentPixelPercent": 80.237,
+      "partialAlphaPixelPercent": 19.69,
+      "meanLuma": 88.382,
+      "lumaStdev": 42.71,
+      "contentBounds": {
+        "x": 281,
+        "y": 173,
+        "width": 486,
+        "height": 682
+      },
+      "anchor": {
+        "x": 524.0,
+        "y": 855,
+        "note": "bottom-center of contentBounds; pixel coordinates on source canvas"
+      }
+    },
+    {
+      "file": "npc-allen.png",
+      "url": "/art/npc-allen.png",
+      "type": "entity",
+      "width": 1024,
+      "height": 1024,
+      "bytes": 642436,
+      "sha256": "613f8acdc6ca668bec1ff28407d087904f23a4644320a60f00c3d32d264df561",
+      "transparentPixelPercent": 79.779,
+      "partialAlphaPixelPercent": 20.098,
+      "meanLuma": 69.568,
+      "lumaStdev": 28.998,
+      "contentBounds": {
+        "x": 300,
+        "y": 30,
+        "width": 394,
+        "height": 957
+      },
+      "anchor": {
+        "x": 497.0,
+        "y": 987,
+        "note": "bottom-center of contentBounds; pixel coordinates on source canvas"
+      }
+    },
+    {
+      "file": "npc-vivian.png",
+      "url": "/art/npc-vivian.png",
+      "type": "entity",
+      "width": 1024,
+      "height": 1024,
+      "bytes": 575580,
+      "sha256": "1dd57046aa0c4993f6648f9557dc8f94af25c6f52fca0d0e2bff477f50091ec8",
+      "transparentPixelPercent": 82.086,
+      "partialAlphaPixelPercent": 17.793,
+      "meanLuma": 62.347,
+      "lumaStdev": 30.029,
+      "contentBounds": {
+        "x": 357,
+        "y": 18,
+        "width": 334,
+        "height": 990
+      },
+      "anchor": {
+        "x": 524.0,
+        "y": 1008,
+        "note": "bottom-center of contentBounds; pixel coordinates on source canvas"
+      }
+    },
+    {
+      "file": "drone.png",
+      "url": "/art/drone.png",
+      "type": "entity",
+      "width": 1024,
+      "height": 1024,
+      "bytes": 588117,
+      "sha256": "6112fca2b28a9bd5a6dda0f0f215c9fa441bfd2a2bc7f2d16f040dd4a63fe7f2",
+      "transparentPixelPercent": 81.777,
+      "partialAlphaPixelPercent": 18.134,
+      "meanLuma": 70.891,
+      "lumaStdev": 35.855,
+      "contentBounds": {
+        "x": 86,
+        "y": 222,
+        "width": 852,
+        "height": 602
+      },
+      "anchor": {
+        "x": 512.0,
+        "y": 824,
+        "note": "bottom-center of contentBounds; pixel coordinates on source canvas"
+      }
+    }
+  ]
+}
