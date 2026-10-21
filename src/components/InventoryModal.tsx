@@ -5,6 +5,7 @@ import { Item, Equipment } from '../types/game';
 import { COLLECT_DEFS, COLLECT_SETS, TIER_COLOR, setProgress } from '../game/collection';
 import { ItemIcon } from './ItemIcon';
 import { RarityFrame } from './RarityFrame';
+import { gatheringDescription, inventoryCapacity } from '../game/equipmentRules';
 
 interface InventoryModalProps {
   isOpen: boolean;
@@ -59,16 +60,15 @@ const EQUIP_META: Record<'weapon' | 'armor' | 'tool' | 'pack', { name: string; i
       if (it.id === 'throw_molly') return '燃烧 · 持续120';
       if (it.id === 'throw_smoke') return '烟雾 · 遮蔽脱战';
       if (it.id === 'throw_flash') return '闪光 · 致盲3秒';
-      if (it.id === 'pickaxe_copper') return '铜镐 · 采集+60%';
       if (it.id === 'thermite_charge') return '铝热 · 无声熔切';
       if (it.id === 'c4_explosive') return 'C4 · 破拆400';
-      return '石镐 · 采集+60%/近战22';
+      return gatheringDescription(it.id) ?? it.desc;
     },
   },
   pack: {
     name: '背包',
     icon: <Briefcase className="w-4 h-4 text-violet-400" />,
-    bonus: (it) => (!it ? '基础6格' : it.id === 'pack_tactical' ? '战术携行具 · 共10格' : '帆布背包 · 共8格'),
+    bonus: (it) => !it ? `基础${inventoryCapacity()}格` : `${it.name} · 共${inventoryCapacity(it.id)}格`,
   },
 };
 
@@ -172,7 +172,7 @@ export const InventoryModal: React.FC<InventoryModalProps> = ({
                     <div className="text-xs font-bold text-slate-200 truncate">
                       {it ? `${it.name}${it.count > 1 ? ` ×${it.count}` : ''}` : '空格'}
                     </div>
-                    <div className="text-[10px] text-slate-500 truncate">{it?.desc || ''}</div>
+                    <div className="text-[10px] text-slate-500 truncate">{it ? gatheringDescription(it.id) ?? it.desc : ''}</div>
                     {it && (
                       <div className="flex items-center gap-1 mt-1">
                         {canUse(it) && (

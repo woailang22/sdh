@@ -19,6 +19,7 @@ import { ProfileModal } from './components/ProfileModal';
 import { SettingsModal } from './components/SettingsModal';
 import { WorldMapModal } from './components/WorldMapModal';
 import { copyRenderDiagnostics, readRenderDiagnostics } from './game/renderDiagnostics';
+import { BASE_INVENTORY_SLOTS, inventoryCapacity } from './game/equipmentRules';
 import { BuildingBar } from './components/BuildingBar';
 import { WeatherWidget } from './components/WeatherWidget';
 import { QuestPanel, QuestStep } from './components/QuestPanel';
@@ -175,24 +176,17 @@ export default function App() {
     },
   ]);
 
-  // Inventory Hotbar（零开局：6格全空，靠采集/搜刮/制造填满）
-  const [hotbarSlots, setHotbarSlots] = useState<(Item | null)[]>([
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-  ]);
+  // Inventory starts empty; the quick bar only displays its first six slots.
+  const [hotbarSlots, setHotbarSlots] = useState<(Item | null)[]>(Array(BASE_INVENTORY_SLOTS).fill(null));
 
   // 个人装备栏：武器/护甲/工具/背包（战斗属性只看这里，背包决定格数）
   const [equipment, setEquipment] = useState<Equipment>({ weapon: null, armor: null, tool: null, pack: null });
   const equipmentRef = useRef(equipment);
   equipmentRef.current = equipment;
 
-  // 背包容量：基础6格 + 背包装备（帆布+2/战术+4）
+  // 背包容量与服务端共用规则。
   const packCapacity = (eq: Equipment) =>
-    6 + (eq.pack?.id === 'pack_tactical' ? 4 : eq.pack?.id === 'pack_canvas' ? 2 : 0);
+    inventoryCapacity(eq.pack?.id);
 
   // 护甲加成表
   const ARMOR_BONUS: Record<string, number> = { armor_cloth: 25, armor_vest: 50, ...ARMOR_BONUS_TABLE };
@@ -364,7 +358,7 @@ export default function App() {
     return true;
   }, [applyArmorDelta]);
 
-  // 脱装备：装备栏 → 背包（脱背包时若东西超6格则拒绝）
+  // 脱装备：装备栏 → 背包（空间不足时拒绝缩容）
   const unequipSlot = useCallback((slot: 'weapon' | 'armor' | 'tool' | 'pack') => {
     if (gameStateRef.current) { netManagerRef.current?.gameAction('unequip', { slot }); return; }
     const eq = { ...equipmentRef.current };

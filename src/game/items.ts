@@ -1,4 +1,5 @@
 import type { Item } from '../types/game';
+import { gatheringDescription } from './equipmentRules';
 
 export type ItemQuality = 0 | 1 | 2 | 3;
 
@@ -20,9 +21,9 @@ export interface ItemDef {
 
 export const ITEM_DEFS: Record<string, ItemDef> = {
   copper_bar: { id: 'copper_bar', name: '精炼铜锭', category: 'material', icon: '🟠', rarity: 3, maxCount: 99, desc: '在营地熔炉加工铜矿，制造升级工具。', buyPrice: 120, sellPrice: 80 },
-  pickaxe_stone: { id: 'pickaxe_stone', name: '开山镐', category: 'tool', icon: '⛏️', rarity: 1, maxCount: 1, desc: '用于采石和采矿。', buyPrice: 40, sellPrice: 20 },
-  axe_stone: { id: 'axe_stone', name: '石斧', category: 'tool', icon: '🪓', rarity: 1, maxCount: 1, desc: '用于伐木。', buyPrice: 40, sellPrice: 20 },
-  rod_basic: { id: 'rod_basic', name: '简易钓竿', category: 'tool', icon: '🎣', rarity: 1, maxCount: 1, desc: '用于钓鱼。', buyPrice: 35, sellPrice: 15 },
+  pickaxe_stone: { id: 'pickaxe_stone', name: '开山镐', category: 'tool', icon: '⛏️', rarity: 1, maxCount: 1, desc: gatheringDescription('pickaxe_stone')!, buyPrice: 40, sellPrice: 20 },
+  axe_stone: { id: 'axe_stone', name: '石斧', category: 'tool', icon: '🪓', rarity: 1, maxCount: 1, desc: gatheringDescription('axe_stone')!, buyPrice: 40, sellPrice: 20 },
+  rod_basic: { id: 'rod_basic', name: '简易钓竿', category: 'tool', icon: '🎣', rarity: 1, maxCount: 1, desc: gatheringDescription('rod_basic')!, buyPrice: 35, sellPrice: 15 },
   crude_gun: { id: 'crude_gun', name: '土铳', category: 'weapon', icon: '🔫', rarity: 1, maxCount: 1, desc: '粗制火枪，使用通用弹药。', buyPrice: 100, sellPrice: 50, damage: 55 },
   armor_cloth: { id: 'armor_cloth', name: '粗布护甲', category: 'armor', icon: '🧥', rarity: 1, maxCount: 1, desc: '护盾上限增加25。', buyPrice: 60, sellPrice: 30, shield: 25 },
   dried_fish: { id: 'dried_fish', name: '烤肉干', category: 'food', icon: '🍖', rarity: 1, maxCount: 99, desc: '恢复35点饱食。', buyPrice: 12, sellPrice: 6, satiety: 35 },
@@ -110,7 +111,7 @@ export const ITEM_DEFS: Record<string, ItemDef> = {
   throw_smoke: { id: 'throw_smoke', name: '烟雾弹×2', category: 'tool', icon: '💨', rarity: 2, maxCount: 10, desc: '遮蔽视野，脱战/摸箱用。', buyPrice: 60, sellPrice: 40 },
   throw_flash: { id: 'throw_flash', name: '闪光弹×2', category: 'tool', icon: '✨', rarity: 3, maxCount: 10, desc: '致盲3秒，越级打精英。', buyPrice: 80, sellPrice: 54 },
   throw_molly: { id: 'throw_molly', name: '燃烧瓶×2', category: 'tool', icon: '🔥', rarity: 3, maxCount: 10, desc: '持续120灼烧，封路守门。', buyPrice: 90, sellPrice: 60 },
-  pickaxe_copper: { id: 'pickaxe_copper', name: '铜镐', category: 'tool', icon: '⛏️', rarity: 3, maxCount: 1, desc: '采矿专用：采石效率+60%，铜矿升级。', buyPrice: 350, sellPrice: 230 },
+  pickaxe_copper: { id: 'pickaxe_copper', name: '铜镐', category: 'tool', icon: '⛏️', rarity: 3, maxCount: 1, desc: gatheringDescription('pickaxe_copper')!, buyPrice: 350, sellPrice: 230 },
   att_scope4x: { id: 'att_scope4x', name: '4倍战术瞄具', category: 'material', icon: '🔭', rarity: 4, maxCount: 5, desc: 'SVD/M4配件，工厂/掠夺者产出。', buyPrice: 400, sellPrice: 280 },
   att_suppressor: { id: 'att_suppressor', name: '消音器', category: 'material', icon: '🔇', rarity: 4, maxCount: 5, desc: '开火无声，摸金必备。', buyPrice: 450, sellPrice: 300 },
   att_extmag: { id: 'att_extmag', name: '扩容弹匣', category: 'material', icon: '🎒', rarity: 3, maxCount: 5, desc: '备弹+50%，持续火力。', buyPrice: 250, sellPrice: 170 },

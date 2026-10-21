@@ -1,5 +1,6 @@
 import { makeItem } from './items';
 import type { Item } from '../types/game';
+import { gatheringDescription, inventoryCapacity } from './equipmentRules';
 
 export interface CraftCost {
   wood: number;
@@ -35,7 +36,7 @@ const RECIPES: Omit<Recipe, 'resultItemId' | 'resultCount'>[] = [
     resultName: '开山镐',
     icon: '⛏️',
     category: '工具打造',
-    desc: '采矿专用！采石效率+60%，砍树无加成。先做镐再做斧。',
+    desc: gatheringDescription('pickaxe_stone')!,
     cost: { wood: 8, stone: 6, scrap: 0, parts: 0 },
   },
   {
@@ -44,7 +45,7 @@ const RECIPES: Omit<Recipe, 'resultItemId' | 'resultCount'>[] = [
     resultName: '石斧',
     icon: '🪓',
     category: '工具打造',
-    desc: '伐木专用！砍树效率+60%，采矿无加成。',
+    desc: gatheringDescription('axe_stone')!,
     cost: { wood: 10, stone: 4, scrap: 0, parts: 0 },
   },
   {
@@ -53,7 +54,7 @@ const RECIPES: Omit<Recipe, 'resultItemId' | 'resultCount'>[] = [
     resultName: '简易钓竿',
     icon: '🎣',
     category: '工具打造',
-    desc: '钓鱼专用！一次钓两条，饱食无忧。',
+    desc: gatheringDescription('rod_basic')!,
     cost: { wood: 8, stone: 0, scrap: 4, parts: 0 },
   },
   {
@@ -116,7 +117,7 @@ const RECIPES: Omit<Recipe, 'resultItemId' | 'resultCount'>[] = [
     resultName: '帆布背包',
     icon: '🎒',
     category: '背包打造',
-    desc: '背包格 +2（共8格）。东西不够装的第一解。',
+    desc: `背包格 +2（共${inventoryCapacity('pack_canvas')}格）。装备后生效。`,
     cost: { wood: 6, stone: 0, scrap: 12, parts: 0 },
   },
   {
@@ -125,7 +126,7 @@ const RECIPES: Omit<Recipe, 'resultItemId' | 'resultCount'>[] = [
     resultName: '战术携行具',
     icon: '🧳',
     category: '背包打造',
-    desc: '背包格 +4（共10格）。搜刮流毕业装。',
+    desc: `背包格 +4（共${inventoryCapacity('pack_tactical')}格）。装备后生效。`,
     cost: { wood: 0, stone: 0, scrap: 25, parts: 3 },
   },
   {
@@ -144,7 +145,7 @@ const RECIPES: Omit<Recipe, 'resultItemId' | 'resultCount'>[] = [
   { id: 'grow_starfruit', name: '种植：星果 ×2', resultName: '星果', icon: '🌟', category: '农圩种植', desc: '种子×1，酿酒暴利。', cost: { wood: 6, stone: 0, scrap: 6, parts: 1, extra: [{ itemId: 'seed_starfruit', count: 1 }] } },
   { id: 'jam_pot', name: '蓝莓果酱 ×2', resultName: '蓝莓果酱', icon: '🫙', category: '食物加工', desc: '蓝莓×3→果酱×2，售价翻倍。', cost: { wood: 4, stone: 0, scrap: 6, parts: 0, extra: [{ itemId: 'crop_blueberry', count: 3 }] } },
   { id: 'cook_pot', name: '鱼汤 ×2', resultName: '鱼汤', icon: '🍲', category: '食物加工', desc: '鲈鱼×2+水感废料，恢复60饱食。', cost: { wood: 6, stone: 0, scrap: 4, parts: 0, extra: [{ itemId: 'fish_bass', count: 2 }] } },
-  { id: 'copper_pickaxe', name: '铜镐', resultName: '铜镐', icon: '⛏️', category: '工具打造', desc: '铜矿×8，采矿效率+120%。', cost: { wood: 6, stone: 0, scrap: 8, parts: 0, extra: [{ itemId: 'ore_copper', count: 8 }] } },
+  { id: 'copper_pickaxe', name: '铜镐', resultName: '铜镐', icon: '⛏️', category: '工具打造', desc: gatheringDescription('pickaxe_copper')!, cost: { wood: 6, stone: 0, scrap: 8, parts: 0, extra: [{ itemId: 'ore_copper', count: 8 }] } },
   { id: 'ammo_reload', name: '复装弹药 ×30', resultName: '复装弹药', icon: '🎯', category: '弹药制造', desc: '废铁×10+零件×1，通用备弹+30。', cost: { wood: 0, stone: 0, scrap: 10, parts: 1 } },
   { id: 'surgery_craft', name: '野战手术包 ×1', resultName: '野战手术包', icon: '💉', category: '医疗合成', desc: '绷带×2+零件×1，恢复100生命。', cost: { wood: 0, stone: 0, scrap: 14, parts: 1, extra: [{ itemId: 'med_bandage', count: 2 }] } },
   { id: 'star_wine', name: '星果酒 ×1', resultName: '星果酒', icon: '🍷', category: '食物加工', desc: '星果×3陈酿，毕业暴利。', cost: { wood: 10, stone: 0, scrap: 8, parts: 1, extra: [{ itemId: 'crop_starfruit', count: 3 }] } },

@@ -5,6 +5,7 @@ import { CRAFT_RECIPES, recipeFacility } from '../src/game/crafting';
 import { ARMOR_REDUCTION, killReward, MELEE, WEAPONS } from '../src/game/combat';
 import { BUILD_RECIPES } from '../src/game/buildingRecipes';
 import { hasLineOfSight, isPositionBlocked } from '../src/game/navigation';
+import { BASE_INVENTORY_SLOTS, inventoryCapacity, resizeInventory, gatheringEffects } from '../src/game/equipmentRules';
 import type { DbHandle } from './db';
 
 export type ResourceKey = 'wood' | 'stone' | 'scrap' | 'parts' | 'food' | 'ammo' | 'c4' | 'medical' | 'credits' | 'shard';
@@ -82,6 +83,7 @@ export class GameWorld {
       this.state.production ||= {};
       this.state.monsters ||= {};
       for (const p of Object.values(this.state.players)) { p.satiety ??= 100; p.survivalAt = this.now(); p.blueprints ||= []; p.disconnectUntil ??= 0; p.lastDamageAt ??= this.now(); p.xp ??= 0; p.maxXp ||= p.level * 100; p.kills ??= 0; this.deriveArmor(p); }
+      for (const p of Object.values(this.state.players)) while (p.inventory.length < inventoryCapacity(p.equipment.pack?.id)) p.inventory.push(null);
       for (const camp of Object.values(this.state.camps)) { camp.members ||= []; camp.level ||= 1; camp.size ||= 64; camp.state = this.core(camp)?.hp === 0 ? 'breached' : 'active'; }
       for (const p of Object.values(this.state.players)) {
         // A recorded disconnect deadline takes precedence even after it expires; later damage must not extend the body lifetime on restart.
@@ -138,7 +140,7 @@ export class GameWorld {
   private newPlayer(id: string, name: string): Player {
     return { id, name, level: 1, title: '废土流浪者', avatarSeed: id, x: 0, y: 0, angle: 0, mapId: 'world', hp: 100, maxHp: 100, shield: 0, maxShield: 50,
       isFiring: false, isDashing: false, color: '#06b6d4', ping: 0, lastSeen: this.now(), currentAction: '徒手求生',
-      inventory: Array(24).fill(null), equipment: { weapon: null, armor: null, tool: null, pack: null }, resources: emptyResources(), campId: null,
+      inventory: Array(BASE_INVENTORY_SLOTS).fill(null), equipment: { weapon: null, armor: null, tool: null, pack: null }, resources: emptyResources(), campId: null,
       moveAt: this.now(), moveBudget: 0.25, actionAt: {}, combatUntil: 0, satiety: 100, survivalAt: this.now(), dashUntil: 0, dashReadyAt: 0, blueprints: [], disconnectUntil: 0, lastDamageAt: this.now(), xp: 0, maxXp: 100, kills: 0 };
   }
 
@@ -379,7 +381,7 @@ export class GameWorld {
       requireRule(['tree', 'boulder', 'pond', 'crystal', 'scrap'].includes(def.type), '该目标需要搜刮');
       this.cooldown(p, 'gather', 800);
       const tool = p.equipment.tool?.id || '';
-      const isAxe = /axe_stone|stone_axe/.test(tool), isPick = /pickaxe/.test(tool), isRod = /rod/.test(tool);
+      const effects = gatheringEffects(tool), isPick = effects.canMine, isRod = effects.canFish;
       requireRule(def.type !== 'pond' || isRod, '钓鱼需要装备钓竿');
       requireRule(def.type !== 'crystal' || isPick, '晶矿需要装备镐');
       const itemId = def.type === 'tree' ? 'wood' : def.type === 'boulder' ? 'stone' : def.type === 'pond' ? 'fish' : def.type === 'crystal' ? 'shard' : 'scrap';
@@ -392,7 +394,7 @@ export class GameWorld {
         const fishId = fish.length ? fish[harvested % fish.length].itemId : 'fish';
         this.add(p, fishId, fishId === 'fish' ? 2 : 1);
       } else {
-        this.add(p, itemId, def.type === 'tree' && isAxe || def.type === 'boulder' && isPick ? 3 : 1);
+        this.add(p, itemId, def.type === 'tree' ? effects.wood : def.type === 'boulder' ? effects.stone : 1);
         if (def.type === 'boulder' && isPick) for (const mineral of minerals.filter(item => item.itemId !== itemId).slice(0, 2)) this.add(p, mineral.itemId, 1);
       }
       node.stock--; if (!node.stock) node.respawnAt = this.now() + (def.respawnSec || 180) * 1000;
@@ -545,6 +547,11 @@ export class GameWorld {
         const item = p.inventory[Number(a.index)]; requireRule(item && item.category === slot && item.count === 1, '装备类型不匹配');
         p.inventory[Number(a.index)] = p.equipment[slot]; p.equipment[slot] = item;
       }
+      if (slot === 'pack') {
+        const resized = resizeInventory(p.inventory, inventoryCapacity(p.equipment.pack?.id));
+        requireRule(resized, '背包空间不足，请先整理物品再更换或卸下背包');
+        p.inventory = resized;
+      }
       this.deriveArmor(p); return;
     }
     if (a.action === 'craft') {
@@ -645,7 +652,7 @@ export class GameWorld {
     }
     const home = p.campId ? this.state.camps[p.campId] : undefined;
     const bed = home && home.state !== 'breached' && !this.hasHostile(home.id as MapZoneId) ? Object.values(this.state.buildings).find(b => b.mapId === home.id && b.ownerId === p.id && b.type === 'bed' && b.hp > 0) : undefined;
-    p.inventory = Array(24).fill(null); p.mapId = bed ? bed.mapId! : 'world'; p.x = bed?.x || 0; p.y = bed ? bed.y + 1 : 0; p.hp = p.maxHp; p.shield = 0; p.satiety = 40; p.moveAt = this.now();
+    p.inventory = Array(inventoryCapacity(p.equipment.pack?.id)).fill(null); p.mapId = bed ? bed.mapId! : 'world'; p.x = bed?.x || 0; p.y = bed ? bed.y + 1 : 0; p.hp = p.maxHp; p.shield = 0; p.satiety = 40; p.moveAt = this.now();
     this.clearSpawn(p);
   }
 

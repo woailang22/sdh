@@ -39,6 +39,83 @@ function npcHit(game: GameWorld, advance: (ms: number) => void, playerId = 'owne
   delete game.state.monsters.fixture_hit; game.persist();
 }
 
+describe('equipment progression and inventory capacity', () => {
+  it('expands the actual inventory and rejects removing a full pack without losing anything', () => {
+    const { game, act } = setup(); const p = game.state.players.owner;
+    p.inventory[0] = makeItem('pack_canvas', 1);
+    expect(act('owner', 'equip', { slot: 'pack', index: 0 }).error).toBeUndefined();
+    expect(p.inventory).toHaveLength(26);
+    p.resources.credits = 100000;
+    expect(act('owner', 'buy', { itemId: 'rifle', quantity: 26 }).error).toBeUndefined();
+    const before = structuredClone(p);
+    expect(act('owner', 'unequip', { slot: 'pack' }).error).toContain('背包');
+    expect(p.inventory).toEqual(before.inventory);
+    expect(p.equipment).toEqual(before.equipment);
+  });
+
+  it('moves occupied extension slots into free base slots on unequip and persists every item', () => {
+    const { game, act, db } = setup(); const p = game.state.players.owner;
+    p.inventory[0] = makeItem('pack_canvas', 1); p.inventory[4] = makeItem('med_bandage', 2);
+    act('owner', 'equip', { slot: 'pack', index: 0 }); p.inventory[25] = makeItem('food', 3);
+    expect(act('owner', 'unequip', { slot: 'pack' }).error).toBeUndefined();
+    expect(p.inventory).toHaveLength(24);
+    expect(p.inventory[4]).toMatchObject({ id: 'med_bandage', count: 2 });
+    expect(p.inventory.filter(Boolean).map(i => [i!.id, i!.count]).sort()).toEqual([['food', 3], ['med_bandage', 2], ['pack_canvas', 1]].sort());
+    const restored = new GameWorld(db, rules);
+    expect(restored.state.players.owner.inventory).toEqual(p.inventory);
+    expect(restored.state.players.owner.equipment.pack).toBeNull();
+  });
+
+  it('refuses an overfull downgrade, then swaps packs and preserves quick slots once space is available', () => {
+    const { game, act } = setup(); const p = game.state.players.owner;
+    p.equipment.pack = makeItem('pack_tactical', 1);
+    p.inventory = Array.from({ length: 28 }, (_, i) => i < 26 ? makeItem('rifle', 1) : null);
+    p.inventory[0] = makeItem('pack_canvas', 1); p.inventory[27] = makeItem('med_bandage', 3);
+    const before = structuredClone(p);
+    expect(act('owner', 'equip', { slot: 'pack', index: 0 }).error).toContain('空间');
+    expect(p.inventory).toEqual(before.inventory); expect(p.equipment).toEqual(before.equipment);
+    p.inventory[24] = null;
+    expect(act('owner', 'equip', { slot: 'pack', index: 0 }).error).toBeUndefined();
+    expect(p.inventory).toHaveLength(26);
+    expect(p.equipment.pack?.id).toBe('pack_canvas');
+    expect(p.inventory[0]?.id).toBe('pack_tactical');
+    expect(p.inventory[24]).toMatchObject({ id: 'med_bandage', count: 3 });
+    expect(p.inventory[1]?.id).toBe('rifle');
+  });
+
+  it('applies already-equipped legacy packs after restart without deleting existing slots', () => {
+    const { game, db } = setup(); const p = game.state.players.owner;
+    p.equipment.pack = makeItem('pack_tactical', 1); p.inventory[23] = makeItem('food', 7); game.persist();
+    const restored = new GameWorld(db, rules);
+    expect(restored.state.players.owner.inventory).toHaveLength(28);
+    expect(restored.state.players.owner.inventory[23]).toMatchObject({ id: 'food', count: 7 });
+  });
+
+  it('keeps equipped pack capacity on death while dropping extension-slot inventory exactly once', () => {
+    const { game, advance, db } = setup(); const p = game.state.players.owner;
+    p.equipment.pack = makeItem('pack_tactical', 1); p.inventory = Array(28).fill(null);
+    p.inventory[27] = makeItem('food', 7); p.hp = 1; p.shield = 0;
+    npcHit(game, advance);
+    expect(p.inventory).toHaveLength(28); expect(p.inventory.every(i => !i)).toBe(true);
+    expect(p.equipment.pack?.id).toBe('pack_tactical');
+    expect(Object.values(game.state.drops).flatMap(d => d.items).filter(i => i.itemId === 'food')).toEqual([{ itemId: 'food', name: makeItem('food', 7).name, count: 7 }]);
+    const restored = new GameWorld(db, rules);
+    expect(restored.state.players.owner.inventory).toHaveLength(28);
+    expect(Object.values(restored.state.drops).flatMap(d => d.items).filter(i => i.itemId === 'food')).toHaveLength(1);
+  });
+
+  it('gives copper picks a real mining improvement without granting axe benefits', () => {
+    const rock = { ...tree, type: 'boulder' as const, id: 'ore', lootTable: [{ itemId: 'ore_copper', name: '铜矿', count: 1 }] };
+    for (const [tool, expected] of [['pickaxe_stone', 3], ['pickaxe_copper', 4], ['axe_stone', 1]] as const) {
+      const db = createMemoryDb(); const game = new GameWorld(db, { ...rules, nodeAt: () => rock, nodesNear: () => [rock] });
+      game.connect('miner', '矿工'); game.state.players.miner.equipment.tool = makeItem(tool, 1);
+      const result = game.action('miner', { requestId: 'mine', action: 'gather', targetId: rock.id });
+      expect(result.error).toBeUndefined(); expect(result.player.resources.stone).toBe(expected);
+      expect(result.player.inventory.filter(i => i?.id === 'ore_copper').reduce((sum, i) => sum + i!.count, 0)).toBe(tool === 'axe_stone' ? 0 : 1);
+    }
+  });
+});
+
 describe('public building layout updates', () => {
   it('aligns saved public doors to current geometry while retaining damage, door state and private camps', () => {
     const { game, db, p } = campSetup();
