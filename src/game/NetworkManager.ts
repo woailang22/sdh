@@ -6,14 +6,17 @@ import {
   NetMessage,
   MapZoneId,
 } from '../types/game';
+import type { GameStateSnapshot } from '../../server/worldState';
 
 export interface NetworkCallbacks {
+  onGameState?: (state: GameStateSnapshot) => void;
   onInit: (data: {
     selfId: string;
     selfPlayer: OnlinePlayer;
     players: OnlinePlayer[];
     buildings: BuildingEntity[];
     weather: WeatherState;
+    gameState?: GameStateSnapshot;
   }) => void;
   onPlayerJoined: (player: OnlinePlayer) => void;
   onPlayerLeft: (playerId: string, name: string) => void;
@@ -36,15 +39,16 @@ export class NetworkManager {
   private lastPingSent: number = 0;
   private reconnectTimer: any = null;
   private disposed: boolean = false; // 销毁后不再重连（防幽灵连接）
+  private sessionPending = false;
   public selfId: string = '';
 
   constructor(callbacks: NetworkCallbacks) {
     this.callbacks = callbacks;
   }
 
-  public connect() {
+  public async connect() {
     this.disposed = false;
-    if (this.ws && (this.ws.readyState === WebSocket.OPEN || this.ws.readyState === WebSocket.CONNECTING)) {
+    if (this.sessionPending || (this.ws && (this.ws.readyState === WebSocket.OPEN || this.ws.readyState === WebSocket.CONNECTING))) {
       return;
     }
 
@@ -53,6 +57,10 @@ export class NetworkManager {
     const wsUrl = `${protocol}//${host}/ws`;
 
     try {
+      this.sessionPending = true;
+      const session = await fetch('/api/session', { credentials: 'same-origin' });
+      if (!session.ok) throw new Error('无法恢复玩家身份');
+      if (this.disposed) return;
       this.ws = new WebSocket(wsUrl);
 
       this.ws.onopen = () => {
@@ -71,10 +79,14 @@ export class NetworkManager {
         }
       };
 
-      this.ws.onclose = () => {
+      this.ws.onclose = (event) => {
         this.isConnected = false;
         this.stopPingLoop();
         this.callbacks.onConnectionChange(false, 0);
+        if (event.code === 4001) {
+          this.disposed = true;
+          return;
+        }
         console.warn('[Multiplayer] Connection closed. Retrying in 2.5s...');
         this.scheduleReconnect();
       };
@@ -85,6 +97,8 @@ export class NetworkManager {
     } catch (e) {
       console.error('[Multiplayer] Failed to initialize WebSocket:', e);
       this.scheduleReconnect();
+    } finally {
+      this.sessionPending = false;
     }
   }
 
@@ -148,17 +162,27 @@ export class NetworkManager {
     mapId: MapZoneId;
     material?: 'wood' | 'stone' | 'iron';
   }) {
-    this.send({
-      type: 'building_placed',
-      payload: building,
-    });
+    this.gameAction('build', { buildType: building.type, x: building.x, y: building.y });
   }
 
   public attemptRaid(targetId: string, supplyId: string, supplyName: string) {
-    this.send({
-      type: 'raid_attempt',
-      payload: { targetId, supplyId, supplyName },
-    });
+    this.gameAction('raid', { targetId, supplyId });
+  }
+
+  public gameAction(action: string, payload: Record<string, unknown> = {}) {
+    let requestId: string;
+    if (typeof crypto.randomUUID === 'function') {
+      requestId = crypto.randomUUID();
+    } else {
+      // LAN HTTP has getRandomValues, but randomUUID requires a secure context.
+      const bytes = crypto.getRandomValues(new Uint8Array(16));
+      bytes[6] = (bytes[6] & 0x0f) | 0x40;
+      bytes[8] = (bytes[8] & 0x3f) | 0x80;
+      const hex = Array.from(bytes, byte => byte.toString(16).padStart(2, '0')).join('');
+      requestId = [hex.slice(0, 8), hex.slice(8, 12), hex.slice(12, 16), hex.slice(16, 20), hex.slice(20)].join('-');
+    }
+    this.send({ type: 'game_action', payload: { ...payload, action, requestId } });
+    return requestId;
   }
 
   public sendChat(channel: 'world' | 'team' | 'system', text: string) {
@@ -181,14 +205,18 @@ export class NetworkManager {
   }
 
   public visitHome(targetPlayerId: string) {
-    this.send({ type: 'player_sync', payload: { mapId: `home_${targetPlayerId}` as any, x: 0, y: 9 } });
+    this.gameAction('enter_camp', { campId: `home_${targetPlayerId}` });
   }
   public goHome(selfId: string) {
-    this.send({ type: 'player_sync', payload: { mapId: `home_${selfId}` as any, x: 0, y: 9 } });
+    this.gameAction('enter_camp', { campId: `home_${selfId}` });
   }
 
   private handleMessage(msg: NetMessage) {
     switch (msg.type) {
+      case 'game_state': {
+        this.callbacks.onGameState?.(msg.payload);
+        break;
+      }
       case 'init': {
         this.selfId = msg.payload.selfId;
         this.callbacks.onInit(msg.payload);

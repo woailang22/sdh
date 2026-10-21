@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { Hammer, Shield, DoorClosed, Zap, Archive, Flame, X, Grid, Eye, Wrench, Sparkles, Layers } from 'lucide-react';
+import { Hammer, Shield, DoorClosed, Zap, Archive, Flame, X, Grid, Eye, Wrench, Layers, BedDouble, Sprout, FlaskConical } from 'lucide-react';
 import { soundManager } from '../audio/soundManager';
 import { BuildableType } from '../types/game';
+import { BUILD_RECIPES } from '../game/buildingRecipes';
 
 export interface BuildableStructure {
   type: BuildableType;
@@ -23,6 +24,8 @@ interface BuildingBarProps {
   onToggleBuildMode: () => void;
   playerScrap: number;
   playerParts: number;
+  playerWood?: number;
+  playerStone?: number;
 }
 
 export const BuildingBar: React.FC<BuildingBarProps> = ({
@@ -32,10 +35,12 @@ export const BuildingBar: React.FC<BuildingBarProps> = ({
   onToggleBuildMode,
   playerScrap,
   playerParts,
+  playerWood = 0,
+  playerStone = 0,
 }) => {
   const [activeCategory, setActiveCategory] = useState<'floor' | 'wall' | 'utility'>('floor');
 
-  const structures: BuildableStructure[] = [
+  const definitions: BuildableStructure[] = [
     // 1. 地板系列 (Floors)
     {
       type: 'wood_floor',
@@ -46,7 +51,7 @@ export const BuildingBar: React.FC<BuildingBarProps> = ({
       costWood: 4,
       costParts: 0,
       hp: 300,
-      desc: '铺设营地木质地板，平整地面，扩展可活动领地空间',
+      desc: '铺设营地木质地板；营地边界由核心升级扩展',
     },
     {
       type: 'stone_floor',
@@ -57,7 +62,7 @@ export const BuildingBar: React.FC<BuildingBarProps> = ({
       costStone: 6,
       costParts: 0,
       hp: 550,
-      desc: '厚重坚固的花岗石板路面，防蚀体钻地突袭，防爆破',
+      desc: '铺设石质地板，提供营地建筑基础',
     },
     {
       type: 'iron_floor',
@@ -131,7 +136,7 @@ export const BuildingBar: React.FC<BuildingBarProps> = ({
       costScrap: 20,
       costParts: 4,
       hp: 5000,
-      desc: '领地核心安全大门！5000超高耐久，其他玩家可使用破拆物资(C4/铝热剂/EMP)突袭攻门！',
+      desc: '高耐久安全门，其他玩家可消耗真实 C4 或铝热弹破拆',
     },
 
     // 3. 领地与城防设施 (Utilities & Defense)
@@ -156,34 +161,14 @@ export const BuildingBar: React.FC<BuildingBarProps> = ({
       desc: '野战军工工作台，靠近按 [F] 制造步枪子弹、医疗包与工具',
     },
     {
-      type: 'electric_core',
-      category: 'utility',
-      name: '电磁防卫核心',
-      icon: <Sparkles className="w-4 h-4 text-cyan-300" />,
-      costScrap: 12,
-      costParts: 2,
-      hp: 600,
-      desc: '安装在领地防线，对 5 格范围内接近的蚀体自动释放高压电浆',
-    },
-    {
-      type: 'flame_core',
-      category: 'utility',
-      name: '聚能烈焰燃芯',
-      icon: <Flame className="w-4 h-4 text-orange-400" />,
-      costScrap: 12,
-      costParts: 2,
-      hp: 600,
-      desc: '装载旧时代聚能燃芯，对周围接近的怪兽喷吐炽热烈焰',
-    },
-    {
       type: 'turret',
       category: 'utility',
-      name: '自律防御电击塔',
+      name: '自动防御炮塔',
       icon: <Zap className="w-4 h-4 text-amber-400" />,
       costScrap: 15,
       costParts: 2,
       hp: 750,
-      desc: '全自动索敌哨塔，向靠近的恶瘴魑发射密集破甲电浆',
+      desc: '装填真实弹药后攻击营地入侵者，主人离线仍守备；最多装填 500 发',
     },
     {
       type: 'spikes',
@@ -193,9 +178,19 @@ export const BuildingBar: React.FC<BuildingBarProps> = ({
       costScrap: 4,
       costParts: 0,
       hp: 300,
-      desc: '铺设于地面必经之路，造成持续穿刺伤害并大幅减速敌人',
+      desc: '接触入侵者时造成伤害，同时消耗自身耐久',
     },
+    { type: 'campfire', category: 'utility', name: '篝火', icon: <Flame className="w-4 h-4 text-orange-400" />, costScrap: 0, costParts: 0, hp: 1, desc: '消耗配方材料加工食物，完成后在篝火领取' },
+    { type: 'bed', category: 'utility', name: '营地床铺', icon: <BedDouble className="w-4 h-4 text-indigo-300" />, costScrap: 0, costParts: 0, hp: 1, desc: '脱离战斗后休息恢复 20 生命，每 10 秒可用一次' },
+    { type: 'furnace', category: 'utility', name: '冶炼炉', icon: <Flame className="w-4 h-4 text-red-400" />, costScrap: 0, costParts: 0, hp: 1, desc: '消耗铜矿和燃料材料冶炼铜锭，完成后领取' },
+    { type: 'farm_plot', category: 'utility', name: '种植田', icon: <Sprout className="w-4 h-4 text-lime-400" />, costScrap: 0, costParts: 0, hp: 1, desc: '消耗种子和配方材料开始种植，成熟后领取作物' },
+    { type: 'research_table', category: 'utility', name: '研究台', icon: <FlaskConical className="w-4 h-4 text-violet-300" />, costScrap: 0, costParts: 0, hp: 1, desc: '消耗蓝图、废铁与零件，解锁等离子步枪制造配方' },
   ];
+
+  const structures = definitions.filter(structure => BUILD_RECIPES[structure.type]).map(structure => {
+    const recipe = BUILD_RECIPES[structure.type]!;
+    return { ...structure, name: recipe.name, hp: recipe.hp, costWood: recipe.wood || 0, costStone: recipe.stone || 0, costScrap: recipe.scrap || 0, costParts: recipe.parts || 0 };
+  });
 
   const currentStructures = structures.filter((s) => s.category === activeCategory);
   const currentSelected = structures.find((s) => s.type === selectedType) || structures[0];
@@ -212,7 +207,7 @@ export const BuildingBar: React.FC<BuildingBarProps> = ({
         <Hammer className="w-4 h-4 text-cyan-400" />
         <span>建造工坊 [B]</span>
         <span className="text-[10px] text-amber-400/90 bg-amber-950/60 px-1.5 py-0.5 rounded border border-amber-500/30">
-          铺地板 / 造墙 / 设核心
+          铺地板 / 造墙 / 建设施
         </span>
       </button>
     );
@@ -228,7 +223,7 @@ export const BuildingBar: React.FC<BuildingBarProps> = ({
             <span>领地与地表建造模式</span>
           </span>
           <span className="text-[10px] text-slate-400 bg-slate-900 px-2 py-0.5 rounded border border-slate-700">
-            废铁: <strong className="text-amber-400">{playerScrap}</strong> · 零件: <strong className="text-cyan-400">{playerParts}</strong>
+            木 {playerWood} · 石 {playerStone} · 铁 {playerScrap} · 件 {playerParts}
           </span>
         </div>
 
@@ -291,19 +286,20 @@ export const BuildingBar: React.FC<BuildingBarProps> = ({
           }`}
         >
           <Zap className="w-3.5 h-3.5" />
-          <span>储物·制造·城防核心</span>
+          <span>储物·生产·防御</span>
         </button>
       </div>
 
       {/* Structure Items Grid */}
-      <div className="grid grid-cols-3 sm:grid-cols-5 gap-1.5 w-full">
+      <div className="grid grid-cols-3 sm:grid-cols-5 gap-1.5 w-full max-h-[40vh] overflow-y-auto">
         {currentStructures.map((s) => {
           const isSelected = selectedType === s.type;
-          const canAfford = playerScrap >= s.costScrap && playerParts >= s.costParts;
+          const canAfford = playerScrap >= s.costScrap && playerParts >= s.costParts && playerWood >= (s.costWood || 0) && playerStone >= (s.costStone || 0);
 
           return (
             <button
               key={s.type}
+              disabled={!canAfford}
               onClick={() => {
                 soundManager.playClick();
                 onSelectType(s.type);
@@ -318,7 +314,9 @@ export const BuildingBar: React.FC<BuildingBarProps> = ({
                 {s.icon}
               </div>
               <span className="text-[11px] font-bold line-clamp-1 leading-tight">{s.name}</span>
-              <div className="flex items-center gap-1 text-[9px] font-mono mt-1 text-slate-400">
+              <div className="flex flex-wrap items-center justify-center gap-1 text-[9px] font-mono mt-1 text-slate-400">
+                {!!s.costWood && <span className={playerWood < s.costWood ? 'text-rose-400' : 'text-amber-300'}>木:{s.costWood}</span>}
+                {!!s.costStone && <span className={playerStone < s.costStone ? 'text-rose-400' : 'text-slate-300'}>石:{s.costStone}</span>}
                 <span className={playerScrap < s.costScrap ? 'text-rose-400' : 'text-amber-400'}>
                   铁:{s.costScrap}
                 </span>

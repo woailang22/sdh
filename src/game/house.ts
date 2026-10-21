@@ -14,6 +14,10 @@ export interface HouseGroup {
 }
 
 function prefixOf(id: string): string {
+  if (/^(build_|b_)/.test(id)) return id;
+  const procedural = /^(world:-?\d+:-?\d+:poi):/.exec(id);
+  if (procedural) return procedural[1];
+  id = id.replace(/^world:-?\d+:-?\d+:b:/, 'world:');
   // gas_office_n_-8 → gas_office；gas_office_door → gas_office；ru_cw_1 → ru_cw
   if (id.endsWith('_door')) return id.slice(0, -5);
   const parts = id.split('_');
@@ -62,4 +66,40 @@ export function houseCorners(members: BuildingEntity[]): { x0: number; x1: numbe
   const xs = members.map((m) => m.x);
   const ys = members.map((m) => m.y);
   return { x0: Math.min(...xs), x1: Math.max(...xs), y0: Math.min(...ys), y1: Math.max(...ys) };
+}
+
+export interface HouseWallRun {
+  side: 'N' | 'S' | 'E' | 'W';
+  start: { x: number; y: number };
+  end: { x: number; y: number };
+}
+
+/** Merge only surviving wall cells. Doors and breached wall cells stay holes. */
+export function houseWallRuns(members: BuildingEntity[]): HouseWallRun[] {
+  const { x0, x1, y0, y1 } = houseCorners(members);
+  const result: HouseWallRun[] = [];
+  for (const side of ['N', 'W', 'S', 'E'] as const) {
+    const horizontal = side === 'N' || side === 'S';
+    const fixed = side === 'N' ? y0 : side === 'S' ? y1 : side === 'W' ? x0 : x1;
+    const min = horizontal ? x0 : y0, max = horizontal ? x1 : y1;
+    const intervals = members.filter(b => b.type.endsWith('_wall') && b.hp > 0 && Math.abs((horizontal ? b.y : b.x) - fixed) < 0.01)
+      .map(b => ({ a: Math.max(min, (horizontal ? b.x : b.y) - 0.5), z: Math.min(max, (horizontal ? b.x : b.y) + 0.5) })).sort((a, b) => a.a - b.a);
+    const merged: { a: number; z: number }[] = [];
+    for (const interval of intervals) {
+      const last = merged.at(-1);
+      if (last && interval.a <= last.z + 0.01) last.z = Math.max(last.z, interval.z);
+      else merged.push({ ...interval });
+    }
+    result.push(...merged.filter(r => r.z > r.a).map(r => ({ side, start: horizontal ? { x: r.a, y: fixed } : { x: fixed, y: r.a }, end: horizontal ? { x: r.z, y: fixed } : { x: fixed, y: r.z } })));
+  }
+  return result;
+}
+
+export function houseEntrance(members: BuildingEntity[], door: BuildingEntity): HouseWallRun {
+  const { x0, x1, y0, y1 } = houseCorners(members);
+  const side = door.y === y1 ? 'S' : door.y === y0 ? 'N' : door.x === x0 ? 'W' : 'E';
+  const half = Math.max(0.5, Math.min(2, (door.doorWidth ?? 1) / 2));
+  return side === 'N' || side === 'S'
+    ? { side, start: { x: Math.max(x0, door.x - half), y: door.y }, end: { x: Math.min(x1, door.x + half), y: door.y } }
+    : { side, start: { x: door.x, y: Math.max(y0, door.y - half) }, end: { x: door.x, y: Math.min(y1, door.y + half) } };
 }

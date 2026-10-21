@@ -4,8 +4,13 @@ import { SUBMAPS, displayName, regionOf, lootResourceOf } from './maps';
 import { groundBaseColor, hash2 as hash2Pure, withAlpha, themeAccent, drawSoftShadow, healthBarColor, weatherTint, themeHaze } from './visualTheme';
 import type { GroundTheme } from './visualTheme';
 import { groupBuildingsIntoHouses, houseCorners, HOUSE_WALL_H } from './house';
+import { drawHouseLayer } from './houseRenderer';
 import { frameContent, angleToSurvivorFrame, interactableSprite, buildingSprite } from './art';
 import { isHostile, canOperateDoor } from './diplomacy';
+import { CHUNK_SIZE, WORLD_MIN, WORLD_MAX, generateWorldChunk, worldToChunk, worldThemeAt, worldLocationAt, worldIsRoad, type WorldChunk } from './world';
+import { findPath, isPositionBlocked, hasLineOfSight } from './navigation';
+import { recordRenderFailure } from './renderDiagnostics';
+import { generateWorldScenery, type WorldScenery } from './worldScenery';
 import {
   MonsterEntity,
   InteractableEntity,
@@ -19,6 +24,9 @@ import {
 } from '../types/game';
 
 export interface GameCallbacks {
+  onRenderStatus?: (message: string | null) => void;
+  onGameAction?: (action: string, payload?: Record<string, unknown>) => void;
+  onCampInteract?: () => boolean;
   onOpenWorkbench: () => void;
   onLootFound: (item: string, count: number, resourceType?: 'wood' | 'stone' | 'scrap' | 'parts' | 'food' | 'ammo' | 'c4' | 'medical' | 'weapon' | 'armor' | 'credits' | 'shard' | 'blueprint' | 'pack') => void;
   // 三角洲式开箱：读条完成后打开搜刮面板，由玩家挑选（不再自动全拿）
@@ -56,6 +64,13 @@ export interface MapWaypoint {
   targetY: number;
 }
 
+interface GroundRect {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+}
+
 export class IsometricEngine {
   private canvas: HTMLCanvasElement;
   private ctx: CanvasRenderingContext2D;
@@ -68,7 +83,18 @@ export class IsometricEngine {
   public mouse = { screenX: 0, screenY: 0, worldX: 0, worldY: 0, isDown: false };
 
   // Current Active Map Theme
-  public currentMapId: MapZoneId = 'camp_plaza';
+  public currentMapId: MapZoneId = 'world';
+  private worldChunks = new Map<string, WorldChunk>();
+  private worldWindow = '';
+  private serverBuildings: BuildingEntity[] = [];
+  private monsterAuthority = false;
+  private monsterTargets = new Map<string, { x: number; y: number }>();
+  private movePath: { x: number; y: number }[] = [];
+  public navigationTarget: { x: number; y: number; name: string } | null = null;
+  public campEntrances: { id: string; ownerId: string; ownerName: string; x: number; y: number }[] = [];
+  public friendlyPlayerIds: Set<string> = new Set();
+  public campSize = 64;
+  public inputBlocked = false;
 
   // Multiplayer Online State
   public localPlayerId: string = '';
@@ -82,8 +108,13 @@ export class IsometricEngine {
   // Art sprite cache (/art/*, lazy-load on first use; missing/failed -> procedural fallback)
   public artImages: Map<string, HTMLImageElement> = new Map();
 
-  // 预烘菱形地砖贴片缓存（64×64，key = theme+variant:px:py）：把逐格 clip 变成一次性预烘 + 每格 1 次 drawImage
+  // 预烘菱形地砖贴片缓存（64×64，key = theme+variant:px:py）。
   private tilePatchCache: Map<string, HTMLCanvasElement> = new Map();
+  private artRevision = 0;
+  private worldScenery: WorldScenery[] = [];
+  private sceneryCache = new WeakMap<WorldChunk, WorldScenery[]>();
+  private groundCache: { canvas: HTMLCanvasElement; overlay?: HTMLCanvasElement; key: string; x: number; y: number } | null = null;
+  private readonly listenerController = new AbortController();
 
   // Player Placed Floors (key: `${wx},${wy}`)
   public placedFloors: Map<string, { x: number; y: number; type: 'wood_floor' | 'stone_floor' | 'iron_floor' }> = new Map();
@@ -201,6 +232,12 @@ export class IsometricEngine {
 
   // Animation Loop
   private animFrameId: number = 0;
+  private running = false;
+  private disposed = false;
+  private contextLost = false;
+  private renderRetryAt = 0;
+  private renderStatus: string | null = null;
+  private lastRenderTime = 0;
   private lastTime: number = 0;
   private gameTime: number = 0;
   private rainCount: number = 140;
@@ -212,11 +249,21 @@ export class IsometricEngine {
     this.ctx = canvas.getContext('2d')!;
     this.callbacks = callbacks;
 
-    this.loadMapZone('camp_plaza');
+    this.loadMapZone('world', 0, 9);
     this.initWeather();
     this.setupListeners();
     this.resize();
-    // 贴图全部改为按需懒加载 + 启动后渐进预热（见 artImage / warmArtCache）：
+    canvas.addEventListener('contextlost', () => {
+      this.contextLost = true;
+      recordRenderFailure('Canvas context lost', { mapId: this.currentMapId, x: this.player.x, y: this.player.y });
+      this.setRenderStatus('画面资源暂不可用，正在等待恢复');
+      // The default Canvas 2D behavior restores the context. Do not cancel it.
+    }, { signal: this.listenerController.signal });
+    canvas.addEventListener('contextrestored', () => {
+      this.contextLost = false;
+      this.resetGraphics();
+    }, { signal: this.listenerController.signal });
+    // 仅加载实际绘制到的素材，不预加载未访问地图。
   }
 
   /**
@@ -230,36 +277,15 @@ export class IsometricEngine {
     if (!img) {
       img = new Image();
       img.decoding = 'async';
+      img.addEventListener('load', () => {
+        this.artRevision++;
+        // B 图就绪后不能继续复用此前从 A 图生成的回退贴片。
+        this.tilePatchCache.clear();
+      }, { once: true, signal: this.listenerController.signal });
       img.src = src;
       this.artImages.set(src, img);
     }
     return img;
-  }
-
-  /**
-   * 渐进预热：启动后按空闲时间逐张加载世界贴图。首帧立即可用（procedural 回退），贴图随后平滑替换，
-   * 不再与首屏绘制争抢主线程。
-   */
-  private warmArtCache() {
-    const themes = ['camp', 'plaza', 'field', 'urban', 'ruins', 'forest', 'quarry', 'lake', 'marsh', 'rift'];
-    const queue = [
-      'texture-ground.png', 'nature-trees.png', 'char-survivor.png', 'monster-pack.png', 'prop-wreck.png',
-      'building-facility.png', 'veh-van.png', 'veh-truck.png', 'prop-scrap.png', 'prop-pond.png',
-      'prop-crystal-cluster.png', 'npc-allen.png', 'npc-vivian.png', 'drone.png',
-      ...themes.map((t) => `tile-${t}-a.png`),
-      ...themes.map((t) => `tile-${t}-b.png`),
-    ];
-    const ric = (window as unknown as { requestIdleCallback?: (cb: () => void, opts: { timeout: number }) => void }).requestIdleCallback;
-    const idle: (cb: () => void) => void = ric
-      ? (cb) => ric(cb, { timeout: 400 })
-      : (cb) => window.setTimeout(cb, 90);
-    const step = () => {
-      const file = queue.shift();
-      if (!file) return;
-      this.artImage(file);
-      idle(step);
-    };
-    step();
   }
 
   /**
@@ -357,8 +383,7 @@ export class IsometricEngine {
   }
 
   /**
-   * 预烘菱形贴片：clip 只在预烘时发生一次（每种主题/变体 7×7=49 个采样位，64px 步进），
-   * 逐格渲染只剩 1 次 drawImage —— 消除此前每格 save/clip/restore 的开销。
+   * 预烘菱形贴片：clip 只在预烘时发生一次，逐格渲染只剩 1 次 drawImage。
    */
   private tilePatch(theme: string, variant: 'a' | 'b', px: number, py: number): HTMLCanvasElement | null {
     const ck = `${theme}${variant}:${px}:${py}`;
@@ -396,8 +421,6 @@ export class IsometricEngine {
     this.ctx.drawImage(patch, sx - 32, sy - 32);
   }
 
-  private groundPattern: CanvasPattern | null = null;
-
   // Switch / Load Map Zone
   public loadMapZone(mapId: MapZoneId, targetX: number = 0, targetY: number = 0) {
     this.warpToMap(mapId, targetX, targetY);
@@ -411,6 +434,9 @@ export class IsometricEngine {
     this.player.y = targetY;
     this.player.vx = 0;
     this.player.vy = 0;
+    this.targetMovePoint = null;
+    this.movePath = [];
+    this.placedFloors.clear();
     this.camera.x = -(targetX - targetY) * (this.TILE_W / 2);
     this.camera.y = -(targetX + targetY) * (this.TILE_H / 2);
 
@@ -446,14 +472,114 @@ export class IsometricEngine {
   }
 
   public getMapName(id: MapZoneId): string {
+    if (id === 'world') return `公共荒野 · ${worldLocationAt(this.player.x, this.player.y).name}`;
+    if (String(id).startsWith('home_')) return '独立营地';
     return displayName(id);
   }
 
   public getGroundTheme() {
+    if (this.currentMapId === 'world') return worldThemeAt(this.player.x, this.player.y);
+    if (String(this.currentMapId).startsWith('home_')) return 'field';
     return SUBMAPS[this.currentMapId]?.theme ?? 'camp';
   }
 
+  /** Swap only the nearby data window; the player and space remain continuous. */
+  private refreshWorld(force = false) {
+    if (this.currentMapId !== 'world') return;
+    const center = worldToChunk(this.player.x, this.player.y);
+    const windowKey = `${center.x},${center.y}`;
+    if (!force && windowKey === this.worldWindow) return;
+    this.worldWindow = windowKey;
+    const chunks: WorldChunk[] = [];
+    for (let dx = -2; dx <= 2; dx++) for (let dy = -2; dy <= 2; dy++) {
+      const cx = center.x + dx, cy = center.y + dy;
+      if (cx * CHUNK_SIZE < WORLD_MIN || cx * CHUNK_SIZE >= WORLD_MAX || cy * CHUNK_SIZE < WORLD_MIN || cy * CHUNK_SIZE >= WORLD_MAX) continue;
+      const key = `world:${cx}:${cy}`;
+      let chunk = this.worldChunks.get(key);
+      if (!chunk) chunk = generateWorldChunk(cx, cy);
+      this.worldChunks.delete(key);
+      this.worldChunks.set(key, chunk);
+      chunks.push(chunk);
+    }
+    while (this.worldChunks.size > 64) this.worldChunks.delete(this.worldChunks.keys().next().value!);
+    this.interactables = chunks.flatMap(c => c.interactables);
+    if (!this.monsterAuthority) this.monsters = chunks.flatMap(c => c.monsters);
+    const changes = new Map(this.serverBuildings.map(b => [b.id, b]));
+    this.buildings = chunks.flatMap(c => c.buildings).map(b => changes.get(b.id) ?? b);
+    this.worldScenery = chunks.flatMap(chunk => {
+      let scenery = this.sceneryCache.get(chunk);
+      if (!scenery) { scenery = generateWorldScenery(chunk); this.sceneryCache.set(chunk, scenery); }
+      return scenery;
+    });
+  }
+
+  public setAuthoritativeBuildings(buildings: BuildingEntity[]) {
+    this.serverBuildings = buildings;
+    if (this.currentMapId === 'world') this.refreshWorld(true);
+    else this.buildings = buildings.filter(b => b.mapId === this.currentMapId);
+    this.placedFloors.clear();
+    for (const b of this.buildings) if (b.type.endsWith('_floor')) {
+      this.placedFloors.set(`${b.x},${b.y}`, { x: b.x, y: b.y, type: b.type as 'wood_floor' | 'stone_floor' | 'iron_floor' });
+    }
+  }
+
+  public setResourceStates(nodes: { id: string; stock: number; respawnAt: number }[]) {
+    const states = new Map(nodes.map(n => [n.id, n]));
+    for (const it of this.interactables) {
+      const state = states.get(it.id);
+      if (state) { it.stock = state.stock; it.respawnAt = state.respawnAt; }
+    }
+  }
+
+  public setAuthoritativeMonsters(monsters: MonsterEntity[]) {
+    this.monsterAuthority = true;
+    const previous = new Map(this.monsters.map(m => [m.id, m]));
+    this.monsterTargets = new Map(monsters.map(m => [m.id, { x: m.x, y: m.y }]));
+    this.monsters = monsters.map(next => {
+      const old = previous.get(next.id);
+      if (!old) return { ...next };
+      if (next.hp < old.hp) this.addTextParticle(next.x, next.y - 1.2, `-${Math.ceil(old.hp - next.hp)}`, '#fb923c');
+      if (next.state === 'dead' && old.state !== 'dead') this.callbacks.onMonsterKilled(next.name, next.maxHp);
+      const { x, y } = old;
+      Object.assign(old, next);
+      if (next.state !== 'dead' && Math.hypot(next.x - x, next.y - y) < 4) { old.x = x; old.y = y; }
+      return old;
+    });
+  }
+
+  public receiveAuthoritativeDamage(amount: number) {
+    this.lastHurtAt = this.gameTime;
+    this.shieldRegenAt = this.gameTime + 5;
+    this.hurtFlash = 0.4;
+    this.shake = Math.min(10, this.shake + 4);
+    this.isLooting = false;
+    this.lootTarget = null;
+    this.lootingTimer = 0;
+    this.lootProgress = 0;
+    this.addTextParticle(this.player.x, this.player.y - 1.2, `-${Math.ceil(amount)}`, '#ef4444');
+    soundManager.playHit(false);
+  }
+
+  public navigateTo(x: number, y: number) {
+    this.targetMovePoint = { x, y };
+    this.movePath = findPath(this.player, { x, y }, this.buildings);
+    if (!this.movePath.length) this.targetMovePoint = null;
+  }
+
   private initEntitiesForMap(mapId: MapZoneId) {
+    if (mapId === 'world') {
+      this.mapWaypoints = [];
+      this.worldWindow = '';
+      this.refreshWorld();
+      return;
+    }
+    if (String(mapId).startsWith('home_')) {
+      this.interactables = [];
+      this.monsters = [];
+      this.buildings = [];
+      this.mapWaypoints = [];
+      return;
+    }
     // 数据驱动：实体/门/怪/建筑全部来自 maps.ts（地图编辑器改的就是这份数据）
     const isHomeInst = String(mapId).startsWith('home_') && String(mapId) !== 'home_base';
     const tplId = isHomeInst ? 'home_base' : mapId;
@@ -1157,20 +1283,24 @@ export class IsometricEngine {
     this.virtualJoystick = { x: 0, y: 0 };
     this.player.vx = 0;
     this.player.vy = 0;
+    this.player.isFiring = false;
+    this.mouse.isDown = false;
   }
 
   private setupListeners() {
-    window.addEventListener('resize', () => this.resize());
+    const options = { signal: this.listenerController.signal };
+    window.addEventListener('resize', () => this.resize(), options);
 
     // Window blur / focus safety - prevents keys getting permanently stuck on Alt-Tab or clicking out
     window.addEventListener('blur', () => {
       this.clearKeys();
-    });
+    }, options);
     window.addEventListener('focus', () => {
       this.clearKeys();
-    });
+    }, options);
 
     window.addEventListener('keydown', (e) => {
+      if (this.inputBlocked) return;
       // If typing inside an input box or textarea, ignore game controls
       if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) {
         return;
@@ -1220,28 +1350,28 @@ export class IsometricEngine {
       if (e.code === 'Space' && !this.player.isDashing && this.player.stamina >= 30) {
         this.performDash();
       }
-    });
+    }, options);
 
     window.addEventListener('keyup', (e) => {
       const key = e.key.toLowerCase();
       const code = e.code.toLowerCase();
       this.keys[key] = false;
       this.keys[code] = false;
-    });
+    }, options);
 
     // Right-click on ground to Click-to-Move (Auto-Pathing, 编辑器模式下右键改为删除)
     this.canvas.addEventListener('contextmenu', (e) => {
       e.preventDefault();
-      if (this.editMode) return;
+      if (this.editMode || this.inputBlocked) return;
       const rect = this.canvas.getBoundingClientRect();
       const screenX = e.clientX - rect.left;
       const screenY = e.clientY - rect.top;
       const worldPos = this.toWorld(screenX, screenY);
 
-      this.targetMovePoint = { x: worldPos.x, y: worldPos.y };
+      this.navigateTo(worldPos.x, worldPos.y);
       soundManager.playClick();
       this.addTextParticle(worldPos.x, worldPos.y - 0.6, '📍 跑动指令', '#38bdf8');
-    });
+    }, options);
 
     this.canvas.addEventListener('mousemove', (e) => {
       const rect = this.canvas.getBoundingClientRect();
@@ -1250,9 +1380,10 @@ export class IsometricEngine {
       const worldPos = this.toWorld(this.mouse.screenX, this.mouse.screenY);
       this.mouse.worldX = worldPos.x;
       this.mouse.worldY = worldPos.y;
-    });
+    }, options);
 
     this.canvas.addEventListener('mousedown', (e) => {
+      if (this.inputBlocked) return;
       // 地图编辑器模式：左键放置 / 右键删除
       if (this.editMode) {
         const rect = this.canvas.getBoundingClientRect();
@@ -1271,14 +1402,14 @@ export class IsometricEngine {
         this.mouse.isDown = true;
         this.player.isFiring = true;
       }
-    });
+    }, options);
 
     window.addEventListener('mouseup', (e) => {
       if (e.button === 0) {
         this.mouse.isDown = false;
         this.player.isFiring = false;
       }
-    });
+    }, options);
   }
 
   public toScreen(wx: number, wy: number): { x: number; y: number } {
@@ -1353,6 +1484,11 @@ export class IsometricEngine {
   public tryPlaceBuilding() {
     const placeX = Math.round(this.mouse.worldX);
     const placeY = Math.round(this.mouse.worldY);
+
+    if (this.callbacks.onGameAction) {
+      this.callbacks.onGameAction('build', { buildType: this.selectedBuildType, x: placeX, y: placeY, facing: this.buildFacing });
+      return;
+    }
 
     const distToPlayer = Math.hypot(this.player.x - placeX, this.player.y - placeY);
     if (distToPlayer > 4.5) {
@@ -1434,6 +1570,39 @@ export class IsometricEngine {
   }
 
   public triggerInteraction() {
+    if (this.callbacks.onGameAction) {
+      if (this.callbacks.onCampInteract?.()) return;
+      const b = this.nearestBuilding;
+      if (b && hasLineOfSight(this.player, b, this.buildings, b.id)) {
+        const hostile = !!b.ownerId && b.ownerId !== this.localPlayerId && !this.friendlyPlayerIds.has(b.ownerId);
+        if (hostile && b.hp > 0 && !b.type.endsWith('_floor')) {
+          this.callbacks.onOpenRaidModal?.(b); return;
+        }
+        if (b.hp <= 0 || b.type.includes('wall') || ['campfire', 'bed', 'furnace', 'farm_plot', 'research_table'].includes(b.type)) {
+          this.callbacks.onOpenStorageBox(b); return;
+        }
+        if (b.type === 'door' || b.type === 'safe_door') {
+          this.callbacks.onGameAction('toggle_door', { targetId: b.id });
+          return;
+        }
+        if (b.type === 'storage_box' || b.type === 'turret' || b.type === 'anchor_core') {
+          this.callbacks.onOpenStorageBox(b);
+          return;
+        }
+        if (b.type === 'workbench') { this.callbacks.onOpenWorkbench(); return; }
+        if (b.ownerId && b.ownerId !== this.localPlayerId && String(this.currentMapId).startsWith('home_')) {
+          this.callbacks.onOpenRaidModal?.(b); return;
+        }
+      }
+      const it = this.nearestInteractable;
+      if (!it || !hasLineOfSight(this.player, it, this.buildings) || this.gatherCooldown > 0 || this.isLooting) return;
+      if (it.type === 'workbench') { this.callbacks.onOpenWorkbench(); return; }
+      if ((it.stock ?? 1) <= 0) { this.gatherCooldown = 0.8; this.addTextParticle(it.x, it.y, '已采空，稍后再来', '#f59e0b'); return; }
+      this.isLooting = true;
+      this.lootTarget = it;
+      this.lootingTimer = it.searchDuration ?? 1.2;
+      return;
+    }
     // Inter-map Waypoint Fast Travel on [F]
     const closeWp = this.mapWaypoints.find((w) => Math.hypot(this.player.x - w.x, this.player.y - w.y) < 3.0);
     if (closeWp) {
@@ -1766,28 +1935,96 @@ export class IsometricEngine {
     }
   }
 
+  private setRenderStatus(message: string | null) {
+    if (this.renderStatus === message) return;
+    this.renderStatus = message;
+    this.callbacks.onRenderStatus?.(message);
+  }
+
+  private resetGraphics() {
+    for (const patch of this.tilePatchCache.values()) patch.width = patch.height = 0;
+    this.tilePatchCache.clear();
+    if (this.groundCache) {
+      this.groundCache.canvas.width = this.groundCache.canvas.height = 0;
+      if (this.groundCache.overlay) this.groundCache.overlay.width = this.groundCache.overlay.height = 0;
+    }
+    this.groundCache = null;
+    this.canvas.width = Math.max(1, this.width);
+    this.canvas.height = Math.max(1, this.height);
+    this.ctx = this.canvas.getContext('2d')!;
+  }
+
   public start() {
+    if (this.running || this.disposed) return;
+    this.running = true;
     this.lastTime = performance.now();
-    this.warmArtCache();
+    this.lastRenderTime = this.lastTime;
+    const frameInterval = 1000 / 60;
     const loop = (time: number) => {
+      if (!this.running) return;
+      // Schedule before any game work: a failed frame must not kill the loop.
+      this.animFrameId = requestAnimationFrame(loop);
       const dt = Math.min((time - this.lastTime) / 1000, 0.1);
       this.lastTime = time;
-      this.update(dt);
-      this.render();
-      this.animFrameId = requestAnimationFrame(loop);
+      if (!document.hidden && !this.contextLost && time >= this.renderRetryAt) {
+        let phase = 'update';
+        try {
+          this.update(dt);
+          const elapsed = time - this.lastRenderTime;
+          if (elapsed >= frameInterval) {
+            phase = 'render';
+            this.lastRenderTime = time - (elapsed % frameInterval);
+            this.render();
+            this.setRenderStatus(null);
+          }
+        } catch (error) {
+          recordRenderFailure(error, {
+            source: 'frame', phase, mapId: this.currentMapId, x: this.player.x, y: this.player.y,
+            interaction: this.lootTarget ? { id: this.lootTarget.id, type: this.lootTarget.type, stock: this.lootTarget.stock, progress: this.lootProgress } : null,
+          });
+          console.error('[game frame]', error);
+          this.setRenderStatus('画面发生错误，正在重新绘制');
+          this.renderRetryAt = time + 500;
+          this.resetGraphics();
+        }
+      } else {
+        this.lastRenderTime = time;
+      }
     };
     this.animFrameId = requestAnimationFrame(loop);
   }
 
   public stop() {
+    this.running = false;
     if (this.animFrameId) {
       cancelAnimationFrame(this.animFrameId);
+      this.animFrameId = 0;
     }
+  }
+
+  public dispose() {
+    this.stop();
+    this.disposed = true;
+    this.listenerController.abort();
+    this.clearKeys();
+    for (const patch of this.tilePatchCache.values()) patch.width = patch.height = 0;
+    this.tilePatchCache.clear();
+    this.artImages.clear();
+    this.worldChunks.clear();
+    this.worldScenery = [];
+    this.sceneryCache = new WeakMap();
+    this.monsterTargets.clear();
+    if (this.groundCache) {
+      this.groundCache.canvas.width = this.groundCache.canvas.height = 0;
+      if (this.groundCache.overlay) this.groundCache.overlay.width = this.groundCache.overlay.height = 0;
+    }
+    this.groundCache = null;
   }
 
   // --- UPDATE LOOP ---
   private update(dt: number) {
     this.gameTime += dt;
+    this.refreshWorld();
 
     // Weather timer
     this.weatherDurationLeft -= dt;
@@ -1860,10 +2097,12 @@ export class IsometricEngine {
       }
     } else if (this.targetMovePoint) {
       // Right-Click to Move Auto-Pathing
-      const tdx = this.targetMovePoint.x - this.player.x;
-      const tdy = this.targetMovePoint.y - this.player.y;
+      if (this.movePath.length && Math.hypot(this.movePath[0].x - this.player.x, this.movePath[0].y - this.player.y) < 0.2) this.movePath.shift();
+      const next = this.movePath[0] ?? this.targetMovePoint;
+      const tdx = next.x - this.player.x;
+      const tdy = next.y - this.player.y;
       const dist = Math.hypot(tdx, tdy);
-      if (dist > 0.35) {
+      if (dist > 0.12) {
         mx = tdx / dist;
         my = tdy / dist;
       } else {
@@ -1877,22 +2116,25 @@ export class IsometricEngine {
     if (len > 0) {
       this.player.vx = mx * speed;
       this.player.vy = my * speed;
-      this.player.x += this.player.vx * dt;
-      this.player.y += this.player.vy * dt;
+      const nextX = this.player.x + this.player.vx * dt;
+      if (!isPositionBlocked(nextX, this.player.y, this.buildings)) this.player.x = nextX;
+      const nextY = this.player.y + this.player.vy * dt;
+      if (!isPositionBlocked(this.player.x, nextY, this.buildings)) this.player.y = nextY;
     } else {
       this.player.vx = 0;
       this.player.vy = 0;
     }
 
     // Real Expansive Map Boundaries (-38.0 to +38.0, 80x80 large open world grid)
-    const MAP_BOUND_LIMIT = 38.0;
-    this.player.x = Math.max(-MAP_BOUND_LIMIT, Math.min(MAP_BOUND_LIMIT, this.player.x));
-    this.player.y = Math.max(-MAP_BOUND_LIMIT, Math.min(MAP_BOUND_LIMIT, this.player.y));
+    const minBound = this.currentMapId === 'world' ? WORLD_MIN + 0.5 : -this.campSize / 2 + 0.5;
+    const maxBound = this.currentMapId === 'world' ? WORLD_MAX - 0.5 : this.campSize / 2 - 0.5;
+    this.player.x = Math.max(minBound, Math.min(maxBound, this.player.x));
+    this.player.y = Math.max(minBound, Math.min(maxBound, this.player.y));
 
     // Walking across physical checkpoint gates & waypoint portals
     if (this.warpCooldown > 0) {
       this.warpCooldown -= dt;
-    } else {
+    } else if (!this.callbacks.onGameAction) {
       // Walked directly into an outpost gateway portal trigger circle (radius 2.4)
       const nearWp = this.mapWaypoints.find((w) => Math.hypot(this.player.x - w.x, this.player.y - w.y) < 2.4);
       if (nearWp) {
@@ -1935,7 +2177,7 @@ export class IsometricEngine {
     }
 
     // 倒地：巡逻队救回庇护所（物品保留），致敬参考站的低惩罚
-    if (this.player.hp <= 0) {
+    if (this.player.hp <= 0 && !this.callbacks.onGameAction) {
       soundManager.playThunder();
       this.player.hp = Math.round(this.player.maxHp * 0.6);
       this.player.satiety = 40;
@@ -1960,7 +2202,7 @@ export class IsometricEngine {
     this.camera.y += (targetCamY - this.camera.y) * 6 * dt;
 
     // 建筑碰撞：墙/关闭的门/设施挡人，开着的门可穿行进入室内
-    for (const b of this.buildings) {
+    for (const b of this.callbacks.onGameAction ? [] : this.buildings) {
       if (b.type === 'spikes') continue;
       if ((b.type === 'door' || b.type === 'safe_door') && b.isOpen) continue;
       const dx = this.player.x - b.x;
@@ -2019,19 +2261,24 @@ export class IsometricEngine {
       if (this.player.isFiring && !this.isBuildMode && !this.hasRangedWeapon) {
         this.meleeTimer -= dt;
         if (this.meleeTimer <= 0 && this.player.stamina >= MELEE.stamina) {
+          const remote = this.aimedRemoteTarget(this.player.angle, MELEE.range);
+          if (remote) this.callbacks.onGameAction?.('attack', { targetId: remote.id });
           const targets = this.monsters.filter((m) => {
             if (m.state === 'dead') return false;
             const dist = Math.hypot(m.x - this.player.x, m.y - this.player.y);
             if (dist > MELEE.range) return false;
-            const ang = Math.atan2(m.y - this.player.y, m.x - this.player.x);
+            const origin = this.toScreen(this.player.x, this.player.y), point = this.toScreen(m.x, m.y);
+            const ang = Math.atan2(point.y - origin.y, point.x - origin.x);
             let diff = Math.abs(this.player.angle - ang);
             if (diff > Math.PI) diff = Math.PI * 2 - diff;
-            return diff < MELEE.arc;
+            return diff < MELEE.arc && hasLineOfSight(this.player, m, this.buildings);
           });
           if (targets.length > 0) {
             this.meleeTimer = MELEE.cooldown;
             this.player.stamina -= MELEE.stamina;
+            if (this.monsterAuthority && !remote) this.callbacks.onGameAction?.('attack', { monsterId: targets[0].id });
             for (const target of targets.slice(0, 3)) {
+              if (this.monsterAuthority) continue;
               target.hp -= this.meleeDamage;
               target.state = 'chase';
               const d = Math.max(0.001, Math.hypot(target.x - this.player.x, target.y - this.player.y));
@@ -2098,6 +2345,7 @@ export class IsometricEngine {
 
     // Turret AI：集火最近的怪；尖刺： standing 怪每秒掉血
     this.buildings.forEach((b) => {
+      if (this.monsterAuthority || (this.callbacks.onGameAction && this.currentMapId.startsWith('home_'))) return;
       if (b.type === 'spikes') {
         const victim = this.monsters.find((m) => m.state !== 'dead' && Math.hypot(m.x - b.x, m.y - b.y) < 1.0);
         if (victim) {
@@ -2187,7 +2435,11 @@ export class IsometricEngine {
           this.lootProgress = 0;
           const target = this.lootTarget;
           this.lootTarget = null;
-          if (target?.lootTable && (target.stock ?? 1) > 0) {
+          if (target && this.callbacks.onGameAction) {
+            const gather = ['tree', 'boulder', 'pond', 'crystal'].includes(target.type);
+            this.callbacks.onGameAction(gather ? 'gather' : 'search', { targetId: target.id });
+            this.gatherCooldown = 0.2;
+          } else if (target?.lootTable && (target.stock ?? 1) > 0) {
             soundManager.playLoot();
             this.addTextParticle(this.player.x, this.player.y - 1.8, `🔍 ${target.name}：挑能带走的！`, '#4ade80');
             this.callbacks.onOpenLootPanel?.({
@@ -2201,7 +2453,7 @@ export class IsometricEngine {
     }
 
     // 资源刷新：枯竭节点到点恢复
-    for (const it of this.interactables) {
+    for (const it of this.callbacks.onGameAction ? [] : this.interactables) {
       if (isFinite(it.maxStock ?? 0) && (it.stock ?? 1) <= 0 && this.gameTime >= (it.respawnAt ?? Infinity)) {
         it.stock = it.maxStock;
       }
@@ -2209,6 +2461,15 @@ export class IsometricEngine {
 
     // Monsters
     this.monsters.forEach((m) => {
+      if (this.monsterAuthority) {
+        const target = this.monsterTargets.get(m.id);
+        if (target && m.state !== 'dead') {
+          m.x += (target.x - m.x) * Math.min(1, dt * 12);
+          m.y += (target.y - m.y) * Math.min(1, dt * 12);
+        }
+        m.animTime += dt;
+        return;
+      }
       if (m.state === 'dead') return;
       m.animTime += dt;
       if (m.windup === undefined) m.windup = 0;
@@ -2288,6 +2549,7 @@ export class IsometricEngine {
                 this.hurtFlash = 0.35;
                 this.shieldRegenAt = this.gameTime + 5;
                 this.callbacks.onPlayerDamage(dmg);
+                this.callbacks.onGameAction?.('damage', { monsterId: m.id });
                 this.lastHurtAt = this.gameTime;
                 this.addTextParticle(this.player.x, this.player.y - 0.8, `-${dmg}`, '#ef4444');
                 soundManager.playHit(false);
@@ -2400,7 +2662,7 @@ export class IsometricEngine {
     let minDist = 3.0;
     this.interactables.forEach((item) => {
       const d = Math.hypot(this.player.x - item.x, this.player.y - item.y);
-      if (d < item.radius && d < minDist) {
+      if (d < item.radius && d < minDist && hasLineOfSight(this.player, item, this.buildings)) {
         minDist = d;
         closestInteractable = item;
       }
@@ -2410,13 +2672,18 @@ export class IsometricEngine {
     let closestBuilding: BuildingEntity | null = null;
     let minBuildDist = 2.4;
     this.buildings.forEach((b) => {
+      if (b.type.endsWith('_floor')) return;
+      if (b.hp <= 0 && b.type !== 'storage_box' && b.ownerId !== this.localPlayerId && !this.friendlyPlayerIds.has(b.ownerId ?? '')) return;
+      if (b.type.includes('wall') && ((!b.ownerId) || (b.ownerId === this.localPlayerId && b.hp >= b.maxHp))) return;
       const d = Math.hypot(this.player.x - b.x, this.player.y - b.y);
-      if (d < minBuildDist) {
+      if (d < minBuildDist && hasLineOfSight(this.player, b, this.buildings, b.id)) {
         minBuildDist = d;
         closestBuilding = b;
       }
     });
     this.nearestBuilding = closestBuilding;
+    const gatherTarget = this.nearestInteractable as InteractableEntity | null;
+    if (this.callbacks.onGameAction && !this.isLooting && this.gatherCooldown <= 0 && (this.keys.e || this.keys.f) && gatherTarget && ['tree', 'boulder', 'pond', 'crystal'].includes(gatherTarget.type)) this.triggerInteraction();
 
     // Sparks & Campfire
     if (this.getGroundTheme() === 'camp') {
@@ -2512,9 +2779,31 @@ export class IsometricEngine {
     return lootResourceOf(itemId);
   }
 
+  private aimedRemoteTarget(angle: number, range: number): OnlinePlayer | undefined {
+    const origin = this.toScreen(this.player.x, this.player.y);
+    return [...this.onlinePlayers.values()].filter(p => {
+      if (p.id === this.localPlayerId || this.friendlyPlayerIds.has(p.id) || p.mapId !== this.currentMapId || p.hp <= 0) return false;
+      if (Math.hypot(p.x - this.player.x, p.y - this.player.y) > range || !hasLineOfSight(this.player, p, this.buildings)) return false;
+      const screen = this.toScreen(p.x, p.y);
+      let difference = Math.abs(angle - Math.atan2(screen.y - origin.y, screen.x - origin.x));
+      difference = Math.min(difference, Math.PI * 2 - difference);
+      return difference < 0.24;
+    }).sort((a, b) => Math.hypot(a.x - this.player.x, a.y - this.player.y) - Math.hypot(b.x - this.player.x, b.y - this.player.y))[0];
+  }
+
   private fireBullet(startX: number, startY: number, angle: number) {
     const range = this.rangedRange;
     const spread = this.rangedSpread;
+    const target = this.aimedRemoteTarget(angle, range);
+    const origin = this.toScreen(this.player.x, this.player.y);
+    const monster = !target ? this.monsters.filter(m => {
+      if (m.state === 'dead' || Math.hypot(m.x - this.player.x, m.y - this.player.y) > range || !hasLineOfSight(this.player, m, this.buildings)) return false;
+      const point = this.toScreen(m.x, m.y);
+      let diff = Math.abs(angle - Math.atan2(point.y - origin.y, point.x - origin.x));
+      diff = Math.min(diff, Math.PI * 2 - diff);
+      return diff < 0.28 + spread;
+    }).sort((a, b) => Math.hypot(a.x - this.player.x, a.y - this.player.y) - Math.hypot(b.x - this.player.x, b.y - this.player.y))[0] : undefined;
+    this.callbacks.onGameAction?.('fire', { angle, ...(target ? { targetId: target.id } : monster ? { monsterId: monster.id } : {}) });
 
     this.particles.push({
       x: startX,
@@ -2528,16 +2817,19 @@ export class IsometricEngine {
       type: 'laser',
     });
 
+    if (this.monsterAuthority) return;
     for (const m of this.monsters) {
       if (m.state === 'dead') continue;
       const dist = Math.hypot(m.x - startX, m.y - startY);
-      const angleToMonster = Math.atan2(m.y - startY, m.x - startX);
+      const origin = this.toScreen(this.player.x, this.player.y);
+      const monsterScreen = this.toScreen(m.x, m.y);
+      const angleToMonster = Math.atan2(monsterScreen.y - origin.y, monsterScreen.x - origin.x);
       let angleDiff = Math.abs(angle - angleToMonster);
       if (angleDiff > Math.PI) angleDiff = Math.PI * 2 - angleDiff;
       // 散布：土铳容差大但要求近，步枪容差小但射程远
       const tolerance = 0.28 + spread;
 
-      if (dist < range && (angleDiff < tolerance || dist < 1.2)) {
+      if (!target && dist < range && (angleDiff < tolerance || dist < 1.2) && hasLineOfSight(this.player, m, this.buildings)) {
         const critChance = Math.min(0.6, this.rangedCritChance + weatherCritBonus(this.currentWeather));
         const isCrit = rollCrit(critChance);
         const damage = calcRangedDamage(this.rangedDamage, dist, range, isCrit, this.rangedCritMult);
@@ -2647,6 +2939,14 @@ export class IsometricEngine {
   }
 
   // --- RENDER ENGINE ---
+  private isWorldAreaVisible(x0: number, y0: number, x1 = x0, y1 = y0) {
+    const left = this.toScreen(x0, y1).x;
+    const right = this.toScreen(x1, y0).x;
+    const top = this.toScreen(x0, y0).y - 180;
+    const bottom = this.toScreen(x1, y1).y + 40;
+    return right >= -128 && left <= this.width + 128 && bottom >= -128 && top <= this.height + 128;
+  }
+
   private render() {
     this.ctx.clearRect(0, 0, this.width, this.height);
     // 受击震屏（combat）：帧级平移，restore 在方法末尾
@@ -2668,7 +2968,12 @@ export class IsometricEngine {
     const gtheme = this.getGroundTheme();
 
     // Map Specific Props & Natural Flora（按地形主题，同主题多图复用）
-    if (gtheme === 'camp') {
+    if (this.currentMapId === 'world') {
+      for (const prop of this.worldScenery) {
+        if (!this.isWorldAreaVisible(prop.x, prop.y)) continue;
+        renderList.push({ yDepth: prop.x + prop.y, render: () => this.drawWorldScenery(prop) });
+      }
+    } else if (gtheme === 'camp') {
       // 纪念篝火 + 纯观赏植被（可交互物由 drawInteractable 真实绘制，不再摆假模型）
       renderList.push({ yDepth: this.campfire.x + this.campfire.y, render: () => this.drawCampfire(this.campfire.x, this.campfire.y) });
       renderList.push({ yDepth: -7 + -3, render: () => this.drawPineTree(-7, -3) });
@@ -2716,6 +3021,7 @@ export class IsometricEngine {
 
     // Gameplay Interactables（采集/搜刮点：逐个绘制真实模型+标记，不再隐身）
     this.interactables.forEach((it) => {
+      if (!this.isWorldAreaVisible(it.x, it.y)) return;
       renderList.push({
         yDepth: it.x + it.y,
         render: () => this.drawInteractable(it),
@@ -2723,7 +3029,10 @@ export class IsometricEngine {
     });
 
     // Buildings（闭合院与屋内箱子一次画完，箱子压在上层保证可见）
-    const houseGroups = groupBuildingsIntoHouses(this.buildings);
+    const houseGroups = groupBuildingsIntoHouses(this.buildings).filter(g => {
+      const { x0, x1, y0, y1 } = houseCorners(g.members);
+      return this.isWorldAreaVisible(x0, y0, x1, y1);
+    });
     const interiorIds = new Set<string>();
     houseGroups.forEach((g) => {
       if (g.members.length >= 8) {
@@ -2742,10 +3051,11 @@ export class IsometricEngine {
         const depths = g.members.map((m) => m.x + m.y);
         const { x0, x1, y0, y1 } = houseCorners(g.members);
         const inside = this.buildings.filter((b) => interiorIds.has(b.id) && b.x > x0 && b.x < x1 && b.y > y0 && b.y < y1);
+        renderList.push({ yDepth: Math.min(...depths) - 0.1, render: () => this.drawHouse(g.members, g.door, 'back') });
         renderList.push({
           yDepth: Math.max(...depths),
           render: () => {
-            this.drawHouse(g.members, g.door);
+            this.drawHouse(g.members, g.door, 'front');
             inside.forEach((b) => this.drawBuilding(b));
           },
         });
@@ -2777,6 +3087,22 @@ export class IsometricEngine {
     });
 
     // Local Player
+    const entrances = this.currentMapId === 'world' ? this.campEntrances : [{ id: 'exit', ownerId: '', ownerName: '营地南侧出口', x: 0, y: 28 }];
+    for (const entrance of entrances) {
+      renderList.push({ yDepth: entrance.x + entrance.y, render: () => {
+        const p = this.toScreen(entrance.x, entrance.y);
+        if (p.x < -80 || p.x > this.width + 80 || p.y < -80 || p.y > this.height + 80) return;
+        this.ctx.save();
+        this.ctx.strokeStyle = '#d6b67c'; this.ctx.lineWidth = 3;
+        this.ctx.beginPath(); this.ctx.moveTo(p.x, p.y); this.ctx.lineTo(p.x, p.y - 55); this.ctx.stroke();
+        this.ctx.fillStyle = entrance.ownerId === this.localPlayerId ? '#3f9276' : '#ab7544';
+        this.ctx.fillRect(p.x + 1, p.y - 55, 28, 18);
+        this.ctx.font = 'bold 12px sans-serif'; this.ctx.textAlign = 'center';
+        this.ctx.fillStyle = '#fff4dc';
+        this.ctx.fillText(entrance.id === 'exit' ? '南侧出口 [E/F]' : `${entrance.ownerName} · 营地入口 [E/F]`, p.x, p.y - 66);
+        this.ctx.restore();
+      } });
+    }
     renderList.push({
       yDepth: this.player.x + this.player.y,
       render: () => this.drawPlayer(),
@@ -2829,6 +3155,16 @@ export class IsometricEngine {
     renderList.sort((a, b) => a.yDepth - b.yDepth);
     renderList.forEach((item) => item.render());
 
+    if (this.navigationTarget) {
+      const target = this.navigationTarget;
+      const distance = Math.hypot(target.x - this.player.x, target.y - this.player.y);
+      this.ctx.save(); this.ctx.font = 'bold 13px sans-serif';
+      this.ctx.textAlign = 'center'; this.ctx.fillStyle = '#fde6a4';
+      this.ctx.fillText(`目的地：${target.name} · ${Math.ceil(distance)} 格 · (${Math.round(target.x)}, ${Math.round(target.y)})`, this.width / 2, 72);
+      this.ctx.restore();
+      if (distance < 3) this.navigationTarget = null;
+    }
+
     // 3. Build Mode Ghost
     if (this.isBuildMode) {
       this.drawBuildGhost();
@@ -2856,13 +3192,167 @@ export class IsometricEngine {
 
   // --- SEAMLESS HIGH-FIDELITY ISOMETRIC GROUND RENDERER BY MAP ZONE ---
   private renderMapGround() {
+    const theme = this.getGroundTheme();
+    const animated = this.currentMapId !== 'world' && (theme === 'lake' || theme === 'marsh' || theme === 'rift');
+    const margin = 128;
+    const floors = Array.from(this.placedFloors, ([key, floor]) => `${key}:${floor.type}`).join(';');
+    const key = `${this.currentMapId}:${this.width}:${this.height}:${this.artRevision}:${floors}`;
+    let cache = this.groundCache;
+    if (!cache) {
+      const canvas = document.createElement('canvas');
+      cache = this.groundCache = { canvas, key: '', x: 0, y: 0 };
+    }
+    if (cache.key !== key || Math.abs(this.camera.x - cache.x) > margin || Math.abs(this.camera.y - cache.y) > margin) {
+      const width = this.width;
+      const height = this.height;
+      const ctx = this.ctx;
+      const camera = this.camera;
+      const shiftX = Math.round(camera.x - cache.x);
+      const shiftY = Math.round(camera.y - cache.y);
+      const scrolling = cache.key === key && Math.abs(shiftX) < cache.canvas.width && Math.abs(shiftY) < cache.canvas.height;
+      const regions: GroundRect[] = [];
+      if (scrolling) {
+        // 整数像素平移旧画面，仅补画露出的边缘；两个区域不重叠，避免透明罩层叠加。
+        if (shiftX !== 0) regions.push({ x: shiftX > 0 ? 0 : cache.canvas.width + shiftX, y: 0, width: Math.abs(shiftX), height: cache.canvas.height });
+        if (shiftY !== 0) regions.push({ x: shiftX > 0 ? shiftX : 0, y: shiftY > 0 ? 0 : cache.canvas.height + shiftY, width: cache.canvas.width - Math.abs(shiftX), height: Math.abs(shiftY) });
+      } else {
+        cache.canvas.width = width + margin * 2;
+        cache.canvas.height = height + margin * 2;
+      }
+      const groundCtx = cache.canvas.getContext('2d');
+      if (!groundCtx) {
+        this.renderMapGroundUncached();
+        this.renderGroundDetails();
+        return;
+      }
+      try {
+        this.width = cache.canvas.width;
+        this.height = cache.canvas.height;
+        this.camera = { x: scrolling ? cache.x + shiftX : camera.x, y: scrolling ? cache.y + shiftY : camera.y };
+        const paint = (surface: HTMLCanvasElement, context: CanvasRenderingContext2D, terrain: boolean) => {
+          this.ctx = context;
+          const draw = (region?: GroundRect) => {
+            if (terrain) this.renderMapGroundUncached(false, region);
+            if (!terrain || !animated) this.renderGroundDetails();
+          };
+          if (scrolling) {
+            context.save();
+            context.globalCompositeOperation = 'copy';
+            context.drawImage(surface, shiftX, shiftY);
+            context.restore();
+            for (const region of regions) {
+              context.save();
+              try {
+                context.beginPath();
+                context.rect(region.x, region.y, region.width, region.height);
+                context.clip();
+                draw(region);
+              } finally {
+                context.restore();
+              }
+            }
+          } else {
+            draw();
+          }
+        };
+        paint(cache.canvas, groundCtx, true);
+        if (animated) {
+          cache.overlay ??= document.createElement('canvas');
+          if (!scrolling) {
+            cache.overlay.width = this.width;
+            cache.overlay.height = this.height;
+          }
+          const overlayCtx = cache.overlay.getContext('2d');
+          if (overlayCtx) paint(cache.overlay, overlayCtx, false);
+        } else {
+          if (cache.overlay) cache.overlay.width = cache.overlay.height = 0;
+          cache.overlay = undefined;
+        }
+        cache.key = key;
+        cache.x = this.camera.x;
+        cache.y = this.camera.y;
+      } finally {
+        this.ctx = ctx;
+        this.width = width;
+        this.height = height;
+        this.camera = camera;
+      }
+    }
+    const dx = this.camera.x - cache.x - margin;
+    const dy = this.camera.y - cache.y - margin;
+    this.ctx.drawImage(cache.canvas, dx, dy);
+    if (animated) {
+      this.renderAnimatedGround(theme);
+      if (cache.overlay) this.ctx.drawImage(cache.overlay, dx, dy);
+    }
+  }
+
+  private renderAnimatedGround(theme: GroundTheme) {
+    const corners = [this.toWorld(0, 0), this.toWorld(this.width, 0), this.toWorld(0, this.height), this.toWorld(this.width, this.height)];
+    const minX = Math.floor(Math.min(...corners.map(c => c.x))) - 3;
+    const maxX = Math.ceil(Math.max(...corners.map(c => c.x))) + 3;
+    const minY = Math.floor(Math.min(...corners.map(c => c.y))) - 3;
+    const maxY = Math.ceil(Math.max(...corners.map(c => c.y))) + 3;
+    this.ctx.save();
+    for (let wx = minX; wx <= maxX; wx++) {
+      for (let wy = minY; wy <= maxY; wy++) {
+        if (this.placedFloors.has(`${wx},${wy}`)) continue;
+        const fissure = theme === 'rift' && (Math.abs(wx - wy) < 1.8 || Math.abs(wx + wy) < 1.4);
+        if (!fissure && !(theme !== 'rift' && wx < 3)) continue;
+        const s = this.toScreen(wx, wy);
+        if (s.x < -64 || s.x > this.width + 64 || s.y < -64 || s.y > this.height + 64) continue;
+        const dock = theme === 'lake' && ((wx >= -2 && wx <= 4 && (wy === 0 || wy === -2 || wy === 2)) || (wx >= 1 && wx <= 3 && wy >= -3 && wy <= 3));
+        if (fissure || (theme === 'lake' && !dock)) {
+          if (fissure) {
+            const pulse = (Math.sin(this.gameTime * 4.5 + wx * 1.2 + wy * 1.2) + 1) * 0.5;
+            this.ctx.fillStyle = pulse > 0.5 ? '#7e22ce' : '#6b21a8';
+          } else {
+            const wave = Math.sin(this.gameTime * 2.4 + wx * 0.8 + wy * 0.8);
+            this.ctx.fillStyle = wave > 0 ? '#4a5862' : '#46545e';
+          }
+          this.ctx.beginPath();
+          this.ctx.moveTo(s.x, s.y - this.TILE_H / 2);
+          this.ctx.lineTo(s.x + this.TILE_W / 2, s.y);
+          this.ctx.lineTo(s.x, s.y + this.TILE_H / 2);
+          this.ctx.lineTo(s.x - this.TILE_W / 2, s.y);
+          this.ctx.closePath();
+          this.ctx.fill();
+        }
+        if (fissure) {
+          this.ctx.fillStyle = '#fdf4ff';
+          this.ctx.beginPath();
+          this.ctx.ellipse(s.x, s.y, 6, 2.5, 0, 0, Math.PI * 2);
+          this.ctx.fill();
+        } else {
+          this.drawWaterShimmer(wx, wy, s.x, s.y);
+        }
+      }
+    }
+    this.ctx.restore();
+  }
+
+  private drawWaterShimmer(wx: number, wy: number, sx: number, sy: number) {
+    const waveA = Math.sin(this.gameTime * 2.5 + wx * 1.1 + wy * 0.7);
+    const waveB = Math.cos(this.gameTime * 1.9 + wx * 0.7 - wy * 0.9);
+    if (waveA + waveB > 0.8) {
+      this.ctx.strokeStyle = 'rgba(255, 255, 255, 0.32)';
+      this.ctx.lineWidth = 1.3;
+      this.ctx.beginPath();
+      this.ctx.moveTo(sx - 12, sy + waveA * 1.5);
+      this.ctx.quadraticCurveTo(sx, sy - 3 + waveB * 1.5, sx + 12, sy + waveA * 1.5);
+      this.ctx.stroke();
+    }
+  }
+
+  private renderMapGroundUncached(animated = true, bounds?: GroundRect) {
     this.ctx.save();
 
     // 1. Calculate camera visible isometric bounds with wide margins
-    const tl = this.toWorld(0, 0);
-    const tr = this.toWorld(this.width, 0);
-    const bl = this.toWorld(0, this.height);
-    const br = this.toWorld(this.width, this.height);
+    const area = bounds ?? { x: 0, y: 0, width: this.width, height: this.height };
+    const tl = this.toWorld(area.x, area.y);
+    const tr = this.toWorld(area.x + area.width, area.y);
+    const bl = this.toWorld(area.x, area.y + area.height);
+    const br = this.toWorld(area.x + area.width, area.y + area.height);
 
     const minWX = Math.floor(Math.min(tl.x, bl.x, tr.x, br.x)) - 3;
     const maxWX = Math.ceil(Math.max(tl.x, bl.x, tr.x, br.x)) + 3;
@@ -2871,6 +3361,7 @@ export class IsometricEngine {
 
     // Dusty wasteland background tone based on map theme (matches map-*.jpg previews)
     const bgColors: { [key in MapZoneId]: string } = {
+      world: '#4a4a3c',
       camp_plaza: '#4a4a3c',
       camp_workshop: '#4e4e48',
       camp_outskirts: '#505040',
@@ -2901,6 +3392,8 @@ export class IsometricEngine {
     for (let wx = minWX; wx <= maxWX; wx++) {
       for (let wy = minWY; wy <= maxWY; wy++) {
         const s = this.toScreen(wx, wy);
+        // 逆变换包围盒包含大量屏幕外地砖，提前排除，避免提交无效绘制。
+        if (s.x < area.x - 64 || s.x > area.x + area.width + 64 || s.y < area.y - 64 || s.y > area.y + area.height + 64) continue;
 
         // Tile diamond path
         this.ctx.beginPath();
@@ -2963,6 +3456,18 @@ export class IsometricEngine {
         }
 
         // B. Natural Map Terrain By Zone (theme-driven, low-contrast):
+        if (this.currentMapId === 'world') {
+          const tileTheme = worldThemeAt(wx, wy);
+          const road = Math.hypot(wx, wy) >= 16 && worldIsRoad(wx, wy, 2);
+          const woodlandTrail = tileTheme === 'forest' && Math.abs(wy - (22 + Math.sin(wx / 17) * 6)) < 1.1;
+          this.ctx.fillStyle = road || woodlandTrail ? '#9a896b' : groundBaseColor(tileTheme, wx, wy);
+          this.ctx.fill();
+          this.ctx.globalAlpha = road ? 0.24 : tileTheme === 'forest' ? 0.43 : 0.36;
+          if (tileTheme !== 'lake') this.drawTileTexture(wx, wy, s.x, s.y, tileTheme);
+          this.ctx.globalAlpha = 1;
+          this.drawWorldGroundDetail(wx, wy, s.x, s.y, tileTheme, road || woodlandTrail);
+          continue;
+        }
         const gkey = (theme === 'camp' || theme === 'plaza' || theme === 'field' || theme === 'urban' || theme === 'ruins' || theme === 'forest' || theme === 'quarry' || theme === 'lake' || theme === 'marsh' || theme === 'rift') ? theme : 'camp';
         if (theme === 'camp') {
           const inLivingBase = wx >= -6 && wx <= 6 && wy >= -5 && wy <= 5;
@@ -3130,17 +3635,7 @@ export class IsometricEngine {
         // 3. Pond + Marsh:
         if (theme === 'lake' || theme === 'marsh') {
           if (wx < 3) {
-            // Smooth undulating water shimmer wavelets
-            const waveA = Math.sin(this.gameTime * 2.5 + wx * 1.1 + wy * 0.7);
-            const waveB = Math.cos(this.gameTime * 1.9 + wx * 0.7 - wy * 0.9);
-            if (waveA + waveB > 0.8) {
-              this.ctx.strokeStyle = 'rgba(255, 255, 255, 0.32)';
-              this.ctx.lineWidth = 1.3;
-              this.ctx.beginPath();
-              this.ctx.moveTo(s.x - 12, s.y + waveA * 1.5);
-              this.ctx.quadraticCurveTo(s.x, s.y - 3 + waveB * 1.5, s.x + 12, s.y + waveA * 1.5);
-              this.ctx.stroke();
-            }
+            if (animated) this.drawWaterShimmer(wx, wy, s.x, s.y);
           } else if (wx >= -2 && wx <= 4 && (wy === 0 || wy === -2 || wy === 2)) {
             // Wooden dock planks with bevels
             this.ctx.strokeStyle = 'rgba(67, 34, 13, 0.4)';
@@ -3213,7 +3708,12 @@ export class IsometricEngine {
       this.ctx.setLineDash([]);
     }
 
-    // 数据饰品：每张图独特的地标（编辑器可增删，存档在地图数据里）
+    this.ctx.restore();
+  }
+
+  private renderGroundDetails() {
+    this.ctx.save();
+    // 地标与噪点叠在动态水纹之上，保持码头、地基等细节可见。
     const def = SUBMAPS[this.currentMapId];
     if (def?.deco) {
       for (const d of def.deco) {
@@ -3305,25 +3805,20 @@ export class IsometricEngine {
       }
     }
 
-    // 地表噪点罩染（texture-ground.png 全屏平铺 alpha 0.08，图案相位跟随镜头 = 世界锁定）
+    // 用少量 drawImage 平铺噪点，避免 CanvasPattern 填充在缓存更新时阻塞。
     const gtex = this.artImage('texture-ground.png');
     if (gtex && gtex.complete && gtex.naturalWidth > 0) {
-      try {
-        if (!this.groundPattern) this.groundPattern = this.ctx.createPattern(gtex, 'repeat');
-      } catch {
-        this.groundPattern = null;
+      const origin = this.toScreen(0, 0);
+      const startX = ((origin.x % gtex.naturalWidth) + gtex.naturalWidth) % gtex.naturalWidth - gtex.naturalWidth;
+      const startY = ((origin.y % gtex.naturalHeight) + gtex.naturalHeight) % gtex.naturalHeight - gtex.naturalHeight;
+      this.ctx.save();
+      this.ctx.globalAlpha = 0.08;
+      for (let x = startX; x < this.width; x += gtex.naturalWidth) {
+        for (let y = startY; y < this.height; y += gtex.naturalHeight) {
+          this.ctx.drawImage(gtex, x, y);
+        }
       }
-      if (this.groundPattern) {
-        const TW = 1254;
-        const px = ((this.camera.x % TW) + TW) % TW;
-        const py = ((this.camera.y % TW) + TW) % TW;
-        this.ctx.save();
-        this.ctx.globalAlpha = 0.08;
-        this.ctx.translate(-px, -py);
-        this.ctx.fillStyle = this.groundPattern;
-        this.ctx.fillRect(px, py, this.width, this.height);
-        this.ctx.restore();
-      }
+      this.ctx.restore();
     }
 
     this.ctx.restore();
@@ -3620,6 +4115,61 @@ export class IsometricEngine {
     return hash2Pure(x, y);
   }
 
+  private drawWorldScenery(prop: WorldScenery) {
+    const s = this.toScreen(prop.x, prop.y);
+    this.ctx.save();
+    if (prop.kind === 'grass' || prop.kind === 'shrub') {
+      this.ctx.translate(s.x, s.y); this.ctx.scale(prop.scale, prop.scale); this.ctx.translate(-s.x, -s.y);
+      if (prop.kind === 'grass') this.drawWorldSprite('nature-trees.png', 'dry-grass', prop.x, prop.y, 58, 42, 2, 0.8);
+      else this.drawWastelandShrub(prop.x, prop.y);
+      this.ctx.restore(); return;
+    }
+    const size = ({ understory: 178, outcrop: 236, reeds: 174, tank: 208, rubble: 186, fence: 170 })[prop.kind] * prop.scale;
+    // Test the projected silhouette as well as distance: tall foreground props
+    // can hide the survivor even when their ground anchor is several tiles away.
+    const player = this.toScreen(this.player.x, this.player.y);
+    const overlapsPlayer = s.y >= player.y - 8 && Math.abs(s.x - player.x) < size * 0.4 && player.y - 38 >= s.y - size * 0.94 && player.y - 38 <= s.y;
+    if (overlapsPlayer || Math.hypot(prop.x - this.player.x, prop.y - this.player.y) < 2.5) this.ctx.globalAlpha = 0.24;
+    if (!this.drawArtFrame('world-environment-v1.png', prop.kind, s.x - size / 2, s.y - size * 0.94, size, size)) {
+      if (prop.kind === 'understory' || prop.kind === 'fence') this.drawWastelandShrub(prop.x, prop.y);
+      else if (prop.kind === 'reeds') this.drawReedsAndLilies(prop.x, prop.y);
+      else this.drawQuarryBoulders(prop.x, prop.y);
+    }
+    this.ctx.restore();
+  }
+
+  // Static details are painted into the scrolling ground cache, never animated per tile.
+  private drawWorldGroundDetail(wx: number, wy: number, sx: number, sy: number, theme: GroundTheme, road: boolean) {
+    const noise = this.hash2(wx, wy);
+    if (road) {
+      this.ctx.strokeStyle = 'rgba(66,50,32,0.22)';
+      this.ctx.lineWidth = 2;
+      this.ctx.beginPath();
+      this.ctx.moveTo(sx - 9, sy - 5); this.ctx.lineTo(sx + 9, sy + 4);
+      this.ctx.stroke();
+    } else if (theme === 'lake' && noise > 0.6) {
+      this.ctx.strokeStyle = 'rgba(171,210,204,0.38)';
+      this.ctx.lineWidth = 1.2;
+      this.ctx.beginPath();
+      this.ctx.moveTo(sx - 11, sy); this.ctx.quadraticCurveTo(sx, sy - 4, sx + 11, sy);
+      this.ctx.stroke();
+    } else if (theme === 'quarry' && noise > 0.55) {
+      this.ctx.fillStyle = noise > 0.8 ? '#b9b8a8' : '#74786c';
+      this.ctx.beginPath();
+      this.ctx.moveTo(sx - 6, sy + 1); this.ctx.lineTo(sx - 1, sy - 5);
+      this.ctx.lineTo(sx + 7, sy - 1); this.ctx.lineTo(sx + 3, sy + 4);
+      this.ctx.closePath(); this.ctx.fill();
+    } else if ((theme === 'forest' || theme === 'field') && noise > (theme === 'forest' ? 0.3 : 0.72)) {
+      this.ctx.strokeStyle = theme === 'forest' ? 'rgba(141,160,96,0.5)' : 'rgba(158,156,101,0.5)';
+      this.ctx.lineWidth = 1.3;
+      this.ctx.beginPath();
+      this.ctx.moveTo(sx - 3, sy + 3); this.ctx.lineTo(sx - 6, sy - 3);
+      this.ctx.moveTo(sx, sy + 4); this.ctx.lineTo(sx + 1, sy - 5);
+      this.ctx.moveTo(sx + 2, sy + 4); this.ctx.lineTo(sx + 6, sy);
+      this.ctx.stroke();
+    }
+  }
+
   // --- 可交互物统一绘制：按类型调用对应模型 + 悬浮标记 + 名牌 ---
   private drawInteractable(it: InteractableEntity) {
     const s = this.toScreen(it.x, it.y);
@@ -3633,13 +4183,13 @@ export class IsometricEngine {
 
     // 可搜刮呼吸光环（靠近时更亮）
     const isNear = this.nearestInteractable?.id === it.id;
-    this.ctx.strokeStyle = isNear ? 'rgba(74, 222, 128, 0.9)' : 'rgba(148, 163, 184, 0.35)';
-    this.ctx.lineWidth = isNear ? 2.5 : 1.5;
-    this.ctx.setLineDash(isNear ? [] : [6, 5]);
-    this.ctx.beginPath();
-    this.ctx.ellipse(s.x, s.y + 4, 36, 16, 0, 0, Math.PI * 2);
-    this.ctx.stroke();
-    this.ctx.setLineDash([]);
+    if (isNear) {
+      this.ctx.strokeStyle = 'rgba(74, 222, 128, 0.9)';
+      this.ctx.lineWidth = 2.5;
+      this.ctx.beginPath();
+      this.ctx.ellipse(s.x, s.y + 4, 36, 16, 0, 0, Math.PI * 2);
+      this.ctx.stroke();
+    }
     this.ctx.restore();
 
     // 本体模型
@@ -3690,9 +4240,25 @@ export class IsometricEngine {
         markerH = 62;
         break;
       case 'box':
-        if (!this.tryInteractableSprite('box', it.x, it.y)) this.drawSupplyChest(it.x, it.y);
-        markerIcon = '📦';
-        markerH = 62;
+        if (it.lootTable?.length === 1 && it.lootTable[0].itemId === 'wood') {
+          this.ctx.save();
+          this.ctx.strokeStyle = '#57412b'; this.ctx.lineWidth = 7; this.ctx.lineCap = 'round';
+          for (let i = 0; i < 3; i++) {
+            this.ctx.beginPath(); this.ctx.moveTo(s.x - 18 + i * 8, s.y - 4 + i * 3);
+            this.ctx.lineTo(s.x + 9 + i * 6, s.y - 13 + i * 4); this.ctx.stroke();
+          }
+          this.ctx.restore();
+          markerIcon = '🪵'; markerH = 28;
+        } else if (it.lootTable?.length === 1 && it.lootTable[0].itemId === 'stone') {
+          this.ctx.save();
+          this.ctx.translate(s.x, s.y); this.ctx.scale(0.42, 0.42); this.ctx.translate(-s.x, -s.y);
+          this.drawQuarryBoulders(it.x, it.y);
+          this.ctx.restore();
+          markerIcon = '🪨'; markerH = 38;
+        } else {
+          if (!this.tryInteractableSprite('box', it.x, it.y)) this.drawSupplyChest(it.x, it.y);
+          markerIcon = '📦'; markerH = 62;
+        }
         break;
       case 'workbench':
         if (!this.tryInteractableSprite('workbench', it.x, it.y)) this.drawWorkbench(it.x, it.y);
@@ -3705,7 +4271,19 @@ export class IsometricEngine {
         markerH = 84;
         break;
       case 'pond':
-        if (!this.tryInteractableSprite('pond', it.x, it.y)) this.drawPierDock(it.x, it.y, 2);
+        if (it.id.endsWith(':water:0')) {
+          this.ctx.save();
+          this.ctx.strokeStyle = '#a4bbb1'; this.ctx.lineWidth = 1.4;
+          for (let i = 0; i < 3; i++) {
+            this.ctx.beginPath(); this.ctx.ellipse(s.x, s.y, 12 + i * 7, 4 + i * 3, 0, 0, Math.PI * 2); this.ctx.stroke();
+          }
+          this.ctx.strokeStyle = '#94986a'; this.ctx.lineWidth = 3;
+          for (let i = 0; i < 4; i++) {
+            this.ctx.beginPath(); this.ctx.moveTo(s.x + 24 + i * 3, s.y + 5);
+            this.ctx.lineTo(s.x + 21 + i * 5, s.y - 15 - i * 3); this.ctx.stroke();
+          }
+          this.ctx.restore();
+        } else if (!this.tryInteractableSprite('pond', it.x, it.y)) this.drawPierDock(it.x, it.y, 2);
         markerIcon = '🎣';
         markerH = 66;
         break;
@@ -3722,7 +4300,8 @@ export class IsometricEngine {
         break;
     }
 
-    // 悬浮标记徽章 + 名牌（靠近才显示全名，平时只留小徽章）
+    // Nearby hints remain discoverable; distant scenery carries no floating UI.
+    if (!isNear && (Math.hypot(it.x - this.player.x, it.y - this.player.y) > 7 || (it.stock ?? 1) <= 0)) return;
     this.ctx.save();
     const bob = Math.sin(this.gameTime * 3 + it.x * 1.7) * 4;
     const bx = s.x, by = s.y - markerH + bob;
@@ -3755,71 +4334,14 @@ export class IsometricEngine {
     this.ctx.restore();
   }
 
-  private drawHouse(members: BuildingEntity[], door: BuildingEntity | null) {
-    const { x0, x1, y0, y1 } = houseCorners(members);
-    const first = members[0];
-    const isWood = first.type === 'wood_wall';
-    const isStone = first.type === 'stone_wall';
-    // 参考案例配色（平顶 concrete box）：左墙亮、右墙暗、顶面深色
-    const cLeft = isWood ? '#8a5a2b' : isStone ? '#9aa5b5' : '#9aa0a8';
-    const cRight = isWood ? '#5a3413' : isStone ? '#5b6675' : '#5b6067';
-    const wallH = HOUSE_WALL_H;
-    const gLeft = this.toScreen(x0, y1);
-    const gBottom = this.toScreen(x1, y1);
-    const gRight = this.toScreen(x1, y0);
-    const gTop = this.toScreen(x0, y0);
-    const up = (p: { x: number; y: number }, dy: number) => ({ x: p.x, y: p.y - dy });
-    this.ctx.save();
-    drawSoftShadow(this.ctx, (gLeft.x + gRight.x) / 2, gBottom.y + 4, 40);
-    const quad = (a: { x: number; y: number }, b2: { x: number; y: number }, c2: { x: number; y: number }, d: { x: number; y: number }, fill: string) => {
-      this.ctx.fillStyle = fill;
-      this.ctx.beginPath();
-      this.ctx.moveTo(a.x, a.y); this.ctx.lineTo(b2.x, b2.y); this.ctx.lineTo(c2.x, c2.y); this.ctx.lineTo(d.x, d.y);
-      this.ctx.closePath(); this.ctx.fill();
-      this.ctx.strokeStyle = 'rgba(0,0,0,0.45)'; this.ctx.lineWidth = 1.5; this.ctx.stroke();
-    };
-    // 敞口院：无屋顶，先画浅色室内地坪，院内物资由 render 层随后画在上层
-    quad(gLeft, gBottom, gRight, gTop, 'rgba(226, 232, 240, 0.12)');
-    quad(gLeft, gBottom, up(gBottom, wallH), up(gLeft, wallH), cLeft);
-    quad(gBottom, gRight, up(gRight, wallH), up(gBottom, wallH), cRight);
-    // 门画在左墙面中央（参考案例：门在左墙）；东/西门画在右墙面
-    const doorOnSouth = door && door.y === y1;
-    const doorOnEastWest = door && (door.x === x0 || door.x === x1) && door.y !== y1;
-    if (doorOnSouth && door) {
-      const w = Math.max(10, (gBottom.x - gLeft.x) * 0.16);
-      const h = wallH * 0.62;
-      const cx = (gLeft.x + gBottom.x) / 2;
-      const baseY = (gLeft.y + gBottom.y) / 2;
-      this.ctx.fillStyle = '#0f172a';
-      this.ctx.fillRect(cx - w / 2 - 2, baseY - h - 2, w + 4, h + 4);
-      this.ctx.fillStyle = door.type === 'safe_door' ? '#3f5c50' : '#5b7a99';
-      this.ctx.fillRect(cx - w / 2, baseY - h, w, h);
-      this.ctx.fillStyle = door.isOpen ? '#34d399' : '#ef4444';
-      this.ctx.fillRect(cx + w / 2 - 6, baseY - h - 6, 5, 5);
-    } else if (doorOnEastWest && door) {
-      const w = Math.max(10, (gRight.x - gBottom.x) * 0.3);
-      const h = wallH * 0.62;
-      const cx = (gBottom.x + gRight.x) / 2;
-      const baseY = (gBottom.y + gRight.y) / 2;
-      this.ctx.fillStyle = '#0f172a';
-      this.ctx.fillRect(cx - w / 2 - 2, baseY - h - 2, w + 4, h + 4);
-      this.ctx.fillStyle = door.type === 'safe_door' ? '#3f5c50' : '#5b7a99';
-      this.ctx.fillRect(cx - w / 2, baseY - h, w, h);
-      this.ctx.fillStyle = door.isOpen ? '#34d399' : '#ef4444';
-      this.ctx.fillRect(cx + w / 2 - 6, baseY - h - 6, 5, 5);
+  private drawHouse(members: BuildingEntity[], door: BuildingEntity | null, layer: 'back' | 'front' = 'front') {
+    drawHouseLayer(this.ctx, members, door, this.player, (x, y) => this.toScreen(x, y), layer);
+    if (layer === 'front' && !door?.id.startsWith('world:')) {
+      const bounds = houseCorners(members);
+      const point = this.toScreen((bounds.x0 + bounds.x1) / 2, bounds.y1);
+      const ref = door ?? members[0];
+      this.drawBuildingHp(point.x, point.y - HOUSE_WALL_H - 12, ref.hp, ref.maxHp);
     }
-    const winW = Math.max(8, (gBottom.x - gLeft.x) * 0.1);
-    const winH = wallH * 0.28;
-    const winCx = (gBottom.x + gRight.x) / 2;
-    const winBaseY = (gBottom.y + gRight.y) / 2 - wallH * 0.45;
-    this.ctx.fillStyle = '#0f172a';
-    this.ctx.fillRect(winCx - winW / 2 - 1, winBaseY - winH - 1, winW + 2, winH + 2);
-    this.ctx.fillStyle = '#fde68a';
-    this.ctx.fillRect(winCx - winW / 2, winBaseY - winH, winW, winH);
-    this.ctx.restore();
-    const s = this.toScreen((x0 + x1) / 2, y1);
-    const ref = door ?? first;
-    this.drawBuildingHp(s.x, s.y - wallH - 12, ref.hp, ref.maxHp);
   }
 
   private drawBuilding(b: BuildingEntity) {
@@ -4127,6 +4649,29 @@ export class IsometricEngine {
         this.ctx.fill();
       }
       this.drawBuildingHp(s.x, s.y - 22, b.hp, b.maxHp);
+    } else if (b.type === 'campfire') {
+      this.drawCampfire(b.x, b.y);
+    } else if (['bed', 'farm_plot', 'furnace', 'research_table'].includes(b.type)) {
+      this.ctx.fillStyle = b.type === 'farm_plot' ? '#5c4330' : b.type === 'furnace' ? '#69717a' : '#755b43';
+      this.ctx.fillRect(s.x - 23, s.y - 21, 46, 25);
+      this.ctx.strokeStyle = '#1f2937'; this.ctx.lineWidth = 2;
+      this.ctx.strokeRect(s.x - 23, s.y - 21, 46, 25);
+      if (b.type === 'bed') {
+        this.ctx.fillStyle = '#adbdab'; this.ctx.fillRect(s.x - 19, s.y - 18, 38, 15);
+        this.ctx.fillStyle = '#e0ddcf'; this.ctx.fillRect(s.x - 18, s.y - 17, 11, 13);
+      } else if (b.type === 'farm_plot') {
+        this.ctx.strokeStyle = '#2c2019'; this.ctx.lineWidth = 2;
+        for (let row = -14; row < 0; row += 7) { this.ctx.beginPath(); this.ctx.moveTo(s.x - 20, s.y + row); this.ctx.lineTo(s.x + 20, s.y + row); this.ctx.stroke(); }
+        if (b.production) { this.ctx.fillStyle = '#89b65d'; for (let x = -15; x <= 15; x += 10) this.ctx.fillRect(s.x + x, s.y - 13, 4, 10); }
+      } else if (b.type === 'furnace') {
+        this.ctx.fillStyle = '#252b30'; this.ctx.fillRect(s.x - 17, s.y - 45, 34, 31);
+        this.ctx.fillStyle = b.production ? '#e89a43' : '#51443a'; this.ctx.fillRect(s.x - 10, s.y - 30, 20, 13);
+      } else {
+        this.ctx.fillStyle = '#b6c4ba'; this.ctx.fillRect(s.x - 12, s.y - 24, 23, 12);
+        this.ctx.fillStyle = '#7aa7b8'; this.ctx.fillRect(s.x - 7, s.y - 23, 13, 10);
+      }
+      this.ctx.font = 'bold 10px sans-serif'; this.ctx.textAlign = 'center'; this.ctx.fillStyle = '#ece5cf'; this.ctx.fillText(b.name, s.x, s.y - 52);
+      if (b.hp < b.maxHp) this.drawBuildingHp(s.x, s.y - 62, b.hp, b.maxHp);
     } else if (b.type === 'anchor_core') {
       if (!this.tryBuildingSprite('anchor_core', b.x, b.y)) {
       this.ctx.fillStyle = '#0369a1';

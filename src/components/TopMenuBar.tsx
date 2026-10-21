@@ -75,7 +75,7 @@ export const TopMenuBar: React.FC<TopMenuBarProps> = ({
         <div className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-950/90 backdrop-blur-md border border-cyan-500/40 shadow-lg text-xs font-mono">
           <span className="text-cyan-400 font-bold">🗺️ {mapName}</span>
           <span className="px-1.5 py-0.5 rounded bg-cyan-950/80 text-[10px] text-cyan-300 border border-cyan-500/40">
-            80×80 网格大地图 · 6400格
+            {mapName.includes('独立营地') ? '独立营地空间' : '无缝公共世界'}
           </span>
           <span className="text-amber-400 font-semibold text-[11px]">
             [{coords.x.toFixed(1)}, {coords.y.toFixed(1)}]

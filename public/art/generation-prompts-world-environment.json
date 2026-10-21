@@ -1,0 +1,19 @@
+{
+  "asset": "world-environment-v1.png",
+  "mode": "built-in image_gen",
+  "size": [
+    1536,
+    1024
+  ],
+  "transparent_background": true,
+  "layout": "3 columns, 2 rows; each cell 512x512",
+  "frames": [
+    "understory",
+    "outcrop",
+    "reeds",
+    "tank",
+    "rubble",
+    "fence"
+  ],
+  "prompt": "Use case: stylized-concept. Asset type: one production sprite atlas for a 2.5D isometric post-apocalyptic survival game, six environment prop clusters, genuine transparent background. Primary request: a single 1536 by 1024 PNG sheet divided into exactly 3 equal columns and 2 equal rows, six 512 by 512 cells. Each cell contains one complete isolated prop cluster centered horizontally, its lowest ground contact at 88 percent of cell height, generous 10 percent clear alpha padding around every cell. No visible grid or dividers. TOP LEFT: a lush but dusty woodland understory cluster, mossy fallen trunk, several ferns and low dark green shrubs, no full tall tree. TOP MIDDLE: a rugged layered slate and granite rock outcrop, stepped cliff fragment with pale broken stone rubble at its foot. TOP RIGHT: lakeshore reeds, cattails, driftwood and smooth pebbles; no large patch of water, just the isolated vegetation and debris. BOTTOM LEFT: a weathered rust red horizontal industrial water tank on squat supports with pipes and a couple of dented barrels, an abandoned industrial landmark. BOTTOM MIDDLE: low collapsed brick and concrete foundation rubble with a leaning broken wooden beam, visibly ruined, no intact enclosed room and no roof. BOTTOM RIGHT: a weathered broken farm fence corner with an old wooden wheel and small wild grasses, not blocking an entire lane. Style: high quality hand-painted game sprites with restrained realistic materials and crisp readable silhouettes, matching muted olive conifers, dusty beige field, gray slate rock and rusted metal; not cartoon outline, not pixel art, not photograph. Camera: consistent orthographic isometric 2:1 ground plane, view from southeast at 30 degree elevation, same direction and scale in all six cells. Soft daylight upper left, minimal short contact shadow, no long cast shadow. Constraints: actual alpha transparency, completely empty transparent surrounding pixels, no opaque background, no checkered transparency pattern, no tile bases or floating islands, no text, no labels, no numbers, no UI, no logos or watermark, no people or creatures, all six complete and separated inside their own cells, no object crossing a cell boundary."
+}

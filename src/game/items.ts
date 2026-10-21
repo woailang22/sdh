@@ -19,6 +19,13 @@ export interface ItemDef {
 }
 
 export const ITEM_DEFS: Record<string, ItemDef> = {
+  copper_bar: { id: 'copper_bar', name: '精炼铜锭', category: 'material', icon: '🟠', rarity: 3, maxCount: 99, desc: '在营地熔炉加工铜矿，制造升级工具。', buyPrice: 120, sellPrice: 80 },
+  pickaxe_stone: { id: 'pickaxe_stone', name: '开山镐', category: 'tool', icon: '⛏️', rarity: 1, maxCount: 1, desc: '用于采石和采矿。', buyPrice: 40, sellPrice: 20 },
+  axe_stone: { id: 'axe_stone', name: '石斧', category: 'tool', icon: '🪓', rarity: 1, maxCount: 1, desc: '用于伐木。', buyPrice: 40, sellPrice: 20 },
+  rod_basic: { id: 'rod_basic', name: '简易钓竿', category: 'tool', icon: '🎣', rarity: 1, maxCount: 1, desc: '用于钓鱼。', buyPrice: 35, sellPrice: 15 },
+  crude_gun: { id: 'crude_gun', name: '土铳', category: 'weapon', icon: '🔫', rarity: 1, maxCount: 1, desc: '粗制火枪，使用通用弹药。', buyPrice: 100, sellPrice: 50, damage: 55 },
+  armor_cloth: { id: 'armor_cloth', name: '粗布护甲', category: 'armor', icon: '🧥', rarity: 1, maxCount: 1, desc: '护盾上限增加25。', buyPrice: 60, sellPrice: 30, shield: 25 },
+  dried_fish: { id: 'dried_fish', name: '烤肉干', category: 'food', icon: '🍖', rarity: 1, maxCount: 99, desc: '恢复35点饱食。', buyPrice: 12, sellPrice: 6, satiety: 35 },
   wood: { id: 'wood', name: '优质原木', category: 'material', icon: '🪵', rarity: 1, maxCount: 999, desc: '砍树产出，建造与制造基底。', buyPrice: 5, sellPrice: 3 },
   stone: { id: 'stone', name: '花岗石料', category: 'material', icon: '🪨', rarity: 1, maxCount: 999, desc: '采石产出，墙体与工具原料。', buyPrice: 5, sellPrice: 3 },
   scrap: { id: 'scrap', name: '特种废铁', category: 'material', icon: '⚙️', rarity: 1, maxCount: 999, desc: '拆车/废墟产出，工作台核心材料。', buyPrice: 15, sellPrice: 12 },
@@ -150,6 +157,7 @@ export const COOK_SOURCE: Record<string, { materials: { itemId: string; count: n
   wine_starfruit: { materials: [{ itemId: 'crop_starfruit', count: 3 }] },
 };
 export const FOOD_VALUE: Record<string, { satiety: number; heal: number }> = {
+  dried_fish: { satiety: 35, heal: 0 },
   food: { satiety: 35, heal: 0 },
   fish: { satiety: 30, heal: 5 },
   fish2: { satiety: 40, heal: 10 },

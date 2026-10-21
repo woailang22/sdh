@@ -18,6 +18,7 @@ import { AnchorModal } from './components/AnchorModal';
 import { ProfileModal } from './components/ProfileModal';
 import { SettingsModal } from './components/SettingsModal';
 import { WorldMapModal } from './components/WorldMapModal';
+import { copyRenderDiagnostics, readRenderDiagnostics } from './game/renderDiagnostics';
 import { BuildingBar } from './components/BuildingBar';
 import { WeatherWidget } from './components/WeatherWidget';
 import { QuestPanel, QuestStep } from './components/QuestPanel';
@@ -32,6 +33,9 @@ import { ALL_QUESTS } from './game/quests';
 import { dayKey, isNextDay } from './game/daily';
 import { BASE_PLOTS } from './game/spawn';
 import { homeMapIdFor } from './game/home';
+import { WORLD_LOCATIONS } from './game/world';
+import { CampPanel } from './components/CampPanel';
+import type { GameStateSnapshot } from '../server/worldState';
 import { CraftOrder } from './components/WorkbenchModal';
 import { RaidModal } from './components/RaidModal';
 import { OnlinePlayersModal } from './components/OnlinePlayersModal';
@@ -67,7 +71,15 @@ export default function App() {
   const netManagerRef = useRef<NetworkManager | null>(null);
 
   // Active Map Zone
-  const [currentMapId, setCurrentMapId] = useState<MapZoneId>('camp_plaza');
+  const [currentMapId, setCurrentMapId] = useState<MapZoneId>('world');
+  const [gameState, setGameState] = useState<GameStateSnapshot | null>(null);
+  const gameStateRef = useRef<GameStateSnapshot | null>(null);
+  const [campOpen, setCampOpen] = useState(false);
+  const [managedBuilding, setManagedBuilding] = useState<BuildingEntity | null>(null);
+  const [actionNotice, setActionNotice] = useState('');
+  const [renderIssue, setRenderIssue] = useState<string | null>(null);
+  const [renderDetailsOpen, setRenderDetailsOpen] = useState(false);
+  const [renderCopyResult, setRenderCopyResult] = useState('');
 
   // Boot splash（keyart 开屏，点进入废土关闭）
   const [showBoot, setShowBoot] = useState(true);
@@ -201,7 +213,7 @@ export default function App() {
       channel: 'world',
       sender: '坍界求生电台',
       senderTitle: '系统广播',
-      text: '欢迎来到末日废土！营地只管建造不产物资：去野外山地/城镇徒手采集木/石/废铁 → 回营地工作台制造 → 钓鱼补充饱食。在线真人同图求生。',
+      text: '从公共荒野开始探索：捡取木石、制作工具、在野外插旗建营。营地进入后是独立地图，全天可被攻击，离线防御需要真实弹药。',
       timestamp: '00:01',
     },
   ]);
@@ -295,6 +307,12 @@ export default function App() {
 
   // 穿装备：背包格 → 装备栏（旧装备换回背包，需有空格；背包扩容即时生效）
   const equipItem = useCallback((idx: number): boolean => {
+    if (gameStateRef.current) {
+      const item = hotbarSlotsRef.current[idx];
+      if (!item || !isEquipment(item)) return false;
+      netManagerRef.current?.gameAction('equip', { slot: item.category, index: idx });
+      return true;
+    }
     const cur = [...hotbarSlotsRef.current];
     const item = cur[idx];
     if (!item || !isEquipment(item)) return false;
@@ -348,6 +366,7 @@ export default function App() {
 
   // 脱装备：装备栏 → 背包（脱背包时若东西超6格则拒绝）
   const unequipSlot = useCallback((slot: 'weapon' | 'armor' | 'tool' | 'pack') => {
+    if (gameStateRef.current) { netManagerRef.current?.gameAction('unequip', { slot }); return; }
     const eq = { ...equipmentRef.current };
     const item = eq[slot];
     if (!item) return;
@@ -395,6 +414,7 @@ export default function App() {
 
   // 丢弃整叠
   const dropItem = useCallback((idx: number) => {
+    if (gameStateRef.current) { netManagerRef.current?.gameAction('drop', { index: idx }); return; }
     const cur = [...hotbarSlotsRef.current];
     const item = cur[idx];
     if (!item) return;
@@ -503,6 +523,65 @@ export default function App() {
       },
     ]);
   }, []);
+
+  const sendGameAction = useCallback((action: string, payload: Record<string, unknown> = {}) => {
+    if (!netManagerRef.current?.isConnected) { pushSystemMsg('连接已断开，恢复连接后再操作。'); return; }
+    netManagerRef.current.gameAction(action, payload);
+  }, [pushSystemMsg]);
+
+  const applyGameState = useCallback((state: GameStateSnapshot) => {
+    const prev = gameStateRef.current;
+    gameStateRef.current = state;
+    setGameState(state);
+    const p = state.player;
+    setHotbarSlots(p.inventory);
+    setEquipment(p.equipment);
+    setPlayerWood(p.resources.wood); setPlayerStone(p.resources.stone);
+    setPlayerScrap(p.resources.scrap); setPlayerParts(p.resources.parts);
+    setTotalWood(v => v + Math.max(0, p.resources.wood - (prev?.player.resources.wood ?? 0)));
+    setTotalStone(v => v + Math.max(0, p.resources.stone - (prev?.player.resources.stone ?? 0)));
+    setTotalScrap(v => v + Math.max(0, p.resources.scrap - (prev?.player.resources.scrap ?? 0)));
+    setPlayerStats(v => ({ ...v, hp: p.hp, maxHp: p.maxHp, shield: p.shield, maxShield: p.maxShield, satiety: p.satiety, credits: p.resources.credits, shards: p.resources.shard, level: p.level, title: p.title, xp: p.xp, maxXp: p.maxXp }));
+    setKillCount(p.kills);
+    setClaimedPlot(!!p.campId);
+    setPickaxeCrafted(!!p.equipment.tool?.id.includes('pickaxe') || p.inventory.some(it => it?.id.includes('pickaxe')));
+    const owned = state.buildings.filter(b => b.ownerId === p.id);
+    setWorkbenchBuilt(v => v || owned.some(b => b.type === 'workbench'));
+    setSafeDoorBuilt(v => v || owned.some(b => b.type === 'safe_door'));
+    setTurretBuilt(v => v || owned.some(b => b.type === 'turret'));
+    setRaidDoor(v => v ? state.buildings.find(b => b.id === v.id) ?? null : null);
+    setManagedBuilding(v => v ? state.buildings.find(b => b.id === v.id) ?? null : null);
+    if (state.loot) setLootPanel(state.loot.items.length ? { ...state.loot, items: state.loot.items.map(it => ({ ...it, taken: false })) } : null);
+    if (state.error) { pushSystemMsg(state.error); setActionNotice(state.error); }
+    const eng = engineRef.current;
+    if (!eng) return;
+    eng.localPlayerId = p.id;
+    eng.campEntrances = state.camps;
+    const currentCamp = state.camps.find(c => c.id === p.mapId);
+    eng.campSize = currentCamp?.size ?? 64;
+    eng.friendlyPlayerIds = currentCamp && (currentCamp.ownerId === p.id || currentCamp.members?.includes(p.id)) ? new Set([currentCamp.ownerId, ...(currentCamp.members ?? [])]) : new Set();
+    if (eng.currentMapId !== p.mapId) {
+      eng.warpToMap(p.mapId, p.x, p.y);
+      setCampOpen(false); setLootPanel(null);
+    } else if (state.correction || !prev) {
+      eng.player.x = p.x; eng.player.y = p.y;
+      eng.targetMovePoint = null;
+    }
+    if (prev?.player.mapId === p.mapId && (p.hp < prev.player.hp || (p.shield < prev.player.shield && p.maxShield >= prev.player.maxShield))) {
+      eng.receiveAuthoritativeDamage(Math.max(0, prev.player.hp - p.hp) + Math.max(0, prev.player.shield - p.shield));
+    }
+    eng.player.hp = p.hp; eng.player.maxHp = p.maxHp;
+    eng.player.shield = p.shield; eng.player.maxShield = p.maxShield;
+    eng.player.satiety = p.satiety;
+    eng.player.reserveAmmo = p.resources.ammo;
+    if (p.resources.ammo <= 0) eng.player.ammo = 0;
+    eng.setAuthoritativeBuildings(state.buildings);
+    eng.setResourceStates(state.nodes);
+    eng.setAuthoritativeMonsters(state.monsters);
+    for (const drop of state.drops) if (!eng.interactables.some(it => it.id === drop.id)) {
+      eng.interactables.push({ id: drop.id, name: drop.name, type: 'box', x: drop.x, y: drop.y, radius: 2.8, available: true, prompt: '[E/F 搜索掉落包]', searchDuration: 0.6, stock: 1 });
+    }
+  }, [pushSystemMsg]);
 
   // 采集技能经验（星露谷式）：升级提示 + 产量加成同步引擎
   const gainSkill = useCallback((key: 'wood' | 'stone' | 'fish') => {
@@ -644,6 +723,7 @@ export default function App() {
     if (!prev) return;
     const entry = prev.items.find((i) => i.itemId === itemId && !i.taken);
     if (!entry) return;
+    if (gameStateRef.current) { sendGameAction('take_loot', { targetId: prev.id, itemId, count: entry.count }); return; }
     if (!applyLoot(lootResourceOf(itemId), itemId, entry.name, entry.count)) return;
     grantXp(3);
     soundManager.playLoot();
@@ -659,6 +739,10 @@ export default function App() {
   const handleTakeAllLoot = useCallback(() => {
     const prev = lootPanelRef.current;
     if (!prev) return;
+    if (gameStateRef.current) {
+      for (const entry of prev.items) if (!entry.taken && entry.count > 0) sendGameAction('take_loot', { targetId: prev.id, itemId: entry.itemId, count: entry.count });
+      return;
+    }
     let changed = false;
     const items = prev.items.map((i) => {
       if (i.taken) return i;
@@ -707,6 +791,7 @@ export default function App() {
         setActiveModal(null);
         setRaidDoor(null);
         setIsOnlinePlayersOpen(false);
+        setCampOpen(false); setLootPanel(null); setManagedBuilding(null);
       }
     };
     window.addEventListener('keydown', handleKeyDown);
@@ -716,16 +801,18 @@ export default function App() {
   // Initialize Realtime Multiplayer Network Manager（只连一次，切图不断线：身份保持，防幽灵连接刷人数）
   useEffect(() => {
     const netManager = new NetworkManager({
+      onGameState: applyGameState,
       onInit: (data) => {
         // 过期 manager 的回包直接丢弃（防僵尸连接劫持身份）
         if (netManagerRef.current && netManagerRef.current !== netManager) return;
         setSelfId(data.selfId);
+        if (data.gameState) applyGameState(data.gameState);
         setOnlinePlayers(data.players);
         if (engineRef.current) {
           engineRef.current.localPlayerId = data.selfId;
           engineRef.current.setOnlinePlayers(data.players);
           if (data.buildings && data.buildings.length > 0) {
-            engineRef.current.buildings = data.buildings;
+            engineRef.current.setAuthoritativeBuildings(data.buildings);
           }
         }
         if (data.weather) {
@@ -823,7 +910,7 @@ export default function App() {
         }
       },
       onPvpHit: (hit) => {
-        engineRef.current?.applyPvpHit(hit.damage, hit.attackerName);
+        if (engineRef.current) { engineRef.current.hurtFlash = 0.4; engineRef.current.addTextParticle(engineRef.current.player.x, engineRef.current.player.y, `受到 ${hit.attackerName} 攻击`, '#f87171'); }
       },
     });
 
@@ -840,222 +927,50 @@ export default function App() {
     if (showBoot || !canvasRef.current) return;
 
     const engine = new IsometricEngine(canvasRef.current, {
-      onOpenWorkbench: () => {
-        setActiveModal('workbench');
+      onRenderStatus: message => {
+        setRenderIssue(message);
+        if (message) {
+          setRenderDetailsOpen(true);
+          setRenderCopyResult('');
+        }
       },
-      onLootFound: (itemName: string, count: number, resourceType?: 'wood' | 'stone' | 'scrap' | 'parts' | 'food' | 'ammo' | 'c4' | 'medical' | 'weapon' | 'armor' | 'credits' | 'shard' | 'blueprint' | 'pack') => {
-        setScavengeCount((prev) => prev + 1);
-        grantXp(8);
-        setPlayerStats((prev) => ({ ...prev, credits: prev.credits + count }));
-        // 即时采集（星露谷侧）：树/石/鱼
-        if (resourceType === 'wood') gainSkill('wood');
-        else if (resourceType === 'stone') gainSkill('stone');
-        else if (resourceType === 'food' && (itemName.includes('鱼') || itemName.includes('鳟'))) gainSkill('fish');
-        const guessId =
-          resourceType === 'wood' ? 'wood'
-          : resourceType === 'stone' ? 'stone'
-          : resourceType === 'food' ? 'fish'
-          : resourceType === 'ammo' ? 'ammo'
-          : resourceType === 'c4' ? 'c4_explosive'
-          : resourceType === 'medical' ? (itemName.includes('绷带') ? 'bandage' : 'medkit')
-          : resourceType === 'weapon' ? 'rifle'
-          : resourceType === 'armor' ? 'vest'
-          : resourceType === 'credits' ? 'credits'
-          : resourceType === 'shard' ? 'shard'
-          : resourceType === 'blueprint' ? 'blueprint'
-          : resourceType === 'pack' ? (itemName.includes('战术') ? 'pack_tactical' : 'pack_canvas')
-          : 'scrap';
-        applyLoot(resourceType ?? 'scrap', guessId, itemName, count);
-      },
-      onOpenLootPanel: (target) => {
-        // 三角洲式开箱：校验还有储量才打开
+      onGameAction: sendGameAction,
+      onCampInteract: () => {
         const eng = engineRef.current;
-        if (eng) {
-          const it = eng.interactables.find((x) => x.id === target.id);
-          if (!it || (it.stock ?? 1) <= 0) return;
+        if (!eng) return false;
+        if (eng.currentMapId === 'world') {
+          const camp = gameStateRef.current?.camps.find(c => Math.hypot(c.x - eng.player.x, c.y - eng.player.y) < 3);
+          if (camp) { sendGameAction('enter_camp', { campId: camp.id }); return true; }
+        } else if (Math.hypot(eng.player.x, eng.player.y - 28) < 3) {
+          sendGameAction('leave_camp'); return true;
         }
-        setLootPanel({
-          id: target.id,
-          name: target.name,
-          items: target.items.map((i) => ({ ...i, taken: false })),
-        });
+        return false;
       },
-      onMonsterKilled: (monsterName: string, monsterMaxHp?: number) => {
-        setKillCount((prev) => prev + 1);
-        if ((monsterMaxHp ?? 0) >= 550) setEliteKilled(true);
-        if (monsterName.includes('深渊霸主') || monsterName.includes('领主BOSS')) setBossKilled(true);
-        if (monsterName.includes('蚀骸巨兽')) setBossKilled(true);
-        const reward = killReward(monsterMaxHp ?? 300);
-        const xpGained = reward.xp;
-
-        // Level-up logic（求生数值：升级+10生命/+5护盾）
-        setPlayerStats((prev) => {
-          const nextXp = prev.xp + xpGained;
-          if (nextXp >= prev.maxXp) {
-            soundManager.playCraft();
-            const newLvl = prev.level + 1;
-            // Broadcast level up in server chat
-            netManagerRef.current?.sendChat('world', `✨ 我已升级至 Lv.${newLvl}！`);
-            return {
-              ...prev,
-              level: newLvl,
-              xp: nextXp - prev.maxXp,
-              maxXp: Math.floor(prev.maxXp * 1.3),
-              maxHp: prev.maxHp + 10,
-              hp: prev.maxHp + 10,
-              maxShield: prev.maxShield + 5,
-              shield: prev.maxShield + 5,
-              credits: prev.credits + reward.credits,
-            };
-          }
-          return {
-            ...prev,
-            xp: nextXp,
-            credits: prev.credits + reward.credits,
-            shards: prev.shards + reward.shards,
-          };
-        });
-        // 击杀掉落：按强度概率掉弹药/医疗（进背包，满则转文字提示）
-        if (engineRef.current) {
-          const eng = engineRef.current;
-          const roll = Math.random();
-          if ((monsterMaxHp ?? 0) >= 1000 || roll < 0.25) {
-            eng.player.reserveAmmo += 12;
-            eng.addTextParticle(eng.player.x, eng.player.y - 1.8, '+12 步枪弹药（按R装填）', '#38bdf8');
-          } else if (roll < 0.4) {
-            addItemToHotbar({ id: 'med_亚麻绷带', name: '亚麻绷带', category: 'medical', icon: '🩹', count: 1, maxCount: 10, desc: '点击使用，恢复30点生命。', rarity: 2 });
-          }
-        }
+      onOpenWorkbench: () => setActiveModal('workbench'),
+      onLootFound: () => {},
+      onOpenLootPanel: target => sendGameAction('search', { targetId: target.id }),
+      onMonsterKilled: (name, maxHp) => {
+        if ((maxHp ?? 0) >= 600) setEliteKilled(true);
+        if ((maxHp ?? 0) >= 1000) setBossKilled(true);
       },
-      onPlayerDamage: (dmg: number) => {},
-      onUpdateSquadStatus: (_members: SquadMember[]) => {
-        // 单人模式：忽略NPC小队状态，仅保留自己
+      onPlayerDamage: () => {},
+      onUpdateSquadStatus: () => {},
+      onBuildingPlaced: () => false,
+      onOpenStorageBox: building => {
+        setManagedBuilding(building ?? null);
+        setCampOpen(true);
+        if (building?.type === 'storage_box') sendGameAction('search', { targetId: building.id });
       },
-      onBuildingPlaced: (type: string, costWood: number, costStone: number, costScrap: number, costParts: number) => {
-        if (
-          playerWoodRef.current < costWood ||
-          playerStoneRef.current < costStone ||
-          playerScrapRef.current < costScrap ||
-          playerPartsRef.current < costParts
-        ) {
-          return false;
-        }
-
-        // Deduct materials accurately based on blueprint costs
-        if (costWood > 0) setPlayerWood((prev) => Math.max(0, prev - costWood));
-        if (costStone > 0) setPlayerStone((prev) => Math.max(0, prev - costStone));
-        if (costScrap > 0) setPlayerScrap((prev) => Math.max(0, prev - costScrap));
-        if (costParts > 0) setPlayerParts((prev) => Math.max(0, prev - costParts));
-        grantXp(20);
-        if (type === 'workbench') setWorkbenchBuilt(true);
-        if (type === 'safe_door') setSafeDoorBuilt(true);
-        if (type === 'turret') setTurretBuilt(true);
-
-        // Broadcast to multiplayer server
-        if (netManagerRef.current && engineRef.current) {
-          const mouseX = Math.round(engineRef.current.mouse.worldX);
-          const mouseY = Math.round(engineRef.current.mouse.worldY);
-          netManagerRef.current.placeBuilding({
-            type,
-            name: type === 'safe_door' ? '高耐久防爆安全门' : '领地防御设施',
-            x: mouseX,
-            y: mouseY,
-            hp: type === 'safe_door' ? 5000 : 800,
-            maxHp: type === 'safe_door' ? 5000 : 800,
-            mapId: currentMapId,
-          });
-        }
-        const eb = engineRef.current as any;
-        if (eb && Array.isArray(eb._serverBuildings)) {
-          eb._serverBuildings.push({ id: `b_${Date.now()}`, type, x: Math.round(eb.mouse.worldX), y: Math.round(eb.mouse.worldY), mapId: currentMapId, ownerId: selfId });
-        }
-        return true;
-      },
-      onOpenStorageBox: (building) => {
-        grantXp(10);
-        const loot = building?.storedLoot;
-        if (loot && loot.length > 0) {
-          // 建筑含物资：按名关键字分拣进账
-          for (const l of loot) {
-            const n = l.name;
-            if (/信用|钞票|凭证/.test(n)) {
-              setPlayerStats((p) => ({ ...p, credits: p.credits + l.count }));
-            } else if (/晶/.test(n)) {
-              setPlayerStats((p) => ({ ...p, shards: p.shards + l.count }));
-            } else if (/C4|炸药|爆破|铝热|解码|EMP|火炬/.test(n)) {
-              addItemToHotbar({ id: 'c4_explosive', name: '高爆C4塑胶炸药', category: 'tool', icon: '💣', count: l.count, maxCount: 20, desc: '突袭破拆敌方安全门的利器。' });
-            } else if (/医疗|绷带|针剂|药剂|急救/.test(n)) {
-              addItemToHotbar({ id: `med_${n}`, name: n, category: 'medical', icon: '💉', count: l.count, maxCount: 10, desc: '点击使用，恢复生命。' });
-            } else if (/弹药|子弹/.test(n)) {
-              if (engineRef.current) engineRef.current.player.reserveAmmo += l.count * 10;
-            } else if (/食物|肉|鱼|罐头|干粮|合剂|口粮|莲藕|熏鱼/.test(n)) {
-              addItemToHotbar({ id: `food_${n}`, name: n, category: 'food', icon: '🥩', count: l.count, maxCount: 99, desc: '点击食用，恢复饱食。' });
-            } else if (/蓝图/.test(n)) {
-              setPlayerStats((p) => ({ ...p, credits: p.credits + 500 }));
-            } else if (/装甲|护甲|背心/.test(n)) {
-              addItemToHotbar({ id: 'armor_vest', name: '军用防弹背心', category: 'armor', icon: '🦺', count: 1, maxCount: 1, desc: '护盾上限+50，受伤减免15%。' });
-            } else {
-              setPlayerScrap((prev) => prev + l.count);
-              setTotalScrap((prev) => prev + l.count);
-            }
-          }
-          if (engineRef.current) {
-            engineRef.current.addTextParticle(
-              engineRef.current.player.x,
-              engineRef.current.player.y - 1.2,
-              `开箱：${loot.map((l) => `${l.name}×${l.count}`).join('、').slice(0, 24)}`,
-              '#4ade80'
-            );
-          }
-        } else {
-          setPlayerScrap((prev) => prev + 15);
-          setTotalScrap((prev) => prev + 15);
-          if (engineRef.current) {
-            engineRef.current.addTextParticle(
-              engineRef.current.player.x,
-              engineRef.current.player.y - 1.2,
-              '+15 废铁（公共储物箱）',
-              '#10b981'
-            );
-          }
-        }
-      },
-      onWeatherChange: (w: WeatherState) => {
-        setWeatherState(w);
-      },
-      onMapZoneChange: (mapId: MapZoneId) => {
-        const from = String(currentMapIdRef.current);
-        const to = String(mapId);
-        const fromCamp = from.startsWith('camp_');
-        const toWild = !to.startsWith('camp_') && !to.startsWith('home_') && to !== 'sanctuary';
-        // 新手卡点：没做出开山镐就出境只提示不硬锁
-        if (fromCamp && toWild && !pickaxeCraftedRef.current) {
-          pushSystemMsg('⛏️ 出境前先回营地工作台做出开山镐吧（8木+6石，采石效率+60%），野外才好混！');
-        }
+      onWeatherChange: setWeatherState,
+      onMapZoneChange: mapId => {
+        currentMapIdRef.current = mapId;
         setCurrentMapId(mapId);
-        setLootPanel(null); // 切图关箱
-        // 切图 splash：预览图 bridge（2.4s），所见即所得的心理锚点
-        window.clearTimeout(splashTimer.current);
-        setZoneSplash({ mapId, nonce: Date.now() });
-        splashTimer.current = window.setTimeout(() => setZoneSplash(null), 2400);
+        setLootPanel(null);
+        setZoneSplash(null);
       },
-      onOpenRaidModal: (doorBuilding: BuildingEntity) => {
-        setRaidDoor(doorBuilding);
-      },
-      onPlayerSyncNeeded: (pState) => {
-        if (netManagerRef.current && netManagerRef.current.isConnected) {
-          netManagerRef.current.syncPlayerState({
-            ...pState,
-            level: playerStats.level,
-          });
-        }
-      },
-      onPlayerDeathDrop: (mapId) => {
-        const cur = [...hotbarSlotsRef.current];
-        const r = calcDeathDrop(cur, mapId);
-        if (r.clearReserveAmmo && engineRef.current) engineRef.current.player.reserveAmmo = 0;
-        for (const i of r.droppedIndexes) cur[i] = null;
-        setHotbarSlots(cur);
+      onOpenRaidModal: setRaidDoor,
+      onPlayerSyncNeeded: state => {
+        netManagerRef.current?.syncPlayerState({ ...state, level: playerStatsRef.current.level });
       },
     });
 
@@ -1063,11 +978,13 @@ export default function App() {
     if (selfId) {
       engine.localPlayerId = selfId;
     }
+    if (gameStateRef.current) applyGameState({ ...gameStateRef.current, correction: true });
+    engine.inputBlocked = !!activeModal || campOpen || !!raidDoor;
     engine.start();
 
     // Sync state interval (60ms)
     const syncInterval = setInterval(() => {
-      if (!engineRef.current) return;
+      if (!engineRef.current || document.hidden) return;
       const eng = engineRef.current;
 
       setPlayerStats((prev) => ({
@@ -1145,13 +1062,21 @@ export default function App() {
           shield: Math.round(eng.player.shield),
         },
       ]);
-    }, 60);
+    }, 120);
 
     return () => {
       clearInterval(syncInterval);
-      engine.stop();
+      engine.dispose();
+      if (engineRef.current === engine) engineRef.current = null;
     };
   }, [showBoot]);
+
+  useEffect(() => {
+    const engine = engineRef.current;
+    if (!engine) return;
+    engine.inputBlocked = !!activeModal || campOpen || !!raidDoor || !!lootPanel || isOnlinePlayersOpen || renderDetailsOpen;
+    if (engine.inputBlocked) { engine.clearKeys(); engine.targetMovePoint = null; }
+  }, [activeModal, campOpen, raidDoor, lootPanel, isOnlinePlayersOpen, renderDetailsOpen]);
 
   const handleSelectSlot = useCallback((slotIdx: number) => {
     setActiveSlot(slotIdx);
@@ -1160,35 +1085,11 @@ export default function App() {
     }
   }, []);
 
-  // 使用物品：按类别生效，不再写死槽位
-  const handleUseItem = useCallback((slotIdx: number) => {
-    const cur = [...hotbarSlotsRef.current];
-    const item = cur[slotIdx];
-    if (!item || item.count <= 0 || !engineRef.current) return;
-    const eng = engineRef.current;
-
-    if (item.category === 'food') {
-      const fv = FOOD_VALUE[item.id] ?? { satiety: 35, heal: 0 };
-      eng.player.satiety = Math.min(eng.player.maxSatiety, eng.player.satiety + fv.satiety);
-      eng.player.stamina = Math.min(eng.player.maxStamina, eng.player.stamina + 20);
-      if (fv.heal > 0) eng.player.hp = Math.min(eng.player.maxHp, eng.player.hp + fv.heal);
-      soundManager.playUseMedical();
-      eng.addTextParticle(eng.player.x, eng.player.y - 1.4, `+${fv.satiety} 饱食${fv.heal > 0 ? ` +${fv.heal}生命` : ''}`, '#fb923c');
-      setAteFood(true);
-    } else if (item.category === 'medical') {
-      const heal = MED_HEAL[item.id] ?? (item.name.includes('绷带') ? 30 : 60);
-      eng.player.hp = Math.min(eng.player.maxHp, eng.player.hp + heal);
-      if (item.id === 'med_painkiller') eng.player.stamina = Math.min(eng.player.maxStamina, eng.player.stamina + 20);
-      soundManager.playUseMedical();
-      eng.addTextParticle(eng.player.x, eng.player.y - 1.4, `+${heal} 生命`, '#4ade80');
-    } else {
-      return;
-    }
-
-    item.count -= 1;
-    cur[slotIdx] = item.count <= 0 ? null : { ...item };
-    setHotbarSlots(cur);
-  }, []);
+  // Item effects and consumption are committed by the server.
+  const handleUseItem = useCallback((index: number) => {
+    sendGameAction('use_item', { index });
+    if (hotbarSlotsRef.current[index]?.category === 'food') setAteFood(true);
+  }, [sendGameAction]);
 
   const handleToggleBuildMode = useCallback(() => {
     if (engineRef.current) {
@@ -1224,406 +1125,56 @@ export default function App() {
     [playerStats.level]
   );
 
-  const handleSelectMapZone = useCallback((zoneId: MapZoneId) => {
-    setCurrentMapId(zoneId as MapZoneId);
-    if (engineRef.current) {
-      engineRef.current.warpToMap(zoneId, 0, 0, '战术折跃');
-    }
+  const markDestination = useCallback((x: number, y: number, name = '目的地') => {
+    if (engineRef.current) engineRef.current.navigationTarget = { x, y, name };
+    pushSystemMsg(`已标记 ${name}（${Math.round(x)}, ${Math.round(y)}），沿道路前往。`);
     setActiveModal(null);
-  }, []);
+  }, [pushSystemMsg]);
+
+  const handleSelectMapZone = useCallback((zoneId: MapZoneId, x?: number, y?: number) => {
+    const location = WORLD_LOCATIONS.find(l => l.sourceMapId === zoneId);
+    markDestination(x ?? location?.x ?? 0, y ?? location?.y ?? 0, location?.name ?? '地图标记');
+  }, [markDestination]);
 
   const handleGoHome = useCallback(() => {
-    if (!selfId) return;
-    const hid = homeMapIdFor(selfId) as MapZoneId;
-    setCurrentMapId(hid);
-    if (engineRef.current) engineRef.current.warpToMap(hid, 0, 9, '回家·个人营地');
-    netManagerRef.current?.goHome(selfId);
-  }, [selfId]);
+    const camp = gameStateRef.current?.camps.find(c => c.id === gameStateRef.current?.player.campId);
+    if (camp) markDestination(camp.x, camp.y, '我的营地');
+    setCampOpen(true);
+  }, [markDestination]);
 
   const handleVisitHome = useCallback((targetId: string, targetName: string) => {
-    const hid = homeMapIdFor(targetId) as MapZoneId;
-    setCurrentMapId(hid);
-    if (engineRef.current) engineRef.current.warpToMap(hid, 0, 9, `突袭·${targetName}的营地`);
-    netManagerRef.current?.visitHome(targetId);
-    pushSystemMsg(`⚠️ 已潜入 [${targetName}] 的个人营地实例，只能破拆不能建造，祝好运。`);
-  }, [pushSystemMsg]);
+    const camp = gameStateRef.current?.camps.find(c => c.ownerId === targetId);
+    if (camp) markDestination(camp.x, camp.y, `${targetName}的营地`);
+    else pushSystemMsg('尚未在附近发现该玩家营地，需要到野外寻找入口。');
+  }, [markDestination, pushSystemMsg]);
 
-  // 黑市买入：先扣钱后发货，发货失败（背包满）则不扣钱
   const handleBuyMarketItem = useCallback((item: MarketItem, quantity: number): boolean => {
-    const cost = item.buyPrice * quantity;
-    if (playerStatsRef.current.credits < cost) return false;
-    const eng = engineRef.current;
-    let ok = true;
-    if (item.id === 'scrap') {
-      setPlayerScrap((prev) => prev + 10 * quantity);
-    } else if (item.id === 'ammo_box') {
-      if (eng) {
-        eng.player.reserveAmmo += 60 * quantity;
-        eng.addTextParticle(eng.player.x, eng.player.y - 1.2, `+${60 * quantity} 备弹（R装填）`, '#38bdf8');
-      }
-    } else if (item.id === 'medkit') {
-      ok = addItemToHotbar({
-        id: 'med_纳米医疗包', name: '纳米医疗包', category: 'medical', icon: '💉',
-        count: 1 * quantity, maxCount: 10, desc: '点击使用，恢复60点生命。', rarity: 4,
-      });
-    } else if (item.id === 'food_ration') {
-      ok = addItemToHotbar({
-        id: 'food_战术肉排', name: '战术肉排', category: 'food', icon: '🥩',
-        count: 10 * quantity, maxCount: 99, desc: '点击食用，恢复35点饱食。', rarity: 2,
-      });
-    } else if (item.id === 'rift_shard') {
-      setPlayerStats((prev) => ({ ...prev, shards: prev.shards + 1 * quantity }));
-    } else {
-      // 新增通用商品（种子/铜矿/配件/房卡/藏品/手术包/手雷/星果酒）
-      const def = (() => { try { return getItemDef(item.id); } catch { return null; } })();
-      if (def) {
-        if (def.category === 'food' || def.category === 'medical' || def.category === 'material' || def.category === 'tool') {
-          ok = addItemToHotbar({ id: def.id, name: def.name, category: def.category === 'material' && (def.id.startsWith('att_') || def.id.startsWith('key_') || def.id.startsWith('collect_') || def.id.startsWith('ore_') || def.id.startsWith('seed_')) ? 'material' : def.category, icon: def.icon, count: def.id.startsWith('seed_') ? 2 * quantity : def.id === 'ore_copper' ? 5 * quantity : def.id === 'throw_frag' ? 2 * quantity : 1 * quantity, maxCount: def.maxCount, desc: def.desc, rarity: def.rarity });
-        } else if (def.category === 'weapon' || def.category === 'armor') {
-          ok = addItemToHotbar({ id: def.id, name: def.name, category: def.category, icon: def.icon, count: 1, maxCount: 1, desc: def.desc, rarity: def.rarity });
-        }
-      }
-    }
-    if (!ok) {
-      pushSystemMsg('背包满了，本次购买未扣钱。按 I 整理后再来。');
-      return false;
-    }
-    setPlayerStats((prev) => ({ ...prev, credits: prev.credits - cost }));
-    soundManager.playLoot();
+    sendGameAction('buy', { itemId: item.id, quantity });
     return true;
-  }, [addItemToHotbar, pushSystemMsg]);
+  }, [sendGameAction]);
 
-  // 黑市卖出：必须真有货，扣货加钱
   const handleSellMarketItem = useCallback((item: MarketItem, quantity: number): boolean => {
-    const revenue = item.sellPrice * quantity;
-    const eng = engineRef.current;
-    const deny = (text: string) => {
-      pushSystemMsg(text);
-      if (eng) eng.addTextParticle(eng.player.x, eng.player.y - 1.4, '货物不足，出售失败', '#f87171');
-      soundManager.playClick();
-    };
-    if (item.id === 'scrap') {
-      if (playerScrapRef.current < 10 * quantity) { deny('废铁不足10个，无法出售。'); return false; }
-      setPlayerScrap((prev) => Math.max(0, prev - 10 * quantity));
-    } else if (item.id === 'ammo_box') {
-      if (!eng || eng.player.reserveAmmo < 60 * quantity) { deny('备弹不足60发，无法出售。'); return false; }
-      eng.player.reserveAmmo -= 60 * quantity;
-    } else if (item.id === 'medkit') {
-      const cur = [...hotbarSlotsRef.current];
-      const idx = cur.findIndex((s) => s && s.category === 'medical' && s.count > 0);
-      if (idx < 0 || !cur[idx]) { deny('没有医疗包可卖。'); return false; }
-      const s = cur[idx]!;
-      cur[idx] = s.count - 1 <= 0 ? null : { ...s, count: s.count - 1 };
-      setHotbarSlots(cur);
-    } else if (item.id === 'food_ration') {
-      const cur = [...hotbarSlotsRef.current];
-      let need = 10 * quantity;
-      for (let i = 0; i < cur.length && need > 0; i++) {
-        const s = cur[i];
-        if (s && s.category === 'food' && s.count > 0) {
-          const take = Math.min(need, s.count);
-          need -= take;
-          cur[i] = s.count - take <= 0 ? null : { ...s, count: s.count - take };
-        }
-      }
-      if (need > 0) { deny('食物不足10份，无法出售。'); return false; }
-      setHotbarSlots(cur);
-    } else if (item.id === 'rift_shard') {
-      if (playerStatsRef.current.shards < 1 * quantity) { deny('没有紫晶可卖。'); return false; }
-      setPlayerStats((prev) => ({ ...prev, shards: prev.shards - 1 * quantity }));
-    } else {
-      const sdef = (() => { try { return getItemDef(item.id); } catch { return null; } })();
-      if (sdef) {
-        const cur = [...hotbarSlotsRef.current];
-        let need = quantity;
-        for (let i = 0; i < cur.length && need > 0; i++) {
-          const s = cur[i];
-          if (s && s.id === item.id && s.count > 0) {
-            const take = Math.min(need, s.count);
-            need -= take;
-            cur[i] = s.count - take <= 0 ? null : { ...s, count: s.count - take };
-          }
-        }
-        if (need > 0) { deny(`没有足够的${sdef.name}可卖。`); return false; }
-        setHotbarSlots(cur);
-        setPlayerStats((prev) => ({ ...prev, credits: prev.credits + item.sellPrice * quantity }));
-        soundManager.playLoot();
-        return true;
-      }
-    }
-    setPlayerStats((prev) => ({ ...prev, credits: prev.credits + revenue }));
-    soundManager.playLoot();
+    sendGameAction('sell', { itemId: item.id, quantity });
     return true;
+  }, [sendGameAction]);
+
+  const handleCraftSuccess = useCallback((order: CraftOrder) => {
+    sendGameAction('craft', { recipeId: order.id });
+  }, [sendGameAction]);
+
+  const handleExecuteRaid = useCallback((supplyId: string) => {
+    if (raidDoor) sendGameAction('raid', { targetId: raidDoor.id, supplyId });
+  }, [raidDoor, sendGameAction]);
+
+  const handleClaimRaidLoot = useCallback(() => {
+    pushSystemMsg('破门不会生成奖励，请进入营地搜取实际仓库物资。');
   }, [pushSystemMsg]);
-
-  // 制造结算：按配方真实扣料，成品进背包
-  const handleCraftSuccess = useCallback(
-    (order: CraftOrder) => {
-      const eng = engineRef.current;
-      if (!eng) return;
-
-      const grantItem = (item: Item): boolean => addItemToHotbar(item);
-
-      const applyResult = (): boolean => {
-        switch (order.id) {
-          case 'stone_pickaxe':
-            return grantItem({
-              id: 'pickaxe_stone',
-              name: '开山镐',
-              category: 'tool',
-              icon: '⛏️',
-              count: 1,
-              maxCount: 1,
-              desc: '采矿专用：采石效率+60%， crystal 通用，近战22伤害。',
-            });
-          case 'stone_axe':
-            return grantItem({
-              id: 'axe_stone',
-              name: '石斧',
-              category: 'tool',
-              icon: '🪓',
-              count: 1,
-              maxCount: 1,
-              desc: '伐木专用：砍树效率+60%，近战22伤害。',
-            });
-          case 'rod_basic':
-            return grantItem({
-              id: 'rod_basic',
-              name: '简易钓竿',
-              category: 'tool',
-              icon: '🎣',
-              count: 1,
-              maxCount: 1,
-              desc: '钓鱼专用：一次钓两条。',
-            });
-          case 'crude_gun':
-            return grantItem({
-              id: 'crude_gun',
-              name: '土铳',
-              category: 'weapon',
-              icon: '🔫',
-              count: 1,
-              maxCount: 1,
-              desc: '单发55伤害，装填步枪弹药（R）。',
-            });
-          case 'bandage':
-            return grantItem(makeItem('med_bandage', 2));
-          case 'dried_fish':
-            return grantItem({
-              id: 'food_烤肉干',
-              name: '烤肉干',
-              category: 'food',
-              icon: '🍖',
-              count: 2,
-              maxCount: 99,
-              desc: '点击食用，恢复35点饱食。',
-            });
-          case 'ammo_pack':
-            eng.player.reserveAmmo += 30;
-            eng.addTextParticle(eng.player.x, eng.player.y - 1.2, '+30 步枪弹药（按R装填）', '#38bdf8');
-            return true;
-          case 'nano_medkit':
-            return grantItem({
-              id: 'med_纳米医疗包',
-              name: '纳米医疗包',
-              category: 'medical',
-              icon: '💉',
-              count: 1,
-              maxCount: 10,
-              desc: '点击使用，恢复60点生命。',
-            });
-          case 'armor_plate':
-            return grantItem({
-              id: 'armor_vest',
-              name: '军用防弹背心',
-              category: 'armor',
-              icon: '🦺',
-              count: 1,
-              maxCount: 1,
-              desc: '护盾上限+50，受伤减免15%。',
-            });
-          case 'cloth_armor':
-            return grantItem({
-              id: 'armor_cloth',
-              name: '粗布护甲',
-              category: 'armor',
-              icon: '🧥',
-              count: 1,
-              maxCount: 1,
-              desc: '护盾上限+25。',
-            });
-          case 'pack_canvas':
-            return grantItem({
-              id: 'pack_canvas',
-              name: '帆布背包',
-              category: 'pack',
-              icon: '🎒',
-              count: 1,
-              maxCount: 1,
-              desc: '背包格 +2。',
-            });
-          case 'pack_tactical':
-            return grantItem({
-              id: 'pack_tactical',
-              name: '战术携行具',
-              category: 'pack',
-              icon: '🧳',
-              count: 1,
-              maxCount: 1,
-              desc: '背包格 +4。',
-            });
-          case 'grow_parsnip':
-            return grantItem(makeItem('crop_parsnip', 4));
-          case 'grow_potato':
-            return grantItem(makeItem('crop_potato', 4));
-          case 'grow_corn':
-            return grantItem(makeItem('crop_corn', 4));
-          case 'grow_pumpkin':
-            return grantItem(makeItem('crop_pumpkin', 3));
-          case 'grow_starfruit':
-            return grantItem(makeItem('crop_starfruit', 2));
-          case 'jam_pot':
-            return grantItem(makeItem('jam_berry', 2));
-          case 'cook_pot':
-            return grantItem(makeItem('cook_fishsoup', 2));
-          case 'copper_pickaxe':
-            return grantItem({ id: 'pickaxe_copper', name: '铜镐', category: 'tool', icon: '⛏️', count: 1, maxCount: 1, desc: '采矿效率+120%，采石专用。', rarity: 3 });
-          case 'surgery_craft':
-            return grantItem(makeItem('med_surgery', 1));
-          case 'star_wine':
-            return grantItem(makeItem('wine_starfruit', 1));
-          case 'gun_upgrade_m4':
-            return grantItem(makeItem('wp_m4a1', 1));
-          case 'pickle_pot':
-            return grantItem(makeItem('pickle_veg', 2));
-          case 'cheese_press':
-            return grantItem(makeItem('cheese_goat', 1));
-          case 'stirfry_pan':
-            return grantItem(makeItem('cook_stirfry', 2));
-          case 'energy_mix':
-            return grantItem(makeItem('cook_energybar', 2));
-          case 'ammo_reload':
-            eng.player.reserveAmmo += 30;
-            eng.addTextParticle(eng.player.x, eng.player.y - 1.2, '+30 复装弹药（按R装填）', '#38bdf8');
-            return true;
-          default:
-            return true;
-        }
-      };
-
-      if (!applyResult()) return; // 背包满：不扣料
-      if (order.cost.wood > 0) setPlayerWood((prev) => Math.max(0, prev - order.cost.wood));
-      if (order.cost.stone > 0) setPlayerStone((prev) => Math.max(0, prev - order.cost.stone));
-      if (order.cost.scrap > 0) setPlayerScrap((prev) => Math.max(0, prev - order.cost.scrap));
-      if (order.cost.parts > 0) setPlayerParts((prev) => Math.max(0, prev - order.cost.parts));
-      for (const e of order.cost.extra ?? []) {
-        setHotbarSlots((prev) => {
-          const next = [...prev];
-          let need = e.count;
-          for (let i = 0; i < next.length && need > 0; i++) {
-            const s = next[i];
-            if (s && s.id === e.itemId) {
-              const take = Math.min(s.count, need);
-              need -= take;
-              const left = s.count - take;
-              next[i] = left <= 0 ? null : { ...s, count: left };
-            }
-          }
-          return next;
-        });
-      }
-      if (order.id === 'stone_pickaxe') setPickaxeCrafted(true);
-      grantXp(30);
-      soundManager.playCraft();
-      eng.addTextParticle(
-        eng.player.x,
-        eng.player.y - 1.2,
-        '制造完成！',
-        '#38bdf8'
-      );
-    },
-    [addItemToHotbar, grantXp]
-  );
-
-  const handleExecuteRaid = useCallback((supplyId: string, supplyName: string) => {
-    if (!raidDoor) return;
-    // 突袭消耗1个破拆物（C4/铝热剂共用背包里的C4；没有则本次免单，提示去搜）
-    const cur = [...hotbarSlotsRef.current];
-    const c4Idx = cur.findIndex((s) => s && (s.id === 'c4_explosive' || s.id === 'thermite_charge'));
-    if (c4Idx >= 0 && cur[c4Idx]) {
-      const c = cur[c4Idx]!;
-      c.count -= 1;
-      cur[c4Idx] = c.count <= 0 ? null : { ...c };
-      setHotbarSlots(cur);
-    } else if (engineRef.current) {
-      engineRef.current.addTextParticle(
-        engineRef.current.player.x, engineRef.current.player.y - 1.5,
-        '破拆物不足！去搜弹药箱/采石炸药库', '#f87171'
-      );
-    }
-    if (netManagerRef.current && netManagerRef.current.isConnected) {
-      netManagerRef.current.attemptRaid(raidDoor.id, supplyId, supplyName);
-    } else {
-      // Local calculation fallback if server is reconnecting
-      const dmg = 850;
-      const isCrit = Math.random() < 0.3;
-      const actualDmg = isCrit ? dmg * 2 : dmg;
-      if (engineRef.current) {
-        raidDoor.hp = Math.max(0, raidDoor.hp - actualDmg);
-        if (raidDoor.hp <= 0) {
-          raidDoor.isOpen = true;
-          raidDoor.isLocked = false;
-        }
-        engineRef.current.addTextParticle(
-          raidDoor.x,
-          raidDoor.y - 1.2,
-          `-${actualDmg}! ${isCrit ? '暴击破拆!' : ''}`,
-          isCrit ? '#facc15' : '#f87171'
-        );
-      }
-      setRaidDoor({ ...raidDoor });
-    }
-  }, [raidDoor]);
-
-  const handleClaimRaidLoot = useCallback((spoils: { name: string; count: number; icon: string }[]) => {
-    setPlayerStats((prev) => ({
-      ...prev,
-      credits: prev.credits + 2500,
-      shards: prev.shards + 18,
-      xp: prev.xp + 500,
-    }));
-    setHotbarSlots((prev) =>
-      prev.map((slot, idx) => {
-        if (idx === 5 && slot) {
-          return { ...slot, count: slot.count + 80 };
-        }
-        return slot;
-      })
-    );
-    if (engineRef.current) {
-      engineRef.current.player.reserveAmmo += 120;
-      engineRef.current.addTextParticle(
-        engineRef.current.player.x,
-        engineRef.current.player.y - 1.5,
-        '🎉 成功掠夺大量战利品与晶石！',
-        '#10b981'
-      );
-    }
-    soundManager.playLoot();
-    setTimeout(() => {
-      setRaidDoor(null);
-    }, 1200);
-  }, []);
 
   const handleResetGame = useCallback(() => {
-    if (engineRef.current) {
-      engineRef.current.player.x = 0;
-      engineRef.current.player.y = 0;
-      engineRef.current.player.hp = engineRef.current.player.maxHp;
-      engineRef.current.player.shield = engineRef.current.player.maxShield;
-    }
+    engineRef.current?.clearKeys();
+    pushSystemMsg('已清除移动按键；存档、位置和生命值由服务器保存。');
     setActiveModal(null);
-  }, []);
+  }, [pushSystemMsg]);
 
   const handleGMLogin = useCallback((token: string) => {
     try { sessionStorage.setItem('sdc_gm_token', token); } catch { /* ignore */ }
@@ -1657,220 +1208,40 @@ export default function App() {
     }
   }, [pushSystemMsg]);
 
-  // 三幕18步：Act1新手8 + Act2领地6 + Act3领主4
-  const questRewardText = (id: string): string | undefined => {
-    const r = ALL_QUESTS.find((q) => q.id === id)?.reward;
-    if (!r) return undefined;
-    return `+${r.xp}经验${r.credits > 0 ? ` +${r.credits}币` : ''}`;
-  };
   const questSteps: QuestStep[] = [
-    {
-      id: 'move',
-      title: '走出第一步',
-      desc: 'WASD/方向键或右键点地移动，离开出生点。',
-      progressText: movedFar ? '1/1' : '0/1',
-      done: movedFar,
-      rewardText: questRewardText('move'),
-    },
-    {
-      id: 'wood',
-      title: '野外伐木 ×10',
-      desc: '去黑松伐木场/商业街枯树/渔港白杨按 E 砍伐（营地不产物资，每棵树有采集上限）。',
-      progressText: `${Math.min(totalWood, 10)}/10`,
-      done: totalWood >= 10,
-      rewardText: questRewardText('wood'),
-    },
-    {
-      id: 'stone',
-      title: '野外采石 ×10',
-      desc: '去北岭采石场/渔港滩涂岩按 E 开采（节点采空要等恢复）。',
-      progressText: `${Math.min(totalStone, 10)}/10`,
-      done: totalStone >= 10,
-      rewardText: questRewardText('stone'),
-    },
-    {
-      id: 'scrap',
-      title: '搜刮废铁 ×10',
-      desc: '去加油站/商业街拆事故车/翻货架，工作台和枪都靠它。',
-      progressText: `${Math.min(totalScrap, 10)}/10`,
-      done: totalScrap >= 10,
-      rewardText: questRewardText('scrap'),
-    },
-    {
-      id: 'workbench',
-      title: '建造工作台',
-      desc: '[B]进入建造→设施→工作台（8废铁+1零件），放下去。',
-      progressText: workbenchBuilt ? '1/1' : '0/1',
-      done: workbenchBuilt,
-      rewardText: questRewardText('workbench'),
-    },
-    {
-      id: 'pickaxe',
-      title: '制造开山镐',
-      desc: '靠近工作台按 F：8木+6石，采石效率+60%（砍树要另做石斧）。',
-      progressText: pickaxeCrafted ? '1/1' : '0/1',
-      done: pickaxeCrafted,
-      rewardText: questRewardText('pickaxe'),
-    },
-    {
-      id: 'eat',
-      title: '吃一顿好的',
-      desc: '钓鱼/烤肉干，点击快捷栏进食回饱食。饿到0会掉血！',
-      progressText: ateFood ? '1/1' : '0/1',
-      done: ateFood,
-      rewardText: questRewardText('eat'),
-    },
-    {
-      id: 'kill',
-      title: '首杀蚀体',
-      desc: '做把土铳+弹药，去公路/密林外围猎杀1只。死了会被救回营地，物品保留。',
-      progressText: `${Math.min(killCount, 1)}/1`,
-      done: killCount >= 1,
-      rewardText: questRewardText('kill'),
-    },
-    {
-      id: 'claim',
-      title: '圈一块野外地',
-      desc: '点“回家”进入你的 home_ 独立营地（从零开始，只有一座残核），站上去即认领。',
-      progressText: claimedPlot ? '1/1' : '0/1',
-      done: claimedPlot,
-    },
-    {
-      id: 'safedoor',
-      title: '立起防爆安全门',
-      desc: '在自家营地内[B]建造→安全门（10石+20废铁+4零件），访客只能破拆。',
-      progressText: safeDoorBuilt ? '1/1' : '0/1',
-      done: safeDoorBuilt,
-    },
-    {
-      id: 'rifle',
-      title: '造出战术步枪',
-      desc: '工作台+搜刮攒出步枪（rifle），土铳不算毕业。',
-      progressText: rifleOwned ? '1/1' : '0/1',
-      done: rifleOwned,
-    },
-    {
-      id: 'raid_npc',
-      title: '首次突袭NPC据点',
-      desc: '带C4对废墟/深林NPC安全门造成任意伤害。',
-      progressText: raidHit ? '1/1' : '0/1',
-      done: raidHit,
-    },
-    {
-      id: 'elite',
-      title: '猎杀精英蚀体',
-      desc: '击杀1只≥550HP精英（恶瘴魑/巨熊/工厂精英）。',
-      progressText: eliteKilled ? '1/1' : '0/1',
-      done: eliteKilled,
-    },
-    {
-      id: 'turret',
-      title: '架起防御塔',
-      desc: '[B]建造→电击塔（15废铁+2零件）。',
-      progressText: turretBuilt ? '1/1' : '0/1',
-      done: turretBuilt,
-    },
-    {
-      id: 'boss1',
-      title: '直面深渊霸主',
-      desc: '去裂隙前线击杀深渊霸主（1600HP），组队更稳。',
-      progressText: bossKilled ? '1/1' : '0/1',
-      done: bossKilled,
-    },
-    {
-      id: 'darkcore',
-      title: '带回暗物质晶核',
-      desc: '开深渊箱/破门缴获，晶石≥12。',
-      progressText: darkCoreGot ? '1/1' : '0/1',
-      done: darkCoreGot,
-    },
-    {
-      id: 'level10',
-      title: '成长为Lv.10行者',
-      desc: '野外练级+交任务升到10级。',
-      progressText: `Lv.${playerStats.level}/10`,
-      done: playerStats.level >= 10,
-    },
-    {
-      id: 'fortress',
-      title: '要塞守住一夜',
-      desc: '自家营地内同时拥有安全门+防御塔+精英击杀，即毕业。',
-      progressText: safeDoorBuilt && turretBuilt && eliteKilled ? '1/1' : '0/1',
-      done: safeDoorBuilt && turretBuilt && eliteKilled,
-    },
+    { id: 'move', title: '探索公共荒野', desc: 'WASD 或右键移动，沿道路进入林地、矿场和城镇；打开地图标记目的地。', progressText: movedFar ? '1/1' : '0/1', done: movedFar },
+    { id: 'wood', title: '收集木材', desc: '捡取枯枝、搜刮农舍；装备斧后伐木更快。按住 E/F 可连续采集。', progressText: `${Math.min(totalWood, 20)}/20`, done: totalWood >= 20 },
+    { id: 'stone', title: '收集石料', desc: '捡取碎石或开采石堆，制作镐来提升效率。满包不会扣除未收到的物资。', progressText: `${Math.min(totalStone, 10)}/10`, done: totalStone >= 10 },
+    { id: 'pickaxe', title: '制作并装备工具', desc: '从制造面板制作开山镐（8木、6石），在背包中装备。', progressText: pickaxeCrafted ? '1/1' : '0/1', done: pickaxeCrafted },
+    { id: 'claim', title: '在野外建立营地', desc: '收集20木、10石，在道路和地标外选址，打开营地面板插旗；开局没有私人领地。', progressText: claimedPlot ? '1/1' : '0/1', done: claimedPlot },
+    { id: 'workbench', title: '建设与储存', desc: '走到野外入口进入独立营地，建造仓库和工作台。营地始终可被攻击。', progressText: workbenchBuilt ? '1/1' : '0/1', done: workbenchBuilt },
+    { id: 'turret', title: '准备离线防御', desc: '布置墙门、地刺和炮塔，靠近炮塔按 E 装填弹药；主人离线后仍会防守。', progressText: turretBuilt ? '1/1' : '0/1', done: turretBuilt },
+    { id: 'survive', title: '补给与谨慎撤离', desc: '在营地种植、烹饪和研究，探索更远区域。死亡会掉落携带物资，进出营地不会回血。', progressText: ateFood ? '已补给' : '待补给', done: ateFood },
   ];
 
-  // 任务完成自动发奖（xp/币以 quests.ts QuestDef.reward 为准，道具/称号为额外添头）
   useEffect(() => {
-    const questRewardOf = (id: string) => ALL_QUESTS.find((q) => q.id === id)?.reward;
-    const grantQuestReward = (id: string) => {
-      const r = questRewardOf(id);
-      if (!r) return;
-      grantXp(r.xp);
-      if (r.credits > 0) setPlayerStats((p) => ({ ...p, credits: p.credits + r.credits }));
-    };
-    const rewards: Record<string, () => void> = {
-      move: () => grantQuestReward('move'),
-      wood: () => grantQuestReward('wood'),
-      stone: () => grantQuestReward('stone'),
-      scrap: () => {
-        grantQuestReward('scrap');
-        addItemToHotbar({
-          id: 'med_亚麻绷带', name: '亚麻绷带', category: 'medical', icon: '🩹',
-          count: 1, maxCount: 10, desc: '点击使用，恢复30点生命。',
-        });
-      },
-      workbench: () => {
-        grantQuestReward('workbench');
-        addItemToHotbar({
-          id: 'food_烤肉干', name: '烤肉干', category: 'food', icon: '🍖',
-          count: 2, maxCount: 99, desc: '点击食用，恢复35点饱食。',
-        });
-      },
-      pickaxe: () => grantQuestReward('pickaxe'),
-      eat: () => grantQuestReward('eat'),
-      kill: () => {
-        grantQuestReward('kill');
-        addItemToHotbar({
-          id: 'med_纳米医疗包', name: '纳米医疗包', category: 'medical', icon: '💉',
-          count: 1, maxCount: 10, desc: '点击使用，恢复60点生命。',
-        });
-        setPlayerStats((p) => (p.title === '废土流浪者' ? { ...p, title: '见习拾荒者' } : p));
-      },
-      claim: () => grantXp(60),
-      safedoor: () => { grantXp(120); setPlayerStats((p) => ({ ...p, credits: p.credits + 200 })); },
-      rifle: () => grantXp(120),
-      raid_npc: () => { grantXp(150); setPlayerStats((p) => ({ ...p, shards: p.shards + 3 })); },
-      elite: () => { grantXp(200); setPlayerStats((p) => ({ ...p, credits: p.credits + 300 })); },
-      turret: () => grantXp(120),
-      boss1: () => { grantXp(500); setPlayerStats((p) => ({ ...p, credits: p.credits + 1000, shards: p.shards + 6 })); },
-      darkcore: () => grantXp(300),
-      level10: () => { grantXp(300); setPlayerStats((p) => ({ ...p, title: '裂隙行者' })); },
-      fortress: () => { grantXp(500); pushSystemMsg('🎓 三幕毕业！你是真正的裂隙领主，深渊裂口等你常驻。'); },
-    };
-    for (const step of questSteps) {
-      if (step.done && !grantedQuestsRef.current.has(step.id)) {
-        grantedQuestsRef.current.add(step.id);
-        rewards[step.id]?.();
-        soundManager.playLoot();
-        if (engineRef.current) {
-          engineRef.current.addTextParticle(
-            engineRef.current.player.x,
-            engineRef.current.player.y - 1.8,
-            `✓ 引路完成：${step.title}`,
-            '#4ade80'
-          );
-        }
-        pushSystemMsg(`✓ 新手引路完成：${step.title}，奖励已发放！`);
-      }
+    for (const step of questSteps) if (step.done && !grantedQuestsRef.current.has(step.id)) {
+      grantedQuestsRef.current.add(step.id);
+      pushSystemMsg(`引路完成：${step.title}`);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [movedFar, totalWood, totalStone, totalScrap, workbenchBuilt, pickaxeCrafted, ateFood, killCount, safeDoorBuilt, turretBuilt, rifleOwned, raidHit, eliteKilled, bossKilled, darkCoreGot, claimedPlot, playerStats.level]);
+  }, [movedFar, totalWood, totalStone, totalScrap, pickaxeCrafted, claimedPlot, workbenchBuilt, safeDoorBuilt, turretBuilt]);
 
   return (
     <div className="relative w-screen h-screen overflow-hidden bg-slate-950 font-sans select-none">
       {/* 2.5D Isometric Canvas Engine */}
       <canvas ref={canvasRef} className="absolute inset-0 w-full h-full cursor-crosshair" />
+      {renderDetailsOpen && <div role="alert" className="absolute inset-0 z-[90] flex items-center justify-center bg-slate-950/90 p-4 text-slate-100">
+        <div className="w-full max-w-xl space-y-4 rounded-xl border border-amber-700/50 bg-slate-900 p-6 text-center">
+          <p>{renderIssue ?? (readRenderDiagnostics() === '[]' ? '暂无画面错误记录' : '画面已恢复，错误信息已保留')}</p>
+          <div className="flex flex-wrap justify-center gap-3">
+            {!renderIssue && <button className="rounded bg-emerald-700 px-4 py-2" onClick={() => setRenderDetailsOpen(false)}>继续游戏</button>}
+            <button className="rounded bg-amber-600 px-4 py-2" onClick={() => window.location.reload()}>重新载入</button>
+            <button className="rounded bg-slate-700 px-4 py-2" onClick={async () => setRenderCopyResult(await copyRenderDiagnostics() ? '已复制错误信息' : '复制未成功，请在下方长按或选中文字复制')}>复制错误信息</button>
+          </div>
+          {renderCopyResult && <p role="status" className="text-sm text-amber-200">{renderCopyResult}</p>}
+          <textarea aria-label="错误信息" readOnly value={readRenderDiagnostics()} className="h-40 w-full select-text rounded bg-slate-950 p-3 text-left font-mono text-xs text-slate-300" onFocus={event => event.currentTarget.select()} />
+        </div>
+      </div>}
 
       {/* Boot splash：keyart 开屏，点进入废土关闭 */}
       {showBoot && (
@@ -1910,7 +1281,7 @@ export default function App() {
       <div hidden={showBoot}>
       {/* Top Menu Bar with Weather Widget, Online Ping & Roster Button */}
       <TopMenuBar
-        onOpenModal={(modal) => setActiveModal(modal)}
+        onOpenModal={(modal) => { if (modal === 'anchor') { setManagedBuilding(null); setCampOpen(true); } else setActiveModal(modal); }}
         activeModal={activeModal}
         onlineCount={Math.max(1, onlinePlayers.length)}
         ping={ping}
@@ -1930,6 +1301,7 @@ export default function App() {
       {/* Top Right Radar Minimap (Click to open Tactical World Map [M]) */}
       <div className="absolute top-4 right-4 z-20">
         <RadarMinimap
+          currentMapId={currentMapId}
           playerPos={radarEntities.playerPos}
           monsters={radarEntities.monsters}
           teammates={radarEntities.teammates}
@@ -2000,6 +1372,11 @@ export default function App() {
           </button>
         </div>
 
+        <div className="flex justify-center gap-2 mb-2">
+          <button onClick={() => { setManagedBuilding(null); setCampOpen(true); }} className="rounded-lg border border-amber-600/60 bg-slate-950/90 px-3 py-1.5 text-xs font-bold text-amber-200">🏕️ 营地与建营</button>
+          <button onClick={() => setActiveModal('workbench')} className="rounded-lg border border-slate-600 bg-slate-950/90 px-3 py-1.5 text-xs text-slate-200">🛠️ 随身制造</button>
+        </div>
+
         {/* Building Bar Toggle & Structure Selection */}
         <BuildingBar
           isBuildMode={isBuildMode}
@@ -2008,11 +1385,13 @@ export default function App() {
           onToggleBuildMode={handleToggleBuildMode}
           playerScrap={playerScrap}
           playerParts={playerParts}
+          playerWood={playerWood}
+          playerStone={playerStone}
         />
 
         {/* 6-Slot Hotbar */}
         <Hotbar
-          slots={hotbarSlots}
+          slots={hotbarSlots.slice(0, 6)}
           activeSlotIndex={activeSlot}
           ammo={ammo}
           onSelectSlot={handleSelectSlot}
@@ -2027,6 +1406,9 @@ export default function App() {
           onClose={() => setRaidDoor(null)}
           onRaidAttempt={handleExecuteRaid}
           onClaimLoot={handleClaimRaidLoot}
+          resources={gameState?.player.resources}
+          inventory={hotbarSlots}
+          equipment={equipment}
         />
       )}
 
@@ -2078,6 +1460,9 @@ export default function App() {
         waypoints={radarEntities.waypoints}
         onSelectMapZone={handleSelectMapZone}
         onGoHome={handleGoHome}
+        onSetWaypoint={markDestination}
+        camps={gameState?.camps ?? []}
+        campSize={engineRef.current?.campSize ?? 64}
       />
 
       {/* Interactive Modals */}
@@ -2101,7 +1486,6 @@ export default function App() {
         hasExtra={(itemId, count) => {
           let have = 0;
           for (const s of hotbarSlotsRef.current) if (s && s.id === itemId) have += s.count;
-          if (itemId === 'water') have += 999; // 水感：水井/餐馆易得，首版免校验只收废铁木料，防卡死
           return have >= count;
         }}
       />
@@ -2119,7 +1503,7 @@ export default function App() {
           }
           setActiveModal(null);
         }}
-        hasReward={true}
+        hasReward={false}
       />
 
       <AnchorModal
@@ -2145,11 +1529,30 @@ export default function App() {
 
       {/* 三角洲式搜刮面板 */}
       <LootPanel
-        target={lootPanel}
+        target={campOpen ? null : lootPanel}
         onTake={handleTakeLoot}
         onTakeAll={handleTakeAllLoot}
         onClose={() => setLootPanel(null)}
       />
+
+      <CampPanel
+        isOpen={campOpen}
+        onClose={() => { setCampOpen(false); setLootPanel(null); setManagedBuilding(null); }}
+        camps={gameState?.camps ?? []}
+        campId={gameState?.player.campId ?? null}
+        currentMapId={currentMapId}
+        playerPos={radarEntities.playerPos}
+        selfId={selfId}
+        resources={gameState?.player.resources ?? {}}
+        inventory={hotbarSlots}
+        building={managedBuilding}
+        loot={lootPanel}
+        reports={gameState?.reports ?? []}
+        blueprints={gameState?.player.blueprints ?? []}
+        onAction={sendGameAction}
+        onNavigate={markDestination}
+      />
+      {actionNotice && <button onClick={() => setActionNotice('')} role="status" className="fixed top-24 left-1/2 z-[80] -translate-x-1/2 rounded-xl border border-amber-500/60 bg-slate-950 px-5 py-3 text-sm text-amber-200 shadow-xl">{actionNotice} · 点击关闭</button>}
 
       <SettingsModal
         isOpen={activeModal === 'settings'}
@@ -2158,6 +1561,7 @@ export default function App() {
         isGM={isGM}
         onGMLogin={handleGMLogin}
         onGMLogout={handleGMLogout}
+        onOpenRenderDiagnostics={() => { setActiveModal(null); setRenderCopyResult(''); setRenderDetailsOpen(true); }}
       />
 
       <InventoryModal

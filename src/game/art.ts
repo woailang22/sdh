@@ -22,6 +22,14 @@ export interface ArtFrame {
 
 /** 静态帧表：key 为文件名，value 为 frame id -> rect（源自 public/art/atlas.json）。 */
 const FRAMES: Record<string, Record<string, FrameRect>> = {
+  'world-environment-v1.png': {
+    'understory': { x: 0, y: 0, width: 512, height: 512 },
+    'outcrop': { x: 512, y: 0, width: 512, height: 512 },
+    'reeds': { x: 1024, y: 0, width: 512, height: 512 },
+    'tank': { x: 0, y: 512, width: 512, height: 512 },
+    'rubble': { x: 512, y: 512, width: 512, height: 512 },
+    'fence': { x: 1024, y: 512, width: 512, height: 512 },
+  },
   'char-survivor.png': {
     'southeast': { x: 0, y: 0, width: 562, height: 724 },
     'southwest': { x: 562, y: 0, width: 524, height: 724 },

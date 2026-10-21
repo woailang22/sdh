@@ -1,794 +1,203 @@
 import express from 'express';
-import http from 'http';
+import http from 'node:http';
 import { WebSocketServer, WebSocket } from 'ws';
-import path from 'path';
-import fs from 'fs';
-import { fileURLToPath } from 'url';
-import { createDb, createMemoryDb } from './server/db.js';
-import type { DbHandle } from './server/db.js';
-import type {
-  OnlinePlayer,
-  BuildingEntity,
-  MapZoneId,
-  WeatherState,
-  WeatherType,
-  RaidEvent,
-  NetMessage,
-} from './src/types/game.js';
+import path from 'node:path';
+import fs from 'node:fs';
+import { fileURLToPath } from 'node:url';
+import { createDb, backupDatabase } from './server/db.js';
+import { guestTokenFromCookie, resolveGuest } from './server/identity.js';
+import { GameWorld, type GameStateSnapshot, type WorldRules } from './server/worldState.js';
+import { generateWorldChunk, getWorldInteractable, migrateWorldPosition, worldIsRoad, worldThemeAt, worldToChunk, WORLD_LOCATIONS, type WorldChunk } from './src/game/world.js';
+import type { MapZoneId, NetMessage, WeatherState, WeatherType } from './src/types/game.js';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const app = express();
 const server = http.createServer(app);
-const wss = new WebSocketServer({ server, path: '/ws' });
-
+const wss = new WebSocketServer({ server, path: '/ws', maxPayload: 16384 });
 app.use(express.json());
 
-// API health endpoint
-app.get('/api/health', (req, res) => {
-  res.json({
-    status: 'ok',
-    onlineCount: clients.size,
-    timestamp: Date.now(),
-    serverTime: new Date().toISOString(),
-  });
-});
-
-// SQLite persistence (Task 1: 重启不丢档，只存 players+buildings)
-// DB 打不开则降级内存模式：worldBuildings 保持下方5种子，不 crash
 const DB_PATH = process.env.DB_PATH || 'data/sdc.sqlite';
-let db: DbHandle;
-try {
-  fs.mkdirSync(path.dirname(DB_PATH), { recursive: true });
-  db = createDb(DB_PATH);
-  // meta 版本兜底（db 层已幂等 ensure，此处再确认一次供后续升级用）
-  try {
-    if (!db.getMeta('version')) db.setMeta('version', '1');
-  } catch (e) {
-    console.error('[db] ensure meta version failed', e);
+fs.mkdirSync(path.dirname(DB_PATH), { recursive: true });
+const db = createDb(DB_PATH);
+// Refuse to mutate legacy state unless a consistent SQLite backup was completed.
+if (!db.getMeta('authoritative-world-v2') || db.getMeta('public-house-layout') !== '2') {
+  const backup = await backupDatabase(DB_PATH);
+  if (backup) console.log('[db] pre-migration backup: ' + backup);
+}
+
+// Terrain is deterministic; only a bounded nearby chunk cache exists on the server.
+const chunkCache = new Map<string, WorldChunk>();
+function nearbyChunks(x: number, y: number) {
+  const center = worldToChunk(x, y);
+  const result: WorldChunk[] = [];
+  for (let cy = center.y - 2; cy <= center.y + 2; cy++) for (let cx = center.x - 2; cx <= center.x + 2; cx++) {
+    const key = cx + ':' + cy;
+    let chunk = chunkCache.get(key);
+    if (!chunk) { chunk = generateWorldChunk(cx, cy); chunkCache.set(key, chunk); }
+    else { chunkCache.delete(key); chunkCache.set(key, chunk); }
+    result.push(chunk);
   }
-} catch (e) {
-  console.error('[db] open failed, continuing in memory mode', e);
-  db = createMemoryDb();
+  while (chunkCache.size > 192) chunkCache.delete(chunkCache.keys().next().value!);
+  return result;
 }
-
-// Server State
-interface ConnectedClient {
-  ws: WebSocket;
-  playerId: string;
-  player: OnlinePlayer;
-  isGM: boolean;
-  lastDbSave: number;
-}
-
-// GM 口令（环境变量覆盖）：地图编辑器天气控制等 GM 操作需要先 gm_auth
+const rules: WorldRules = {
+  nodeAt: getWorldInteractable,
+  nodesNear: (x, y) => nearbyChunks(x, y).flatMap(c => c.interactables).filter(n => Math.hypot(n.x - x, n.y - y) <= 45),
+  buildingsNear: (x, y) => nearbyChunks(x, y).flatMap(c => c.buildings).filter(b => Math.hypot(b.x - x, b.y - y) <= 55),
+  monstersNear: (x, y) => nearbyChunks(x, y).flatMap(c => c.monsters).filter(m => Math.hypot(m.x - x, m.y - y) <= 40),
+  campSiteAllowed: (x, y) => Math.hypot(x, y) >= 48 && !worldIsRoad(x, y, 6) && !['lake', 'rift', 'marsh'].includes(worldThemeAt(x, y)) && WORLD_LOCATIONS.every(l => Math.hypot(l.x - x, l.y - y) >= (l.sourceMapId.startsWith('camp_') ? 48 : 20)),
+  migrate: (mapId, x, y) => migrateWorldPosition(mapId as MapZoneId, x, y),
+};
+const game = new GameWorld(db, rules);
+db.setMeta('public-house-layout', '2');
+interface Client { ws: WebSocket; id: string; isGM: boolean; visible: Set<string>; lastSeen: number; lastCorrection: number; lastMessageAt: number; messageCount: number; lastSnapshot: number; mapId: MapZoneId }
+const clients = new Map<string, Client>();
 const GM_TOKEN = process.env.GM_TOKEN || 'rift-gm';
-
-const clients = new Map<string, ConnectedClient>();
-
-// Persistent World Buildings (including default Sanctuary base and player bases)
-let worldBuildings: BuildingEntity[] = [
-  {
-    id: 'base_anchor_core',
-    type: 'anchor_core',
-    name: '先锋前哨 · 坍界锚点核心',
-    x: 0,
-    y: 0,
-    hp: 5000,
-    maxHp: 5000,
-    level: 3,
-    ownerId: 'system',
-    ownerName: '坍界开拓团',
-    mapId: 'camp_plaza',
-  },
-  {
-    id: 'base_workbench_1',
-    type: 'workbench',
-    name: '战术重型制造台',
-    x: 2.5,
-    y: 0.5,
-    hp: 2000,
-    maxHp: 2000,
-    level: 2,
-    ownerId: 'system',
-    ownerName: '坍界开拓团',
-    mapId: 'camp_plaza',
-  },
-  {
-    id: 'base_storage_1',
-    type: 'storage_box',
-    name: '前哨物资重型储藏箱',
-    x: -2.5,
-    y: 0.8,
-    hp: 1500,
-    maxHp: 1500,
-    level: 2,
-    ownerId: 'system',
-    ownerName: '坍界开拓团',
-    mapId: 'camp_plaza',
-    storedLoot: [
-      { name: '高爆C4塑胶炸药', count: 3, icon: '💣' },
-      { name: '微型铝热熔切弹', count: 5, icon: '🔥' },
-      { name: '脉冲电子解码器', count: 2, icon: '⚡' },
-    ],
-  },
-  // Default Safe Door in Wild Outpost (demonstrating territory raid mechanics)
-  {
-    id: 'wild_safe_gate_alpha',
-    type: 'safe_door',
-    name: '荒野叛军重装安全防护闸门 [高防可突袭]',
-    x: 4.0,
-    y: -3.5,
-    hp: 4200,
-    maxHp: 6000,
-    level: 2,
-    isOpen: false,
-    isLocked: true,
-    ownerId: 'npc_raider_boss',
-    ownerName: '裂隙铁血掠夺者联盟',
-    mapId: 'town_ruins',
-    material: 'iron',
-    storedLoot: [
-      { name: '坍界暗物质晶核', count: 18, icon: '💎' },
-      { name: '军用钛合金复合装甲板', count: 8, icon: '🛡️' },
-      { name: '破界级等离子步枪蓝图', count: 1, icon: '📜' },
-      { name: '废土高级信用点', count: 2500, icon: '💰' },
-    ],
-  },
-  {
-    id: 'wild_safe_gate_beta',
-    type: 'safe_door',
-    name: '黑松林秘密前哨密封门 [坚固安全门]',
-    x: -3.0,
-    y: 4.2,
-    hp: 5500,
-    maxHp: 5500,
-    level: 2,
-    isOpen: false,
-    isLocked: true,
-    ownerId: 'npc_forest_syndicate',
-    ownerName: '深林佣兵团',
-    mapId: 'mtn_deep',
-    material: 'iron',
-    storedLoot: [
-      { name: '军用战术急救针剂', count: 10, icon: '💉' },
-      { name: '坍界高纯晶石', count: 14, icon: '💎' },
-      { name: '高聚合破拆炸药', count: 4, icon: '🧨' },
-    ],
-  },
-];
-
-// 重启恢复：DB 非空则覆盖内存默认值；为空则将内存5种子回写 DB；异常则沿用内存种子
-{
-  let savedBuildings: BuildingEntity[] = [];
-  try {
-    savedBuildings = db.listBuildings() as BuildingEntity[];
-  } catch (e) {
-    console.error('[db] listBuildings failed, fallback to in-memory seeds', e);
-    savedBuildings = [];
-  }
-  if (savedBuildings.length > 0) {
-    worldBuildings = savedBuildings;
-    console.log(`[db] restored ${savedBuildings.length} buildings from ${DB_PATH}`);
-  } else {
-    for (const b of worldBuildings) {
-      try {
-        db.saveBuilding(b);
-      } catch (e) {
-        console.error('[db] seed saveBuilding failed', e);
-      }
-    }
-    console.log(`[db] seeded ${worldBuildings.length} buildings to ${DB_PATH}`);
-  }
-}
-
-// Dynamic Weather State
 const WILD_WEATHERS: { type: WeatherType; name: string; icon: string; desc: string; effectLabel: string }[] = [
   { type: 'clear', name: '晴朗破晓', icon: '☀️', desc: '视野清晰，无负面环境侵蚀。', effectLabel: '搜刮收益提升 +20%' },
-  { type: 'acid_rain', name: '酸雨风暴', icon: '🧪', desc: '酸蚀腐蚀大气，护盾缓慢受损，但变异怪兽掉落极佳！', effectLabel: '野外怪兽暴击率 +25% / 护盾腐蚀' },
-  { type: 'fog', name: '暗蚀重雾', icon: '🌫️', desc: '浓雾笼罩荒野，雷达侦测范围缩减，潜行突袭伤害大幅增强！', effectLabel: '突袭破拆伤害 +30%' },
-  { type: 'thunder', name: '离子雷暴', icon: '⚡', desc: '强对流离子风暴，闪电穿透电磁场，充能技能加速！', effectLabel: '攻击射速 +20%' },
-  { type: 'rain', name: '荒芜骤雨', icon: '🌧️', desc: '雨幕遮蔽地平线，脚步声减弱，适合战术渗透。', effectLabel: '移动速度 +15%' },
+  { type: 'acid_rain', name: '酸雨风暴', icon: '🧪', desc: '酸蚀腐蚀大气，护盾缓慢受损。', effectLabel: '野外酸雨预警' },
+  { type: 'fog', name: '暗蚀重雾', icon: '🌫️', desc: '浓雾笼罩荒野，雷达侦测范围缩减。', effectLabel: '浓雾预警' },
+  { type: 'thunder', name: '离子雷暴', icon: '⚡', desc: '强对流离子风暴，注意隐蔽。', effectLabel: '离子雷暴预警' },
+  { type: 'rain', name: '荒芜骤雨', icon: '🌧️', desc: '雨幕遮蔽地平线，脚步声减弱。', effectLabel: '降雨预警' },
 ];
-
-let wildWeatherIndex = 0;
-let weatherTimer = 180; // 3 minutes per cycle
-
-// Default Player Prefabs to choose/seed from
-const PREFAB_NAMES = [
-  '影刃 · 零号', '重装 · 铁壁', '幽灵 · 渡鸦', '雷鸣 · 凯尔',
-  '战地工兵 · 索尔', '苍穹 · 艾拉', '裂隙猎手 · 斩风', '先锋 · 泰坦'
-];
-
-function broadcast(msg: NetMessage, exceptId?: string) {
-  const json = JSON.stringify(msg);
-  for (const [id, client] of clients.entries()) {
-    if (exceptId && id === exceptId) continue;
-    if (client.ws.readyState === WebSocket.OPEN) {
-      client.ws.send(json);
-    }
-  }
+let weatherIndex = 0;
+let weatherTimer = 180;
+function weather(): WeatherState {
+  const { type, ...rest } = WILD_WEATHERS[weatherIndex];
+  return { current: type, ...rest, durationLeft: weatherTimer };
 }
+function send(ws: WebSocket, type: string, payload: unknown) {
+  if (ws.readyState === WebSocket.OPEN) ws.send(JSON.stringify({ type, payload, timestamp: Date.now() }));
+}
+function broadcast(type: string, payload: unknown) { for (const c of clients.values()) send(c.ws, type, payload); }
+function stateTo(client: Client, snapshot?: GameStateSnapshot, correction = false) {
+  const state = snapshot || game.snapshot(client.id);
+  state.correction ||= correction || client.mapId !== state.player.mapId;
+  client.mapId = state.player.mapId; client.lastSnapshot = Date.now();
+  send(client.ws, 'game_state', state);
+}
+function refreshVisibility(client: Client) {
+  const players = game.visiblePlayers(client.id);
+  const visible = new Set(players.map(p => p.id));
+  for (const oldId of client.visible) if (!visible.has(oldId)) send(client.ws, 'player_left', { playerId: oldId });
+  for (const p of players) if (p.id !== client.id) send(client.ws, client.visible.has(p.id) ? 'player_sync' : 'player_joined', p);
+  client.visible = visible;
+}
+function sameOrigin(origin: string | undefined, host: string | undefined) {
+  if (!origin) return true;
+  try { return new URL(origin).host === host; } catch { return false; }
+}
+app.get('/api/health', (_req, res) => res.json({ status: 'ok', onlineCount: clients.size, timestamp: Date.now(), serverTime: new Date().toISOString() }));
+app.get('/api/session', (req, res) => {
+  if (!sameOrigin(req.headers.origin, req.headers.host)) { res.status(403).json({ error: 'Origin rejected' }); return; }
+  const session = resolveGuest(db, guestTokenFromCookie(req.headers.cookie));
+  res.cookie('sdc_guest', session.token, { httpOnly: true, sameSite: 'lax', secure: req.secure || req.headers['x-forwarded-proto'] === 'https', maxAge: 365 * 24 * 60 * 60 * 1000, path: '/' });
+  res.setHeader('Cache-Control', 'no-store');
+  res.json({ playerId: session.playerId });
+});
 
-// Tick Loop for Weather and World State
-setInterval(() => {
-  weatherTimer--;
-  if (weatherTimer <= 0) {
-    weatherTimer = 180;
-    wildWeatherIndex = (wildWeatherIndex + 1) % WILD_WEATHERS.length;
-    const nextWeather = WILD_WEATHERS[wildWeatherIndex];
-
-    const weatherState: WeatherState = {
-      current: nextWeather.type,
-      name: nextWeather.name,
-      icon: nextWeather.icon,
-      desc: nextWeather.desc,
-      effectLabel: nextWeather.effectLabel,
-      durationLeft: weatherTimer,
-    };
-
-    broadcast({
-      type: 'weather_update',
-      payload: weatherState,
-      timestamp: Date.now(),
-    });
-
-    // Broadcast system weather alert in chat
-    broadcast({
-      type: 'chat',
-      payload: {
-        id: `sys_weather_${Date.now()}`,
-        channel: 'system',
-        sender: '坍界天候预警台',
-        senderTitle: '全频段广播',
-        text: `【气象骤变】野外区域已切换为「${nextWeather.name}」(${nextWeather.desc})！前哨领地安全区依旧恒定晴朗。`,
-        timestamp: new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' }),
-      },
-    });
-  }
-}, 1000);
-
-// Zombie sweep: 正常客户端每 50ms 同步一次，60s 无声的视为幽灵连接，直接踢掉并广播离开
-setInterval(() => {
-  const now = Date.now();
-  for (const [id, client] of clients.entries()) {
-    if (now - client.player.lastSeen > 60000) {
-      try {
-        client.ws.terminate();
-      } catch { /* ignore */ }
-      clients.delete(id);
-      broadcast({
-        type: 'player_left',
-        payload: { playerId: id, name: client.player.name },
-        timestamp: now,
-      });
-      console.log(`[sweep] removed silent client ${client.player.name} (${id}), online=${clients.size}`);
-    }
-  }
-}, 30000);
-
-// WebSocket Connection Handling
-wss.on('connection', (ws: WebSocket, req) => {
-  // Phase1: playerId 随机，getPlayer 保留给二期账号系统，本期只保 buildings。
-  const playerId = 'player_' + Math.random().toString(36).substring(2, 9);
-  const randomNameIndex = Math.floor(Math.random() * PREFAB_NAMES.length);
-  const assignedName = `${PREFAB_NAMES[randomNameIndex]} #${Math.floor(100 + Math.random() * 900)}`;
-
-  const spawnIndex = clients.size % 8;
-  const SPAWN_XY: [number, number][] = [[-6, -6], [6, -6], [-6, 6], [6, 6], [0, -9], [0, 9], [-9, 0], [9, 0]];
-  const [sx, sy] = SPAWN_XY[spawnIndex % SPAWN_XY.length];
-
-  const newPlayer: OnlinePlayer = {
-    id: playerId,
-    name: assignedName,
-    level: 1,
-    title: '废土流浪者',
-    avatarSeed: playerId,
-    x: sx,
-    y: sy,
-    angle: 0,
-    mapId: 'camp_plaza',
-    hp: 100,
-    maxHp: 100,
-    shield: 0,
-    maxShield: 50,
-    isFiring: false,
-    isDashing: false,
-    color: ['#06b6d4', '#3b82f6', '#10b981', '#f59e0b', '#ec4899', '#8b5cf6'][
-      Math.floor(Math.random() * 6)
-    ],
-    ping: 28,
-    lastSeen: Date.now(),
-    currentAction: '徒手求生',
-    spawnIndex,
-  };
-
-  clients.set(playerId, { ws, playerId, player: newPlayer, isGM: false, lastDbSave: 0 });
-
-  // Send initial state to the connecting client
-  const allPlayers = Array.from(clients.values()).map((c) => c.player);
-  const curWild = WILD_WEATHERS[wildWeatherIndex];
-
-  const initMsg: NetMessage = {
-    type: 'init',
-    payload: {
-      selfId: playerId,
-      selfPlayer: newPlayer,
-      players: allPlayers,
-      buildings: worldBuildings,
-      weather: {
-        current: curWild.type,
-        name: curWild.name,
-        icon: curWild.icon,
-        desc: curWild.desc,
-        effectLabel: curWild.effectLabel,
-        durationLeft: weatherTimer,
-      },
-      serverTime: Date.now(),
-    },
-  };
-  ws.send(JSON.stringify(initMsg));
-
-  // Broadcast to other players that new player joined
-  broadcast(
-    {
-      type: 'player_joined',
-      payload: newPlayer,
-      timestamp: Date.now(),
-    },
-    playerId
-  );
-
-  // Broadcast chat announcement
-  broadcast({
-    type: 'chat',
-    payload: {
-      id: `sys_join_${Date.now()}`,
-      channel: 'world',
-      sender: '全区频道',
-      senderTitle: '接入通知',
-      text: `📡 玩家 [${newPlayer.name}] (Lv.${newPlayer.level}) 已同步接入战区节点！当前在线探索者: ${clients.size} 人`,
-      timestamp: new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' }),
-    },
-  });
-
-  // Handle incoming messages
-  ws.on('message', (data: string) => {
+wss.on('connection', (ws, req) => {
+  const token = guestTokenFromCookie(req.headers.cookie);
+  if (!token || !sameOrigin(req.headers.origin, req.headers.host)) { ws.close(1008, 'Create a same-origin guest session first'); return; }
+  const session = resolveGuest(db, token);
+  // A forged cookie must not silently establish an identity unknown to its holder.
+  if (session.token !== token) { ws.close(1008, 'Invalid guest session'); return; }
+  const id = session.playerId;
+  const previous = clients.get(id);
+  const self = game.connect(id, '废土流浪者 #' + id.slice(-4));
+  const client: Client = { ws, id, isGM: false, visible: new Set(), lastSeen: Date.now(), lastCorrection: 0, lastMessageAt: Date.now(), messageCount: 0, lastSnapshot: 0, mapId: self.mapId };
+  clients.set(id, client);
+  if (previous) previous.ws.close(4001, 'Guest identity connected elsewhere');
+  const snapshot = game.snapshot(id);
+  const players = game.visiblePlayers(id);
+  client.visible = new Set(players.map(p => p.id));
+  send(ws, 'init', { selfId: id, selfPlayer: self, players, buildings: snapshot.buildings, weather: weather(), serverTime: Date.now(), gameState: snapshot });
+  stateTo(client, snapshot, true);
+  ws.on('message', data => {
+    if (clients.get(id)?.ws !== ws) return;
+    const now = Date.now();
+    if (now - client.lastMessageAt >= 1000) { client.lastMessageAt = now; client.messageCount = 0; }
+    if (++client.messageCount > 100) { ws.close(1008, 'Too many messages'); return; }
+    client.lastSeen = now;
     try {
-      const msg: NetMessage = JSON.parse(data.toString());
-      const client = clients.get(playerId);
-      if (!client) return;
-
+      const msg = JSON.parse(data.toString()) as NetMessage;
+      const payload = msg.payload || {};
       switch (msg.type) {
         case 'player_sync': {
-          // Client sends position, angle, action, health, mapId
-          const p = client.player;
-          if (msg.payload.x !== undefined) p.x = msg.payload.x;
-          if (msg.payload.y !== undefined) p.y = msg.payload.y;
-          if (msg.payload.angle !== undefined) p.angle = msg.payload.angle;
-          if (msg.payload.mapId !== undefined) p.mapId = msg.payload.mapId;
-          if (msg.payload.hp !== undefined) p.hp = msg.payload.hp;
-          if (msg.payload.shield !== undefined) p.shield = msg.payload.shield;
-          if (msg.payload.level !== undefined) p.level = msg.payload.level;
-          if (msg.payload.isFiring !== undefined) p.isFiring = msg.payload.isFiring;
-          if (msg.payload.isDashing !== undefined) p.isDashing = msg.payload.isDashing;
-          if (msg.payload.currentAction !== undefined) p.currentAction = msg.payload.currentAction;
-          p.lastSeen = Date.now();
-
-          // SQLite 节流持久化：每客户端 5 秒最多写一次（写保护：失败只打日志，不抛不踢人）
-          if (Date.now() - client.lastDbSave > 5000) {
-            client.lastDbSave = Date.now();
-            try {
-              db.savePlayer(client.player);
-            } catch (e) {
-              console.error('[db] savePlayer failed', e);
-            }
-          }
-
-          // Broadcast to other players in the room
-          broadcast(
-            {
-              type: 'player_sync',
-              payload: p,
-              senderId: playerId,
-              timestamp: Date.now(),
-            },
-            playerId
-          );
-          break;
-        }
-
-        case 'building_placed': {
-          // Player builds a structure (e.g. wall, safe_door, turret, floor, etc.)
-          const bData = msg.payload;
-          const newBuilding: BuildingEntity = {
-            id: `build_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`,
-            type: bData.type,
-            name: bData.name || '防御建筑',
-            x: bData.x,
-            y: bData.y,
-            hp: bData.hp || 3000,
-            maxHp: bData.maxHp || 3000,
-            level: bData.level || 1,
-            isOpen: false,
-            isLocked: true,
-            ownerId: playerId,
-            ownerName: client.player.name,
-            mapId: bData.mapId || client.player.mapId,
-            material: bData.material || 'iron',
-            storedLoot: bData.type === 'safe_door' ? [
-              { name: '坍界高纯晶石', count: 12, icon: '💎' },
-              { name: '高聚合爆破装药', count: 3, icon: '💣' },
-              { name: '战备信用凭证', count: 1800, icon: '💰' }
-            ] : undefined,
-          };
-
-          const CAMP = ['camp_plaza', 'camp_workshop', 'camp_outskirts'];
-          if (CAMP.includes(String(newBuilding.mapId)) && newBuilding.type === 'safe_door') {
-            newBuilding.name = (bData.name || '防御建筑') + '（中立·不可突袭）';
-          }
-          const isHomeInst = String(newBuilding.mapId).startsWith('home_') && String(newBuilding.mapId) !== 'home_base';
-          if (isHomeInst) {
-            const instOwner = String(newBuilding.mapId).slice(5);
-            if (instOwner !== playerId) {
-              ws.send(JSON.stringify({ type: 'raid_result', payload: { error: '只能在自己营地建造，去突袭页进入对方营地只能破拆' } }));
-              return;
-            }
-          }
-          if (String(newBuilding.mapId) === 'home_base') {
-            ws.send(JSON.stringify({ type: 'raid_result', payload: { error: '模板不可建造，请回自己的 home_ 实例' } }));
-            return;
-          }
-
-          worldBuildings.push(newBuilding);
-          try {
-            db.saveBuilding(newBuilding);
-          } catch (e) {
-            console.error('[db] saveBuilding failed', e);
-          }
-
-          broadcast({
-            type: 'building_placed',
-            payload: newBuilding,
-            senderId: playerId,
-            timestamp: Date.now(),
-          });
-
-          // Chat notification for safe door setup
-          if (newBuilding.type === 'safe_door') {
-            broadcast({
-              type: 'chat',
-              payload: {
-                id: `sys_build_${Date.now()}`,
-                channel: 'world',
-                sender: '领地监控台',
-                senderTitle: '防御构筑',
-                text: `🛡️ 玩家 [${client.player.name}] 在区域 [${newBuilding.mapId}] 部署了【高耐久安全闸门】(耐久: ${newBuilding.maxHp})！领地突袭与防守协议已激活。`,
-                timestamp: new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' }),
-              },
-            });
+          if (!game.move(id, payload) && now - client.lastCorrection >= 150) {
+            client.lastCorrection = now; stateTo(client, undefined, true);
           }
           break;
         }
-
-        case 'raid_attempt': {
-          // Raid attack on a territory building (Safe Door / Outpost Core)
-          const { targetId, supplyId, supplyName } = msg.payload;
-          const target = worldBuildings.find((b) => b.id === targetId);
-
-          if (!target) {
-            ws.send(JSON.stringify({
-              type: 'raid_result',
-              payload: { error: '目标建筑不存在或已瓦解' },
-            }));
-            return;
-          }
-
-          const CAMP_MAPS = ['camp_plaza', 'camp_workshop', 'camp_outskirts'];
-          if (target.ownerId === playerId) {
-            ws.send(JSON.stringify({ type: 'raid_result', payload: { error: '不能突袭自己的门，用 F 直接开关' } }));
-            return;
-          }
-          if (CAMP_MAPS.includes(String(target.mapId))) {
-            ws.send(JSON.stringify({ type: 'raid_result', payload: { error: '营地为中立区，不可突袭' } }));
-            return;
-          }
-          const targetMapStr = String(target.mapId);
-          const isHomeTarget = targetMapStr.startsWith('home_') && targetMapStr !== 'home_base';
-          if (isHomeTarget) {
-            const instOwner = targetMapStr.slice(5);
-            if (target.ownerId !== instOwner) {
-              ws.send(JSON.stringify({ type: 'raid_result', payload: { error: '该建筑不属于该营地实例主人' } }));
-              return;
+        case 'game_action': {
+          const state = game.action(id, payload);
+          stateTo(client, state);
+          if (!state.error) {
+            for (const c of clients.values()) {
+              if (c.id === id) continue;
+              const p = game.state.players[c.id];
+              if (p.mapId === state.player.mapId && (p.mapId !== 'world' || Math.hypot(p.x - state.player.x, p.y - state.player.y) <= 80) || payload.action === 'create_camp') stateTo(c);
             }
-            if (playerId === instOwner) {
-              ws.send(JSON.stringify({ type: 'raid_result', payload: { error: '不能突袭自己的营地，用 F 直接开关' } }));
-              return;
-            }
-          }
-
-          // Calculate damage with randomness and critical hits
-          let baseDamage = 500;
-          let critChance = 0.25;
-          let critMult = 1.8;
-          let successChance = 0.85;
-
-          if (supplyId === 'c4_explosive') {
-            baseDamage = 900;
-            critChance = 0.35;
-            critMult = 2.0;
-            successChance = 0.88;
-          } else if (supplyId === 'thermite_charge') {
-            baseDamage = 750;
-            critChance = 0.28;
-            critMult = 1.85;
-            successChance = 0.95;
-          } else if (supplyId === 'emp_breacher') {
-            baseDamage = 600;
-            critChance = 0.40;
-            critMult = 2.2;
-            successChance = 0.80;
-          } else if (supplyId === 'plasma_torch') {
-            baseDamage = 550;
-            critChance = 0.20;
-            critMult = 1.5;
-            successChance = 0.98;
-          }
-
-          const roll = Math.random();
-          const isSuccess = roll <= successChance;
-          const isCritical = Math.random() < critChance;
-
-          let actualDamage = isSuccess ? baseDamage : Math.floor(baseDamage * 0.35);
-          if (isCritical) {
-            actualDamage = Math.floor(actualDamage * critMult);
-          }
-
-          // Random damage jitter (+-15%)
-          actualDamage = Math.floor(actualDamage * (0.85 + Math.random() * 0.3));
-
-          target.hp = Math.max(0, target.hp - actualDamage);
-          const isBreached = target.hp <= 0;
-
-          const raidEvent: RaidEvent = {
-            targetId: target.id,
-            targetName: target.name,
-            targetX: target.x,
-            targetY: target.y,
-            ownerName: target.ownerName || '领地所有者',
-            raiderId: playerId,
-            raiderName: client.player.name,
-            supplyUsed: supplyName || '破拆装药',
-            damage: actualDamage,
-            remainingHp: target.hp,
-            isCritical,
-            isBreached,
-            timestamp: Date.now(),
-            loot: isBreached ? (target.storedLoot || [
-              { name: '坍界高纯晶石', count: 15, icon: '💎' },
-              { name: '珍贵机械齿轮', count: 6, icon: '⚙️' },
-              { name: '废土信用凭证', count: 1600, icon: '💰' }
-            ]) : undefined,
-          };
-
-          // If breached, unlock and open the door or remove
-          if (isBreached) {
-            target.isOpen = true;
-            target.isLocked = false;
-          }
-          // raid 落盘：hp/isOpen/isLocked 变更后即时持久化（写保护：失败只打日志；手动验证：突袭后重启服务端，门血量应保持）
-          try {
-            db.saveBuilding(target);
-          } catch (e) {
-            console.error('[db] saveBuilding (raid) failed', e);
-          }
-
-          // Broadcast raid result to all players
-          broadcast({
-            type: 'raid_result',
-            payload: raidEvent,
-            timestamp: Date.now(),
-          });
-
-          // Broadcast server-wide emergency alert
-          if (isBreached) {
-            broadcast({
-              type: 'chat',
-              payload: {
-                id: `sys_raid_${Date.now()}`,
-                channel: 'world',
-                sender: '🚨 紧急战报',
-                senderTitle: '破门警报',
-                text: `💥【领地攻破】玩家 [${client.player.name}] 成功爆破攻陷了 [${target.ownerName}] 的安全门！缴获全部战利品物资！`,
-                timestamp: new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' }),
-              },
-            });
-          } else {
-            broadcast({
-              type: 'chat',
-              payload: {
-                id: `sys_raid_${Date.now()}`,
-                channel: 'world',
-                sender: '⚠️ 突袭警报',
-                senderTitle: '攻防交火',
-                text: `⚠️ [${client.player.name}] 使用 [${raidEvent.supplyUsed}] 突袭安全门！${isCritical ? '【致命暴击!】' : ''}造成 ${actualDamage} 点破拆伤害！安全门剩余耐久: ${target.hp}/${target.maxHp}`,
-                timestamp: new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' }),
-              },
-            });
           }
           break;
         }
-
+        case 'building_placed': case 'raid_attempt': case 'pvp_hit':
+          stateTo(client, game.snapshot(id, undefined, '请使用服务器游戏操作协议')); break;
         case 'chat': {
-          const chatPayload = {
-            id: `msg_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`,
-            channel: msg.payload.channel || 'world',
-            sender: client.player.name,
-            senderTitle: `Lv.${client.player.level} ${client.player.title}`,
-            text: msg.payload.text,
-            timestamp: new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' }),
-          };
-          broadcast({
-            type: 'chat',
-            payload: chatPayload,
-            senderId: playerId,
-            timestamp: Date.now(),
-          });
-          break;
+          if (typeof payload.text !== 'string' || !payload.text.trim()) break;
+          const p = game.state.players[id];
+          const chat = { id: 'msg_' + now + '_' + id.slice(-4), channel: payload.channel === 'team' ? 'team' : 'world', sender: p.name, senderTitle: 'Lv.' + p.level + ' ' + p.title, text: payload.text.slice(0, 500), timestamp: new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' }) };
+          broadcast('chat', chat); break;
         }
-
-        case 'pvp_hit': {
-          const { targetId, damage } = msg.payload || {};
-          const target = clients.get(targetId);
-          if (!target) break;
-          if (target.player.mapId !== client.player.mapId) break;
-          const CAMP_PVP = ['camp_plaza', 'camp_workshop', 'camp_outskirts'];
-          if (CAMP_PVP.includes(String(client.player.mapId))) break;
-          if (String(client.player.mapId) === 'home_base') break;
-          if (target.ws.readyState === WebSocket.OPEN) {
-            target.ws.send(JSON.stringify({
-              type: 'pvp_hit',
-              payload: { attackerId: playerId, attackerName: client.player.name, damage: Math.max(1, Math.floor(damage || 10)) },
-              timestamp: Date.now(),
-            }));
-          }
-          break;
-        }
-
-        case 'ping': {
-          ws.send(JSON.stringify({ type: 'pong', payload: { serverTime: Date.now() } }));
-          break;
-        }
-
-        case 'gm_auth': {
-          const ok = msg.payload && msg.payload.token === GM_TOKEN;
-          client.isGM = !!ok;
-          ws.send(JSON.stringify({
-            type: 'gm_auth_result',
-            payload: { ok: !!ok, playerId },
-          }));
-          console.log(`[gm] auth ${ok ? 'OK' : 'FAIL'} for ${client.player.name} (${playerId})`);
-          break;
-        }
-
+        case 'ping': send(ws, 'pong', { serverTime: now }); break;
+        case 'gm_auth': client.isGM = payload.token === GM_TOKEN; send(ws, 'gm_auth_result', { ok: client.isGM, playerId: id }); break;
         case 'weather_set': {
-          if (!client.isGM) {
-            ws.send(JSON.stringify({
-              type: 'gm_auth_result',
-              payload: { ok: false, error: 'GM only' },
-            }));
-            break;
-          }
-          const idx = WILD_WEATHERS.findIndex((w) => w.type === msg.payload?.weather);
-          if (idx < 0) break;
-          wildWeatherIndex = idx;
-          weatherTimer = 180;
-          const nextWeather = WILD_WEATHERS[wildWeatherIndex];
-          const weatherState: WeatherState = {
-            current: nextWeather.type,
-            name: nextWeather.name,
-            icon: nextWeather.icon,
-            desc: nextWeather.desc,
-            effectLabel: nextWeather.effectLabel,
-            durationLeft: weatherTimer,
-          };
-          broadcast({ type: 'weather_update', payload: weatherState, timestamp: Date.now() });
-          broadcast({
-            type: 'chat',
-            payload: {
-              id: `sys_gmweather_${Date.now()}`,
-              channel: 'system',
-              sender: '坍界天候预警台',
-              senderTitle: 'GM 调度',
-              text: `【GM调度】野外天气已切换为「${nextWeather.name}」！`,
-              timestamp: new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' }),
-            },
-          });
-          break;
+          if (!client.isGM) { send(ws, 'gm_auth_result', { ok: false, error: 'GM only' }); break; }
+          const next = WILD_WEATHERS.findIndex(w => w.type === payload.weather);
+          if (next < 0) break;
+          weatherIndex = next; weatherTimer = 180; broadcast('weather_update', weather()); break;
         }
       }
-    } catch (err) {
-      console.error('Error handling WebSocket message:', err);
-    }
+    } catch (error) { console.error('[ws] message rejected', error); }
   });
-
   ws.on('close', () => {
-    const leaving = clients.get(playerId);
-    clients.delete(playerId);
-    if (leaving) {
-      try {
-        db.savePlayer(leaving.player);
-      } catch (e) {
-        console.error('[db] savePlayer on close failed', e);
-      }
-      broadcast({
-        type: 'player_left',
-        payload: { playerId, name: leaving.player.name },
-        timestamp: Date.now(),
-      });
-      broadcast({
-        type: 'chat',
-        payload: {
-          id: `sys_leave_${Date.now()}`,
-          channel: 'world',
-          sender: '全区频道',
-          senderTitle: '离线通知',
-          text: `🚪 玩家 [${leaving.player.name}] 已断开战区同步。当前在线: ${clients.size} 人`,
-          timestamp: new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' }),
-        },
-      });
-    }
+    // A replaced connection cannot disconnect or persist over the new socket's player.
+    if (clients.get(id)?.ws !== ws) return;
+    clients.delete(id); game.disconnect(id);
+    for (const other of clients.values()) if (other.visible.has(id)) { other.visible.delete(id); send(other.ws, 'player_left', { playerId: id }); }
   });
+  ws.on('error', error => console.error('[ws]', error.message));
 });
 
-// 退出 flush：SIGINT/SIGTERM 时全量回写在线玩家（逐个 try/catch，一个失败不影响其他）
-function flushAllPlayers(signal: string) {
+setInterval(() => {
+  const now = Date.now();
+  const dirty = game.tick();
   for (const client of clients.values()) {
-    try {
-      db.savePlayer(client.player);
-    } catch (e) {
-      console.error(`[db] savePlayer on ${signal} failed`, e);
-    }
+    if (now - client.lastSeen > 60000) { client.ws.terminate(); continue; }
+    refreshVisibility(client);
+    if (dirty || now - client.lastSnapshot >= 2000) stateTo(client);
   }
-  console.log(`[db] flushed ${clients.size} players on ${signal}`);
-}
-process.on('SIGINT', () => {
-  flushAllPlayers('SIGINT');
-  process.exit(0);
-});
-process.on('SIGTERM', () => {
-  flushAllPlayers('SIGTERM');
-  process.exit(0);
-});
+}, 200);
+setInterval(() => { try { game.persist(); } catch (error) { console.error('[db] periodic save failed', error); } }, 5000);
+setInterval(() => {
+  if (--weatherTimer > 0) return;
+  weatherTimer = 180; weatherIndex = (weatherIndex + 1) % WILD_WEATHERS.length;
+  broadcast('weather_update', weather());
+  broadcast('chat', { id: 'weather_' + Date.now(), channel: 'system', sender: '坍界天候预警台', text: '【气象骤变】野外区域已切换为「' + weather().name + '」。', timestamp: new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' }) });
+}, 1000);
+function shutdown() { game.persist(); process.exit(0); }
+process.on('SIGINT', shutdown); process.on('SIGTERM', shutdown);
 
-// Setup Vite middlewares in development or static serve in production
 async function startServer() {
-  const isProduction = process.env.NODE_ENV === 'production';
-
-  if (!isProduction) {
-    const { createServer: createViteServer } = await import('vite');
-    const vite = await createViteServer({
-      server: { middlewareMode: true },
-      appType: 'spa',
-    });
+  if (process.env.NODE_ENV !== 'production') {
+    const { createServer } = await import('vite');
+    const vite = await createServer({ server: { middlewareMode: true }, appType: 'spa' });
     app.use(vite.middlewares);
   } else {
     app.use(express.static(path.resolve(__dirname, 'dist')));
-    app.get('*', (req, res) => {
-      res.sendFile(path.resolve(__dirname, 'dist/index.html'));
-    });
+    app.get('*', (_req, res) => res.sendFile(path.resolve(__dirname, 'dist/index.html')));
   }
-
-  const PORT = Number(process.env.PORT) || 3000;
-  // 双栈监听（IPv4+IPv6）：localhost 在某些系统优先解析到 ::1，只绑 0.0.0.0 会导致浏览器打不开
-  server.listen(PORT, () => {
-    console.log(`[Rift Walker MMORPG] Server running on http://0.0.0.0:${PORT}`);
-    console.log(`[Rift Walker MMORPG] Realtime WebSocket gateway active at ws://0.0.0.0:${PORT}/ws`);
-  });
+  const port = Number(process.env.PORT) || 3000;
+  server.listen(port, () => console.log('[Rift Walker] http://localhost:' + port));
 }
-
-startServer().catch((err) => {
-  console.error('Failed to start server:', err);
-  process.exit(1);
-});
+startServer().catch(error => { console.error('Failed to start server:', error); process.exit(1); });

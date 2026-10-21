@@ -99,7 +99,7 @@ export const CharacterHUD: React.FC<CharacterHUDProps> = ({ stats }) => {
 
         <div className="flex items-center gap-1 px-2 py-0.5 rounded bg-slate-900/90 border border-emerald-500/40 text-[11px] font-medium text-emerald-400">
           <Shield className="w-3 h-3 text-emerald-400" />
-          <span>玩家保护</span>
+          <span>探索求生</span>
         </div>
       </div>
     </div>

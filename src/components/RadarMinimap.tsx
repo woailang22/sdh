@@ -1,8 +1,9 @@
 import React, { useEffect, useRef } from 'react';
-import { MonsterEntity } from '../types/game';
+import { MapZoneId, MonsterEntity } from '../types/game';
 import { soundManager } from '../audio/soundManager';
 import { Map } from 'lucide-react';
 import { radarDotColor } from '../game/visualTheme';
+import { worldLocationAt } from '../game/world';
 
 interface RadarMinimapProps {
   playerPos: { x: number; y: number; angle: number };
@@ -12,6 +13,8 @@ interface RadarMinimapProps {
   buildings?: { x: number; y: number; type: string }[];
   waypoints?: { x: number; y: number; name: string; targetMap: string; icon?: string }[];
   onOpenWorldMap?: () => void;
+  currentMapId?: MapZoneId;
+  range?: 32 | 48;
 }
 
 export const RadarMinimap: React.FC<RadarMinimapProps> = ({
@@ -22,6 +25,8 @@ export const RadarMinimap: React.FC<RadarMinimapProps> = ({
   buildings = [],
   waypoints = [],
   onOpenWorldMap,
+  currentMapId = 'world',
+  range = 32,
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const sweepAngleRef = useRef<number>(0);
@@ -82,7 +87,7 @@ export const RadarMinimap: React.FC<RadarMinimapProps> = ({
       ctx.fillStyle = sweepGrad;
       ctx.fill();
 
-      const scale = 6.5;
+      const scale = radius / range;
 
       // 0. Draw Inter-Map Waypoint Portals (Cyan rings with pulsating central dot)
       waypoints.forEach((wp) => {
@@ -106,6 +111,7 @@ export const RadarMinimap: React.FC<RadarMinimapProps> = ({
 
       // 1. Draw Buildings (Cyan squares)
       buildings.forEach((b) => {
+        if (b.type.endsWith('_floor')) return;
         const dx = (b.x - playerPos.x) * scale;
         const dy = (b.y - playerPos.y) * scale;
         if (Math.hypot(dx, dy) < radius - 6) {
@@ -190,7 +196,7 @@ export const RadarMinimap: React.FC<RadarMinimapProps> = ({
 
     animId = requestAnimationFrame(renderRadar);
     return () => cancelAnimationFrame(animId);
-  }, [playerPos, monsters, teammates, interactables, buildings]);
+  }, [playerPos, monsters, teammates, interactables, buildings, waypoints, range]);
 
   return (
     <div className="relative flex flex-col items-center">
@@ -211,6 +217,10 @@ export const RadarMinimap: React.FC<RadarMinimapProps> = ({
         <div className="absolute bottom-1 right-2 p-1 rounded-full bg-slate-950/80 border border-cyan-500/40 text-cyan-300 group-hover:scale-110 transition-transform">
           <Map className="w-3 h-3" />
         </div>
+      </div>
+      <div className="mt-1 px-2 py-1 rounded-lg bg-slate-950/85 border border-cyan-500/20 text-center max-w-40">
+        <div className="text-[10px] text-cyan-200 truncate">{currentMapId.startsWith('home_') ? '独立营地' : worldLocationAt(playerPos.x, playerPos.y).name} · {range} 格</div>
+        <div className="text-[9px] font-mono text-slate-500">{currentMapId.startsWith('home_') ? '营地坐标' : '世界坐标'} {Math.round(playerPos.x)}, {Math.round(playerPos.y)}</div>
       </div>
     </div>
   );

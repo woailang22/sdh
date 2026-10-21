@@ -2,6 +2,10 @@ import { describe, expect, it } from 'vitest';
 import { frameRect, iconFor, spriteStyle, angleToSurvivorFrame, frameContent, interactableSprite, buildingSprite, rarityFrameStyle } from './art';
 
 describe('art atlas', () => {
+  it('gives each generated environment prop its own complete atlas cell', () => {
+    const kinds = ['understory', 'outcrop', 'reeds', 'tank', 'rubble', 'fence'];
+    kinds.forEach((kind, i) => expect(frameRect('world-environment-v1.png', kind)).toEqual({ x: (i % 3) * 512, y: Math.floor(i / 3) * 512, width: 512, height: 512 }));
+  });
   it('maps rifle to weapons assault-rifle', () => {
     expect(iconFor('rifle')).toEqual({ file: 'icon-weapons.png', frame: 'assault-rifle' });
   });

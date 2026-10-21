@@ -1,12 +1,53 @@
 import { describe, expect, it } from 'vitest';
-import { groupBuildingsIntoHouses, houseCorners, HOUSE_WALL_H } from './house';
+import { groupBuildingsIntoHouses, houseCorners, HOUSE_WALL_H, houseWallRuns, houseEntrance } from './house';
+import { buildCompoundWalls } from './compound';
+import { isPositionBlocked } from './navigation';
 import type { BuildingEntity } from '../types/game';
 
 const wall = (id: string, x: number, y: number): BuildingEntity => ({
   id, type: 'iron_wall', name: '墙', x, y, hp: 850, maxHp: 850, level: 1, ownerName: '遗迹', facing: 'ew',
 });
 
+describe('complete house geometry', () => {
+  const room = () => buildCompoundWalls({ idPrefix: 'room', cx: 0, cy: 0, w: 8, h: 6, wallType: 'wood_wall', wallName: '墙', ownerName: '遗迹', doorSide: 'S', doorType: 'door', doorName: '入口', doorExtra: { doorWidth: 3 } }).filter(b => !(b.type.endsWith('_wall') && b.y === 3 && Math.abs(b.x) < 2));
+  it('retains all four sides and leaves the actual three-tile door opening clear', () => {
+    const buildings = room();
+    const runs = houseWallRuns(buildings);
+    expect(new Set(runs.map(r => r.side))).toEqual(new Set(['N', 'S', 'E', 'W']));
+    const south = runs.filter(r => r.side === 'S');
+    expect(south).toHaveLength(2);
+    expect(south.every(r => r.end.x <= -1.5 || r.start.x >= 1.5)).toBe(true);
+    const door = buildings.find(b => b.type === 'door')!;
+    expect(houseEntrance(buildings, door)).toMatchObject({ side: 'S', start: { x: -1.5, y: 3 }, end: { x: 1.5, y: 3 } });
+    expect(isPositionBlocked(1.1, 3, [{ ...door, isOpen: false }])).toBe(true);
+    expect(isPositionBlocked(1.1, 3, [{ ...door, isOpen: true }])).toBe(false);
+  });
+  it('does not paint a solid wall over a destroyed section', () => {
+    const buildings = room();
+    buildings.find(b => b.y === -3 && b.x === 0)!.hp = 0;
+    expect(houseWallRuns(buildings).filter(r => r.side === 'N').every(r => r.end.x <= -0.5 || r.start.x >= 0.5)).toBe(true);
+  });
+});
+
 describe('groupBuildingsIntoHouses', () => {
+  it('groups a landmark across world chunks and keeps placed walls individually accurate', () => {
+    const groups = groupBuildingsIntoHouses([
+      wall('world:7:-1:b:town_gas:gas_office_n_-8', 232, -2),
+      wall('world:7:0:b:town_gas:gas_office_s_-8', 232, 2),
+      wall('build_one', 0, 0), wall('build_two', 20, 20),
+    ]);
+    expect(groups).toHaveLength(3);
+    expect(groups.find(g => g.members.length === 2)?.members.map(b => b.y)).toEqual([-2, 2]);
+  });
+  it('groups procedural point of interest sides into one actual building', () => {
+    const groups = groupBuildingsIntoHouses([
+      wall('world:-3:6:poi:n_-5', -85, 204),
+      wall('world:-3:6:poi:s_5', -75, 212),
+      { ...wall('world:-3:6:poi:door', -80, 212), type: 'door' as const },
+    ]);
+    expect(groups).toHaveLength(1);
+    expect(groups[0].door).not.toBeNull();
+  });
   it('same prefix walls form one house, others stay single', () => {
     const bs = [wall('gas_office_n_-8', -8, -14), wall('gas_office_s_-8', -8, -12), wall('ru_cw_1', 6, 8)];
     const groups = groupBuildingsIntoHouses(bs);

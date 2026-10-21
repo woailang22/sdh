@@ -29,6 +29,10 @@ export const MELEE = {
 export const ARMOR_REDUCTION: Record<string, number> = {
   armor_cloth: 0,
   armor_vest: 0.15,
+  vest: 0.15,
+  vest_t3: 0.15,
+  vest_t4: 0.20,
+  vest_t5: 0.25,
 };
 
 export function rollCrit(chance: number, rand: () => number = Math.random): boolean {

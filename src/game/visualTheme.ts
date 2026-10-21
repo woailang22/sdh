@@ -23,9 +23,9 @@ const BASE_PAIRS: Record<GroundTheme, [string, string]> = {
   field: ['#6b6247', '#6f664b'],
   urban: ['#54534e', '#585751'],
   ruins: ['#5b5145', '#5f5548'],
-  forest: ['#57503f', '#5b5343'],
+  forest: ['#46533a', '#4a573e'],
   quarry: ['#8a8d90', '#8e9194'],
-  lake: ['#46545e', '#4a5862'],
+  lake: ['#3d6268', '#41666c'],
   marsh: ['#5c5a41', '#605e45'],
   rift: ['#4c423a', '#50463e'],
 };

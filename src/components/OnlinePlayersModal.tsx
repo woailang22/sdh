@@ -63,7 +63,6 @@ export function OnlinePlayersModal({
           {players.map((p) => {
             const isSelf = p.id === selfId;
             const zoneName = displayName(p.mapId);
-            const hpPct = Math.round((p.hp / p.maxHp) * 100);
 
             return (
               <div
@@ -119,13 +118,13 @@ export function OnlinePlayersModal({
                       邀请入队
                     </button>
                   )}
-                  {!isSelf && (
+                  {!isSelf && onVisitHome && (
                     <button
-                      onClick={() => (onVisitHome as any)?.(p.id, p.name)}
+                      onClick={() => onVisitHome(p.id, p.name)}
                       className="px-2 py-1 rounded bg-red-900/60 border border-red-500/40 text-red-200 text-[11px] font-bold hover:bg-red-800/60"
-                      title="潜入TA的个人营地实例，只能破拆不能建造"
+                      title="查看已发现的营地线索，在公共世界步行抵达入口"
                     >
-                      🚩突袭TA营地
+                      🚩营地线索
                     </button>
                   )}
                 </div>
@@ -135,6 +134,7 @@ export function OnlinePlayersModal({
         </div>
 
         {/* Footer */}
+        <p className="px-6 pb-3 text-xs text-slate-400">名录只显示在线行者。营地需要在野外发现并步行抵达入口，无法通过名录传送；主人离线后营地仍可被攻击。</p>
         <div className="bg-slate-950 px-6 py-3 border-t border-slate-800 flex justify-between items-center text-xs text-slate-400">
           <span className="flex items-center gap-1.5">
             <Radio className="w-4 h-4 text-cyan-400 animate-pulse" /> 按 <strong>Tab</strong> 键可随时快速呼出/隐藏战区名录

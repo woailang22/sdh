@@ -96,6 +96,11 @@ export type BuildableType =
   | 'door'
   | 'safe_door'
   | 'storage_box'
+  | 'campfire'
+  | 'bed'
+  | 'furnace'
+  | 'farm_plot'
+  | 'research_table'
   | 'workbench'
   | 'turret'
   | 'electric_core'
@@ -121,6 +126,7 @@ export interface BuildingEntity {
   level: number;
   isOpen?: boolean;
   isLocked?: boolean;
+  doorWidth?: number;
   ownerId?: string;
   ownerName?: string;
   mapId?: MapZoneId;
@@ -129,6 +135,7 @@ export interface BuildingEntity {
   storedLoot?: { name: string; count: number; icon: string }[];
   /** 墙体/门朝向：ew=沿东西向展开，ns=沿南北向展开（等距视角下形态不同） */
   facing?: 'ew' | 'ns';
+  production?: { recipeId: string; resultItemId: string; resultCount: number; readyAt: number };
 }
 
 export interface WorldZone {
@@ -193,6 +200,7 @@ export interface CraftRecipe {
 }
 
 export type MapZoneId =
+  | 'world'
   | 'camp_plaza' | 'camp_workshop' | 'camp_outskirts'
   | 'town_gas' | 'town_street' | 'town_ruins'
   | 'mtn_logging' | 'mtn_quarry' | 'mtn_deep'
@@ -348,6 +356,8 @@ export interface TerritoryZone {
 }
 
 export type NetMessageType =
+  | 'game_action'
+  | 'game_state'
   | 'init'
   | 'player_sync'
   | 'player_joined'

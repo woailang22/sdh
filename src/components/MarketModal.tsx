@@ -3,6 +3,7 @@ import { MarketItem } from '../types/game';
 import { X, ShoppingBag, Coins, TrendingUp } from 'lucide-react';
 import { soundManager } from '../audio/soundManager';
 import { ItemIcon } from './ItemIcon';
+import { ITEM_DEFS } from '../game/items';
 
 interface MarketModalProps {
   isOpen: boolean;
@@ -124,7 +125,13 @@ export const MarketModal: React.FC<MarketModalProps> = ({
 
         {/* Content List */}
         <div className="flex-1 overflow-y-auto p-6 space-y-3">
-          {items.map((item) => (
+          {items.map((entry) => {
+            const bundles: Record<string, [string, number]> = { scrap: ['scrap', 10], ammo_box: ['ammo', 60], food_ration: ['food', 10], rift_shard: ['shard', 1] };
+            const [id, count] = bundles[entry.id] ?? [entry.id, 1];
+            const definition = ITEM_DEFS[id];
+            const item = { ...entry, buyPrice: definition.buyPrice * count, sellPrice: definition.sellPrice * count,
+              name: definition.name + (count > 1 ? ` ×${count}` : '') };
+            return (
             <div
               key={item.id}
               className="flex items-center justify-between p-3.5 rounded-xl bg-slate-950/60 border border-slate-800 hover:border-cyan-500/40 transition-all"
@@ -142,7 +149,7 @@ export const MarketModal: React.FC<MarketModalProps> = ({
                   </div>
                   <p className="text-xs text-slate-400 mt-0.5 line-clamp-1">{item.description}</p>
                   <div className="text-[11px] text-slate-500 mt-1 font-mono">
-                    商栈库存: {item.stock} 件
+                    公共补给点交易 · 数量与结算以实际携带物资为准
                   </div>
                 </div>
               </div>
@@ -152,13 +159,7 @@ export const MarketModal: React.FC<MarketModalProps> = ({
                 <button
                   onClick={() => {
                     if (playerCredits < item.buyPrice || item.stock <= 0) return;
-                    const ok = onBuyItem(item, 1);
-                    if (ok) {
-                      soundManager.playLoot();
-                      setItems((prev) =>
-                        prev.map((x) => (x.id === item.id ? { ...x, stock: Math.max(0, x.stock - 1) } : x))
-                      );
-                    }
+                    onBuyItem(item, 1);
                   }}
                   disabled={playerCredits < item.buyPrice || item.stock <= 0}
                   className={`px-3 py-1.5 rounded-lg text-xs font-bold font-mono transition-all flex items-center gap-1 ${
@@ -181,16 +182,16 @@ export const MarketModal: React.FC<MarketModalProps> = ({
                 </button>
               </div>
             </div>
-          ))}
+          ); })}
         </div>
 
         {/* Footer Notice */}
         <div className="px-6 py-3 bg-slate-950/90 border-t border-slate-800 text-xs text-slate-400 flex items-center justify-between">
           <span className="flex items-center gap-1.5">
             <TrendingUp className="w-4 h-4 text-emerald-400" />
-            黑市行情指数稳定 · 废铁需求持续上涨 +8.4%
+            交易需要身处公共补给点，失败原因会显示提示
           </span>
-          <span className="font-mono text-[11px]">下一轮物资补仓: 14分22秒</span>
+          <span className="font-mono text-[11px]">服务器确认后更新物资</span>
         </div>
       </div>
     </div>

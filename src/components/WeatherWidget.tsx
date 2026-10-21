@@ -9,7 +9,8 @@ interface WeatherWidgetProps {
 }
 
 export const WeatherWidget: React.FC<WeatherWidgetProps> = ({ weather, currentMapId }) => {
-  const isSanctuary = regionOf(currentMapId) === 'camp';
+  const isCamp = currentMapId.startsWith('home_');
+  const isSanctuary = isCamp || currentMapId.startsWith('camp_');
 
   const formatSec = (sec: number) => {
     const m = Math.floor(sec / 60);
@@ -26,13 +27,13 @@ export const WeatherWidget: React.FC<WeatherWidgetProps> = ({ weather, currentMa
           </div>
           <div className="flex flex-col text-left">
             <div className="flex items-center gap-1.5 leading-tight">
-              <span className="font-bold text-xs text-slate-100">恒定晴和 · 领地安全区</span>
+              <span className="font-bold text-xs text-slate-100">{isCamp ? '独立营地 · 环境稳定' : '公共补给点'}</span>
               <span className="text-[10px] font-mono text-cyan-300 bg-cyan-950/80 px-1.5 rounded border border-cyan-500/30 flex items-center gap-1">
-                <ShieldCheck className="w-3 h-3 text-emerald-400" /> 力场覆盖
+                <ShieldCheck className="w-3 h-3 text-emerald-400" /> {isCamp ? '全天攻防' : '补给休整'}
               </span>
             </div>
             <span className="text-[9px] font-mono text-emerald-400/90 font-medium">
-              全域恒温 · 绝对安全保护 · 0环境侵蚀
+              {isCamp ? '营地全天可被攻击 · 离线防御需要弹药' : '公共工坊与交易 · 野外探索前补给'}
             </span>
           </div>
         </div>

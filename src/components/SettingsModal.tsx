@@ -9,9 +9,10 @@ interface SettingsModalProps {
   isGM: boolean;
   onGMLogin: (token: string) => void;
   onGMLogout: () => void;
+  onOpenRenderDiagnostics: () => void;
 }
 
-export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose, onResetGame, isGM, onGMLogin, onGMLogout }) => {
+export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose, onResetGame, isGM, onGMLogin, onGMLogout, onOpenRenderDiagnostics }) => {
   const [vol, setVol] = useState(soundManager.getVolume() * 100);
   const [gmToken, setGmToken] = useState('');
 
@@ -103,6 +104,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose, o
           </div>
 
           {/* Reset button */}
+          <button onClick={onOpenRenderDiagnostics} className="w-full rounded-xl border border-slate-700 bg-slate-800 py-2.5 text-xs text-slate-300">查看最近画面错误</button>
           <button
             onClick={() => {
               soundManager.playClick();

@@ -1,8 +1,23 @@
 // server/db.test.ts
 import { describe, expect, it } from 'vitest';
-import { createDb } from './db';
+import { createDb, backupDatabase } from './db';
+import { mkdtempSync, existsSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
 
 describe('sqlite persistence', () => {
+  it('backs up real persisted data before migration and preserves atomic world state across reopen', async () => {
+    const dir = mkdtempSync(join(tmpdir(), 'sdc-db-'));
+    const file = join(dir, 'world.sqlite');
+    const db = createDb(file);
+    db.savePlayer({ id: 'legacy', mapId: 'town_ruins', x: 3, y: 4 });
+    const backup = await backupDatabase(file);
+    expect(existsSync(backup!)).toBe(true);
+    expect(createDb(backup!).getPlayer('legacy').mapId).toBe('town_ruins');
+    db.setMeta('authoritative-world-v2', JSON.stringify({ accounts: { p: { wood: 2 } }, storage: { wood: 8 } }));
+    expect(JSON.parse(createDb(file).getMeta('authoritative-world-v2')!)).toEqual({ accounts: { p: { wood: 2 } }, storage: { wood: 8 } });
+    expect(db.listPlayers()).toHaveLength(1);
+  });
   it('building survives reload', () => {
     const db = createDb(':memory:');
     db.saveBuilding({ id: 'b1', type: 'safe_door', name: '门', x: 1, y: 2, hp: 5000, maxHp: 5000, level: 1, ownerId: 'p1', mapId: 'town_ruins' } as any);
