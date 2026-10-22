@@ -47,6 +47,8 @@ export const WorldMapModal: React.FC<WorldMapModalProps> = ({
   const selectedRoute = WORLD_SUPPLY_ROUTES.find(route => route.stops.some(point => point.id === selection.id));
   const selectedStop = selectedRoute?.stops.find(point => point.id === selection.id);
   const visibleRoute = selectedRoute ?? WORLD_SUPPLY_ROUTES.find(route => route.id === routeId)!;
+  const routeCoordinates = visibleRoute.stops.map(point => point[visibleRoute.axis]);
+  const routeMin = Math.min(0, ...routeCoordinates), routeMax = Math.max(0, ...routeCoordinates);
   const scale = view.size / WORLD_SIZE;
   const terrain = useMemo(() => Array.from({ length: 32 * 32 }, (_, index) => {
     const x = WORLD_MIN + (index % 32) * 64;
@@ -144,7 +146,7 @@ export const WorldMapModal: React.FC<WorldMapModalProps> = ({
                   return <text key={region.id} x={x - 70} y={y - 120} fill="#e2e8f0" fillOpacity="0.5" fontSize="46" fontWeight="bold" letterSpacing="5">{region.name}</text>;
                 })}
                 {view.size <= 1024 && <g stroke="#c5ac72" strokeWidth={3 * scale} strokeDasharray={`${8 * scale} ${6 * scale}`} fill="none" opacity="0.65" pointerEvents="none">
-                  <path d={visibleRoute.axis === 'x' ? 'M 0 0 H -254' : 'M 0 96 V 592'} />
+                  <path d={visibleRoute.axis === 'x' ? `M ${routeMin} 0 H ${routeMax}` : `M 0 ${routeMin} V ${routeMax}`} />
                   {visibleRoute.stops.map(point => <path key={point.id} d={visibleRoute.axis === 'x' ? `M ${point.x} 0 V ${point.y}` : `M 0 ${point.y} H ${point.x}`} />)}
                 </g>}
                 {WORLD_LOCATIONS.map(point => <g key={point.id} data-map-marker="true" role="button" tabIndex={0} aria-label={`选择地标：${point.name}`} className="cursor-pointer outline-none focus:stroke-white" onClick={() => setSelected(point)} onKeyDown={event => markerKey(event, point)}>
@@ -156,7 +158,7 @@ export const WorldMapModal: React.FC<WorldMapModalProps> = ({
                 {view.size <= 1024 && visibleRoute.stops.map(point => <g key={point.id} data-map-marker="true" role="button" tabIndex={0} aria-label={`选择驿点：${point.name}`} className="cursor-pointer outline-none focus:stroke-white" onClick={() => setSelected(point)} onKeyDown={event => markerKey(event, point)}>
                   <rect x={point.x - 13 * scale} y={point.y - 13 * scale} width={26 * scale} height={26 * scale} fill={point.color} stroke={selection.id === point.id ? '#fbbf24' : '#172027'} strokeWidth={3 * scale} />
                   <circle cx={point.x} cy={point.y} r={34 * scale} fill="transparent" />
-                  <text x={point.x + (point.x < 0 ? -26 : 26) * scale} y={point.y + 10 * scale} textAnchor={point.x < 0 ? 'end' : 'start'} fill="#f1e5ce" fontSize={38 * scale} paintOrder="stroke" stroke="#172027" strokeWidth={7 * scale}>{point.name}</text>
+                  <text x={point.x + (point.labelOffset?.x ?? (point.x < 0 ? -26 : 26)) * scale} y={point.y + (point.labelOffset?.y ?? 10) * scale} textAnchor={(point.labelOffset?.x ?? point.x) < 0 ? 'end' : 'start'} fill="#f1e5ce" fontSize={38 * scale} paintOrder="stroke" stroke="#172027" strokeWidth={7 * scale}>{point.name}</text>
                   <title>{`${point.name} · ${point.supplies}`}</title>
                 </g>)}
                 {camps.map(camp => <g key={camp.id} data-map-marker="true" role="button" tabIndex={0} aria-label={`选择营地：${camp.ownerName}`} className="cursor-pointer" onClick={() => setSelected({ ...camp, name: `${camp.ownerName}的营地`, camp: true })} onKeyDown={event => markerKey(event, { ...camp, name: `${camp.ownerName}的营地`, camp: true })}>

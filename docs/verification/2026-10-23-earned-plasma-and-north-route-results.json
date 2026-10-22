@@ -1,0 +1,450 @@
+{
+  "baseCommit": "1c99388087f42f3a362c95c3f9b6fb42860ae95d",
+  "sourceSha256": {
+    "src/game/worldRoutes.ts": "88508bcbe18a91f52a7ee05e3eda7fec654714626db2e7988d64462920dc7c44",
+    "src/components/WorldMapModal.tsx": "9b9ac192baa15961b733bf44c5d60e1084fe3c06494187b63ca4d2b427b7125e",
+    "src/game/worldRoutes.test.ts": "70a16cb850aa68061b65a4057126fd3f5c430df8cbd860ebc3be205aff078754",
+    "src/game/world.ts": "5606b3aaf385c771b11d8f87df268dc61f665d1615bc18931d478273614b2877",
+    "src/game/crafting.ts": "260a13c12ade856cc395e5eefcb4a084a272dc92092ad0a16c6737c39392b481",
+    "server/worldState.ts": "f24e68e741a55b8f69539e838890f48310dee3f9968eee4eb04b0ea99530c7ef"
+  },
+  "mapProductionBundle": "index-BMzytow9.js",
+  "scope": "Map intelligence for existing northern resources; actual continuation of previously earned research character to manufactured/equipped advanced rifle. Unique QA DB backups, normal movement and timers; no grants, position/HP/clock edits, GM actions or real data/sdc.sqlite access.",
+  "source": "Previous verified earned research return: docs/verification/2026-10-23-earned-research-results.json",
+  "preexistingMaterials": {
+    "copperOre": 1,
+    "copperBars": 1,
+    "storedDarkCores": 2,
+    "scrap": 24,
+    "parts": 2,
+    "wood": 1,
+    "ammo": 73
+  },
+  "newlyAcquired": {
+    "woodFromThreeTwigs": 9,
+    "copperOreFromThreeNodes": 9,
+    "stoneFromMining": 27,
+    "repairRoom": {
+      "scrap": 8,
+      "parts": 2
+    },
+    "dozer": {
+      "scrap": 50,
+      "parts": 5
+    }
+  },
+  "actualCosts": {
+    "threeSmelts": {
+      "copperOre": 9,
+      "wood": 6,
+      "copperBarsProduced": 3,
+      "timers": [
+        {
+          "batch": 1,
+          "seconds": 20.073
+        },
+        {
+          "batch": 2,
+          "seconds": 20.104
+        },
+        {
+          "batch": 3,
+          "seconds": 20.07
+        }
+      ]
+    },
+    "rifle": {
+      "scrap": 40,
+      "parts": 8,
+      "copperBars": 4,
+      "darkCores": 2,
+      "result": "wp_plasma x1"
+    },
+    "foodConsumed": [
+      {
+        "id": "water",
+        "count": 2
+      },
+      {
+        "id": "fish_eel",
+        "count": 1
+      },
+      {
+        "id": "fish_catfish",
+        "count": 1
+      }
+    ],
+    "ammoUsed": 0,
+    "medicalUsed": 0
+  },
+  "milestones": [
+    {
+      "stage": "earned-research-source",
+      "segmentElapsedSeconds": 0.002,
+      "map": "own-camp",
+      "position": {
+        "x": 2.898061698744375,
+        "y": 25.989936963056884
+      },
+      "hp": 100,
+      "satiety": 59.21850000000078,
+      "resources": {
+        "wood": 1,
+        "stone": 5,
+        "scrap": 24,
+        "parts": 2,
+        "food": 4,
+        "ammo": 73,
+        "c4": 0,
+        "medical": 7,
+        "credits": 332,
+        "shard": 1
+      },
+      "copperOre": 1,
+      "copperBars": 1,
+      "darkCores": 0,
+      "plasmaInInventory": 0,
+      "weapon": "crude_gun"
+    },
+    {
+      "stage": "mined-world:-3:-9:node:4",
+      "segmentElapsedSeconds": 157.667,
+      "map": "world",
+      "position": {
+        "x": -79.11462641705324,
+        "y": -274.42978617970874
+      },
+      "hp": 100,
+      "satiety": 49.85525000000087,
+      "resources": {
+        "wood": 10,
+        "stone": 32,
+        "scrap": 32,
+        "parts": 4,
+        "food": 2,
+        "ammo": 73,
+        "c4": 0,
+        "medical": 7,
+        "credits": 332,
+        "shard": 1
+      },
+      "copperOre": 10,
+      "copperBars": 1,
+      "darkCores": 0,
+      "plasmaInInventory": 0,
+      "weapon": "rifle"
+    },
+    {
+      "stage": "earned-dozer-scrap-and-parts",
+      "segmentElapsedSeconds": 190.78,
+      "map": "world",
+      "position": {
+        "x": -118.3915374904803,
+        "y": -345.9651947545547
+      },
+      "hp": 100,
+      "satiety": 86.62375000000088,
+      "resources": {
+        "wood": 10,
+        "stone": 32,
+        "scrap": 82,
+        "parts": 9,
+        "food": 1,
+        "ammo": 73,
+        "c4": 0,
+        "medical": 7,
+        "credits": 332,
+        "shard": 1
+      },
+      "copperOre": 10,
+      "copperBars": 1,
+      "darkCores": 0,
+      "plasmaInInventory": 0,
+      "weapon": "rifle"
+    },
+    {
+      "stage": "ready-for-earned-plasma-craft",
+      "segmentElapsedSeconds": 101.019,
+      "map": "own-camp",
+      "position": {
+        "x": -0.9899399010568469,
+        "y": 24.10568849116281
+      },
+      "hp": 100,
+      "satiety": 63.03900000000097,
+      "resources": {
+        "wood": 4,
+        "stone": 32,
+        "scrap": 82,
+        "parts": 9,
+        "food": 0,
+        "ammo": 73,
+        "c4": 0,
+        "medical": 7,
+        "credits": 332,
+        "shard": 1
+      },
+      "copperOre": 1,
+      "copperBars": 4,
+      "darkCores": 2,
+      "plasmaInInventory": 0,
+      "weapon": "rifle"
+    },
+    {
+      "stage": "earned-plasma-manufactured",
+      "segmentElapsedSeconds": 102.794,
+      "map": "own-camp",
+      "position": {
+        "x": -0.9899399010568469,
+        "y": 24.10568849116281
+      },
+      "hp": 100,
+      "satiety": 62.525000000000965,
+      "resources": {
+        "wood": 4,
+        "stone": 32,
+        "scrap": 42,
+        "parts": 1,
+        "food": 0,
+        "ammo": 73,
+        "c4": 0,
+        "medical": 7,
+        "credits": 332,
+        "shard": 1
+      },
+      "copperOre": 1,
+      "copperBars": 0,
+      "darkCores": 0,
+      "plasmaInInventory": 1,
+      "weapon": "rifle"
+    },
+    {
+      "stage": "earned-plasma-after-restart",
+      "segmentElapsedSeconds": 106.738,
+      "map": "own-camp",
+      "position": {
+        "x": -0.9899399010568469,
+        "y": 24.10568849116281
+      },
+      "hp": 100,
+      "satiety": 61.97950000000097,
+      "resources": {
+        "wood": 4,
+        "stone": 32,
+        "scrap": 42,
+        "parts": 1,
+        "food": 0,
+        "ammo": 73,
+        "c4": 0,
+        "medical": 7,
+        "credits": 332,
+        "shard": 1
+      },
+      "copperOre": 1,
+      "copperBars": 0,
+      "darkCores": 0,
+      "plasmaInInventory": 0,
+      "weapon": "wp_plasma"
+    }
+  ],
+  "interruptions": [
+    {
+      "phase": "Original expedition return",
+      "source": "data/earned-plasma-20261023-a1-results.json",
+      "outcome": "QA waypoint targeted occupied public anchor(0,0); navigation stopped~0.62 cells away, less than requested arrival precision0.4. No action/render/runtime exception. Real hunger and acquired materials retained; same DB resumed with normal detour(-4,-8)->(-60,-8)->(-60,20). Not a product collision bypass or a reset."
+    },
+    {
+      "phase": "Map QA a1",
+      "outcome": "QA selected inactive MapZoneSwitcher button instead of actual radar/keyboard entry; corrected to native M key."
+    },
+    {
+      "phase": "Map QA a2",
+      "outcome": "Independent review P2 reproduced:3 pairs of northern source labels overlapped. Fixed only text offsets of second/third points, real coordinates unchanged."
+    },
+    {
+      "phase": "Map QA a3",
+      "outcome": "Map selected correct destination and HUD showed it, but QA inspected legacy mapWaypoints instead of navigationTarget. Final QA checks actual property; prior HUD screenshot was also reviewed. Product navigation unchanged."
+    }
+  ],
+  "mapValidation": {
+    "environment": "Chrome headless=new;1920x1080/DPR1 and390x844/DPR1; viewport emulation is not a physical phone benchmark",
+    "source": "data/north-mining-map-20261023-a4-results.json",
+    "north": {
+      "viewBox": "-256 -416 448 448",
+      "spine": "M 0 -346 V 0",
+      "labels": [
+        "矿场南缘铜矿",
+        "东侧铜矿露头",
+        "坡脚铜矿露头",
+        "采石推土机残骸"
+      ],
+      "overlapPairs": 0,
+      "options": [
+        {
+          "label": "矿场南缘铜矿",
+          "id": "world:-4:-9:node:6"
+        },
+        {
+          "label": "东侧铜矿露头",
+          "id": "world:-3:-9:node:6"
+        },
+        {
+          "label": "坡脚铜矿露头",
+          "id": "world:-3:-9:node:4"
+        },
+        {
+          "label": "采石推土机残骸",
+          "id": "world:-4:-11:i:mtn_quarry:q_dozer"
+        }
+      ]
+    },
+    "westSpine": "M -254 0 H 0",
+    "southSpine": "M 0 0 V 592",
+    "desktopDestination": {
+      "x": -120,
+      "y": -346,
+      "name": "采石推土机残骸"
+    },
+    "mobileDestination": {
+      "x": -120,
+      "y": -346,
+      "name": "采石推土机残骸"
+    },
+    "positionBefore": {
+      "x": -60,
+      "y": 20
+    },
+    "positionAfter": {
+      "x": -60,
+      "y": 20
+    },
+    "mobile": {
+      "bodyWidth": 390,
+      "viewportWidth": 390,
+      "routeButtonFits": true,
+      "selectorFits": true,
+      "options": 4
+    },
+    "visual": "Reviewed desktop north map and mobile dropdown screenshots; source names distinguishable, instructions and route controls accessible; no new map texture assets."
+  },
+  "persistedVerification": {
+    "integrity": "ok",
+    "resources": {
+      "wood": 4,
+      "stone": 32,
+      "scrap": 42,
+      "parts": 1,
+      "food": 0,
+      "ammo": 73,
+      "c4": 0,
+      "medical": 0,
+      "credits": 332,
+      "shard": 1
+    },
+    "foodInventory": 0,
+    "medicalInventory": 7,
+    "hp": 100,
+    "satiety": 61.21150000000097,
+    "kills": 1,
+    "blueprints": [
+      "wp_plasma"
+    ],
+    "weapon": "wp_plasma",
+    "armor": "vest",
+    "inventory": [
+      {
+        "id": "ore_copper",
+        "count": 1
+      },
+      {
+        "id": "att_foregrip",
+        "count": 1
+      },
+      {
+        "id": "rifle",
+        "count": 1
+      },
+      {
+        "id": "axe_stone",
+        "count": 1
+      },
+      {
+        "id": "seed_potato",
+        "count": 1
+      },
+      {
+        "id": "battery",
+        "count": 3
+      },
+      {
+        "id": "medkit",
+        "count": 2
+      },
+      {
+        "id": "med_bloodbag",
+        "count": 1
+      },
+      {
+        "id": "bandage",
+        "count": 3
+      },
+      {
+        "id": "antidote",
+        "count": 1
+      },
+      {
+        "id": "fuel",
+        "count": 2
+      },
+      {
+        "id": "crude_gun",
+        "count": 1
+      },
+      {
+        "id": "seed_starfruit",
+        "count": 1
+      }
+    ],
+    "buildings": [
+      "anchor_core",
+      "workbench",
+      "storage_box",
+      "farm_plot",
+      "campfire",
+      "turret",
+      "furnace",
+      "research_table"
+    ],
+    "turretAmmo": 20,
+    "storedDarkCores": 0,
+    "productionJobs": 0,
+    "depletedSources": [
+      "world:-4:-9:node:6",
+      "world:-3:-9:node:6",
+      "world:-3:-9:node:4",
+      "world:-4:-11:i:mtn_quarry:q_dozer",
+      "world:-5:-2:poi:supplies"
+    ]
+  },
+  "checks": {
+    "testFiles": 29,
+    "testsPassed": 368,
+    "typecheck": "passed",
+    "productionBuild": "passed",
+    "existingWarnings": "Vite native config __dirname and >500kB JS chunk",
+    "redGreen": "New resource-route regression failed when north route was absent, then passed with existing-node supply verification; browser label-overlap assertion failed before offsets and passed after.",
+    "independentReview": "Initial P2 overlapping names fixed; final static review no blockers",
+    "runtimeExceptions": 0,
+    "actionErrors": 0,
+    "renderDiagnostics": 0
+  },
+  "limits": [
+    "Three northern ore nodes give9 ore for3 bars, not the entire4-bar rifle price; prior1 earned bar and2 cores are explicitly included. Dozer5 parts also do not alone cover8-part price; prior stock and repair room provide remainder.",
+    "This is a segmented continuation; failed QA waiting spent hunger, so do not claim an uninterrupted from-zero progression timing.",
+    "The expedition and smelting steps straddle frontend builds differing only in map intelligence; no crafting/server rule changes were made. Final map UI uses the listed bundle.",
+    "Rifle manufactured, equipped and persisted; this checkpoint does not fire it, prove combat balance or test offline raids.",
+    "Character ends with no carried food and about61 satiety; retained seeds/farm allow replenishment but another farming cycle is not validated here.",
+    "World node IDs, generation, resource density, loot quantities, prices and saved buildings are unchanged by shipped code.",
+    "No performance, total memory, multiuser load or original-device claim is inferred from these functional checks. Raw QA stores/identity files remain ignored; QA services closed."
+  ]
+}

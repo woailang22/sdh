@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { getWorldInteractable } from './world';
 import { WORLD_SUPPLY_ROUTES, WORLD_ROADSIDE_STOPS } from './worldRoutes';
+import { craftingRecipe } from './crafting';
 
 describe('world supply route intelligence', () => {
   it('keeps southern room definitions separate from western map-only targets', () => {
@@ -31,5 +32,28 @@ describe('world supply route intelligence', () => {
     }
     expect(west.stops[2].description).toContain('怪物');
     expect(west.stops[3].description).toContain('铜矿');
+  });
+
+  it('guides northern mining to enough existing copper for three smelts and an industrial salvage source', () => {
+    const north = WORLD_SUPPLY_ROUTES.find(route => route.id === 'north');
+    expect(north, 'the northern materials route is discoverable on the map').toBeDefined();
+    const nodes = north!.stops.map(stop => {
+      const node = getWorldInteractable(stop.id)!;
+      expect(node, stop.name).toBeDefined();
+      expect({ x: stop.x, y: stop.y }).toEqual({ x: node.x, y: node.y });
+      expect(stop.x).toBeGreaterThanOrEqual(north!.view.x);
+      expect(stop.x).toBeLessThanOrEqual(north!.view.x + north!.view.size);
+      expect(stop.y).toBeGreaterThanOrEqual(north!.view.y);
+      expect(stop.y).toBeLessThanOrEqual(north!.view.y + north!.view.size);
+      return node;
+    });
+    const copper = nodes.filter(node => node.type === 'boulder' && node.lootTable?.some(item => item.itemId === 'ore_copper'));
+    const oreForThreeSmelts = craftingRecipe('smelt_copper')!.cost.extra!.find(item => item.itemId === 'ore_copper')!.count * 3;
+    expect(copper.reduce((total, node) => total + (node.stock ?? 0), 0)).toBeGreaterThanOrEqual(oreForThreeSmelts);
+    expect(nodes.some(node => node.type === 'car' && node.lootTable?.some(item => item.itemId === 'part' && item.count >= 5) && node.lootTable.some(item => item.itemId === 'scrap' && item.count >= 40))).toBe(true);
+    expect(north!.stops.some(stop => stop.description.includes('镐') && stop.description.includes('熔炉'))).toBe(true);
+    expect(north!.stops.some(stop => stop.description.includes('怪物'))).toBe(true);
+    const ids = WORLD_SUPPLY_ROUTES.flatMap(route => route.stops.map(stop => stop.id));
+    expect(new Set(ids).size).toBe(ids.length);
   });
 });

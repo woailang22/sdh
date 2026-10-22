@@ -20,12 +20,13 @@ export const WORLD_ROADSIDE_STOPS: RoadsideStop[] = [
 
 interface SupplyRouteStop {
   id: string; name: string; x: number; y: number; description: string; supplies: string; color: string;
+  labelOffset?: { x: number; y: number };
 }
 interface SupplyRoute {
   id: string; name: string; view: { x: number; y: number; size: number }; axis: 'x' | 'y'; stops: SupplyRouteStop[];
 }
 
-/** Map intelligence only. Western targets refer to existing containers and do not change world generation. */
+/** Map intelligence only. Targets refer to existing nodes and do not change world generation. */
 export const WORLD_SUPPLY_ROUTES: SupplyRoute[] = [
   {
     id: 'south', name: '南下补给线', view: { x: -320, y: 48, size: 640 }, axis: 'y',
@@ -38,6 +39,15 @@ export const WORLD_SUPPLY_ROUTES: SupplyRoute[] = [
       { id: 'world:-6:0:poi:supplies', name: '林缘维修工棚', x: -186, y: 22, supplies: '废铁 · 零件', color: '#b77b52', description: '南侧入口通往物资柜。上一处被搜空时可继续西行，找到材料后也可直接回营，不必深入伐木场。' },
       { id: 'world:-8:-1:i:mtn_logging:log_truck', name: '侧翻运材卡车', x: -240, y: -16, supplies: '废铁 · 原木 · 零件', color: '#c5ac72', description: '伐木场北侧的运材车，废铁较多。附近有怪物，先观察再搜刮；携带食物，预留回营路线。' },
       { id: 'world:-8:0:i:mtn_logging:log_toolshed', name: '伐木工具棚', x: -254, y: 4, supplies: '零件 · 废铁 · 铜矿 · 握把', color: '#7ca98a', description: '林场西侧工具棚有机械材料、铜矿和握把。与运材车不同用途；注意林场怪物，材料够用即可撤离。' },
+    ],
+  },
+  {
+    id: 'north', name: '北上采矿线', view: { x: -256, y: -416, size: 448 }, axis: 'y',
+    stops: [
+      { id: 'world:-4:-9:node:6', name: '矿场南缘铜矿', x: -124, y: -265, supplies: '铜矿 · 石料', color: '#c68b5c', description: '北岭矿场外围的铜矿露头，需装备镐。每 3 份铜矿和 2 原木可在营地熔炉炼成 1 铜锭，用于研究后的高级制造。' },
+      { id: 'world:-3:-9:node:6', name: '东侧铜矿露头', x: -89, y: -265, supplies: '铜矿 · 石料', color: '#c68b5c', labelOffset: { x: 26, y: 10 }, description: '沿矿场南缘向东补充铜矿。矿点耗尽后需要等待恢复，带足食物，保留回营冶炼的木材。' },
+      { id: 'world:-3:-9:node:4', name: '坡脚铜矿露头', x: -79, y: -275, supplies: '铜矿 · 石料', color: '#c68b5c', labelOffset: { x: 26, y: -28 }, description: '第三处外围矿点，可继续补齐铜矿，不必为采矿深入值班室。铜锭需回营地熔炉加工。' },
+      { id: 'world:-4:-11:i:mtn_quarry:q_dozer', name: '采石推土机残骸', x: -120, y: -346, supplies: '废铁 · 零件', color: '#b77b52', description: '矿场机械残骸提供废铁和零件，附近有怪物，先观察再搜刮。零件不足可先走西行材料线；带材料回营再制造。' },
     ],
   },
 ];
