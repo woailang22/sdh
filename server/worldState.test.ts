@@ -447,6 +447,71 @@ describe('shared authoritative wildlife', () => {
     const game = new GameWorld(db, npcRules, () => time); game.connect('a', '甲'); game.connect('b', '乙');
     return { game, db, npcRules, now: () => time, advance: (ms: number) => { time += ms; }, action: (id: string, action: string, params = {}) => game.action(id, { requestId: crypto.randomUUID(), action, ...params }) };
   }
+  it('chases a real ranged attacker outside passive detection, persists the target and still stops at the spawn leash', () => {
+    const { game, db, npcRules, now, advance, action } = npcSetup();
+    const p = game.state.players.a; p.x = 9; game.state.players.b.x = 100;
+    p.equipment.weapon = makeItem('crude_gun', 1); p.resources.ammo = 2;
+    game.tick(); expect(game.state.monsters[def.id].targetId).toBeUndefined();
+    expect(action('a', 'fire', { monsterId: def.id }).error).toBeUndefined();
+    expect(game.state.monsters[def.id]).toMatchObject({ hp: 95, targetId: 'a' });
+    const x = game.state.monsters[def.id].x; advance(200); game.tick();
+    expect(game.state.monsters[def.id].state).toBe('chase');
+    expect(game.state.monsters[def.id].x).toBeGreaterThan(x);
+    const restored = new GameWorld(db, npcRules, now); restored.connect('a', '甲');
+    expect(restored.state.monsters[def.id].targetId).toBe('a');
+    restored.state.players.a.x = 30; advance(200); restored.tick();
+    expect(restored.state.monsters[def.id].targetId).toBeUndefined();
+    expect(Math.hypot(restored.state.monsters[def.id].x - 1, restored.state.monsters[def.id].y)).toBeLessThanOrEqual(14);
+  });
+  it('locks onto the latest successful attacker without granting a target to a blocked hit', () => {
+    const { game, action } = npcSetup();
+    for (const [id, x] of [['a', 9], ['b', 8]] as const) {
+      const p = game.state.players[id]; p.x = x; p.equipment.weapon = makeItem('crude_gun', 1); p.resources.ammo = 2;
+    }
+    game.state.buildings.blocker = { id: 'blocker', type: 'wood_wall', name: '墙', x: 5, y: 0, hp: 100, maxHp: 100, level: 1, mapId: 'world', facing: 'ns' };
+    expect(action('a', 'fire', { monsterId: def.id }).error).toContain('遮挡');
+    expect(game.state.monsters[def.id].targetId).toBeUndefined();
+    expect(game.state.players.a.resources.ammo).toBe(2);
+    delete game.state.buildings.blocker;
+    expect(action('a', 'fire', { monsterId: def.id }).error).toBeUndefined();
+    expect(game.state.monsters[def.id].targetId).toBe('a');
+    expect(action('b', 'fire', { monsterId: def.id }).error).toBeUndefined();
+    expect(game.state.monsters[def.id]).toMatchObject({ hp: 40, targetId: 'b' });
+  });
+  it.each([1, 9])('keeps the attack windup when hit aggro switches to a player at x=%s, without granting an extra hit', x => {
+    const { game, advance, action } = npcSetup();
+    const a = game.state.players.a, b = game.state.players.b; b.x = 100;
+    for (const p of [a, b]) { p.equipment.weapon = makeItem('crude_gun', 1); p.resources.ammo = 2; p.shield = 0; }
+    game.tick(); advance(250); game.tick();
+    const monster = game.state.monsters[def.id], remaining = monster.windup;
+    expect(remaining).toBeCloseTo(0.1); expect(monster.targetId).toBe('a');
+    expect(action('a', 'fire', { monsterId: def.id }).error).toBeUndefined();
+    expect(monster.windup).toBe(remaining);
+    b.x = x; b.y = 1;
+    expect(action('b', 'fire', { monsterId: def.id }).error).toBeUndefined();
+    expect(monster.targetId).toBe('b'); expect(monster.windup).toBe(remaining);
+    advance(100); game.tick();
+    expect(a.hp).toBe(100); expect(b.hp).toBe(x === 1 ? 90 : 100);
+    expect(monster.windup).toBe(0); expect(monster.attackCooldown).toBe(1.2);
+    advance(100); game.tick();
+    expect(a.hp).toBe(100); expect(b.hp).toBe(x === 1 ? 90 : 100);
+  });
+  it('rolls back hit aggro when persistence fails and clears it after a lethal strike', () => {
+    const { game, db, advance, action } = npcSetup();
+    const p = game.state.players.a; p.x = 9; game.state.players.b.x = 100;
+    p.equipment.weapon = makeItem('crude_gun', 1); p.resources.ammo = 2; game.persist();
+    const save = db.setMeta; db.setMeta = () => { throw new Error('disk failure'); };
+    expect(action('a', 'fire', { monsterId: def.id }).error).toBe('disk failure');
+    expect(game.state.monsters[def.id]).toMatchObject({ hp: 150 });
+    expect(game.state.monsters[def.id].targetId).toBeUndefined();
+    expect(game.state.players.a.resources.ammo).toBe(2); db.setMeta = save;
+    expect(action('a', 'fire', { monsterId: def.id }).error).toBeUndefined();
+    expect(game.state.monsters[def.id].targetId).toBe('a');
+    advance(300); game.state.players.a.equipment.weapon = makeItem('rifle', 1);
+    expect(action('a', 'fire', { monsterId: def.id }).error).toBeUndefined();
+    expect(game.state.monsters[def.id]).toMatchObject({ hp: 0, state: 'dead' });
+    expect(game.state.monsters[def.id].targetId).toBeUndefined();
+  });
   it('shares damaged HP, pays one real shot and persists one reward, death and replay guard across restart', () => {
     const { game, db, npcRules, now, advance, action } = npcSetup();
     game.state.players.a.equipment.weapon = makeItem('rifle', 1); game.state.players.a.resources.ammo = 2;

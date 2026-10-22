@@ -321,6 +321,8 @@ export class GameWorld {
       const reward = killReward(monster.maxHp); p.resources.credits += reward.credits; p.resources.shard += reward.shards; p.xp += reward.xp; p.kills++;
       while (p.xp >= p.maxXp) { p.xp -= p.maxXp; p.level++; p.maxXp = p.level * 100; p.maxHp = 100 + (p.level - 1) * 10; }
       this.deriveArmor(p);
+    } else {
+      monster.targetId = p.id;
     }
     p.combatUntil = this.now() + 30000;
   }

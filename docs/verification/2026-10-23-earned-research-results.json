@@ -1,0 +1,361 @@
+{
+  "baseCommit": "2c229f165470be40c4430c914bb04f0b70d22a12",
+  "sourceHashes": {
+    "server/worldState.ts": "f24e68e741a55b8f69539e838890f48310dee3f9968eee4eb04b0ea99530c7ef",
+    "server/worldState.test.ts": "a0fe036c7158fb7ce6e542046f36210afcb45d3d9a0fc914248711cd77dd352f"
+  },
+  "environment": {
+    "browser": "Chrome headless=new",
+    "width": 1920,
+    "height": 1080,
+    "dpr": 1,
+    "service": "isolated production server",
+    "database": "unique QA database, original data/sdc.sqlite untouched"
+  },
+  "scope": "Segmented continuation of a previously earned first-gun character. Native movement, inventory use, firing, searches, camp construction and research UI; normal timers and authoritative server. No grants or state/time/position edits. Not a continuous from-zero timing benchmark or final advanced-weapon manufacture.",
+  "interruptions": [
+    {
+      "phase": "old server baseline",
+      "result": "one genuine 55-damage hit; guard kept roaming outside passive detection"
+    },
+    {
+      "phase": "first fixed-server return attempt",
+      "result": "one shot consumed without damaging guard; QA wait timed out, no action/render/runtime exception. Exact miss cause not established. Same database, ammo and HP preserved."
+    },
+    {
+      "phase": "resumed fixed-server return",
+      "result": "normal movement to (117,703), re-aimed with 100ms aim settle, five hits kill guard, return, build, research, deposit, restart"
+    }
+  ],
+  "baseline": {
+    "player": {
+      "x": 119.60506214299635,
+      "y": 699.9999999999777,
+      "weapon": "crude_gun",
+      "ammo": 79
+    },
+    "before": {
+      "hp": 320,
+      "x": 111.48845001301011,
+      "y": 700.4649126785614,
+      "state": "roam",
+      "hasTarget": false
+    },
+    "after": {
+      "hp": 265,
+      "x": 111.40266680384286,
+      "y": 699.8648810066481,
+      "state": "roam",
+      "hasTarget": false
+    }
+  },
+  "fixedHits": [
+    {
+      "shot": 1,
+      "beforeHp": 265,
+      "afterHp": 210,
+      "state": "chase",
+      "hasTarget": true
+    },
+    {
+      "shot": 2,
+      "beforeHp": 210,
+      "afterHp": 155,
+      "state": "chase",
+      "hasTarget": true
+    },
+    {
+      "shot": 3,
+      "beforeHp": 155,
+      "afterHp": 100,
+      "state": "chase",
+      "hasTarget": true
+    },
+    {
+      "shot": 4,
+      "beforeHp": 100,
+      "afterHp": 45,
+      "state": "chase",
+      "hasTarget": true
+    },
+    {
+      "shot": 5,
+      "beforeHp": 45,
+      "afterHp": 0,
+      "state": "dead",
+      "hasTarget": false
+    }
+  ],
+  "outboundMilestones": [
+    {
+      "stage": "earned-gun-source",
+      "elapsedSec": 0.003,
+      "map": "world",
+      "pos": {
+        "x": 3.385990986610794,
+        "y": 2.5353537009389444
+      },
+      "hp": 100,
+      "satiety": 48.4750000000003,
+      "resources": {
+        "wood": 13,
+        "stone": 5,
+        "scrap": 1,
+        "parts": 6,
+        "food": 3,
+        "ammo": 40,
+        "c4": 0,
+        "medical": 0,
+        "credits": 0,
+        "shard": 0
+      }
+    },
+    {
+      "stage": "at-rift-with-earned-gun",
+      "elapsedSec": 363.309,
+      "map": "world",
+      "pos": {
+        "x": 119.60506214299635,
+        "y": 699.9999999999777
+      },
+      "hp": 100,
+      "satiety": 52.65450000000057,
+      "resources": {
+        "wood": 13,
+        "stone": 5,
+        "scrap": 54,
+        "parts": 8,
+        "food": 7,
+        "ammo": 80,
+        "c4": 0,
+        "medical": 7,
+        "credits": 0,
+        "shard": 0
+      }
+    }
+  ],
+  "lootedSources": [
+    {
+      "id": "world:-1:3:poi:supplies",
+      "name": "麦穗农舍物资柜"
+    },
+    {
+      "id": "world:0:6:poi:supplies",
+      "name": "渡口维修工棚物资柜"
+    },
+    {
+      "id": "world:-1:8:i:marsh_docks:dock_boat",
+      "name": "搁浅快艇残骸"
+    },
+    {
+      "id": "world:0:8:i:marsh_docks:dock_chest",
+      "name": "渔港栈道补给木箱"
+    },
+    {
+      "id": "world:-1:10:poi:supplies",
+      "name": "芦湾诊所药柜"
+    },
+    {
+      "id": "world:0:14:poi:supplies",
+      "name": "泥岸补给仓库物资柜"
+    }
+  ],
+  "returnMilestones": [
+    {
+      "stage": "earned-blueprint-collected",
+      "elapsedSec": 10.366,
+      "map": "world",
+      "pos": {
+        "x": 109.60356997450204,
+        "y": 700.0000035840957
+      },
+      "hp": 100,
+      "satiety": 45.49650000000058,
+      "resources": {
+        "wood": 13,
+        "stone": 5,
+        "scrap": 54,
+        "parts": 8,
+        "food": 7,
+        "ammo": 73,
+        "c4": 0,
+        "medical": 7,
+        "credits": 332,
+        "shard": 1
+      }
+    },
+    {
+      "stage": "first-earned-research-completed",
+      "elapsedSec": 282.971,
+      "map": "own-camp",
+      "pos": {
+        "x": 6.989749317774228,
+        "y": 18.1150600686215
+      },
+      "hp": 100,
+      "satiety": 62.31550000000077,
+      "resources": {
+        "wood": 1,
+        "stone": 5,
+        "scrap": 24,
+        "parts": 2,
+        "food": 4,
+        "ammo": 73,
+        "c4": 0,
+        "medical": 7,
+        "credits": 332,
+        "shard": 1
+      }
+    },
+    {
+      "stage": "earned-research-after-restart",
+      "elapsedSec": 293.096,
+      "map": "own-camp",
+      "pos": {
+        "x": -0.9898681306669864,
+        "y": 24.10592925376037
+      },
+      "hp": 100,
+      "satiety": 60.01175000000078,
+      "resources": {
+        "wood": 1,
+        "stone": 5,
+        "scrap": 24,
+        "parts": 2,
+        "food": 4,
+        "ammo": 73,
+        "c4": 0,
+        "medical": 7,
+        "credits": 332,
+        "shard": 1
+      }
+    }
+  ],
+  "craftingGate": {
+    "step": "learned-crafting-gate",
+    "label": "材料不足",
+    "disabled": true
+  },
+  "persistedVerification": {
+    "integrity": "ok",
+    "resources": {
+      "wood": 1,
+      "stone": 5,
+      "scrap": 24,
+      "parts": 2,
+      "food": 4,
+      "ammo": 73,
+      "c4": 0,
+      "medical": 7,
+      "credits": 332,
+      "shard": 1
+    },
+    "foodMedicalNote": "Food and medical are derived from real inventory in player snapshots; SQLite raw counter fields are zero.",
+    "hp": 100,
+    "satiety": 59.50225000000078,
+    "kills": 1,
+    "xp": 64,
+    "learnedBlueprints": [
+      "wp_plasma"
+    ],
+    "inventory": [
+      {
+        "id": "ore_copper",
+        "count": 1
+      },
+      {
+        "id": "att_foregrip",
+        "count": 1
+      },
+      {
+        "id": "axe_stone",
+        "count": 1
+      },
+      {
+        "id": "copper_bar",
+        "count": 1
+      },
+      {
+        "id": "water",
+        "count": 2
+      },
+      {
+        "id": "seed_potato",
+        "count": 1
+      },
+      {
+        "id": "battery",
+        "count": 3
+      },
+      {
+        "id": "medkit",
+        "count": 2
+      },
+      {
+        "id": "fish_eel",
+        "count": 1
+      },
+      {
+        "id": "fish_catfish",
+        "count": 1
+      },
+      {
+        "id": "med_bloodbag",
+        "count": 1
+      },
+      {
+        "id": "bandage",
+        "count": 3
+      },
+      {
+        "id": "antidote",
+        "count": 1
+      },
+      {
+        "id": "fuel",
+        "count": 2
+      },
+      {
+        "id": "rifle",
+        "count": 1
+      },
+      {
+        "id": "vest",
+        "count": 1
+      },
+      {
+        "id": "seed_starfruit",
+        "count": 1
+      }
+    ],
+    "buildings": [
+      "anchor_core",
+      "workbench",
+      "storage_box",
+      "farm_plot",
+      "campfire",
+      "turret",
+      "furnace",
+      "research_table"
+    ],
+    "towerAmmo": 20,
+    "storedCores": 2,
+    "productionJobs": 0
+  },
+  "checks": {
+    "testFiles": 29,
+    "testsPassed": 361,
+    "typeCheck": "passed",
+    "productionBuild": "passed",
+    "existingViteWarnings": "native config and chunk size warnings unchanged",
+    "staticReview": "no blocking findings; shared windup covered by two additional tests",
+    "runtimeExceptions": 0,
+    "actionErrors": 0,
+    "renderDiagnostics": 0
+  },
+  "limits": [
+    "First successful shot used old server; final five hits used fixed server. One genuine missed shot is included in the spent ammunition.",
+    "Blueprint learned, not an advanced weapon manufactured. Remaining manufacturing materials and repeated raid/economy balance require further validation.",
+    "No GPU, large-camp or multi-hour memory result is inferred from this functional expedition."
+  ]
+}
