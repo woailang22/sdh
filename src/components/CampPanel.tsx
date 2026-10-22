@@ -63,6 +63,8 @@ export function CampPanel({ isOpen, onClose, camps, campId, currentMapId, player
   });
   const availableRecipes = CRAFT_RECIPES.filter(recipe => building?.type === 'farm_plot' ? recipe.id.startsWith('grow_') : building?.type === 'furnace' ? recipe.id.startsWith('smelt_') : building?.type === 'campfire' && recipe.category === '食物加工');
   const recipe = availableRecipes.find(entry => entry.id === selectedRecipe) || availableRecipes[0];
+  const product = ITEM_DEFS[job?.resultItemId ?? recipe?.resultItemId ?? ''];
+  const productCount = job?.resultCount ?? recipe?.resultCount;
   const recipeCost = recipe ? [recipe.cost.wood && `木材 ${recipe.cost.wood}`, recipe.cost.stone && `石料 ${recipe.cost.stone}`, recipe.cost.scrap && `废铁 ${recipe.cost.scrap}`, recipe.cost.parts && `零件 ${recipe.cost.parts}`, ...(recipe.cost.extra || []).map(cost => `${ITEM_DEFS[cost.itemId]?.name || cost.itemId} ${cost.count}`)].filter(Boolean).join(' / ') : '';
   const recipeAffordable = !!recipe && ['wood', 'stone', 'scrap', 'parts'].every(key => (resources[key] || 0) >= recipe.cost[key as 'wood' | 'stone' | 'scrap' | 'parts']) && (recipe.cost.extra || []).every(cost => (carried.get(cost.itemId)?.count || 0) >= cost.count);
   const coreOwner = ownedBuilding && building?.type === 'anchor_core' && currentCamp?.ownerId === selfId;
@@ -122,6 +124,7 @@ export function CampPanel({ isOpen, onClose, camps, campId, currentMapId, player
             </div>}
             {building.type === 'bed' && canUseBuilding && <div className="space-y-2"><p className="text-xs text-slate-400">脱离战斗后休息恢复 20 生命，冷却 10 秒。休息不补充饱食，具体状态由服务器检查。</p><button className={buttonClass} disabled={!buildingNear || building.hp <= 0} onClick={() => onAction('rest', { targetId: building.id })}>休息恢复生命</button></div>}
             {availableRecipes.length > 0 && canUseBuilding && <div className="space-y-2 border-t border-slate-800 pt-3">
+              {product && <div className="space-y-1 text-xs"><p className="text-emerald-200">{`产物：${product.name} ×${productCount}`}</p>{product.category === 'food' && <p className="text-slate-400">{`每份恢复饱食 ${product.satiety || 0}、生命 ${product.heal || 0}，使用后按各自上限结算。`}</p>}</div>}
               {job ? <><p className="text-xs text-cyan-200">{ITEM_DEFS[job.resultItemId]?.name || job.resultItemId} ×{job.resultCount} · {productionSeconds > 0 ? `剩余约 ${productionSeconds} 秒` : '等待领取，完成状态由服务器确认'}</p><button className={buttonClass} disabled={!buildingNear || building.hp <= 0 || productionSeconds > 0} onClick={() => onAction('collect_production', { targetId: building.id })}>领取产物</button></> : <>
                 <label className="block space-y-2 text-xs"><span>生产配方</span><select value={recipe?.id || ''} onChange={event => setSelectedRecipe(event.target.value)} className="block w-full rounded border border-slate-700 bg-slate-900 px-3 py-2 text-slate-100">{availableRecipes.map(entry => <option key={entry.id} value={entry.id}>{entry.name}</option>)}</select></label>
                 <p className="text-xs text-slate-400">消耗：{recipeCost} · 预计 {building.type === 'farm_plot' ? 60 : 20} 秒，开始时扣除材料</p>

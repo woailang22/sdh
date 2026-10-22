@@ -33,6 +33,24 @@ describe('cached public building definitions', () => {
   });
 });
 describe('exploration rewards and the market catalogue', () => {
+  it('refreshes known item text in snapshots without rewriting quantities, equipment state or legacy unknown items', () => {
+    const { game, db } = setup(); const p = game.state.players.owner;
+    p.inventory[0] = { ...makeItem('seed_potato', 2), name: '旧名称', desc: '旧说明' };
+    p.inventory[1] = { ...makeItem('food', 3), id: 'legacy_food', name: '旧版自制口粮', desc: '保留旧版说明' };
+    p.inventory[2] = { ...makeItem('food', 1), id: 'toString', name: '未知旧物', desc: '原型名称不代表物品定义' };
+    p.equipment.tool = { ...makeItem('axe_stone', 1), name: '旧工具名', desc: '旧工具说明', durability: 7, maxDurability: 25, rarity: 5 };
+    const before = structuredClone(p); game.persist();
+    const visible = game.snapshot('owner').player;
+    expect(visible.inventory[0]).toMatchObject({ ...makeItem('seed_potato', 2), count: 2 });
+    expect(visible.inventory[1]).toEqual(before.inventory[1]); expect(visible.inventory[2]).toEqual(before.inventory[2]);
+    expect(visible.equipment.tool).toEqual({ ...before.equipment.tool, name: makeItem('axe_stone', 1).name, desc: makeItem('axe_stone', 1).desc });
+    expect(p.inventory).toEqual(before.inventory); expect(p.equipment).toEqual(before.equipment);
+    const restored = new GameWorld(db, rules);
+    expect(restored.state.players.owner.inventory).toEqual(before.inventory);
+    expect(restored.snapshot('owner').player.inventory[0]).toEqual(visible.inventory[0]);
+    expect(restored.snapshot('owner').player.equipment.tool).toEqual(visible.equipment.tool);
+  });
+
   it('rejects buying unlisted progression rewards without spending credits or granting inventory', () => {
     const { game, act } = setup(); const p = game.state.players.owner; p.resources.credits = 100000;
     for (const itemId of ['blueprint', 'dark_core', 'wp_plasma', 'copper_bar', 'rifle', '__proto__']) {

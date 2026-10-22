@@ -57,6 +57,11 @@ const SAVE_KEY = 'authoritative-world-v2';
 const resourceKeys: ResourceKey[] = ['wood', 'stone', 'scrap', 'parts', 'food', 'ammo', 'c4', 'medical', 'credits', 'shard'];
 const emptyResources = (): Resources => Object.fromEntries(resourceKeys.map(key => [key, 0])) as Resources;
 const clone = <T>(value: T): T => JSON.parse(JSON.stringify(value));
+const describedItem = (item: Item | null): Item | null => {
+  if (!item || !Object.hasOwn(ITEM_DEFS, item.id)) return item;
+  const definition = ITEM_DEFS[item.id];
+  return { ...item, name: definition.name, desc: definition.desc };
+};
 const distance = (a: { x: number; y: number }, b: { x: number; y: number }) => Math.hypot(a.x - b.x, a.y - b.y);
 const finite = (n: unknown): n is number => typeof n === 'number' && Number.isFinite(n);
 const positiveCount = (n: unknown): n is number => Number.isInteger(n) && Number(n) > 0 && Number(n) <= 999999;
@@ -233,7 +238,9 @@ export class GameWorld {
     resources.food = p.inventory.reduce((sum, item) => sum + (item?.category === 'food' ? item.count : 0), 0);
     resources.medical = p.inventory.reduce((sum, item) => sum + (item?.category === 'medical' ? item.count : 0), 0);
     this.ensureMonsters(p);
-    const player: PlayerState = { ...this.publicPlayer(p), inventory: p.inventory, equipment: p.equipment, resources, campId: p.campId, satiety: p.satiety, blueprints: p.blueprints, xp: p.xp, maxXp: p.maxXp, kills: p.kills, onboarding: p.onboarding, lastDamageAt: p.lastDamageAt };
+    const equipment = { ...p.equipment };
+    for (const slot of ['weapon', 'armor', 'tool', 'pack'] as const) equipment[slot] = describedItem(equipment[slot]);
+    const player: PlayerState = { ...this.publicPlayer(p), inventory: p.inventory.map(describedItem), equipment, resources, campId: p.campId, satiety: p.satiety, blueprints: p.blueprints, xp: p.xp, maxXp: p.maxXp, kills: p.kills, onboarding: p.onboarding, lastDamageAt: p.lastDamageAt };
     return clone({ requestId, error, correction, player,
       camps: Object.values(this.state.camps).filter(c => c.ownerId === id || c.members?.includes(id) || c.id === p.mapId || p.mapId === 'world' && distance(c, p) <= 80), buildings: this.buildingsFor(p).map(b => { const { storedLoot: _, production: _production, ...visible } = b; return { ...visible, ammo: this.state.ammo[b.id] || 0, production: this.canUse(p.id, b) ? this.state.production[b.id] : undefined }; }),
       nodes: p.mapId === 'world' ? this.rules.nodesNear(p.x, p.y).map(def => { const node = this.state.nodes[def.id] ? this.node(def) : undefined; return { id: def.id, stock: node?.stock ?? def.stock ?? 1, respawnAt: node?.respawnAt || 0 }; }) : [],

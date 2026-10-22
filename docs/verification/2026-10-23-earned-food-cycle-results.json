@@ -1,0 +1,373 @@
+{
+  "baseCommit": "bebd5c578cd59eea33ca3c9e57895d0c4230afe3",
+  "sourceSha256": {
+    "server/worldState.ts": "820ccd5ebc3eecd09d11339c3878861ff8efc514f99dd2eef0c0d86f21526c62",
+    "server/worldState.test.ts": "49661b322f5b8f35cb14df1bf25ea2b219bfb3c5cc774be42790dc14e5d5197a",
+    "src/components/CampPanel.tsx": "b96a0927ab675a99837dfd2de0bc5c913decd9d060a60c2b828c51a82ba5b4f7",
+    "src/game/items.ts": "96337485eff172cbc3936f742af827a4c975275f800d8445b232f050649317f0",
+    "src/game/crafting.ts": "eb43bd22c9ee159759a1b23a76d64bbbdaeaf0c3a89cbc22fa7df87c90d34105",
+    "src/game/crafting.test.ts": "3888b68ed7f19e90a21100e7379d61b6dcb16fa7d97162605f87ea4043d4b2a9"
+  },
+  "productionBundle": "index-DsqGbpOt.js",
+  "scope": "Correct existing production information and preview, then validate one earned food-and-seed resupply cycle. No grant, HP/position/clock edits or real data/sdc.sqlite access. Unique QA backup of already-earned advanced-rifle character.",
+  "legacySeed": {
+    "before": {
+      "id": "seed_potato",
+      "name": "土豆种子×5",
+      "desc": "农圩种植，6天成熟，产量大。",
+      "count": 1
+    },
+    "after": {
+      "id": "seed_potato",
+      "name": "土豆种子",
+      "desc": "营地种植田每轮消耗1份种子，60秒后领取4份土豆；另需配方材料，收获后需重新播种。",
+      "count": 1
+    }
+  },
+  "implementation": {
+    "text": "17 seed/food definitions and4 recipe descriptions corrected; item names no longer embed fake bundle counts; current crop/cooking times and nutrition replace unsupported season/equipment/profit claims",
+    "snapshots": "Known IDs get current name/desc using own registry entries; all other fields preserved. Original saved item objects untouched, unknown legacy and inherited-property IDs retained.",
+    "preview": "Selected recipe before starting; actual active job output while running. Material yield shown without nutrition; food states per-item satiety/heal and caps.",
+    "referenceMetadata": "COOK_SOURCE soup no longer adds water absent from actual recipe; no runtime consumer of this reference table"
+  },
+  "unchangedRulesAudit": {
+    "itemsChecked": 102,
+    "recipesChecked": 29,
+    "textChanged": 17,
+    "ids": [
+      "seed_parsnip",
+      "seed_potato",
+      "seed_corn",
+      "seed_pumpkin",
+      "seed_starfruit",
+      "crop_parsnip",
+      "crop_corn",
+      "crop_starfruit",
+      "crop_blueberry",
+      "jam_berry",
+      "pickle_veg",
+      "cheese_goat",
+      "wine_starfruit",
+      "honey_wild",
+      "cook_stirfry",
+      "cook_fishsoup",
+      "cook_energybar"
+    ],
+    "pricesNutritionInventoryFieldsUnchanged": true,
+    "recipeCostsOutputsUnchanged": true,
+    "foodValueAndSeedGrowTablesUnchanged": true,
+    "referenceOnlyCorrection": "COOK_SOURCE fish soup now matches actual2-bass extra ingredient list; no runtime consumer of COOK_SOURCE"
+  },
+  "normalGrowth": {
+    "configuredSeconds": 60,
+    "observedWallSeconds": 60.689,
+    "initialReadyAt": 1792702096356,
+    "readyAtAfterRestart": 1792702096356,
+    "restartObservedAtSegmentSeconds": 17.402,
+    "cost": {
+      "seed_potato": 1,
+      "wood": 2,
+      "scrap": 2
+    },
+    "result": {
+      "crop_potato": 4
+    },
+    "method": "Native facility UI; restart at~17 seconds; no reset or acceleration of readyAt"
+  },
+  "eating": {
+    "item": "crop_potato",
+    "count": 1,
+    "before": 44.224000000000984,
+    "after": 69.22400000000098,
+    "measuredSatietyIncrease": 25,
+    "health": "Already100/100, so no claim of an observed3HP increase; preview reflects definition and server caps."
+  },
+  "storage": {
+    "harvested": 4,
+    "immediatelyEaten": 1,
+    "deposited": 3,
+    "verifiedAfterRestart": 3,
+    "withdrawnForExpedition": 1,
+    "eatenOnExpedition": 0,
+    "stillCarried": 1,
+    "remainingStored": 2
+  },
+  "resupply": {
+    "source": "world:-1:3:poi:supplies",
+    "name": "麦穗农舍物资柜",
+    "position": {
+      "x": -18,
+      "y": 110
+    },
+    "loot": {
+      "food": 3,
+      "water": 2,
+      "seed_potato": 1
+    },
+    "rationEatenOnReturn": 1,
+    "method": "Normal southbound walk, existing open door, native search and take-all; normal return to actual camp entrance. Source depleted afterward."
+  },
+  "milestones": [
+    {
+      "stage": "earned-no-food-source",
+      "segmentElapsedSeconds": 0.002,
+      "map": "own-camp",
+      "position": {
+        "x": 5.968585383422165,
+        "y": 24.36929672062654
+      },
+      "hp": 100,
+      "satiety": 59.90175000000097,
+      "wood": 4,
+      "scrap": 42,
+      "carriedFood": 0,
+      "potatoSeeds": 1,
+      "potatoes": 0,
+      "weapon": "wp_plasma"
+    },
+    {
+      "stage": "potato-started",
+      "segmentElapsedSeconds": 2.454,
+      "map": "own-camp",
+      "position": {
+        "x": 5.990036429103959,
+        "y": 24.11712745398376
+      },
+      "hp": 100,
+      "satiety": 59.384000000000974,
+      "wood": 2,
+      "scrap": 40,
+      "carriedFood": 0,
+      "potatoSeeds": 0,
+      "potatoes": 0,
+      "weapon": "wp_plasma"
+    },
+    {
+      "stage": "potato-job-after-mid-growth-restart",
+      "segmentElapsedSeconds": 17.402,
+      "map": "own-camp",
+      "position": {
+        "x": 5.990036429103959,
+        "y": 24.11712745398376
+      },
+      "hp": 100,
+      "satiety": 55.77050000000097,
+      "wood": 2,
+      "scrap": 40,
+      "carriedFood": 0,
+      "potatoSeeds": 0,
+      "potatoes": 0,
+      "weapon": "wp_plasma"
+    },
+    {
+      "stage": "four-potatoes-harvested",
+      "segmentElapsedSeconds": 63.145,
+      "map": "own-camp",
+      "position": {
+        "x": 5.990036429103959,
+        "y": 24.11712745398376
+      },
+      "hp": 100,
+      "satiety": 44.47600000000099,
+      "wood": 2,
+      "scrap": 40,
+      "carriedFood": 4,
+      "potatoSeeds": 0,
+      "potatoes": 4,
+      "weapon": "wp_plasma"
+    },
+    {
+      "stage": "ate-one-potato",
+      "segmentElapsedSeconds": 63.9,
+      "map": "own-camp",
+      "position": {
+        "x": 5.990036429103959,
+        "y": 24.11712745398376
+      },
+      "hp": 100,
+      "satiety": 69.22400000000098,
+      "wood": 2,
+      "scrap": 40,
+      "carriedFood": 3,
+      "potatoSeeds": 0,
+      "potatoes": 3,
+      "weapon": "wp_plasma"
+    },
+    {
+      "stage": "stored-three-potatoes",
+      "segmentElapsedSeconds": 66.251,
+      "map": "own-camp",
+      "position": {
+        "x": 3.035479241039766,
+        "y": 25.898032836717288
+      },
+      "hp": 100,
+      "satiety": 68.462750000001,
+      "wood": 2,
+      "scrap": 40,
+      "carriedFood": 0,
+      "potatoSeeds": 0,
+      "potatoes": 0,
+      "weapon": "wp_plasma"
+    },
+    {
+      "stage": "pantry-after-restart-with-one-for-trip",
+      "segmentElapsedSeconds": 70.312,
+      "map": "own-camp",
+      "position": {
+        "x": 3.035479241039766,
+        "y": 25.898032836717288
+      },
+      "hp": 100,
+      "satiety": 67.94250000000099,
+      "wood": 2,
+      "scrap": 40,
+      "carriedFood": 1,
+      "potatoSeeds": 0,
+      "potatoes": 1,
+      "weapon": "wp_plasma"
+    },
+    {
+      "stage": "farm-resupply-seed-and-food",
+      "segmentElapsedSeconds": 116.984,
+      "map": "world",
+      "position": {
+        "x": -17.99969971761,
+        "y": 110.68992035249026
+      },
+      "hp": 100,
+      "satiety": 56.152250000000976,
+      "wood": 2,
+      "scrap": 40,
+      "carriedFood": 6,
+      "potatoSeeds": 1,
+      "potatoes": 1,
+      "weapon": "wp_plasma"
+    },
+    {
+      "stage": "next-cycle-seed-returned",
+      "segmentElapsedSeconds": 160.962,
+      "map": "own-camp",
+      "position": {
+        "x": 0,
+        "y": 28
+      },
+      "hp": 100,
+      "satiety": 80.216500000001,
+      "wood": 2,
+      "scrap": 40,
+      "carriedFood": 5,
+      "potatoSeeds": 1,
+      "potatoes": 1,
+      "weapon": "wp_plasma"
+    }
+  ],
+  "mobile": {
+    "viewport": [
+      390,
+      844
+    ],
+    "dpr": 1,
+    "bodyWidth": 390,
+    "dialog": {
+      "x": 12,
+      "y": 50.640625,
+      "width": 366,
+      "height": 742.71875,
+      "top": 50.640625,
+      "right": 378,
+      "bottom": 793.359375,
+      "left": 12
+    },
+    "product": {
+      "x": 50,
+      "y": 578.640625,
+      "width": 275,
+      "height": 16,
+      "top": 578.640625,
+      "right": 325,
+      "bottom": 594.640625,
+      "left": 50
+    },
+    "review": "Screenshot reviewed: full production output and per-item nutrition readable without horizontal overflow. Emulated viewport, not physical mobile performance."
+  },
+  "persistence": {
+    "integrity": "ok",
+    "resources": {
+      "wood": 2,
+      "stone": 32,
+      "scrap": 40,
+      "parts": 1,
+      "food": 5,
+      "ammo": 73,
+      "c4": 0,
+      "medical": 7,
+      "credits": 332,
+      "shard": 1
+    },
+    "counterNote": "Food/medical in snapshots derive from usable inventory; raw SQLite counter fields are zero.",
+    "hp": 100,
+    "satiety": 79.70500000000101,
+    "weapon": "wp_plasma",
+    "armor": "vest",
+    "learned": [
+      "wp_plasma"
+    ],
+    "foodItems": [
+      {
+        "id": "crop_potato",
+        "count": 1
+      },
+      {
+        "id": "food",
+        "count": 2
+      },
+      {
+        "id": "water",
+        "count": 2
+      }
+    ],
+    "seedItems": [
+      {
+        "id": "seed_potato",
+        "count": 1
+      },
+      {
+        "id": "seed_starfruit",
+        "count": 1
+      }
+    ],
+    "storedPotatoes": 2,
+    "turretAmmo": 20,
+    "productionJobs": 0,
+    "buildings": 8,
+    "buildingSha256": "96e59eeef0e47d8bf3c2c46b60875f55b65e17bb1f938be824ba44cfa2a4916b",
+    "buildingObjectsMatchEarnedSource": true,
+    "untouchedLegacyStarfruitItem": "Full raw saved item equals source, including old text; proves snapshot refresh does not rewrite original metadata."
+  },
+  "verification": {
+    "testFiles": 29,
+    "testsPassed": 373,
+    "typecheck": "passed after QA script type-path repair",
+    "productionBuild": "passed",
+    "existingWarnings": "Vite native config __dirname and >500kB JS chunk",
+    "redGreen": "Snapshot stale-text test and3 output-preview cases failed before code; food-reference consistency test exposed extra water. All5 new cases and existing suites pass.",
+    "staticReview": "Independent review found no in-scope issues; verified preserving unknown IDs and equipment instance fields, actual job priority, current timing and reference-only correction.",
+    "runtimeExceptions": 0,
+    "actionErrors": 0,
+    "renderDiagnostics": 0
+  },
+  "qaRepair": "First final typecheck found own ignored audit copies still importing old relative types and an overly narrow Record type. Fixed only QA script type annotations/import paths, reran typecheck/build successfully; product source unchanged after373-test run.",
+  "sources": [
+    "data/earned-food-baseline-20261023-a1-results.json",
+    "data/earned-food-production-20261023-a1-results.json",
+    "data/food-rule-diff-20261023-results.json"
+  ],
+  "limits": [
+    "One complete farm/storage/resupply cycle, not repeated multi-hour economy or unlimited self-sustaining farming. Each crop still consumes seeds and materials.",
+    "No price, yield, nutrition, growth timing or crafting-cost balance changes; removed profit claims do not establish all food recipes are economically balanced.",
+    "17 updated item definitions are verified numerically against prior102-item registry and29 recipes; not every crop/cooked food was produced in the browser.",
+    "No combat, raids, concurrent-player load, GPU or memory performance claim.",
+    "Raw QA identities, screenshots and databases stay ignored. QA browser and server closed; original real database not opened or replaced."
+  ]
+}

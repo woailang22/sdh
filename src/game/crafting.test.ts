@@ -1,9 +1,10 @@
 import { describe, expect, it } from 'vitest';
 import { CRAFT_RECIPES, craftingRecipe, craftingResult, findCraftingWorkbench, recipeRequiresWorkbench } from './crafting';
-import { ITEM_DEFS } from './items';
+import { COOK_SOURCE, ITEM_DEFS, SEED_GROW } from './items';
 import React from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { WorkbenchModal } from '../components/WorkbenchModal';
+import { CampPanel } from '../components/CampPanel';
 import type { BuildingEntity, InteractableEntity } from '../types/game';
 
 describe('shared crafting definitions', () => {
@@ -19,6 +20,16 @@ describe('shared crafting definitions', () => {
       expect(craftingResult(recipe.id)?.count).toBe(recipe.resultCount);
     }
     expect(craftingResult('forged_free_gun')).toBeUndefined();
+  });
+  it('keeps seed yields and food ingredient references consistent with authoritative production recipes', () => {
+    for (const [id, growing] of Object.entries(SEED_GROW)) {
+      const recipe = CRAFT_RECIPES.find(recipe => recipe.cost.extra?.some(item => item.itemId === id))!;
+      expect(recipe.resultItemId).toBe(growing.cropId); expect(recipe.resultCount).toBe(growing.outCount);
+    }
+    for (const [id, source] of Object.entries(COOK_SOURCE)) {
+      const recipe = CRAFT_RECIPES.find(recipe => recipe.resultItemId === id)!;
+      expect(source.materials, id).toEqual(recipe.cost.extra);
+    }
   });
   it('offers one ammo recipe at the existing lower cost and resolves the legacy ID to that exact definition', () => {
     const ammo = CRAFT_RECIPES.filter(recipe => recipe.resultItemId === 'ammo');
@@ -84,5 +95,34 @@ describe('crafting requirements in the interface', () => {
     const html = render(true, [], 10);
     expect(card(html, 'ammo_pack')).not.toContain('disabled');
     expect(html).not.toContain('复装弹药 ×30');
+  });
+});
+
+describe('production yield information', () => {
+  const render = (type: BuildingEntity['type'], production?: BuildingEntity['production']) => renderToStaticMarkup(React.createElement(CampPanel, {
+    isOpen: true, onClose() {}, onAction() {}, onNavigate() {}, selfId: 'owner', campId: 'home_owner', currentMapId: 'home_owner',
+    playerPos: { x: 0, y: 0 }, camps: [{ id: 'home_owner', ownerId: 'owner', ownerName: '主人', x: 100, y: 100, mapId: 'world' }],
+    inventory: [], resources: { wood: 100, stone: 100, scrap: 100, parts: 100 },
+    building: { id: 'facility', name: '生产设施', type, x: 0, y: 0, mapId: 'home_owner', ownerId: 'owner', hp: 100, maxHp: 100, level: 1, production },
+  }));
+
+  it('shows the selected farm output and nutrition per item before starting', () => {
+    const html = render('farm_plot');
+    expect(html).toContain('产物：防风草 ×4');
+    expect(html).toContain('每份恢复饱食 20、生命 2');
+  });
+
+  it('describes the active potato job instead of the first dropdown recipe', () => {
+    const html = render('farm_plot', { recipeId: 'grow_potato', resultItemId: 'crop_potato', resultCount: 4, readyAt: Date.now() + 60000 });
+    expect(html).toContain('产物：土豆 ×4');
+    expect(html).toContain('每份恢复饱食 25、生命 3');
+    expect(html).not.toContain('产物：防风草');
+    expect(html).not.toContain('每份恢复饱食 20');
+  });
+
+  it('shows smelting output without claiming it can restore food or health', () => {
+    const html = render('furnace');
+    expect(html).toContain('产物：精炼铜锭 ×1');
+    expect(html).not.toContain('每份恢复饱食');
   });
 });
