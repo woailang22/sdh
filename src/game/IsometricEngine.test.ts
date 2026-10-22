@@ -336,6 +336,60 @@ describe('ground rendering cost', () => {
     expect(context.drawImage.mock.calls.at(-1)?.[0]).toBe(sprite);
   });
 
+  function groundAtQuarryEdge() {
+    const result = setup(); stubImageLoading();
+    const { engine } = result;
+    (engine as any).width = 1920; (engine as any).height = 1080;
+    engine.camera = { x: -(4.4 - 7) * 32, y: -(4.4 + 7) * 16 };
+    (engine as any).renderMapGround();
+    const image = (engine as any).artImage('tile-quarry-a.png');
+    const load = () => { image.complete = true; image.dispatchEvent(new Event('load')); };
+    return { ...result, load, cache: (engine as any).groundCache };
+  }
+
+  it('repaints only newly loaded terrain at the cached camera anchor without resetting the whole surface', () => {
+    const { engine, cache, load } = groundAtQuarryEdge();
+    const anchor = { x: cache.x, y: cache.y }, size = { width: cache.canvas.width, height: cache.canvas.height };
+    const paint = vi.spyOn(engine as any, 'renderMapGroundUncached');
+    engine.camera.x += 24; load(); (engine as any).renderMapGround();
+    expect(paint).toHaveBeenCalledTimes(1);
+    const region = paint.mock.calls[0][1] as { x: number; y: number; width: number; height: number };
+    expect(region).toBeDefined();
+    expect(region.width * region.height).toBeLessThan(size.width * size.height / 2);
+    expect({ x: cache.x, y: cache.y }).toEqual(anchor);
+    expect({ width: cache.canvas.width, height: cache.canvas.height }).toEqual(size);
+    paint.mockClear(); (engine as any).renderMapGround(); expect(paint).not.toHaveBeenCalled();
+  });
+
+  it('keeps unrelated offscreen tile loads from repainting the ground', () => {
+    const { engine } = groundAtQuarryEdge();
+    const paint = vi.spyOn(engine as any, 'renderMapGroundUncached');
+    const image = (engine as any).artImage('tile-rift-a.png'); image.complete = true; image.dispatchEvent(new Event('load'));
+    (engine as any).renderMapGround();
+    expect(paint).not.toHaveBeenCalled();
+  });
+
+  it('combines new tile availability with normal scroll edges instead of rebuilding the entire ground', () => {
+    const { engine, cache, load } = groundAtQuarryEdge();
+    const paint = vi.spyOn(engine as any, 'renderMapGroundUncached');
+    const previous = { x: cache.x, y: cache.y };
+    engine.camera.x -= 160; engine.camera.y += 140; load(); (engine as any).renderMapGround();
+    expect(cache.x).toBe(previous.x - 160); expect(cache.y).toBe(previous.y + 140);
+    expect(paint.mock.calls.length).toBeGreaterThanOrEqual(3);
+    expect(paint.mock.calls.every(call => call[1] !== undefined)).toBe(true);
+    expect(cache.canvas.getContext('2d').drawImage.mock.calls.find((call: unknown[]) => call[0] === cache.canvas)).toEqual([cache.canvas, -160, 140]);
+  });
+
+  it('retains full texture refresh in separate animated maps', () => {
+    const { engine } = setup(); stubImageLoading(); engine.currentMapId = 'marsh_docks';
+    (engine as any).renderMapGround();
+    const paint = vi.spyOn(engine as any, 'renderMapGroundUncached');
+    const image = (engine as any).artImage('tile-marsh-a.png'); image.complete = true; image.dispatchEvent(new Event('load'));
+    (engine as any).renderMapGround();
+    expect(paint).toHaveBeenCalledTimes(1);
+    expect(paint.mock.calls[0][1]).toBeUndefined();
+  });
+
   it('replaces a B tile fallback after loading without discarding other variants or terrains', () => {
     const { engine } = setup(); stubImageLoading();
     const forest = (engine as any).artImage('tile-forest-a.png');

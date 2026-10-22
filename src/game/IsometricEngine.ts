@@ -119,6 +119,7 @@ export class IsometricEngine {
   private tilePatchCells = new WeakMap<HTMLCanvasElement, Set<number>>();
   private tilePatchScratch: HTMLCanvasElement | null = null;
   private artRevision = 0;
+  private groundTileChanges = new Set<string>();
   private worldScenery: WorldScenery[] = [];
   private sceneryCache = new WeakMap<WorldChunk, WorldScenery[]>();
   private groundCache: { canvas: HTMLCanvasElement; overlay?: HTMLCanvasElement; key: string; x: number; y: number } | null = null;
@@ -290,7 +291,8 @@ export class IsometricEngine {
       img.addEventListener('load', () => {
         const tile = /^tile-(.+)-(a|b)\.png$/.exec(file);
         if (!tile && file !== 'texture-ground.png') return;
-        this.artRevision++;
+        if (tile && this.currentMapId === 'world') this.groundTileChanges.add(tile[1]);
+        else this.artRevision++;
         // Only the loaded tile variant can have stale fallback patches.
         // Sprite sheets are drawn live and never invalidate cached terrain.
         if (tile) for (const [key, patch] of this.tilePatchCache) {
@@ -1973,6 +1975,7 @@ export class IsometricEngine {
     if (this.tilePatchScratch) this.tilePatchScratch.width = this.tilePatchScratch.height = 0;
     this.tilePatchScratch = null;
     this.tilePatchCells = new WeakMap();
+    this.groundTileChanges.clear();
     if (this.groundCache) {
       this.groundCache.canvas.width = this.groundCache.canvas.height = 0;
       if (this.groundCache.overlay) this.groundCache.overlay.width = this.groundCache.overlay.height = 0;
@@ -2041,6 +2044,7 @@ export class IsometricEngine {
     if (this.tilePatchScratch) this.tilePatchScratch.width = this.tilePatchScratch.height = 0;
     this.tilePatchScratch = null;
     this.tilePatchCells = new WeakMap();
+    this.groundTileChanges.clear();
     this.artImages.clear();
     this.worldChunks.clear();
     this.worldScenery = [];
@@ -3246,6 +3250,27 @@ export class IsometricEngine {
   }
 
   // --- SEAMLESS HIGH-FIDELITY ISOMETRIC GROUND RENDERER BY MAP ZONE ---
+  private changedGroundTextureBounds(): GroundRect | undefined {
+    const corners = [this.toWorld(0, 0), this.toWorld(this.width, 0), this.toWorld(0, this.height), this.toWorld(this.width, this.height)];
+    const minX = Math.floor(Math.min(...corners.map(p => p.x))) - 3, maxX = Math.ceil(Math.max(...corners.map(p => p.x))) + 3;
+    const minY = Math.floor(Math.min(...corners.map(p => p.y))) - 3, maxY = Math.ceil(Math.max(...corners.map(p => p.y))) + 3;
+    let left = this.width, top = this.height, right = 0, bottom = 0;
+    const theme = this.getGroundTheme();
+    for (let wx = minX; wx <= maxX; wx++) for (let wy = minY; wy <= maxY; wy++) {
+      if (this.placedFloors.has(`${wx},${wy}`)) continue;
+      const tileTheme = this.currentMapId === 'world' ? worldThemeAt(wx, wy) : theme;
+      if (this.currentMapId === 'world' && tileTheme === 'lake') continue;
+      const key = this.tileTextureKey(wx, wy, tileTheme);
+      if (!key || !this.groundTileChanges.has(key)) continue;
+      const s = this.toScreen(wx, wy);
+      left = Math.min(left, s.x - 33); top = Math.min(top, s.y - 33);
+      right = Math.max(right, s.x + 33); bottom = Math.max(bottom, s.y + 33);
+    }
+    left = Math.max(0, Math.floor(left)); top = Math.max(0, Math.floor(top));
+    right = Math.min(this.width, Math.ceil(right)); bottom = Math.min(this.height, Math.ceil(bottom));
+    if (right > left && bottom > top) return { x: left, y: top, width: right - left, height: bottom - top };
+  }
+
   private renderMapGround() {
     const theme = this.getGroundTheme();
     const animated = this.currentMapId !== 'world' && (theme === 'lake' || theme === 'marsh' || theme === 'rift');
@@ -3257,20 +3282,22 @@ export class IsometricEngine {
       const canvas = document.createElement('canvas');
       cache = this.groundCache = { canvas, key: '', x: 0, y: 0 };
     }
-    if (cache.key !== key || Math.abs(this.camera.x - cache.x) > margin || Math.abs(this.camera.y - cache.y) > margin) {
+    const moving = Math.abs(this.camera.x - cache.x) > margin || Math.abs(this.camera.y - cache.y) > margin;
+    if (cache.key !== key || moving || this.groundTileChanges.size > 0) {
       const width = this.width;
       const height = this.height;
       const ctx = this.ctx;
       const camera = this.camera;
       const shiftX = Math.round(camera.x - cache.x);
       const shiftY = Math.round(camera.y - cache.y);
-      const scrolling = cache.key === key && Math.abs(shiftX) < cache.canvas.width && Math.abs(shiftY) < cache.canvas.height;
+      const scrolling = moving && cache.key === key && Math.abs(shiftX) < cache.canvas.width && Math.abs(shiftY) < cache.canvas.height;
+      const partial = cache.key === key && (!moving || scrolling);
       const regions: GroundRect[] = [];
       if (scrolling) {
         // 整数像素平移旧画面，仅补画露出的边缘；两个区域不重叠，避免透明罩层叠加。
         if (shiftX !== 0) regions.push({ x: shiftX > 0 ? 0 : cache.canvas.width + shiftX, y: 0, width: Math.abs(shiftX), height: cache.canvas.height });
         if (shiftY !== 0) regions.push({ x: shiftX > 0 ? shiftX : 0, y: shiftY > 0 ? 0 : cache.canvas.height + shiftY, width: cache.canvas.width - Math.abs(shiftX), height: Math.abs(shiftY) });
-      } else {
+      } else if (!partial) {
         cache.canvas.width = width + margin * 2;
         cache.canvas.height = height + margin * 2;
       }
@@ -3283,24 +3310,31 @@ export class IsometricEngine {
       try {
         this.width = cache.canvas.width;
         this.height = cache.canvas.height;
-        this.camera = { x: scrolling ? cache.x + shiftX : camera.x, y: scrolling ? cache.y + shiftY : camera.y };
+        this.camera = partial ? { x: cache.x + (scrolling ? shiftX : 0), y: cache.y + (scrolling ? shiftY : 0) } : camera;
+        if (partial && this.groundTileChanges.size > 0) {
+          const changed = this.changedGroundTextureBounds();
+          if (changed) regions.push(changed);
+        }
         const paint = (surface: HTMLCanvasElement, context: CanvasRenderingContext2D, terrain: boolean) => {
           this.ctx = context;
           const draw = (region?: GroundRect) => {
             if (terrain) this.renderMapGroundUncached(false, region);
             if (!terrain || !animated) this.renderGroundDetails();
           };
-          if (scrolling) {
-            context.save();
-            context.globalCompositeOperation = 'copy';
-            context.drawImage(surface, shiftX, shiftY);
-            context.restore();
+          if (partial) {
+            if (scrolling) {
+              context.save();
+              context.globalCompositeOperation = 'copy';
+              context.drawImage(surface, shiftX, shiftY);
+              context.restore();
+            }
             for (const region of regions) {
               context.save();
               try {
                 context.beginPath();
                 context.rect(region.x, region.y, region.width, region.height);
                 context.clip();
+                context.clearRect(region.x, region.y, region.width, region.height);
                 draw(region);
               } finally {
                 context.restore();
@@ -3313,7 +3347,7 @@ export class IsometricEngine {
         paint(cache.canvas, groundCtx, true);
         if (animated) {
           cache.overlay ??= document.createElement('canvas');
-          if (!scrolling) {
+          if (!partial) {
             cache.overlay.width = this.width;
             cache.overlay.height = this.height;
           }
@@ -3326,6 +3360,7 @@ export class IsometricEngine {
         cache.key = key;
         cache.x = this.camera.x;
         cache.y = this.camera.y;
+        this.groundTileChanges.clear();
       } finally {
         this.ctx = ctx;
         this.width = width;
