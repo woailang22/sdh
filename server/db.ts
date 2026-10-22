@@ -26,6 +26,9 @@ export async function backupDatabase(path: string): Promise<string | null> {
 export function createDb(path: string): DbHandle {
   try {
     const db = new Database(path);
+    // Keep acknowledged world transfers durable while avoiding rollback-journal rewrites.
+    db.pragma('journal_mode = WAL');
+    db.pragma('synchronous = FULL');
     db.exec(`CREATE TABLE IF NOT EXISTS buildings (id TEXT PRIMARY KEY, data TEXT NOT NULL);
     CREATE TABLE IF NOT EXISTS players (id TEXT PRIMARY KEY, data TEXT NOT NULL);
     CREATE TABLE IF NOT EXISTS meta (k TEXT PRIMARY KEY, v TEXT NOT NULL);`);
