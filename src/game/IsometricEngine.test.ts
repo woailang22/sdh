@@ -220,6 +220,26 @@ describe('ground rendering cost', () => {
     expect(engine.interactables).toHaveLength(2); // Culling affects drawing, not simulation or cache contents.
   });
 
+  it('keeps three floor materials in the ground layout without casting separate building shadows over them', () => {
+    const { engine } = setup();
+    const render = (engine as any).render;
+    for (const name of Object.getOwnPropertyNames(IsometricEngine.prototype)) {
+      if (name !== 'render' && /^(render|draw)/.test(name)) vi.spyOn(engine as any, name).mockImplementation(() => {});
+    }
+    engine.currentMapId = 'home_owner'; engine.camera = { x: 0, y: 0 };
+    const base = { hp: 300, maxHp: 300, level: 1, mapId: 'home_owner', ownerId: 'owner', y: 0 };
+    const floors = ['wood_floor', 'stone_floor', 'iron_floor'].map((type, x) => ({ ...base, id: 'build_' + type, name: type, type, x }));
+    const storage = { ...base, id: 'build_storage', type: 'storage_box', name: '仓库', x: 1 };
+    const wall = { ...base, id: 'build_wall', type: 'wood_wall', name: '墙', x: 3 };
+    const buildings = [...floors, storage, wall];
+    engine.setAuthoritativeBuildings(buildings as any);
+    render.call(engine);
+    expect((engine as any).drawBuilding.mock.calls.map(([b]: any[]) => b.id)).toEqual([storage.id, wall.id]);
+    expect([...engine.placedFloors.values()]).toEqual(floors.map(b => ({ x: b.x, y: b.y, type: b.type })));
+    expect(engine.buildings).toEqual(buildings);
+    expect((engine as any).renderMapGround).toHaveBeenCalledOnce();
+  });
+
   it('keeps the noise texture aligned to world coordinates during camera movement', () => {
     const { engine, context } = setup();
     const image = { complete: true, naturalWidth: 1254, naturalHeight: 1254 };

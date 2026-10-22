@@ -3082,7 +3082,8 @@ export class IsometricEngine {
     });
 
     // Buildings（闭合院与屋内箱子一次画完，箱子压在上层保证可见）
-    const allHouseGroups = groupBuildingsIntoHouses(this.buildings);
+    // Floors are already painted in the ground cache, not as shadow-casting entities.
+    const allHouseGroups = groupBuildingsIntoHouses(this.buildings.filter(b => !b.type.endsWith('_floor')));
     if (this.currentMapId === 'world') for (const g of allHouseGroups) {
       if (g.members.length < 8 || !g.door?.id.startsWith('world:') || worldThemeAt(g.cx, g.cy) !== 'lake') continue;
       const b = waterHousePlatformBounds(g.members, g.door);
