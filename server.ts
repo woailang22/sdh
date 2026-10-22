@@ -6,7 +6,7 @@ import fs from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { createDb, backupDatabase } from './server/db.js';
 import { guestTokenFromCookie, resolveGuest } from './server/identity.js';
-import { GameWorld, type GameStateSnapshot, type WorldRules } from './server/worldState.js';
+import { GameWorld, isUntargetedFire, type GameStateSnapshot, type WorldRules } from './server/worldState.js';
 import { createWorldQueries } from './server/worldQueries.js';
 import { StateEncoder } from './src/game/stateSync.js';
 import { sendMessage as send } from './server/transport.js';
@@ -116,7 +116,9 @@ wss.on('connection', (ws, req) => {
         case 'game_action': {
           const state = game.action(id, payload);
           stateTo(client, state);
-          if (!state.error) {
+          // Empty shots only change the shooter's private ammunition/cooldown.
+          // Positions and firing animation still use the regular visibility tick.
+          if (!state.error && !isUntargetedFire(payload)) {
             for (const c of clients.values()) {
               if (c.id === id) continue;
               const p = game.state.players[c.id];

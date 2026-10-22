@@ -53,6 +53,7 @@ export interface WorldRules {
   weather?(): WeatherType;
 }
 export interface GameAction { requestId: string; action: string; [key: string]: unknown }
+export const isUntargetedFire = (packet: Record<string, unknown>) => packet.action === 'fire' && packet.monsterId === undefined && packet.targetId === undefined;
 
 const SAVE_KEY = 'authoritative-world-v2';
 const resourceKeys: ResourceKey[] = ['wood', 'stone', 'scrap', 'parts', 'food', 'ammo', 'c4', 'medical', 'credits', 'shard'];
@@ -242,12 +243,19 @@ export class GameWorld {
     const equipment = { ...p.equipment };
     for (const slot of ['weapon', 'armor', 'tool', 'pack'] as const) equipment[slot] = describedItem(equipment[slot]);
     const player: PlayerState = { ...this.publicPlayer(p), inventory: p.inventory.map(describedItem), equipment, resources, campId: p.campId, satiety: p.satiety, blueprints: p.blueprints, xp: p.xp, maxXp: p.maxXp, kills: p.kills, onboarding: p.onboarding, lastDamageAt: p.lastDamageAt };
-    return clone({ requestId, error, correction, player,
-      camps: Object.values(this.state.camps).filter(c => c.ownerId === id || c.members?.includes(id) || c.id === p.mapId || p.mapId === 'world' && distance(c, p) <= 80), buildings: this.buildingsFor(p).map(b => { const { storedLoot: _, production: _production, ...visible } = b; return { ...visible, ammo: this.state.ammo[b.id] || 0, production: this.canUse(p.id, b) ? this.state.production[b.id] : undefined }; }),
+    // Building fields are scalar except the private loot (omitted) and job
+    // (copied below). Do not JSON-roundtrip thousands of already-detached rows.
+    const buildings = this.buildingsFor(p).map(b => {
+      const { storedLoot: _, production: _production, ...visible } = b;
+      const job = this.canUse(p.id, b) ? this.state.production[b.id] : undefined;
+      return Object.assign(visible, { ammo: this.state.ammo[b.id] || 0, production: job ? { ...job } : undefined });
+    });
+    return { ...clone({ requestId, error, correction, player,
+      camps: Object.values(this.state.camps).filter(c => c.ownerId === id || c.members?.includes(id) || c.id === p.mapId || p.mapId === 'world' && distance(c, p) <= 80),
       nodes: p.mapId === 'world' ? this.rules.nodesNear(p.x, p.y).map(def => { const node = this.state.nodes[def.id] ? this.node(def) : undefined; return { id: def.id, stock: node?.stock ?? def.stock ?? 1, respawnAt: node?.respawnAt || 0 }; }) : [],
       drops: Object.values(this.state.drops).filter(drop => drop.mapId === p.mapId && distance(p, drop) <= 40).map(({ items: _, ...drop }) => drop),
       monsters: p.mapId === 'world' ? Object.values(this.state.monsters).filter(monster => distance(p, monster) <= 45) : [],
-      reports: this.state.reports.filter(report => report.ownerId === id).slice(-30), loot });
+      reports: this.state.reports.filter(report => report.ownerId === id).slice(-30), loot }), buildings };
   }
 
   move(id: string, packet: Record<string, unknown>): boolean {
@@ -383,7 +391,13 @@ export class GameWorld {
     const requestId = typeof packet?.requestId === 'string' ? packet.requestId : '';
     if (!requestId || requestId.length > 120 || typeof packet?.action !== 'string') return this.snapshot(id, requestId, '无效操作请求');
     if (this.state.handled[id]?.includes(requestId)) return this.snapshot(id, requestId);
-    const before = clone(this.state);
+    // Untargeted fire mutates only this player and their replay ledger. Shared
+    // combat (including every targeted shot) still needs the full rollback copy.
+    const before = isUntargetedFire(packet) ? {
+      ...this.state,
+      players: { ...this.state.players, [id]: clone(p) },
+      handled: { ...this.state.handled, ...(this.state.handled[id] ? { [id]: [...this.state.handled[id]] } : {}) },
+    } : clone(this.state);
     try {
       const loot = this.perform(p, packet, receivedAt);
       (this.state.handled[id] ||= []).push(requestId);

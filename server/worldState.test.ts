@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { createMemoryDb } from './db';
 import { GameWorld, type WorldRules, type PersistedWorld } from './worldState';
 import { makeItem } from '../src/game/items';
@@ -14,6 +14,84 @@ const rules: WorldRules = {
   monstersNear: () => [],
 };
 describe('cached public building definitions', () => {
+  it('serializes the full camp only for the durable commit of an untargeted shot', () => {
+    const { game, p, act } = campSetup(); p.equipment.weapon = makeItem('rifle', 1); p.resources.ammo = 10;
+    for (let i = 0; i < 600; i++) game.state.buildings['floor_' + i] = { id: 'floor_' + i, type: 'wood_floor', name: '地板', x: i % 30, y: Math.floor(i / 30), hp: 200, maxHp: 200, level: 1, ownerId: p.id, mapId: p.mapId };
+    const stringify = JSON.stringify; let completeWorldCopies = 0;
+    const serialization = vi.spyOn(JSON, 'stringify').mockImplementation((...args: Parameters<typeof JSON.stringify>) => {
+      if (args[0]?.buildings?.floor_0) completeWorldCopies++;
+      return stringify(...args);
+    });
+    let result;
+    try { result = act('owner', 'fire'); } finally { serialization.mockRestore(); }
+    expect(result.error).toBeUndefined(); expect(p.resources.ammo).toBe(9);
+    expect(completeWorldCopies).toBe(1);
+  });
+  it('rolls back a failed private shot without changing world data or creating a replay entry', () => {
+    const { game, db, act } = setup(); const p = game.state.players.owner;
+    p.equipment.weapon = makeItem('rifle', 1); p.resources.ammo = 10;
+    const before = structuredClone(game.state), save = db.setMeta;
+    db.setMeta = () => { throw new Error('disk failure'); };
+    const request = { action: 'fire', requestId: 'private-shot-retry' };
+    expect(game.action('owner', request).error).toBe('disk failure');
+    expect(game.state).toEqual(before); expect(game.state.players.owner).toBe(p);
+    expect(game.state.handled).not.toHaveProperty('owner');
+    db.setMeta = save;
+    expect(game.action('owner', request).error).toBeUndefined();
+    expect(game.action('owner', request).error).toBeUndefined();
+    expect(p.resources.ammo).toBe(9); expect(game.state.handled.owner).toEqual(['private-shot-retry']);
+    expect(act('owner', 'fire').error).toContain('过快'); expect(p.resources.ammo).toBe(9);
+  });
+  it('restores a full replay ledger after failed private fire and trims only a committed retry', () => {
+    const { game, db } = setup(); const p = game.state.players.owner;
+    p.equipment.weapon = makeItem('rifle', 1); p.resources.ammo = 10;
+    const oldIds = Array.from({ length: 128 }, (_, i) => 'old-' + i);
+    game.state.handled.owner = [...oldIds]; const save = db.setMeta;
+    db.setMeta = () => { throw new Error('disk failure'); };
+    const request = { action: 'fire', requestId: 'full-ledger-retry' };
+    expect(game.action('owner', request).error).toBe('disk failure');
+    expect(game.state.handled.owner).toEqual(oldIds); expect(p.resources.ammo).toBe(10);
+    db.setMeta = save;
+    expect(game.action('owner', request).error).toBeUndefined();
+    expect(game.action('owner', request).error).toBeUndefined();
+    expect(game.state.handled.owner).toEqual([...oldIds.slice(1), request.requestId]);
+    expect(p.resources.ammo).toBe(9);
+  });
+  it('does not serialize a large camp geometry again merely to detach its snapshot', () => {
+    const { game, p } = campSetup();
+    for (let i = 0; i < 600; i++) game.state.buildings['floor_' + i] = { id: 'floor_' + i, type: 'wood_floor', name: '地板', x: i % 30, y: Math.floor(i / 30), hp: 200, maxHp: 200, level: 1, ownerId: p.id, mapId: p.mapId };
+    const stringify = JSON.stringify; let serializedBytes = 0;
+    const serialization = vi.spyOn(JSON, 'stringify').mockImplementation((...args: Parameters<typeof JSON.stringify>) => {
+      const text = stringify(...args); serializedBytes += text?.length || 0; return text;
+    });
+    let snapshot;
+    try { snapshot = game.snapshot('owner'); } finally { serialization.mockRestore(); }
+    expect(snapshot.buildings).toHaveLength(601);
+    expect(serializedBytes).toBeLessThan(4096);
+    snapshot.buildings.find(b => b.id === 'floor_0')!.hp = 1;
+    expect(game.state.buildings.floor_0.hp).toBe(200);
+  });
+  it('detaches all mutable snapshot data while hiding storage and unauthorized production', () => {
+    const { game, p } = campSetup(); const farm = facility(game, 'farm_plot');
+    p.inventory[0] = makeItem('seed_potato', 2); p.equipment.weapon = makeItem('rifle', 1);
+    p.onboarding.wood = 20;
+    const camp = game.state.camps[p.mapId]; camp.members = ['member'];
+    game.state.production[farm.id] = { recipeId: 'grow_potato', resultItemId: 'crop_potato', resultCount: 4, readyAt: 50000 };
+    game.state.buildings[farm.id].storedLoot = [{ name: '私人库存', count: 99, icon: '' }];
+    const snapshot = game.snapshot('owner'), visible = snapshot.buildings.find(b => b.id === farm.id)!;
+    expect(visible).not.toHaveProperty('storedLoot'); expect(visible.production?.readyAt).toBe(50000);
+    snapshot.player.inventory[0]!.count = 0; snapshot.player.equipment.weapon!.name = '客户端修改'; snapshot.player.resources.wood = 0;
+    snapshot.player.onboarding.wood = 0; snapshot.player.blueprints.push('client-only'); snapshot.camps[0].members!.push('client-only');
+    visible.hp = 0; visible.production!.readyAt = 0;
+    expect(p.inventory[0]?.count).toBe(2); expect(p.equipment.weapon?.name).toBe(makeItem('rifle', 1).name);
+    expect(p.resources.wood).toBeGreaterThan(0); expect(p.onboarding.wood).toBeGreaterThan(0);
+    expect(p.blueprints).not.toContain('client-only'); expect(camp.members).toEqual(['member']);
+    expect(farm.hp).toBeGreaterThan(0); expect(game.state.production[farm.id].readyAt).toBe(50000);
+    const enemy = game.state.players.raider; enemy.mapId = p.mapId;
+    expect(game.snapshot('raider').buildings.find(b => b.id === farm.id)?.production).toBeUndefined();
+    p.resources.wood = 999; game.state.production[farm.id].readyAt = 60000;
+    expect(snapshot.player.resources.wood).toBe(0); expect(visible.production?.readyAt).toBe(0);
+  });
   it('rolls back a failed door save without mutating the cached definition', () => {
     const door = { id: 'public_door', type: 'door' as const, name: '门', x: 1, y: 0, hp: 100, maxHp: 100, level: 1, mapId: 'world' as const, isOpen: false, isLocked: false };
     const db = createMemoryDb();

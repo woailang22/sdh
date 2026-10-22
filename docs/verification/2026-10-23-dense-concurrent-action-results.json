@@ -1,0 +1,732 @@
+{
+  "date": "2026-10-23",
+  "baselineCommit": "7b899508ae9a5492d6d121282008366708235116",
+  "result": "Partial performance improvement; dense two-native continuous fire still fails the acceptance gate. Full game objective remains active.",
+  "scope": "Synthetic 128-cell camp, 5675 buildings (4000 floors,1404 walls,36 doors,216 facilities,18 turrets,one core). Friendly empty-space fire only; no real PvP damage or earned economy claim.",
+  "environment": {
+    "nativeBrowsers": 2,
+    "browser": "Chrome155 headless, independent profiles",
+    "viewport": [
+      1920,
+      1080
+    ],
+    "dpr": 1,
+    "documentHidden": false,
+    "server": "production tsx, SQLite WAL synchronous FULL",
+    "clientBundle": "index-Ci3C41xg.js",
+    "load": "20s idle then60s simultaneous normal route navigation and native held left mouse; automatic reload unchanged",
+    "isolation": "No builds, tests, profiling or additional QA browsers ran during the timing phases; after timing all owned processes closed. Functional follow-up and full checks were separate.",
+    "dataSafety": "Only uniquely named ignored QA databases were opened; real data/sdc.sqlite was not opened. Fixture preparation reset synthetic players before the run, never during measurement."
+  },
+  "diagnosis": {
+    "instrumentedBaseline": {
+      "persist": {
+        "count": 131,
+        "totalMs": 3527.137100000001,
+        "p50": 25.77679999999964,
+        "p95": 41.6346999999987,
+        "max": 52.668600000000424
+      },
+      "tick": {
+        "count": 51,
+        "totalMs": 603.1003999999967,
+        "p50": 2.5312000000003536,
+        "p95": 37.51329999999962,
+        "max": 56.22739999999976
+      },
+      "buildingsFor": {
+        "count": 651,
+        "totalMs": 1509.7227999999832,
+        "p50": 2.246899999998277,
+        "p95": 3.152299999999741,
+        "max": 19.378999999997177
+      },
+      "snapshot": {
+        "count": 289,
+        "totalMs": 7333.996499999993,
+        "p50": 25.141700000000128,
+        "p95": 30.227899999999863,
+        "max": 47.95249999999942
+      },
+      "visiblePlayers": {
+        "count": 87,
+        "totalMs": 2.1202000000020007,
+        "p50": 0.01849999999967622,
+        "p95": 0.05640000000016698,
+        "max": 0.20040000000005875
+      },
+      "move": {
+        "count": 471,
+        "totalMs": 1182.6969000000086,
+        "p50": 2.9346000000005006,
+        "p95": 4.462299999999232,
+        "max": 5.585399999999936
+      },
+      "action": {
+        "count": 110,
+        "totalMs": 8148.764899999984,
+        "p50": 72.33390000000145,
+        "p95": 90.90190000000075,
+        "max": 107.27239999999983
+      }
+    },
+    "note": "Inclusive times overlap, so totals cannot be summed. Profile was a separate diagnostic run; final stats flushed on action completion. Windows forced process termination did not produce a CPU profile; the earlier time-based profile lacked active-action data and is not used as evidence."
+  },
+  "changes": [
+    "Skip JSON roundtrip of freshly detached scalar building views; explicitly copy authorized production, omit private storage. Other mutable snapshot fields keep deep cloning.",
+    "Untargeted fire no longer triggers redundant full peer snapshots. Actor acknowledgement and regular movement/animation visibility ticks remain. Targeted combat and shared actions retain broadcasts.",
+    "Untargeted fire snapshots only the current player and their replay ledger for rollback; targeted shots and other actions retain full-world transaction rollback. All accepted actions still synchronously persist the complete world and replay guard in one durable SQLite commit."
+  ],
+  "stages": [
+    {
+      "stage": "baseline",
+      "passed": false,
+      "failure": "Native continuous fire still receives cooldown refusals; no eight-actor run was attempted after this failure.",
+      "phases": [
+        {
+          "name": "two-native-idle",
+          "seconds": 20.448,
+          "clients": [
+            {
+              "client": 1,
+              "sent": 0,
+              "acknowledged": 0,
+              "pending": 0,
+              "rejected": 0,
+              "errorKinds": [],
+              "ammoSpent": 0,
+              "corrections": 0,
+              "connected": true,
+              "buildings": 5675,
+              "floors": 4000,
+              "renderMs": {
+                "p95": 5.7,
+                "max": 7.7
+              },
+              "responseMs": {
+                "p50": 0,
+                "p95": 0,
+                "max": 0
+              },
+              "rafMs": {
+                "p95": 24.4,
+                "max": 60.7,
+                "over50": 4
+              },
+              "longTasks": 0,
+              "frameDiagnostics": 0
+            },
+            {
+              "client": 2,
+              "sent": 0,
+              "acknowledged": 0,
+              "pending": 0,
+              "rejected": 0,
+              "errorKinds": [],
+              "ammoSpent": 0,
+              "corrections": 0,
+              "connected": true,
+              "buildings": 5675,
+              "floors": 4000,
+              "renderMs": {
+                "p95": 5.8,
+                "max": 6.7
+              },
+              "responseMs": {
+                "p50": 0,
+                "p95": 0,
+                "max": 0
+              },
+              "rafMs": {
+                "p95": 30.3,
+                "max": 66.6,
+                "over50": 4
+              },
+              "longTasks": 0,
+              "frameDiagnostics": 0
+            }
+          ]
+        },
+        {
+          "name": "two-native-walk-and-fire",
+          "seconds": 60.536,
+          "clients": [
+            {
+              "client": 1,
+              "sent": 389,
+              "acknowledged": 169,
+              "pending": 220,
+              "rejected": 2,
+              "errorKinds": [
+                "操作过快"
+              ],
+              "ammoSpent": 167,
+              "corrections": 31,
+              "connected": true,
+              "buildings": 5675,
+              "floors": 4000,
+              "renderMs": {
+                "p95": 5.8,
+                "max": 26.2
+              },
+              "responseMs": {
+                "p50": 10832.6,
+                "p95": 34769.3,
+                "max": 34947.9
+              },
+              "rafMs": {
+                "p95": 24.5,
+                "max": 66.7,
+                "over50": 13
+              },
+              "longTasks": 0,
+              "frameDiagnostics": 0
+            },
+            {
+              "client": 2,
+              "sent": 389,
+              "acknowledged": 303,
+              "pending": 86,
+              "rejected": 2,
+              "errorKinds": [
+                "操作过快"
+              ],
+              "ammoSpent": 301,
+              "corrections": 18,
+              "connected": true,
+              "buildings": 5675,
+              "floors": 4000,
+              "renderMs": {
+                "p95": 6.2,
+                "max": 25
+              },
+              "responseMs": {
+                "p50": 13031.7,
+                "p95": 17918.5,
+                "max": 17971.1
+              },
+              "rafMs": {
+                "p95": 30.3,
+                "max": 72.7,
+                "over50": 15
+              },
+              "longTasks": 0,
+              "frameDiagnostics": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "stage": "detached-building-snapshot",
+      "passed": false,
+      "failure": "Native continuous fire still receives cooldown refusals; no eight-actor run was attempted after this failure.",
+      "phases": [
+        {
+          "name": "two-native-idle",
+          "seconds": 20.45,
+          "clients": [
+            {
+              "client": 1,
+              "sent": 0,
+              "acknowledged": 0,
+              "pending": 0,
+              "rejected": 0,
+              "errorKinds": [],
+              "ammoSpent": 0,
+              "corrections": 0,
+              "connected": true,
+              "buildings": 5675,
+              "floors": 4000,
+              "renderMs": {
+                "p95": 5.6,
+                "max": 7
+              },
+              "responseMs": {
+                "p50": 0,
+                "p95": 0,
+                "max": 0
+              },
+              "rafMs": {
+                "p95": 24.4,
+                "max": 66.4,
+                "over50": 2
+              },
+              "longTasks": 0,
+              "frameDiagnostics": 0
+            },
+            {
+              "client": 2,
+              "sent": 0,
+              "acknowledged": 0,
+              "pending": 0,
+              "rejected": 0,
+              "errorKinds": [],
+              "ammoSpent": 0,
+              "corrections": 0,
+              "connected": true,
+              "buildings": 5675,
+              "floors": 4000,
+              "renderMs": {
+                "p95": 5.8,
+                "max": 8.5
+              },
+              "responseMs": {
+                "p50": 0,
+                "p95": 0,
+                "max": 0
+              },
+              "rafMs": {
+                "p95": 30.2,
+                "max": 66.7,
+                "over50": 3
+              },
+              "longTasks": 0,
+              "frameDiagnostics": 0
+            }
+          ]
+        },
+        {
+          "name": "two-native-walk-and-fire",
+          "seconds": 60.554,
+          "clients": [
+            {
+              "client": 1,
+              "sent": 390,
+              "acknowledged": 390,
+              "pending": 0,
+              "rejected": 159,
+              "errorKinds": [
+                "操作过快"
+              ],
+              "ammoSpent": 231,
+              "corrections": 6,
+              "connected": true,
+              "buildings": 5675,
+              "floors": 4000,
+              "renderMs": {
+                "p95": 6,
+                "max": 24.7
+              },
+              "responseMs": {
+                "p50": 433.1,
+                "p95": 1360,
+                "max": 1927.8
+              },
+              "rafMs": {
+                "p95": 30.3,
+                "max": 66.7,
+                "over50": 13
+              },
+              "longTasks": 0,
+              "frameDiagnostics": 0
+            },
+            {
+              "client": 2,
+              "sent": 390,
+              "acknowledged": 389,
+              "pending": 1,
+              "rejected": 147,
+              "errorKinds": [
+                "操作过快"
+              ],
+              "ammoSpent": 242,
+              "corrections": 6,
+              "connected": true,
+              "buildings": 5675,
+              "floors": 4000,
+              "renderMs": {
+                "p95": 6.3,
+                "max": 25
+              },
+              "responseMs": {
+                "p50": 414.5,
+                "p95": 1319.2,
+                "max": 1718.1
+              },
+              "rafMs": {
+                "p95": 30.4,
+                "max": 72.8,
+                "over50": 14
+              },
+              "longTasks": 0,
+              "frameDiagnostics": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "stage": "plus-no-untargeted-peer-snapshot",
+      "passed": false,
+      "failure": "Native continuous fire still receives cooldown refusals; no eight-actor run was attempted after this failure.",
+      "phases": [
+        {
+          "name": "two-native-idle",
+          "seconds": 20.456,
+          "clients": [
+            {
+              "client": 1,
+              "sent": 0,
+              "acknowledged": 0,
+              "pending": 0,
+              "rejected": 0,
+              "errorKinds": [],
+              "ammoSpent": 0,
+              "corrections": 0,
+              "connected": true,
+              "buildings": 5675,
+              "floors": 4000,
+              "renderMs": {
+                "p95": 5.6,
+                "max": 8.4
+              },
+              "responseMs": {
+                "p50": 0,
+                "p95": 0,
+                "max": 0
+              },
+              "rafMs": {
+                "p95": 24.4,
+                "max": 60.6,
+                "over50": 4
+              },
+              "longTasks": 0,
+              "frameDiagnostics": 0
+            },
+            {
+              "client": 2,
+              "sent": 0,
+              "acknowledged": 0,
+              "pending": 0,
+              "rejected": 0,
+              "errorKinds": [],
+              "ammoSpent": 0,
+              "corrections": 0,
+              "connected": true,
+              "buildings": 5675,
+              "floors": 4000,
+              "renderMs": {
+                "p95": 5.8,
+                "max": 8.8
+              },
+              "responseMs": {
+                "p50": 0,
+                "p95": 0,
+                "max": 0
+              },
+              "rafMs": {
+                "p95": 30.3,
+                "max": 60.8,
+                "over50": 4
+              },
+              "longTasks": 0,
+              "frameDiagnostics": 0
+            }
+          ]
+        },
+        {
+          "name": "two-native-walk-and-fire",
+          "seconds": 60.532,
+          "clients": [
+            {
+              "client": 1,
+              "sent": 386,
+              "acknowledged": 386,
+              "pending": 0,
+              "rejected": 109,
+              "errorKinds": [
+                "操作过快"
+              ],
+              "ammoSpent": 277,
+              "corrections": 1,
+              "connected": true,
+              "buildings": 5675,
+              "floors": 4000,
+              "renderMs": {
+                "p95": 5.8,
+                "max": 23.1
+              },
+              "responseMs": {
+                "p50": 176.4,
+                "p95": 318.4,
+                "max": 434.3
+              },
+              "rafMs": {
+                "p95": 30.3,
+                "max": 66.7,
+                "over50": 13
+              },
+              "longTasks": 0,
+              "frameDiagnostics": 0
+            },
+            {
+              "client": 2,
+              "sent": 381,
+              "acknowledged": 381,
+              "pending": 0,
+              "rejected": 121,
+              "errorKinds": [
+                "操作过快"
+              ],
+              "ammoSpent": 260,
+              "corrections": 0,
+              "connected": true,
+              "buildings": 5675,
+              "floors": 4000,
+              "renderMs": {
+                "p95": 6.3,
+                "max": 24.7
+              },
+              "responseMs": {
+                "p50": 186.8,
+                "p95": 317.1,
+                "max": 436.9
+              },
+              "rafMs": {
+                "p95": 30.5,
+                "max": 72.8,
+                "over50": 20
+              },
+              "longTasks": 0,
+              "frameDiagnostics": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "stage": "plus-scoped-private-rollback",
+      "passed": false,
+      "failure": "Native continuous fire still receives cooldown refusals; no eight-actor run was attempted after this failure.",
+      "phases": [
+        {
+          "name": "two-native-idle",
+          "seconds": 20.461,
+          "clients": [
+            {
+              "client": 1,
+              "sent": 0,
+              "acknowledged": 0,
+              "pending": 0,
+              "rejected": 0,
+              "errorKinds": [],
+              "ammoSpent": 0,
+              "corrections": 0,
+              "connected": true,
+              "buildings": 5675,
+              "floors": 4000,
+              "renderMs": {
+                "p95": 5.8,
+                "max": 7.7
+              },
+              "responseMs": {
+                "p50": 0,
+                "p95": 0,
+                "max": 0
+              },
+              "rafMs": {
+                "p95": 24.4,
+                "max": 66.6,
+                "over50": 4
+              },
+              "longTasks": 0,
+              "frameDiagnostics": 0
+            },
+            {
+              "client": 2,
+              "sent": 0,
+              "acknowledged": 0,
+              "pending": 0,
+              "rejected": 0,
+              "errorKinds": [],
+              "ammoSpent": 0,
+              "corrections": 0,
+              "connected": true,
+              "buildings": 5675,
+              "floors": 4000,
+              "renderMs": {
+                "p95": 5.9,
+                "max": 9.4
+              },
+              "responseMs": {
+                "p50": 0,
+                "p95": 0,
+                "max": 0
+              },
+              "rafMs": {
+                "p95": 30.3,
+                "max": 60.6,
+                "over50": 4
+              },
+              "longTasks": 0,
+              "frameDiagnostics": 0
+            }
+          ]
+        },
+        {
+          "name": "two-native-walk-and-fire",
+          "seconds": 60.536,
+          "clients": [
+            {
+              "client": 1,
+              "sent": 390,
+              "acknowledged": 390,
+              "pending": 0,
+              "rejected": 41,
+              "errorKinds": [
+                "操作过快"
+              ],
+              "ammoSpent": 349,
+              "corrections": 0,
+              "connected": true,
+              "buildings": 5675,
+              "floors": 4000,
+              "renderMs": {
+                "p95": 5.9,
+                "max": 23.3
+              },
+              "responseMs": {
+                "p50": 69.5,
+                "p95": 144.7,
+                "max": 200.1
+              },
+              "rafMs": {
+                "p95": 30.4,
+                "max": 72.7,
+                "over50": 20
+              },
+              "longTasks": 0,
+              "frameDiagnostics": 0
+            },
+            {
+              "client": 2,
+              "sent": 385,
+              "acknowledged": 385,
+              "pending": 0,
+              "rejected": 49,
+              "errorKinds": [
+                "操作过快"
+              ],
+              "ammoSpent": 336,
+              "corrections": 0,
+              "connected": true,
+              "buildings": 5675,
+              "floors": 4000,
+              "renderMs": {
+                "p95": 6.5,
+                "max": 24
+              },
+              "responseMs": {
+                "p50": 66.5,
+                "p95": 136.6,
+                "max": 210.2
+              },
+              "rafMs": {
+                "p95": 30.4,
+                "max": 84.8,
+                "over50": 23
+              },
+              "longTasks": 0,
+              "frameDiagnostics": 0
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "sharedState": {
+    "passed": true,
+    "method": "After the benchmark, same final QA world reopened in two independent native browsers. Owner navigated normally to (8,15) and used E twice on the existing door at(8,13); both owner and passive buddy saw closed then open. No game-action, rendering, HMR or runtime exception.",
+    "doorRestoredToOriginalOpen": true
+  },
+  "audit": {
+    "integrity": "ok",
+    "unchangedWorldCollections": {
+      "buildings": true,
+      "camps": true,
+      "storage": true,
+      "ammo": true,
+      "production": true,
+      "nodes": true,
+      "drops": true,
+      "monsters": true
+    },
+    "buildingCount": 5675,
+    "defensiveAmmo": 540,
+    "players": [
+      {
+        "actor": 1,
+        "ammo": 1651,
+        "actualSpent": 349
+      },
+      {
+        "actor": 2,
+        "ammo": 1664,
+        "actualSpent": 336
+      },
+      {
+        "actor": 3,
+        "ammo": 2000,
+        "actualSpent": 0
+      },
+      {
+        "actor": 4,
+        "ammo": 2000,
+        "actualSpent": 0
+      },
+      {
+        "actor": 5,
+        "ammo": 2000,
+        "actualSpent": 0
+      },
+      {
+        "actor": 6,
+        "ammo": 2000,
+        "actualSpent": 0
+      },
+      {
+        "actor": 7,
+        "ammo": 2000,
+        "actualSpent": 0
+      },
+      {
+        "actor": 8,
+        "ammo": 2000,
+        "actualSpent": 0
+      }
+    ],
+    "allAcknowledgedShotsAccountedFor": true,
+    "note": "Rejected cooldown requests spend no ammunition. No defensive rounds, structures or storage were consumed or granted. Post-benchmark shared door test restored its original state."
+  },
+  "verification": {
+    "testFiles": 29,
+    "tests": 414,
+    "typecheck": "passed",
+    "productionBuild": "passed; same client bundle as before",
+    "warnings": [
+      "Existing Vite native-config migration warning",
+      "Existing client chunk >500kB warning"
+    ],
+    "independentReview": "No remaining P1/P2 in static review; full128 replay-ledger failure/retry edge added per reviewer suggestion.",
+    "regressions": [
+      "600-floor snapshot serializes less than4096 chars outside detached building array (old87057 failed).",
+      "Untargeted shot serializes full world once for durable commit (old2 failed).",
+      "Save failure restores original player identity, ammo/cooldown/world and absent handled key; retry/replay charges once.",
+      "Full128 handled entries survive failed save and trim only after committed retry.",
+      "Private loot and unauthorized production omitted; client mutations cannot change authoritative or previous snapshot state."
+    ]
+  },
+  "limitations": [
+    "All four performance stages failed the zero-error gate. Final two native clients still had41 and49 cooldown refusals. No claim of complete stutter fix.",
+    "Six protocol actors were intentionally not connected after the two-native gate failed. No eight-native/mass siege capacity claim.",
+    "Frame render work and response latency are different measurements; no GPU utilization,60FPS or long-term memory claim.",
+    "World snapshots can still initialize monsters or refresh resource nodes through pre-existing code; only the perform branch of untargeted fire is private.",
+    "Every shot still synchronously serializes/writes the entire world. Investigate incremental transactional persistence or a durable commit log before further performance patches; never acknowledge before durable commit or relax rate checks to mask backlog."
+  ],
+  "sourceSha256": {
+    "server.ts": "5c4897e9f9090532cc6be3a9b2340206361651dffdabe1ec7a426ed6129ea375",
+    "server/worldState.ts": "4fba689bb79739b3cc04ec9103075baa1d7f425fbb569a1c19b43c3a2827d439",
+    "server/worldState.test.ts": "0959f9a7c4add59790dbfe084932b281f2daa23903155a49ee0282df4e25196b"
+  }
+}
