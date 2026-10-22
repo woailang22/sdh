@@ -3,7 +3,7 @@ import { IsometricEngine, type GameCallbacks } from './IsometricEngine';
 import { buildCompoundWalls } from './compound';
 import * as houseRenderer from './houseRenderer';
 
-vi.mock('../audio/soundManager', () => ({ soundManager: { playLevelUp: vi.fn(), playHit: vi.fn(), playGunshot: vi.fn() } }));
+vi.mock('../audio/soundManager', () => ({ soundManager: { playLevelUp: vi.fn(), playHit: vi.fn(), playGunshot: vi.fn(), playReload: vi.fn() } }));
 
 function makeCanvas() {
   const context = new Proxy({
@@ -66,6 +66,69 @@ describe('real-time firing cadence', () => {
     const { engine, fire, at } = armed();
     at(1000, 0.01); at(5000, 0.1);
     expect(engine.player.ammo).toBe(28); expect(fire).toHaveBeenCalledTimes(2);
+  });
+});
+
+describe('isometric shot visuals', () => {
+  it.each([0, 45, 90, 135, 180, 225, 270, 315])('aligns the muzzle and moving tracer with a %s-degree screen aim', degrees => {
+    vi.spyOn(performance, 'now').mockReturnValue(1000);
+    const { engine } = setup(); engine.warpToMap('home_self', 5, 8);
+    Object.assign((engine as any).callbacks, { onGameAction: vi.fn() });
+    engine.hasRangedWeapon = true; engine.player.ammo = 5; engine.player.isFiring = true;
+    engine.monsters = []; engine.buildings = [];
+    const angle = degrees * Math.PI / 180, origin = engine.toScreen(engine.player.x, engine.player.y);
+    engine.mouse.screenX = origin.x + Math.cos(angle) * 140; engine.mouse.screenY = origin.y + Math.sin(angle) * 140;
+    const flash = vi.spyOn(engine as any, 'spawnMuzzleFlash');
+    (engine as any).update(0.001);
+    const [x, y] = flash.mock.calls[0] as [number, number];
+    const muzzle = engine.toScreen(x, y), player = engine.toScreen(engine.player.x, engine.player.y);
+    const tracer = engine.particles.find(p => p.type === 'laser')!;
+    const start = engine.toScreen(tracer.x, tracer.y), next = engine.toScreen(tracer.x + tracer.vx, tracer.y + tracer.vy);
+    for (const vector of [{ x: muzzle.x - player.x, y: muzzle.y - player.y }, { x: next.x - start.x, y: next.y - start.y }]) {
+      const length = Math.hypot(vector.x, vector.y);
+      expect((vector.x * Math.cos(angle) + vector.y * Math.sin(angle)) / length).toBeCloseTo(1, 10);
+    }
+    expect(Math.hypot(x - engine.player.x, y - engine.player.y)).toBeCloseTo(0.8);
+    expect(Math.hypot(tracer.vx, tracer.vy)).toBeCloseTo(35);
+    expect(engine.player.ammo).toBe(4);
+  });
+  it.each([[1, 0], [0, 1], [4, -3]])('draws tracer segments in the same projection as their world velocity %s,%s', (vx, vy) => {
+    const { engine, context } = setup(); const line = vi.fn(); (context as any).lineTo = line;
+    engine.particles = [{ x: 6, y: 9, vx, vy, life: 1, maxLife: 1, color: '#fff', size: 3, type: 'laser' }];
+    (engine as any).renderParticles();
+    const end = engine.toScreen(6 + vx * 0.05, 9 + vy * 0.05);
+    expect(line).toHaveBeenCalledWith(end.x, end.y);
+  });
+  it.each([0, 90])('uses the corrected muzzle origin for offline damage at %s degrees without changing weapon damage', degrees => {
+    vi.spyOn(performance, 'now').mockReturnValue(1000);
+    const { engine } = setup(); engine.warpToMap('home_self', 0, 0); engine.buildings = [];
+    const sign = degrees === 0 ? -1 : 1, dx = Math.SQRT1_2, dy = sign * Math.SQRT1_2;
+    const monster = { id: 'offline', name: '测试怪物', x: dx * 8, y: dy * 8, hp: 1000, maxHp: 1000, speed: 0, damage: 10, state: 'roam', animTime: 0, attackCooldown: 0 } as any;
+    engine.monsters = [monster]; engine.hasRangedWeapon = true; engine.rangedDamage = 124; engine.rangedCritChance = 0;
+    engine.player.ammo = 5; engine.player.isFiring = true;
+    const origin = engine.toScreen(0, 0), angle = degrees * Math.PI / 180;
+    engine.mouse.screenX = origin.x + Math.cos(angle) * 140; engine.mouse.screenY = origin.y + Math.sin(angle) * 140;
+    (engine as any).update(0.001);
+    // The target is eight world cells away; muzzle offset0.8 leaves7.2 cells of falloff.
+    expect(monster.hp).toBe(914); expect(engine.rangedDamage).toBe(124);
+  });
+});
+
+describe('authoritative ammunition projection', () => {
+  it.each([[23, 58, 23, 35], [30, 10, 10, 0], [23, 0, 0, 0], [0, 58, 0, 58]])('splits a %s-round magazine and server total%s into%s loaded and%s reserve', (current, total, loaded, reserve) => {
+    const { engine } = setup(); engine.player.ammo = current; engine.player.reserveAmmo = 999;
+    engine.setAuthoritativeAmmo(total);
+    expect(engine.player.ammo).toBe(loaded); expect(engine.player.reserveAmmo).toBe(reserve);
+    expect(engine.player.ammo + engine.player.reserveAmmo).toBe(total);
+  });
+  it('keeps the real total through reloads, repeated snapshots and exhaustion', () => {
+    const { engine } = setup(); engine.player.ammo = 23;
+    engine.setAuthoritativeAmmo(58); engine.reloadWeapon(); engine.setAuthoritativeAmmo(58);
+    expect(engine.player).toMatchObject({ ammo: 30, reserveAmmo: 28 });
+    engine.player.ammo = 0; engine.setAuthoritativeAmmo(3); engine.reloadWeapon(); engine.setAuthoritativeAmmo(3);
+    expect(engine.player).toMatchObject({ ammo: 3, reserveAmmo: 0 });
+    engine.setAuthoritativeAmmo(0); engine.reloadWeapon();
+    expect(engine.player).toMatchObject({ ammo: 0, reserveAmmo: 0 });
   });
 });
 

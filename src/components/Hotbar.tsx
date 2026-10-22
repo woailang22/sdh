@@ -24,7 +24,7 @@ export const Hotbar: React.FC<HotbarProps> = ({
       {/* Top Experience / Ammo Status Gauge */}
       <div className="flex items-center gap-2 mb-1.5 px-2">
         <div className="flex items-center gap-1.5 text-[10px] font-mono">
-          <span className="text-cyan-400 font-bold">主武器弹药:</span>
+          <span className="text-cyan-400 font-bold">弹匣 / 备用:</span>
           <span className="text-amber-400 font-bold">
             {ammo.current} <span className="text-slate-500">/</span> {ammo.reserve}
           </span>

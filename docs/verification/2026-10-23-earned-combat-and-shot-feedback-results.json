@@ -1,0 +1,220 @@
+{
+  "baseCommit": "d1e1f2ca21344abff03e4acd72c583767aa4cc54",
+  "scope": "Correct native shot geometry and authoritative ammunition display, then validate a real earned weapon combat/loot/return/storage cycle on a unique QA backup. No grants, HP/position/clock edits, real data/sdc.sqlite access or deployment.",
+  "sourceSha256": {
+    "src/game/IsometricEngine.ts": "3ec00199dbe48e0def12630cddd55b4ebd71306a249d428e0e8ecd481e6133f4",
+    "src/game/IsometricEngine.test.ts": "66cc5a61ac9528a03327a964a846f6916b8ddcb14cfd644520b842939145f5e5",
+    "src/App.tsx": "af761ec5a8f421f67a3470c20c0b9e441ee48aa01a5c59286057aa7a9a422e54",
+    "src/components/Hotbar.tsx": "631473d7596f46215714e692d53a2bb23806b25bd68c035820f0827263ed3b9b"
+  },
+  "productionBundles": {
+    "baseline": "index-4EHom0Pl.js",
+    "geometryAndExpedition": "index-BqQN9q3e.js",
+    "finalAmmoAndStorage": "index-Ci3C41xg.js"
+  },
+  "shotGeometry": {
+    "rootCause": "Screen aim angle was treated as a world-plane angle for both muzzle and tracer velocity; the tracer line also added world velocity directly to screen coordinates.",
+    "fix": "Inverse-project aim using the existing TILE_W/TILE_H proportions, normalize to a world direction, reuse it for muzzle/velocity, and project tracer segment endpoints through toScreen. World speed35 and muzzle offset0.8 retained.",
+    "nativeBaseline": {
+      "directions": 4,
+      "aimDegrees": [
+        0,
+        90,
+        180,
+        -90
+      ],
+      "muzzleErrorDegrees": [
+        26.5650511771,
+        63.4349488229,
+        26.5650511771,
+        63.4349488229
+      ],
+      "trajectoryErrorDegrees": [
+        26.5650511771,
+        63.4349488229,
+        26.5650511771,
+        63.4349488229
+      ],
+      "paidShots": 4
+    },
+    "nativeFixed": {
+      "sameCharacterContinued": true,
+      "directions": 4,
+      "reportedMuzzleAndTrajectoryErrorDegrees": 0,
+      "paidShots": 4
+    },
+    "finalBundleNativeCheck": "One additional native45-degree shot has matching projected muzzle and velocity angles within1e-8 radians; consumes exactly one actual round.",
+    "offlineEffect": "Offline preview measures falloff and range from the muzzle, so correcting its position can change those edge results. Two offline update tests at8 world cells,0/90-degree screen aim and124 base damage now deal86 from7.2 muzzle-distance cells; old misplaced muzzle dealt85. Online server damage/range/fire-rate code unchanged. Do not describe every mode as visual-only."
+  },
+  "ammunition": {
+    "nativeBug": "During the earned expedition server total58 was displayed as23 loaded plus58 reserve, duplicating the loaded23 in the display. Real server ammunition was not duplicated.",
+    "fix": "setAuthoritativeAmmo clamps current magazine to actual total/capacity, then sets reserve=total-loaded. App snapshots use it and HUD explicitly labels magazine/reserve. Reload only redistributes this total.",
+    "finalNative": {
+      "initial": {
+        "total": 58,
+        "loaded": 0,
+        "reserve": 58
+      },
+      "afterNativeR": {
+        "total": 58,
+        "loaded": 30,
+        "reserve": 28
+      },
+      "afterOneShot": {
+        "total": 57,
+        "loaded": 29,
+        "reserve": 28
+      },
+      "afterReloadAndSnapshots": {
+        "total": 57,
+        "loaded": 30,
+        "reserve": 27
+      },
+      "afterRestart": {
+        "total": 57,
+        "loaded": 0,
+        "reserve": 57
+      }
+    },
+    "persistenceBoundary": "Server stores total ammunition, while the local magazine continues to start unloaded after reconnect; this change does not add server magazine persistence."
+  },
+  "earnedExpedition": {
+    "source": "Exact backup of prior earned food/research/plasma character with8 buildings, researched/crafted equipped wp_plasma,73 rounds, two rations, one carried potato, two waters and two stored potatoes. Eight paid visual-check shots leave65 before the expedition.",
+    "elapsedToReturnSeconds": 481.9,
+    "travel": "Normal navigation from own camp world site(-60,20), via western road approach and southern wetland route, to the rift front and back. No forced coordinates, time changes or state grants.",
+    "combat": [
+      {
+        "monster": "wetland stalker",
+        "maxHp": 280,
+        "shots": 1
+      },
+      {
+        "monster": "rift juvenile",
+        "maxHp": 320,
+        "shots": 1
+      },
+      {
+        "monster": "rift boss",
+        "maxHp": 1600,
+        "shots": 5,
+        "observedDamagePerShot": 320
+      }
+    ],
+    "ammo": {
+      "before": 65,
+      "after": 58,
+      "nativeFireIntents": 7
+    },
+    "rewards": {
+      "creditGain": 220,
+      "shardGain": 8,
+      "xpGainAcrossLevels": 440,
+      "killsBefore": 1,
+      "killsAfter": 4,
+      "levelBefore": 1,
+      "levelAfter": 3,
+      "xpBefore": 64,
+      "xpAfter": 204
+    },
+    "loot": "Actual rift armory container supplies1SVD,1red key,1T4helmet and1T5vest. Container is depleted. All returned alive, persisted after restart; final native follow-up deposits SVD and vest into own storage and verifies them after a further restart.",
+    "supplies": "Two existing rations and one carried potato consumed normally. Two waters, both seed types and all7medical items retained. No material, price, nutrition, reward or enemy balance changes.",
+    "weather": "Normal180-second weather sequence transitions to acid rain during the trip; native screenshot shows acid rain and reduced shields. Shield eventually recovers in later weather. Do not attribute the environmental shield loss to boss hits.",
+    "conservation": {
+      "integrity": "ok",
+      "unchangedBuildings": 8,
+      "equippedInstancesUnchanged": true,
+      "defenseAmmoUnchanged": 20,
+      "ammo": {
+        "source": 73,
+        "oldVisualShots": 4,
+        "fixedVisualShots": 4,
+        "combatShots": 7,
+        "finalNativeShot": 1,
+        "final": 57
+      },
+      "rewards": {
+        "credits": {
+          "before": 332,
+          "after": 552,
+          "earned": 220
+        },
+        "shards": {
+          "before": 1,
+          "after": 9,
+          "earned": 8
+        },
+        "kills": {
+          "before": 1,
+          "after": 4
+        },
+        "level": {
+          "before": 1,
+          "after": 3
+        },
+        "xp": {
+          "before": 64,
+          "after": 204,
+          "earnedAcrossLevels": 440
+        }
+      },
+      "materials": {
+        "wood": 2,
+        "stone": 32,
+        "scrap": 40,
+        "parts": 1
+      },
+      "itemDelta": {
+        "food": -2,
+        "crop_potato": -1,
+        "wp_svd": 1,
+        "key_red": 1,
+        "helmet_t4": 1,
+        "vest_t5": 1
+      },
+      "storage": {
+        "crop_potato": 2,
+        "vest_t5": 1,
+        "wp_svd": 1
+      },
+      "retainedCarry": {
+        "key_red": 1,
+        "helmet_t4": 1,
+        "water": 2,
+        "seed_potato": 1,
+        "seed_starfruit": 1
+      },
+      "weapon": "wp_plasma",
+      "blueprints": [
+        "wp_plasma"
+      ],
+      "medicalsUnchanged": 7
+    }
+  },
+  "verification": {
+    "testFiles": 29,
+    "testsPassed": 409,
+    "typecheck": "passed",
+    "productionBuild": "passed",
+    "existingWarnings": "Vite native config __dirname and >500kB JS chunk",
+    "redGreen": "Eight-direction muzzle/trajectory and three projected segment regressions all failed before the fix. Two added offline branch tests failed against HEAD original source, then passed after restoring corrected source. Five ammunition cases fail before the new sync method and pass after implementation. Existing firing cadence and target selection regressions pass.",
+    "review": "Independent static review found no remaining P1/P2. Its offline falloff caveat is accepted, tested and documented; additional ammo review confirms total conservation.",
+    "nativeErrors": 0,
+    "nativeRenderDiagnostics": 0,
+    "nativeBrowserExceptions": 0
+  },
+  "qaHarnessCorrection": "First final-ammo script assumed the magazine was already loaded immediately after reconnect; actual valid state was0loaded/58reserve. Preserved that failure and the same save, used native R to load30/28, then verified shot/reload/restart conservation. No game state was reset or granted.",
+  "sources": [
+    "data/earned-plasma-visual-baseline-20261023-a1-results.json",
+    "data/earned-plasma-visual-final-20261023-a1-results.json",
+    "data/earned-plasma-combat-20261023-a1-results.json",
+    "data/earned-plasma-final-ammo-20261023-a2-results.json",
+    "data/earned-plasma-combat-save-audit-20261023-results.json"
+  ],
+  "limits": [
+    "One earned equipped-plasma expedition validates this progression route and real resource accounting, not all guns, PvP balance, repeated raid profits or long-term survival economics.",
+    "The boss takes five320-damage rounds under current rules; this successful run does not by itself prove difficulty and reward balance are appropriate.",
+    "The actual expedition used the geometry-only production bundle; the final ammo bundle separately validates native shooting, magazine/reserve projection, reload, reward storage and restart on that same preserved character.",
+    "No FPS/GPU/long-term memory/concurrency performance claim from this functional run.",
+    "Raw QA identities, screenshots and databases remain ignored. Owned browsers/servers closed; broader approved game scope remains in progress."
+  ]
+}

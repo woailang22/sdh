@@ -570,8 +570,7 @@ export default function App() {
     eng.player.hp = p.hp; eng.player.maxHp = p.maxHp;
     eng.player.shield = p.shield; eng.player.maxShield = p.maxShield;
     eng.player.satiety = p.satiety;
-    eng.player.reserveAmmo = p.resources.ammo;
-    if (p.resources.ammo <= 0) eng.player.ammo = 0;
+    eng.setAuthoritativeAmmo(p.resources.ammo);
     eng.setAuthoritativeBuildings(state.buildings);
     eng.setResourceStates(state.nodes);
     eng.setAuthoritativeMonsters(state.monsters);

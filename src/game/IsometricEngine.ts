@@ -1468,6 +1468,11 @@ export class IsometricEngine {
     }
   }
 
+  public setAuthoritativeAmmo(total: number) {
+    this.player.ammo = Math.max(0, Math.min(this.player.ammo, this.player.maxAmmo, total));
+    this.player.reserveAmmo = total - this.player.ammo;
+  }
+
   public reloadWeapon() {
     if (this.player.ammo < this.player.maxAmmo && this.player.reserveAmmo > 0) {
       soundManager.playReload();
@@ -2285,8 +2290,9 @@ export class IsometricEngine {
         soundManager.playGunshot();
 
         const muzzleDist = 0.8;
-        const flashWorldX = this.player.x + Math.cos(this.player.angle) * muzzleDist;
-        const flashWorldY = this.player.y + Math.sin(this.player.angle) * muzzleDist;
+        const direction = this.worldAimDirection(this.player.angle);
+        const flashWorldX = this.player.x + direction.x * muzzleDist;
+        const flashWorldY = this.player.y + direction.y * muzzleDist;
         this.spawnMuzzleFlash(flashWorldX, flashWorldY);
         this.fireBullet(flashWorldX, flashWorldY, this.player.angle);
       }
@@ -2842,6 +2848,14 @@ export class IsometricEngine {
     }).sort((a, b) => Math.hypot(a.x - this.player.x, a.y - this.player.y) - Math.hypot(b.x - this.player.x, b.y - this.player.y))[0];
   }
 
+  private worldAimDirection(angle: number): { x: number; y: number } {
+    // Aim is a screen angle; particles move in the isometric world plane.
+    const x = Math.cos(angle) / this.TILE_W + Math.sin(angle) / this.TILE_H;
+    const y = Math.sin(angle) / this.TILE_H - Math.cos(angle) / this.TILE_W;
+    const length = Math.hypot(x, y);
+    return { x: x / length, y: y / length };
+  }
+
   private fireBullet(startX: number, startY: number, angle: number) {
     const range = this.rangedRange;
     const spread = this.rangedSpread;
@@ -2856,11 +2870,12 @@ export class IsometricEngine {
     }).sort((a, b) => Math.hypot(a.x - this.player.x, a.y - this.player.y) - Math.hypot(b.x - this.player.x, b.y - this.player.y))[0] : undefined;
     this.callbacks.onGameAction?.('fire', { angle, ...(target ? { targetId: target.id } : monster ? { monsterId: monster.id } : {}) });
 
+    const direction = this.worldAimDirection(angle);
     this.particles.push({
       x: startX,
       y: startY,
-      vx: Math.cos(angle) * 35,
-      vy: Math.sin(angle) * 35,
+      vx: direction.x * 35,
+      vy: direction.y * 35,
       life: 0.12,
       maxLife: 0.12,
       color: '#fef08a',
@@ -6467,7 +6482,8 @@ export class IsometricEngine {
         this.ctx.lineWidth = 3;
         this.ctx.beginPath();
         this.ctx.moveTo(s.x, s.y);
-        this.ctx.lineTo(s.x + p.vx * 0.05, s.y + p.vy * 0.05);
+        const end = this.toScreen(p.x + p.vx * 0.05, p.y + p.vy * 0.05);
+        this.ctx.lineTo(end.x, end.y);
         this.ctx.stroke();
       } else {
         this.ctx.globalAlpha = alpha;
