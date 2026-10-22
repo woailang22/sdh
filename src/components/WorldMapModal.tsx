@@ -4,7 +4,7 @@ import { MapZoneId, MonsterEntity } from '../types/game';
 import { REGIONS, SUBMAPS } from '../game/maps';
 import { WORLD_LOCATIONS, WORLD_MIN, WORLD_MAX, worldLocationAt, worldThemeAt } from '../game/world';
 import { groundBaseColor, themeAccent } from '../game/visualTheme';
-import { ROADSIDE_USES, WORLD_ROADSIDE_STOPS } from '../game/worldRoutes';
+import { WORLD_SUPPLY_ROUTES } from '../game/worldRoutes';
 import { soundManager } from '../audio/soundManager';
 
 interface CampMarker { id: string; ownerId: string; ownerName: string; x: number; y: number; mapId: string }
@@ -38,12 +38,15 @@ export const WorldMapModal: React.FC<WorldMapModalProps> = ({
 }) => {
   const [view, setView] = useState({ x: WORLD_MIN, y: WORLD_MIN, size: WORLD_SIZE });
   const [selected, setSelected] = useState<SelectedPoint | null>(null);
+  const [routeId, setRouteId] = useState('south');
   const drag = useRef<{ x: number; y: number; viewX: number; viewY: number } | null>(null);
   const inCamp = currentMapId.startsWith('home_');
   const location = worldLocationAt(playerPos.x, playerPos.y);
   const selection: SelectedPoint = selected ?? location;
   const selectedLocation = WORLD_LOCATIONS.find(point => point.id === selection.id);
-  const selectedStop = WORLD_ROADSIDE_STOPS.find(point => point.id === selection.id);
+  const selectedRoute = WORLD_SUPPLY_ROUTES.find(route => route.stops.some(point => point.id === selection.id));
+  const selectedStop = selectedRoute?.stops.find(point => point.id === selection.id);
+  const visibleRoute = selectedRoute ?? WORLD_SUPPLY_ROUTES.find(route => route.id === routeId)!;
   const scale = view.size / WORLD_SIZE;
   const terrain = useMemo(() => Array.from({ length: 32 * 32 }, (_, index) => {
     const x = WORLD_MIN + (index % 32) * 64;
@@ -52,7 +55,7 @@ export const WorldMapModal: React.FC<WorldMapModalProps> = ({
   }), []);
 
   useEffect(() => {
-    if (isOpen) { setSelected(null); setView({ x: WORLD_MIN, y: WORLD_MIN, size: WORLD_SIZE }); }
+    if (isOpen) { setSelected(null); setRouteId('south'); setView({ x: WORLD_MIN, y: WORLD_MIN, size: WORLD_SIZE }); }
   }, [isOpen, currentMapId]);
   useEffect(() => {
     if (!isOpen) return;
@@ -141,8 +144,8 @@ export const WorldMapModal: React.FC<WorldMapModalProps> = ({
                   return <text key={region.id} x={x - 70} y={y - 120} fill="#e2e8f0" fillOpacity="0.5" fontSize="46" fontWeight="bold" letterSpacing="5">{region.name}</text>;
                 })}
                 {view.size <= 1024 && <g stroke="#c5ac72" strokeWidth={3 * scale} strokeDasharray={`${8 * scale} ${6 * scale}`} fill="none" opacity="0.65" pointerEvents="none">
-                  <path d="M 0 96 V 592" />
-                  {WORLD_ROADSIDE_STOPS.map(point => <path key={point.id} d={`M 0 ${point.y} H ${point.x}`} />)}
+                  <path d={visibleRoute.axis === 'x' ? 'M 0 0 H -254' : 'M 0 96 V 592'} />
+                  {visibleRoute.stops.map(point => <path key={point.id} d={visibleRoute.axis === 'x' ? `M ${point.x} 0 V ${point.y}` : `M 0 ${point.y} H ${point.x}`} />)}
                 </g>}
                 {WORLD_LOCATIONS.map(point => <g key={point.id} data-map-marker="true" role="button" tabIndex={0} aria-label={`选择地标：${point.name}`} className="cursor-pointer outline-none focus:stroke-white" onClick={() => setSelected(point)} onKeyDown={event => markerKey(event, point)}>
                   <circle cx={point.x} cy={point.y} r={17 * scale} fill="#0d1420" stroke={selection.id === point.id ? '#fbbf24' : themeAccent(point.theme)} strokeWidth={4 * scale} />
@@ -150,11 +153,11 @@ export const WorldMapModal: React.FC<WorldMapModalProps> = ({
                   <text x={point.x + (point.id === 'camp_plaza' ? -25 : 25) * scale} y={point.y + (point.id === 'camp_workshop' ? -25 : point.id === 'camp_outskirts' ? 48 : 10) * scale} textAnchor={point.id === 'camp_plaza' ? 'end' : 'start'} fill="#f1f5f9" fontSize={38 * scale} paintOrder="stroke" stroke="#172027" strokeWidth={7 * scale} strokeLinejoin="round">{point.name}</text>
                   <title>{`${point.name} · ${RISK_LABEL[point.risk]}`}</title>
                 </g>)}
-                {view.size <= 1024 && WORLD_ROADSIDE_STOPS.map(point => <g key={point.id} data-map-marker="true" role="button" tabIndex={0} aria-label={`选择驿点：${point.name}`} className="cursor-pointer outline-none focus:stroke-white" onClick={() => setSelected(point)} onKeyDown={event => markerKey(event, point)}>
-                  <rect x={point.x - 13 * scale} y={point.y - 13 * scale} width={26 * scale} height={26 * scale} fill={ROADSIDE_USES[point.kind].color} stroke={selection.id === point.id ? '#fbbf24' : '#172027'} strokeWidth={3 * scale} />
+                {view.size <= 1024 && visibleRoute.stops.map(point => <g key={point.id} data-map-marker="true" role="button" tabIndex={0} aria-label={`选择驿点：${point.name}`} className="cursor-pointer outline-none focus:stroke-white" onClick={() => setSelected(point)} onKeyDown={event => markerKey(event, point)}>
+                  <rect x={point.x - 13 * scale} y={point.y - 13 * scale} width={26 * scale} height={26 * scale} fill={point.color} stroke={selection.id === point.id ? '#fbbf24' : '#172027'} strokeWidth={3 * scale} />
                   <circle cx={point.x} cy={point.y} r={34 * scale} fill="transparent" />
                   <text x={point.x + (point.x < 0 ? -26 : 26) * scale} y={point.y + 10 * scale} textAnchor={point.x < 0 ? 'end' : 'start'} fill="#f1e5ce" fontSize={38 * scale} paintOrder="stroke" stroke="#172027" strokeWidth={7 * scale}>{point.name}</text>
-                  <title>{`${point.name} · ${ROADSIDE_USES[point.kind].supplies}`}</title>
+                  <title>{`${point.name} · ${point.supplies}`}</title>
                 </g>)}
                 {camps.map(camp => <g key={camp.id} data-map-marker="true" role="button" tabIndex={0} aria-label={`选择营地：${camp.ownerName}`} className="cursor-pointer" onClick={() => setSelected({ ...camp, name: `${camp.ownerName}的营地`, camp: true })} onKeyDown={event => markerKey(event, { ...camp, name: `${camp.ownerName}的营地`, camp: true })}>
                   <path d={`M ${camp.x - 15 * scale} ${camp.y + 12 * scale} L ${camp.x} ${camp.y - 18 * scale} L ${camp.x + 15 * scale} ${camp.y + 12 * scale} Z`} fill="#064e3b" stroke="#6ee7b7" strokeWidth={4 * scale} />
@@ -165,11 +168,11 @@ export const WorldMapModal: React.FC<WorldMapModalProps> = ({
                 <g aria-label="世界玩家位置"><circle cx={playerPos.x} cy={playerPos.y} r={13 * scale} fill="#38bdf8" stroke="#fff" strokeWidth={4 * scale} /><title>你的位置</title></g>
               </svg>
               <div className="absolute top-3 left-3 text-[10px] text-slate-200 font-mono rounded bg-slate-950/80 px-2 py-1 pointer-events-none">N ↑ · 世界边界 ±1024</div>
-              <div className="absolute bottom-3 left-3 flex gap-1">
+              <div className="absolute bottom-3 left-3 right-3 flex flex-wrap gap-1">
                 <button aria-label="放大地图" onClick={() => zoom(0.5)} className="p-2 rounded bg-slate-950/90 border border-slate-600 text-slate-200"><Plus className="w-4 h-4" /></button>
                 <button aria-label="缩小地图" onClick={() => zoom(2)} className="p-2 rounded bg-slate-950/90 border border-slate-600 text-slate-200"><Minus className="w-4 h-4" /></button>
                 <button onClick={centerPlayer} className="flex items-center gap-1 px-2 rounded bg-slate-950/90 border border-slate-600 text-slate-200 text-xs"><MapPin className="w-3.5 h-3.5" />我的位置</button>
-                <button onClick={() => { soundManager.playClick(); setView({ x: -320, y: 48, size: 640 }); setSelected(WORLD_ROADSIDE_STOPS[0]); }} className="px-2 rounded bg-slate-950/90 border border-amber-700 text-amber-200 text-xs">南下补给线</button>
+                {WORLD_SUPPLY_ROUTES.map(route => <button key={route.id} onClick={() => { soundManager.playClick(); setRouteId(route.id); setView(route.view); setSelected(route.stops[0]); }} className="px-2 py-2 rounded bg-slate-950/90 border border-amber-700 text-amber-200 text-xs">{route.name}</button>)}
               </div>
             </div>
             <aside className="md:w-60 p-4 border-t md:border-t-0 md:border-l border-slate-800 bg-slate-950/40 flex flex-col gap-3">
@@ -182,18 +185,18 @@ export const WorldMapModal: React.FC<WorldMapModalProps> = ({
                 <div className="text-xs text-slate-300 leading-relaxed">主要资源<br /><span className="text-slate-400">{RESOURCE_LABEL[selectedLocation.region]}</span></div>
               </>}
               {selectedStop && <>
-                <span className="text-xs text-amber-300">南下补给线 · {RISK_LABEL[worldLocationAt(selectedStop.x, selectedStop.y).risk]}</span>
+                <span className="text-xs text-amber-300">{selectedRoute!.name} · {RISK_LABEL[worldLocationAt(selectedStop.x, selectedStop.y).risk]}</span>
                 <label className="text-xs text-slate-400">沿途驿点
-                  <select aria-label="选择沿途驿点" value={selectedStop.id} onChange={event => setSelected(WORLD_ROADSIDE_STOPS.find(point => point.id === event.target.value)!)} className="mt-1 w-full min-h-10 px-2 rounded border border-slate-600 bg-slate-900 text-slate-200">
-                    {WORLD_ROADSIDE_STOPS.map(point => <option key={point.id} value={point.id}>{point.name}</option>)}
+                  <select aria-label="选择沿途驿点" value={selectedStop.id} onChange={event => setSelected(selectedRoute!.stops.find(point => point.id === event.target.value)!)} className="mt-1 w-full min-h-10 px-2 rounded border border-slate-600 bg-slate-900 text-slate-200">
+                    {selectedRoute!.stops.map(point => <option key={point.id} value={point.id}>{point.name}</option>)}
                   </select>
                 </label>
                 <p className="text-xs text-slate-400 leading-relaxed">{selectedStop.description}</p>
-                <div className="text-xs text-slate-300 leading-relaxed">常见物资<br /><span style={{ color: ROADSIDE_USES[selectedStop.kind].color }}>{ROADSIDE_USES[selectedStop.kind].supplies}</span></div>
+                <div className="text-xs text-slate-300 leading-relaxed">常见物资<br /><span style={{ color: selectedStop.color }}>{selectedStop.supplies}</span></div>
               </>}
               {selection.camp && <p className="text-xs text-slate-400 leading-relaxed">导航至世界中的营地入口，到达后交互进入独立营地。</p>}
               <button onClick={markRoute} className="flex items-center justify-center gap-2 px-3 py-2 rounded-lg border border-amber-500/60 bg-amber-950/50 text-amber-200 font-bold text-xs hover:bg-amber-900/60"><Navigation className="w-4 h-4" />标记路线</button>
-              <p className="text-[10px] text-slate-500 leading-relaxed md:mt-auto">拖动平移 · 滚轮或按钮缩放<br />点击地标查看资源与风险<br />公共世界无缝相连，营地为独立空间。路线标记用于步行导航。</p>
+              <p className="text-[10px] text-slate-500 leading-relaxed md:mt-auto">拖动平移 · 滚轮或按钮缩放<br />点击地标查看资源与风险<br />虚线为方向参考，行走需绕过建筑。物资可能已被搜取。<br />公共世界无缝相连，营地为独立空间。路线标记用于步行导航。</p>
             </aside>
           </div>
         )}
