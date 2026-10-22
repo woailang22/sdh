@@ -123,6 +123,7 @@ export class IsometricEngine {
   private worldScenery: WorldScenery[] = [];
   private sceneryCache = new WeakMap<WorldChunk, WorldScenery[]>();
   private groundCache: { canvas: HTMLCanvasElement; overlay?: HTMLCanvasElement; key: string; x: number; y: number } | null = null;
+  private wallImages = new Map<string, HTMLCanvasElement>();
   private readonly listenerController = new AbortController();
 
   // Player Placed Floors (key: `${wx},${wy}`)
@@ -1969,7 +1970,13 @@ export class IsometricEngine {
     this.callbacks.onRenderStatus?.(message);
   }
 
+  private clearWallImages() {
+    for (const image of this.wallImages.values()) image.width = image.height = 0;
+    this.wallImages.clear();
+  }
+
   private resetGraphics() {
+    this.clearWallImages();
     for (const patch of this.tilePatchCache.values()) patch.width = patch.height = 0;
     this.tilePatchCache.clear();
     if (this.tilePatchScratch) this.tilePatchScratch.width = this.tilePatchScratch.height = 0;
@@ -2036,6 +2043,7 @@ export class IsometricEngine {
 
   public dispose() {
     this.stop();
+    this.clearWallImages();
     this.disposed = true;
     this.listenerController.abort();
     this.clearKeys();
@@ -4453,7 +4461,55 @@ export class IsometricEngine {
   }
 
   private drawBuilding(b: BuildingEntity) {
-    const s = this.toScreen(b.x, b.y);
+    if (!['wood_wall', 'stone_wall', 'iron_wall', 'glass_wall'].includes(b.type)) {
+      this.drawBuildingUncached(b);
+      return;
+    }
+    const hostile = isHostile(this.localPlayerId, b.ownerId, this.currentMapId);
+    const point = this.toScreen(b.x, b.y);
+    const x = Math.floor(point.x), y = Math.floor(point.y);
+    // Bake the current subpixel phase, then blit on whole pixels to keep edges crisp.
+    const phaseX = Math.round((point.x - x) * 1024) / 1024;
+    const phaseY = Math.round((point.y - y) * 1024) / 1024;
+    const key = `${b.type}:${b.facing ?? 'ew'}:${b.hp}:${b.maxHp}:${hostile}:${phaseX}:${phaseY}`;
+    let image = this.wallImages.get(key);
+    if (!image) {
+      if (this.wallImages.size >= 32) {
+        const oldest = this.wallImages.keys().next().value!;
+        image = this.wallImages.get(oldest)!;
+        this.wallImages.delete(oldest);
+      } else {
+        image = document.createElement('canvas'); image.width = 128; image.height = 96;
+      }
+      const context = image.getContext('2d');
+      if (!context) {
+        image.width = image.height = 0;
+        this.drawBuildingUncached(b);
+        return;
+      }
+      context.clearRect(0, 0, image.width, image.height);
+      const previous = this.ctx;
+      try {
+        this.ctx = context;
+        this.drawBuildingShape(b, { x: 64 + phaseX, y: 72 + phaseY });
+      } catch (error) {
+        image.width = image.height = 0;
+        throw error;
+      } finally {
+        this.ctx = previous;
+      }
+    }
+    this.wallImages.delete(key); this.wallImages.set(key, image);
+    this.ctx.drawImage(image, x - 64, y - 72);
+    this.drawBuildingDetails(b, point);
+  }
+
+  private drawBuildingUncached(b: BuildingEntity, s = this.toScreen(b.x, b.y)) {
+    this.drawBuildingShape(b, s);
+    this.drawBuildingDetails(b, s);
+  }
+
+  private drawBuildingShape(b: BuildingEntity, s: { x: number; y: number }) {
     if (isHostile(this.localPlayerId, b.ownerId, this.currentMapId) && (b.type === 'safe_door' || b.type.includes('wall') || b.type === 'turret')) {
       this.ctx.save();
       this.ctx.strokeStyle = 'rgba(239,68,68,0.9)';
@@ -4803,8 +4859,14 @@ export class IsometricEngine {
       }
     }
 
+    this.ctx.restore();
+  }
+
+  private drawBuildingDetails(b: BuildingEntity, s: { x: number; y: number }) {
+    if (b.type === 'safe_door' || this.nearestBuilding?.id !== b.id) return;
+    this.ctx.save();
     // 通用名牌：名称 + 归属 + 等级（安全门已有专属大战报式名牌，此处补通用版）
-    if (b.type !== 'safe_door' && this.nearestBuilding?.id === b.id) {
+    if (this.nearestBuilding?.id === b.id) {
       const label = b.ownerName ? `${b.name} · ${b.ownerName}` : b.name;
       const lvl = b.level > 1 ? ` Lv.${b.level}` : '';
       this.ctx.font = 'bold 9px sans-serif';

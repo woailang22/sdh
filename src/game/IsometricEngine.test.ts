@@ -8,6 +8,7 @@ vi.mock('../audio/soundManager', () => ({ soundManager: { playLevelUp: vi.fn(), 
 function makeCanvas() {
   const context = new Proxy({
     fillRect: vi.fn(), fill: vi.fn(), stroke: vi.fn(), drawImage: vi.fn(), createPattern: () => null,
+    fillText: vi.fn(), strokeText: vi.fn(), arc: vi.fn(), clearRect: vi.fn(),
   }, { get: (target, key) => key in target ? target[key as keyof typeof target] : () => {} });
   return Object.assign(new EventTarget(), {
     width: 640, height: 360, parentElement: { clientWidth: 640, clientHeight: 360 },
@@ -238,6 +239,102 @@ describe('ground rendering cost', () => {
     expect([...engine.placedFloors.values()]).toEqual(floors.map(b => ({ x: b.x, y: b.y, type: b.type })));
     expect(engine.buildings).toEqual(buildings);
     expect((engine as any).renderMapGround).toHaveBeenCalledOnce();
+  });
+
+  it('shares wall artwork across positions while separating damage, orientation, material and hostility', () => {
+    const { engine, context, doc } = setup();
+    const gradient = () => ({ addColorStop: vi.fn() });
+    (context as any).createRadialGradient = gradient;
+    const surfaces: ReturnType<typeof makeCanvas>[] = [];
+    vi.spyOn(doc, 'createElement').mockImplementation(() => {
+      const surface = makeCanvas(); (surface.getContext() as any).createRadialGradient = gradient; surfaces.push(surface); return surface;
+    });
+    engine.currentMapId = 'home_owner'; engine.localPlayerId = 'owner';
+    const wall = { id: 'build_wall', type: 'wood_wall', x: 0, y: 0, hp: 350, maxHp: 350, ownerId: 'owner', facing: 'ew' };
+    for (let x = 0; x < 5; x++) (engine as any).drawBuilding({ ...wall, id: 'build_' + x, x });
+    expect(context.drawImage).toHaveBeenCalledTimes(5);
+    expect(surfaces).toHaveLength(1);
+    for (const change of [{ hp: 100 }, { maxHp: 700 }, { facing: 'ns' }, { type: 'stone_wall' }]) (engine as any).drawBuilding({ ...wall, ...change });
+    engine.localPlayerId = 'visitor'; (engine as any).drawBuilding(wall);
+    expect(surfaces).toHaveLength(6);
+    engine.localPlayerId = 'owner'; (engine as any).drawBuilding(wall);
+    expect(surfaces).toHaveLength(6);
+    expect((engine as any).ctx).toBe(context);
+  });
+
+  it('bounds wall artwork allocations while recycling evicted pixels and releasing reset and disposed surfaces', () => {
+    const { engine, context, doc } = setup();
+    const gradient = () => ({ addColorStop: vi.fn() }); (context as any).createRadialGradient = gradient;
+    const surfaces: ReturnType<typeof makeCanvas>[] = [];
+    vi.spyOn(doc, 'createElement').mockImplementation(() => {
+      const surface = makeCanvas(); (surface.getContext() as any).createRadialGradient = gradient; surfaces.push(surface); return surface;
+    });
+    const wall = { id: 'build_wall', type: 'iron_wall', x: 0, y: 0, maxHp: 850, facing: 'ns' };
+    for (let hp = 850; hp > 800; hp--) (engine as any).drawBuilding({ ...wall, hp });
+    const live = () => surfaces.filter(c => c.width > 0 && c.height > 0);
+    expect(live()).toHaveLength(32);
+    expect(surfaces).toHaveLength(32);
+    expect(live().reduce((n, c) => n + c.width * c.height * 4, 0)).toBeLessThanOrEqual(32 * 128 * 96 * 4);
+    expect(surfaces.reduce((n, c) => n + (c.getContext() as any).clearRect.mock.calls.length, 0)).toBeGreaterThanOrEqual(18);
+    (engine as any).resetGraphics(); expect(live()).toHaveLength(0);
+    (engine as any).drawBuilding({ ...wall, hp: 850 }); expect(live()).toHaveLength(1);
+    engine.dispose(); expect(live()).toHaveLength(0);
+  });
+
+  it('restores the live canvas after failed wall baking and falls back when a surface has no context', () => {
+    const { engine, context, doc } = setup();
+    const gradient = () => ({ addColorStop: vi.fn() }); (context as any).createRadialGradient = gradient;
+    const surface = makeCanvas(); (surface.getContext() as any).createRadialGradient = gradient;
+    const create = vi.spyOn(doc, 'createElement').mockReturnValue(surface);
+    const wall = { id: 'build_wall', type: 'wood_wall', x: 0, y: 0, hp: 350, maxHp: 350 };
+    const hp = vi.spyOn(engine as any, 'drawBuildingHp').mockImplementationOnce(() => { throw Error('paint failed'); });
+    expect(() => (engine as any).drawBuilding(wall)).toThrow('paint failed');
+    expect((engine as any).ctx).toBe(context); expect(surface.width).toBe(0); expect(surface.height).toBe(0);
+    hp.mockRestore();
+    create.mockReturnValue({ ...makeCanvas(), getContext: () => null } as any);
+    expect(() => (engine as any).drawBuilding(wall)).not.toThrow();
+    expect(context.fill).toHaveBeenCalled(); expect(context.drawImage).not.toHaveBeenCalled();
+    expect((engine as any).ctx).toBe(context);
+    create.mockClear(); (engine as any).drawBuilding({ ...wall, type: 'door', isOpen: true });
+    expect(create).not.toHaveBeenCalled();
+  });
+
+  it('keeps nearby wall labels and damage smoke dynamic instead of copying them between matching walls', () => {
+    const { engine, context, doc } = setup();
+    const gradient = () => ({ addColorStop: vi.fn() }); (context as any).createRadialGradient = gradient;
+    const surfaces: ReturnType<typeof makeCanvas>[] = [];
+    vi.spyOn(doc, 'createElement').mockImplementation(() => {
+      const surface = makeCanvas(); (surface.getContext() as any).createRadialGradient = gradient; surfaces.push(surface); return surface;
+    });
+    const a = { id: 'build_a', type: 'wood_wall', name: '甲墙', ownerName: '甲', ownerId: 'owner', level: 2, x: 0, y: 0, hp: 100, maxHp: 350 } as any;
+    const b = { ...a, id: 'build_b', name: '乙墙', ownerName: '乙', level: 3, x: 1 };
+    engine.localPlayerId = 'owner'; engine.nearestBuilding = a;
+    (engine as any).drawBuilding(a); (engine as any).drawBuilding(b);
+    expect(surfaces).toHaveLength(1);
+    expect((context as any).fillText.mock.calls.map((call: any[]) => call[0])).toEqual(['甲墙 · 甲 Lv.2']);
+    expect((surfaces[0].getContext() as any).fillText).not.toHaveBeenCalled();
+    const firstArc = (context as any).arc.mock.calls[0];
+    engine.nearestBuilding = b; (engine as any).gameTime += 1;
+    (engine as any).drawBuilding(b);
+    expect((context as any).fillText.mock.calls.at(-1)[0]).toBe('乙墙 · 乙 Lv.3');
+    expect((context as any).arc.mock.calls.at(-2)).not.toEqual(firstArc);
+    engine.nearestBuilding = null; (context as any).fillText.mockClear(); (context as any).arc.mockClear();
+    (engine as any).drawBuilding(a);
+    expect((context as any).fillText).not.toHaveBeenCalled(); expect((context as any).arc).not.toHaveBeenCalled();
+  });
+
+  it('aligns cached wall pixels with fractional camera movement while reusing a phase across positions', () => {
+    const { engine, context, doc } = setup();
+    const gradient = () => ({ addColorStop: vi.fn() }); (context as any).createRadialGradient = gradient;
+    const surfaces: ReturnType<typeof makeCanvas>[] = [];
+    vi.spyOn(doc, 'createElement').mockImplementation(() => {
+      const surface = makeCanvas(); (surface.getContext() as any).createRadialGradient = gradient; surfaces.push(surface); return surface;
+    });
+    const wall = { id: 'build_a', type: 'wood_wall', x: 0, y: 0, hp: 350, maxHp: 350 };
+    (engine as any).drawBuilding(wall); engine.camera.x += 0.25; engine.camera.y += 0.5;
+    (engine as any).drawBuilding(wall); (engine as any).drawBuilding({ ...wall, id: 'build_b', x: 3 });
+    expect(surfaces).toHaveLength(2);
+    expect(context.drawImage.mock.calls.every(call => Number.isInteger(call[1]) && Number.isInteger(call[2]))).toBe(true);
   });
 
   it('keeps the noise texture aligned to world coordinates during camera movement', () => {

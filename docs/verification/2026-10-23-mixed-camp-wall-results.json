@@ -1,0 +1,508 @@
+{
+  "baseCommit": "2144ee6db7a3cdb386336ed859b87cd6b36058da",
+  "sourceSha256": {
+    "src/game/IsometricEngine.ts": "69240b0b5c96e4b4bce568ed395c0cf1d03c2b0740ead3f55e7f1f76129e8d28",
+    "src/game/IsometricEngine.test.ts": "148c613ff26fae2a6ba72bcf017c83bd2918e0631164a28b4804a90afa232e0e"
+  },
+  "bundles": {
+    "before": "index-DSqU0uem.js",
+    "after": "index-Cm6ZuMFk.js"
+  },
+  "environment": {
+    "browser": "Chrome 155.0.8059.85 headless=new",
+    "width": 1920,
+    "height": 1080,
+    "dpr": 1,
+    "adapter": "Not identified; owned-browser process counters only",
+    "isolation": "One QA browser and production QA server; no simultaneous tests/builds or other QA browser"
+  },
+  "fixture": {
+    "synthetic": true,
+    "campSize": 128,
+    "buildings": 5675,
+    "floors": 4000,
+    "walls": 1404,
+    "doors": 36,
+    "facilities": 216,
+    "turrets": 18,
+    "turretAmmo": 540,
+    "core": 1,
+    "layout": "36 room enclosures; wood north/south and stone east/west; all doors open; grid roads and exit/core clearance retained",
+    "economy": "Prebuilt performance fixture, not an earned growth or construction-cost validation",
+    "combat": "Owner only, no attackers; loaded turret presence is not raid validation",
+    "preparation": "Fresh backup of original QA SQLite including WAL; satiety set to100 before service, matching original initial condition; no clock/position/quality/cache/GC edits during timing"
+  },
+  "diagnosticControls": {
+    "shadows": {
+      "source": "data/mixed-shadow-probe-20261023-a1-results.json",
+      "phases": [
+        {
+          "name": "baseline",
+          "seconds": 12.013,
+          "renderCallsPerSecond": 12.65295929409806,
+          "renderP95Ms": 13.199999995529652,
+          "rafP95Ms": 96.90000000000146,
+          "rafIntervalsOver50": 152
+        },
+        {
+          "name": "no-soft-contact-shadows",
+          "seconds": 12.018,
+          "renderCallsPerSecond": 12.7309036445332,
+          "renderP95Ms": 12.899999998509884,
+          "rafP95Ms": 96.90000000000146,
+          "rafIntervalsOver50": 153
+        },
+        {
+          "name": "soft-shadows-restored",
+          "seconds": 12.008,
+          "renderCallsPerSecond": 12.824783477681546,
+          "renderP95Ms": 12.899999998509884,
+          "rafP95Ms": 91,
+          "rafIntervalsOver50": 154
+        },
+        {
+          "name": "no-canvas-shadow-blur",
+          "seconds": 12.004,
+          "renderCallsPerSecond": 13.07897367544152,
+          "renderP95Ms": 14.5,
+          "rafP95Ms": 90.90000000000146,
+          "rafIntervalsOver50": 157
+        },
+        {
+          "name": "all-restored",
+          "seconds": 12.011,
+          "renderCallsPerSecond": 12.988094246940305,
+          "renderP95Ms": 14.399999998509884,
+          "rafP95Ms": 96.89999999999418,
+          "rafIntervalsOver50": 156
+        }
+      ],
+      "scope": "Temporary browser-only diagnostic overrides; restored; not shipped quality changes"
+    },
+    "walls": {
+      "source": "data/mixed-wall-probe-20261023-a1-results.json",
+      "phases": [
+        {
+          "name": "baseline",
+          "seconds": 12.013,
+          "renderCallsPerSecond": 12.403229834346124,
+          "renderP95Ms": 14.199999995529652,
+          "rafP95Ms": 109,
+          "rafIntervalsOver50": 149
+        },
+        {
+          "name": "no-wall-drawing",
+          "seconds": 12.011,
+          "renderCallsPerSecond": 54.866372491882444,
+          "renderP95Ms": 5.899999998509884,
+          "rafP95Ms": 24.299999999999272,
+          "rafIntervalsOver50": 0
+        },
+        {
+          "name": "walls-restored",
+          "seconds": 12.003,
+          "renderCallsPerSecond": 13.16337582271099,
+          "renderP95Ms": 12.899999998509884,
+          "rafP95Ms": 85,
+          "rafIntervalsOver50": 158
+        },
+        {
+          "name": "no-facility-drawing",
+          "seconds": 12.01,
+          "renderCallsPerSecond": 14.820982514571192,
+          "renderP95Ms": 11.600000001490116,
+          "rafP95Ms": 78.90000000000146,
+          "rafIntervalsOver50": 178
+        },
+        {
+          "name": "all-restored",
+          "seconds": 12.012,
+          "renderCallsPerSecond": 13.236763236763236,
+          "renderP95Ms": 12.800000004470348,
+          "rafP95Ms": 85,
+          "rafIntervalsOver50": 159
+        }
+      ],
+      "scope": "Temporary browser-only diagnostic overrides; restored; not shipped quality changes"
+    }
+  },
+  "implementation": {
+    "materials": [
+      "wood_wall",
+      "stone_wall",
+      "iron_wall",
+      "glass_wall"
+    ],
+    "key": "material/facing/hp/maxHp/hostility/subpixel phase",
+    "phaseSteps": 1024,
+    "maxPhaseErrorPixels": 0.00048828125,
+    "limit": 32,
+    "surface": [
+      128,
+      96
+    ],
+    "pixelStorageUpperBoundMiB": 1.5,
+    "allocation": "LRU eviction reuses cleared canvas; unit test50 distinct appearances allocates32 total surfaces, not50",
+    "dynamic": "Nearby name/owner/level and damaged smoke rendered live from original entity/time",
+    "lifecycle": "Reset/dispose zero all cached surface dimensions; bake exception restores main context and releases failed surface; missing context uses original draw path",
+    "preserved": "Depth order, house grouping, collision, pathfinding, authoritative buildings, durability and synchronization"
+  },
+  "nativePixelControls": {
+    "cases": 288,
+    "dimensions": [
+      256,
+      192
+    ],
+    "contexts": "Both source and destination use GPU-default2d contexts",
+    "background": "#80765e",
+    "matrix": "4 materials x2 facings x3 HP(350/175/0,max350) x2 hostility x3 fractional phases x2 selected states",
+    "maxChannelDifference": 46,
+    "maxMeanAbsoluteRgbDifference": 0.013882107204861112,
+    "maxPixelsDifferingOver8": 7,
+    "pixelsPerCase": 49152,
+    "maxLargeDifferenceWithoutReference3x3ContrastOver20": 2,
+    "visual": "Reviewed production walk screenshot and3x stone-wall original/cache/difference x8 sheet; geometry, shadow and HP preserved. Small raster/compositing edge differences remain; not byte-identical. Neighborhood contrast heuristic does not classify all differences as edges.",
+    "sources": [
+      "data/mixed-camp-render-20261023-a4-results.json",
+      "data/mixed-wall-visual-20261023-a1-results.json"
+    ],
+    "comparisonImage": "data/mixed-wall-visual-20261023-a1-comparison.png"
+  },
+  "before": [
+    {
+      "name": "mixed-dense-camp-idle",
+      "seconds": 20.014,
+      "renderCallsPerSecond": 11.841710802438294,
+      "render": {
+        "count": 237,
+        "p95": 12.300000004470348,
+        "p99": 14.700000002980232,
+        "max": 18,
+        "over50": 0
+      },
+      "update": {
+        "count": 237,
+        "p95": 1,
+        "p99": 1.2999999970197678,
+        "max": 2.100000001490116,
+        "over50": 0
+      },
+      "ground": {
+        "count": 237,
+        "p95": 1.1000000014901161,
+        "p99": 1.2999999970197678,
+        "max": 2.2999999970197678,
+        "over50": 0
+      },
+      "buildingSync": {
+        "count": 20,
+        "p95": 1.5,
+        "p99": 1.5,
+        "max": 1.5,
+        "over50": 0
+      },
+      "raf": {
+        "count": 237,
+        "p95": 108.90000000000146,
+        "p99": 121.29999999999927,
+        "max": 133.5,
+        "over50": 236
+      },
+      "longTasks": 0,
+      "positionCorrections": 0,
+      "independentFloorDraws": 0,
+      "buildings": 5675,
+      "floors": 4000,
+      "weather": "clear",
+      "actionErrors": 0,
+      "renderDiagnostics": 0,
+      "samples": [
+        {
+          "privateCommittedMiB": 654.85546875,
+          "gpuSharedMiB": 179.75,
+          "gpuMaxSingleEnginePercent": 21
+        },
+        {
+          "privateCommittedMiB": 635.21484375,
+          "gpuSharedMiB": 189.7109375,
+          "gpuMaxSingleEnginePercent": 27
+        },
+        {
+          "privateCommittedMiB": 628.83203125,
+          "gpuSharedMiB": 189.55078125,
+          "gpuMaxSingleEnginePercent": 28
+        }
+      ]
+    },
+    {
+      "name": "mixed-dense-camp-walk",
+      "seconds": 70.926,
+      "renderCallsPerSecond": 15.241237345966217,
+      "render": {
+        "count": 1081,
+        "p95": 12.100000001490116,
+        "p99": 15.700000002980232,
+        "max": 23.100000001490116,
+        "over50": 0
+      },
+      "update": {
+        "count": 1081,
+        "p95": 2.100000001490116,
+        "p99": 2.899999998509884,
+        "max": 4,
+        "over50": 0
+      },
+      "ground": {
+        "count": 1081,
+        "p95": 2.2000000029802322,
+        "p99": 4.699999995529652,
+        "max": 9.900000005960464,
+        "over50": 0
+      },
+      "buildingSync": {
+        "count": 69,
+        "p95": 1.5,
+        "p99": 2.2000000029802322,
+        "max": 2.2000000029802322,
+        "over50": 0
+      },
+      "raf": {
+        "count": 1081,
+        "p95": 97,
+        "p99": 109.19999999999709,
+        "max": 121.20000000001164,
+        "over50": 736
+      },
+      "longTasks": 0,
+      "positionCorrections": 0,
+      "independentFloorDraws": 0,
+      "buildings": 5675,
+      "floors": 4000,
+      "weather": "clear",
+      "actionErrors": 0,
+      "renderDiagnostics": 0,
+      "samples": [
+        {
+          "privateCommittedMiB": 605.6015625,
+          "gpuSharedMiB": 184.38671875,
+          "gpuMaxSingleEnginePercent": 25
+        }
+      ]
+    }
+  ],
+  "after": [
+    {
+      "name": "mixed-dense-camp-idle",
+      "seconds": 20.015,
+      "renderCallsPerSecond": 48.96327754184362,
+      "render": {
+        "count": 980,
+        "p95": 6.399999998509884,
+        "p99": 8.5,
+        "max": 10.399999998509884,
+        "over50": 0
+      },
+      "update": {
+        "count": 1020,
+        "p95": 0.7000000029802322,
+        "p99": 0.9000000059604645,
+        "max": 1.1000000014901161,
+        "over50": 0
+      },
+      "ground": {
+        "count": 980,
+        "p95": 0.8000000044703484,
+        "p99": 1.1000000014901161,
+        "max": 2.2000000029802322,
+        "over50": 0
+      },
+      "buildingSync": {
+        "count": 19,
+        "p95": 1.8999999985098839,
+        "p99": 1.8999999985098839,
+        "max": 1.8999999985098839,
+        "over50": 0
+      },
+      "raf": {
+        "count": 1020,
+        "p95": 24.399999999999636,
+        "p99": 36.39999999999782,
+        "max": 48.5,
+        "over50": 0
+      },
+      "longTasks": 0,
+      "positionCorrections": 0,
+      "independentFloorDraws": 0,
+      "buildings": 5675,
+      "floors": 4000,
+      "weather": "clear",
+      "wallImages": 32,
+      "wallImagePixels": 393216,
+      "actionErrors": 0,
+      "renderDiagnostics": 0,
+      "samples": [
+        {
+          "privateCommittedMiB": 586.546875,
+          "gpuSharedMiB": 140.21875,
+          "gpuMaxSingleEnginePercent": 59
+        },
+        {
+          "privateCommittedMiB": 581.7265625,
+          "gpuSharedMiB": 150.8359375,
+          "gpuMaxSingleEnginePercent": 60
+        },
+        {
+          "privateCommittedMiB": 581.26953125,
+          "gpuSharedMiB": 150.8359375,
+          "gpuMaxSingleEnginePercent": 61
+        }
+      ]
+    },
+    {
+      "name": "mixed-dense-camp-walk",
+      "seconds": 69.695,
+      "renderCallsPerSecond": 51.22318674223403,
+      "render": {
+        "count": 3570,
+        "p95": 6.200000002980232,
+        "p99": 8.200000002980232,
+        "max": 22.700000002980232,
+        "over50": 0
+      },
+      "update": {
+        "count": 5477,
+        "p95": 1.5999999940395355,
+        "p99": 2.3000000044703484,
+        "max": 5.200000002980232,
+        "over50": 0
+      },
+      "ground": {
+        "count": 3570,
+        "p95": 0.8999999985098839,
+        "p99": 2.899999998509884,
+        "max": 19.80000000447035,
+        "over50": 0
+      },
+      "buildingSync": {
+        "count": 68,
+        "p95": 1.9000000059604645,
+        "p99": 2.399999998509884,
+        "max": 2.399999998509884,
+        "over50": 0
+      },
+      "raf": {
+        "count": 5477,
+        "p95": 24.30000000000291,
+        "p99": 36.39999999999418,
+        "max": 54.60000000000582,
+        "over50": 7
+      },
+      "longTasks": 0,
+      "positionCorrections": 0,
+      "independentFloorDraws": 0,
+      "buildings": 5675,
+      "floors": 4000,
+      "weather": "clear",
+      "wallImages": 32,
+      "wallImagePixels": 393216,
+      "actionErrors": 0,
+      "renderDiagnostics": 0,
+      "samples": [
+        {
+          "privateCommittedMiB": 572.640625,
+          "gpuSharedMiB": 151.16015625,
+          "gpuMaxSingleEnginePercent": 61
+        }
+      ]
+    }
+  ],
+  "route": {
+    "corners": [
+      [
+        0,
+        16
+      ],
+      [
+        48,
+        16
+      ],
+      [
+        48,
+        -16
+      ],
+      [
+        -48,
+        -16
+      ],
+      [
+        -48,
+        16
+      ],
+      [
+        0,
+        16
+      ]
+    ],
+    "nominalCells": 256,
+    "movement": "Native engine navigation in legs <=20 cells, normal time/server checks; live turret obstacles cause valid detours",
+    "duration": "Approximately70 seconds each, includes final process sample; not a frozen identical-frame test"
+  },
+  "persistentAudit": {
+    "before": {
+      "integrity": "ok",
+      "buildings": 5675,
+      "buildingSha256": "c2f571c82e574f44f43ac902a1cc01ebb469519ce3b48cd859feacc3558f84af",
+      "ammoTotal": 540,
+      "ammoSha256": "ff4b697309af8190698827cec9df0089a5fe89f3a23690ba832569fe8b335794",
+      "storageCount": 36,
+      "storageSha256": "ec946506d344cad7cf9acb3f1622683b89c22ecba21f4c93d67c97fc278f6e70",
+      "productionJobs": 0
+    },
+    "after": {
+      "integrity": "ok",
+      "buildings": 5675,
+      "buildingSha256": "c2f571c82e574f44f43ac902a1cc01ebb469519ce3b48cd859feacc3558f84af",
+      "ammoTotal": 540,
+      "ammoSha256": "ff4b697309af8190698827cec9df0089a5fe89f3a23690ba832569fe8b335794",
+      "storageCount": 36,
+      "storageSha256": "ec946506d344cad7cf9acb3f1622683b89c22ecba21f4c93d67c97fc278f6e70",
+      "productionJobs": 0
+    },
+    "comparison": "Full building objects sorted byid match, as do ammo and storage hashes; no production jobs; only isolated QA databases opened"
+  },
+  "iterations": [
+    {
+      "source": "data/mixed-camp-render-20261023-a2-results.json",
+      "status": "Not final accepted implementation",
+      "issues": "First cache included dynamic labels/smoke; independent review P2 fixed. Pixel controls mixed CPU readback and GPU contexts; not final comparison."
+    },
+    {
+      "source": "data/mixed-camp-render-20261023-a3-results.json",
+      "status": "Intermediate, superseded by A4",
+      "issues": "Dynamic details and subpixel phase fixed; still allocated a new surface on each miss. Allocation regression failed50vs32 before final canvas-reuse change."
+    }
+  ],
+  "verification": {
+    "testFiles": 29,
+    "tests": 367,
+    "testsPassed": true,
+    "typecheckPassed": true,
+    "productionBuildPassed": true,
+    "existingBuildWarnings": [
+      "Vite native-config compatibility (__dirname)",
+      "JavaScript chunk exceeds500kB"
+    ],
+    "regressions": 5,
+    "redGreen": "Original no-cache implementation failed initial reuse/bounds tests; dynamic-label test failed initial prototype after fixing test mocks; fractional-phase test failed integer-only prototype; total-allocation test failed allocate-on-eviction variant. Final all pass.",
+    "review": "Independent static review initially identified dynamic-label/smoke P2; fixed and re-reviewed, including final surface reuse; no blockers"
+  },
+  "limitations": [
+    "Render calls per second and RAF callbacks are not physical screen presentation measurements.",
+    "Final complex camp remains around49-51 render calls/second, not stable60. Seven walk RAF intervals exceeded50ms.",
+    "GPU sample rises with higher render output; do not claim reduced GPU use or original-device reproduction.",
+    "Cache1.5MiB is bounded pixel estimate, not measured total browser memory. Short process samples do not prove no leaks or sustained memory reduction.",
+    "No attackers, concurrent players, earned large-camp growth, long-duration play or advanced manufacturing validation in this checkpoint.",
+    "HTTP LAN UUID and map/resource artwork changes belong to previous checkpoints, not this code change.",
+    "Original real data/sdc.sqlite not opened or replaced. Raw QA evidence/identities stay in ignored data directory."
+  ]
+}
