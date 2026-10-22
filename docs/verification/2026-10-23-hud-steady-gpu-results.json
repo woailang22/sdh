@@ -1,0 +1,425 @@
+{
+  "baseCommit": "2f9bd61dada42ef107384bdffe353295d3f426e8",
+  "sourceHashes": {
+    "src/components/RadioChat.tsx": "cd649039b2031bdde166b7a84610b98c3139796752785fcbf260e609d4f9dca0",
+    "src/components/TacticalDpad.tsx": "a415332279a6f5348b408f2e7f81790d3709a3d2dabe770af7e8ce5a44d3faf9"
+  },
+  "productionBundle": "index-CgkGw9hu.js",
+  "environment": {
+    "os": "Windows",
+    "browser": "Chrome 155.0.8059.85 headless=new",
+    "width": 1920,
+    "height": 1080,
+    "dpr": 1,
+    "activeGpuAdapter": "Not identified; only owned browser-process-tree Windows GPU counters are reported"
+  },
+  "scope": "Latest production package, same browser/process tree, 1920x1080 DPR1 at (-2,7); only original pulse classes restored/removed on the two changed icons for A/B/A/B. Main scene and radar remain normal. Then one real 60s east / 60s west walk. Synthetic performance fixture, not economy validation; no concurrent tests/builds/browsers.",
+  "metricDefinitions": {
+    "gpuPercent": "Maximum sampled utilization of one GPU engine among owned browser processes; not whole GPU or average scene utilization",
+    "fps": "Main render method calls per elapsed second; not physical display presentation",
+    "raf": "requestAnimationFrame callback spacing; monitor callback frequency is about 165Hz in this environment",
+    "memory": "PrivateMemorySize64 across owned browser process tree; not physical memory or a leak assertion"
+  },
+  "diagnosticIsolation": [
+    {
+      "name": "baseline",
+      "weather": "clear",
+      "gpuSamples": [
+        51,
+        49,
+        51
+      ],
+      "renderFps": 59.9350703404645,
+      "draw": {
+        "p95": 2.899999998509884,
+        "p99": 3.7999999970197678,
+        "max": 4.399999998509884
+      }
+    },
+    {
+      "name": "no-canvas-shadow-blur",
+      "weather": "clear",
+      "gpuSamples": [
+        52,
+        55,
+        53
+      ],
+      "renderFps": 60.01331779590478,
+      "draw": {
+        "p95": 3.100000001490116,
+        "p99": 3.899999998509884,
+        "max": 4.200000002980232
+      }
+    },
+    {
+      "name": "restored-shadow-blur",
+      "weather": "clear",
+      "gpuSamples": [
+        52,
+        51,
+        52
+      ],
+      "renderFps": 60.023310023310025,
+      "draw": {
+        "p95": 3.100000001490116,
+        "p99": 3.899999998509884,
+        "max": 4.800000004470348
+      }
+    },
+    {
+      "name": "no-fullscreen-overlays",
+      "weather": "clear",
+      "gpuSamples": [
+        41,
+        40,
+        40
+      ],
+      "renderFps": 59.94005994005994,
+      "draw": {
+        "p95": 3.2000000029802322,
+        "p99": 3.7999999970197678,
+        "max": 4.699999995529652
+      }
+    },
+    {
+      "name": "restored-overlays",
+      "weather": "clear",
+      "gpuSamples": [
+        51,
+        53,
+        49
+      ],
+      "renderFps": 59.98835177635411,
+      "draw": {
+        "p95": 3.3000000044703484,
+        "p99": 4.199999995529652,
+        "max": 4.600000001490116
+      }
+    },
+    {
+      "name": "no-hud-css-animation",
+      "weather": "clear",
+      "gpuSamples": [
+        40,
+        42,
+        40
+      ],
+      "renderFps": 60.00332889480693,
+      "draw": {
+        "p95": 3,
+        "p99": 3.6999999955296516,
+        "max": 4.399999998509884
+      }
+    },
+    {
+      "name": "restored-hud-css-animation",
+      "weather": "clear",
+      "gpuSamples": [
+        51,
+        49,
+        51
+      ],
+      "renderFps": 59.990001666388935,
+      "draw": {
+        "p95": 3.399999998509884,
+        "p99": 4,
+        "max": 4.600000001490116
+      }
+    },
+    {
+      "name": "no-interactable-drawing",
+      "weather": "clear",
+      "gpuSamples": [
+        51,
+        55,
+        51
+      ],
+      "renderFps": 60.01831349371514,
+      "draw": {
+        "p95": 3.100000001490116,
+        "p99": 3.8000000044703484,
+        "max": 4.0999999940395355
+      }
+    },
+    {
+      "name": "restored-interactables",
+      "weather": "clear",
+      "gpuSamples": [
+        50,
+        49,
+        52
+      ],
+      "renderFps": 59.96502040476389,
+      "draw": {
+        "p95": 3.100000001490116,
+        "p99": 4.100000001490116,
+        "max": 4.699999995529652
+      }
+    }
+  ],
+  "idlePhases": [
+    {
+      "name": "new-static",
+      "seconds": 12.003,
+      "gpuSamples": [
+        46,
+        43,
+        44
+      ],
+      "renderFps": 60.06831625426977,
+      "draw": {
+        "count": 721,
+        "p95": 2.600000001490116,
+        "p99": 3.5,
+        "max": 4.0999999940395355,
+        "over50": 0
+      },
+      "raf": {
+        "count": 1962,
+        "p95": 6.200000000000728,
+        "p99": 6.399999999997817,
+        "max": 12.300000000001091,
+        "over50": 0
+      },
+      "visibleAnimations": 0,
+      "weather": "clear",
+      "privateCommittedMiB": [
+        550.51953125,
+        518.703125,
+        490.93359375
+      ]
+    },
+    {
+      "name": "old-two-pulses-restored",
+      "seconds": 12.003,
+      "gpuSamples": [
+        57,
+        60,
+        57
+      ],
+      "renderFps": 60.06831625426977,
+      "draw": {
+        "count": 721,
+        "p95": 2.7000000029802322,
+        "p99": 3.7999999970197678,
+        "max": 4.399999998509884,
+        "over50": 0
+      },
+      "raf": {
+        "count": 1964,
+        "p95": 6.200000000000728,
+        "p99": 6.399999999997817,
+        "max": 12.200000000004366,
+        "over50": 0
+      },
+      "visibleAnimations": 2,
+      "weather": "clear",
+      "privateCommittedMiB": [
+        521.59375,
+        512.09375,
+        473.15234375
+      ]
+    },
+    {
+      "name": "new-static-again",
+      "seconds": 12.021,
+      "gpuSamples": [
+        45,
+        44,
+        46
+      ],
+      "renderFps": 59.978371183761745,
+      "draw": {
+        "count": 721,
+        "p95": 2.7000000029802322,
+        "p99": 3.399999998509884,
+        "max": 3.899999998509884,
+        "over50": 0
+      },
+      "raf": {
+        "count": 1953,
+        "p95": 6.200000000004366,
+        "p99": 12.099999999998545,
+        "max": 12.30000000000291,
+        "over50": 0
+      },
+      "visibleAnimations": 0,
+      "weather": "clear",
+      "privateCommittedMiB": [
+        434.6171875,
+        429.2890625,
+        429.02734375
+      ]
+    },
+    {
+      "name": "old-two-pulses-again",
+      "seconds": 12.015,
+      "gpuSamples": [
+        59,
+        58,
+        58
+      ],
+      "renderFps": 60.008322929671245,
+      "draw": {
+        "count": 721,
+        "p95": 2.7000000029802322,
+        "p99": 3.600000001490116,
+        "max": 4.100000001490116,
+        "over50": 0
+      },
+      "raf": {
+        "count": 1967,
+        "p95": 6.200000000004366,
+        "p99": 6.400000000001455,
+        "max": 12.30000000000291,
+        "over50": 0
+      },
+      "visibleAnimations": 2,
+      "weather": "clear",
+      "privateCommittedMiB": [
+        440.55078125,
+        435.34765625,
+        427.30078125
+      ]
+    },
+    {
+      "name": "final-new-static",
+      "seconds": 12.007,
+      "gpuSamples": [
+        43,
+        42,
+        45
+      ],
+      "renderFps": 59.96502040476389,
+      "draw": {
+        "count": 720,
+        "p95": 2.5,
+        "p99": 3.1999999955296516,
+        "max": 4.100000001490116,
+        "over50": 0
+      },
+      "raf": {
+        "count": 1960,
+        "p95": 6.19999999999709,
+        "p99": 12,
+        "max": 12.30000000000291,
+        "over50": 0
+      },
+      "visibleAnimations": 0,
+      "weather": "clear",
+      "privateCommittedMiB": [
+        428.83984375,
+        425.26953125,
+        426.48828125
+      ]
+    }
+  ],
+  "idleComparison": {
+    "oldPulseSampleCount": 6,
+    "newStaticSampleCount": 9,
+    "oldPulseMedian": 58,
+    "newStaticMedian": 44,
+    "absoluteSampleMedianDrop": 14,
+    "relativeSampleMedianDrop": 0.2413793103448276
+  },
+  "walkingLegs": [
+    {
+      "leg": 1,
+      "seconds": 60.015,
+      "pos": {
+        "x": 226.0132999999907,
+        "y": 7
+      },
+      "weather": "clear",
+      "draw": {
+        "count": 3585,
+        "p95": 2.899999998509884,
+        "p99": 4.899999998509884,
+        "max": 27.299999997019768,
+        "over50": 0
+      },
+      "update": {
+        "count": 9632,
+        "p95": 0.3999999985098839,
+        "p99": 0.6000000014901161,
+        "max": 6.199999995529652,
+        "over50": 0
+      },
+      "raf": {
+        "count": 9632,
+        "p95": 6.2000000000116415,
+        "p99": 12.19999999999709,
+        "max": 42.59999999999127,
+        "over50": 0
+      },
+      "longTasks": {
+        "count": 0,
+        "over50": 0
+      },
+      "gpuSamples": [
+        47,
+        47,
+        48
+      ],
+      "corrections": 0,
+      "actionErrors": 0,
+      "renderDiagnostics": 0
+    },
+    {
+      "leg": 2,
+      "seconds": 60.015,
+      "pos": {
+        "x": -2.0224200000044115,
+        "y": 7
+      },
+      "weather": "acid_rain",
+      "draw": {
+        "count": 3583,
+        "p95": 2.8000000044703484,
+        "p99": 4,
+        "max": 18.5,
+        "over50": 0
+      },
+      "update": {
+        "count": 9548,
+        "p95": 0.3999999985098839,
+        "p99": 0.6000000014901161,
+        "max": 1,
+        "over50": 0
+      },
+      "raf": {
+        "count": 9548,
+        "p95": 6.2000000000116415,
+        "p99": 12.200000000011642,
+        "max": 36.40000000002328,
+        "over50": 0
+      },
+      "longTasks": {
+        "count": 0,
+        "over50": 0
+      },
+      "gpuSamples": [
+        47,
+        44,
+        51
+      ],
+      "corrections": 0,
+      "actionErrors": 0,
+      "renderDiagnostics": 0
+    }
+  ],
+  "checks": {
+    "normalIcons": "Both exist and are static; restored control animates exactly these two icons",
+    "typeCheck": "passed",
+    "productionBuild": "passed",
+    "staticReview": "no blocking findings; no state/click/input change; existing conditional warnings unchanged",
+    "runtimeExceptions": 0
+  },
+  "limits": [
+    "Within-process controls restore only the two former pulse classes in the new production package, rather than loading the entire old production bundle.",
+    "Diagnostic bypass phases are temporary probes and are not shipped quality changes. Only two class removals are shipped.",
+    "One browser/device and one two-minute route; no claim about all weather, original user browser, large camps or multi-hour total memory.",
+    "No game render cap change, gameplay state modification, cache clearing, forced garbage collection or animation/quality removal during the final native walking legs.",
+    "Low-satiety and thunder warning animation code is unchanged; this normal-state performance run does not exercise those warnings."
+  ]
+}

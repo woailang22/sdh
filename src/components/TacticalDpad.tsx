@@ -58,7 +58,7 @@ export const TacticalDpad: React.FC<TacticalDpadProps> = ({
     <div className="flex flex-col items-center select-none pointer-events-auto">
       {/* Tactical Status & Stuck Key Clearer */}
       <div className="flex items-center gap-1.5 mb-1 px-2 py-0.5 rounded bg-slate-950/80 border border-cyan-500/30 text-[10px] font-mono text-cyan-400">
-        <Navigation className="w-2.5 h-2.5 text-cyan-300 animate-pulse" />
+        <Navigation className="w-2.5 h-2.5 text-cyan-300" />
         <span>X:{currentCoords.x.toFixed(1)} Y:{currentCoords.y.toFixed(1)}</span>
         <button
           onClick={() => {

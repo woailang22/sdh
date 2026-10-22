@@ -50,7 +50,7 @@ export const RadioChat: React.FC<RadioChatProps> = ({ messages, onSendMessage })
           世界
         </button>
         <span className="ml-auto text-[9px] font-mono text-emerald-400 flex items-center gap-1">
-          <Radio className="w-2.5 h-2.5 animate-pulse" /> 信号强
+          <Radio className="w-2.5 h-2.5" /> 信号强
         </span>
       </div>
 
