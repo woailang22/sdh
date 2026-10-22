@@ -300,7 +300,7 @@ export function generateWorldChunk(cx: number, cy: number): WorldChunk {
       chunk.interactables.push({
         ...original, id: `${key}:i:${location.id}:${original.id}`, x, y,
         lootTable: original.lootTable?.map((l) => ({ ...l })),
-        ...(original.type === 'workbench' ? {} : { stock: 3, maxStock: 3, respawnSec: 300 }),
+        ...(original.type === 'workbench' ? {} : { stock: original.stock ?? 3, maxStock: original.maxStock ?? original.stock ?? 3, respawnSec: original.respawnSec ?? 300 }),
       });
     }
     for (const original of source.monsters) {

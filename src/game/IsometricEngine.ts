@@ -3036,6 +3036,13 @@ export class IsometricEngine {
     // Gameplay Interactables（采集/搜刮点：逐个绘制真实模型+标记，不再隐身）
     this.interactables.forEach((it) => {
       if (!this.isWorldAreaVisible(it.x, it.y)) return;
+      // Dry-land fishing spots need water below all depth-sorted entities.
+      if (it.type === 'pond' && this.currentMapId === 'world' && worldThemeAt(it.x, it.y) !== 'lake') {
+        const s = this.toScreen(it.x, it.y);
+        this.ctx.save(); this.ctx.fillStyle = '#315e69'; this.ctx.strokeStyle = '#78a89a'; this.ctx.lineWidth = 1.5;
+        this.ctx.beginPath(); this.ctx.ellipse(s.x, s.y + 8, 62, 27, 0, 0, Math.PI * 2);
+        this.ctx.fill(); this.ctx.stroke(); this.ctx.restore();
+      }
       renderList.push({
         yDepth: it.x + it.y,
         render: () => this.drawInteractable(it),

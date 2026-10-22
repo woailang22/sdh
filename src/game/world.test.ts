@@ -10,6 +10,39 @@ import {
 } from './world';
 
 describe('continuous world coordinates', () => {
+  it('separates research supplies, lord equipment and the legendary fishing target', () => {
+    const cache = getWorldInteractable('world:3:21:i:marsh_rift:rift_cache')!;
+    const armory = getWorldInteractable('world:2:21:i:marsh_rift:rift_armory');
+    const pond = getWorldInteractable('world:5:27:i:marsh_abyss:aby_legend_pond');
+    expect(cache.lootTable?.find(l => l.itemId === 'dark_core')?.count).toBe(2);
+    expect(cache.lootTable?.find(l => l.itemId === 'blueprint')?.count).toBe(1);
+    expect(armory).toBeDefined(); expect(pond?.type).toBe('pond');
+    for (const id of ['wp_svd', 'key_red', 'helmet_t4', 'vest_t5']) {
+      expect(cache.lootTable?.some(l => l.itemId === id)).toBe(false);
+      expect(armory?.lootTable?.find(l => l.itemId === id)?.count).toBe(1);
+    }
+    expect(cache.lootTable?.some(l => l.itemId === 'fish_legend')).toBe(false);
+    expect(pond?.lootTable?.find(l => l.itemId === 'fish_legend')?.count).toBe(1);
+    for (const [node, lordId] of [[armory, 'world:3:21:m:marsh_rift:rf1'], [pond, 'world:5:27:m:marsh_abyss:ab1']] as const) {
+      const lord = getWorldMonster(lordId)!;
+      expect(node).toBeDefined(); expect(lord.hp).toBeGreaterThanOrEqual(1000);
+      expect(Math.hypot(node!.x - lord.x, node!.y - lord.y)).toBeLessThan(3);
+    }
+  });
+
+  it('keeps special red-zone refresh schedules without changing ordinary resource defaults', () => {
+    for (const [id, seconds] of [
+      ['world:3:21:i:marsh_rift:rift_cache', 1800],
+      ['world:2:21:i:marsh_rift:rift_armory', 2700],
+      ['world:5:28:i:marsh_abyss:aby_cache', 2700],
+      ['world:5:27:i:marsh_abyss:aby_legend_pond', 3600],
+    ] as const) {
+      const node = getWorldInteractable(id);
+      expect(node, id).toMatchObject({ stock: 1, maxStock: 1, respawnSec: seconds });
+    }
+    expect(getWorldInteractable('world:3:21:i:marsh_rift:rift_core')).toMatchObject({ stock: 3, maxStock: 3, respawnSec: 300 });
+  });
+
   it('provides several mineable copper sources around the quarry without spreading them across starter land', () => {
     const quarry = WORLD_LOCATIONS.find(l => l.sourceMapId === 'mtn_quarry')!;
     const center = worldToChunk(quarry.x, quarry.y);

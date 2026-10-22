@@ -23,9 +23,10 @@ const I = (
   x: number, y: number, prompt: string,
   lootTable?: { itemId: string; name: string; count: number }[],
   searchDuration = 1.6,
+  refresh?: Pick<InteractableEntity, 'stock' | 'maxStock' | 'respawnSec'>,
 ): InteractableEntity => ({
   id, name, type, x, y, radius: 2.8, prompt, available: true,
-  searchDuration, lootTable,
+  searchDuration, lootTable, ...refresh,
 });
 
 const M = (
@@ -908,7 +909,7 @@ export const SUBMAPS: Record<string, SubMapDef> = {
   },
   marsh_rift: {
     id: 'marsh_rift', region: 'marsh', name: '裂隙前线', theme: 'rift',
-    desc: '红区：晶石与领主出没，东南先锋宝箱有蓝图、暗核和守卫',
+    desc: '红区：东南先锋补给箱有蓝图和暗核，30分钟刷新；领主旁军械箱产高级装备，45分钟刷新。',
     risk: 'EXTREME',
     gates: [
       { x: 0, y: -42, targetMap: 'marsh_bog', targetX: 0, targetY: 42, name: '北撤沼泽', icon: '🌊', desc: '撤回泥沼泽' },
@@ -926,17 +927,18 @@ export const SUBMAPS: Record<string, SubMapDef> = {
       ], 1.8),
       I('rift_cache', '遗落先锋钛合金密封宝箱', 'box', 12, 12, '[E/F 解锁高阶宝箱]', [
         { itemId: 'blueprint', name: '破界级等离子步枪蓝图', count: 1 },
-        { itemId: 'dark_core', name: '坍界暗物质晶核', count: 12 },
-        { itemId: 'credits', name: '高级信用凭证', count: 2500 },
+        { itemId: 'dark_core', name: '坍界暗物质晶核', count: 2 },
+        { itemId: 'credits', name: '高级信用凭证', count: 300 },
         { itemId: 'rifle', name: '战术突击步枪', count: 1 },
         { itemId: 'vest', name: '军用防弹背心', count: 1 },
         { itemId: 'seed_starfruit', name: '星果种子×1', count: 1 },
+      ], 2.2, { stock: 1, maxStock: 1, respawnSec: 1800 }),
+      I('rift_armory', '领主前哨军械箱', 'ammo_crate', -2, -4, '[E/F 搜索领主军械箱]', [
         { itemId: 'wp_svd', name: 'SVD狙击步枪', count: 1 },
         { itemId: 'key_red', name: '红色房卡', count: 1 },
         { itemId: 'helmet_t4', name: '4级重型头盔', count: 1 },
         { itemId: 'vest_t5', name: '5级钛合金背心', count: 1 },
-        { itemId: 'fish_legend', name: '传说之鱼', count: 1 },
-      ], 2.2),
+      ], 2.5, { stock: 1, maxStock: 1, respawnSec: 2700 }),
     ],
     monsters: [
       M('rf1', '深渊霸主·恶瘴巨兽 (领主BOSS)', 0, -6, 1600, 2.3, 45),
@@ -959,7 +961,7 @@ export const SUBMAPS: Record<string, SubMapDef> = {
   },
   marsh_abyss: {
     id: 'marsh_abyss', region: 'marsh', name: '深渊裂口', theme: 'rift',
-    desc: '第二红区：晶石、暗核与次级领主，东南补给箱有装备和守卫',
+    desc: '第二红区：东南补给箱有暗核和等离子步枪，45分钟刷新；领主旁稀有钓点需钓竿，每小时一条传说鱼。',
     risk: 'EXTREME',
     gates: [
       { x: -30, y: -30, targetMap: 'marsh_rift', targetX: 30, targetY: 30, name: '北撤裂隙前线', icon: '⚠️', desc: '返回裂隙前线' },
@@ -972,12 +974,15 @@ export const SUBMAPS: Record<string, SubMapDef> = {
         { itemId: 'ore_iridium', name: '铱矿石', count: 2 },
       ], 2.5),
       I('aby_cache', '深渊遗落补给箱', 'box', 16, 16, '[E/F 解锁深渊箱]', [
-        { itemId: 'dark_core', name: '坍界暗物质晶核', count: 8 },
-        { itemId: 'credits', name: '高级信用凭证', count: 1800 },
+        { itemId: 'dark_core', name: '坍界暗物质晶核', count: 3 },
+        { itemId: 'credits', name: '高级信用凭证', count: 600 },
         { itemId: 'rifle', name: '战术突击步枪', count: 1 },
         { itemId: 'wp_plasma', name: '破界等离子步枪', count: 1 },
         { itemId: 'collect_dogtag', name: '阵亡者身份牌', count: 1 },
-      ], 2.2),
+      ], 2.2, { stock: 1, maxStock: 1, respawnSec: 2700 }),
+      I('aby_legend_pond', '深渊荧光钓点', 'pond', 2, -6, '[E/F 钓取深渊珍稀鱼]', [
+        { itemId: 'fish_legend', name: '传说之鱼', count: 1 },
+      ], 2.5, { stock: 1, maxStock: 1, respawnSec: 3600 }),
       I('aby_herb', '深渊荧光苔', 'box', -16, 12, '[E/F 采集荧光苔]', [
         { itemId: 'bandage', name: '荧光止血苔', count: 4 },
         { itemId: 'food', name: '荧光菌菇', count: 6 },

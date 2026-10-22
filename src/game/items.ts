@@ -74,7 +74,7 @@ export const ITEM_DEFS: Record<string, ItemDef> = {
   fish_eel: { id: 'fish_eel', name: '沼泽鳗鱼', category: 'food', icon: '🐍', rarity: 3, maxCount: 99, desc: '雨天沼泽限定，烹饪高档料。', buyPrice: 120, sellPrice: 120, satiety: 45, heal: 10 },
   fish_catfish: { id: 'fish_catfish', name: '裂隙鲶鱼', category: 'food', icon: '🐟', rarity: 3, maxCount: 99, desc: '裂隙水域大物，能量棒原料。', buyPrice: 150, sellPrice: 150, satiety: 50, heal: 12 },
   fish_crimson: { id: 'fish_crimson', name: '绯红锦鲤', category: 'food', icon: '🔴', rarity: 4, maxCount: 20, desc: '深渊荧光苔附近，深红传说前兆。', buyPrice: 400, sellPrice: 400, satiety: 60, heal: 20 },
-  fish_legend: { id: 'fish_legend', name: '传说之鱼', category: 'food', icon: '👑', rarity: 5, maxCount: 5, desc: '全图唯一大物，售价封顶，神话藏品。', buyPrice: 2000, sellPrice: 2000, satiety: 100, heal: 50 },
+  fish_legend: { id: 'fish_legend', name: '传说之鱼', category: 'food', icon: '👑', rarity: 5, maxCount: 5, desc: '深渊领主旁荧光钓点的稀有大物，需要钓竿，每小时恢复一次鱼获。', buyPrice: 2000, sellPrice: 2000, satiety: 100, heal: 50 },
   jam_berry: { id: 'jam_berry', name: '蓝莓果酱', category: 'food', icon: '🫙', rarity: 3, maxCount: 99, desc: '果酱桶加工，售价翻倍，恢复45饱食。', buyPrice: 180, sellPrice: 180, satiety: 45, heal: 10 },
   pickle_veg: { id: 'pickle_veg', name: '腌南瓜', category: 'food', icon: '🥒', rarity: 3, maxCount: 99, desc: '腌菜瓮加工，恢复40饱食。', buyPrice: 320, sellPrice: 320, satiety: 40, heal: 12 },
   cheese_goat: { id: 'cheese_goat', name: '羊奶酪', category: 'food', icon: '🧀', rarity: 3, maxCount: 99, desc: '奶酪机加工，恢复50饱食+15生命。', buyPrice: 240, sellPrice: 240, satiety: 50, heal: 15 },
