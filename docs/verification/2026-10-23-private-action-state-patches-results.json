@@ -1,0 +1,386 @@
+{
+  "date": "2026-10-23",
+  "baselineCommit": "9f89b41ca275196236422fb65ebd1792106c1284",
+  "result": "Private action replies avoid shared snapshot work and reduce reply latency. Dense two-native continuous fire still FAILS the zero-rejection gate; full game goal remains active.",
+  "design": "docs/superpowers/plans/2026-10-23-private-action-state-patches.md",
+  "changes": [
+    "Extract player-view assembly and share unchanged transaction logic through runAction<T>. action() keeps full replies; restricted actionPlayer() permits only untargeted fire and returns a detached player/action result. Durable commit/replay/rollback unchanged.",
+    "Negotiated encodePlayer() advances sequence only; preserves shared-list comparisons and full-baseline time. Missing/map-changing/5s-expired baseline uses complete callback with the same request/error/loot/correction and never replays the action.",
+    "Only negotiated untargeted fire uses this path. Legacy peers, targeted combat, shared actions, periodic updates and broadcasts retain full snapshots. Pure private deltas do not refresh the two-second shared-check clock."
+  ],
+  "verification": {
+    "testFiles": 30,
+    "tests": 439,
+    "typecheck": "passed",
+    "productionBuild": "passed; unchanged index-Ci3C41xg.js client bundle",
+    "warnings": [
+      "Existing Vite native-config warning",
+      "Existing client chunk>500kB warning"
+    ],
+    "independentReview": "No remaining P1/P2 in static correctness review.",
+    "redGreen": [
+      "Four encodePlayer cases failed before implementation; two actionPlayer durability/isolation cases failed before implementation.",
+      "Actual server integration regression: deliberately reset lastSnapshot on private deltas, test failed to receive the two-second shared check; restored guard and test passed."
+    ],
+    "coverage": [
+      "No JSON/shared-list serialization for normal private delta, decoder reconstruction and live ammo",
+      "Initial/expired/map-changing full fallback, feedback preservation, five-second baseline not starved by continuous fire",
+      "Door update interleaved with private replies keeps shared comparison state; error/request feedback clears normally",
+      "Full fallback exception does not advance sequence/time; durable reply failure does not undo shot",
+      "Player inventory/equipment/resources are detached; replay costs once; save rejection rolls back; shared action forbidden on private entry",
+      "Real server child with survival tick deliberately disabled solely for this non-performance test: continuous2.8s private fire still receives periodic shared check, door broadcasts to another peer, legacy client gets full fire reply."
+    ],
+    "qaTypecheckNote": "After diagnostics, the ignored wrapper for the union of action/actionPlayer required an explicit method-map and this annotation. Final typecheck passed after correcting those QA types; production code and benchmark behavior unchanged."
+  },
+  "timing": {
+    "environment": "Independent native1920x1080DPR1 headless Chrome155 profiles, visible documents, same synthetic128 camp with5675 buildings/4000 floors/18 turrets540 ammo, production server/client.20s idle then60s normal route navigation/held mouse fire, friendly empty-space targets. No tests/builds/profilers/extra QA concurrently.",
+    "before": {
+      "seconds": 60.508,
+      "clients": [
+        {
+          "client": 1,
+          "sent": 390,
+          "acknowledged": 390,
+          "pending": 0,
+          "rejected": 56,
+          "errorKinds": [
+            "操作过快"
+          ],
+          "ammoSpent": 334,
+          "responseMs": {
+            "p50": 29,
+            "p95": 99.4,
+            "max": 185.1
+          },
+          "renderMs": {
+            "p95": 5.9,
+            "max": 23.7
+          },
+          "rafMs": {
+            "p95": 30.4,
+            "max": 72.8
+          },
+          "corrections": 0,
+          "longTasks": 0,
+          "diagnostics": 0,
+          "connected": true,
+          "buildings": 5675,
+          "floors": 4000
+        },
+        {
+          "client": 2,
+          "sent": 388,
+          "acknowledged": 388,
+          "pending": 0,
+          "rejected": 52,
+          "errorKinds": [
+            "操作过快"
+          ],
+          "ammoSpent": 336,
+          "responseMs": {
+            "p50": 29.5,
+            "p95": 88.7,
+            "max": 146.2
+          },
+          "renderMs": {
+            "p95": 6.4,
+            "max": 28.1
+          },
+          "rafMs": {
+            "p95": 30.5,
+            "max": 72.7
+          },
+          "corrections": 0,
+          "longTasks": 0,
+          "diagnostics": 0,
+          "connected": true,
+          "buildings": 5675,
+          "floors": 4000
+        }
+      ]
+    },
+    "after": {
+      "seconds": 60.499,
+      "clients": [
+        {
+          "client": 1,
+          "sent": 390,
+          "acknowledged": 390,
+          "pending": 0,
+          "rejected": 39,
+          "errorKinds": [
+            "操作过快"
+          ],
+          "ammoSpent": 351,
+          "responseMs": {
+            "p50": 8,
+            "p95": 68.3,
+            "max": 150.2
+          },
+          "renderMs": {
+            "p95": 5.9,
+            "max": 23.7
+          },
+          "rafMs": {
+            "p95": 30.4,
+            "max": 66.7
+          },
+          "corrections": 0,
+          "longTasks": 0,
+          "diagnostics": 0,
+          "connected": true,
+          "buildings": 5675,
+          "floors": 4000
+        },
+        {
+          "client": 2,
+          "sent": 389,
+          "acknowledged": 389,
+          "pending": 0,
+          "rejected": 42,
+          "errorKinds": [
+            "操作过快"
+          ],
+          "ammoSpent": 347,
+          "responseMs": {
+            "p50": 8.6,
+            "p95": 74.4,
+            "max": 143.9
+          },
+          "renderMs": {
+            "p95": 6.4,
+            "max": 23.6
+          },
+          "rafMs": {
+            "p95": 30.5,
+            "max": 78.8
+          },
+          "corrections": 0,
+          "longTasks": 0,
+          "diagnostics": 0,
+          "connected": true,
+          "buildings": 5675,
+          "floors": 4000
+        }
+      ]
+    },
+    "passed": false,
+    "reason": "39/42 cooldown refusals remain. No extra6 protocol actors were connected and no eight-native or real PvP capacity claim is made."
+  },
+  "diagnosis": {
+    "method": "Separate isolated15s before/after stage instrumentation. Samples kept in memory, collected by child IPC after phase; monitorEventLoopDelay resolution1ms and five-ms lag probe. No per-action disk output or CPU profiler. Inclusive method timings overlap.",
+    "results": [
+      {
+        "stage": "before",
+        "eventLoop": {
+          "p50Ms": 8.364031,
+          "p95Ms": 42.041343,
+          "p99Ms": 168.820735,
+          "maxMs": 209.453055
+        },
+        "stages": {
+          "tick": {
+            "count": 75,
+            "totalMs": 1267.3779000000231,
+            "p50Ms": 3.927899999998772,
+            "p95Ms": 48.1890999999996,
+            "maxMs": 51.37840000000142
+          },
+          "snapshot": {
+            "count": 256,
+            "totalMs": 2840.5315000000282,
+            "p50Ms": 11.056300000000192,
+            "p95Ms": 13.874899999998888,
+            "maxMs": 16.109099999997852
+          },
+          "encode": {
+            "count": 256,
+            "totalMs": 2707.566100000011,
+            "p50Ms": 10.53229999999894,
+            "p95Ms": 13.485899999999674,
+            "maxMs": 17.348400000002584
+          },
+          "persist": {
+            "count": 33,
+            "totalMs": 1129.4601000000002,
+            "p50Ms": 33.50870000000032,
+            "p95Ms": 46.719099999998434,
+            "maxMs": 48.89210000000094
+          }
+        },
+        "action": {
+          "count": 196,
+          "totalMs": 2739.794500000011,
+          "p50Ms": 13.644400000001042,
+          "p95Ms": 18.699499999998807,
+          "maxMs": 26.478100000000268
+        },
+        "errors": 29
+      },
+      {
+        "stage": "after",
+        "eventLoop": {
+          "p50Ms": 8.216575,
+          "p95Ms": 18.956287,
+          "p99Ms": 100.990975,
+          "maxMs": 145.227775
+        },
+        "stages": {
+          "snapshotPlayer": {
+            "count": 193,
+            "totalMs": 21.335400000001755,
+            "p50Ms": 0.0989000000008673,
+            "p95Ms": 0.1967000000004191,
+            "maxMs": 0.44989999999961583
+          },
+          "encodePlayer": {
+            "count": 193,
+            "totalMs": 88.02999999997883,
+            "p50Ms": 0.00240000000121654,
+            "p95Ms": 0.008300000001327135,
+            "maxMs": 24.31760000000213
+          },
+          "persist": {
+            "count": 33,
+            "totalMs": 1113.109599999998,
+            "p50Ms": 30.639100000000326,
+            "p95Ms": 48.33599999999933,
+            "maxMs": 51.59110000000146
+          },
+          "tick": {
+            "count": 75,
+            "totalMs": 1254.8605999999927,
+            "p50Ms": 4.694999999999709,
+            "p95Ms": 47.619800000000396,
+            "maxMs": 53.74789999999848
+          },
+          "snapshot": {
+            "count": 64,
+            "totalMs": 694.563999999993,
+            "p50Ms": 10.747300000000905,
+            "p95Ms": 13.296200000000681,
+            "maxMs": 15.849199999998746
+          },
+          "encode": {
+            "count": 64,
+            "totalMs": 685.7563000000064,
+            "p50Ms": 10.261399999999412,
+            "p95Ms": 13.107700000000477,
+            "maxMs": 15.673600000000079
+          }
+        },
+        "action": {
+          "count": 193,
+          "totalMs": 621.7413000000197,
+          "p50Ms": 2.555900000001202,
+          "p95Ms": 8.553400000000693,
+          "maxMs": 13.998599999998987
+        },
+        "errors": 23
+      }
+    ],
+    "interpretation": "Private replies reduce complete snapshot/encode count256→64. Private player assembly P95~0.197ms and encodePlayer P95~0.0083ms; rare full fallback is included in its max. Periodic full checkpoint remains P95~48ms and event-loop P99~101ms, so this alone cannot eliminate receipt-time compression.",
+    "next": "Treat periodic survival-only saves and shared-refresh work as separate from shared mutations; preserve deaths/drops/defense and atomic transfer durability. Also examine bounded delayed fire admission at the existing rate rather than increasing jitter grace. No new scheduling/persistence change is implemented here."
+  },
+  "nativeFollowUp": {
+    "passed": true,
+    "sameDatabaseAfterTiming": true,
+    "door": "Owner normally navigated to(8,15), used E to close/open existing(8,13) door; passive native buddy observed both; open state restored.",
+    "restartAndReplay": [
+      {
+        "client": 1,
+        "ammo": 1649,
+        "duplicateSpent": 0
+      },
+      {
+        "client": 2,
+        "ammo": 1653,
+        "duplicateSpent": 0
+      }
+    ],
+    "noActionOrFrameErrors": true
+  },
+  "audit": {
+    "integrity": "ok",
+    "version": 3,
+    "pendingRows": 0,
+    "unchangedWorldCollections": {
+      "buildings": true,
+      "camps": true,
+      "storage": true,
+      "ammo": true,
+      "production": true,
+      "nodes": true,
+      "drops": true,
+      "monsters": true
+    },
+    "buildings": 5675,
+    "defensiveAmmo": 540,
+    "ammo": [
+      {
+        "actor": 1,
+        "initial": 2000,
+        "final": 1649,
+        "spent": 351
+      },
+      {
+        "actor": 2,
+        "initial": 2000,
+        "final": 1653,
+        "spent": 347
+      },
+      {
+        "actor": 3,
+        "initial": 2000,
+        "final": 2000,
+        "spent": 0
+      },
+      {
+        "actor": 4,
+        "initial": 2000,
+        "final": 2000,
+        "spent": 0
+      },
+      {
+        "actor": 5,
+        "initial": 2000,
+        "final": 2000,
+        "spent": 0
+      },
+      {
+        "actor": 6,
+        "initial": 2000,
+        "final": 2000,
+        "spent": 0
+      },
+      {
+        "actor": 7,
+        "initial": 2000,
+        "final": 2000,
+        "spent": 0
+      },
+      {
+        "actor": 8,
+        "initial": 2000,
+        "final": 2000,
+        "spent": 0
+      }
+    ],
+    "reader": "Read-only checkpoint plus pending player commits; native restart consolidated rows. All successful shots accounted for; rejected requests consume no ammo."
+  },
+  "limits": [
+    "Full target/combat rollback and periodic persistence still serialize the world; no improvement claim for those paths.",
+    "Normal private action acknowledgement does not refresh nearby shared entities; existing shared mutations broadcast immediately, simulation refreshes and two-second checks continue, five-second full baseline retained.",
+    "No GPU-utilization,60FPS,long-term memory or economic-balance claim.",
+    "Synthetic fixture preparation reset only QA actors before each measurement, not during; no real saved progress was used for economy evidence."
+  ],
+  "safety": "Only uniquely named ignored synthetic QA databases and OS temporary test files were opened. Real data/sdc.sqlite was not opened. Raw identities/tokens remain ignored. Owned QA services and browsers closed.",
+  "sourceSha256": {
+    "server.ts": "9aac35a2acbf6e8c4afc50e4a074b8b6f66fcc80f71f4ba378ea37696660faa6",
+    "server/worldState.ts": "ec078136098d418b8766d5923b750f3f3ac0b98e9a2e412502f6287afd40a1e4",
+    "server/worldState.test.ts": "64d310efc6984d5b2a34fea25dce0f74e52bf823b736d6f84ad08a2b1f4dc194",
+    "server/stateSync.test.ts": "373e4b4f452aedd783cd24548fdf75ef042ea7dd6242d61d96a33ce852acd53b",
+    "src/game/stateSync.ts": "c8394eca6e4a570704c6b3bc0fd7523f5ccb8d32a974122b680a38eba83456a3",
+    "src/game/stateSync.test.ts": "e4ddbd0090fe111bb5b73fe58a9729964a51d64dbd2a6c22159bbc3b51229734"
+  }
+}

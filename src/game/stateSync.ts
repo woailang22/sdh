@@ -1,4 +1,4 @@
-import type { GameStateSnapshot } from '../../server/worldState';
+import type { GameStateSnapshot, PlayerActionSnapshot } from '../../server/worldState';
 
 const LISTS = ['camps', 'buildings', 'nodes', 'drops', 'monsters', 'reports'] as const;
 type ListKey = typeof LISTS[number];
@@ -16,6 +16,14 @@ export class StateEncoder {
   private mapId = '';
   private lastFullAt = -Infinity;
   private lists = new Map<ListKey, string>();
+
+  encodePlayer(snapshot: PlayerActionSnapshot, fullSnapshot: () => GameStateSnapshot, now = Date.now()): StatePatch {
+    if (!this.sequence || snapshot.player.mapId !== this.mapId || now - this.lastFullAt >= 5000) return this.encode(fullSnapshot(), now);
+    // Private feedback advances only the stream. Keep shared comparisons and
+    // their baseline time intact for the next shared update/full refresh.
+    const baseSequence = this.sequence++;
+    return { version: 1, sequence: this.sequence, baseSequence, state: snapshot };
+  }
 
   encode(snapshot: GameStateSnapshot, now = Date.now()): StatePatch {
     const full = !this.sequence || snapshot.player.mapId !== this.mapId || now - this.lastFullAt >= 5000;

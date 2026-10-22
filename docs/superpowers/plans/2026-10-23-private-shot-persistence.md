@@ -38,7 +38,7 @@ Files: `server/persistence.test.ts`, ignored uniquely named QA scripts/databases
 - [x] Prepare a fresh synthetic camp copy with the same5675 structures and baseline settings; run the same isolated two-native idle/walk/fire gate. Record any failure honestly; six protocol actors run only after the native gate passes.
 - [x] Verify actual shared change propagation and paid ammunition totals after shutdown/restart. Do not claim real PvP or eight native browsers from friendly empty-space fire/protocol actors.
 - [x] Run full tests/typecheck/build/diff check; archive sanitized evidence, update world plan.
-- [ ] Commit and push to authorized sdh/main. Verify remote SHA and clean tree; keep broad game goal active.
+- [x] Commit and push to authorized sdh/main. Remote and local SHA both verified as9f89b41ca275196236422fb65ebd1792106c1284 with a clean tree at that checkpoint; broad game goal remains active.
 
 ## Outcome and next evidence
 

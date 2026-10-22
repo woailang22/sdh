@@ -244,15 +244,23 @@ export class GameWorld {
       .filter(p => p && p.mapId === self.mapId && (self.mapId !== 'world' || distance(p, self) <= 80)).map(p => this.publicPlayer(p));
   }
 
-  snapshot(id: string, requestId?: string, error?: string, loot?: { id: string; name: string; items: LootItem[] }, correction = false) {
-    const p = this.state.players[id];
+  private playerView(p: Player): PlayerState {
     const resources = { ...p.resources };
     resources.food = p.inventory.reduce((sum, item) => sum + (item?.category === 'food' ? item.count : 0), 0);
     resources.medical = p.inventory.reduce((sum, item) => sum + (item?.category === 'medical' ? item.count : 0), 0);
-    this.ensureMonsters(p);
     const equipment = { ...p.equipment };
     for (const slot of ['weapon', 'armor', 'tool', 'pack'] as const) equipment[slot] = describedItem(equipment[slot]);
-    const player: PlayerState = { ...this.publicPlayer(p), inventory: p.inventory.map(describedItem), equipment, resources, campId: p.campId, satiety: p.satiety, blueprints: p.blueprints, xp: p.xp, maxXp: p.maxXp, kills: p.kills, onboarding: p.onboarding, lastDamageAt: p.lastDamageAt };
+    return { ...this.publicPlayer(p), inventory: p.inventory.map(describedItem), equipment, resources, campId: p.campId, satiety: p.satiety, blueprints: p.blueprints, xp: p.xp, maxXp: p.maxXp, kills: p.kills, onboarding: p.onboarding, lastDamageAt: p.lastDamageAt };
+  }
+
+  snapshotPlayer(id: string, requestId?: string, error?: string, loot?: { id: string; name: string; items: LootItem[] }, correction = false) {
+    return clone({ requestId, error, correction, player: this.playerView(this.state.players[id]), loot });
+  }
+
+  snapshot(id: string, requestId?: string, error?: string, loot?: { id: string; name: string; items: LootItem[] }, correction = false) {
+    const p = this.state.players[id];
+    this.ensureMonsters(p);
+    const player = this.playerView(p);
     // Building fields are scalar except the private loot (omitted) and job
     // (copied below). Do not JSON-roundtrip thousands of already-detached rows.
     const buildings = this.buildingsFor(p).map(b => {
@@ -395,12 +403,21 @@ export class GameWorld {
   }
 
   action(id: string, packet: GameAction) {
+    return this.runAction(id, packet, (...args) => this.snapshot(...args));
+  }
+
+  actionPlayer(id: string, packet: GameAction) {
+    requireRule(isUntargetedFire(packet), '仅无目标射击可使用角色状态回复');
+    return this.runAction(id, packet, (...args) => this.snapshotPlayer(...args));
+  }
+
+  private runAction<T>(id: string, packet: GameAction, reply: (...args: Parameters<GameWorld['snapshot']>) => T): T {
     const receivedAt = this.now();
     const p = this.state.players[id];
     if (!p) throw new Error('角色未接入');
     const requestId = typeof packet?.requestId === 'string' ? packet.requestId : '';
-    if (!requestId || requestId.length > 120 || typeof packet?.action !== 'string') return this.snapshot(id, requestId, '无效操作请求');
-    if (this.state.handled[id]?.includes(requestId)) return this.snapshot(id, requestId);
+    if (!requestId || requestId.length > 120 || typeof packet?.action !== 'string') return reply(id, requestId, '无效操作请求');
+    if (this.state.handled[id]?.includes(requestId)) return reply(id, requestId);
     // Untargeted fire mutates only this player and their replay ledger. Shared
     // combat (including every targeted shot) still needs the full rollback copy.
     const before = isUntargetedFire(packet) ? {
@@ -425,11 +442,11 @@ export class GameWorld {
       }
       const players = this.state.players;
       this.state = before; this.state.players = players;
-      return this.snapshot(id, requestId, error instanceof Error ? error.message : '操作失败');
+      return reply(id, requestId, error instanceof Error ? error.message : '操作失败');
     }
     // A response failure cannot undo a durable transaction. Retrying its request
     // must see the committed replay guard, including after a later checkpoint.
-    return this.snapshot(id, requestId, undefined, loot, p.mapId !== before.players[id].mapId);
+    return reply(id, requestId, undefined, loot, p.mapId !== before.players[id].mapId);
   }
 
   private perform(p: Player, a: GameAction, receivedAt: number): { id: string; name: string; items: LootItem[] } | undefined {
@@ -829,3 +846,4 @@ export class GameWorld {
 }
 
 export type GameStateSnapshot = ReturnType<GameWorld['snapshot']>;
+export type PlayerActionSnapshot = ReturnType<GameWorld['snapshotPlayer']>;

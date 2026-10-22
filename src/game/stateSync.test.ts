@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { StateDecoder, StateEncoder } from './stateSync';
 import { GameWorld, type GameStateSnapshot, type WorldRules } from '../../server/worldState';
 import { createMemoryDb } from '../../server/db';
@@ -15,6 +15,52 @@ function snapshot(): GameStateSnapshot {
 const copy = <T,>(value: T): T => JSON.parse(JSON.stringify(value));
 
 describe('nearby state transport', () => {
+  it('acknowledges private player changes without inspecting or serializing shared lists', () => {
+    const encoder = new StateEncoder(), decoder = new StateDecoder(), state = snapshot();
+    decoder.decode(copy(encoder.encode(state, 0)));
+    const live = { player: copy(state.player), correction: false, requestId: 'private-fire', error: undefined, loot: undefined };
+    live.player.resources.ammo = 9;
+    const fallback = vi.fn(() => { throw Error('Unexpected shared snapshot'); });
+    const serialization = vi.spyOn(JSON, 'stringify'); let patch;
+    try { patch = encoder.encodePlayer(live, fallback, 120); expect(serialization).not.toHaveBeenCalled(); } finally { serialization.mockRestore(); }
+    expect(fallback).not.toHaveBeenCalled(); expect(patch.state).not.toHaveProperty('buildings');
+    expect(decoder.decode(copy(patch))).toEqual({ ...state, ...copy(live) });
+  });
+  it('uses full fallback on missing, expired and changed-map baselines without starving refresh during continuous private replies', () => {
+    const encoder = new StateEncoder(), decoder = new StateDecoder(), state = snapshot();
+    const live = { player: state.player, correction: true, requestId: 'initial-shot', error: '武器或弹药不足', loot: undefined };
+    const fallback = vi.fn(() => ({ ...state, ...live }));
+    const first = encoder.encodePlayer(live, fallback, 0);
+    expect(first.baseSequence).toBeNull(); expect(decoder.decode(copy(first))).toEqual(copy({ ...state, ...live }));
+    for (const now of [1000, 2000, 3000, 4000, 4999]) expect(decoder.decode(copy(encoder.encodePlayer(live, fallback, now)))).toBeDefined();
+    expect(fallback).toHaveBeenCalledTimes(1);
+    const refreshed = encoder.encodePlayer(live, fallback, 5000);
+    expect(refreshed.baseSequence).toBeNull(); expect(fallback).toHaveBeenCalledTimes(2);
+    decoder.decode(copy(refreshed));
+    live.player = { ...state.player, mapId: 'home_owner' }; live.requestId = 'new-space-shot';
+    const newSpace = { ...state, ...live, buildings: [], monsters: [], nodes: [], drops: [], camps: [] };
+    const entered = encoder.encodePlayer(live, () => newSpace, 5100);
+    expect(entered.baseSequence).toBeNull(); expect(decoder.decode(copy(entered))).toEqual(copy(newSpace));
+  });
+  it('preserves shared door updates between private replies and clears single-use feedback', () => {
+    const encoder = new StateEncoder(), decoder = new StateDecoder(), state = snapshot();
+    decoder.decode(copy(encoder.encode(state, 0)));
+    const live = { player: state.player, correction: false, requestId: 'rejected-shot', error: '操作过快', loot: undefined };
+    decoder.decode(copy(encoder.encodePlayer(live, () => state, 120)));
+    state.buildings[0].isOpen = true;
+    expect(decoder.decode(copy(encoder.encode(state, 200)))!.buildings[0].isOpen).toBe(true);
+    const next = encoder.encodePlayer({ ...live, requestId: undefined, error: undefined }, () => state, 300);
+    const reconstructed = decoder.decode(copy(next))!;
+    expect(reconstructed.buildings[0].isOpen).toBe(true); expect(reconstructed.error).toBeUndefined(); expect(reconstructed.requestId).toBeUndefined();
+    expect(encoder.encode(state, 400).state).not.toHaveProperty('buildings');
+  });
+  it('does not advance sequences or refresh time when a full fallback fails', () => {
+    const encoder = new StateEncoder(), state = snapshot(); encoder.encode(state, 0);
+    const live = { player: state.player, correction: false, requestId: 'committed-fire', error: undefined, loot: undefined };
+    expect(() => encoder.encodePlayer(live, () => { throw Error('snapshot failed'); }, 5000)).toThrow('snapshot failed');
+    const recovered = encoder.encodePlayer(live, () => ({ ...state, ...live }), 5001);
+    expect(recovered.sequence).toBe(2); expect(recovered.baseSequence).toBeNull(); expect(recovered.state.requestId).toBe(live.requestId);
+  });
   it('sends a full baseline then omits unchanged lists while preserving live player state', () => {
     const encoder = new StateEncoder(), decoder = new StateDecoder(), initial = snapshot();
     const first = encoder.encode(initial, 10000);

@@ -6,7 +6,7 @@ import fs from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { createDb, backupDatabase } from './server/db.js';
 import { guestTokenFromCookie, resolveGuest } from './server/identity.js';
-import { GameWorld, isUntargetedFire, type GameStateSnapshot, type WorldRules } from './server/worldState.js';
+import { GameWorld, isUntargetedFire, type GameStateSnapshot, type PlayerActionSnapshot, type WorldRules } from './server/worldState.js';
 import { createWorldQueries } from './server/worldQueries.js';
 import { StateEncoder } from './src/game/stateSync.js';
 import { sendMessage as send } from './server/transport.js';
@@ -56,6 +56,16 @@ function stateTo(client: Client, snapshot?: GameStateSnapshot, correction = fals
   client.mapId = state.player.mapId; client.lastSnapshot = Date.now();
   if (client.stateEncoder) send(client.ws, 'game_state_patch', client.stateEncoder.encode(state));
   else send(client.ws, 'game_state', state);
+}
+function playerStateTo(client: Client, state: PlayerActionSnapshot) {
+  if (client.ws.readyState !== WebSocket.OPEN || !client.stateEncoder) return;
+  state.correction ||= client.mapId !== state.player.mapId;
+  const patch = client.stateEncoder.encodePlayer(state, () => game.snapshot(client.id, state.requestId, state.error, state.loot, state.correction));
+  client.mapId = state.player.mapId;
+  // Only shared snapshots refresh this clock; private fire must not postpone
+  // the periodic shared check when no simulation entity is dirty.
+  if (patch.baseSequence === null) client.lastSnapshot = Date.now();
+  send(client.ws, 'game_state_patch', patch);
 }
 function refreshVisibility(client: Client) {
   const players = game.visiblePlayers(client.id);
@@ -115,6 +125,9 @@ wss.on('connection', (ws, req) => {
           break;
         }
         case 'game_action': {
+          if (client.stateEncoder && isUntargetedFire(payload)) {
+            playerStateTo(client, game.actionPlayer(id, payload)); break;
+          }
           const state = game.action(id, payload);
           stateTo(client, state);
           // Empty shots only change the shooter's private ammunition/cooldown.

@@ -14,6 +14,38 @@ const rules: WorldRules = {
   monstersNear: () => [],
 };
 describe('cached public building definitions', () => {
+  it('commits a detached private reply without constructing shared entities and rejects shared actions on that path', () => {
+    const { game, db } = setup(); const p = game.state.players.owner;
+    p.equipment.weapon = makeItem('rifle', 1); p.resources.ammo = 10; p.inventory[0] = makeItem('food', 2); game.persist();
+    const shared = vi.spyOn(game, 'snapshot').mockImplementation(() => { throw Error('Unexpected shared snapshot'); });
+    const request = { action: 'fire', requestId: 'player-only-fire' };
+    let result;
+    try {
+      result = game.actionPlayer('owner', request);
+      expect(game.actionPlayer('owner', request).player.resources.ammo).toBe(9);
+      expect(game.actionPlayer('owner', { action: 'fire', requestId: 'spam' }).error).toContain('过快');
+      expect(shared).not.toHaveBeenCalled();
+      expect(() => game.actionPlayer('owner', { action: 'gather', requestId: 'bad-entry', targetId: tree.id })).toThrow('无目标射击');
+    } finally { shared.mockRestore(); }
+    expect(result).not.toHaveProperty('buildings'); expect(result.player.resources.ammo).toBe(9);
+    result.player.resources.ammo = 500; result.player.inventory[0]!.count = 0; result.player.equipment.weapon!.name = '修改';
+    expect(p.resources.ammo).toBe(9); expect(p.inventory[0]?.count).toBe(2); expect(p.equipment.weapon?.name).toBe(makeItem('rifle', 1).name);
+    const restored = new GameWorld(db, rules);
+    expect(restored.action('owner', request).player.resources.ammo).toBe(9);
+    expect(restored.state.handled.owner).toEqual([request.requestId]);
+  });
+  it('rolls back private reply save failure but keeps a successful commit when its player view fails', () => {
+    const { game, db } = setup(); const p = game.state.players.owner;
+    p.equipment.weapon = makeItem('rifle', 1); p.resources.ammo = 10; game.persist();
+    const request = { action: 'fire', requestId: 'private-view-failure' }, save = db.saveWorldPlayerCommit;
+    db.saveWorldPlayerCommit = () => { throw Error('disk failure'); };
+    expect(game.actionPlayer('owner', request).error).toBe('disk failure'); expect(p.resources.ammo).toBe(10);
+    expect(game.state.handled.owner).toBeUndefined(); db.saveWorldPlayerCommit = save;
+    const view = vi.spyOn(game, 'snapshotPlayer').mockImplementationOnce(() => { throw Error('view failure'); });
+    try { expect(() => game.actionPlayer('owner', request)).toThrow('view failure'); } finally { view.mockRestore(); }
+    expect(p.resources.ammo).toBe(9); expect(game.actionPlayer('owner', request).player.resources.ammo).toBe(9);
+    expect(new GameWorld(db, rules).state.players.owner.resources.ammo).toBe(9);
+  });
   it('does not serialize the full camp for a durable untargeted shot', () => {
     const { game, db, p, act } = campSetup(); p.equipment.weapon = makeItem('rifle', 1); p.resources.ammo = 10;
     for (let i = 0; i < 600; i++) game.state.buildings['floor_' + i] = { id: 'floor_' + i, type: 'wood_floor', name: '地板', x: i % 30, y: Math.floor(i / 30), hp: 200, maxHp: 200, level: 1, ownerId: p.id, mapId: p.mapId };
