@@ -1,0 +1,516 @@
+{
+  "testedCommit": "b73f12c8774fa5d553162e4d08d1135d8ab25b4f",
+  "environment": {
+    "os": "Windows 11 Pro 10.0.26200",
+    "browser": "Chrome 155.0.8059.85 headless=new",
+    "hostDisplayAdapters": [
+      "Intel UHD Graphics",
+      "NVIDIA GeForce RTX 3070 Laptop GPU",
+      "Todesk Virtual Display Adapter",
+      "GameViewer Virtual Display Adapter"
+    ],
+    "activeGpuAdapter": "Not identified; GPU counters refer only to the owned browser process tree"
+  },
+  "resolution": {
+    "width": 1920,
+    "height": 1080,
+    "dpr": 1
+  },
+  "metricDefinitions": {
+    "privateCommittedMiB": "Sum of PrivateMemorySize64 for owned browser process tree, divided by 1048576",
+    "gpuSharedMiB": "GPU process shared-usage counter for owned browser process tree; do not add to private commit as total memory",
+    "heapSamplesMiB": "Three performance.memory.usedJSHeapSize observations, not a precise retained-heap measure",
+    "loadedImages": "artImages.size, number of image objects cached by game engine",
+    "decodedImageMiB": "Sum of naturalWidth * naturalHeight * 4 / 1048576, pixel-size estimate, not measured browser decode allocation",
+    "raf": "requestAnimationFrame callback spacing, not physical display presentation",
+    "longTasksAndCorrections": "Only run 2, six measuring walking windows; startup, idle sampling and food UI excluded"
+  },
+  "route": {
+    "start": {
+      "x": -2,
+      "y": 7
+    },
+    "direction": "east along y=7, then return",
+    "secondsPerLeg": 60,
+    "legsPerRun": 6,
+    "roundsPerRun": 3
+  },
+  "method": "Two independent production browser processes and isolated synthetic databases. Normal joystick speed, hunger, weather and networking; two carried food, one consumed normally. No reload, teleport, cache clear, speed or quality change between rounds. Three natural idle memory samples after each leg; forced GC only after all six measured legs, reported separately. No concurrent builds, tests or QA browsers.",
+  "runs": [
+    {
+      "id": "three-cycle-world-20261022-a1",
+      "success": true,
+      "foodRemaining": 1,
+      "legs": [
+        {
+          "leg": 1,
+          "round": 1,
+          "direction": "outbound",
+          "draw": {
+            "count": 3588,
+            "p95Ms": 3.3,
+            "p99Ms": 4.7,
+            "maxMs": 17.2,
+            "over50": 0
+          },
+          "raf": {
+            "count": 9602,
+            "maxMs": 30.4,
+            "over50": 0
+          },
+          "longTaskCount": null,
+          "correctionCount": null,
+          "weatherAtLegEnd": null,
+          "position": {
+            "x": 226.0357199999896,
+            "y": 7
+          }
+        },
+        {
+          "leg": 2,
+          "round": 1,
+          "direction": "return",
+          "draw": {
+            "count": 3589,
+            "p95Ms": 3.3,
+            "p99Ms": 4.7,
+            "maxMs": 11.7,
+            "over50": 0
+          },
+          "raf": {
+            "count": 9596,
+            "maxMs": 42.4,
+            "over50": 0
+          },
+          "longTaskCount": null,
+          "correctionCount": null,
+          "weatherAtLegEnd": null,
+          "position": {
+            "x": -2.0919599999992804,
+            "y": 7
+          }
+        },
+        {
+          "leg": 3,
+          "round": 2,
+          "direction": "outbound",
+          "draw": {
+            "count": 3581,
+            "p95Ms": 3.1,
+            "p99Ms": 4.3,
+            "maxMs": 13.8,
+            "over50": 0
+          },
+          "raf": {
+            "count": 9488,
+            "maxMs": 36.4,
+            "over50": 0
+          },
+          "longTaskCount": null,
+          "correctionCount": null,
+          "weatherAtLegEnd": null,
+          "position": {
+            "x": 226.01253999999565,
+            "y": 7
+          }
+        },
+        {
+          "leg": 4,
+          "round": 2,
+          "direction": "return",
+          "draw": {
+            "count": 3585,
+            "p95Ms": 3.3,
+            "p99Ms": 4.6,
+            "maxMs": 13.3,
+            "over50": 0
+          },
+          "raf": {
+            "count": 9336,
+            "maxMs": 30.4,
+            "over50": 0
+          },
+          "longTaskCount": null,
+          "correctionCount": null,
+          "weatherAtLegEnd": null,
+          "position": {
+            "x": -2.0463599999980984,
+            "y": 7
+          }
+        },
+        {
+          "leg": 5,
+          "round": 3,
+          "direction": "outbound",
+          "draw": {
+            "count": 3586,
+            "p95Ms": 3.2,
+            "p99Ms": 4.7,
+            "maxMs": 11.3,
+            "over50": 0
+          },
+          "raf": {
+            "count": 9364,
+            "maxMs": 24.4,
+            "over50": 0
+          },
+          "longTaskCount": null,
+          "correctionCount": null,
+          "weatherAtLegEnd": null,
+          "position": {
+            "x": 226.03533999999223,
+            "y": 7
+          }
+        },
+        {
+          "leg": 6,
+          "round": 3,
+          "direction": "return",
+          "draw": {
+            "count": 3590,
+            "p95Ms": 3.3,
+            "p99Ms": 4.3,
+            "maxMs": 8.1,
+            "over50": 0
+          },
+          "raf": {
+            "count": 9595,
+            "maxMs": 36.4,
+            "over50": 0
+          },
+          "longTaskCount": null,
+          "correctionCount": null,
+          "weatherAtLegEnd": null,
+          "position": {
+            "x": -2.0235599999971616,
+            "y": 7
+          }
+        }
+      ],
+      "returns": [
+        {
+          "round": 1,
+          "privateCommittedMiB": 521.91,
+          "gpuSharedMiB": 164.5,
+          "gpuMaxEngineSamplesPercent": [
+            57,
+            52,
+            59
+          ],
+          "heapSamplesMiB": [
+            8.69,
+            18,
+            8.73
+          ],
+          "chunks": 64,
+          "tileAtlases": 12,
+          "tileCells": 505,
+          "loadedImages": 20,
+          "decodedImageMiB": 57.99,
+          "nearby": {
+            "nodes": 153,
+            "monsters": 0,
+            "buildings": 370
+          },
+          "weather": null
+        },
+        {
+          "round": 2,
+          "privateCommittedMiB": 533.3,
+          "gpuSharedMiB": 167.09,
+          "gpuMaxEngineSamplesPercent": [
+            59,
+            59,
+            56
+          ],
+          "heapSamplesMiB": [
+            8.2,
+            24.41,
+            16.91
+          ],
+          "chunks": 64,
+          "tileAtlases": 12,
+          "tileCells": 505,
+          "loadedImages": 20,
+          "decodedImageMiB": 57.99,
+          "nearby": {
+            "nodes": 153,
+            "monsters": 0,
+            "buildings": 370
+          },
+          "weather": null
+        },
+        {
+          "round": 3,
+          "privateCommittedMiB": 536.85,
+          "gpuSharedMiB": 164.41,
+          "gpuMaxEngineSamplesPercent": [
+            56,
+            56,
+            54
+          ],
+          "heapSamplesMiB": [
+            24.74,
+            13.92,
+            19.8
+          ],
+          "chunks": 64,
+          "tileAtlases": 12,
+          "tileCells": 505,
+          "loadedImages": 20,
+          "decodedImageMiB": 57.99,
+          "nearby": {
+            "nodes": 153,
+            "monsters": 0,
+            "buildings": 370
+          },
+          "weather": null
+        }
+      ],
+      "finalAfterForcedGc": {
+        "privateCommittedMiB": 476.8,
+        "gpuSharedMiB": 164.39,
+        "cacheUnchanged": true
+      },
+      "runtimeErrors": 0
+    },
+    {
+      "id": "three-cycle-world-20261022-a2",
+      "success": true,
+      "foodRemaining": 1,
+      "legs": [
+        {
+          "leg": 1,
+          "round": 1,
+          "direction": "outbound",
+          "draw": {
+            "count": 3589,
+            "p95Ms": 3.2,
+            "p99Ms": 5.1,
+            "maxMs": 16.9,
+            "over50": 0
+          },
+          "raf": {
+            "count": 9585,
+            "maxMs": 30.5,
+            "over50": 0
+          },
+          "longTaskCount": 0,
+          "correctionCount": 0,
+          "weatherAtLegEnd": "clear",
+          "position": {
+            "x": 226.08169999998938,
+            "y": 7
+          }
+        },
+        {
+          "leg": 2,
+          "round": 1,
+          "direction": "return",
+          "draw": {
+            "count": 3586,
+            "p95Ms": 3.1,
+            "p99Ms": 4.1,
+            "maxMs": 7.8,
+            "over50": 0
+          },
+          "raf": {
+            "count": 9582,
+            "maxMs": 36.5,
+            "over50": 0
+          },
+          "longTaskCount": 0,
+          "correctionCount": 0,
+          "weatherAtLegEnd": "clear",
+          "position": {
+            "x": -1.9768200000002945,
+            "y": 7
+          }
+        },
+        {
+          "leg": 3,
+          "round": 2,
+          "direction": "outbound",
+          "draw": {
+            "count": 3588,
+            "p95Ms": 3.1,
+            "p99Ms": 4.1,
+            "maxMs": 11.7,
+            "over50": 0
+          },
+          "raf": {
+            "count": 9489,
+            "maxMs": 42.4,
+            "over50": 0
+          },
+          "longTaskCount": 0,
+          "correctionCount": 0,
+          "weatherAtLegEnd": "acid_rain",
+          "position": {
+            "x": 226.0816999999953,
+            "y": 7
+          }
+        },
+        {
+          "leg": 4,
+          "round": 2,
+          "direction": "return",
+          "draw": {
+            "count": 3591,
+            "p95Ms": 3.2,
+            "p99Ms": 4.3,
+            "maxMs": 10.7,
+            "over50": 0
+          },
+          "raf": {
+            "count": 9323,
+            "maxMs": 30.4,
+            "over50": 0
+          },
+          "longTaskCount": 0,
+          "correctionCount": 0,
+          "weatherAtLegEnd": "acid_rain",
+          "position": {
+            "x": -1.9543999999986028,
+            "y": 7
+          }
+        },
+        {
+          "leg": 5,
+          "round": 3,
+          "direction": "outbound",
+          "draw": {
+            "count": 3581,
+            "p95Ms": 3.3,
+            "p99Ms": 4.3,
+            "maxMs": 12.9,
+            "over50": 0
+          },
+          "raf": {
+            "count": 9309,
+            "maxMs": 36.5,
+            "over50": 0
+          },
+          "longTaskCount": 0,
+          "correctionCount": 0,
+          "weatherAtLegEnd": "acid_rain",
+          "position": {
+            "x": 226.12805999999165,
+            "y": 7
+          }
+        },
+        {
+          "leg": 6,
+          "round": 3,
+          "direction": "return",
+          "draw": {
+            "count": 3590,
+            "p95Ms": 3.1,
+            "p99Ms": 4.4,
+            "maxMs": 14.1,
+            "over50": 0
+          },
+          "raf": {
+            "count": 9548,
+            "maxMs": 36.2,
+            "over50": 0
+          },
+          "longTaskCount": 0,
+          "correctionCount": 0,
+          "weatherAtLegEnd": "fog",
+          "position": {
+            "x": -1.8844799999974466,
+            "y": 7
+          }
+        }
+      ],
+      "returns": [
+        {
+          "round": 1,
+          "privateCommittedMiB": 533.67,
+          "gpuSharedMiB": 169.13,
+          "gpuMaxEngineSamplesPercent": [
+            61,
+            59,
+            60
+          ],
+          "heapSamplesMiB": [
+            15.83,
+            31.54,
+            18.69
+          ],
+          "chunks": 64,
+          "tileAtlases": 12,
+          "tileCells": 505,
+          "loadedImages": 20,
+          "decodedImageMiB": 57.99,
+          "nearby": {
+            "nodes": 153,
+            "monsters": 0,
+            "buildings": 370
+          },
+          "weather": "clear"
+        },
+        {
+          "round": 2,
+          "privateCommittedMiB": 557.9,
+          "gpuSharedMiB": 172.64,
+          "gpuMaxEngineSamplesPercent": [
+            58,
+            60,
+            60
+          ],
+          "heapSamplesMiB": [
+            19.21,
+            11.49,
+            26.2
+          ],
+          "chunks": 64,
+          "tileAtlases": 12,
+          "tileCells": 505,
+          "loadedImages": 20,
+          "decodedImageMiB": 57.99,
+          "nearby": {
+            "nodes": 153,
+            "monsters": 0,
+            "buildings": 370
+          },
+          "weather": "acid_rain"
+        },
+        {
+          "round": 3,
+          "privateCommittedMiB": 558.42,
+          "gpuSharedMiB": 170.27,
+          "gpuMaxEngineSamplesPercent": [
+            57,
+            54,
+            56
+          ],
+          "heapSamplesMiB": [
+            6.92,
+            25.94,
+            15
+          ],
+          "chunks": 64,
+          "tileAtlases": 12,
+          "tileCells": 505,
+          "loadedImages": 20,
+          "decodedImageMiB": 57.99,
+          "nearby": {
+            "nodes": 153,
+            "monsters": 0,
+            "buildings": 370
+          },
+          "weather": "fog"
+        }
+      ],
+      "finalAfterForcedGc": {
+        "privateCommittedMiB": 494.88,
+        "gpuSharedMiB": 169.44,
+        "cacheUnchanged": true
+      },
+      "runtimeErrors": 0
+    }
+  ],
+  "conclusion": "Both independent runs kept resource/cache counts unchanged across three return visits and met the specified walking draw gate. Natural private commit rose then flattened, not a proof of zero leaks. Forced-GC results show reclaimable transient memory and are not normal gameplay memory numbers or a proposed feature. Main-thread long tasks and authoritative corrections were observed only in the six measuring walking windows of run 2, both zero; startup, idle and food UI are excluded. GPU utilization remains high in idle samples; original user device, physical display presentation, all regions, combat, large camps and multi-hour sessions are not covered."
+}
