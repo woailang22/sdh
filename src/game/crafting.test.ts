@@ -99,6 +99,15 @@ describe('crafting requirements in the interface', () => {
 });
 
 describe('production yield information', () => {
+  it.each([[64, 28], [96, 44], [128, 60]])('enables leaving only near the actual %s-cell camp exit', (size, exitY) => {
+    const renderExit = (y: number) => renderToStaticMarkup(React.createElement(CampPanel, {
+      isOpen: true, onClose() {}, onAction() {}, onNavigate() {}, selfId: 'owner', campId: 'home_owner', currentMapId: 'home_owner',
+      playerPos: { x: 0, y }, camps: [{ id: 'home_owner', ownerId: 'owner', ownerName: '主人', x: 100, y: 100, mapId: 'world', size }], inventory: [], resources: {},
+    }));
+    expect(renderExit(exitY)).toContain(`南侧出口 (0, ${exitY})`);
+    expect(renderExit(exitY).match(/<button[^>]*>离开营地<\/button>/)?.[0]).not.toContain('disabled=""');
+    expect(renderExit(exitY - 4)).toMatch(/<button[^>]*disabled=""[^>]*>离开营地<\/button>/);
+  });
   const render = (type: BuildingEntity['type'], production?: BuildingEntity['production']) => renderToStaticMarkup(React.createElement(CampPanel, {
     isOpen: true, onClose() {}, onAction() {}, onNavigate() {}, selfId: 'owner', campId: 'home_owner', currentMapId: 'home_owner',
     playerPos: { x: 0, y: 0 }, camps: [{ id: 'home_owner', ownerId: 'owner', ownerName: '主人', x: 100, y: 100, mapId: 'world' }],

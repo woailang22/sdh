@@ -5,6 +5,7 @@ import { REGIONS, SUBMAPS } from '../game/maps';
 import { WORLD_LOCATIONS, WORLD_MIN, WORLD_MAX, worldLocationAt, worldThemeAt } from '../game/world';
 import { groundBaseColor, themeAccent } from '../game/visualTheme';
 import { WORLD_SUPPLY_ROUTES } from '../game/worldRoutes';
+import { campExitPosition } from '../game/home';
 import { soundManager } from '../audio/soundManager';
 
 interface CampMarker { id: string; ownerId: string; ownerName: string; x: number; y: number; mapId: string }
@@ -41,6 +42,7 @@ export const WorldMapModal: React.FC<WorldMapModalProps> = ({
   const [routeId, setRouteId] = useState('south');
   const drag = useRef<{ x: number; y: number; viewX: number; viewY: number } | null>(null);
   const inCamp = currentMapId.startsWith('home_');
+  const exit = campExitPosition(campSize);
   const location = worldLocationAt(playerPos.x, playerPos.y);
   const selection: SelectedPoint = selected ?? location;
   const selectedLocation = WORLD_LOCATIONS.find(point => point.id === selection.id);
@@ -105,13 +107,13 @@ export const WorldMapModal: React.FC<WorldMapModalProps> = ({
             <svg viewBox={`${-campSize / 2 - 8} ${-campSize / 2 - 8} ${campSize + 16} ${campSize + 16}`} className="w-full h-[48vh] min-h-64 rounded-xl bg-slate-950 border border-slate-700" role="img" aria-label="营地局部位置与出口">
               <defs><pattern id="camp-map-grid" width="8" height="8" patternUnits="userSpaceOnUse"><path d="M 8 0 L 0 0 0 8" fill="none" stroke="#334155" strokeWidth="0.2" /></pattern></defs>
               <rect x={-campSize / 2} y={-campSize / 2} width={campSize} height={campSize} fill="url(#camp-map-grid)" stroke="#64748b" strokeWidth="0.4" />
-              <text x="0" y="35" fill="#94a3b8" textAnchor="middle" fontSize="3">南侧营地出口 (0, 28) · 返回公共世界</text>
-              <path d="M -3 25 L 0 28 L 3 25" stroke="#34d399" fill="none" strokeWidth="0.8" />
+              <text x="0" y={exit.y + 7} fill="#94a3b8" textAnchor="middle" fontSize="3">南侧营地出口 (0, {exit.y}) · 返回公共世界</text>
+              <path d={`M -3 ${exit.y - 3} L 0 ${exit.y} L 3 ${exit.y - 3}`} stroke="#34d399" fill="none" strokeWidth="0.8" />
               {waypoints.map((point, index) => <circle key={`${point.name}-${index}`} cx={point.x} cy={point.y} r="1.2" fill="#34d399"><title>{point.name}</title></circle>)}
               <circle cx={playerPos.x} cy={playerPos.y} r="1.4" fill="#38bdf8" stroke="white" strokeWidth="0.5" />
               <text x={playerPos.x + 3} y={playerPos.y + 1} fill="#e2e8f0" fontSize="3">你的位置</text>
             </svg>
-            <p className="text-xs text-slate-400 mt-3">营地独立于公共世界。走到南侧出口 (0, 28) 并交互，返回营地入口所在的世界坐标。</p>
+            <p className="text-xs text-slate-400 mt-3">营地独立于公共世界。走到南侧出口 (0, {exit.y}) 并交互，返回营地入口所在的世界坐标。</p>
           </div>
         ) : (
           <div className="flex flex-col md:flex-row min-h-0 overflow-y-auto">

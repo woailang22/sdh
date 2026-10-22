@@ -645,7 +645,7 @@ describe('camp facilities and membership', () => {
     act('raider', 'fire', { targetId: 'owner' }); expect(p.mapId).toBe('world'); expect(p.blueprints).toEqual(['wp_plasma']);
     expect(new GameWorld(db, rules).snapshot('owner').player.blueprints).toEqual(['wp_plasma']);
   });
-  it('upgrades camp bounds with exact paid costs and preserves the fixed southern exit', () => {
+  it('upgrades camp bounds with exact paid costs and moves the exit to the expanded perimeter', () => {
     const { game, act, p, db, advance } = campSetup(); const stone = p.resources.stone;
     expect(act('owner', 'upgrade_camp').error).toBeUndefined();
     expect(p.resources.stone).toBe(stone - 60); expect(game.state.camps[p.campId!]).toMatchObject({ level: 2, size: 96 });
@@ -653,7 +653,50 @@ describe('camp facilities and membership', () => {
     expect(game.move('owner', { x: 40.1, y: 4 })).toBe(true);
     expect(act('owner', 'build', { buildType: 'wood_wall', x: 42, y: 4 }).error).toBeUndefined();
     expect(new GameWorld(db, rules).state.camps[p.campId!].size).toBe(96);
-    p.x = 0; p.y = 28; expect(act('owner', 'leave_camp').error).toBeUndefined(); expect(p.x).toBe(100);
+    p.x = 0; p.y = 28; expect(act('owner', 'leave_camp').error).toContain('南侧出口');
+    p.y = 44; expect(act('owner', 'leave_camp').error).toBeUndefined(); expect(p.x).toBe(100);
+  });
+  it.each([[64, 28], [96, 44], [128, 60]])('enters and exits a %s-cell camp at the perimeter for owners and attackers', (size, exitY) => {
+    const { game, act, p } = campSetup(); const camp = game.state.camps[p.campId!]; camp.size = size;
+    for (const id of ['owner', 'raider']) {
+      const player = game.state.players[id]; Object.assign(player, { mapId: 'world', x: camp.x, y: camp.y });
+      expect(act(id, 'enter_camp', { campId: camp.id }).error).toBeUndefined();
+      expect(player).toMatchObject({ mapId: camp.id, x: 0, y: exitY });
+      expect(size / 2 - player.y).toBe(4);
+      expect(act(id, 'leave_camp').error).toBeUndefined();
+      expect(player).toMatchObject({ mapId: 'world', x: camp.x, y: camp.y });
+    }
+  });
+  it.each([[64, 28], [96, 44], [128, 60]])('keeps the %s-cell exit clear without reserving the old inner corridor', (size, exitY) => {
+    const { game, act, p } = campSetup(); game.state.camps[p.campId!].size = size;
+    Object.assign(p, { x: 0, y: exitY }); const before = structuredClone(p.resources);
+    expect(act('owner', 'build', { buildType: 'wood_wall', x: 0, y: exitY }).error).toContain('保持通畅');
+    expect(p.resources).toEqual(before);
+    p.y = exitY - 5;
+    expect(act('owner', 'build', { buildType: 'wood_wall', x: 0, y: exitY - 5 }).error).toBeUndefined();
+  });
+  it('preserves players and built defenses through both paid expansions while attackers reenter at the perimeter', () => {
+    const { game, act, p, advance, db } = campSetup(); const camp = game.state.camps[p.campId!];
+    p.x = 0; p.y = 21;
+    expect(act('owner', 'build', { buildType: 'wood_wall', x: 0, y: 20 }).error).toBeUndefined();
+    const wall = structuredClone(Object.values(game.state.buildings).find(b => b.type === 'wood_wall')!);
+    p.x = 1; p.y = 0;
+    for (const [size, exitY] of [[96, 44], [128, 60]]) {
+      const position = { x: p.x, y: p.y };
+      expect(act('owner', 'upgrade_camp').error).toBeUndefined();
+      expect(camp.size).toBe(size); expect({ x: p.x, y: p.y }).toEqual(position);
+      expect(game.state.buildings[wall.id]).toEqual(wall);
+      const raider = game.state.players.raider; Object.assign(raider, { mapId: 'world', x: camp.x, y: camp.y });
+      expect(act('raider', 'enter_camp', { campId: camp.id }).error).toBeUndefined();
+      expect(raider.y).toBe(exitY);
+      raider.x = 0; raider.y = 20.8; advance(1000);
+      expect(game.move('raider', { x: 0, y: 19.2 })).toBe(false);
+      expect(raider.y).toBe(20.8);
+      raider.x = 3; advance(1000);
+      expect(game.move('raider', { x: 3, y: 19.2 })).toBe(true);
+    }
+    expect(new GameWorld(db, rules).state.camps[camp.id].size).toBe(128);
+    expect(new GameWorld(db, rules).state.buildings[wall.id]).toEqual(wall);
   });
   it('allows safe bed rest without creating food and rejects resting during combat', () => {
     const { game, act, p, advance } = campSetup(); p.x = 4; p.y = 4; const bed = facility(game, 'bed');

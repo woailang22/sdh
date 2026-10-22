@@ -1,5 +1,10 @@
 /** 个人营地实例：mapId = `home_<ownerPlayerId>`；模板为 `home_base`（SUBMAPS占位，不直接进入） */
 
+/** 入口与出口共用南侧外围落点，距边界四格。 */
+export function campExitPosition(size = 64): { x: number; y: number } {
+  return { x: 0, y: size / 2 - 4 };
+}
+
 export function homeMapIdFor(playerId: string): string {
   return `home_${playerId}`;
 }

@@ -10,6 +10,7 @@ import { frameContent, angleToSurvivorFrame, interactableSprite, buildingSprite 
 import { isHostile, canOperateDoor } from './diplomacy';
 import { CHUNK_SIZE, WORLD_MIN, WORLD_MAX, generateWorldChunk, worldToChunk, worldThemeAt, worldLocationAt, worldIsRoad, type WorldChunk } from './world';
 import { findPath, isPositionBlocked, hasLineOfSight } from './navigation';
+import { campExitPosition } from './home';
 import { recordRenderFailure } from './renderDiagnostics';
 import { generateWorldScenery, type WorldScenery } from './worldScenery';
 import { ROADSIDE_USES, WORLD_ROADSIDE_STOPS, type RoadsideStop } from './worldRoutes';
@@ -1590,9 +1591,9 @@ export class IsometricEngine {
     const distance = (target: { x: number; y: number }) => Math.hypot(this.player.x - target.x, this.player.y - target.y);
     const portalDistance = this.currentMapId === 'world'
       ? Math.min(Infinity, ...this.campEntrances.map(distance))
-      : distance({ x: 0, y: 28 });
+      : distance(campExitPosition(this.campSize));
     const target = this.nearestBuilding ?? this.nearestInteractable;
-    return portalDistance < 3 && portalDistance <= (target ? distance(target) : Infinity);
+    return portalDistance <= 3 && portalDistance <= (target ? distance(target) : Infinity);
   }
 
   private isRaidTarget(building: BuildingEntity): boolean {
@@ -3155,7 +3156,7 @@ export class IsometricEngine {
     });
 
     // Local Player
-    const entrances = this.currentMapId === 'world' ? this.campEntrances : [{ id: 'exit', ownerId: '', ownerName: '营地南侧出口', x: 0, y: 28 }];
+    const entrances = this.currentMapId === 'world' ? this.campEntrances : [{ id: 'exit', ownerId: '', ownerName: '营地南侧出口', ...campExitPosition(this.campSize) }];
     for (const entrance of entrances) {
       renderList.push({ yDepth: entrance.x + entrance.y, render: () => {
         const p = this.toScreen(entrance.x, entrance.y);

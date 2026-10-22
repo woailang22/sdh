@@ -33,7 +33,7 @@ import { calcDeathDrop } from './game/death';
 import { ALL_QUESTS } from './game/quests';
 import { dayKey, isNextDay } from './game/daily';
 import { BASE_PLOTS } from './game/spawn';
-import { homeMapIdFor } from './game/home';
+import { campExitPosition, homeMapIdFor } from './game/home';
 import { WORLD_LOCATIONS } from './game/world';
 import { weatherInfo } from './game/weather';
 import { CampPanel } from './components/CampPanel';
@@ -938,9 +938,9 @@ export default function App() {
         const eng = engineRef.current;
         if (!eng) return false;
         if (eng.currentMapId === 'world') {
-          const camp = gameStateRef.current?.camps.find(c => Math.hypot(c.x - eng.player.x, c.y - eng.player.y) < 3);
+          const camp = gameStateRef.current?.camps.find(c => Math.hypot(c.x - eng.player.x, c.y - eng.player.y) <= 3);
           if (camp) { sendGameAction('enter_camp', { campId: camp.id }); return true; }
-        } else if (Math.hypot(eng.player.x, eng.player.y - 28) < 3) {
+        } else if (Math.hypot(eng.player.x, eng.player.y - campExitPosition(eng.campSize).y) <= 3) {
           sendGameAction('leave_camp'); return true;
         }
         return false;

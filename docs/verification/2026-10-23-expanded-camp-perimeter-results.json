@@ -1,0 +1,116 @@
+{
+  "baseCommit": "7e263a815a798c4b3d16b14109a62b7d87315704",
+  "scope": "Fix expanded camp entry and exit remaining at the original inner coordinate, then validate a synthetic dense camp offline raid through the production browser. No real data/sdc.sqlite access or deployment.",
+  "sourceSha256": {
+    "server/worldState.ts": "d12d6bc442219a27f248f1167df3837a07385cb567443d03caa4e82c855ca0d4",
+    "server/worldState.test.ts": "7c3efd75218865d01ee1ad35f40f9be7103a0c9cc730b2b978f75919dff608f9",
+    "src/App.tsx": "f462037544ab668b0134ad1dab28bd31189093a5bab911411d40ea08e08a98f6",
+    "src/game/home.ts": "d5e609f91b1c702f8c3605e27137ad2d3d21ebfc14d98a4301dfebdd0f3c6c11",
+    "src/game/IsometricEngine.ts": "d5c561aa2a57d968f08359985ab384f6698a61a482a197a6c20d07cf1f091aa5",
+    "src/game/IsometricEngine.test.ts": "420ed9f116fc27290adb0cdf882f7d772378ae53d51ad3340a9dd80bc57abb96",
+    "src/components/CampPanel.tsx": "7c467530fb97ebf15291f041d02cb8361f6643cac58ee1d05063b731c72d4a1b",
+    "src/components/WorldMapModal.tsx": "b96565c6661634f79128206a74caaa3c4f044607ce2909964b6f1b7d2cb03685",
+    "src/game/crafting.test.ts": "1db06e14acab420f787b3e8b337aac9b7fb7c0065d939b46c2205917032bc5a2",
+    "src/game/navigation.test.ts": "914c9614227af02b11080bd8be2d95f9d2bb28b0b41db7d325f43a0fc463f80c"
+  },
+  "productionBundle": "index-4EHom0Pl.js",
+  "baseline": {
+    "campSize": 128,
+    "entry": {
+      "x": 0,
+      "y": 28
+    },
+    "distanceFromSouthernBoundary": 36,
+    "requiredDistance": 4,
+    "nativeReproduced": true
+  },
+  "change": {
+    "sharedRule": "campExitPosition(size = 64) returns (0, size / 2 - 4)",
+    "positions": [
+      {
+        "size": 64,
+        "y": 28
+      },
+      {
+        "size": 96,
+        "y": 44
+      },
+      {
+        "size": 128,
+        "y": 60
+      }
+    ],
+    "consumers": [
+      "server entry and exit validation",
+      "server protected southern building corridor",
+      "App shortcut callback",
+      "engine interaction priority and world marker",
+      "camp management text, waypoint and exit button",
+      "local camp map marker and text"
+    ],
+    "interactionRange": "All camp entry/exit checks allow distance <= 3. Closer buildings and resources still take priority.",
+    "protectedArea": "abs(x) < 3 and y > exit.y - 4, plus the existing core exclusion. Expanded inner corridor can be built on.",
+    "compatibility": "No saved positions, buildings, inventories or camp sizes rewritten. Existing old reserved corridor already covers new portal locations. Existing connected players remain where they are; future entries use the current perimeter."
+  },
+  "verification": {
+    "testFiles": 29,
+    "testsPassed": 391,
+    "typecheck": "passed",
+    "productionBuild": "passed",
+    "existingWarnings": "Vite native config __dirname and >500kB JS chunk",
+    "redGreen": "11 targeted cases failed against the old fixed28 code; three additional exactly3-cell shortcut cases failed before the inclusive-range correction. All pass. Total suite grew from373 to391 cases.",
+    "continuousUpgrade": "Actual paid64->96->128 actions preserve the current owner position and built wall, place new attackers at44/60, and persist the128 camp and wall. A1.6-cell crossing through the wall fails while the same movement beside the wall succeeds, both below the1.9-cell movement budget.",
+    "review": "Independent static review identified a <3 versus <=3 mismatch and a movement-test false positive above the speed budget. Both corrected; final review reports no remaining P1/P2.",
+    "finalNativeSmoke": "Final production bundle enters the same preserved128 camp at(0,60), shows enabled matching exit in the management panel, and exits through E to the original world site. Carried10wood and0C4 preserved; no action or browser exception."
+  },
+  "nativeOfflineRaid": {
+    "fixture": "Synthetic dense128 camp, not earned growth or economy.5676 buildings:4000 floors,1404 walls,36 doors,216 facilities,19 turrets and1core. One targeted closed/locked door,10wood in its interior storage,20 rounds in the targeted turret, two carried C4 and two medkits.",
+    "browser": "Owned temporary Chrome155 profile,1920x1080 DPR1, production server, no HMR",
+    "ownerOfflineThroughoutRaid": true,
+    "entry": {
+      "x": 0,
+      "y": 60,
+      "boundaryGap": 4
+    },
+    "closedDoor": "Approached normally to approximately(8,47), waited2.5 seconds; shield100/hp100 and turret20 remained unchanged behind the closed door.",
+    "breach": "Native E opens breach UI. First C4 destroys650HP door; it becomes open/unlocked, turret fires and consumes a round, shield100->90. Normal pathfinding enters the room; second C4 destroys400HP storage.",
+    "loot": {
+      "storedWoodBefore": 10,
+      "storedWoodAfter": 0,
+      "carriedWoodBefore": 0,
+      "carriedWoodAfter": 10,
+      "c4Before": 2,
+      "c4After": 0
+    },
+    "defense": {
+      "targetAmmoBefore": 20,
+      "targetAmmoAfter": 12,
+      "spent": 8,
+      "otherTurretsTotalAmmo": 540,
+      "otherTurretAmmoUnchanged": true
+    },
+    "exit": "Normal retreat through the breached door and E at the southern perimeter. Alive at original world site(100,100),hp100; both medkits retained.",
+    "restart": "Owner connects only after the raid and a server restart. Both structures remain destroyed, target turret12 rounds,5676 buildings retained, and UI displays two attack reports and one10wood loss report.",
+    "rawQaSaveAudit": "Read-only comparison with source synthetic layout:5673 original building objects unchanged, exactly the door and storage changed, added targeted turret retained. Storage empty, raider has10wood and0C4, original18turret inventories unchanged.",
+    "browserExceptions": 0,
+    "actionErrors": 0
+  },
+  "qaHarnessFailuresPreserved": [
+    "a1 initially asserted management text immediately after entry, although App correctly closes that panel on map transition. Reopened it and resumed the same save at the new perimeter; no grants or reset.",
+    "a2 completed the raid and exit, then tried reading the camp turret from the raider's world-only snapshot. The assertion threw because the correctly scoped world snapshot omits private camp buildings. a3 resumed the unchanged save, checked owner-visible state and reports after restart, and audited raw QA save conservation; no rerun or restoration of raid supplies.",
+    "Initial typecheck found the ignored fixture seed script missing two required WorldRules methods. Corrected only that QA generator and reran typecheck successfully."
+  ],
+  "sources": [
+    "data/expanded-camp-entry-baseline-20261023-a1-results.json",
+    "data/expanded-camp-raid-native-20261023-a2-results.json",
+    "data/expanded-camp-raid-native-20261023-a3-results.json",
+    "data/expanded-camp-raid-native-20261023-a4-results.json"
+  ],
+  "limits": [
+    "One synthetic dense camp and one attacker validate mechanics and conservation, not earned camp progression, repeatable raid economics or large concurrent battles.",
+    "Actual dense native raid used index-DquM-pUB.js; final index-4EHom0Pl.js only adds the inclusive public-entry callback boundary and passed native enter/exit smoke on the same preserved save.",
+    "No claim of improved FPS, GPU use, long-running memory, online latency or all weapon damage balance from this functional test.",
+    "Earlier128 camps may have defenses around the previous inner entry. Buildings remain in place; players may choose to extend defenses toward the new perimeter.",
+    "QA identities, screenshots, scripts and databases remain ignored. Owned QA browsers and servers closed. The broader approved goal remains in progress."
+  ]
+}

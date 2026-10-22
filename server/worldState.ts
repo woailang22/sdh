@@ -6,6 +6,7 @@ import { ARMOR_REDUCTION, killReward, MELEE, WEAPONS } from '../src/game/combat'
 import { BUILD_RECIPES } from '../src/game/buildingRecipes';
 import { ACID_SHIELD_DRAIN } from '../src/game/weather';
 import { marketOffer } from '../src/game/market';
+import { campExitPosition } from '../src/game/home';
 import { hasLineOfSight, isPositionBlocked } from '../src/game/navigation';
 import { BASE_INVENTORY_SLOTS, inventoryCapacity, resizeInventory, gatheringEffects } from '../src/game/equipmentRules';
 import type { DbHandle } from './db';
@@ -473,11 +474,11 @@ export class GameWorld {
     }
     if (a.action === 'enter_camp') {
       const camp = this.state.camps[String(a.campId)]; requireRule(camp && p.mapId === 'world', '营地不存在或不在公共世界');
-      this.near(p, camp); p.mapId = camp.id as MapZoneId; p.x = 0; p.y = 28; p.moveAt = this.now(); return;
+      this.near(p, camp); p.mapId = camp.id as MapZoneId; Object.assign(p, campExitPosition(camp.size)); p.moveAt = this.now(); return;
     }
     if (a.action === 'leave_camp') {
       const camp = this.state.camps[p.mapId]; requireRule(camp, '当前不在营地');
-      requireRule(distance(p, { x: 0, y: 28 }) <= 3, '请到南侧出口撤离');
+      requireRule(distance(p, campExitPosition(camp.size)) <= 3, '请到南侧出口撤离');
       p.mapId = 'world'; p.x = camp.x; p.y = camp.y; p.moveAt = this.now(); return;
     }
     if (a.action === 'authorize_member' || a.action === 'revoke_member') {
@@ -525,7 +526,7 @@ export class GameWorld {
       const bound = (this.state.camps[p.campId].size || 64) / 2 - 1;
       requireRule(finite(a.x) && finite(a.y) && Number.isInteger(a.x) && Number.isInteger(a.y) && Math.abs(a.x) < bound && Math.abs(a.y) < bound, '超出营地建设范围');
       const pos = { x: a.x, y: a.y }; this.near(p, pos);
-      requireRule(!(Math.abs(a.x) < 3 && a.y > 24) && distance(pos, { x: 0, y: 0 }) > 2, '核心与南侧出口需要保持通畅');
+      requireRule(!(Math.abs(a.x) < 3 && a.y > campExitPosition(this.state.camps[p.campId].size).y - 4) && distance(pos, { x: 0, y: 0 }) > 2, '核心与南侧出口需要保持通畅');
       const buildings = this.buildingsFor(p);
       requireRule(!buildings.some(b => b.hp > 0 && distance(b, pos) < (type.endsWith('_floor') !== b.type.endsWith('_floor') ? 0 : 0.9)), '此处已有建筑');
       requireRule(!['door', 'safe_door'].includes(type) || !buildings.some(b => b.type.includes('wall') && distance(b, pos) < 1.2 && Math.abs(b.x - pos.x) < 0.5 && Math.abs(b.y - pos.y) < 0.5), '门洞空间不足');

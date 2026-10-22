@@ -63,6 +63,11 @@ describe('shared collision and navigation', () => {
 });
 
 describe('world navigation interface', () => {
+  it.each([[64, 28], [96, 44], [128, 60]])('marks the actual southern perimeter of a %s-cell camp', (size, exitY) => {
+    const html = renderToStaticMarkup(React.createElement(WorldMapModal, { isOpen: true, onClose() {}, currentMapId: 'home_player', playerPos: { x: 0, y: exitY }, campSize: size }));
+    expect(html).toContain(`南侧营地出口 (0, ${exitY})`);
+    expect(html).toContain(`M -3 ${exitY - 3} L 0 ${exitY} L 3 ${exitY - 3}`);
+  });
   it('renders one continuous world overview with landmarks and route controls', () => {
     const html = renderToStaticMarkup(React.createElement(WorldMapModal, { isOpen: true, onClose() {}, currentMapId: 'world', playerPos: { x: 448, y: 32 } }));
     expect(html).toContain('连续世界总览');

@@ -4,6 +4,7 @@ import type { CampSummary } from '../../server/worldState';
 import type { BuildingEntity, Item, MapZoneId } from '../types/game';
 import { ITEM_DEFS } from '../game/items';
 import { CRAFT_RECIPES } from '../game/crafting';
+import { campExitPosition } from '../game/home';
 
 interface CampPanelProps {
   isOpen: boolean;
@@ -45,7 +46,8 @@ export function CampPanel({ isOpen, onClose, camps, campId, currentMapId, player
   const currentCamp = camps.find(camp => camp.id === currentMapId);
   const friendly = !!currentCamp && (currentCamp.ownerId === selfId || currentCamp.members?.includes(selfId));
   const nearby = (target: { x: number; y: number }) => Math.hypot(playerPos.x - target.x, playerPos.y - target.y) <= 3;
-  const canExit = inside && nearby({ x: 0, y: 28 });
+  const exit = campExitPosition(currentCamp?.size);
+  const canExit = inside && nearby(exit);
   const affordable = (resources.wood || 0) >= 20 && (resources.stone || 0) >= 10;
   const ownedBuilding = building?.ownerId === selfId;
   const canUseBuilding = ownedBuilding || friendly && building?.ownerId === currentCamp?.ownerId;
@@ -101,8 +103,8 @@ export function CampPanel({ isOpen, onClose, camps, campId, currentMapId, player
           {inside ? <section className="space-y-2 rounded-lg border border-cyan-800/50 bg-slate-950/60 p-4">
             <h3 className="font-semibold text-slate-100">{currentMapId === campId ? '自己的营地' : '其他行者的营地'}</h3>
             {currentCamp && <p className="text-xs text-slate-400">等级 {currentCamp.level || 1} · 规模 {currentCamp.size || 64} × {currentCamp.size || 64} · {currentCamp.state === 'breached' ? '核心已损坏，等待修复' : '营地运行中'}{friendly && currentCamp.ownerId !== selfId && ' · 你是授权成员'}</p>}
-            <p className="text-xs text-slate-400">沿营地内部步行到南侧出口 (0, 28)，靠近 3 格以内才能返回公共野外。</p>
-            <div className="flex gap-2"><button className={buttonClass} onClick={() => { onNavigate(0, 28, '营地南侧出口'); onClose(); }}>标记出口</button><button className={buttonClass} disabled={!canExit} onClick={() => onAction('leave_camp')}>离开营地</button></div>
+            <p className="text-xs text-slate-400">沿营地内部步行到南侧出口 (0, {exit.y})，靠近 3 格以内才能返回公共野外。</p>
+            <div className="flex gap-2"><button className={buttonClass} onClick={() => { onNavigate(exit.x, exit.y, '营地南侧出口'); onClose(); }}>标记出口</button><button className={buttonClass} disabled={!canExit} onClick={() => onAction('leave_camp')}>离开营地</button></div>
           </section> : <section className="space-y-2">
             <h3 className="font-semibold text-slate-100">{ownCamp ? '营地入口与已发现线索' : '已发现的营地入口'}</h3>
             {camps.length === 0 && <p className="text-xs text-slate-500">附近没有已发现的营地，继续在野外探索。</p>}

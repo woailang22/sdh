@@ -648,17 +648,26 @@ describe('camp interaction priority', () => {
     expect(role === 'enemy' ? manage : raid).not.toHaveBeenCalled();
   });
 
-  it('uses the closer exit and suppresses the competing building prompt', () => {
+  it.each([[64, 28], [96, 44], [128, 60]])('uses the closer %s-cell camp exit and suppresses the competing building prompt', (size, exitY) => {
     const { engine, context } = setup(); const portal = vi.fn(() => true), raid = vi.fn(), labels = vi.fn();
     Object.assign((engine as any).callbacks, { onGameAction: vi.fn(), onCampInteract: portal, onOpenRaidModal: raid });
-    engine.localPlayerId = 'self'; engine.warpToMap('home_other', 0, 27.5);
-    const building = { id: 'storage', type: 'storage_box', name: '仓库', x: 1, y: 26, hp: 400, maxHp: 400, ownerId: 'other', mapId: engine.currentMapId } as any;
+    engine.localPlayerId = 'self'; engine.warpToMap('home_other', 0, exitY - 0.5); engine.campSize = size;
+    const building = { id: 'storage', type: 'storage_box', name: '仓库', x: 1, y: exitY - 2, hp: 400, maxHp: 400, ownerId: 'other', mapId: engine.currentMapId } as any;
     engine.buildings = [building]; engine.nearestBuilding = building; (context as any).fillText = labels;
     engine.triggerInteraction(); (engine as any).renderInteractionHUD();
     expect(portal).toHaveBeenCalledTimes(1); expect(raid).not.toHaveBeenCalled();
     expect(labels).not.toHaveBeenCalled();
   });
 
+  it.each([[64, 28], [96, 44], [128, 60]])('allows the %s-cell exit at exactly three cells and rejects a farther interaction', (size, exitY) => {
+    const { engine } = setup(); const portal = vi.fn(() => true);
+    Object.assign((engine as any).callbacks, { onGameAction: vi.fn(), onCampInteract: portal });
+    engine.warpToMap('home_other', 0, exitY - 3); engine.campSize = size;
+    engine.nearestBuilding = null; engine.nearestInteractable = null;
+    engine.triggerInteraction(); expect(portal).toHaveBeenCalledTimes(1);
+    portal.mockClear(); engine.player.y -= 0.01;
+    engine.triggerInteraction(); expect(portal).not.toHaveBeenCalled();
+  });
   it('gathers a closer resource instead of leaving through a nearby exit', () => {
     const { engine } = setup(); const portal = vi.fn(() => true);
     Object.assign((engine as any).callbacks, { onGameAction: vi.fn(), onCampInteract: portal });
@@ -680,6 +689,9 @@ describe('camp interaction priority', () => {
     engine.isLooting = false; (engine as any).lootTarget = null; engine.player.x = 101.5;
     engine.triggerInteraction();
     expect(portal).toHaveBeenCalledTimes(1); expect(engine.isLooting).toBe(false);
+    engine.player.x = 104.5;
+    engine.triggerInteraction();
+    expect(portal).toHaveBeenCalledTimes(2);
   });
 
   it('describes breaching, member door access and broken remains without inventing loot', () => {
