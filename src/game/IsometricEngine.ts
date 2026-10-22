@@ -73,6 +73,10 @@ interface GroundRect {
   height: number;
 }
 
+const TILE_CELL_SIZE = 64;
+const TILE_CELL_STRIDE = TILE_CELL_SIZE + 2;
+const TILE_ATLAS_SIZE = 7 * TILE_CELL_STRIDE;
+
 export class IsometricEngine {
   private canvas: HTMLCanvasElement;
   private ctx: CanvasRenderingContext2D;
@@ -110,8 +114,10 @@ export class IsometricEngine {
   // Art sprite cache (/art/*, lazy-load on first use; missing/failed -> procedural fallback)
   public artImages: Map<string, HTMLImageElement> = new Map();
 
-  // 预烘菱形地砖贴片缓存（64×64，key = theme+variant:px:py）。
+  // 按主题/变体共用地砖图集，64×64 采样按需烘焙。
   private tilePatchCache: Map<string, HTMLCanvasElement> = new Map();
+  private tilePatchCells = new WeakMap<HTMLCanvasElement, Set<number>>();
+  private tilePatchScratch: HTMLCanvasElement | null = null;
   private artRevision = 0;
   private worldScenery: WorldScenery[] = [];
   private sceneryCache = new WeakMap<WorldChunk, WorldScenery[]>();
@@ -394,28 +400,39 @@ export class IsometricEngine {
   }
 
   /**
-   * 预烘菱形贴片：clip 只在预烘时发生一次，逐格渲染只剩 1 次 drawImage。
+   * 同主题/变体共用图集；64px 临时表面保持原遮罩，边缘复制避免小数像素串格。
    */
   private tilePatch(theme: string, variant: 'a' | 'b', px: number, py: number): HTMLCanvasElement | null {
-    const ck = `${theme}${variant}:${px}:${py}`;
+    const ck = `${theme}${variant}:atlas`;
+    const cell = py * 448 + px;
     const hit = this.tilePatchCache.get(ck);
-    if (hit) return hit;
+    if (hit && this.tilePatchCells.get(hit)?.has(cell)) return hit;
     const img = this.tileImage(theme, variant);
     if (!img || typeof document === 'undefined') return null;
-    const c = document.createElement('canvas');
-    c.width = 64;
-    c.height = 64;
-    const g = c.getContext('2d');
-    if (!g) return null;
-    g.beginPath();
-    g.moveTo(32, 0);
-    g.lineTo(64, 32);
-    g.lineTo(32, 64);
-    g.lineTo(0, 32);
-    g.closePath();
-    g.clip();
-    g.drawImage(img, px, py, 64, 64, 0, 0, 64, 64);
+    const c = hit ?? document.createElement('canvas');
+    if (!hit) c.width = c.height = TILE_ATLAS_SIZE;
+    if (!this.tilePatchScratch) {
+      this.tilePatchScratch = document.createElement('canvas');
+      this.tilePatchScratch.width = this.tilePatchScratch.height = TILE_CELL_SIZE;
+    }
+    const scratch = this.tilePatchScratch, g = scratch.getContext('2d'), atlas = c.getContext('2d');
+    if (!g || !atlas) return null;
+    // Clear outside the clip too, so translucent edge pixels never accumulate.
+    g.clearRect(0, 0, TILE_CELL_SIZE, TILE_CELL_SIZE);
+    g.save();
+    try {
+      g.beginPath(); g.moveTo(32, 0); g.lineTo(64, 32); g.lineTo(32, 64); g.lineTo(0, 32); g.closePath(); g.clip();
+      g.drawImage(img, px, py, 64, 64, 0, 0, 64, 64);
+    } finally { g.restore(); }
+    const ax = px / TILE_CELL_SIZE * TILE_CELL_STRIDE + 1, ay = py / TILE_CELL_SIZE * TILE_CELL_STRIDE + 1;
+    atlas.drawImage(scratch, ax, ay);
+    atlas.drawImage(scratch, 0, 0, 64, 1, ax, ay - 1, 64, 1);
+    atlas.drawImage(scratch, 0, 63, 64, 1, ax, ay + 64, 64, 1);
+    atlas.drawImage(scratch, 0, 0, 1, 64, ax - 1, ay, 1, 64);
+    atlas.drawImage(scratch, 63, 0, 1, 64, ax + 64, ay, 1, 64);
     this.tilePatchCache.set(ck, c);
+    const cells = this.tilePatchCells.get(c) ?? new Set<number>();
+    cells.add(cell); this.tilePatchCells.set(c, cells);
     return c;
   }
 
@@ -429,7 +446,7 @@ export class IsometricEngine {
     const py = snap((((wy * 32) % 448) + 448) % 448);
     const patch = this.tilePatch(key, variant, px, py);
     if (!patch) return;
-    this.ctx.drawImage(patch, sx - 32, sy - 32);
+    this.ctx.drawImage(patch, px / TILE_CELL_SIZE * TILE_CELL_STRIDE + 1, py / TILE_CELL_SIZE * TILE_CELL_STRIDE + 1, TILE_CELL_SIZE, TILE_CELL_SIZE, sx - 32, sy - 32, TILE_CELL_SIZE, TILE_CELL_SIZE);
   }
 
   // Switch / Load Map Zone
@@ -1953,6 +1970,9 @@ export class IsometricEngine {
   private resetGraphics() {
     for (const patch of this.tilePatchCache.values()) patch.width = patch.height = 0;
     this.tilePatchCache.clear();
+    if (this.tilePatchScratch) this.tilePatchScratch.width = this.tilePatchScratch.height = 0;
+    this.tilePatchScratch = null;
+    this.tilePatchCells = new WeakMap();
     if (this.groundCache) {
       this.groundCache.canvas.width = this.groundCache.canvas.height = 0;
       if (this.groundCache.overlay) this.groundCache.overlay.width = this.groundCache.overlay.height = 0;
@@ -2018,6 +2038,9 @@ export class IsometricEngine {
     this.clearKeys();
     for (const patch of this.tilePatchCache.values()) patch.width = patch.height = 0;
     this.tilePatchCache.clear();
+    if (this.tilePatchScratch) this.tilePatchScratch.width = this.tilePatchScratch.height = 0;
+    this.tilePatchScratch = null;
+    this.tilePatchCells = new WeakMap();
     this.artImages.clear();
     this.worldChunks.clear();
     this.worldScenery = [];

@@ -119,6 +119,45 @@ describe('server weather synchronization', () => {
 });
 
 describe('ground rendering cost', () => {
+  it('shares one backing surface across every sample of a terrain variant without rebaking a cached cell', () => {
+    const { engine } = setup(); stubImageLoading();
+    const image = (engine as any).artImage('tile-forest-a.png'); image.complete = true; image.dispatchEvent(new Event('load'));
+    const patch = (x: number, y: number) => (engine as any).tilePatch('forest', 'a', x, y);
+    const first = patch(0, 0), second = patch(64, 128);
+    expect(second).toBe(first);
+    const draws = first.getContext('2d').drawImage.mock.calls.length;
+    expect(patch(64, 128)).toBe(first);
+    expect(first.getContext('2d').drawImage.mock.calls.length).toBe(draws);
+    expect((engine as any).tilePatchCache.size).toBe(1);
+  });
+
+  it.each([
+    { x: 2, y: 4, sourceX: 67, sourceY: 133 },
+    { x: -2, y: -4, sourceX: 397, sourceY: 331 },
+  ])('uses the padded source cell at $x,$y instead of drawing an entire atlas', ({ x, y, sourceX, sourceY }) => {
+    const { engine, context } = setup(); stubImageLoading();
+    const image = (engine as any).artImage('tile-forest-a.png'); image.complete = true; image.dispatchEvent(new Event('load'));
+    (engine as any).drawTileTexture(x, y, 100, 150, 'forest');
+    expect(context.drawImage.mock.calls.at(-1)?.slice(1)).toEqual([sourceX, sourceY, 64, 64, 68, 118, 64, 64]);
+  });
+
+  it('bounds all terrain samples to twenty atlas surfaces and releases their scratch surface on disposal', () => {
+    const { engine } = setup(); stubImageLoading();
+    for (const theme of ['camp', 'plaza', 'field', 'urban', 'ruins', 'forest', 'quarry', 'lake', 'marsh', 'rift']) for (const variant of ['a', 'b']) {
+      const image = (engine as any).artImage(`tile-${theme}-${variant}.png`); image.complete = true; image.dispatchEvent(new Event('load'));
+      for (let x = 0; x < 448; x += 64) for (let y = 0; y < 448; y += 64) (engine as any).tilePatch(theme, variant, x, y);
+    }
+    const atlases = [...(engine as any).tilePatchCache.values()] as HTMLCanvasElement[], scratch = (engine as any).tilePatchScratch;
+    expect(atlases).toHaveLength(20);
+    expect(atlases.every(c => c.width === 462 && c.height === 462)).toBe(true);
+    expect(atlases.every(c => (engine as any).tilePatchCells.get(c).size === 49)).toBe(true);
+    engine.dispose();
+    expect(atlases.every(c => c.width === 0 && c.height === 0)).toBe(true);
+    expect(scratch.width).toBe(0); expect(scratch.height).toBe(0);
+    expect((engine as any).tilePatchScratch).toBeNull();
+    expect((engine as any).tilePatchCells.get(atlases[0])).toBeUndefined();
+  });
+
   it('draws a wetland approach visible from a narrow road view even when the house is offscreen', () => {
     const { engine } = setup();
     const render = (engine as any).render;
@@ -303,15 +342,16 @@ describe('ground rendering cost', () => {
     const quarry = (engine as any).artImage('tile-quarry-a.png');
     for (const image of [forest, quarry]) { image.complete = true; image.dispatchEvent(new Event('load')); }
     const patch = (theme: string, variant: string) => (engine as any).tilePatch(theme, variant, 0, 0);
-    const forestA = patch('forest', 'a'), oldForestB = patch('forest', 'b'), quarryA = patch('quarry', 'a');
-    expect(oldForestB.getContext('2d').drawImage.mock.calls[0][0]).toBe(forest);
+    const forestA = patch('forest', 'a'), oldForestB = patch('forest', 'b');
+    expect((engine as any).tilePatchScratch.getContext('2d').drawImage.mock.calls.at(-1)[0]).toBe(forest);
+    const quarryA = patch('quarry', 'a');
     const forestB = (engine as any).artImage('tile-forest-b.png');
     forestB.complete = true; forestB.dispatchEvent(new Event('load'));
     expect(patch('forest', 'a')).toBe(forestA);
     expect(patch('quarry', 'a')).toBe(quarryA);
     const replaced = patch('forest', 'b');
     expect(replaced).not.toBe(oldForestB);
-    expect(replaced.getContext('2d').drawImage.mock.calls[0][0]).toBe(forestB);
+    expect((engine as any).tilePatchScratch.getContext('2d').drawImage.mock.calls.at(-1)[0]).toBe(forestB);
     expect(oldForestB.width).toBe(0); expect(oldForestB.height).toBe(0);
   });
 
@@ -354,6 +394,9 @@ describe('engine lifetime', () => {
 
   it('rebuilds lost canvas caches without moving the player or cancelling browser restoration', () => {
     const { engine, canvas } = setup();
+    stubImageLoading();
+    const image = (engine as any).artImage('tile-forest-a.png'); image.complete = true; image.dispatchEvent(new Event('load'));
+    const atlas = (engine as any).tilePatch('forest', 'a', 0, 0), scratch = (engine as any).tilePatchScratch;
     const status = vi.fn(); (engine as any).callbacks.onRenderStatus = status;
     (engine as any).renderMapGround();
     const old = (engine as any).groundCache.canvas;
@@ -364,6 +407,8 @@ describe('engine lifetime', () => {
     expect(status).toHaveBeenCalledWith(expect.any(String));
     canvas.dispatchEvent(new Event('contextrestored'));
     expect(old.width).toBe(0);
+    expect(atlas.width).toBe(0); expect(scratch.width).toBe(0);
+    expect((engine as any).tilePatchScratch).toBeNull();
     expect((engine as any).groundCache).toBeNull();
     expect({ x: engine.player.x, y: engine.player.y }).toEqual(position);
     (engine as any).renderMapGround();
