@@ -9,6 +9,7 @@ import { guestTokenFromCookie, resolveGuest } from './server/identity.js';
 import { GameWorld, type GameStateSnapshot, type WorldRules } from './server/worldState.js';
 import { createWorldQueries } from './server/worldQueries.js';
 import { StateEncoder } from './src/game/stateSync.js';
+import { sendMessage as send } from './server/transport.js';
 import { getWorldInteractable, migrateWorldPosition, worldIsRoad, worldThemeAt, WORLD_LOCATIONS } from './src/game/world.js';
 import { WEATHER_DURATION, WEATHER_SEQUENCE, weatherInfo } from './src/game/weather.js';
 import type { MapZoneId, NetMessage, WeatherState, WeatherType } from './src/types/game.js';
@@ -46,11 +47,9 @@ let weatherTimer = WEATHER_DURATION;
 function weather(): WeatherState {
   return weatherInfo(WEATHER_SEQUENCE[weatherIndex], weatherTimer);
 }
-function send(ws: WebSocket, type: string, payload: unknown) {
-  if (ws.readyState === WebSocket.OPEN) ws.send(JSON.stringify({ type, payload, timestamp: Date.now() }));
-}
 function broadcast(type: string, payload: unknown) { for (const c of clients.values()) send(c.ws, type, payload); }
 function stateTo(client: Client, snapshot?: GameStateSnapshot, correction = false) {
+  if (client.ws.readyState !== WebSocket.OPEN) return;
   const state = snapshot || game.snapshot(client.id);
   state.correction ||= correction || client.mapId !== state.player.mapId;
   client.mapId = state.player.mapId; client.lastSnapshot = Date.now();
@@ -95,7 +94,7 @@ wss.on('connection', (ws, req) => {
   send(ws, 'init', { selfId: id, selfPlayer: self, players, buildings: snapshot.buildings, weather: weather(), serverTime: Date.now(), gameState: snapshot });
   stateTo(client, snapshot, true);
   ws.on('message', data => {
-    if (clients.get(id)?.ws !== ws) return;
+    if (clients.get(id)?.ws !== ws || ws.readyState !== WebSocket.OPEN) return;
     const now = Date.now();
     if (now - client.lastMessageAt >= 1000) { client.lastMessageAt = now; client.messageCount = 0; }
     if (++client.messageCount > 100) { ws.close(1008, 'Too many messages'); return; }
