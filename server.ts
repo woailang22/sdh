@@ -24,7 +24,8 @@ const DB_PATH = process.env.DB_PATH || 'data/sdc.sqlite';
 fs.mkdirSync(path.dirname(DB_PATH), { recursive: true });
 const db = createDb(DB_PATH);
 // Refuse to mutate legacy state unless a consistent SQLite backup was completed.
-if (!db.getMeta('authoritative-world-v2') || db.getMeta('public-house-layout') !== '2') {
+const savedWorld = db.getMeta('authoritative-world-v2');
+if (!savedWorld || JSON.parse(savedWorld).version !== 3 || db.getMeta('public-house-layout') !== '2') {
   const backup = await backupDatabase(DB_PATH);
   if (backup) console.log('[db] pre-migration backup: ' + backup);
 }

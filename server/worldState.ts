@@ -35,7 +35,7 @@ interface LootItem { itemId: string; name: string; count: number }
 interface NodeState { stock: number; respawnAt: number; items?: LootItem[] }
 interface Drop { id: string; name: string; mapId: MapZoneId; x: number; y: number; items: LootItem[]; expiresAt: number }
 export interface PersistedWorld {
-  version: 2;
+  version: 2 | 3;
   players: Record<string, Player>; camps: Record<string, CampSummary>; buildings: Record<string, BuildingEntity>;
   nodes: Record<string, NodeState>; storage: Record<string, Record<string, number>>; ammo: Record<string, number>;
   drops: Record<string, Drop>; reports: { ownerId: string; text: string; timestamp: number }[];
@@ -90,9 +90,19 @@ export class GameWorld {
   constructor(private db: DbHandle, private rules: WorldRules, private now: () => number = Date.now) {
     this.npcTickAt = now();
     const saved = db.getMeta(SAVE_KEY);
+    const commits = db.listWorldPlayerCommits();
+    requireRule(saved || !commits.length, '缺少角色提交记录对应的世界存档');
     if (saved) {
       this.state = JSON.parse(saved);
-      requireRule(this.state.version === 2, '不支持的世界存档版本');
+      requireRule(this.state.version === 2 || this.state.version === 3, '不支持的世界存档版本');
+      for (const { id, data } of commits) {
+        const commit = JSON.parse(data) as { player: Player; handled: string[] };
+        requireRule(this.state.version === 3 && Object.hasOwn(this.state.players, id) && commit?.player?.id === id && Array.isArray(commit.handled) && commit.handled.length <= 128, '无效的角色提交记录');
+        this.state.players[id] = commit.player;
+        this.state.handled[id] = commit.handled;
+      }
+      // Older servers must refuse this format instead of ignoring private commits.
+      this.state.version = 3;
       this.state.production ||= {};
       this.state.monsters ||= {};
       for (const p of Object.values(this.state.players)) { p.satiety ??= 100; p.survivalAt = this.now(); p.blueprints ||= []; p.disconnectUntil ??= 0; p.lastDamageAt ??= this.now(); p.xp ??= 0; p.maxXp ||= p.level * 100; p.kills ??= 0; this.deriveArmor(p); }
@@ -104,7 +114,7 @@ export class GameWorld {
         if (until > this.now()) this.active.set(p.id, until);
       }
     } else {
-      this.state = { version: 2, players: {}, camps: {}, buildings: {}, nodes: {}, storage: {}, ammo: {}, drops: {}, reports: [], handled: {}, production: {}, monsters: {} };
+      this.state = { version: 3, players: {}, camps: {}, buildings: {}, nodes: {}, storage: {}, ammo: {}, drops: {}, reports: [], handled: {}, production: {}, monsters: {} };
       // Preserve legacy rows separately. Migrate coordinates and ownership, without generating old template loot.
       for (const legacy of db.listPlayers()) {
         const p = this.newPlayer(legacy.id, legacy.name || '废土流浪者');
@@ -203,7 +213,7 @@ export class GameWorld {
     this.persist();
   }
 
-  persist() { this.db.setMeta(SAVE_KEY, JSON.stringify(this.state)); }
+  persist() { this.db.checkpointWorld(JSON.stringify(this.state)); }
 
   private buildingsFor(p: { mapId: MapZoneId; x: number; y: number }): BuildingEntity[] {
     const persistent = Object.values(this.state.buildings).filter(b => b.mapId === p.mapId && (p.mapId !== 'world' || distance(p, b) < 80));
@@ -398,12 +408,16 @@ export class GameWorld {
       players: { ...this.state.players, [id]: clone(p) },
       handled: { ...this.state.handled, ...(this.state.handled[id] ? { [id]: [...this.state.handled[id]] } : {}) },
     } : clone(this.state);
+    let loot: { id: string; name: string; items: LootItem[] } | undefined;
     try {
-      const loot = this.perform(p, packet, receivedAt);
+      loot = this.perform(p, packet, receivedAt);
       (this.state.handled[id] ||= []).push(requestId);
       this.state.handled[id] = this.state.handled[id].slice(-128);
-      this.persist(); // One SQLite row atomically contains both sides of every transfer and its replay guard.
-      return this.snapshot(id, requestId, undefined, loot, p.mapId !== before.players[id].mapId);
+      if (isUntargetedFire(packet)) {
+        // This branch changes no shared entities. Player and replay guard commit
+        // together before acknowledgement; full checkpoints absorb these rows.
+        this.db.saveWorldPlayerCommit(id, JSON.stringify({ player: p, handled: this.state.handled[id] }));
+      } else this.persist(); // Both sides of transfers and their replay guards stay in one durable checkpoint.
     } catch (error) {
       // Failed validation is side effect free; disk failures also roll back the complete transaction.
       for (const [key, oldPlayer] of Object.entries(before.players)) {
@@ -413,6 +427,9 @@ export class GameWorld {
       this.state = before; this.state.players = players;
       return this.snapshot(id, requestId, error instanceof Error ? error.message : '操作失败');
     }
+    // A response failure cannot undo a durable transaction. Retrying its request
+    // must see the committed replay guard, including after a later checkpoint.
+    return this.snapshot(id, requestId, undefined, loot, p.mapId !== before.players[id].mapId);
   }
 
   private perform(p: Player, a: GameAction, receivedAt: number): { id: string; name: string; items: LootItem[] } | undefined {

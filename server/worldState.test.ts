@@ -14,9 +14,10 @@ const rules: WorldRules = {
   monstersNear: () => [],
 };
 describe('cached public building definitions', () => {
-  it('serializes the full camp only for the durable commit of an untargeted shot', () => {
-    const { game, p, act } = campSetup(); p.equipment.weapon = makeItem('rifle', 1); p.resources.ammo = 10;
+  it('does not serialize the full camp for a durable untargeted shot', () => {
+    const { game, db, p, act } = campSetup(); p.equipment.weapon = makeItem('rifle', 1); p.resources.ammo = 10;
     for (let i = 0; i < 600; i++) game.state.buildings['floor_' + i] = { id: 'floor_' + i, type: 'wood_floor', name: '地板', x: i % 30, y: Math.floor(i / 30), hp: 200, maxHp: 200, level: 1, ownerId: p.id, mapId: p.mapId };
+    game.persist();
     const stringify = JSON.stringify; let completeWorldCopies = 0;
     const serialization = vi.spyOn(JSON, 'stringify').mockImplementation((...args: Parameters<typeof JSON.stringify>) => {
       if (args[0]?.buildings?.floor_0) completeWorldCopies++;
@@ -25,18 +26,21 @@ describe('cached public building definitions', () => {
     let result;
     try { result = act('owner', 'fire'); } finally { serialization.mockRestore(); }
     expect(result.error).toBeUndefined(); expect(p.resources.ammo).toBe(9);
-    expect(completeWorldCopies).toBe(1);
+    expect(completeWorldCopies).toBe(0);
+    const recovered = new GameWorld(db, rules);
+    expect(recovered.state.players.owner.resources.ammo).toBe(9);
+    expect(Object.keys(recovered.state.buildings)).toHaveLength(601);
   });
   it('rolls back a failed private shot without changing world data or creating a replay entry', () => {
     const { game, db, act } = setup(); const p = game.state.players.owner;
     p.equipment.weapon = makeItem('rifle', 1); p.resources.ammo = 10;
-    const before = structuredClone(game.state), save = db.setMeta;
-    db.setMeta = () => { throw new Error('disk failure'); };
+    const before = structuredClone(game.state), save = db.saveWorldPlayerCommit;
+    db.saveWorldPlayerCommit = () => { throw new Error('disk failure'); };
     const request = { action: 'fire', requestId: 'private-shot-retry' };
     expect(game.action('owner', request).error).toBe('disk failure');
     expect(game.state).toEqual(before); expect(game.state.players.owner).toBe(p);
     expect(game.state.handled).not.toHaveProperty('owner');
-    db.setMeta = save;
+    db.saveWorldPlayerCommit = save;
     expect(game.action('owner', request).error).toBeUndefined();
     expect(game.action('owner', request).error).toBeUndefined();
     expect(p.resources.ammo).toBe(9); expect(game.state.handled.owner).toEqual(['private-shot-retry']);
@@ -46,16 +50,98 @@ describe('cached public building definitions', () => {
     const { game, db } = setup(); const p = game.state.players.owner;
     p.equipment.weapon = makeItem('rifle', 1); p.resources.ammo = 10;
     const oldIds = Array.from({ length: 128 }, (_, i) => 'old-' + i);
-    game.state.handled.owner = [...oldIds]; const save = db.setMeta;
-    db.setMeta = () => { throw new Error('disk failure'); };
+    game.state.handled.owner = [...oldIds]; const save = db.saveWorldPlayerCommit;
+    db.saveWorldPlayerCommit = () => { throw new Error('disk failure'); };
     const request = { action: 'fire', requestId: 'full-ledger-retry' };
     expect(game.action('owner', request).error).toBe('disk failure');
     expect(game.state.handled.owner).toEqual(oldIds); expect(p.resources.ammo).toBe(10);
-    db.setMeta = save;
+    db.saveWorldPlayerCommit = save;
     expect(game.action('owner', request).error).toBeUndefined();
     expect(game.action('owner', request).error).toBeUndefined();
     expect(game.state.handled.owner).toEqual([...oldIds.slice(1), request.requestId]);
     expect(p.resources.ammo).toBe(9);
+  });
+  it('recovers both players latest private commits and consolidates them before a shared action', () => {
+    const { game, db, act, advance } = setup();
+    for (const p of Object.values(game.state.players)) { p.equipment.weapon = makeItem('rifle', 1); p.resources.ammo = 10; }
+    game.persist();
+    const a = { action: 'fire', requestId: 'a-shot' }, b = { action: 'fire', requestId: 'b-shot' };
+    expect(game.action('owner', a).error).toBeUndefined();
+    expect(game.action('raider', b).error).toBeUndefined();
+    advance(200); expect(act('owner', 'fire').error).toBeUndefined();
+    expect(db.listWorldPlayerCommits()).toHaveLength(2);
+    expect(JSON.parse(db.getMeta('authoritative-world-v2')!).players.owner.resources.ammo).toBe(10);
+    const restored = new GameWorld(db, rules, () => 10200);
+    expect(restored.action('owner', a).player.resources.ammo).toBe(8);
+    expect(restored.action('raider', b).player.resources.ammo).toBe(9);
+    expect(db.listWorldPlayerCommits()).toEqual([]);
+    expect(restored.action('owner', { action: 'gather', targetId: tree.id, requestId: 'shared-gather' }).error).toBeUndefined();
+    const reopened = new GameWorld(db, rules, () => 10400);
+    expect(reopened.state.players.owner.resources).toMatchObject({ ammo: 8, wood: 1 });
+    expect(reopened.state.players.raider.resources.ammo).toBe(9);
+    expect(reopened.state.nodes[tree.id].stock).toBe(1);
+  });
+  it('migrates a v2 checkpoint and rejects mismatched private player commits', () => {
+    const { game, db } = setup();
+    const legacy = structuredClone(game.state); legacy.version = 2;
+    db.setMeta('authoritative-world-v2', JSON.stringify(legacy));
+    const migrated = new GameWorld(db, rules);
+    expect(migrated.state.version).toBe(3);
+    expect(migrated.state.players.owner.inventory).toEqual(legacy.players.owner.inventory);
+    db.saveWorldPlayerCommit('owner', JSON.stringify({ player: migrated.state.players.raider, handled: [] }));
+    expect(() => new GameWorld(db, rules)).toThrow('角色提交记录');
+    expect(db.listWorldPlayerCommits()).toHaveLength(1);
+  });
+  it.each(['fire', 'gather'])('never rolls back committed %s when response construction fails', action => {
+    let failSnapshot = false, time = 10000;
+    const db = createMemoryDb();
+    const responseRules = { ...rules, nodesNear: () => { if (failSnapshot) { failSnapshot = false; throw Error('response failed'); } return [tree, box]; } };
+    const game = new GameWorld(db, responseRules, () => time); game.connect('owner', '主人');
+    const p = game.state.players.owner; p.equipment.weapon = makeItem('rifle', 1); p.resources.ammo = 10; game.persist();
+    const request = { action, targetId: action === 'gather' ? tree.id : undefined, requestId: 'committed-response-failure' };
+    failSnapshot = true;
+    expect(() => game.action('owner', request)).toThrow('response failed');
+    expect(game.state.handled.owner).toEqual([request.requestId]);
+    expect(game.action('owner', request).error).toBeUndefined();
+    expect(p.resources).toMatchObject({ ammo: action === 'fire' ? 9 : 10, wood: action === 'gather' ? 1 : 0 });
+    time += 1000;
+    expect(game.action('owner', { action: 'fire', requestId: 'next-shot' }).error).toBeUndefined();
+    const restored = new GameWorld(db, responseRules, () => time);
+    expect(restored.action('owner', request).error).toBeUndefined();
+    expect(restored.state.players.owner.resources).toMatchObject({ ammo: action === 'fire' ? 8 : 9, wood: action === 'gather' ? 1 : 0 });
+    expect(restored.state.handled.owner).toEqual([request.requestId, 'next-shot']);
+  });
+  it('does not duplicate a committed deposit after response failure, private fire and restart', () => {
+    const { game, db, p, act } = campSetup(); const storage = facility(game, 'storage_box');
+    p.x = 4; p.y = 4;
+    p.resources.wood = 10; p.resources.ammo = 10; p.equipment.weapon = makeItem('rifle', 1); game.persist();
+    const snapshot = game.snapshot.bind(game); let fail = true;
+    game.snapshot = (...args: Parameters<typeof game.snapshot>) => { if (fail) { fail = false; throw Error('response failed'); } return snapshot(...args); };
+    const request = { action: 'deposit', targetId: storage.id, itemId: 'wood', count: 4, requestId: 'deposit-response-failure' };
+    expect(() => game.action('owner', request)).toThrow('response failed');
+    expect(p.resources.wood).toBe(6); expect(game.state.storage[storage.id].wood).toBe(4);
+    expect(act('owner', 'fire').error).toBeUndefined();
+    const restored = new GameWorld(db, rules);
+    expect(restored.action('owner', request).error).toBeUndefined();
+    expect(restored.state.players.owner.resources).toMatchObject({ wood: 6, ammo: 9 });
+    expect(restored.state.storage[storage.id].wood).toBe(4);
+  });
+  it('leaves a v2 checkpoint and all progress intact when migration persistence fails', () => {
+    const { game, db } = setup(); const legacy = structuredClone(game.state); legacy.version = 2;
+    legacy.players.owner.resources.ammo = 37; db.setMeta('authoritative-world-v2', JSON.stringify(legacy));
+    const checkpoint = db.checkpointWorld;
+    db.checkpointWorld = () => { throw Error('disk failure'); };
+    expect(() => new GameWorld(db, rules)).toThrow('disk failure');
+    expect(JSON.parse(db.getMeta('authoritative-world-v2')!)).toEqual(legacy);
+    db.checkpointWorld = checkpoint;
+    const restored = new GameWorld(db, rules);
+    expect(restored.state.version).toBe(3); expect(restored.state.players.owner.resources.ammo).toBe(37);
+  });
+  it.each(['missing', 'constructor', 'toString', '__proto__'])('rejects orphan private records, including inherited player key %s', id => {
+    const { game, db } = setup();
+    db.saveWorldPlayerCommit(id, JSON.stringify({ player: { ...game.state.players.owner, id }, handled: [] }));
+    expect(() => new GameWorld(db, rules)).toThrow('角色提交记录');
+    expect(db.listWorldPlayerCommits()).toHaveLength(1);
   });
   it('does not serialize a large camp geometry again merely to detach its snapshot', () => {
     const { game, p } = campSetup();

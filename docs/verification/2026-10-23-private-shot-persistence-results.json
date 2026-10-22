@@ -1,0 +1,334 @@
+{
+  "date": "2026-10-23",
+  "baselineCommit": "bdf36251a62520056612f236f72af822842deba9",
+  "result": "Durable private-shot writes now avoid full-world serialization. Reply latency improved; dense native continuous fire still FAILS its zero-rejection gate. This is progress, not completion of the full game goal.",
+  "design": "docs/superpowers/plans/2026-10-23-private-shot-persistence.md",
+  "changes": {
+    "database": "One bounded latest row per player stores complete player and handled together. Full checkpoints atomically write the same original meta key and clear commit rows. SQLite WAL synchronous FULL and commit-before-reply remain.",
+    "recovery": "Merge rows before migrations, reject mismatched/orphan/inherited keys, upgrade v2 to v3 at the original meta key. Startup backs up based on actual saved version before migration; old code refuses v3.",
+    "necessaryRelatedFix": "Successful response snapshot moved outside the transaction rollback try. A reply exception must not roll back a completed deposit or shot and subsequently duplicate inventory."
+  },
+  "tests": {
+    "files": 29,
+    "passed": 432,
+    "typecheck": "passed, including temporary QA sources after compatibility type-import path correction",
+    "build": "passed; index-Ci3C41xg.js unchanged",
+    "warnings": [
+      "Existing Vite config native-loader migration warning",
+      "Existing client chunk>500kB warning"
+    ],
+    "redGreen": [
+      "Full-camp shot serialization1→0",
+      "Private commit fault injection returns error and restores ammo/player identity/cooldown/replay",
+      "Committed fire/gather response exception no longer rolls back",
+      "Inherited orphan commit keys constructor/toString/__proto__ rejected"
+    ],
+    "correctness": [
+      "SQLite checkpoint-clear trigger failure rolls back BOTH snapshot and rows",
+      "SQLite replacement failure retains previous player row",
+      "Latest rows recover two players and replay ledger; shared commit cannot revive stale inventory",
+      "Committed deposit response failure→private fire→restart conserves wood6+4 and ammo9",
+      "128-entry replay ledger survives rejected save, trims only committed retry",
+      "v2 checkpoint failure preserves old version/progress",
+      "Actual server startup v2/layout2 backs up before upgrading",
+      "Backup rejection stops startup without mutation; retry backs up successfully",
+      "Migration SQLite rejection leaves v2 intact; retry makes a fresh backup before upgrade",
+      "Force-kill child immediately after3 acknowledged private shots; original WAL and SQLite backup recover p8/q19 with replay guards; subsequent shared gather checkpoints and clears rows without resurrecting stale state"
+    ],
+    "independentReview": "No remaining P1/P2 after correcting post-commit rollback, migration backup version check and inherited player-key validation."
+  },
+  "performance": {
+    "environment": "Same synthetic128 camp,5675 buildings/4000 floors/18 turrets540 ammo, two independent headless Chrome1551920x1080DPR1 visible documents, production server/client, friendly paid empty-space fire.20s idle+60s normal route walking/native held fire. No concurrent build/test/profiler/other QA during timing.",
+    "before": {
+      "seconds": 60.536,
+      "clients": [
+        {
+          "client": 1,
+          "sent": 390,
+          "acknowledged": 390,
+          "pending": 0,
+          "rejected": 41,
+          "ammoSpent": 349,
+          "responseMs": {
+            "p50": 69.5,
+            "p95": 144.7,
+            "max": 200.1
+          },
+          "renderMs": {
+            "p95": 5.9,
+            "max": 23.3
+          },
+          "rafP95Ms": 30.4,
+          "corrections": 0,
+          "longTasks": 0,
+          "frameErrors": 0,
+          "connected": true,
+          "buildings": 5675,
+          "floors": 4000
+        },
+        {
+          "client": 2,
+          "sent": 385,
+          "acknowledged": 385,
+          "pending": 0,
+          "rejected": 49,
+          "ammoSpent": 336,
+          "responseMs": {
+            "p50": 66.5,
+            "p95": 136.6,
+            "max": 210.2
+          },
+          "renderMs": {
+            "p95": 6.5,
+            "max": 24
+          },
+          "rafP95Ms": 30.4,
+          "corrections": 0,
+          "longTasks": 0,
+          "frameErrors": 0,
+          "connected": true,
+          "buildings": 5675,
+          "floors": 4000
+        }
+      ]
+    },
+    "after": {
+      "seconds": 60.508,
+      "clients": [
+        {
+          "client": 1,
+          "sent": 390,
+          "acknowledged": 390,
+          "pending": 0,
+          "rejected": 56,
+          "ammoSpent": 334,
+          "responseMs": {
+            "p50": 29,
+            "p95": 99.4,
+            "max": 185.1
+          },
+          "renderMs": {
+            "p95": 5.9,
+            "max": 23.7
+          },
+          "rafP95Ms": 30.4,
+          "corrections": 0,
+          "longTasks": 0,
+          "frameErrors": 0,
+          "connected": true,
+          "buildings": 5675,
+          "floors": 4000
+        },
+        {
+          "client": 2,
+          "sent": 388,
+          "acknowledged": 388,
+          "pending": 0,
+          "rejected": 52,
+          "ammoSpent": 336,
+          "responseMs": {
+            "p50": 29.5,
+            "p95": 88.7,
+            "max": 146.2
+          },
+          "renderMs": {
+            "p95": 6.4,
+            "max": 28.1
+          },
+          "rafP95Ms": 30.5,
+          "corrections": 0,
+          "longTasks": 0,
+          "frameErrors": 0,
+          "connected": true,
+          "buildings": 5675,
+          "floors": 4000
+        }
+      ]
+    },
+    "passed": false,
+    "reason": "Both clients still report cooldown rejection. Six extra protocol actors intentionally not connected; no eight-native, real PvP or siege capacity claim.",
+    "measurementSourceNote": "Timed server code precedes the final startup-only Object.hasOwn validation fix. Final source was exercised by two-native restart/door/replay follow-up; cadence diagnostic and full tests use final code."
+  },
+  "cadenceDiagnosis": {
+    "method": "Separate15s two-native diagnostic only. Hook records in-memory server action receipt/result/duration, client records send times/request IDs; collect by child IPC after the phase. No CPU profiler or per-action file writes; no builds/tests alongside it. Original acceptance gate unchanged.",
+    "clients": [
+      {
+        "client": 1,
+        "requests": 98,
+        "sendGapMs": {
+          "n": 97,
+          "min": 120.4,
+          "p50": 131.2,
+          "p95": 156.2,
+          "max": 830.8
+        },
+        "receiveGapMs": {
+          "n": 97,
+          "min": 38,
+          "p50": 130,
+          "p95": 237,
+          "max": 831
+        },
+        "actionMs": {
+          "n": 98,
+          "min": 7.71,
+          "p50": 12.53,
+          "p95": 17.27,
+          "max": 22.67
+        },
+        "rejected": 14,
+        "rejectedWithLegalOutboundGap": 14,
+        "rejectedGapRanges": {
+          "sendMin": 120.7,
+          "sendMax": 173.5,
+          "receiveMin": 38,
+          "receiveMax": 99
+        }
+      },
+      {
+        "client": 2,
+        "requests": 97,
+        "sendGapMs": {
+          "n": 96,
+          "min": 120.2,
+          "p50": 134.6,
+          "p95": 163.4,
+          "max": 851.4
+        },
+        "receiveGapMs": {
+          "n": 96,
+          "min": 69,
+          "p50": 136,
+          "p95": 206,
+          "max": 827
+        },
+        "actionMs": {
+          "n": 97,
+          "min": 8.27,
+          "p50": 13.36,
+          "p95": 16.63,
+          "max": 23.44
+        },
+        "rejected": 7,
+        "rejectedWithLegalOutboundGap": 7,
+        "rejectedGapRanges": {
+          "sendMin": 133.6,
+          "sendMax": 144.1,
+          "receiveMin": 69,
+          "receiveMax": 99
+        }
+      }
+    ],
+    "finding": "All21 sampled rejections had legal outbound gaps>=120ms, but server action processing gaps compressed to38–99ms. This proves endpoint timing compression; it does NOT distinguish socket queueing from event-loop blockage.",
+    "next": "Measure server event-loop delay and separate snapshot/encoding/periodic-checkpoint work; preserve cadence and durability rather than relax checks or hide errors."
+  },
+  "nativeFollowUp": {
+    "passed": true,
+    "fixture": "Same synthetic final QA world, no reset after timing",
+    "door": "Owner normally walked to(8,15) and used native E to close/open existing(8,13) door. Passive native buddy observed both states. Original open state restored.",
+    "restartAndReplay": [
+      {
+        "client": 1,
+        "ammo": 1666,
+        "duplicateSpent": 0
+      },
+      {
+        "client": 2,
+        "ammo": 1664,
+        "duplicateSpent": 0
+      }
+    ],
+    "noRuntimeOrFrameErrors": true,
+    "qaFailure": "First follow-up already completed door checks but its replay lookup shadowed player ID in a callback and threw. Fixed ignored harness and resumed SAME database; no refunds, resets, or repeated firing. Separate old-version compatibility probe only adjusted erased type import for its temporary file location."
+  },
+  "compatibility": {
+    "oldBuild": "bdf3625",
+    "oldBuildRefusesV3": true,
+    "checkpointUnchanged": true,
+    "pendingShotUnchanged": true
+  },
+  "audit": {
+    "integrity": "ok",
+    "version": 3,
+    "pendingPlayerRowsAfterNativeReconnect": 0,
+    "unchangedWorldCollections": {
+      "buildings": true,
+      "camps": true,
+      "storage": true,
+      "ammo": true,
+      "production": true,
+      "nodes": true,
+      "drops": true,
+      "monsters": true
+    },
+    "buildingCount": 5675,
+    "defensiveAmmo": 540,
+    "ammo": [
+      {
+        "actor": 1,
+        "initial": 2000,
+        "final": 1666,
+        "spent": 334
+      },
+      {
+        "actor": 2,
+        "initial": 2000,
+        "final": 1664,
+        "spent": 336
+      },
+      {
+        "actor": 3,
+        "initial": 2000,
+        "final": 2000,
+        "spent": 0
+      },
+      {
+        "actor": 4,
+        "initial": 2000,
+        "final": 2000,
+        "spent": 0
+      },
+      {
+        "actor": 5,
+        "initial": 2000,
+        "final": 2000,
+        "spent": 0
+      },
+      {
+        "actor": 6,
+        "initial": 2000,
+        "final": 2000,
+        "spent": 0
+      },
+      {
+        "actor": 7,
+        "initial": 2000,
+        "final": 2000,
+        "spent": 0
+      },
+      {
+        "actor": 8,
+        "initial": 2000,
+        "final": 2000,
+        "spent": 0
+      }
+    ],
+    "rawReaders": "Audited full checkpoint plus any pending rows, read-only; never assume raw meta alone is complete. Final native reconnect consolidated rows."
+  },
+  "safety": "All databases uniquely named ignored synthetic QA fixtures or OS test temp files. Real data/sdc.sqlite was never opened. Raw identities/tokens remain ignored. Owned QA services/browsers closed.",
+  "limitations": [
+    "Zero-error dense fire acceptance still failed; rejection count did not improve despite faster replies.",
+    "Periodic/shared actions still use full-world checkpoint and targeted action rollback. No claim of improved targeted-combat load.",
+    "No GPU utilization,60FPS,long-term memory or earned economy claim.",
+    "Upgrade has automatic consistent backup; older server cannot read v3. Restoring a pre-upgrade backup loses later progress, as documented in README."
+  ],
+  "sourceSha256": {
+    "server.ts": "03698b60d15a4c8d0f78876a3cf263f2aff8f7334ce7199939059a59b0b5b3ad",
+    "server/db.ts": "3cb2c24041c68a8486d8b0c97032aec45b9e7b3991895b65f48421fb56500cbf",
+    "server/worldState.ts": "087b59bef3ef8a3fe8f07af4709042fe75b6cd77901172fd9f75763ec128eed0",
+    "server/db.test.ts": "018d33d8155a3d5284c37cde467e739827e711ab6e50f64085b7d131f099f28e",
+    "server/worldState.test.ts": "70defd1cd42d82ee4ae5a4b5773ff8dcb471c8d23ab2109d53e32f1dd11cdd9e",
+    "server/persistence.test.ts": "9ff3898c43f4b61da3891617678adf87361b271c821550d9d576752073678543",
+    "README.md": "76b40c8dc09a99ffeebe50835067665ff294ad179630c2e8fa0e3fb45b709af2"
+  }
+}

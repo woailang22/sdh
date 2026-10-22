@@ -1,12 +1,47 @@
 // server/db.test.ts
 import { describe, expect, it } from 'vitest';
-import { createDb, backupDatabase } from './db';
+import { createDb, createMemoryDb, backupDatabase } from './db';
 import { mkdtempSync, existsSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import Database from 'better-sqlite3';
 
 describe('sqlite persistence', () => {
+  it.each(['sqlite', 'memory'])('keeps latest player commits until an atomic checkpoint succeeds (%s)', mode => {
+    const db = mode === 'sqlite' ? createDb(':memory:') : createMemoryDb();
+    const key = 'authoritative-world-v2'; db.checkpointWorld('before');
+    db.saveWorldPlayerCommit('a', 'shot-a1'); db.saveWorldPlayerCommit('b', 'shot-b'); db.saveWorldPlayerCommit('a', 'shot-a2');
+    expect(db.listWorldPlayerCommits().sort((a, b) => a.id.localeCompare(b.id))).toEqual([{ id: 'a', data: 'shot-a2' }, { id: 'b', data: 'shot-b' }]);
+    const set = db.setMeta;
+    db.setMeta = () => { throw Error('disk failure'); };
+    expect(() => db.checkpointWorld('after')).toThrow('disk failure');
+    expect(db.getMeta(key)).toBe('before'); expect(db.listWorldPlayerCommits()).toHaveLength(2);
+    db.setMeta = set;
+    db.checkpointWorld('after'); expect(db.getMeta(key)).toBe('after'); expect(db.listWorldPlayerCommits()).toEqual([]);
+  });
+  it('rolls back the checkpoint and preserves all commits if SQLite rejects deleting them', () => {
+    const file = join(mkdtempSync(join(tmpdir(), 'sdc-checkpoint-')), 'world.sqlite');
+    const db = createDb(file); db.checkpointWorld('before'); db.saveWorldPlayerCommit('a', 'shot');
+    const control = new Database(file);
+    try {
+      control.exec("CREATE TRIGGER reject_clear BEFORE DELETE ON world_player_commits BEGIN SELECT RAISE(ABORT, 'disk failure'); END");
+      expect(() => db.checkpointWorld('after')).toThrow('disk failure');
+      expect(db.getMeta('authoritative-world-v2')).toBe('before');
+      expect(db.listWorldPlayerCommits()).toEqual([{ id: 'a', data: 'shot' }]);
+      control.exec('DROP TRIGGER reject_clear');
+      db.checkpointWorld('after'); expect(db.listWorldPlayerCommits()).toEqual([]);
+    } finally { control.close(); }
+  });
+  it('retains the previous player commit when SQLite rejects its replacement', () => {
+    const file = join(mkdtempSync(join(tmpdir(), 'sdc-private-write-')), 'world.sqlite');
+    const db = createDb(file); db.saveWorldPlayerCommit('a', 'old-shot');
+    const control = new Database(file);
+    try {
+      control.exec("CREATE TRIGGER reject_shot BEFORE UPDATE ON world_player_commits BEGIN SELECT RAISE(ABORT, 'disk failure'); END");
+      expect(() => db.saveWorldPlayerCommit('a', 'new-shot')).toThrow('disk failure');
+      expect(db.listWorldPlayerCommits()).toEqual([{ id: 'a', data: 'old-shot' }]);
+    } finally { control.close(); }
+  });
   it('commits both sides of a world transfer while a reporting reader retains its previous snapshot', async () => {
     const file = join(mkdtempSync(join(tmpdir(), 'sdc-reader-')), 'world.sqlite');
     const db = createDb(file);

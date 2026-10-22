@@ -10,7 +10,12 @@ export interface DbHandle {
   listPlayers(): any[];
   getMeta(k: string): string | null;
   setMeta(k: string, v: string): void;
+  listWorldPlayerCommits(): { id: string; data: string }[];
+  saveWorldPlayerCommit(id: string, data: string): void;
+  checkpointWorld(data: string): void;
 }
+
+const WORLD_KEY = 'authoritative-world-v2';
 
 /** SQLite's backup API includes committed WAL data; never copy a live database file. */
 export async function backupDatabase(path: string): Promise<string | null> {
@@ -31,7 +36,8 @@ export function createDb(path: string): DbHandle {
     db.pragma('synchronous = FULL');
     db.exec(`CREATE TABLE IF NOT EXISTS buildings (id TEXT PRIMARY KEY, data TEXT NOT NULL);
     CREATE TABLE IF NOT EXISTS players (id TEXT PRIMARY KEY, data TEXT NOT NULL);
-    CREATE TABLE IF NOT EXISTS meta (k TEXT PRIMARY KEY, v TEXT NOT NULL);`);
+    CREATE TABLE IF NOT EXISTS meta (k TEXT PRIMARY KEY, v TEXT NOT NULL);
+    CREATE TABLE IF NOT EXISTS world_player_commits (id TEXT PRIMARY KEY, data TEXT NOT NULL);`);
     const upsertB = db.prepare(`INSERT INTO buildings (id, data) VALUES (@id, @data) ON CONFLICT(id) DO UPDATE SET data=excluded.data`);
     const allB = db.prepare(`SELECT data FROM buildings`);
     const upsertP = db.prepare(`INSERT INTO players (id, data) VALUES (@id, @data) ON CONFLICT(id) DO UPDATE SET data=excluded.data`);
@@ -39,6 +45,9 @@ export function createDb(path: string): DbHandle {
     const allP = db.prepare(`SELECT data FROM players`);
     const getM = db.prepare(`SELECT v FROM meta WHERE k = ?`);
     const upsertM = db.prepare(`INSERT INTO meta (k, v) VALUES (@k, @v) ON CONFLICT(k) DO UPDATE SET v=excluded.v`);
+    const allCommits = db.prepare('SELECT id, data FROM world_player_commits');
+    const upsertCommit = db.prepare('INSERT INTO world_player_commits (id, data) VALUES (?, ?) ON CONFLICT(id) DO UPDATE SET data=excluded.data');
+    const clearCommits = db.prepare('DELETE FROM world_player_commits');
     // meta 版本：供后续 schema 升级用，初始版本为 1（幂等，已存在则保持原值）
     const existingVersion = getM.get('version') as any;
     if (!existingVersion) upsertM.run({ k: 'version', v: '1' });
@@ -50,6 +59,12 @@ export function createDb(path: string): DbHandle {
       listPlayers() { return (allP.all() as any[]).map(r => JSON.parse(r.data)); },
       getMeta(k: string) { const r = getM.get(k) as any; return r ? String(r.v) : null; },
       setMeta(k: string, v: string) { upsertM.run({ k, v }); },
+      listWorldPlayerCommits() { return allCommits.all() as { id: string; data: string }[]; },
+      saveWorldPlayerCommit(id: string, data: string) { upsertCommit.run(id, data); },
+      checkpointWorld(data: string) {
+        // Never let an older private commit override a newer shared transaction.
+        db.transaction(() => { this.setMeta(WORLD_KEY, data); clearCommits.run(); })();
+      },
     };
   } catch (e) {
     throw new Error(`[db] open failed: ${(e as Error)?.message ?? String(e)} (path=${path})`);
@@ -61,6 +76,7 @@ export function createMemoryDb(): DbHandle {
   const buildings = new Map<string, any>();
   const players = new Map<string, any>();
   const meta = new Map<string, string>([['version', '1']]);
+  const commits = new Map<string, string>();
   return {
     saveBuilding(b: any) { buildings.set(b.id, JSON.parse(JSON.stringify(b))); },
     listBuildings() { return [...buildings.values()].map((b) => JSON.parse(JSON.stringify(b))); },
@@ -72,5 +88,8 @@ export function createMemoryDb(): DbHandle {
     listPlayers() { return [...players.values()].map(p => JSON.parse(JSON.stringify(p))); },
     getMeta(k: string) { return meta.has(k) ? String(meta.get(k)) : null; },
     setMeta(k: string, v: string) { meta.set(k, v); },
+    listWorldPlayerCommits() { return [...commits].map(([id, data]) => ({ id, data })); },
+    saveWorldPlayerCommit(id: string, data: string) { commits.set(id, data); },
+    checkpointWorld(data: string) { this.setMeta(WORLD_KEY, data); commits.clear(); },
   };
 }
