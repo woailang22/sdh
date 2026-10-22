@@ -10,6 +10,24 @@ import {
 } from './world';
 
 describe('continuous world coordinates', () => {
+  it.each([
+    { cx: -1, cy: 3, name: '麦穗农舍', x: -16, y: 112, width: 8, height: 6, items: [['food', 3], ['water', 2], ['seed_potato', 1]] },
+    { cx: 0, cy: 6, name: '渡口维修工棚', x: 24, y: 216, width: 12, height: 8, items: [['scrap', 8], ['part', 2]] },
+    { cx: -1, cy: 10, name: '芦湾诊所', x: -24, y: 344, width: 12, height: 8, items: [['bandage', 3], ['antidote', 1]] },
+    { cx: 0, cy: 14, name: '泥岸补给仓库', x: 24, y: 472, width: 8, height: 6, items: [['scrap', 10], ['fuel', 2], ['battery', 1]] },
+    { cx: 0, cy: 18, name: '裂隙前哨诊所', x: 16, y: 592, width: 8, height: 6, items: [['bandage', 3], ['antidote', 1]] },
+  ])('gives $name a distinct purpose while retaining its old footprint and container identity', ({ cx, cy, name, x, y, width, height, items }) => {
+    const chunk = generateWorldChunk(cx, cy), id = `world:${cx}:${cy}:poi`;
+    const house = groupBuildingsIntoHouses(chunk.buildings).find(h => h.key === id)!;
+    expect(house.door?.name).toBe(name + '入口');
+    expect(house.door).toMatchObject({ id: id + ':door', x, y: y + height / 2, isOpen: true, doorWidth: 3 });
+    expect(houseCorners(house.members)).toEqual({ x0: x - width / 2, x1: x + width / 2, y0: y - height / 2, y1: y + height / 2 });
+    const cabinet = chunk.interactables.find(n => n.id === id + ':supplies')!;
+    expect(cabinet).toMatchObject({ x: x - 2, y: y - 2, respawnSec: 300 });
+    expect(cabinet.lootTable?.map(l => [l.itemId, l.count])).toEqual(items);
+    expect(findPath({ x: house.door!.x, y: house.door!.y + 2 }, cabinet, chunk.buildings).length).toBeGreaterThan(0);
+  });
+
   it('separates research supplies, lord equipment and the legendary fishing target', () => {
     const cache = getWorldInteractable('world:3:21:i:marsh_rift:rift_cache')!;
     const armory = getWorldInteractable('world:2:21:i:marsh_rift:rift_armory');

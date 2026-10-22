@@ -1,6 +1,7 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { IsometricEngine, type GameCallbacks } from './IsometricEngine';
 import { buildCompoundWalls } from './compound';
+import * as houseRenderer from './houseRenderer';
 
 vi.mock('../audio/soundManager', () => ({ soundManager: { playLevelUp: vi.fn(), playHit: vi.fn(), playGunshot: vi.fn() } }));
 
@@ -118,6 +119,27 @@ describe('server weather synchronization', () => {
 });
 
 describe('ground rendering cost', () => {
+  it('draws a wetland approach visible from a narrow road view even when the house is offscreen', () => {
+    const { engine } = setup();
+    const render = (engine as any).render;
+    for (const name of Object.getOwnPropertyNames(IsometricEngine.prototype)) {
+      if (name !== 'render' && /^(render|draw)/.test(name)) vi.spyOn(engine as any, name).mockImplementation(() => {});
+    }
+    (engine as any).width = 390; (engine as any).height = 844;
+    engine.currentMapId = 'world';
+    engine.camera = { x: 0, y: 0 };
+    const road = engine.toScreen(0, 220);
+    engine.camera = { x: 195 - road.x, y: 422 - road.y };
+    const room = (prefix: string, x: number, y: number) => buildCompoundWalls({ idPrefix: prefix, cx: x, cy: y, w: 12, h: 8, wallType: 'wood_wall', wallName: '墙', ownerName: '遗迹', doorSide: 'S', doorType: 'door', doorName: '入口' }).map(b => ({ ...b, id: b.id.replace(prefix + '_', prefix + ':') }));
+    const near = room('world:0:6:poi', 24, 216);
+    engine.buildings = [...near, ...room('world:-1:10:poi', -24, 344)];
+    const platform = vi.spyOn(houseRenderer, 'drawWaterHousePlatform').mockImplementation(() => {});
+    render.call(engine);
+    expect(platform).toHaveBeenCalledTimes(1);
+    expect(platform.mock.calls[0][1]).toEqual(near);
+    expect((engine as any).drawHouse).not.toHaveBeenCalled();
+  });
+
   it('keeps resource models visible without a distant field of floating labels', () => {
     const { engine, context } = setup();
     const chest = vi.spyOn(engine as any, 'drawSupplyChest').mockImplementation(() => {});

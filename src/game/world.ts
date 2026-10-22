@@ -3,6 +3,7 @@ import { SUBMAPS } from './maps';
 import { ITEM_DEFS } from './items';
 import { buildCompoundWalls } from './compound';
 import { groupBuildingsIntoHouses, houseCorners } from './house';
+import { ROADSIDE_USES, WORLD_ROADSIDE_STOPS } from './worldRoutes';
 
 export const WORLD_MIN = -1024;
 export const WORLD_MAX = 1024;
@@ -170,15 +171,19 @@ function publicBuildings(location: WorldLocation): BuildingEntity[] {
 function populatePointOfInterest(chunk: WorldChunk, x: number, y: number, starter = false) {
   const location = worldLocationAt(x, y);
   const variant = hash(Math.floor(x / CHUNK_SIZE), Math.floor(y / CHUNK_SIZE), 72) % 4;
-  const kind = starter ? 0 : location.region === 'town' ? variant : location.region === 'mountain' ? 2 : variant % 2 === 0 ? 0 : 3;
-  const labels = ['路边农舍', '野外诊所', '维修工棚', '补给仓库'];
-  const [width, height] = [[8, 6], [8, 8], [10, 6], [12, 8]][kind];
+  const footprintKind = starter ? 0 : location.region === 'town' ? variant : location.region === 'mountain' ? 2 : variant % 2 === 0 ? 0 : 3;
   const prefix = `${chunk.key}:poi`;
+  const stop = WORLD_ROADSIDE_STOPS.find(s => s.id === prefix);
+  const kind = stop ? ROADSIDE_USES[stop.kind].template : footprintKind;
+  const labels = ['路边农舍', '野外诊所', '维修工棚', '补给仓库'];
+  const label = stop?.name ?? labels[kind];
+  // A new use must not move old walls, doors or partially looted containers.
+  const [width, height] = [[8, 6], [8, 8], [10, 6], [12, 8]][footprintKind];
   const walls = buildCompoundWalls({
     idPrefix: prefix, cx: x, cy: y, w: width, h: height,
     wallType: location.region === 'town' ? 'stone_wall' : 'wood_wall',
-    wallName: `${labels[kind]}外墙`, ownerName: '公共遗迹',
-    doorSide: 'S', doorType: 'door', doorName: `${labels[kind]}入口`,
+    wallName: `${label}外墙`, ownerName: '公共遗迹',
+    doorSide: 'S', doorType: 'door', doorName: `${label}入口`,
     doorExtra: { isOpen: true, isLocked: false, doorWidth: 3, mapId: 'world' },
   }).filter((b) => !(b.type.includes('wall') && b.y === y + height / 2 && Math.abs(b.x - x) < 2));
   chunk.buildings.push(...walls.map((b) => ({ ...b, id: b.id.replace(`${prefix}_`, `${prefix}:`), mapId: 'world' as const })));
@@ -186,9 +191,9 @@ function populatePointOfInterest(chunk: WorldChunk, x: number, y: number, starte
     : kind === 1 ? [loot('bandage', 3), loot('antidote', 1)]
     : kind === 2 ? [loot('scrap', 8), loot('part', 2)]
     : [loot('scrap', 10), loot('fuel', 2), loot('battery', 1)];
-  chunk.interactables.push(resource(`${prefix}:supplies`, `${labels[kind]}${kind === 1 ? '药柜' : '物资柜'}`, kind === 1 ? 'med_cabinet' : 'shelves', x - 2, y - 2, drops));
+  chunk.interactables.push(resource(`${prefix}:supplies`, `${label}${kind === 1 ? '药柜' : '物资柜'}`, kind === 1 ? 'med_cabinet' : 'shelves', x - 2, y - 2, drops));
   if (location.risk === 'HIGH' || location.risk === 'EXTREME') {
-    chunk.interactables.push(resource(`${prefix}:secured`, `${labels[kind]}封存补给`, 'ammo_crate', x + 2, y - 2,
+    chunk.interactables.push(resource(`${prefix}:secured`, `${label}封存补给`, 'ammo_crate', x + 2, y - 2,
       location.region === 'marsh' ? [loot('shard', 1), loot('bandage', 1)] : [loot('ammo', 12), loot('part', 2)]));
   }
 }

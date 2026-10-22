@@ -5,13 +5,14 @@ import { SUBMAPS, displayName, regionOf, lootResourceOf } from './maps';
 import { groundBaseColor, hash2 as hash2Pure, withAlpha, themeAccent, drawSoftShadow, healthBarColor, weatherTint, themeHaze } from './visualTheme';
 import type { GroundTheme } from './visualTheme';
 import { groupBuildingsIntoHouses, houseCorners, HOUSE_WALL_H } from './house';
-import { drawHouseLayer } from './houseRenderer';
+import { drawHouseLayer, drawWaterHousePlatform, waterHousePlatformBounds } from './houseRenderer';
 import { frameContent, angleToSurvivorFrame, interactableSprite, buildingSprite } from './art';
 import { isHostile, canOperateDoor } from './diplomacy';
 import { CHUNK_SIZE, WORLD_MIN, WORLD_MAX, generateWorldChunk, worldToChunk, worldThemeAt, worldLocationAt, worldIsRoad, type WorldChunk } from './world';
 import { findPath, isPositionBlocked, hasLineOfSight } from './navigation';
 import { recordRenderFailure } from './renderDiagnostics';
 import { generateWorldScenery, type WorldScenery } from './worldScenery';
+import { ROADSIDE_USES, WORLD_ROADSIDE_STOPS, type RoadsideStop } from './worldRoutes';
 import {
   MonsterEntity,
   InteractableEntity,
@@ -2987,6 +2988,10 @@ export class IsometricEngine {
         if (!this.isWorldAreaVisible(prop.x, prop.y)) continue;
         renderList.push({ yDepth: prop.x + prop.y, render: () => this.drawWorldScenery(prop) });
       }
+      for (const stop of WORLD_ROADSIDE_STOPS) {
+        const x = Math.sign(stop.x) * 5;
+        if (this.isWorldAreaVisible(x, stop.y)) renderList.push({ yDepth: x + stop.y, render: () => this.drawRoadsideSign(stop) });
+      }
     } else if (gtheme === 'camp') {
       // 纪念篝火 + 纯观赏植被（可交互物由 drawInteractable 真实绘制，不再摆假模型）
       renderList.push({ yDepth: this.campfire.x + this.campfire.y, render: () => this.drawCampfire(this.campfire.x, this.campfire.y) });
@@ -3050,7 +3055,13 @@ export class IsometricEngine {
     });
 
     // Buildings（闭合院与屋内箱子一次画完，箱子压在上层保证可见）
-    const houseGroups = groupBuildingsIntoHouses(this.buildings).filter(g => {
+    const allHouseGroups = groupBuildingsIntoHouses(this.buildings);
+    if (this.currentMapId === 'world') for (const g of allHouseGroups) {
+      if (g.members.length < 8 || !g.door?.id.startsWith('world:') || worldThemeAt(g.cx, g.cy) !== 'lake') continue;
+      const b = waterHousePlatformBounds(g.members, g.door);
+      if (this.isWorldAreaVisible(b.x0, b.y0, b.x1, b.y1)) drawWaterHousePlatform(this.ctx, g.members, g.door, (x, y) => this.toScreen(x, y));
+    }
+    const houseGroups = allHouseGroups.filter(g => {
       const { x0, x1, y0, y1 } = houseCorners(g.members);
       return this.isWorldAreaVisible(x0, y0, x1, y1);
     });
@@ -4134,6 +4145,23 @@ export class IsometricEngine {
   // 确定性 tile 哈希（地形噪点/饰品分布用，无随机闪烁）
   private hash2(x: number, y: number): number {
     return hash2Pure(x, y);
+  }
+
+  private drawRoadsideSign(stop: RoadsideStop) {
+    const x = Math.sign(stop.x) * 5, s = this.toScreen(x, stop.y);
+    const use = ROADSIDE_USES[stop.kind];
+    this.ctx.save();
+    if (Math.hypot(this.player.x - x, this.player.y - stop.y) < 2.5) this.ctx.globalAlpha = 0.35;
+    drawSoftShadow(this.ctx, s.x, s.y, 18);
+    this.ctx.fillStyle = '#735740'; this.ctx.fillRect(s.x - 3, s.y - 65, 6, 65);
+    this.ctx.fillStyle = '#383e37'; this.ctx.strokeStyle = '#a18c66'; this.ctx.lineWidth = 1.5;
+    this.ctx.fillRect(s.x - 78, s.y - 79, 156, 43); this.ctx.strokeRect(s.x - 78, s.y - 79, 156, 43);
+    this.ctx.fillStyle = use.color; this.ctx.fillRect(s.x - 76, s.y - 77, 4, 39);
+    this.ctx.textAlign = 'center'; this.ctx.font = 'bold 12px sans-serif'; this.ctx.fillStyle = '#f3e2bb';
+    this.ctx.fillText(`${stop.name} ${stop.x < 0 ? '↖' : '↘'}`, s.x, s.y - 61);
+    this.ctx.font = '11px sans-serif'; this.ctx.fillStyle = use.color;
+    this.ctx.fillText(use.supplies, s.x, s.y - 44);
+    this.ctx.restore();
   }
 
   private drawWorldScenery(prop: WorldScenery) {

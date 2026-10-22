@@ -350,8 +350,8 @@ describe('public building layout updates', () => {
     p.resources.wood = 777;
     const privateCore = structuredClone(game.state.buildings[p.campId! + '_core']);
     game.persist();
-    const restored = new GameWorld(db, { ...rules, buildingsNear: () => [{ ...door, y: 15, hp: 650, isOpen: true, doorWidth: 3 }] });
-    expect(restored.state.buildings[door.id]).toMatchObject({ y: 15, doorWidth: 3, hp: 200, isOpen: false });
+    const restored = new GameWorld(db, { ...rules, buildingsNear: () => [{ ...door, name: '驿站诊所入口', y: 15, hp: 650, isOpen: true, doorWidth: 3 }] });
+    expect(restored.state.buildings[door.id]).toMatchObject({ name: '驿站诊所入口', y: 15, doorWidth: 3, hp: 200, isOpen: false });
     expect(restored.state.buildings[removedId]).toBeUndefined();
     expect(restored.state.players.owner.resources.wood).toBe(777);
     expect(restored.state.buildings[privateCore.id]).toEqual(privateCore);

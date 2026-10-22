@@ -19,6 +19,18 @@ const caches = [
   { nodeId: 'world:5:28:i:marsh_abyss:aby_cache', guardSuffix: ':ab_cache_guard' },
 ];
 describe('high-risk exploration rewards', () => {
+  it('retains an old roadside container remainder when its room becomes a clinic', () => {
+    const { game, db, rules, node, now } = setup('world:-1:10:poi:supplies');
+    game.state.nodes[node.id] = { stock: 3, respawnAt: 0, items: [{ itemId: 'fuel', name: '旧库存燃油', count: 2 }, { itemId: 'battery', name: '旧库存电池', count: 1 }] };
+    game.persist(); const restored = new GameWorld(db, rules, now);
+    const result = restored.action('p', { action: 'search', targetId: node.id, requestId: 'old-room' });
+    expect(result.loot?.name).toContain('芦湾诊所');
+    expect(result.loot?.items.map(i => [i.itemId, i.count])).toEqual([['fuel', 2], ['battery', 1]]);
+    expect(restored.action('p', { action: 'take_loot', targetId: node.id, itemId: 'fuel', count: 2, requestId: 'old-fuel' }).error).toBeUndefined();
+    expect(restored.snapshot('p').player.inventory.find(i => i?.id === 'fuel')?.count).toBe(2);
+    expect(restored.state.nodes[node.id].items?.map(i => [i.itemId, i.count])).toEqual([['battery', 1]]);
+  });
+
   it.each([
     { id: 'world:2:21:i:marsh_rift:rift_armory', lord: ':rf1' },
     { id: 'world:5:27:i:marsh_abyss:aby_legend_pond', lord: ':ab1' },

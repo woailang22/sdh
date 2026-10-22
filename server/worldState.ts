@@ -129,6 +129,7 @@ export class GameWorld {
       const definition = this.rules.buildingsNear(savedBuilding.x, savedBuilding.y).find(b => b.id === id);
       if (!definition) { delete this.state.buildings[id]; continue; }
       savedBuilding.x = definition.x; savedBuilding.y = definition.y;
+      savedBuilding.name = definition.name;
       savedBuilding.facing = definition.facing; savedBuilding.doorWidth = definition.doorWidth;
     }
     // Old instances sometimes contained walls but no core; retain a paid-repair ruin instead of trapping their owner forever.

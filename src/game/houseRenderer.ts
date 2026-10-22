@@ -4,6 +4,35 @@ import { houseCorners, houseEntrance, houseWallRuns, HOUSE_WALL_H, type HouseWal
 type Point = { x: number; y: number };
 type Project = (x: number, y: number) => Point;
 
+export function waterHousePlatformBounds(members: BuildingEntity[], door: BuildingEntity) {
+  const b = houseCorners(members);
+  const approach = door.y === b.y1 && Math.abs(door.x) <= 32;
+  return { x0: Math.min(b.x0 - 0.8, approach ? -0.8 : Infinity), x1: Math.max(b.x1 + 0.8, approach ? 0.8 : -Infinity), y0: b.y0 - 0.8, y1: b.y1 + 0.8 };
+}
+
+/** Draw below actors: existing wetland rooms stand on a deck, with a short road approach. */
+export function drawWaterHousePlatform(ctx: CanvasRenderingContext2D, members: BuildingEntity[], door: BuildingEntity, project: Project) {
+  const { x0, x1, y0, y1 } = houseCorners(members);
+  ctx.save(); ctx.lineWidth = 1.5;
+  const deck = (left: number, top: number, right: number, bottom: number) => {
+    const corners = [[left, top], [right, top], [right, bottom], [left, bottom]].map(([x, y]) => project(x, y));
+    ctx.fillStyle = '#766b50'; ctx.strokeStyle = '#b3a17c';
+    ctx.beginPath(); corners.forEach((p, i) => i ? ctx.lineTo(p.x, p.y) : ctx.moveTo(p.x, p.y)); ctx.closePath(); ctx.fill(); ctx.stroke();
+    ctx.strokeStyle = '#504d3d'; ctx.lineWidth = 1;
+    for (let x = left + 1; x < right; x += 1) {
+      const a = project(x, top), b = project(x, bottom);
+      ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
+    }
+  };
+  if (door.y === y1 && Math.abs(door.x) <= 32) deck(Math.min(0, door.x) - 0.8, door.y - 0.8, Math.max(0, door.x) + 0.8, door.y + 0.8);
+  ctx.fillStyle = '#4e4939';
+  for (const x of [x0 - 0.6, x1 + 0.6]) {
+    const p = project(x, y1 + 0.6); ctx.fillRect(p.x - 4, p.y, 8, 18);
+  }
+  deck(x0 - 0.8, y0 - 0.8, x1 + 0.8, y1 + 0.8);
+  ctx.restore();
+}
+
 /** Four actual wall sides, split into back/front layers around actors and loot. */
 export function drawHouseLayer(ctx: CanvasRenderingContext2D, members: BuildingEntity[], door: BuildingEntity | null, player: Point, project: Project, layer: 'back' | 'front') {
   const { x0, x1, y0, y1 } = houseCorners(members);
