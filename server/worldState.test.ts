@@ -592,6 +592,45 @@ describe('camp facilities and membership', () => {
 });
 
 describe('authoritative world', () => {
+  it.each(['ammo_pack', 'ammo_reload'])('crafts %s with canonical price and output, preserving replay results after restart', recipeId => {
+    const bench = { ...tree, id: 'ammo-workbench', type: 'workbench' as const, x: 1, y: 0 };
+    const db = createMemoryDb(), ammoRules = { ...rules, nodesNear: () => [bench] };
+    const game = new GameWorld(db, ammoRules, () => 10000); game.connect('p', '行者');
+    Object.assign(game.state.players.p.resources, { scrap: 10, parts: 1 });
+    const request = { requestId: 'ammo-craft', action: 'craft', recipeId, cost: { scrap: 0 }, resultCount: 999 };
+    const first = game.action('p', request);
+    expect(first.error).toBeUndefined();
+    expect(first.player.resources).toMatchObject({ scrap: 0, parts: 0, ammo: 30 });
+    expect(game.action('p', request).player.resources).toMatchObject({ scrap: 0, parts: 0, ammo: 30 });
+    const restarted = new GameWorld(db, ammoRules, () => 11000);
+    expect(restarted.action('p', request).player.resources).toMatchObject({ scrap: 0, parts: 0, ammo: 30 });
+  });
+  it.each(['ammo_pack', 'ammo_reload'])('rejects %s without the required real materials or nearby workstation', recipeId => {
+    const bench = { ...tree, id: 'ammo-workbench', type: 'workbench' as const, x: 1, y: 0 };
+    const game = new GameWorld(createMemoryDb(), { ...rules, nodesNear: () => [bench] }, () => 10000); game.connect('p', '行者');
+    for (const [scrap, parts] of [[9, 1], [10, 0]]) {
+      Object.assign(game.state.players.p.resources, { scrap, parts });
+      expect(game.action('p', { requestId: `lacking-${scrap}`, action: 'craft', recipeId }).error).toContain('材料不足');
+      expect(game.state.players.p.resources).toMatchObject({ scrap, parts, ammo: 0 });
+    }
+    const p = game.state.players.p; p.x = 10; Object.assign(p.resources, { scrap: 10, parts: 1 });
+    expect(game.action('p', { requestId: 'away', action: 'craft', recipeId }).error).toContain('工作台');
+    expect(game.state.players.p.resources).toMatchObject({ scrap: 10, parts: 1, ammo: 0 });
+  });
+  it('rolls back a legacy ammo craft on failed persistence and can retry that request exactly once', () => {
+    const bench = { ...tree, id: 'ammo-workbench', type: 'workbench' as const, x: 1, y: 0 };
+    const db = createMemoryDb(), ammoRules = { ...rules, nodesNear: () => [bench] };
+    const game = new GameWorld(db, ammoRules, () => 10000); game.connect('p', '行者');
+    Object.assign(game.state.players.p.resources, { scrap: 10, parts: 1 }); game.persist();
+    const request = { requestId: 'legacy-save-retry', action: 'craft', recipeId: 'ammo_reload' };
+    const save = db.setMeta; db.setMeta = () => { throw new Error('disk failure'); };
+    expect(game.action('p', request).error).toBe('disk failure');
+    expect(game.state.players.p.resources).toMatchObject({ scrap: 10, parts: 1, ammo: 0 });
+    db.setMeta = save;
+    expect(new GameWorld(db, ammoRules).snapshot('p').player.resources).toMatchObject({ scrap: 10, parts: 1, ammo: 0 });
+    expect(game.action('p', request).error).toBeUndefined();
+    expect(game.action('p', request).player.resources).toMatchObject({ scrap: 0, parts: 0, ammo: 30 });
+  });
   it('uses authored public workstation interactables for advanced crafting', () => {
     const bench = { ...tree, id: 'public-workbench', type: 'workbench' as const, x: 1, y: 0 };
     const game = new GameWorld(createMemoryDb(), { ...rules, nodesNear: () => [bench] }); game.connect('p', '玩家');

@@ -1,7 +1,7 @@
 import { randomUUID } from 'node:crypto';
 import type { BuildingEntity, BuildableType, Equipment, InteractableEntity, Item, MapZoneId, MonsterEntity, OnlinePlayer, WeatherType } from '../src/types/game';
 import { ARMOR_BONUS_TABLE, ITEM_DEFS, makeItem, WEAPON_DAMAGE } from '../src/game/items';
-import { CRAFT_RECIPES, findCraftingWorkbench, recipeFacility, recipeRequiresWorkbench } from '../src/game/crafting';
+import { CRAFT_RECIPES, craftingRecipe, findCraftingWorkbench, recipeFacility, recipeRequiresWorkbench } from '../src/game/crafting';
 import { ARMOR_REDUCTION, killReward, MELEE, WEAPONS } from '../src/game/combat';
 import { BUILD_RECIPES } from '../src/game/buildingRecipes';
 import { ACID_SHIELD_DRAIN } from '../src/game/weather';
@@ -502,7 +502,7 @@ export class GameWorld {
       }
       if (a.action === 'start_production') {
         requireRule(!this.state.production[b.id], '设施已有生产任务');
-        const recipe = CRAFT_RECIPES.find(r => r.id === a.recipeId); requireRule(recipe && recipeFacility(recipe) === b.type, '配方与设施不匹配');
+        const recipe = craftingRecipe(a.recipeId); requireRule(recipe && recipeFacility(recipe) === b.type, '配方与设施不匹配');
         this.payRecipe(p, recipe);
         this.state.production[b.id] = { recipeId: recipe.id, resultItemId: recipe.resultItemId, resultCount: recipe.resultCount, readyAt: this.now() + (b.type === 'farm_plot' ? 60000 : 20000) }; return;
       }
@@ -601,7 +601,7 @@ export class GameWorld {
       this.deriveArmor(p); return;
     }
     if (a.action === 'craft') {
-      const recipe = CRAFT_RECIPES.find(r => r.id === a.recipeId); requireRule(recipe, '配方不存在');
+      const recipe = craftingRecipe(a.recipeId); requireRule(recipe, '配方不存在');
       requireRule(!recipeFacility(recipe), '该配方需要对应营地设施的生产任务');
       requireRule(recipe.resultItemId !== 'wp_plasma' || p.blueprints.includes('wp_plasma'), '尚未研究等离子步枪蓝图');
       // Basic hand tools and first aid bootstrap without a private workstation. Advanced crafts require a reachable one.

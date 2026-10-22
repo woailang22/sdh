@@ -90,8 +90,8 @@ const RECIPES: Omit<Recipe, 'resultItemId' | 'resultCount'>[] = [
     resultName: '步枪弹药',
     icon: '🎯',
     category: '弹药制造',
-    desc: '有枪没弹等于烧火棍，记得按 R 装填。',
-    cost: { wood: 0, stone: 0, scrap: 15, parts: 1 },
+    desc: '枪械与炮塔共用弹药；枪械按 R 装填，炮塔靠近按 E 补弹。',
+    cost: { wood: 0, stone: 0, scrap: 10, parts: 1 },
   },
   {
     id: 'nano_medkit',
@@ -146,7 +146,6 @@ const RECIPES: Omit<Recipe, 'resultItemId' | 'resultCount'>[] = [
   { id: 'jam_pot', name: '蓝莓果酱 ×2', resultName: '蓝莓果酱', icon: '🫙', category: '食物加工', desc: '蓝莓×3→果酱×2，售价翻倍。', cost: { wood: 4, stone: 0, scrap: 6, parts: 0, extra: [{ itemId: 'crop_blueberry', count: 3 }] } },
   { id: 'cook_pot', name: '鱼汤 ×2', resultName: '鱼汤', icon: '🍲', category: '食物加工', desc: '鲈鱼×2+水感废料，恢复60饱食。', cost: { wood: 6, stone: 0, scrap: 4, parts: 0, extra: [{ itemId: 'fish_bass', count: 2 }] } },
   { id: 'copper_pickaxe', name: '铜镐', resultName: '铜镐', icon: '⛏️', category: '工具打造', desc: gatheringDescription('pickaxe_copper')!, cost: { wood: 6, stone: 0, scrap: 8, parts: 0, extra: [{ itemId: 'ore_copper', count: 8 }] } },
-  { id: 'ammo_reload', name: '复装弹药 ×30', resultName: '复装弹药', icon: '🎯', category: '弹药制造', desc: '废铁×10+零件×1，通用备弹+30。', cost: { wood: 0, stone: 0, scrap: 10, parts: 1 } },
   { id: 'surgery_craft', name: '野战手术包 ×1', resultName: '野战手术包', icon: '💉', category: '医疗合成', desc: '绷带×2+零件×1，恢复100生命。', cost: { wood: 0, stone: 0, scrap: 14, parts: 1, extra: [{ itemId: 'med_bandage', count: 2 }] } },
   { id: 'star_wine', name: '星果酒 ×1', resultName: '星果酒', icon: '🍷', category: '食物加工', desc: '星果×3陈酿，毕业暴利。', cost: { wood: 10, stone: 0, scrap: 8, parts: 1, extra: [{ itemId: 'crop_starfruit', count: 3 }] } },
   { id: 'gun_upgrade_m4', name: '改装：M4A1（耗AKM+扩容匣）', resultName: 'M4A1', icon: '🔫', category: '武器打造', desc: 'AKM+扩容弹匣→M4A1（110伤），旧枪折价。', cost: { wood: 0, stone: 0, scrap: 15, parts: 2, extra: [{ itemId: 'att_extmag', count: 1 }, { itemId: 'wp_akm', count: 1 }] } },
@@ -157,7 +156,7 @@ const RECIPES: Omit<Recipe, 'resultItemId' | 'resultCount'>[] = [
 ];
 
 
-const RESULTS: Record<string, [string, number]> = {"stone_pickaxe": ["pickaxe_stone", 1], "stone_axe": ["axe_stone", 1], "rod_basic": ["rod_basic", 1], "crude_gun": ["crude_gun", 1], "bandage": ["med_bandage", 2], "dried_fish": ["dried_fish", 2], "ammo_pack": ["ammo", 30], "nano_medkit": ["med_medkit", 1], "cloth_armor": ["armor_cloth", 1], "pack_canvas": ["pack_canvas", 1], "pack_tactical": ["pack_tactical", 1], "armor_plate": ["vest", 1], "grow_parsnip": ["crop_parsnip", 4], "grow_potato": ["crop_potato", 4], "grow_corn": ["crop_corn", 4], "grow_pumpkin": ["crop_pumpkin", 3], "grow_starfruit": ["crop_starfruit", 2], "jam_pot": ["jam_berry", 2], "cook_pot": ["cook_fishsoup", 2], "copper_pickaxe": ["pickaxe_copper", 1], "ammo_reload": ["ammo", 30], "surgery_craft": ["med_surgery", 1], "star_wine": ["wine_starfruit", 1], "gun_upgrade_m4": ["wp_m4a1", 1], "pickle_pot": ["pickle_veg", 2], "cheese_press": ["cheese_goat", 1], "stirfry_pan": ["cook_stirfry", 2], "energy_mix": ["cook_energybar", 2]};
+const RESULTS: Record<string, [string, number]> = {"stone_pickaxe": ["pickaxe_stone", 1], "stone_axe": ["axe_stone", 1], "rod_basic": ["rod_basic", 1], "crude_gun": ["crude_gun", 1], "bandage": ["med_bandage", 2], "dried_fish": ["dried_fish", 2], "ammo_pack": ["ammo", 30], "nano_medkit": ["med_medkit", 1], "cloth_armor": ["armor_cloth", 1], "pack_canvas": ["pack_canvas", 1], "pack_tactical": ["pack_tactical", 1], "armor_plate": ["vest", 1], "grow_parsnip": ["crop_parsnip", 4], "grow_potato": ["crop_potato", 4], "grow_corn": ["crop_corn", 4], "grow_pumpkin": ["crop_pumpkin", 3], "grow_starfruit": ["crop_starfruit", 2], "jam_pot": ["jam_berry", 2], "cook_pot": ["cook_fishsoup", 2], "copper_pickaxe": ["pickaxe_copper", 1], "surgery_craft": ["med_surgery", 1], "star_wine": ["wine_starfruit", 1], "gun_upgrade_m4": ["wp_m4a1", 1], "pickle_pot": ["pickle_veg", 2], "cheese_press": ["cheese_goat", 1], "stirfry_pan": ["cook_stirfry", 2], "energy_mix": ["cook_energybar", 2]};
 
 RESULTS.smelt_copper = ['copper_bar', 1];
 RESULTS.plasma_rifle = ['wp_plasma', 1];
@@ -184,7 +183,13 @@ export function recipeFacility(recipe: Recipe): 'farm_plot' | 'campfire' | 'furn
   return undefined;
 }
 
+export function craftingRecipe(recipeId: unknown): Recipe | undefined {
+  if (typeof recipeId !== 'string') return undefined;
+  // Older clients used this duplicate recipe ID. Resolve it to the same price and result.
+  return CRAFT_RECIPES.find(recipe => recipe.id === (recipeId === 'ammo_reload' ? 'ammo_pack' : recipeId));
+}
+
 export function craftingResult(recipeId: string): Item | undefined {
-  const recipe = CRAFT_RECIPES.find(r => r.id === recipeId);
+  const recipe = craftingRecipe(recipeId);
   return recipe ? makeItem(recipe.resultItemId, recipe.resultCount) : undefined;
 }

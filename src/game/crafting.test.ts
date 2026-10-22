@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { CRAFT_RECIPES, craftingResult, findCraftingWorkbench, recipeRequiresWorkbench } from './crafting';
+import { CRAFT_RECIPES, craftingRecipe, craftingResult, findCraftingWorkbench, recipeRequiresWorkbench } from './crafting';
 import { ITEM_DEFS } from './items';
 import React from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
@@ -19,6 +19,14 @@ describe('shared crafting definitions', () => {
       expect(craftingResult(recipe.id)?.count).toBe(recipe.resultCount);
     }
     expect(craftingResult('forged_free_gun')).toBeUndefined();
+  });
+  it('offers one ammo recipe at the existing lower cost and resolves the legacy ID to that exact definition', () => {
+    const ammo = CRAFT_RECIPES.filter(recipe => recipe.resultItemId === 'ammo');
+    expect(ammo).toHaveLength(1);
+    expect(ammo[0]).toMatchObject({ id: 'ammo_pack', resultCount: 30, cost: { wood: 0, stone: 0, scrap: 10, parts: 1 } });
+    expect(craftingRecipe('ammo_reload')).toBe(ammo[0]);
+    expect(craftingResult('ammo_reload')).toMatchObject({ id: 'ammo', count: 30 });
+    for (const id of ['ammo_free', '__proto__', 'constructor', null, {}, undefined]) expect(craftingRecipe(id)).toBeUndefined();
   });
 });
 
@@ -71,5 +79,10 @@ describe('crafting requirements in the interface', () => {
     const lacking = card(render(true, ['wp_plasma'], 0), 'plasma_rifle');
     expect(lacking).toContain('disabled');
     expect(lacking).toContain('材料不足');
+  });
+  it('shows one ammo choice and makes it affordable with exactly ten scrap and one part', () => {
+    const html = render(true, [], 10);
+    expect(card(html, 'ammo_pack')).not.toContain('disabled');
+    expect(html).not.toContain('复装弹药 ×30');
   });
 });
