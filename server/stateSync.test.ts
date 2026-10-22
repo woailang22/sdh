@@ -19,7 +19,7 @@ async function until(predicate: () => boolean, ms = 5000) {
   throw Error('State synchronization timed out');
 }
 
-it('keeps shared checks and door broadcasts during private fire, and full replies for legacy clients', async () => {
+it.each(['paused', 'survival'])('keeps shared checks and door broadcasts during private fire, and full replies for legacy clients (%s)', async mode => {
   const file = join(mkdtempSync(join(tmpdir(), 'sdc-state-sync-')), 'world.sqlite');
   const db = createDb(file), a = resolveGuest(db), b = resolveGuest(db);
   const rules: WorldRules = { nodeAt: () => undefined, nodesNear: () => [], buildingsNear: () => [], monstersNear: () => [], campSiteAllowed: () => true, migrate: (_map, x, y) => ({ mapId: 'world', x, y }) };
@@ -37,11 +37,13 @@ it('keeps shared checks and door broadcasts during private fire, and full replie
   const port = (probe.address() as AddressInfo).port; await new Promise<void>((resolve, reject) => probe.close(error => error ? reject(error) : resolve()));
   // Isolate the periodic synchronization contract from survival ticks that
   // normally mark state dirty every second. This is not a performance fixture.
-  const source = `import { GameWorld } from ${JSON.stringify(pathToFileURL(resolve('server/worldState.ts')).href)}; GameWorld.prototype.tick=()=>false; await import(${JSON.stringify(pathToFileURL(resolve('server.ts')).href)});`;
-  const child = spawn(process.execPath, ['--import', 'tsx', '--input-type=module', '--eval', source], { cwd: process.cwd(), windowsHide: true, env: { ...process.env, DB_PATH: file, PORT: String(port), NODE_ENV: 'production' }, stdio: ['ignore', 'pipe', 'pipe'] });
+  const source = `import { GameWorld } from ${JSON.stringify(pathToFileURL(resolve('server/worldState.ts')).href)}; const tick=GameWorld.prototype.tick; GameWorld.prototype.tick=function(){const changed=${mode === 'paused' ? 'false' : 'tick.call(this)'};process.send?.({changed,shared:this.sharedTickChanged});return changed;}; await import(${JSON.stringify(pathToFileURL(resolve('server.ts')).href)});`;
+  const child = spawn(process.execPath, ['--import', 'tsx', '--input-type=module', '--eval', source], { cwd: process.cwd(), windowsHide: true, env: { ...process.env, DB_PATH: file, PORT: String(port), NODE_ENV: 'production' }, stdio: ['ignore', 'pipe', 'pipe', 'ipc'] });
   const exited = once(child, 'exit'); let started = false, stderr = '';
-  child.stdout.on('data', chunk => { started ||= String(chunk).includes('[Rift Walker]'); });
-  child.stderr.on('data', chunk => { stderr += String(chunk); });
+  const ticks: { changed: boolean; shared: boolean }[] = [];
+  child.on('message', message => { ticks.push(message as { changed: boolean; shared: boolean }); });
+  child.stdout!.on('data', chunk => { started ||= String(chunk).includes('[Rift Walker]'); });
+  child.stderr!.on('data', chunk => { stderr += String(chunk); });
   const sockets: WebSocket[] = [];
   try {
     await until(() => started);
@@ -70,6 +72,11 @@ it('keeps shared checks and door broadcasts during private fire, and full replie
     expect(replies.every(m => !m.payload.state.error && !Object.hasOwn(m.payload.state, 'buildings'))).toBe(true);
     expect(replies.at(-1).payload.state.player.resources.ammo).toBe(100 - sent);
     expect(modern.messages.some(m => m.type === 'game_state_patch' && m.payload.baseSequence !== null && !m.payload.state.requestId)).toBe(true);
+    if (mode === 'survival') {
+      expect(ticks.some(t => t.changed && !t.shared)).toBe(true); expect(ticks.some(t => t.shared)).toBe(false);
+      expect(replies.at(-1).payload.state.player.satiety).toBeLessThan(100);
+      expect(legacy.messages.some(m => m.type === 'game_state' && !m.payload.requestId && m.payload.player.satiety < 100)).toBe(true);
+    }
     expect(stderr).toBe('');
   } finally {
     for (const ws of sockets) ws.terminate();

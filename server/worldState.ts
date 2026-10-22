@@ -87,6 +87,8 @@ export class GameWorld {
   private active = new Map<string, number>();
   private defenseAt = new Map<string, number>();
   private npcTickAt: number;
+  private tickSharedChange = false;
+  get sharedTickChanged() { return this.tickSharedChange; }
   constructor(private db: DbHandle, private rules: WorldRules, private now: () => number = Date.now) {
     this.npcTickAt = now();
     const saved = db.getMeta(SAVE_KEY);
@@ -766,9 +768,10 @@ export class GameWorld {
   private simulateMonsters(players: Player[], dt: number, time: number) {
     const publicPlayers = players.filter(p => p.mapId === 'world');
     for (const p of publicPlayers) this.ensureMonsters(p);
-    let changed = false, dirty = false;
+    let changed = false, dirty = false, simulated = false;
     for (const monster of Object.values(this.state.monsters)) {
       if (!publicPlayers.some(p => distance(p, monster) <= 40)) continue;
+      simulated = true;
       if (monster.hp <= 0 || monster.state === 'dead') {
         if (!monster.respawnAt || monster.respawnAt > time) continue;
         monster.x = monster.spawnX ?? monster.x; monster.y = monster.spawnY ?? monster.y; monster.hp = monster.maxHp; monster.state = 'roam';
@@ -807,11 +810,13 @@ export class GameWorld {
         break;
       }
     }
-    return { changed, dirty };
+    return { changed, dirty, simulated };
   }
 
   tick() {
+    this.tickSharedChange = false;
     const time = this.now(); let dirty = false;
+    const changedPlayers: { player: Player; before: Player }[] = [];
     const npcDt = Math.min(0.25, Math.max(0, (time - this.npcTickAt) / 1000)); this.npcTickAt = time;
     for (const [id, until] of this.active) if (until <= time) this.active.delete(id);
     for (const [id, drop] of Object.entries(this.state.drops)) if (drop.expiresAt <= time) { delete this.state.drops[id]; dirty = true; }
@@ -820,13 +825,13 @@ export class GameWorld {
     for (const p of activePlayers) {
       const elapsed = Math.min(5, Math.max(0, (time - p.survivalAt) / 1000));
       if (elapsed < 1) continue;
+      changedPlayers.push({ player: p, before: clone(p) });
       const shieldRegenTime = Math.min(elapsed, Math.max(0, (time - Math.max(p.survivalAt, p.lastDamageAt + 5000)) / 1000));
       p.satiety = Math.max(0, p.satiety - elapsed * 0.25); p.survivalAt = time;
-      if (p.satiety <= 0) this.damage(p, elapsed * 2.5);
+      if (p.satiety <= 0) { this.damage(p, elapsed * 2.5); dirty = true; }
       else if (p.satiety > 50 && p.combatUntil < time) p.hp = Math.min(p.maxHp, p.hp + elapsed * 1.2);
       if (p.mapId === 'world' && this.rules.weather?.() === 'acid_rain') p.shield = Math.max(0, p.shield - elapsed * ACID_SHIELD_DRAIN);
       else if (p.satiety > 0 && shieldRegenTime > 0) p.shield = Math.min(p.maxShield, p.shield + shieldRegenTime * 8);
-      dirty = true;
     }
     const maps = new Set(activePlayers.filter(p => p.mapId.startsWith('home_')).map(p => p.mapId));
     for (const mapId of maps) {
@@ -840,8 +845,20 @@ export class GameWorld {
         this.damage(target, defense.type === 'turret' ? 12 : 8); this.defenseAt.set(defense.id, time); dirty = true;
       }
     }
-    if (dirty) this.persist();
-    return dirty || npc.changed;
+    // NPC movement alone keeps its old cadence (shared sync, no extra disk
+    // commit). Survival previously captured its cooldown/animation as well.
+    const fullSave = dirty || npc.simulated && changedPlayers.length > 0;
+    if (fullSave) this.persist();
+    else if (changedPlayers.length) {
+      try {
+        this.db.saveWorldPlayerCommits(changedPlayers.map(({ player }) => ({ id: player.id, data: JSON.stringify({ player, handled: this.state.handled[player.id] || [] }) })));
+      } catch (error) {
+        for (const { player, before } of changedPlayers) Object.assign(player, before);
+        throw error;
+      }
+    }
+    this.tickSharedChange = fullSave || npc.changed;
+    return this.tickSharedChange || changedPlayers.length > 0;
   }
 }
 

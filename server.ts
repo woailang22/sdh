@@ -175,7 +175,11 @@ setInterval(() => {
   for (const client of clients.values()) {
     if (now - client.lastSeen > 60000) { client.ws.terminate(); continue; }
     refreshVisibility(client);
-    if (dirty || now - client.lastSnapshot >= 2000) stateTo(client);
+    if (dirty && game.sharedTickChanged || now - client.lastSnapshot >= 2000) stateTo(client);
+    else if (dirty) {
+      if (client.stateEncoder) playerStateTo(client, game.snapshotPlayer(client.id));
+      else stateTo(client);
+    }
   }
 }, 200);
 setInterval(() => { try { game.persist(); } catch (error) { console.error('[db] periodic save failed', error); } }, 5000);

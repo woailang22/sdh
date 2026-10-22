@@ -401,6 +401,75 @@ describe('authoritative acid rain', () => {
   });
 });
 
+describe('private survival commits', () => {
+  it('saves multiple survival updates without serializing the full camp and restores status with existing shot replay', () => {
+    const { game, db, p, advance } = campSetup(); const other = game.state.players.raider;
+    for (let i = 0; i < 600; i++) game.state.buildings['status_floor_' + i] = { id: 'status_floor_' + i, type: 'wood_floor', name: '地板', x: i % 30, y: Math.floor(i / 30), hp: 200, maxHp: 200, level: 1, ownerId: p.id, mapId: p.mapId };
+    for (const player of [p, other]) Object.assign(player, { hp: 80, shield: 0, satiety: 100, survivalAt: 10000, lastDamageAt: 0, combatUntil: 0 });
+    p.equipment.weapon = makeItem('rifle', 1); p.resources.ammo = 10; game.persist();
+    const shot = { action: 'fire', requestId: 'before-survival' }; expect(game.action('owner', shot).error).toBeUndefined();
+    advance(1000); const stringify = JSON.stringify; let worldCopies = 0;
+    const serialization = vi.spyOn(JSON, 'stringify').mockImplementation((...args: Parameters<typeof JSON.stringify>) => { if (args[0]?.buildings?.status_floor_0) worldCopies++; return stringify(...args); });
+    try { expect(game.tick()).toBe(true); } finally { serialization.mockRestore(); }
+    expect(worldCopies).toBe(0); expect(game.sharedTickChanged).toBe(false);
+    expect(db.listWorldPlayerCommits()).toHaveLength(2);
+    const restored = new GameWorld(db, rules, () => 11000);
+    for (const id of ['owner', 'raider']) { expect(restored.state.players[id].hp).toBeCloseTo(81.2); expect(restored.state.players[id].shield).toBe(8); expect(restored.state.players[id].satiety).toBe(99.75); }
+    expect(restored.action('owner', shot).player.resources.ammo).toBe(9);
+    expect(Object.keys(restored.state.buildings)).toHaveLength(601);
+  });
+  it('restores both players survival clock and status after batch failure and retries the elapsed second once', () => {
+    const { game, db, advance, act } = setup();
+    for (const p of Object.values(game.state.players)) { p.hp = 80; p.shield = 0; p.lastDamageAt = 0; }
+    const owner = game.state.players.owner; owner.equipment.weapon = makeItem('rifle', 1); owner.resources.ammo = 10;
+    expect(act('owner', 'fire').error).toBeUndefined();
+    const before = structuredClone(game.state.players), save = db.saveWorldPlayerCommits;
+    advance(1000); db.saveWorldPlayerCommits = () => { throw Error('disk failure'); };
+    expect(() => game.tick()).toThrow('disk failure'); expect(game.state.players).toEqual(before); expect(game.sharedTickChanged).toBe(false);
+    db.saveWorldPlayerCommits = save; expect(game.tick()).toBe(true);
+    for (const p of Object.values(game.state.players)) { expect(p.hp).toBeCloseTo(81.2); expect(p.satiety).toBe(99.75); expect(p.shield).toBe(8); }
+    expect(owner.resources.ammo).toBe(9); expect(game.state.handled.owner).toHaveLength(1);
+  });
+  it('keeps starvation death, inventory drops and respawn in one complete checkpoint', () => {
+    const { game, db, p, advance } = campSetup();
+    Object.assign(p, { hp: 1, shield: 0, satiety: 0 }); p.inventory[0] = makeItem('food', 2); p.resources.wood = 7; p.resources.ammo = 10;
+    game.persist(); advance(1000); game.tick();
+    expect(game.sharedTickChanged).toBe(true); expect(db.listWorldPlayerCommits()).toEqual([]);
+    expect(p.mapId).toBe('world'); expect(p.hp).toBe(100); expect(p.resources.ammo).toBe(0);
+    const restored = new GameWorld(db, rules, () => 11000);
+    expect(restored.state.players.owner.inventory.every(i => !i)).toBe(true);
+    const items = Object.values(restored.state.drops).flatMap(d => d.items);
+    expect(items.find(i => i.itemId === 'wood')?.count).toBe(7); expect(items.find(i => i.itemId === 'ammo')?.count).toBe(10); expect(items.find(i => i.itemId === 'food')?.count).toBe(2);
+  });
+  it('keeps offline defense ammunition and damage on the shared checkpoint path', () => {
+    const { game, db } = setup(); const p = game.state.players.raider;
+    p.mapId = 'home_owner'; p.x = 1; p.y = 0;
+    const turret = facility(game, 'turret', 0, 0); game.state.ammo[turret.id] = 2;
+    game.disconnect('owner'); game.tick();
+    expect(game.sharedTickChanged).toBe(true); expect(db.listWorldPlayerCommits()).toEqual([]);
+    const restored = new GameWorld(db, rules);
+    expect(restored.state.ammo[turret.id]).toBe(1); expect(restored.state.players.raider.hp).toBe(88);
+  });
+  it('persists expired drops even when no survival interval elapsed', () => {
+    const { game, db, advance } = setup();
+    game.state.drops.expired = { id: 'expired', name: '旧包', x: 0, y: 0, mapId: 'world', items: [], expiresAt: 10001 };
+    game.persist(); advance(2); expect(game.tick()).toBe(true); expect(game.sharedTickChanged).toBe(true);
+    expect(JSON.parse(db.getMeta('authoritative-world-v2')!).drops).toEqual({});
+  });
+  it('retains nearby NPC cooldown/animation in survival checkpoints without writing every roaming tick', () => {
+    let time = 10000; const db = createMemoryDb();
+    const npcRules = { ...rules, monstersNear: () => [{ id: 'still', x: 20, y: 0, speed: 0 }] };
+    const game = new GameWorld(db, npcRules, () => time); game.connect('p', '甲');
+    game.state.monsters.still.attackCooldown = 0.8; game.persist(); time += 1000; game.tick();
+    expect(game.sharedTickChanged).toBe(true); expect(db.listWorldPlayerCommits()).toEqual([]);
+    const saved = JSON.parse(db.getMeta('authoritative-world-v2')!);
+    expect(saved.monsters.still.attackCooldown).toBeCloseTo(0.55); expect(saved.monsters.still.animTime).toBe(0.25);
+    game.state.monsters.still.speed = 1; time += 200;
+    const persist = vi.spyOn(game, 'persist');
+    try { expect(game.tick()).toBe(true); expect(game.sharedTickChanged).toBe(true); expect(persist).not.toHaveBeenCalled(); } finally { persist.mockRestore(); }
+  });
+});
+
 describe('persistent onboarding', () => {
   it('records storage only after a real successful deposit and retains it after withdrawal and destruction', () => {
     const { game, act, db } = campSetup();

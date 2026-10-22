@@ -20,7 +20,7 @@
 - [x] Run focused tests/typecheck, independent review, full suite/build/diff. Preserve post-commit response-failure fix.
 - [x] Run isolated same two-native60s benchmark on fresh5675-building copy, without other QA/build/test/profiling. Extra six protocol actors only after the zero-rejection native gate passes. Record failure honestly if any.
 - [x] Follow up shared door changes, restart/replay and ammunition/world audit in the same final QA world. Archive sanitized evidence and remaining bottlenecks.
-- [ ] Push authorized sdh/main and verify remote state. Keep full game goal active unless all its requirements are achieved.
+- [x] Push authorized sdh/main and verify remote state. Local and remote SHA both54ca079671e9fb446e4269bb05ab740972057514, tree clean at that checkpoint; full game goal remains active.
 
 ## Outcome
 

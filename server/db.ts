@@ -12,6 +12,7 @@ export interface DbHandle {
   setMeta(k: string, v: string): void;
   listWorldPlayerCommits(): { id: string; data: string }[];
   saveWorldPlayerCommit(id: string, data: string): void;
+  saveWorldPlayerCommits(rows: readonly { id: string; data: string }[]): void;
   checkpointWorld(data: string): void;
 }
 
@@ -61,6 +62,9 @@ export function createDb(path: string): DbHandle {
       setMeta(k: string, v: string) { upsertM.run({ k, v }); },
       listWorldPlayerCommits() { return allCommits.all() as { id: string; data: string }[]; },
       saveWorldPlayerCommit(id: string, data: string) { upsertCommit.run(id, data); },
+      saveWorldPlayerCommits(rows: readonly { id: string; data: string }[]) {
+        db.transaction(() => { for (const { id, data } of rows) upsertCommit.run(id, data); })();
+      },
       checkpointWorld(data: string) {
         // Never let an older private commit override a newer shared transaction.
         db.transaction(() => { this.setMeta(WORLD_KEY, data); clearCommits.run(); })();
@@ -90,6 +94,7 @@ export function createMemoryDb(): DbHandle {
     setMeta(k: string, v: string) { meta.set(k, v); },
     listWorldPlayerCommits() { return [...commits].map(([id, data]) => ({ id, data })); },
     saveWorldPlayerCommit(id: string, data: string) { commits.set(id, data); },
+    saveWorldPlayerCommits(rows: readonly { id: string; data: string }[]) { for (const { id, data } of rows) commits.set(id, data); },
     checkpointWorld(data: string) { this.setMeta(WORLD_KEY, data); commits.clear(); },
   };
 }

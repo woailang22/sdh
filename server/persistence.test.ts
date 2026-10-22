@@ -60,7 +60,7 @@ describe('durable world action commits', () => {
       try { const old = JSON.parse((backup.prepare("SELECT v FROM meta WHERE k='authoritative-world-v2'").get() as { v: string }).v); expect(old).toEqual(legacy); } finally { backup.close(); }
     } finally { control.close(); }
   }, 20000);
-  it('recovers private shots and replay guards from WAL after forced death and a backup, then consolidates a shared action', async () => {
+  it('recovers private shots, a survival batch and replay guards from WAL after forced death and a backup, then consolidates a shared action', async () => {
     const file = join(mkdtempSync(join(tmpdir(), 'sdc-private-shot-')), 'world.sqlite');
     const source = String.raw`
       import { createDb } from ${JSON.stringify(pathToFileURL(resolve('server/db.ts')).href)};
@@ -70,12 +70,13 @@ describe('durable world action commits', () => {
       const rules = { nodeAt: id => id === tree.id ? tree : undefined, nodesNear: () => [tree], buildingsNear: () => [], monstersNear: () => [], campSiteAllowed: () => false, migrate: (_map, x, y) => ({mapId: 'world', x, y}) };
       const game = new GameWorld(createDb(${JSON.stringify(file)}), rules, () => now);
       game.connect('p', '甲'); game.connect('q', '乙');
-      for (const [id, ammo] of [['p', 10], ['q', 20]]) { game.state.players[id].equipment.weapon = makeItem('rifle', 1); game.state.players[id].resources.ammo = ammo; }
+      for (const [id, ammo] of [['p', 10], ['q', 20]]) { const p=game.state.players[id]; p.equipment.weapon = makeItem('rifle', 1); p.resources.ammo = ammo; p.hp=80; p.lastDamageAt=0; }
       game.persist();
       for (const [id, requestId] of [['p', 'p1'], ['q', 'q1'], ['p', 'p2']]) {
         now += 200; const response = game.action(id, { action: 'fire', requestId });
         if (response.error) throw Error(response.error);
       }
+      now+=400; if(!game.tick()||game.sharedTickChanged)throw Error('Expected private survival batch');
       process.stdout.write('committed\n'); setInterval(() => {}, 1000);
     `;
     const child = spawn(process.execPath, ['--import', 'tsx', '--input-type=module', '--eval', source], { cwd: process.cwd(), windowsHide: true, stdio: ['ignore', 'pipe', 'pipe'] });
@@ -92,13 +93,14 @@ describe('durable world action commits', () => {
     const raw = new Database(file, { readonly: true });
     try {
       const checkpoint = JSON.parse((raw.prepare("SELECT v FROM meta WHERE k='authoritative-world-v2'").get() as { v: string }).v);
-      expect(checkpoint.version).toBe(3); expect(checkpoint.players.p.resources.ammo).toBe(10);
+      expect(checkpoint.version).toBe(3); expect(checkpoint.players.p.resources.ammo).toBe(10); expect(checkpoint.players.p.satiety).toBe(100);
       expect(raw.prepare('SELECT id FROM world_player_commits').all()).toHaveLength(2);
     } finally { raw.close(); }
     const backup = await backupDatabase(file);
     for (const saved of [file, backup!]) {
       const db = createDb(saved); const game = new GameWorld(db, rules, () => 11000);
       expect(game.state.players.p.resources.ammo).toBe(8); expect(game.state.players.q.resources.ammo).toBe(19);
+      for (const p of Object.values(game.state.players)) { expect(p.hp).toBeCloseTo(81.2); expect(p.shield).toBe(8); expect(p.satiety).toBe(99.75); }
       expect(game.state.handled.p).toEqual(['p1', 'p2']); expect(game.state.handled.q).toEqual(['q1']);
       expect(db.listWorldPlayerCommits()).toEqual([]);
       expect(game.action('p', { action: 'fire', requestId: 'p2' }).player.resources.ammo).toBe(8);

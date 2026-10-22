@@ -7,6 +7,24 @@ import { join } from 'node:path';
 import Database from 'better-sqlite3';
 
 describe('sqlite persistence', () => {
+  it.each(['sqlite', 'memory'])('atomically stores a latest-player batch then consolidates it (%s)', mode => {
+    const db = mode === 'sqlite' ? createDb(':memory:') : createMemoryDb();
+    db.checkpointWorld('before'); db.saveWorldPlayerCommit('a', 'old-a');
+    db.saveWorldPlayerCommits([{ id: 'a', data: 'new-a' }, { id: 'b', data: 'new-b' }]);
+    expect(db.listWorldPlayerCommits().sort((a, b) => a.id.localeCompare(b.id))).toEqual([{ id: 'a', data: 'new-a' }, { id: 'b', data: 'new-b' }]);
+    expect(db.getMeta('authoritative-world-v2')).toBe('before');
+    db.checkpointWorld('after'); expect(db.getMeta('authoritative-world-v2')).toBe('after'); expect(db.listWorldPlayerCommits()).toEqual([]);
+  });
+  it('rolls back every row in a survival batch when the second update is rejected', () => {
+    const file = join(mkdtempSync(join(tmpdir(), 'sdc-status-batch-')), 'world.sqlite');
+    const db = createDb(file); db.saveWorldPlayerCommit('a', 'old-a'); db.saveWorldPlayerCommit('b', 'old-b');
+    const control = new Database(file);
+    try {
+      control.exec("CREATE TRIGGER reject_second BEFORE UPDATE ON world_player_commits WHEN NEW.id='b' BEGIN SELECT RAISE(ABORT, 'disk failure'); END");
+      expect(() => db.saveWorldPlayerCommits([{ id: 'a', data: 'new-a' }, { id: 'b', data: 'new-b' }])).toThrow('disk failure');
+      expect(db.listWorldPlayerCommits().sort((a, b) => a.id.localeCompare(b.id))).toEqual([{ id: 'a', data: 'old-a' }, { id: 'b', data: 'old-b' }]);
+    } finally { control.close(); }
+  });
   it.each(['sqlite', 'memory'])('keeps latest player commits until an atomic checkpoint succeeds (%s)', mode => {
     const db = mode === 'sqlite' ? createDb(':memory:') : createMemoryDb();
     const key = 'authoritative-world-v2'; db.checkpointWorld('before');
