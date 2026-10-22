@@ -1,7 +1,7 @@
 import { randomUUID } from 'node:crypto';
 import type { BuildingEntity, BuildableType, Equipment, InteractableEntity, Item, MapZoneId, MonsterEntity, OnlinePlayer, WeatherType } from '../src/types/game';
 import { ARMOR_BONUS_TABLE, ITEM_DEFS, makeItem, WEAPON_DAMAGE } from '../src/game/items';
-import { CRAFT_RECIPES, recipeFacility } from '../src/game/crafting';
+import { CRAFT_RECIPES, findCraftingWorkbench, recipeFacility, recipeRequiresWorkbench } from '../src/game/crafting';
 import { ARMOR_REDUCTION, killReward, MELEE, WEAPONS } from '../src/game/combat';
 import { BUILD_RECIPES } from '../src/game/buildingRecipes';
 import { ACID_SHIELD_DRAIN } from '../src/game/weather';
@@ -605,9 +605,8 @@ export class GameWorld {
       requireRule(!recipeFacility(recipe), '该配方需要对应营地设施的生产任务');
       requireRule(recipe.resultItemId !== 'wp_plasma' || p.blueprints.includes('wp_plasma'), '尚未研究等离子步枪蓝图');
       // Basic hand tools and first aid bootstrap without a private workstation. Advanced crafts require a reachable one.
-      if (!['stone_pickaxe', 'stone_axe', 'rod_basic', 'bandage', 'dried_fish', 'cloth_armor'].includes(recipe.id)) {
-        const station = this.buildingsFor(p).find(b => b.type === 'workbench' && b.hp > 0 && distance(p, b) <= 3 && (p.mapId === 'world' || this.canUse(p.id, b)))
-          || (p.mapId === 'world' ? this.rules.nodesNear(p.x, p.y).find(node => node.type === 'workbench' && distance(p, node) <= 3) : undefined);
+      if (recipeRequiresWorkbench(recipe)) {
+        const station = findCraftingWorkbench(p, this.buildingsFor(p), () => this.rules.nodesNear(p.x, p.y), b => this.canUse(p.id, b));
         requireRule(station, '请靠近工作台'); this.near(p, station);
       }
       this.cooldown(p, 'craft', 800); this.payRecipe(p, recipe);

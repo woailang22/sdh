@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { X, Wrench, Hammer, ShieldCheck } from 'lucide-react';
 import { soundManager } from '../audio/soundManager';
 import { getItemDef } from '../game/items';
-import { recipeFacility } from '../game/crafting';
+import { recipeFacility, recipeRequiresWorkbench } from '../game/crafting';
 
 import { CRAFT_RECIPES as RECIPES, type Recipe, type CraftCost, type CraftOrder } from '../game/crafting';
 export type { CraftCost, CraftOrder } from '../game/crafting';
@@ -16,6 +16,8 @@ interface WorkbenchModalProps {
   playerParts: number;
   onCraftSuccess: (order: CraftOrder) => void;
   hasExtra?: (itemId: string, count: number) => boolean;
+  hasWorkbench?: boolean;
+  blueprints?: readonly string[];
 }
 
 
@@ -41,6 +43,8 @@ export const WorkbenchModal: React.FC<WorkbenchModalProps> = ({
   playerParts,
   onCraftSuccess,
   hasExtra,
+  hasWorkbench = false,
+  blueprints = [],
 }) => {
   const [craftingId, setCraftingId] = useState<string | null>(null);
 
@@ -54,8 +58,15 @@ export const WorkbenchModal: React.FC<WorkbenchModalProps> = ({
     playerParts >= cost.parts &&
     (cost.extra ?? []).every((e) => hasExtra(e.itemId, e.count));
 
+  const requirement = (recipe: Recipe) => {
+    if (recipe.resultItemId === 'wp_plasma' && !blueprints.includes('wp_plasma')) return '需研究蓝图';
+    if (recipeRequiresWorkbench(recipe) && !hasWorkbench) return '需靠近工作台';
+    if (!canAfford(recipe.cost, hasExtraFn)) return '材料不足';
+    return '';
+  };
+
   const handleStartCraft = (recipe: Recipe) => {
-    if (!canAfford(recipe.cost, hasExtraFn) || craftingId) return;
+    if (requirement(recipe) || craftingId) return;
 
     setCraftingId(recipe.id);
     soundManager.playCraft();
@@ -107,22 +118,23 @@ export const WorkbenchModal: React.FC<WorkbenchModalProps> = ({
         {/* Recipe List */}
         <div className="flex-1 overflow-y-auto p-6 space-y-3">
           {RECIPES.filter(r => !recipeFacility(r)).map((r) => {
-            const affordable = canAfford(r.cost, hasExtraFn);
+            const missing = requirement(r);
+            const available = !missing;
             const isCrafting = craftingId === r.id;
 
             return (
               <div
                 key={r.id}
-                className="flex items-center justify-between p-4 rounded-xl bg-slate-950/60 border border-slate-800 hover:border-cyan-500/40 transition-all"
+                className="flex flex-col items-stretch gap-3 sm:flex-row sm:items-center sm:justify-between p-4 rounded-xl bg-slate-950/60 border border-slate-800 hover:border-cyan-500/40 transition-all"
               >
                 <div className="flex items-center gap-3 min-w-0">
                   <div className="w-12 h-12 rounded-xl bg-slate-900 border border-cyan-500/30 flex items-center justify-center text-2xl shrink-0">
                     {r.icon}
                   </div>
                   <div className="min-w-0">
-                    <div className="flex items-center gap-2">
-                      <span className="font-bold text-sm text-slate-100 truncate">{r.name}</span>
-                      <span className="text-[10px] px-1.5 py-0.5 rounded bg-slate-800 text-cyan-300 font-mono">
+                    <div className="flex flex-wrap sm:flex-nowrap items-center gap-2">
+                      <span className="min-w-0 font-bold text-sm text-slate-100 break-words sm:truncate">{r.name}</span>
+                      <span className="shrink-0 whitespace-nowrap text-[10px] px-1.5 py-0.5 rounded bg-slate-800 text-cyan-300 font-mono">
                         {r.category}
                       </span>
                     </div>
@@ -133,20 +145,20 @@ export const WorkbenchModal: React.FC<WorkbenchModalProps> = ({
                   </div>
                 </div>
 
-                <div className="shrink-0 ml-4">
+                <div className="shrink-0 sm:ml-4">
                   <button
                     onClick={() => handleStartCraft(r)}
-                    disabled={!affordable || isCrafting || craftingId !== null}
-                    className={`px-4 py-2 rounded-lg font-bold text-xs font-mono transition-all flex items-center gap-2 ${
+                    disabled={!available || isCrafting || craftingId !== null}
+                    className={`w-full justify-center sm:w-auto px-4 py-2 rounded-lg font-bold text-xs font-mono transition-all flex items-center gap-2 ${
                       isCrafting
                         ? 'bg-amber-600 text-white animate-pulse'
-                        : affordable && craftingId === null
+                        : available && craftingId === null
                         ? 'bg-cyan-600 hover:bg-cyan-500 text-white shadow-[0_0_12px_rgba(6,182,212,0.4)]'
                         : 'bg-slate-800 text-slate-500 cursor-not-allowed'
                     }`}
                   >
                     <Hammer className="w-3.5 h-3.5" />
-                    <span>{isCrafting ? '打造中...' : '开始制造'}</span>
+                    <span>{isCrafting ? '打造中...' : missing || '开始制造'}</span>
                   </button>
                 </div>
               </div>

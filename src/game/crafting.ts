@@ -1,5 +1,5 @@
 import { makeItem } from './items';
-import type { Item } from '../types/game';
+import type { BuildingEntity, InteractableEntity, Item } from '../types/game';
 import { gatheringDescription, inventoryCapacity } from './equipmentRules';
 
 export interface CraftCost {
@@ -163,6 +163,19 @@ RESULTS.smelt_copper = ['copper_bar', 1];
 RESULTS.plasma_rifle = ['wp_plasma', 1];
 
 export const CRAFT_RECIPES: Recipe[] = RECIPES.map(recipe => ({ ...recipe, resultItemId: RESULTS[recipe.id][0], resultCount: RESULTS[recipe.id][1] }));
+
+export function recipeRequiresWorkbench(recipe: Pick<Recipe, 'id'>): boolean {
+  return !['stone_pickaxe', 'stone_axe', 'rod_basic', 'bandage', 'dried_fish', 'cloth_armor'].includes(recipe.id);
+}
+
+export function findCraftingWorkbench(
+  player: { x: number; y: number; mapId: string }, buildings: readonly BuildingEntity[],
+  publicNodes: () => readonly InteractableEntity[], canUse: (building: BuildingEntity) => boolean,
+): BuildingEntity | InteractableEntity | undefined {
+  const nearby = (point: { x: number; y: number }) => Math.hypot(point.x - player.x, point.y - player.y) <= 3;
+  return buildings.find(building => building.type === 'workbench' && building.hp > 0 && building.mapId === player.mapId && nearby(building) && (player.mapId === 'world' || canUse(building)))
+    || (player.mapId === 'world' ? publicNodes().find(node => node.type === 'workbench' && nearby(node)) : undefined);
+}
 
 export function recipeFacility(recipe: Recipe): 'farm_plot' | 'campfire' | 'furnace' | undefined {
   if (recipe.id.startsWith('grow_')) return 'farm_plot';

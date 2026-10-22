@@ -39,6 +39,8 @@ import { weatherInfo } from './game/weather';
 import { CampPanel } from './components/CampPanel';
 import type { GameStateSnapshot } from '../server/worldState';
 import { CraftOrder } from './components/WorkbenchModal';
+import { findCraftingWorkbench } from './game/crafting';
+import { hasLineOfSight } from './game/navigation';
 import { RaidModal } from './components/RaidModal';
 import { OnlinePlayersModal } from './components/OnlinePlayersModal';
 import { TacticalDpad } from './components/TacticalDpad';
@@ -1224,6 +1226,14 @@ export default function App() {
     }
   }, [movedFar, totalWood, totalStone, totalScrap, pickaxeCrafted, claimedPlot, workbenchBuilt, storageUsed, safeDoorBuilt, turretBuilt, turretLoaded, ateFood]);
 
+  const craftPlayer = activeModal === 'workbench' ? gameState?.player : undefined;
+  const craftCamp = gameState?.camps.find(camp => camp.id === craftPlayer?.mapId);
+  const craftWorkbench = craftPlayer && gameState ? findCraftingWorkbench(craftPlayer, gameState.buildings,
+    () => engineRef.current?.currentMapId === craftPlayer.mapId ? engineRef.current.interactables : [],
+    building => building.ownerId === craftPlayer.id || craftCamp?.ownerId === building.ownerId && !!craftCamp?.members?.includes(craftPlayer.id),
+  ) : undefined;
+  const hasCraftWorkbench = !!craftPlayer && !!gameState && !!craftWorkbench && hasLineOfSight(craftPlayer, craftWorkbench, gameState.buildings, craftWorkbench.id);
+
   return (
     <div className="relative w-screen h-screen overflow-hidden bg-slate-950 font-sans select-none">
       {/* 2.5D Isometric Canvas Engine */}
@@ -1481,6 +1491,8 @@ export default function App() {
         playerScrap={playerScrap}
         playerParts={playerParts}
         onCraftSuccess={handleCraftSuccess}
+        hasWorkbench={hasCraftWorkbench}
+        blueprints={gameState?.player.blueprints}
         hasExtra={(itemId, count) => {
           let have = 0;
           for (const s of hotbarSlotsRef.current) if (s && s.id === itemId) have += s.count;
