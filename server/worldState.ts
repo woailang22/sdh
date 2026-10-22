@@ -12,8 +12,8 @@ import type { DbHandle } from './db';
 
 export type ResourceKey = 'wood' | 'stone' | 'scrap' | 'parts' | 'food' | 'ammo' | 'c4' | 'medical' | 'credits' | 'shard';
 export type Resources = Record<ResourceKey, number>;
-export interface OnboardingProgress { wood: number; stone: number; explored: boolean; toolEquipped: boolean; ateFood: boolean; workbenchBuilt: boolean; turretBuilt: boolean }
-const emptyOnboarding = (): OnboardingProgress => ({ wood: 0, stone: 0, explored: false, toolEquipped: false, ateFood: false, workbenchBuilt: false, turretBuilt: false });
+export interface OnboardingProgress { wood: number; stone: number; explored: boolean; toolEquipped: boolean; ateFood: boolean; workbenchBuilt: boolean; turretBuilt: boolean; storageUsed: boolean; turretLoaded: boolean }
+const emptyOnboarding = (): OnboardingProgress => ({ wood: 0, stone: 0, explored: false, toolEquipped: false, ateFood: false, workbenchBuilt: false, turretBuilt: false, storageUsed: false, turretLoaded: false });
 export interface CampSummary { id: string; ownerId: string; ownerName: string; x: number; y: number; mapId: MapZoneId; members?: string[]; level?: number; size?: number; state?: 'active' | 'breached' }
 interface Player extends OnlinePlayer {
   inventory: (Item | null)[]; equipment: Equipment; resources: Resources; campId: string | null;
@@ -154,6 +154,8 @@ export class GameWorld {
       if (owner && b.mapId === owner.campId) {
         owner.onboarding.workbenchBuilt ||= b.type === 'workbench';
         owner.onboarding.turretBuilt ||= b.type === 'turret';
+        owner.onboarding.storageUsed ||= b.type === 'storage_box' && Object.values(this.state.storage[b.id] || {}).some(count => count > 0);
+        owner.onboarding.turretLoaded ||= b.type === 'turret' && (this.state.ammo[b.id] || 0) >= 10;
       }
     }
     this.persist();
@@ -548,6 +550,8 @@ export class GameWorld {
         if (a.action === 'deposit') {
           requireRule(b.hp > 0 && this.count(p, a.itemId) >= a.count, '物资不足或仓库已损坏');
           this.remove(p, a.itemId, a.count); storage[a.itemId] = (storage[a.itemId] || 0) + a.count;
+          const owner = this.state.players[b.ownerId || ''];
+          if (owner && b.mapId === owner.campId) owner.onboarding.storageUsed = true;
         } else {
           requireRule((storage[a.itemId] || 0) >= a.count, '仓库物资不足');
           this.add(p, a.itemId, a.count); storage[a.itemId] -= a.count;
@@ -558,7 +562,10 @@ export class GameWorld {
       if (a.action === 'load_turret') {
         requireRule(this.canUse(p.id, b) && b.type === 'turret' && b.hp > 0 && positiveCount(a.count), '无权装填');
         requireRule(p.resources.ammo >= a.count && (this.state.ammo[b.id] || 0) + a.count <= 500, '弹药不足或超出容量');
-        p.resources.ammo -= a.count; this.state.ammo[b.id] = (this.state.ammo[b.id] || 0) + a.count; return;
+        p.resources.ammo -= a.count; this.state.ammo[b.id] = (this.state.ammo[b.id] || 0) + a.count;
+        const owner = this.state.players[b.ownerId || ''];
+        if (owner && b.mapId === owner.campId && this.state.ammo[b.id] >= 10) owner.onboarding.turretLoaded = true;
+        return;
       }
       if (a.action === 'repair') {
         requireRule(this.canUse(p.id, b) && b.hp < b.maxHp, '无法修复'); this.cooldown(p, 'repair', 800);

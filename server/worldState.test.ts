@@ -188,6 +188,86 @@ describe('authoritative acid rain', () => {
 });
 
 describe('persistent onboarding', () => {
+  it('records storage only after a real successful deposit and retains it after withdrawal and destruction', () => {
+    const { game, act, db } = campSetup();
+    expect(act('owner', 'build', { buildType: 'workbench', x: 3, y: 0 }).error).toBeUndefined();
+    expect(act('owner', 'build', { buildType: 'storage_box', x: 3, y: 1 }).error).toBeUndefined();
+    const storage = Object.values(game.state.buildings).find(b => b.type === 'storage_box')!;
+    expect(game.snapshot('owner').player.onboarding.storageUsed).toBe(false);
+    expect(act('owner', 'deposit', { targetId: storage.id, itemId: 'wood', count: 0 }).error).toBeTruthy();
+    expect(game.snapshot('owner').player.onboarding.storageUsed).toBe(false);
+    const wood = game.state.players.owner.resources.wood;
+    expect(act('owner', 'deposit', { targetId: storage.id, itemId: 'wood', count: 1 }).error).toBeUndefined();
+    expect(game.state.players.owner.resources.wood).toBe(wood - 1);
+    expect(game.state.storage[storage.id].wood).toBe(1);
+    expect(game.snapshot('owner').player.onboarding.storageUsed).toBe(true);
+    expect(act('owner', 'withdraw', { targetId: storage.id, itemId: 'wood', count: 1 }).error).toBeUndefined();
+    game.state.buildings[storage.id].hp = 0; game.persist();
+    expect(new GameWorld(db, rules).snapshot('owner').player.onboarding.storageUsed).toBe(true);
+  });
+
+  it('records defense preparation after loading ten real rounds, not construction or a rejected load', () => {
+    const { game, act, db, p } = campSetup();
+    expect(act('owner', 'build', { buildType: 'turret', x: 3, y: 0 }).error).toBeUndefined();
+    const tower = Object.values(game.state.buildings).find(b => b.type === 'turret')!;
+    expect(game.snapshot('owner').player.onboarding.turretLoaded).toBe(false);
+    expect(act('owner', 'load_turret', { targetId: tower.id, count: 10 }).error).toBeTruthy();
+    expect(game.snapshot('owner').player.onboarding.turretLoaded).toBe(false);
+    p.resources.ammo = 10;
+    expect(act('owner', 'load_turret', { targetId: tower.id, count: 9 }).error).toBeUndefined();
+    expect(game.snapshot('owner').player.onboarding.turretLoaded).toBe(false);
+    expect(act('owner', 'load_turret', { targetId: tower.id, count: 1 }).error).toBeUndefined();
+    expect(p.resources.ammo).toBe(0); expect(game.state.ammo[tower.id]).toBe(10);
+    expect(game.snapshot('owner').player.onboarding.turretLoaded).toBe(true);
+    game.state.ammo[tower.id] = 0; game.state.buildings[tower.id].hp = 0; game.persist();
+    expect(new GameWorld(db, rules).snapshot('owner').player.onboarding.turretLoaded).toBe(true);
+  });
+
+  it('credits actual authorized camp supplies to the camp owner while rejecting an unauthorized visitor', () => {
+    const { game, act, p } = campSetup();
+    act('owner', 'build', { buildType: 'storage_box', x: 3, y: 0 });
+    act('owner', 'build', { buildType: 'turret', x: 3, y: 1 });
+    const storage = Object.values(game.state.buildings).find(b => b.type === 'storage_box')!;
+    const tower = Object.values(game.state.buildings).find(b => b.type === 'turret')!;
+    const visitor = game.state.players.raider; Object.assign(visitor, { mapId: p.mapId, x: p.x, y: p.y });
+    visitor.resources.wood = 1; visitor.resources.ammo = 10;
+    expect(act('raider', 'deposit', { targetId: storage.id, itemId: 'wood', count: 1 }).error).toBeTruthy();
+    expect(act('raider', 'load_turret', { targetId: tower.id, count: 10 }).error).toBeTruthy();
+    expect(game.snapshot('owner').player.onboarding).toMatchObject({ storageUsed: false, turretLoaded: false });
+    expect(act('owner', 'authorize_member', { playerId: 'raider' }).error).toBeUndefined();
+    expect(act('raider', 'deposit', { targetId: storage.id, itemId: 'wood', count: 1 }).error).toBeUndefined();
+    expect(act('raider', 'load_turret', { targetId: tower.id, count: 10 }).error).toBeUndefined();
+    expect(visitor.resources.wood).toBe(0); expect(visitor.resources.ammo).toBe(0);
+    expect(game.snapshot('owner').player.onboarding).toMatchObject({ storageUsed: true, turretLoaded: true });
+    expect(game.snapshot('raider').player.onboarding).toMatchObject({ storageUsed: false, turretLoaded: false });
+  });
+
+  it.each([0, 9, 10])('migrates only proven stored supplies and loaded ammunition (%i rounds)', ammo => {
+    const { game, db, p } = campSetup();
+    const storage = facility(game, 'storage_box'), tower = facility(game, 'turret');
+    game.state.storage[storage.id] = { wood: ammo === 0 ? 0 : 1 }; game.state.ammo[tower.id] = ammo;
+    delete (p.onboarding as any).storageUsed; delete (p.onboarding as any).turretLoaded; game.persist();
+    const progress = new GameWorld(db, rules).snapshot('owner').player.onboarding;
+    expect(progress.storageUsed).toBe(ammo > 0); expect(progress.turretLoaded).toBe(ammo >= 10);
+  });
+
+  it.each(['deposit', 'load_turret'] as const)('rolls back the owner milestone and member supplies if saving %s fails', action => {
+    const { game, act, db, p } = campSetup();
+    act('owner', 'build', { buildType: 'storage_box', x: 3, y: 0 });
+    act('owner', 'build', { buildType: 'turret', x: 3, y: 1 });
+    act('owner', 'authorize_member', { playerId: 'raider' });
+    const visitor = game.state.players.raider; Object.assign(visitor, { mapId: p.mapId, x: p.x, y: p.y });
+    visitor.resources.wood = 1; visitor.resources.ammo = 10; game.persist();
+    const building = Object.values(game.state.buildings).find(b => b.type === (action === 'deposit' ? 'storage_box' : 'turret'))!;
+    const save = db.setMeta; db.setMeta = () => { throw new Error('disk failure'); };
+    expect(act('raider', action, { targetId: building.id, itemId: 'wood', count: action === 'deposit' ? 1 : 10 }).error).toBe('disk failure');
+    db.setMeta = save;
+    expect(visitor.resources).toMatchObject({ wood: 1, ammo: 10 });
+    expect(game.state.storage[building.id]?.wood || 0).toBe(0); expect(game.state.ammo[building.id] || 0).toBe(0);
+    expect(game.snapshot('owner').player.onboarding).toMatchObject({ storageUsed: false, turretLoaded: false });
+    expect(new GameWorld(db, rules).snapshot('owner').player.onboarding).toMatchObject({ storageUsed: false, turretLoaded: false });
+  });
+
   it('retains collected materials after spending them on a camp and restarting, without counting replays', () => {
     const supplies = { ...box, lootTable: [{ itemId: 'wood', name: '木材', count: 20 }, { itemId: 'stone', name: '石料', count: 10 }] };
     const db = createMemoryDb(); const game = new GameWorld(db, { ...rules, nodeAt: () => supplies });

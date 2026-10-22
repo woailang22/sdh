@@ -227,9 +227,11 @@ export default function App() {
   const [ateFood, setAteFood] = useState(false);
   const [movedFar, setMovedFar] = useState(false);
   const [workbenchBuilt, setWorkbenchBuilt] = useState(false);
+  const [storageUsed, setStorageUsed] = useState(false);
   const [pickaxeCrafted, setPickaxeCrafted] = useState(false);
   const [safeDoorBuilt, setSafeDoorBuilt] = useState(false);
   const [turretBuilt, setTurretBuilt] = useState(false);
+  const [turretLoaded, setTurretLoaded] = useState(false);
   const [rifleOwned, setRifleOwned] = useState(false);
   const [raidHit, setRaidHit] = useState(false);
   const [eliteKilled, setEliteKilled] = useState(false);
@@ -538,8 +540,10 @@ export default function App() {
     setPickaxeCrafted(p.onboarding.toolEquipped);
     const owned = state.buildings.filter(b => b.ownerId === p.id);
     setWorkbenchBuilt(p.onboarding.workbenchBuilt);
+    setStorageUsed(!!p.onboarding.storageUsed);
     setSafeDoorBuilt(v => v || owned.some(b => b.type === 'safe_door'));
     setTurretBuilt(p.onboarding.turretBuilt);
+    setTurretLoaded(!!p.onboarding.turretLoaded);
     setRaidDoor(v => v ? state.buildings.find(b => b.id === v.id) ?? null : null);
     setManagedBuilding(v => v ? state.buildings.find(b => b.id === v.id) ?? null : null);
     if (state.loot) setLootPanel(state.loot.items.length ? { ...state.loot, items: state.loot.items.map(it => ({ ...it, taken: false })) } : null);
@@ -1208,8 +1212,8 @@ export default function App() {
     { id: 'stone', title: '收集石料', desc: '捡取碎石或开采石堆，制作镐来提升效率。满包不会扣除未收到的物资。', progressText: `${Math.min(totalStone, 10)}/10`, done: totalStone >= 10 },
     { id: 'pickaxe', title: '制作并装备开山镐', desc: '从制造面板制作开山镐（8木、6石），在背包中装备。完成后更换工具不影响进度。', progressText: pickaxeCrafted ? '1/1' : '0/1', done: pickaxeCrafted },
     { id: 'claim', title: '在野外建立营地', desc: '收集20木、10石，在道路和地标外选址，打开营地面板插旗；开局没有私人领地。', progressText: claimedPlot ? '1/1' : '0/1', done: claimedPlot },
-    { id: 'workbench', title: '建设与储存', desc: '走到野外入口进入独立营地，建造仓库和工作台。营地始终可被攻击。', progressText: workbenchBuilt ? '1/1' : '0/1', done: workbenchBuilt },
-    { id: 'turret', title: '准备离线防御', desc: '布置墙门、地刺和炮塔，靠近炮塔按 E 装填弹药；主人离线后仍会防守。', progressText: turretBuilt ? '1/1' : '0/1', done: turretBuilt },
+    { id: 'workbench', title: '建设与储存', desc: '在自己的营地建造工作台和仓库，并实际存入物资。零件可去维修工棚或拆车获取；取出物资不影响已完成的引导。', progressText: !workbenchBuilt ? '未建工作台' : storageUsed ? '1/1' : '待存入物资', done: workbenchBuilt && storageUsed },
+    { id: 'turret', title: '准备离线防御', desc: '架设炮塔并靠近按 E 装入至少10发弹药，可在工作台制造弹药。墙门与地刺辅助阻挡；弹药会消耗，需要继续补充。', progressText: !turretBuilt ? '未建炮塔' : turretLoaded ? '1/1' : '待装10发弹药', done: turretBuilt && turretLoaded },
     { id: 'survive', title: '补给与谨慎撤离', desc: '在营地种植、烹饪和研究，探索更远区域。死亡会掉落携带物资，进出营地不会回血。', progressText: ateFood ? '已补给' : '待补给', done: ateFood },
   ];
 
@@ -1218,7 +1222,7 @@ export default function App() {
       grantedQuestsRef.current.add(step.id);
       pushSystemMsg(`引路完成：${step.title}`);
     }
-  }, [movedFar, totalWood, totalStone, totalScrap, pickaxeCrafted, claimedPlot, workbenchBuilt, safeDoorBuilt, turretBuilt, ateFood]);
+  }, [movedFar, totalWood, totalStone, totalScrap, pickaxeCrafted, claimedPlot, workbenchBuilt, storageUsed, safeDoorBuilt, turretBuilt, turretLoaded, ateFood]);
 
   return (
     <div className="relative w-screen h-screen overflow-hidden bg-slate-950 font-sans select-none">
