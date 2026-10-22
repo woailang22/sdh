@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { createMemoryDb } from './db';
 import { GameWorld, type WorldRules, type PersistedWorld } from './worldState';
 import { makeItem } from '../src/game/items';
-import type { MonsterEntity } from '../src/types/game';
+import type { MonsterEntity, WeatherType } from '../src/types/game';
 
 const tree = { id: 'tree_1', name: '树', type: 'tree' as const, x: 1, y: 0, radius: 1, prompt: '', available: true, stock: 2, maxStock: 2, respawnSec: 60 };
 const box = { ...tree, id: 'box_1', type: 'box' as const, lootTable: [{ itemId: 'wp_p1911', name: '手枪', count: 1 }] };
@@ -13,6 +13,96 @@ const rules: WorldRules = {
   migrate: (_mapId, x, y) => ({ mapId: 'world' as const, x: x + 100, y }),
   monstersNear: () => [],
 };
+describe('cached public building definitions', () => {
+  it('rolls back a failed door save without mutating the cached definition', () => {
+    const door = { id: 'public_door', type: 'door' as const, name: '门', x: 1, y: 0, hp: 100, maxHp: 100, level: 1, mapId: 'world' as const, isOpen: false, isLocked: false };
+    const db = createMemoryDb();
+    const game = new GameWorld(db, { ...rules, buildingsNear: () => [door] }, () => 10000);
+    game.connect('p', '行者');
+    const save = db.setMeta;
+    db.setMeta = () => { throw new Error('disk failure'); };
+    expect(game.action('p', { requestId: 'failed-door', action: 'toggle_door', targetId: door.id }).error).toBe('disk failure');
+    expect(door.isOpen).toBe(false);
+    expect(game.snapshot('p').buildings.find(b => b.id === door.id)?.isOpen).toBe(false);
+    db.setMeta = save;
+    expect(game.action('p', { requestId: 'open-door', action: 'toggle_door', targetId: door.id }).error).toBeUndefined();
+    expect(door.isOpen).toBe(false);
+    expect(game.snapshot('p').buildings.find(b => b.id === door.id)?.isOpen).toBe(true);
+    const restored = new GameWorld(db, { ...rules, buildingsNear: () => [door] }, () => 10000);
+    expect(restored.snapshot('p').buildings.find(b => b.id === door.id)?.isOpen).toBe(true);
+  });
+});
+describe('exploration rewards and the market catalogue', () => {
+  it('rejects buying unlisted progression rewards without spending credits or granting inventory', () => {
+    const { game, act } = setup(); const p = game.state.players.owner; p.resources.credits = 100000;
+    for (const itemId of ['blueprint', 'dark_core', 'wp_plasma', 'copper_bar', 'rifle', '__proto__']) {
+      const before = structuredClone(p);
+      expect(act('owner', 'buy', { itemId, quantity: 1, price: 0 }).error).toContain('未上架');
+      expect(p.inventory).toEqual(before.inventory); expect(p.resources).toEqual(before.resources);
+      expect(p.blueprints).toEqual([]);
+    }
+  });
+  it('settles listed bundles at canonical prices and quantities despite forged client fields', () => {
+    const { game, act } = setup(); const p = game.state.players.owner; p.resources.credits = 100000;
+    expect(act('owner', 'buy', { itemId: 'ammo_box', quantity: 2, units: 999, price: 0 }).error).toBeUndefined();
+    expect(p.resources.ammo).toBe(120); expect(p.resources.credits).toBe(98800);
+    expect(act('owner', 'buy', { itemId: 'scrap', quantity: 1, count: 999 }).error).toBeUndefined();
+    expect(p.resources.scrap).toBe(10); expect(p.resources.credits).toBe(98650);
+    expect(act('owner', 'buy', { itemId: 'ore_copper', quantity: 1 }).error).toBeUndefined();
+    expect(p.inventory.find(i => i?.id === 'ore_copper')?.count).toBe(1); expect(p.resources.credits).toBe(98620);
+    expect(act('owner', 'buy', { itemId: 'food_ration', quantity: 1 }).error).toBeUndefined();
+    expect(p.inventory.find(i => i?.id === 'food')?.count).toBe(10); expect(p.resources.credits).toBe(98500);
+  });
+  it('preserves actual rare loot and allows its sale without turning it into a purchasable offer', () => {
+    const { game, act, db } = setup(); const p = game.state.players.owner;
+    p.inventory[0] = makeItem('dark_core', 2); p.inventory[1] = makeItem('blueprint', 1); p.resources.credits = 2000; game.persist();
+    expect(act('owner', 'sell', { itemId: 'dark_core', quantity: 1, price: 99999 }).error).toBeUndefined();
+    expect(p.resources.credits).toBe(2500); expect(p.inventory[0]?.count).toBe(1);
+    expect(act('owner', 'buy', { itemId: 'dark_core', quantity: 1 }).error).toContain('未上架');
+    const restored = new GameWorld(db, rules).snapshot('owner').player;
+    expect(restored.inventory.filter(Boolean).map(i => [i!.id, i!.count])).toEqual([['dark_core', 1], ['blueprint', 1]]);
+    expect(restored.resources.credits).toBe(2500);
+  });
+});
+describe('firing receipt times', () => {
+  it('does not charge validation work against the next legal shot interval', () => {
+    let time = 10000, processing = false;
+    const game = new GameWorld(createMemoryDb(), { ...rules,
+      buildingsNear: () => { if (processing) time += 2; return []; },
+      monstersNear: () => [{ id: 'target', x: 1, y: 0, hp: 1000, maxHp: 1000 }],
+    }, () => time);
+    game.connect('p', '射手'); const p = game.state.players.p;
+    p.equipment.weapon = makeItem('rifle', 1); p.resources.ammo = 10; processing = true;
+    expect(game.action('p', { action: 'fire', monsterId: 'target', requestId: 'first' }).error).toBeUndefined();
+    time = 10120;
+    expect(game.action('p', { action: 'fire', monsterId: 'target', requestId: 'second' }).error).toBeUndefined();
+    expect(p.resources.ammo).toBe(8);
+    time = 10150;
+    expect(game.action('p', { action: 'fire', monsterId: 'target', requestId: 'too-fast' }).error).toContain('过快');
+    expect(p.resources.ammo).toBe(8);
+  });
+  it('absorbs small receive jitter as cooldown debt instead of increasing sustained fire rate', () => {
+    const { game, act, advance } = setup(); const p = game.state.players.owner;
+    p.equipment.weapon = makeItem('rifle', 1); p.resources.ammo = 30;
+    expect(act('owner', 'fire').error).toBeUndefined();
+    advance(110); expect(act('owner', 'fire').error).toBeUndefined();
+    expect(p.actionAt.attack).toBe(10120);
+    expect(act('owner', 'fire').error).toContain('过快');
+    advance(100); expect(act('owner', 'fire').error).toContain('过快');
+    advance(10); expect(act('owner', 'fire').error).toBeUndefined();
+    expect(p.actionAt.attack).toBe(10240); expect(p.resources.ammo).toBe(27);
+  });
+  it('keeps a ten-millisecond spam loop at the normal sustained rate and retains timing across restart', () => {
+    const { game, act, advance, db } = setup(); const p = game.state.players.owner;
+    p.equipment.weapon = makeItem('rifle', 1); p.resources.ammo = 30;
+    act('owner', 'fire');
+    for (let i = 0; i < 100; i++) { advance(10); act('owner', 'fire'); }
+    expect(p.resources.ammo).toBe(21); expect(p.actionAt.attack).toBe(10960);
+    const restored = new GameWorld(db, rules, () => 11000);
+    expect(restored.action('owner', { action: 'fire', requestId: 'after-restart' }).error).toContain('过快');
+    expect(restored.state.players.owner.resources.ammo).toBe(21);
+  });
+});
 function setup(saved?: Partial<PersistedWorld>) {
   const db = createMemoryDb();
   let now = 10_000;
@@ -39,6 +129,140 @@ function npcHit(game: GameWorld, advance: (ms: number) => void, playerId = 'owne
   delete game.state.monsters.fixture_hit; game.persist();
 }
 
+describe('authoritative acid rain', () => {
+  function weatherSetup() {
+    let time = 10_000, weather: WeatherType = 'acid_rain';
+    const db = createMemoryDb();
+    const weatherRules = { ...rules, weather: () => weather };
+    const game = new GameWorld(db, weatherRules, () => time); game.connect('p', '行者');
+    const p = game.state.players.p; p.x = 200; p.y = 200; p.shield = 20; p.lastDamageAt = 0;
+    return { game, db, p, weatherRules, now: () => time, advance: (ms: number) => { time += ms; }, setWeather: (next: WeatherType) => { weather = next; } };
+  }
+
+  it('corrodes only shields at the existing 1.5 per second rate without regenerating or starting combat', () => {
+    const { game, p, advance } = weatherSetup(); advance(1000); game.tick();
+    expect(p.shield).toBe(18.5); expect(p.hp).toBe(100);
+    expect(p.lastDamageAt).toBe(0); expect(p.combatUntil).toBe(0);
+    expect(game.snapshot('p').player.lastDamageAt).toBe(0);
+    expect(p.satiety).toBe(99.75);
+  });
+
+  it('clamps at zero without spilling acid corrosion into health or charging the same tick twice', () => {
+    const { game, p, advance } = weatherSetup(); p.shield = 1;
+    advance(2000); game.tick(); game.tick();
+    expect(p.shield).toBe(0); expect(p.hp).toBe(100);
+    advance(1000); game.tick(); expect(p.shield).toBe(0); expect(p.hp).toBe(100);
+  });
+
+  it('keeps private camps immune while another active player in the public world is corroded', () => {
+    const { game, p, advance } = weatherSetup(); p.mapId = 'home_p';
+    game.connect('other', '野外行者'); const other = game.state.players.other;
+    other.x = 200; other.y = 200; other.shield = 20; other.lastDamageAt = 0;
+    advance(1000); game.tick();
+    expect(p.shield).toBe(28); expect(other.shield).toBe(18.5);
+  });
+
+  it('resumes ordinary delayed regeneration when the server changes back to clear weather', () => {
+    const { game, p, advance, setWeather } = weatherSetup();
+    advance(1000); game.tick(); expect(p.shield).toBe(18.5);
+    setWeather('clear'); advance(1000); game.tick(); expect(p.shield).toBe(26.5);
+    p.lastDamageAt = 12_000; advance(1000); game.tick(); expect(p.shield).toBe(26.5);
+  });
+
+  it('persists the depleted shield without applying weather damage for time the server was stopped', () => {
+    const { game, db, p, advance, weatherRules, now } = weatherSetup();
+    advance(1000); game.tick(); expect(p.shield).toBe(18.5);
+    advance(60_000); const restored = new GameWorld(db, weatherRules, now); restored.connect('p', '行者');
+    restored.tick(); expect(restored.state.players.p.shield).toBe(18.5);
+    advance(1000); restored.tick(); expect(restored.state.players.p.shield).toBe(17);
+  });
+
+  it('distinguishes a real hit during acid rain from environmental shield corrosion in snapshots', () => {
+    const { game, p, advance } = weatherSetup();
+    npcHit(game, advance, 'p');
+    expect(p.shield).toBe(10);
+    expect(game.snapshot('p').player.lastDamageAt).toBe(10_400);
+    advance(1000); game.tick(); expect(p.shield).toBeCloseTo(10 - 1.4 * 1.5);
+    expect(game.snapshot('p').player.lastDamageAt).toBe(10_400);
+  });
+});
+
+describe('persistent onboarding', () => {
+  it('retains collected materials after spending them on a camp and restarting, without counting replays', () => {
+    const supplies = { ...box, lootTable: [{ itemId: 'wood', name: '木材', count: 20 }, { itemId: 'stone', name: '石料', count: 10 }] };
+    const db = createMemoryDb(); const game = new GameWorld(db, { ...rules, nodeAt: () => supplies });
+    game.connect('p', '新手');
+    game.action('p', { requestId: 'search', action: 'search', targetId: box.id });
+    const take = { requestId: 'wood', action: 'take_loot', targetId: box.id, itemId: 'wood', count: 3 };
+    expect(game.action('p', take).error).toBeUndefined(); game.action('p', take);
+    expect(game.snapshot('p').player.onboarding.wood).toBe(3);
+    game.action('p', { ...take, requestId: 'wood-rest', count: 17 });
+    game.action('p', { requestId: 'stone', action: 'take_loot', targetId: box.id, itemId: 'stone', count: 10 });
+    const p = game.state.players.p; p.x = 100;
+    expect(game.action('p', { requestId: 'camp', action: 'create_camp', x: 100, y: 0 }).error).toBeUndefined();
+    expect(p.resources).toMatchObject({ wood: 0, stone: 0 });
+    expect(new GameWorld(db, rules).snapshot('p').player.onboarding).toMatchObject({ wood: 20, stone: 10 });
+  });
+
+  it('records tool equipment rather than possession and retains the achievement after removal', () => {
+    const { game, act, db } = setup(); const p = game.state.players.owner;
+    p.inventory[0] = makeItem('pickaxe_stone', 1);
+    expect(game.snapshot('owner').player.onboarding.toolEquipped).toBe(false);
+    expect(act('owner', 'equip', { slot: 'tool', index: 0 }).error).toBeUndefined();
+    expect(act('owner', 'unequip', { slot: 'tool' }).error).toBeUndefined();
+    expect(act('owner', 'drop', { index: 0 }).error).toBeUndefined();
+    expect(new GameWorld(db, rules).snapshot('owner').player.onboarding.toolEquipped).toBe(true);
+  });
+
+  it('only completes eating after a successful food action, not a medical or invalid request', () => {
+    const { game, act, advance, db } = setup(); const p = game.state.players.owner;
+    p.inventory[0] = makeItem('bandage', 2); p.inventory[1] = makeItem('food', 2);
+    expect(act('owner', 'use_item', { index: 100 }).error).toBeTruthy();
+    expect(act('owner', 'use_item', { index: 0 }).error).toBeUndefined();
+    expect(game.snapshot('owner').player.onboarding.ateFood).toBe(false);
+    expect(act('owner', 'use_item', { index: 1 }).error).toBeTruthy();
+    expect(game.snapshot('owner').player.onboarding.ateFood).toBe(false);
+    advance(801); expect(act('owner', 'use_item', { index: 1 }).error).toBeUndefined();
+    expect(new GameWorld(db, rules).snapshot('owner').player.onboarding.ateFood).toBe(true);
+    expect(p.inventory[1]?.count).toBe(1);
+  });
+
+  it('preserves completed construction after the building is destroyed or no longer visible', () => {
+    const { game, act, db, p } = campSetup();
+    expect(act('owner', 'build', { buildType: 'turret', x: 100, y: 0 }).error).toBeTruthy();
+    expect(game.snapshot('owner').player.onboarding.turretBuilt).toBe(false);
+    expect(act('owner', 'build', { buildType: 'workbench', x: 3, y: 0 }).error).toBeUndefined();
+    expect(act('owner', 'build', { buildType: 'turret', x: 3, y: 1 }).error).toBeUndefined();
+    for (const b of Object.values(game.state.buildings)) if (['workbench', 'turret'].includes(b.type)) b.hp = 0;
+    p.mapId = 'world'; p.x = 100; game.persist();
+    expect(new GameWorld(db, rules).snapshot('owner').player.onboarding).toMatchObject({ workbenchBuilt: true, turretBuilt: true });
+  });
+
+  it('records exploration from accepted movement and retains it after returning to spawn', () => {
+    const { game, advance, db } = setup();
+    expect(game.move('owner', { x: 20, y: 0, onboarding: { explored: true } })).toBe(false);
+    expect(game.snapshot('owner').player.onboarding.explored).toBe(false);
+    for (const x of [1.8, 3, 1.5, 0]) { advance(500); expect(game.move('owner', { x, y: 0 })).toBe(true); }
+    game.persist(); expect(new GameWorld(db, rules).snapshot('owner').player.onboarding.explored).toBe(true);
+  });
+
+  it('initializes old saves from verifiable possessions and buildings without inventing past meals', () => {
+    const { game, db, p } = campSetup();
+    p.resources.wood = 1; p.resources.stone = 1; p.equipment.tool = makeItem('pickaxe_stone', 1);
+    facility(game, 'workbench');
+    delete (p as any).onboarding; game.persist();
+    expect(new GameWorld(db, rules).snapshot('owner').player.onboarding).toMatchObject({ wood: 20, stone: 10, toolEquipped: true, workbenchBuilt: true, ateFood: false });
+  });
+
+  it('rolls back collection progress when mineral output cannot fit in the inventory', () => {
+    const rock = { ...tree, type: 'boulder' as const, lootTable: [{ itemId: 'ore_copper', name: '铜矿', count: 1 }] };
+    const game = new GameWorld(createMemoryDb(), { ...rules, nodeAt: () => rock }); game.connect('p', '矿工');
+    const p = game.state.players.p; p.equipment.tool = makeItem('pickaxe_stone', 1); p.inventory.fill(makeItem('rifle', 1));
+    expect(game.action('p', { requestId: 'full', action: 'gather', targetId: rock.id }).error).toContain('背包');
+    expect(game.snapshot('p').player.onboarding.stone).toBe(0); expect(p.resources.stone).toBe(0);
+  });
+});
+
 describe('equipment progression and inventory capacity', () => {
   it('expands the actual inventory and rejects removing a full pack without losing anything', () => {
     const { game, act } = setup(); const p = game.state.players.owner;
@@ -46,7 +270,7 @@ describe('equipment progression and inventory capacity', () => {
     expect(act('owner', 'equip', { slot: 'pack', index: 0 }).error).toBeUndefined();
     expect(p.inventory).toHaveLength(26);
     p.resources.credits = 100000;
-    expect(act('owner', 'buy', { itemId: 'rifle', quantity: 26 }).error).toBeUndefined();
+    expect(act('owner', 'buy', { itemId: 'att_scope4x', quantity: 130 }).error).toBeUndefined();
     const before = structuredClone(p);
     expect(act('owner', 'unequip', { slot: 'pack' }).error).toContain('背包');
     expect(p.inventory).toEqual(before.inventory);
@@ -486,9 +710,9 @@ describe('authoritative world', () => {
     expect(p.resources.ammo).toBe(60); expect(p.resources.credits).toBe(400);
     act('owner', 'sell', { itemId: 'ammo', quantity: 60 });
     expect(p.resources.credits).toBe(760); expect(p.resources.ammo).toBe(0);
-    expect(act('owner', 'buy', { itemId: 'rifle', quantity: -1 }).error).toBeTruthy();
+    expect(act('owner', 'buy', { itemId: 'ammo_box', quantity: -1 }).error).toContain('数量');
     p.inventory = Array.from({ length: 24 }, () => makeItem('rifle', 1));
-    expect(act('owner', 'buy', { itemId: 'bandage', quantity: 1 }).error).toBeTruthy();
+    expect(act('owner', 'buy', { itemId: 'medkit', quantity: 1 }).error).toContain('背包');
     expect(p.resources.credits).toBe(760);
     const dropped = act('owner', 'drop', { index: 0 });
     expect(dropped.player.inventory[0]).toBeNull();

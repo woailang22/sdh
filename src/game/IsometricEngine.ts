@@ -1,5 +1,6 @@
 ﻿import { soundManager } from '../audio/soundManager';
 import { calcRangedDamage, rollCrit, weatherCritBonus, MELEE, aggroRangeFor, isEnraged, calcMonsterHit, absorbShieldFirst } from './combat';
+import { ACID_SHIELD_DRAIN, WEATHER_DURATION, weatherInfo } from './weather';
 import { SUBMAPS, displayName, regionOf, lootResourceOf } from './maps';
 import { groundBaseColor, hash2 as hash2Pure, withAlpha, themeAccent, drawSoftShadow, healthBarColor, weatherTint, themeHaze } from './visualTheme';
 import type { GroundTheme } from './visualTheme';
@@ -130,7 +131,8 @@ export class IsometricEngine {
 
   // Weather System
   public currentWeather: WeatherType = 'clear';
-  public weatherDurationLeft: number = 120;
+  public weatherDurationLeft: number = WEATHER_DURATION;
+  private weatherDeadline = Date.now() + WEATHER_DURATION * 1000;
   private lightningFlash: number = 0;
   private nextLightningTime: number = 8;
   private fogOffsets: { x: number; y: number; speed: number; radius: number }[] = [];
@@ -239,6 +241,7 @@ export class IsometricEngine {
   private renderStatus: string | null = null;
   private lastRenderTime = 0;
   private lastTime: number = 0;
+  private nextShotAt = 0;
   private gameTime: number = 0;
   private rainCount: number = 140;
   private rainDrops: { x: number; y: number; speed: number; len: number }[] = [];
@@ -278,9 +281,16 @@ export class IsometricEngine {
       img = new Image();
       img.decoding = 'async';
       img.addEventListener('load', () => {
+        const tile = /^tile-(.+)-(a|b)\.png$/.exec(file);
+        if (!tile && file !== 'texture-ground.png') return;
         this.artRevision++;
-        // B 图就绪后不能继续复用此前从 A 图生成的回退贴片。
-        this.tilePatchCache.clear();
+        // Only the loaded tile variant can have stale fallback patches.
+        // Sprite sheets are drawn live and never invalidate cached terrain.
+        if (tile) for (const [key, patch] of this.tilePatchCache) {
+          if (!key.startsWith(`${tile[1]}${tile[2]}:`)) continue;
+          patch.width = patch.height = 0;
+          this.tilePatchCache.delete(key);
+        }
       }, { once: true, signal: this.listenerController.signal });
       img.src = src;
       this.artImages.set(src, img);
@@ -1230,9 +1240,10 @@ export class IsometricEngine {
     }
   }
 
-  public setWeather(newWeather: WeatherType) {
+  public setWeather(newWeather: WeatherType, durationLeft: number = WEATHER_DURATION) {
     this.currentWeather = newWeather;
-    this.weatherDurationLeft = 120;
+    this.weatherDurationLeft = Math.max(0, durationLeft);
+    this.weatherDeadline = Date.now() + this.weatherDurationLeft * 1000;
     const weatherData = this.getWeatherInfo(newWeather);
     this.callbacks.onWeatherChange(weatherData);
 
@@ -1248,22 +1259,7 @@ export class IsometricEngine {
   }
 
   public getWeatherInfo(type: WeatherType): WeatherState {
-    const configs: { [key in WeatherType]: { name: string; icon: string; desc: string; effectLabel: string } } = {
-      rain: { name: '阴雨绵绵', icon: '🌧️', desc: '轻度降水，视距良好。', effectLabel: '体力消耗降低 15%' },
-      thunder: { name: '裂隙雷暴', icon: '⚡', desc: '狂风雷暴，强闪电刺破夜空！', effectLabel: '暴击率提升 20%' },
-      fog: { name: '坍界浓雾', icon: '🌫️', desc: '空间迷雾，隐匿行踪。', effectLabel: '怪物视野缩小 30%' },
-      clear: { name: '恒界破晓', icon: '☀️', desc: '晴空破晓，全图视野清澈明亮！', effectLabel: '搜刮掉落提升 25%' },
-      acid_rain: { name: '蚀体酸雨', icon: '⛈️', desc: '腐蚀酸雨，护盾缓慢受损。', effectLabel: '金属腐蚀危险' },
-    };
-    const c = configs[type] || configs.rain;
-    return {
-      current: type,
-      name: c.name,
-      icon: c.icon,
-      desc: c.desc,
-      effectLabel: c.effectLabel,
-      durationLeft: Math.round(this.weatherDurationLeft),
-    };
+    return weatherInfo(type, this.weatherDurationLeft);
   }
 
   private triggerLightning() {
@@ -1569,13 +1565,25 @@ export class IsometricEngine {
     this.addTextParticle(placeX, placeY - 1.0, `建造成功: ${costInfo.name}`, '#10b981');
   }
 
+  private campInteractionIsNearest(): boolean {
+    const distance = (target: { x: number; y: number }) => Math.hypot(this.player.x - target.x, this.player.y - target.y);
+    const portalDistance = this.currentMapId === 'world'
+      ? Math.min(Infinity, ...this.campEntrances.map(distance))
+      : distance({ x: 0, y: 28 });
+    const target = this.nearestBuilding ?? this.nearestInteractable;
+    return portalDistance < 3 && portalDistance <= (target ? distance(target) : Infinity);
+  }
+
+  private isRaidTarget(building: BuildingEntity): boolean {
+    return building.hp > 0 && !building.type.endsWith('_floor') && !!building.ownerId && building.ownerId !== this.localPlayerId && !this.friendlyPlayerIds.has(building.ownerId);
+  }
+
   public triggerInteraction() {
     if (this.callbacks.onGameAction) {
-      if (this.callbacks.onCampInteract?.()) return;
+      if (this.campInteractionIsNearest() && this.callbacks.onCampInteract?.()) return;
       const b = this.nearestBuilding;
       if (b && hasLineOfSight(this.player, b, this.buildings, b.id)) {
-        const hostile = !!b.ownerId && b.ownerId !== this.localPlayerId && !this.friendlyPlayerIds.has(b.ownerId);
-        if (hostile && b.hp > 0 && !b.type.endsWith('_floor')) {
+        if (this.isRaidTarget(b)) {
           this.callbacks.onOpenRaidModal?.(b); return;
         }
         if (b.hp <= 0 || b.type.includes('wall') || ['campfire', 'bed', 'furnace', 'farm_plot', 'research_table'].includes(b.type)) {
@@ -2027,9 +2035,12 @@ export class IsometricEngine {
     this.refreshWorld();
 
     // Weather timer
-    this.weatherDurationLeft -= dt;
-    if (this.weatherDurationLeft <= 0) {
+    const previousWeatherSecond = Math.ceil(this.weatherDurationLeft);
+    this.weatherDurationLeft = Math.max(0, this.callbacks.onGameAction ? (this.weatherDeadline - Date.now()) / 1000 : this.weatherDurationLeft - dt);
+    if (this.weatherDurationLeft <= 0 && !this.callbacks.onGameAction) {
       this.cycleNextWeather();
+    } else if (Math.ceil(this.weatherDurationLeft) !== previousWeatherSecond) {
+      this.callbacks.onWeatherChange(this.getWeatherInfo(this.currentWeather));
     }
 
     if (this.currentWeather === 'thunder') {
@@ -2156,10 +2167,12 @@ export class IsometricEngine {
     }
 
     // 护盾延迟回复：脱战5s后每秒回8点，酸雨天不回复反腐蚀
-    if (this.currentWeather === 'acid_rain') {
-      this.player.shield = Math.max(0, this.player.shield - 1.5 * dt);
-    } else if (this.gameTime >= this.shieldRegenAt && this.player.shield < this.player.maxShield) {
-      this.player.shield = Math.min(this.player.maxShield, this.player.shield + 8 * dt);
+    if (!this.callbacks.onGameAction) {
+      if (this.currentWeather === 'acid_rain' && !this.currentMapId.startsWith('home_')) {
+        this.player.shield = Math.max(0, this.player.shield - ACID_SHIELD_DRAIN * dt);
+      } else if (this.gameTime >= this.shieldRegenAt && this.player.shield < this.player.maxShield) {
+        this.player.shield = Math.min(this.player.maxShield, this.player.shield + 8 * dt);
+      }
     }
     if (this.shake > 0) this.shake = Math.max(0, this.shake - 30 * dt);
     if (this.hurtFlash > 0) this.hurtFlash = Math.max(0, this.hurtFlash - dt);
@@ -2224,9 +2237,11 @@ export class IsometricEngine {
     this.player.angle = Math.atan2(this.mouse.screenY - playerScreen.y, this.mouse.screenX - playerScreen.x);
 
     // Shooting（选中槽为武器+有弹才能开火，否则左键为徒手/工具近战）
+    const shotTime = performance.now();
+    this.player.fireTimer = Math.max(0, (this.nextShotAt - shotTime) / 1000);
     if (this.player.isFiring && this.hasRangedWeapon && this.player.ammo > 0 && !this.isBuildMode) {
-      this.player.fireTimer -= dt;
-      if (this.player.fireTimer <= 0) {
+      if (shotTime >= this.nextShotAt) {
+        this.nextShotAt = shotTime + this.player.fireRate * 1000;
         this.player.fireTimer = this.player.fireRate;
         this.player.ammo -= 1;
         this.player.recoil = 8;
@@ -2239,7 +2254,6 @@ export class IsometricEngine {
         this.fireBullet(flashWorldX, flashWorldY, this.player.angle);
       }
     } else {
-      this.player.fireTimer = 0;
       // 有枪无弹：有备弹自动装填，无备弹则提示去向（2秒一次，免刷屏）
       if (this.player.isFiring && !this.isBuildMode && this.hasRangedWeapon && this.player.ammo <= 0) {
         if (this.player.reserveAmmo > 0) {
@@ -6427,8 +6441,8 @@ export class IsometricEngine {
   private renderWeather() {
     this.ctx.save();
 
-    // In Camp Safe Region: Always serene sunny, completely immune to wild weather!
-    if (regionOf(this.currentMapId) === 'camp') {
+    // Personal camps and legacy supply maps shelter from weather; the continuous world is outdoors.
+    if (this.currentMapId.startsWith('home_') || (this.currentMapId !== 'world' && regionOf(this.currentMapId) === 'camp')) {
       const sunBeam = this.ctx.createLinearGradient(0, 0, this.width, this.height);
       sunBeam.addColorStop(0, 'rgba(254, 240, 138, 0.08)');
       sunBeam.addColorStop(0.5, 'rgba(253, 224, 71, 0.03)');
@@ -6507,6 +6521,7 @@ export class IsometricEngine {
   }
 
   private renderInteractionHUD() {
+    if (this.callbacks.onGameAction && this.callbacks.onCampInteract && this.campInteractionIsNearest()) return;
     if (this.nearestBuilding) {
       const s = this.toScreen(this.nearestBuilding.x, this.nearestBuilding.y);
       this.ctx.save();
@@ -6515,7 +6530,7 @@ export class IsometricEngine {
       const badgeX = s.x - badgeW / 2;
       const badgeY = s.y - 68;
 
-      const isRaidTarget = this.nearestBuilding.type === 'safe_door' && this.nearestBuilding.ownerId !== this.localPlayerId;
+      const isRaidTarget = this.isRaidTarget(this.nearestBuilding);
 
       this.ctx.fillStyle = 'rgba(15, 23, 42, 0.92)';
       this.ctx.strokeStyle = isRaidTarget ? '#ef4444' : '#10b981';
@@ -6533,15 +6548,14 @@ export class IsometricEngine {
       this.ctx.fillStyle = isRaidTarget ? '#f87171' : '#34d399';
       this.ctx.font = '10px sans-serif';
       let promptText = '[E/F 交互]';
-      if (this.nearestBuilding.type === 'door') {
+      if (isRaidTarget) {
+        promptText = '[E/F 破拆建筑]';
+      } else if (this.nearestBuilding.hp <= 0) {
+        promptText = '[E/F 查看残骸]';
+      } else if (this.nearestBuilding.type === 'door') {
         promptText = this.nearestBuilding.isOpen ? '[E/F 关门]' : '[E/F 开门]';
       } else if (this.nearestBuilding.type === 'safe_door') {
-        const isOwner = this.nearestBuilding.ownerId === this.localPlayerId;
-        if (isOwner) {
-          promptText = this.nearestBuilding.isOpen ? '[E/F 闭锁安全门]' : '[E/F 开启安全门]';
-        } else {
-          promptText = this.nearestBuilding.hp <= 0 ? '🎉 [E/F 搜刮战利品]' : '💥 [E/F 突袭破拆安全门]';
-        }
+        promptText = this.nearestBuilding.isOpen ? '[E/F 闭锁安全门]' : '[E/F 开启安全门]';
       } else if (this.nearestBuilding.type === 'storage_box') {
         promptText = '[E/F 打开储物]';
       } else if (this.nearestBuilding.type === 'workbench') {

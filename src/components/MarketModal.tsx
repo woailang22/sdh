@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { MarketItem } from '../types/game';
 import { X, ShoppingBag, Coins, TrendingUp } from 'lucide-react';
 import { soundManager } from '../audio/soundManager';
 import { ItemIcon } from './ItemIcon';
-import { ITEM_DEFS } from '../game/items';
+import { MARKET_OFFERS, marketItem } from '../game/market';
+
+const items = MARKET_OFFERS.map(marketItem);
 
 interface MarketModalProps {
   isOpen: boolean;
@@ -22,67 +24,6 @@ export const MarketModal: React.FC<MarketModalProps> = ({
   onBuyItem,
   onSellItem,
 }) => {
-  const [items, setItems] = useState<MarketItem[]>([
-    {
-      id: 'scrap',
-      name: '优质精炼废铁',
-      category: '物资',
-      buyPrice: 15,
-      sellPrice: 12,
-      icon: '⚙️',
-      stock: 350,
-      description: '战前载具与重工业残骸切割出的结构钢材，工作台的核心基底材料。',
-    },
-    {
-      id: 'ammo_box',
-      name: '7.62mm 步枪弹药盒 (x60)',
-      category: '装备',
-      buyPrice: 80,
-      sellPrice: 65,
-      icon: '🎯',
-      stock: 45,
-      description: '全金属被甲穿透弹，对蚀体与恶瘴外壳具有高穿透与震慑效果。',
-    },
-    {
-      id: 'medkit',
-      name: '纳米急救喷雾包',
-      category: '裂隙药剂',
-      buyPrice: 120,
-      sellPrice: 95,
-      icon: '💉',
-      stock: 20,
-      description: '快速止血凝胶与皮下微针，点击使用恢复 60 点生命值。',
-    },
-    {
-      id: 'food_ration',
-      name: '战术高热量肉排 (x10)',
-      category: '物资',
-      buyPrice: 50,
-      sellPrice: 40,
-      icon: '🥩',
-      stock: 80,
-      description: '辐射净化真空浓缩军粮，点击食用恢复 35 点饱食。',
-    },
-    {
-      id: 'rift_shard',
-      name: '坍界紫晶原石',
-      category: '稀有材料',
-      buyPrice: 320,
-      sellPrice: 280,
-      icon: '💎',
-      stock: 8,
-      description: '从恶瘴魑体内凝结的高能量晶体，用于驱动高阶下锚发生器。',
-    },
-    { id: 'seed_corn', name: '玉米种子包', category: '物资', buyPrice: 60, sellPrice: 20, icon: '🌱', stock: 60, description: '农圩可种，连续收获，星露谷入门包。' },
-    { id: 'ore_copper', name: '铜矿石 ×5', category: '物资', buyPrice: 150, sellPrice: 100, icon: '🟤', stock: 40, description: '铜镐升级材料，工具棚/矿场产出。' },
-    { id: 'att_scope4x', name: '4倍战术瞄具', category: '装备', buyPrice: 400, sellPrice: 280, icon: '🔭', stock: 6, description: 'SVD/M4配件，三角洲摸金标配。' },
-    { id: 'key_blue', name: '蓝色房卡', category: '稀有材料', buyPrice: 600, sellPrice: 450, icon: '🟦', stock: 3, description: '开加油站办公室/渔港小屋，内有高价值箱。' },
-    { id: 'collect_mandel', name: '曼德尔砖', category: '稀有材料', buyPrice: 2000, sellPrice: 1500, icon: '🧱', stock: 1, description: '三角洲头号藏品，红区房卡房限定。' },
-    { id: 'med_surgery', name: '野战手术包', category: '裂隙药剂', buyPrice: 300, sellPrice: 220, icon: '💉', stock: 5, description: '恢复100生命，BOSS战救命。' },
-    { id: 'throw_frag', name: '破片手雷 ×2', category: '装备', buyPrice: 120, sellPrice: 80, icon: '💣', stock: 12, description: '范围300伤害，清群怪。' },
-    { id: 'wine_starfruit', name: '星果酒', category: '稀有材料', buyPrice: 2250, sellPrice: 2250, icon: '🍷', stock: 2, description: '星果陈酿，毕业暴利，食用回40饱食+30生命。' },
-  ]);
-
   if (!isOpen) return null;
 
   return (
@@ -125,13 +66,7 @@ export const MarketModal: React.FC<MarketModalProps> = ({
 
         {/* Content List */}
         <div className="flex-1 overflow-y-auto p-6 space-y-3">
-          {items.map((entry) => {
-            const bundles: Record<string, [string, number]> = { scrap: ['scrap', 10], ammo_box: ['ammo', 60], food_ration: ['food', 10], rift_shard: ['shard', 1] };
-            const [id, count] = bundles[entry.id] ?? [entry.id, 1];
-            const definition = ITEM_DEFS[id];
-            const item = { ...entry, buyPrice: definition.buyPrice * count, sellPrice: definition.sellPrice * count,
-              name: definition.name + (count > 1 ? ` ×${count}` : '') };
-            return (
+          {items.map((item) => (
             <div
               key={item.id}
               className="flex items-center justify-between p-3.5 rounded-xl bg-slate-950/60 border border-slate-800 hover:border-cyan-500/40 transition-all"
@@ -182,7 +117,7 @@ export const MarketModal: React.FC<MarketModalProps> = ({
                 </button>
               </div>
             </div>
-          ); })}
+          ))}
         </div>
 
         {/* Footer Notice */}

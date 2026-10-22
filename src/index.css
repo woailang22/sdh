@@ -1,1 +1,7 @@
 @import "tailwindcss";
+
+/* Moving scenery behind HUD panels otherwise gets blurred again on every composite. */
+.game-hud [class*="backdrop-blur"] {
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}

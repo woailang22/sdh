@@ -1,18 +1,23 @@
 import { randomUUID } from 'node:crypto';
-import type { BuildingEntity, BuildableType, Equipment, InteractableEntity, Item, MapZoneId, MonsterEntity, OnlinePlayer } from '../src/types/game';
+import type { BuildingEntity, BuildableType, Equipment, InteractableEntity, Item, MapZoneId, MonsterEntity, OnlinePlayer, WeatherType } from '../src/types/game';
 import { ARMOR_BONUS_TABLE, ITEM_DEFS, makeItem, WEAPON_DAMAGE } from '../src/game/items';
 import { CRAFT_RECIPES, recipeFacility } from '../src/game/crafting';
 import { ARMOR_REDUCTION, killReward, MELEE, WEAPONS } from '../src/game/combat';
 import { BUILD_RECIPES } from '../src/game/buildingRecipes';
+import { ACID_SHIELD_DRAIN } from '../src/game/weather';
+import { marketOffer } from '../src/game/market';
 import { hasLineOfSight, isPositionBlocked } from '../src/game/navigation';
 import { BASE_INVENTORY_SLOTS, inventoryCapacity, resizeInventory, gatheringEffects } from '../src/game/equipmentRules';
 import type { DbHandle } from './db';
 
 export type ResourceKey = 'wood' | 'stone' | 'scrap' | 'parts' | 'food' | 'ammo' | 'c4' | 'medical' | 'credits' | 'shard';
 export type Resources = Record<ResourceKey, number>;
+export interface OnboardingProgress { wood: number; stone: number; explored: boolean; toolEquipped: boolean; ateFood: boolean; workbenchBuilt: boolean; turretBuilt: boolean }
+const emptyOnboarding = (): OnboardingProgress => ({ wood: 0, stone: 0, explored: false, toolEquipped: false, ateFood: false, workbenchBuilt: false, turretBuilt: false });
 export interface CampSummary { id: string; ownerId: string; ownerName: string; x: number; y: number; mapId: MapZoneId; members?: string[]; level?: number; size?: number; state?: 'active' | 'breached' }
 interface Player extends OnlinePlayer {
   inventory: (Item | null)[]; equipment: Equipment; resources: Resources; campId: string | null;
+  onboarding: OnboardingProgress;
   moveAt: number; moveBudget: number; actionAt: Record<string, number>; combatUntil: number;
   satiety: number; survivalAt: number;
   dashUntil: number; dashReadyAt: number;
@@ -21,7 +26,7 @@ interface Player extends OnlinePlayer {
   lastDamageAt: number;
   xp: number; maxXp: number; kills: number;
 }
-export interface PlayerState extends OnlinePlayer { inventory: (Item | null)[]; equipment: Equipment; resources: Resources; campId: string | null; satiety: number; blueprints: string[]; xp: number; maxXp: number; kills: number }
+export interface PlayerState extends OnlinePlayer { inventory: (Item | null)[]; equipment: Equipment; resources: Resources; campId: string | null; satiety: number; blueprints: string[]; xp: number; maxXp: number; kills: number; onboarding: OnboardingProgress; lastDamageAt: number }
 export type WorldMonsterDefinition = Pick<MonsterEntity, 'id' | 'x' | 'y'> & Partial<MonsterEntity>;
 export type AuthoritativeMonster = MonsterEntity & { respawnAt?: number; targetId?: string };
 export type ProductionJob = NonNullable<BuildingEntity['production']>;
@@ -44,6 +49,7 @@ export interface WorldRules {
   campSiteAllowed(x: number, y: number): boolean;
   migrate(mapId: string, x: number, y: number): { mapId: MapZoneId; x: number; y: number };
   monstersNear?(x: number, y: number): WorldMonsterDefinition[];
+  weather?(): WeatherType;
 }
 export interface GameAction { requestId: string; action: string; [key: string]: unknown }
 
@@ -134,13 +140,28 @@ export class GameWorld {
       }
       camp.state = core.hp > 0 ? 'active' : 'breached';
     }
+    // Migrate only facts that existing saves can prove; past meals cannot be reconstructed.
+    for (const p of Object.values(this.state.players)) {
+      p.onboarding = { ...emptyOnboarding(), ...p.onboarding };
+      p.onboarding.wood = Math.max(p.onboarding.wood, Math.min(20, p.resources.wood + (p.campId ? 20 : 0)));
+      p.onboarding.stone = Math.max(p.onboarding.stone, Math.min(10, p.resources.stone + (p.campId ? 10 : 0)));
+      p.onboarding.explored ||= p.mapId !== 'world' || Math.hypot(p.x, p.y) > 2.5;
+      p.onboarding.toolEquipped ||= gatheringEffects(p.equipment.tool?.id).canMine;
+    }
+    for (const b of Object.values(this.state.buildings)) {
+      const owner = b.ownerId && this.state.players[b.ownerId];
+      if (owner && b.mapId === owner.campId) {
+        owner.onboarding.workbenchBuilt ||= b.type === 'workbench';
+        owner.onboarding.turretBuilt ||= b.type === 'turret';
+      }
+    }
     this.persist();
   }
 
   private newPlayer(id: string, name: string): Player {
     return { id, name, level: 1, title: '废土流浪者', avatarSeed: id, x: 0, y: 0, angle: 0, mapId: 'world', hp: 100, maxHp: 100, shield: 0, maxShield: 50,
       isFiring: false, isDashing: false, color: '#06b6d4', ping: 0, lastSeen: this.now(), currentAction: '徒手求生',
-      inventory: Array(BASE_INVENTORY_SLOTS).fill(null), equipment: { weapon: null, armor: null, tool: null, pack: null }, resources: emptyResources(), campId: null,
+      inventory: Array(BASE_INVENTORY_SLOTS).fill(null), equipment: { weapon: null, armor: null, tool: null, pack: null }, resources: emptyResources(), campId: null, onboarding: emptyOnboarding(),
       moveAt: this.now(), moveBudget: 0.25, actionAt: {}, combatUntil: 0, satiety: 100, survivalAt: this.now(), dashUntil: 0, dashReadyAt: 0, blueprints: [], disconnectUntil: 0, lastDamageAt: this.now(), xp: 0, maxXp: 100, kills: 0 };
   }
 
@@ -209,7 +230,7 @@ export class GameWorld {
     resources.food = p.inventory.reduce((sum, item) => sum + (item?.category === 'food' ? item.count : 0), 0);
     resources.medical = p.inventory.reduce((sum, item) => sum + (item?.category === 'medical' ? item.count : 0), 0);
     this.ensureMonsters(p);
-    const player: PlayerState = { ...this.publicPlayer(p), inventory: p.inventory, equipment: p.equipment, resources, campId: p.campId, satiety: p.satiety, blueprints: p.blueprints, xp: p.xp, maxXp: p.maxXp, kills: p.kills };
+    const player: PlayerState = { ...this.publicPlayer(p), inventory: p.inventory, equipment: p.equipment, resources, campId: p.campId, satiety: p.satiety, blueprints: p.blueprints, xp: p.xp, maxXp: p.maxXp, kills: p.kills, onboarding: p.onboarding, lastDamageAt: p.lastDamageAt };
     return clone({ requestId, error, correction, player,
       camps: Object.values(this.state.camps).filter(c => c.ownerId === id || c.members?.includes(id) || c.id === p.mapId || p.mapId === 'world' && distance(c, p) <= 80), buildings: this.buildingsFor(p).map(b => { const { storedLoot: _, production: _production, ...visible } = b; return { ...visible, ammo: this.state.ammo[b.id] || 0, production: this.canUse(p.id, b) ? this.state.production[b.id] : undefined }; }),
       nodes: p.mapId === 'world' ? this.rules.nodesNear(p.x, p.y).map(def => { const node = this.state.nodes[def.id] ? this.node(def) : undefined; return { id: def.id, stock: node?.stock ?? def.stock ?? 1, respawnAt: node?.respawnAt || 0 }; }) : [],
@@ -237,6 +258,7 @@ export class GameWorld {
     const buildings = this.buildingsFor(p);
     if (isPositionBlocked(to.x, to.y, buildings) || !hasLineOfSight(p, to, buildings)) return false;
     p.x = to.x; p.y = to.y; p.moveBudget = Math.max(0, p.moveBudget - travelled);
+    p.onboarding.explored ||= p.mapId === 'world' && Math.hypot(p.x, p.y) > 2.5;
     if (finite(packet.angle)) p.angle = packet.angle;
     p.isFiring = packet.isFiring === true; p.isDashing = dashing;
     return true;
@@ -257,7 +279,11 @@ export class GameWorld {
     requireRule(hasLineOfSight(p, target, this.buildingsFor(p), target.id), '目标被墙体遮挡');
   }
 
-  private cooldown(p: Player, key: string, ms: number) { requireRule(this.now() - (p.actionAt[key] ?? -Infinity) >= ms, '操作过快'); }
+  private cooldown(p: Player, key: string, ms: number, at = this.now(), jitter = 0) {
+    const scheduledAt = Math.max(at, (p.actionAt[key] ?? -Infinity) + ms);
+    requireRule(scheduledAt <= at + jitter, '操作过快');
+    return scheduledAt;
+  }
   private checkCost(p: Player, cost: Partial<Resources>) {
     for (const key of resourceKeys) requireRule(p.resources[key] >= (cost[key] || 0), '材料不足');
   }
@@ -325,7 +351,11 @@ export class GameWorld {
   }
   private add(p: Player, itemId: string, count: number) {
     const resource = resourceFor(itemId);
-    if (resource) { p.resources[resource] += count; return; }
+    if (resource) {
+      p.resources[resource] += count;
+      if (resource === 'wood' || resource === 'stone') p.onboarding[resource] = Math.min(resource === 'wood' ? 20 : 10, p.onboarding[resource] + count);
+      return;
+    }
     requireRule(ITEM_DEFS[itemId], '未知物品');
     const capacity = p.inventory.reduce((sum, item) => sum + (item ? item.id === itemId ? item.maxCount - item.count : 0 : ITEM_DEFS[itemId].maxCount), 0);
     requireRule(capacity >= count, '背包已满');
@@ -334,6 +364,7 @@ export class GameWorld {
   }
 
   action(id: string, packet: GameAction) {
+    const receivedAt = this.now();
     const p = this.state.players[id];
     if (!p) throw new Error('角色未接入');
     const requestId = typeof packet?.requestId === 'string' ? packet.requestId : '';
@@ -341,7 +372,7 @@ export class GameWorld {
     if (this.state.handled[id]?.includes(requestId)) return this.snapshot(id, requestId);
     const before = clone(this.state);
     try {
-      const loot = this.perform(p, packet);
+      const loot = this.perform(p, packet, receivedAt);
       (this.state.handled[id] ||= []).push(requestId);
       this.state.handled[id] = this.state.handled[id].slice(-128);
       this.persist(); // One SQLite row atomically contains both sides of every transfer and its replay guard.
@@ -357,7 +388,7 @@ export class GameWorld {
     }
   }
 
-  private perform(p: Player, a: GameAction): { id: string; name: string; items: LootItem[] } | undefined {
+  private perform(p: Player, a: GameAction, receivedAt: number): { id: string; name: string; items: LootItem[] } | undefined {
     const targetId = typeof a.targetId === 'string' ? a.targetId : '';
     if (a.action === 'search') {
       const drop = this.state.drops[targetId];
@@ -368,7 +399,7 @@ export class GameWorld {
         return this.storageLoot(building);
       }
     }
-    if (a.action === 'take_loot' && this.state.buildings[targetId]?.type === 'storage_box') return this.perform(p, { ...a, action: 'withdraw' });
+    if (a.action === 'take_loot' && this.state.buildings[targetId]?.type === 'storage_box') return this.perform(p, { ...a, action: 'withdraw' }, receivedAt);
     if (a.action === 'gather' || a.action === 'search') {
       requireRule(p.mapId === 'world', '只能在公共世界采集');
       const def = this.rules.nodeAt(targetId); requireRule(def, '资源不存在'); this.near(p, def);
@@ -491,11 +522,17 @@ export class GameWorld {
       this.state.buildings[b.id] = b;
       if (type === 'storage_box') this.state.storage[b.id] = {};
       if (type === 'turret') this.state.ammo[b.id] = 0;
+      p.onboarding.workbenchBuilt ||= type === 'workbench';
+      p.onboarding.turretBuilt ||= type === 'turret';
       return;
     }
     if (['toggle_door', 'deposit', 'withdraw', 'load_turret', 'raid', 'repair'].includes(a.action)) {
-      const b = this.state.buildings[targetId] || this.buildingsFor(p).find(b => b.id === targetId);
-      requireRule(b, '建筑不存在'); this.near(p, b);
+      const definition = this.state.buildings[targetId] || this.buildingsFor(p).find(b => b.id === targetId);
+      requireRule(definition, '建筑不存在');
+      // Static terrain definitions can outlive a failed action. Only mutate an
+      // owned state copy so rollback cannot leave a cached door open or damaged.
+      const b = this.state.buildings[targetId] || clone(definition);
+      this.near(p, b);
       if (a.action === 'toggle_door') {
         requireRule(['door', 'safe_door'].includes(b.type) && b.hp > 0, '目标不是可用的门');
         requireRule(this.canUse(p.id, b) || p.mapId === 'world' && b.type === 'door' && !b.isLocked, '门已上锁');
@@ -552,6 +589,7 @@ export class GameWorld {
         requireRule(resized, '背包空间不足，请先整理物品再更换或卸下背包');
         p.inventory = resized;
       }
+      p.onboarding.toolEquipped ||= slot === 'tool' && gatheringEffects(p.equipment.tool?.id).canMine;
       this.deriveArmor(p); return;
     }
     if (a.action === 'craft') {
@@ -571,8 +609,9 @@ export class GameWorld {
     if (a.action === 'buy' || a.action === 'sell') {
       requireRule(p.mapId === 'world' && this.isNeutral(p), '交易需要返回公共补给点');
       requireRule(typeof a.itemId === 'string' && positiveCount(a.quantity) && a.quantity <= 999, '商品或数量无效');
-      const bundle: Record<string, [string, number]> = { ammo_box: ['ammo', 60], food_ration: ['food', 10], rift_shard: ['shard', 1], scrap: ['scrap', 10] };
-      const [itemId, units] = bundle[a.itemId] || [a.itemId, 1];
+      const offer = marketOffer(a.itemId);
+      if (a.action === 'buy') requireRule(offer, '该商品未上架，请通过探索或制造获取');
+      const [itemId, units] = offer ? [offer.itemId, offer.units] as const : [a.itemId, 1] as const;
       requireRule(Object.hasOwn(ITEM_DEFS, itemId) && itemId !== 'credits', '商品不存在');
       const def = ITEM_DEFS[itemId.startsWith('ammo_') ? 'ammo' : itemId];
       const count = a.quantity * units;
@@ -595,6 +634,7 @@ export class GameWorld {
       const item = p.inventory[Number(a.index)]; requireRule(item && ['food', 'medical'].includes(item.category), '物品不能使用');
       this.cooldown(p, 'use_item', 800); const def = ITEM_DEFS[item.id];
       p.hp = Math.min(p.maxHp, p.hp + (def.heal || 0)); p.satiety = Math.min(100, p.satiety + (def.satiety || 0));
+      p.onboarding.ateFood ||= item.category === 'food';
       item.count--; if (!item.count) p.inventory[Number(a.index)] = null; p.actionAt.use_item = this.now(); return;
     }
     if (a.action === 'damage') {
@@ -602,7 +642,9 @@ export class GameWorld {
     }
     if (a.action === 'fire') {
       requireRule(p.equipment.weapon && p.resources.ammo > 0, '武器或弹药不足');
-      this.cooldown(p, 'attack', (WEAPONS[p.equipment.weapon.id]?.fireRate ?? 0.12) * 1000);
+      const interval = (WEAPONS[p.equipment.weapon.id]?.fireRate ?? 0.12) * 1000;
+      // A frame's receive jitter becomes debt on the next shot, not a faster rate.
+      const firedAt = this.cooldown(p, 'attack', interval, receivedAt, Math.min(20, interval / 4));
       requireRule(a.monsterId === undefined || a.targetId === undefined, '攻击只能指定一个目标');
       if (a.monsterId !== undefined) this.attackMonster(p, a.monsterId, true);
       if (a.targetId !== undefined) {
@@ -611,7 +653,7 @@ export class GameWorld {
         this.near(p, target, WEAPONS[p.equipment.weapon.id]?.range ?? 12);
         this.damage(target, WEAPON_DAMAGE[p.equipment.weapon.id] || 55); p.combatUntil = this.now() + 30_000;
       }
-      p.resources.ammo--; p.actionAt.attack = this.now(); return;
+      p.resources.ammo--; p.actionAt.attack = firedAt; return;
     }
     if (a.action === 'die') { requireRule(p.hp <= 0, '角色仍存活'); this.damage(p, 1); return; }
     if (a.action === 'attack' || a.action === 'pvp_hit') {
@@ -717,7 +759,8 @@ export class GameWorld {
       p.satiety = Math.max(0, p.satiety - elapsed * 0.25); p.survivalAt = time;
       if (p.satiety <= 0) this.damage(p, elapsed * 2.5);
       else if (p.satiety > 50 && p.combatUntil < time) p.hp = Math.min(p.maxHp, p.hp + elapsed * 1.2);
-      if (p.satiety > 0 && shieldRegenTime > 0) p.shield = Math.min(p.maxShield, p.shield + shieldRegenTime * 8);
+      if (p.mapId === 'world' && this.rules.weather?.() === 'acid_rain') p.shield = Math.max(0, p.shield - elapsed * ACID_SHIELD_DRAIN);
+      else if (p.satiety > 0 && shieldRegenTime > 0) p.shield = Math.min(p.maxShield, p.shield + shieldRegenTime * 8);
       dirty = true;
     }
     const maps = new Set(activePlayers.filter(p => p.mapId.startsWith('home_')).map(p => p.mapId));

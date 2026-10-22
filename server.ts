@@ -7,7 +7,10 @@ import { fileURLToPath } from 'node:url';
 import { createDb, backupDatabase } from './server/db.js';
 import { guestTokenFromCookie, resolveGuest } from './server/identity.js';
 import { GameWorld, type GameStateSnapshot, type WorldRules } from './server/worldState.js';
-import { generateWorldChunk, getWorldInteractable, migrateWorldPosition, worldIsRoad, worldThemeAt, worldToChunk, WORLD_LOCATIONS, type WorldChunk } from './src/game/world.js';
+import { createWorldQueries } from './server/worldQueries.js';
+import { StateEncoder } from './src/game/stateSync.js';
+import { getWorldInteractable, migrateWorldPosition, worldIsRoad, worldThemeAt, WORLD_LOCATIONS } from './src/game/world.js';
+import { WEATHER_DURATION, WEATHER_SEQUENCE, weatherInfo } from './src/game/weather.js';
 import type { MapZoneId, NetMessage, WeatherState, WeatherType } from './src/types/game.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -25,46 +28,23 @@ if (!db.getMeta('authoritative-world-v2') || db.getMeta('public-house-layout') !
   if (backup) console.log('[db] pre-migration backup: ' + backup);
 }
 
-// Terrain is deterministic; only a bounded nearby chunk cache exists on the server.
-const chunkCache = new Map<string, WorldChunk>();
-function nearbyChunks(x: number, y: number) {
-  const center = worldToChunk(x, y);
-  const result: WorldChunk[] = [];
-  for (let cy = center.y - 2; cy <= center.y + 2; cy++) for (let cx = center.x - 2; cx <= center.x + 2; cx++) {
-    const key = cx + ':' + cy;
-    let chunk = chunkCache.get(key);
-    if (!chunk) { chunk = generateWorldChunk(cx, cy); chunkCache.set(key, chunk); }
-    else { chunkCache.delete(key); chunkCache.set(key, chunk); }
-    result.push(chunk);
-  }
-  while (chunkCache.size > 192) chunkCache.delete(chunkCache.keys().next().value!);
-  return result;
-}
+const worldQueries = createWorldQueries();
 const rules: WorldRules = {
   nodeAt: getWorldInteractable,
-  nodesNear: (x, y) => nearbyChunks(x, y).flatMap(c => c.interactables).filter(n => Math.hypot(n.x - x, n.y - y) <= 45),
-  buildingsNear: (x, y) => nearbyChunks(x, y).flatMap(c => c.buildings).filter(b => Math.hypot(b.x - x, b.y - y) <= 55),
-  monstersNear: (x, y) => nearbyChunks(x, y).flatMap(c => c.monsters).filter(m => Math.hypot(m.x - x, m.y - y) <= 40),
+  ...worldQueries,
   campSiteAllowed: (x, y) => Math.hypot(x, y) >= 48 && !worldIsRoad(x, y, 6) && !['lake', 'rift', 'marsh'].includes(worldThemeAt(x, y)) && WORLD_LOCATIONS.every(l => Math.hypot(l.x - x, l.y - y) >= (l.sourceMapId.startsWith('camp_') ? 48 : 20)),
   migrate: (mapId, x, y) => migrateWorldPosition(mapId as MapZoneId, x, y),
+  weather: () => WEATHER_SEQUENCE[weatherIndex],
 };
 const game = new GameWorld(db, rules);
 db.setMeta('public-house-layout', '2');
-interface Client { ws: WebSocket; id: string; isGM: boolean; visible: Set<string>; lastSeen: number; lastCorrection: number; lastMessageAt: number; messageCount: number; lastSnapshot: number; mapId: MapZoneId }
+interface Client { ws: WebSocket; id: string; isGM: boolean; visible: Set<string>; lastSeen: number; lastCorrection: number; lastMessageAt: number; messageCount: number; lastSnapshot: number; mapId: MapZoneId; stateEncoder?: StateEncoder }
 const clients = new Map<string, Client>();
 const GM_TOKEN = process.env.GM_TOKEN || 'rift-gm';
-const WILD_WEATHERS: { type: WeatherType; name: string; icon: string; desc: string; effectLabel: string }[] = [
-  { type: 'clear', name: '晴朗破晓', icon: '☀️', desc: '视野清晰，无负面环境侵蚀。', effectLabel: '搜刮收益提升 +20%' },
-  { type: 'acid_rain', name: '酸雨风暴', icon: '🧪', desc: '酸蚀腐蚀大气，护盾缓慢受损。', effectLabel: '野外酸雨预警' },
-  { type: 'fog', name: '暗蚀重雾', icon: '🌫️', desc: '浓雾笼罩荒野，雷达侦测范围缩减。', effectLabel: '浓雾预警' },
-  { type: 'thunder', name: '离子雷暴', icon: '⚡', desc: '强对流离子风暴，注意隐蔽。', effectLabel: '离子雷暴预警' },
-  { type: 'rain', name: '荒芜骤雨', icon: '🌧️', desc: '雨幕遮蔽地平线，脚步声减弱。', effectLabel: '降雨预警' },
-];
 let weatherIndex = 0;
-let weatherTimer = 180;
+let weatherTimer = WEATHER_DURATION;
 function weather(): WeatherState {
-  const { type, ...rest } = WILD_WEATHERS[weatherIndex];
-  return { current: type, ...rest, durationLeft: weatherTimer };
+  return weatherInfo(WEATHER_SEQUENCE[weatherIndex], weatherTimer);
 }
 function send(ws: WebSocket, type: string, payload: unknown) {
   if (ws.readyState === WebSocket.OPEN) ws.send(JSON.stringify({ type, payload, timestamp: Date.now() }));
@@ -74,7 +54,8 @@ function stateTo(client: Client, snapshot?: GameStateSnapshot, correction = fals
   const state = snapshot || game.snapshot(client.id);
   state.correction ||= correction || client.mapId !== state.player.mapId;
   client.mapId = state.player.mapId; client.lastSnapshot = Date.now();
-  send(client.ws, 'game_state', state);
+  if (client.stateEncoder) send(client.ws, 'game_state_patch', client.stateEncoder.encode(state));
+  else send(client.ws, 'game_state', state);
 }
 function refreshVisibility(client: Client) {
   const players = game.visiblePlayers(client.id);
@@ -123,6 +104,10 @@ wss.on('connection', (ws, req) => {
       const msg = JSON.parse(data.toString()) as NetMessage;
       const payload = msg.payload || {};
       switch (msg.type) {
+        case 'state_sync': {
+          if (payload.version !== 1) break;
+          client.stateEncoder = new StateEncoder(); stateTo(client); break;
+        }
         case 'player_sync': {
           if (!game.move(id, payload) && now - client.lastCorrection >= 150) {
             client.lastCorrection = now; stateTo(client, undefined, true);
@@ -153,9 +138,9 @@ wss.on('connection', (ws, req) => {
         case 'gm_auth': client.isGM = payload.token === GM_TOKEN; send(ws, 'gm_auth_result', { ok: client.isGM, playerId: id }); break;
         case 'weather_set': {
           if (!client.isGM) { send(ws, 'gm_auth_result', { ok: false, error: 'GM only' }); break; }
-          const next = WILD_WEATHERS.findIndex(w => w.type === payload.weather);
+          const next = WEATHER_SEQUENCE.findIndex(w => w === payload.weather);
           if (next < 0) break;
-          weatherIndex = next; weatherTimer = 180; broadcast('weather_update', weather()); break;
+          weatherIndex = next; weatherTimer = WEATHER_DURATION; broadcast('weather_update', weather()); break;
         }
       }
     } catch (error) { console.error('[ws] message rejected', error); }
@@ -181,7 +166,7 @@ setInterval(() => {
 setInterval(() => { try { game.persist(); } catch (error) { console.error('[db] periodic save failed', error); } }, 5000);
 setInterval(() => {
   if (--weatherTimer > 0) return;
-  weatherTimer = 180; weatherIndex = (weatherIndex + 1) % WILD_WEATHERS.length;
+  weatherTimer = WEATHER_DURATION; weatherIndex = (weatherIndex + 1) % WEATHER_SEQUENCE.length;
   broadcast('weather_update', weather());
   broadcast('chat', { id: 'weather_' + Date.now(), channel: 'system', sender: '坍界天候预警台', text: '【气象骤变】野外区域已切换为「' + weather().name + '」。', timestamp: new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' }) });
 }, 1000);

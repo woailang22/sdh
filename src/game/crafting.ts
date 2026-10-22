@@ -138,7 +138,7 @@ const RECIPES: Omit<Recipe, 'resultItemId' | 'resultCount'>[] = [
     desc: '护盾上限+50，受伤减免15%。穿上它再去红区。',
     cost: { wood: 0, stone: 0, scrap: 20, parts: 2 },
   },
-  { id: 'grow_parsnip', name: '种植：防风草 ×4', resultName: '防风草', icon: '🥕', category: '农圩种植', desc: '种子×1农圩种植，工作台浓缩为12秒。', cost: { wood: 2, stone: 0, scrap: 0, parts: 0, extra: [{ itemId: 'seed_parsnip', count: 1 }] } },
+  { id: 'grow_parsnip', name: '种植：防风草 ×4', resultName: '防风草', icon: '🥕', category: '农圩种植', desc: '在营地种植田消耗种子1和木材2，60秒后领取4份防风草。', cost: { wood: 2, stone: 0, scrap: 0, parts: 0, extra: [{ itemId: 'seed_parsnip', count: 1 }] } },
   { id: 'grow_potato', name: '种植：土豆 ×4', resultName: '土豆', icon: '🥔', category: '农圩种植', desc: '种子×1，量大管饱。', cost: { wood: 2, stone: 0, scrap: 2, parts: 0, extra: [{ itemId: 'seed_potato', count: 1 }] } },
   { id: 'grow_corn', name: '种植：玉米 ×4', resultName: '玉米', icon: '🌽', category: '农圩种植', desc: '种子×1，鱼汤原料。', cost: { wood: 4, stone: 0, scrap: 2, parts: 0, extra: [{ itemId: 'seed_corn', count: 1 }] } },
   { id: 'grow_pumpkin', name: '种植：南瓜 ×3', resultName: '南瓜', icon: '🎃', category: '农圩种植', desc: '种子×1，腌菜原料。', cost: { wood: 4, stone: 0, scrap: 4, parts: 0, extra: [{ itemId: 'seed_pumpkin', count: 1 }] } },

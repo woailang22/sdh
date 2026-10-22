@@ -2,7 +2,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { IsometricEngine, type GameCallbacks } from './IsometricEngine';
 import { buildCompoundWalls } from './compound';
 
-vi.mock('../audio/soundManager', () => ({ soundManager: { playLevelUp: vi.fn(), playHit: vi.fn() } }));
+vi.mock('../audio/soundManager', () => ({ soundManager: { playLevelUp: vi.fn(), playHit: vi.fn(), playGunshot: vi.fn() } }));
 
 function makeCanvas() {
   const context = new Proxy({
@@ -30,6 +30,92 @@ function setup() {
 }
 
 afterEach(() => { vi.restoreAllMocks(); vi.unstubAllGlobals(); });
+
+function stubImageLoading() {
+  vi.stubGlobal('Image', class extends EventTarget {
+    complete = false; naturalWidth = 512; naturalHeight = 512; src = ''; decoding = '';
+  });
+}
+
+describe('real-time firing cadence', () => {
+  function armed() {
+    let time = 1000;
+    vi.spyOn(performance, 'now').mockImplementation(() => time);
+    const { engine } = setup(), fire = vi.fn();
+    (engine as any).callbacks.onGameAction = fire;
+    engine.hasRangedWeapon = true; engine.player.fireRate = 0.12;
+    engine.player.isFiring = true; engine.player.ammo = 30; engine.monsters = []; engine.buildings = [];
+    return { engine, fire, at: (now: number, dt: number) => { time = now; (engine as any).update(dt); } };
+  }
+  it('does not fire early when frame timestamps advance faster than callback execution', () => {
+    const { engine, fire, at } = armed();
+    at(1000, 0.1); at(1050, 0.1); at(1100, 0.03);
+    expect(engine.player.ammo).toBe(29); expect(fire).toHaveBeenCalledTimes(1);
+    at(1120, 0.001); expect(engine.player.ammo).toBe(28); expect(fire).toHaveBeenCalledTimes(2);
+  });
+  it('retains the shot cooldown through release and rapid repress', () => {
+    const { engine, fire, at } = armed();
+    at(1000, 0.001); engine.player.isFiring = false; at(1020, 0.02);
+    engine.player.isFiring = true; at(1040, 0.02);
+    expect(engine.player.ammo).toBe(29); expect(fire).toHaveBeenCalledTimes(1);
+    at(1120, 0.08); expect(engine.player.ammo).toBe(28);
+  });
+  it('fires only once on resume without replaying shots accumulated during a pause', () => {
+    const { engine, fire, at } = armed();
+    at(1000, 0.01); at(5000, 0.1);
+    expect(engine.player.ammo).toBe(28); expect(fire).toHaveBeenCalledTimes(2);
+  });
+});
+
+describe('server weather synchronization', () => {
+  it('retains the server countdown instead of resetting it to a client-only duration', () => {
+    const { engine } = setup();
+    engine.setWeather('acid_rain', 37);
+    expect(engine.weatherDurationLeft).toBe(37);
+    expect((engine as any).callbacks.onWeatherChange).toHaveBeenLastCalledWith(expect.objectContaining({ current: 'acid_rain', durationLeft: 37 }));
+  });
+
+  it('waits for the server at countdown expiry and keeps the displayed seconds current', () => {
+    const time = vi.spyOn(Date, 'now').mockReturnValue(10_000);
+    const { engine } = setup(); (engine as any).callbacks.onGameAction = vi.fn();
+    engine.setWeather('clear', 1.01);
+    time.mockReturnValue(10_020);
+    (engine as any).update(0.02);
+    expect((engine as any).callbacks.onWeatherChange).toHaveBeenLastCalledWith(expect.objectContaining({ current: 'clear', durationLeft: 1 }));
+    time.mockReturnValue(11_020); (engine as any).update(0.02);
+    expect(engine.currentWeather).toBe('clear'); expect(engine.weatherDurationLeft).toBe(0);
+    (engine as any).update(0.02); expect(engine.currentWeather).toBe('clear');
+  });
+
+  it('includes time spent paused or hidden when updating the online weather countdown', () => {
+    const time = vi.spyOn(Date, 'now').mockReturnValue(10_000);
+    const { engine } = setup(); (engine as any).callbacks.onGameAction = vi.fn();
+    engine.setWeather('clear', 180); time.mockReturnValue(70_000);
+    (engine as any).update(0.1); expect(engine.weatherDurationLeft).toBe(120);
+    expect(engine.currentWeather).toBe('clear');
+  });
+
+  it.each(['acid_rain', 'clear'] as const)('does not locally change authoritative shield values during %s', weather => {
+    const { engine } = setup(); (engine as any).callbacks.onGameAction = vi.fn();
+    engine.setWeather(weather); engine.player.shield = 20;
+    (engine as any).update(0.1); expect(engine.player.shield).toBe(20);
+  });
+
+  it('preserves autonomous weather transitions for an offline preview', () => {
+    const { engine } = setup(); engine.setWeather('clear'); engine.weatherDurationLeft = 0.01;
+    (engine as any).update(0.02); expect(engine.currentWeather).toBe('acid_rain');
+  });
+
+  it('keeps personal camps clear while rendering acid rain in the continuous public world', () => {
+    const { engine, context } = setup();
+    (context as any).createLinearGradient = () => ({ addColorStop: vi.fn() });
+    engine.currentWeather = 'acid_rain'; engine.currentMapId = 'home_owner';
+    const drops = vi.fn(); (context as any).moveTo = drops;
+    (engine as any).renderWeather(); expect(drops).not.toHaveBeenCalled();
+    engine.currentMapId = 'world'; (engine as any).renderWeather();
+    expect(drops.mock.calls.length).toBeGreaterThan(0);
+  });
+});
 
 describe('ground rendering cost', () => {
   it('keeps resource models visible without a distant field of floating labels', () => {
@@ -174,17 +260,50 @@ describe('ground rendering cost', () => {
     }
   });
 
-  it('invalidates ground and fallback tile patches when an image finishes loading', () => {
+  it('shows a newly loaded scenery sprite without repainting cached terrain', () => {
     const { engine, context } = setup();
-    const image = Object.assign(new EventTarget(), { complete: false, naturalWidth: 0, naturalHeight: 0, src: '', decoding: '' });
-    vi.stubGlobal('Image', function () { return image; });
+    stubImageLoading();
     (engine as any).renderMapGround();
     const cached = context.drawImage.mock.calls.at(-1)?.[0];
     expect(cached).toBeDefined();
     const fills = cached.getContext('2d').fillRect.mock.calls.length;
-    (engine as any).tilePatchCache.set('fallback', makeCanvas());
-    image.dispatchEvent(new Event('load'));
-    expect((engine as any).tilePatchCache.size).toBe(0);
+    const sprite = (engine as any).artImage('world-environment-v1.png');
+    sprite.complete = true; sprite.dispatchEvent(new Event('load'));
+    (engine as any).renderMapGround();
+    expect(cached.getContext('2d').fillRect.mock.calls.length).toBe(fills);
+    expect((engine as any).drawArtFrame('world-environment-v1.png', 'understory', 0, 0, 100, 100)).toBe(true);
+    expect(context.drawImage.mock.calls.at(-1)?.[0]).toBe(sprite);
+  });
+
+  it('replaces a B tile fallback after loading without discarding other variants or terrains', () => {
+    const { engine } = setup(); stubImageLoading();
+    const forest = (engine as any).artImage('tile-forest-a.png');
+    const quarry = (engine as any).artImage('tile-quarry-a.png');
+    for (const image of [forest, quarry]) { image.complete = true; image.dispatchEvent(new Event('load')); }
+    const patch = (theme: string, variant: string) => (engine as any).tilePatch(theme, variant, 0, 0);
+    const forestA = patch('forest', 'a'), oldForestB = patch('forest', 'b'), quarryA = patch('quarry', 'a');
+    expect(oldForestB.getContext('2d').drawImage.mock.calls[0][0]).toBe(forest);
+    const forestB = (engine as any).artImage('tile-forest-b.png');
+    forestB.complete = true; forestB.dispatchEvent(new Event('load'));
+    expect(patch('forest', 'a')).toBe(forestA);
+    expect(patch('quarry', 'a')).toBe(quarryA);
+    const replaced = patch('forest', 'b');
+    expect(replaced).not.toBe(oldForestB);
+    expect(replaced.getContext('2d').drawImage.mock.calls[0][0]).toBe(forestB);
+    expect(oldForestB.width).toBe(0); expect(oldForestB.height).toBe(0);
+  });
+
+  it('refreshes the cached ground texture without discarding valid tile patches', () => {
+    const { engine, context } = setup(); stubImageLoading();
+    const forest = (engine as any).artImage('tile-forest-a.png');
+    forest.complete = true; forest.dispatchEvent(new Event('load'));
+    const patch = (engine as any).tilePatch('forest', 'a', 0, 0);
+    (engine as any).renderMapGround();
+    const cached = context.drawImage.mock.calls.at(-1)?.[0];
+    const fills = cached.getContext('2d').fillRect.mock.calls.length;
+    const texture = (engine as any).artImage('texture-ground.png');
+    texture.complete = true; texture.dispatchEvent(new Event('load'));
+    expect((engine as any).tilePatch('forest', 'a', 0, 0)).toBe(patch);
     (engine as any).renderMapGround();
     expect(cached.getContext('2d').fillRect.mock.calls.length).toBeGreaterThan(fills);
   });
@@ -273,6 +392,72 @@ describe('engine lifetime', () => {
     expect(engine.keys.w).toBeUndefined();
     expect((engine as any).tilePatchCache.size).toBe(0);
     expect(engine.artImages.size).toBe(0);
+  });
+});
+
+describe('camp interaction priority', () => {
+  it.each(['owner', 'enemy', 'member'])('uses the closer %s storage instead of leaving camp', role => {
+    const { engine } = setup();
+    const portal = vi.fn(() => true), raid = vi.fn(), manage = vi.fn();
+    Object.assign((engine as any).callbacks, { onGameAction: vi.fn(), onCampInteract: portal, onOpenRaidModal: raid, onOpenStorageBox: manage });
+    engine.localPlayerId = 'self'; engine.warpToMap(role === 'owner' ? 'home_self' : 'home_other', 1.5, 25.5);
+    if (role === 'member') engine.friendlyPlayerIds.add('other');
+    const storage = { id: 'storage', type: 'storage_box', name: '仓库', x: 3, y: 24, hp: 400, maxHp: 400, ownerId: role === 'owner' ? 'self' : 'other', mapId: engine.currentMapId } as any;
+    engine.buildings = [storage]; engine.nearestBuilding = storage;
+    engine.triggerInteraction();
+    expect(portal).not.toHaveBeenCalled();
+    expect(role === 'enemy' ? raid : manage).toHaveBeenCalledWith(storage);
+    expect(role === 'enemy' ? manage : raid).not.toHaveBeenCalled();
+  });
+
+  it('uses the closer exit and suppresses the competing building prompt', () => {
+    const { engine, context } = setup(); const portal = vi.fn(() => true), raid = vi.fn(), labels = vi.fn();
+    Object.assign((engine as any).callbacks, { onGameAction: vi.fn(), onCampInteract: portal, onOpenRaidModal: raid });
+    engine.localPlayerId = 'self'; engine.warpToMap('home_other', 0, 27.5);
+    const building = { id: 'storage', type: 'storage_box', name: '仓库', x: 1, y: 26, hp: 400, maxHp: 400, ownerId: 'other', mapId: engine.currentMapId } as any;
+    engine.buildings = [building]; engine.nearestBuilding = building; (context as any).fillText = labels;
+    engine.triggerInteraction(); (engine as any).renderInteractionHUD();
+    expect(portal).toHaveBeenCalledTimes(1); expect(raid).not.toHaveBeenCalled();
+    expect(labels).not.toHaveBeenCalled();
+  });
+
+  it('gathers a closer resource instead of leaving through a nearby exit', () => {
+    const { engine } = setup(); const portal = vi.fn(() => true);
+    Object.assign((engine as any).callbacks, { onGameAction: vi.fn(), onCampInteract: portal });
+    engine.warpToMap('home_other', 0, 26.5); engine.nearestBuilding = null;
+    const resource = { id: 'drop', type: 'box', name: '掉落物', x: 0, y: 26.2, stock: 1, searchDuration: 1 } as any;
+    engine.nearestInteractable = resource;
+    engine.triggerInteraction();
+    expect(portal).not.toHaveBeenCalled(); expect(engine.isLooting).toBe(true); expect((engine as any).lootTarget).toBe(resource);
+  });
+
+  it('compares a public camp entrance with the current resource target and still enters at the marker', () => {
+    const { engine } = setup(); const portal = vi.fn(() => true);
+    Object.assign((engine as any).callbacks, { onGameAction: vi.fn(), onCampInteract: portal });
+    engine.warpToMap('world', 100, 35); engine.nearestBuilding = null;
+    engine.campEntrances = [{ id: 'home_other', ownerId: 'other', ownerName: '另一位行者', x: 101.5, y: 35 }];
+    engine.nearestInteractable = { id: 'box', type: 'box', name: '枯枝', x: 100.25, y: 35, stock: 1, searchDuration: 1 } as any;
+    engine.triggerInteraction();
+    expect(engine.isLooting).toBe(true); expect(portal).not.toHaveBeenCalled();
+    engine.isLooting = false; (engine as any).lootTarget = null; engine.player.x = 101.5;
+    engine.triggerInteraction();
+    expect(portal).toHaveBeenCalledTimes(1); expect(engine.isLooting).toBe(false);
+  });
+
+  it('describes breaching, member door access and broken remains without inventing loot', () => {
+    const { engine, context } = setup(); const labels = vi.fn(); (context as any).fillText = labels;
+    (engine as any).callbacks.onGameAction = vi.fn(); engine.localPlayerId = 'self'; engine.warpToMap('home_other', 5, 5);
+    const building = { id: 'storage', type: 'storage_box', name: '敌方仓库', x: 6, y: 5, hp: 400, maxHp: 400, ownerId: 'other', mapId: engine.currentMapId } as any;
+    engine.nearestBuilding = building;
+    (engine as any).renderInteractionHUD();
+    expect(labels.mock.calls.some(([text]) => text.includes('破拆'))).toBe(true);
+    labels.mockClear(); engine.friendlyPlayerIds.add('other'); building.type = 'safe_door';
+    (engine as any).renderInteractionHUD();
+    expect(labels.mock.calls.some(([text]) => text.includes('开启安全门'))).toBe(true);
+    labels.mockClear(); building.hp = 0;
+    (engine as any).renderInteractionHUD();
+    expect(labels.mock.calls.some(([text]) => text.includes('残骸'))).toBe(true);
+    expect(labels.mock.calls.some(([text]) => text.includes('战利品'))).toBe(false);
   });
 });
 

@@ -1,0 +1,59 @@
+import type { GameStateSnapshot } from '../../server/worldState';
+
+const LISTS = ['camps', 'buildings', 'nodes', 'drops', 'monsters', 'reports'] as const;
+type ListKey = typeof LISTS[number];
+type LiveState = Pick<GameStateSnapshot, 'player' | 'correction' | 'requestId' | 'error' | 'loot'>;
+export interface StatePatch {
+  version: 1;
+  sequence: number;
+  baseSequence: number | null;
+  state: LiveState & Partial<Pick<GameStateSnapshot, ListKey>>;
+}
+
+/** One bounded comparison set per connection; no world history is retained. */
+export class StateEncoder {
+  private sequence = 0;
+  private mapId = '';
+  private lastFullAt = -Infinity;
+  private lists = new Map<ListKey, string>();
+
+  encode(snapshot: GameStateSnapshot, now = Date.now()): StatePatch {
+    const full = !this.sequence || snapshot.player.mapId !== this.mapId || now - this.lastFullAt >= 5000;
+    const { player, correction, requestId, error, loot } = snapshot;
+    const state: StatePatch['state'] = { player, correction, requestId, error, loot };
+    for (const key of LISTS) {
+      const encoded = JSON.stringify(snapshot[key]);
+      if (full || this.lists.get(key) !== encoded) Object.assign(state, { [key]: snapshot[key] });
+      this.lists.set(key, encoded);
+    }
+    const baseSequence = full ? null : this.sequence;
+    this.sequence++;
+    this.mapId = player.mapId;
+    if (full) this.lastFullAt = now;
+    return { version: 1, sequence: this.sequence, baseSequence, state };
+  }
+}
+
+/** Reconstructs the existing complete game snapshot at the network boundary. */
+export class StateDecoder {
+  private sequence = 0;
+  private snapshot: GameStateSnapshot | null = null;
+
+  reset() { this.sequence = 0; this.snapshot = null; }
+
+  decode(patch: StatePatch): GameStateSnapshot | undefined {
+    if (patch?.version !== 1 || !Number.isSafeInteger(patch.sequence) || patch.sequence <= 0 || !patch.state?.player) return;
+    if (patch.baseSequence === null) {
+      if (LISTS.some(key => !Array.isArray(patch.state[key]))) return;
+      this.snapshot = patch.state as GameStateSnapshot;
+    } else {
+      if (!this.snapshot || patch.baseSequence !== this.sequence || patch.sequence !== this.sequence + 1
+        || patch.state.player.id !== this.snapshot.player.id || patch.state.player.mapId !== this.snapshot.player.mapId) return;
+      // Action feedback is single-use. Missing error/loot/requestId must clear it.
+      const { requestId: _request, error: _error, loot: _loot, ...previous } = this.snapshot;
+      this.snapshot = { ...previous, ...patch.state };
+    }
+    this.sequence = patch.sequence;
+    return this.snapshot;
+  }
+}

@@ -27,7 +27,7 @@ type SelectedPoint = { id: string; name: string; x: number; y: number; sourceMap
 const RISK_LABEL = { SAFE: '安全', LOW: '低风险', HIGH: '高风险', EXTREME: '极高风险' };
 const RESOURCE_LABEL: Record<string, string> = {
   camp: '公共工坊 · 营地入口', town: '废铁 · 零件 · 弹药',
-  mountain: '原木 · 石料 · 铁矿', marsh: '鱼获 · 食物 · 晶石',
+  mountain: '原木 · 石料 · 铁矿 · 铜矿', marsh: '鱼获 · 食物 · 晶石',
 };
 const WORLD_SIZE = WORLD_MAX - WORLD_MIN;
 

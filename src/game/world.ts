@@ -356,8 +356,9 @@ export function generateWorldChunk(cx: number, cy: number): WorldChunk {
       node = variant === 0 ? resource('', '废弃车辆', 'car', x, y, [loot('scrap', 5), loot('part', 1)])
         : resource('', '散落废铁', 'scrap', x, y, [loot('scrap', 3)]);
     } else if (theme === 'quarry') {
-      node = resource('', variant === 0 ? '露天铁矿' : '风化石堆', 'boulder', x, y,
-        variant === 0 ? [loot('stone', 3), loot('iron_ore', 1)] : [loot('stone', 5)]);
+      const copper = variant === 3 && location.sourceMapId === 'mtn_quarry' && Math.hypot(x - location.x, y - location.y) <= 96;
+      node = resource('', copper ? '露天铜矿' : variant === 0 ? '露天铁矿' : '风化石堆', 'boulder', x, y,
+        copper ? [loot('stone', 3), loot('ore_copper', 1)] : variant === 0 ? [loot('stone', 3), loot('iron_ore', 1)] : [loot('stone', 5)]);
     } else if (variant < 2) {
       node = resource('', variant === 0 ? '林间枯枝' : '黑松树', variant === 0 ? 'box' : 'tree', x, y, [loot('wood', variant === 0 ? 3 : 6)]);
     } else {

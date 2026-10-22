@@ -358,6 +358,8 @@ export interface TerritoryZone {
 export type NetMessageType =
   | 'game_action'
   | 'game_state'
+  | 'game_state_patch'
+  | 'state_sync'
   | 'init'
   | 'player_sync'
   | 'player_joined'

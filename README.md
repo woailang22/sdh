@@ -1,20 +1,72 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://ai.google.dev/static/site-assets/images/share-ais-513315318.png" />
-</div>
+# 坍界行者
 
-# Run and deploy your AI Studio app
+以探索生存、采集和营地建设为主的等距视角网页游戏。公共野外使用连续世界坐标，包含林地、矿场、城镇和湿地；个人营地需要在野外建立，进入后为独立空间。
 
-This contains everything you need to run your app locally.
+当前已接入服务器保存的角色、资源消耗、制造、仓储、营地设施和全天攻防。营地主人离线后，已装填的防御设施仍可运行。
 
-View your app in AI Studio: https://ai.studio/apps/df8170ce-c753-49ec-b8ca-c2e7d21912bf
+## 本地开发
 
-## Run Locally
+需要 Node.js。本机验证版本为 Node.js 24.15.0。
 
-**Prerequisites:**  Node.js
+```powershell
+npm ci
+npm run dev
+```
 
+默认访问 `http://localhost:3000`。同一局域网可使用运行机器的 IP 和端口访问。
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+## 运行生产构建
+
+在 PowerShell 中：
+
+```powershell
+npm run build
+$env:NODE_ENV = 'production'
+npm start
+```
+
+该模式使用 `dist/` 中的客户端构建，同时提供游戏 API 和 WebSocket。返回开发模式时，将 `NODE_ENV` 设为 `development` 后运行 `npm run dev`。
+
+可按需在启动前设置：
+
+| 环境变量 | 用途 | 默认值 / 使用说明 |
+|---|---|---|
+| `PORT` | HTTP 与 WebSocket 监听端口 | `3000` |
+| `DB_PATH` | SQLite 存档文件 | `data/sdc.sqlite` |
+| `GM_TOKEN` | 管理员功能口令 | 对外运行时设置自己的口令 |
+| `DISABLE_HMR` | 开发模式关闭热更新与文件监听 | 设置为 `true` 时关闭 |
+
+反向代理需同时转发 `/ws` 的 WebSocket 连接并保留原始 Host。`/api/health` 可检查服务状态。
+
+## 开始游戏
+
+- 新角色为空背包、无私人营地。先在附近农舍搜取补给，拾取枯枝和碎石，或徒手采集。
+- 随身制造石斧需要木材 10、石料 4；开山镐需要木材 8、石料 6。制作后在背包中装备。
+- 携带木材 20、石料 10，到道路、水域和地标保护范围外，打开“营地与建营”选址插旗。
+- 靠近野外入口进入营地，再建设仓库、工作台、种植和加工设施。新营地仅有核心。
+- 营地全天可被攻打，包括主人离线时；防御塔使用真实弹药，仓库被破坏后可能丢失实存物资。
+
+| 操作 | 按键 |
+|---|---|
+| 移动 / 点选移动 | WASD、方向键 / 鼠标右键 |
+| 采集、搜索、建筑交互 | E / F；长按可连续采集 |
+| 背包与装备 | I |
+| 营地建造 | B |
+| 世界地图与路线标记 | M |
+| 关闭面板 | Esc |
+
+游客身份随当前浏览器 Cookie 恢复，角色与世界状态保存在服务器 SQLite 中。试玩时保留当前浏览器数据；跨浏览器的账号登录与找回尚未接入。
+
+## 检查与设计记录
+
+```powershell
+npm test
+npm run lint
+npm run build
+```
+
+- [无缝世界、资源与营地设计](docs/superpowers/specs/2026-10-20-seamless-world-camps-design.md)
+- [实施、实际验证和剩余事项](docs/superpowers/plans/2026-10-20-seamless-world-camps.md)
+- [环境素材生成提示与来源](public/art/generation-prompts-world-environment.json)
+
+已做本地开局、持久化、攻防规则和浏览器路线验证。首次加载仍可能出现长帧，长期多人经济与大规模并发尚未验收；具体数值、验证条件和限制见实施记录。

@@ -30,6 +30,7 @@ export const RadarMinimap: React.FC<RadarMinimapProps> = ({
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const sweepAngleRef = useRef<number>(0);
+  const paintClockRef = useRef({ dueAt: 0, lastAt: 0 });
 
   useEffect(() => {
     let animId: number;
@@ -38,8 +39,17 @@ export const RadarMinimap: React.FC<RadarMinimapProps> = ({
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    const renderRadar = () => {
-      sweepAngleRef.current = (sweepAngleRef.current + 0.04) % (Math.PI * 2);
+    const renderRadar = (time: number) => {
+      animId = requestAnimationFrame(renderRadar);
+      const clock = paintClockRef.current;
+      if (document.hidden) { clock.dueAt = clock.lastAt = time; return; }
+      if (time < clock.dueAt) return;
+      const elapsed = Math.min(100, Math.max(0, time - clock.lastAt));
+      clock.lastAt = time;
+      const interval = 1000 / 30;
+      clock.dueAt = time + interval - (time - clock.dueAt) % interval;
+      // Keep the sweep speed independent of monitor refresh and prop updates.
+      sweepAngleRef.current = (sweepAngleRef.current + elapsed * 0.0024) % (Math.PI * 2);
 
       const w = canvas.width;
       const h = canvas.height;
@@ -191,7 +201,6 @@ export const RadarMinimap: React.FC<RadarMinimapProps> = ({
 
       ctx.restore();
 
-      animId = requestAnimationFrame(renderRadar);
     };
 
     animId = requestAnimationFrame(renderRadar);

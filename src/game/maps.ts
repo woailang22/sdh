@@ -595,7 +595,7 @@ export const SUBMAPS: Record<string, SubMapDef> = {
   },
   mtn_quarry: {
     id: 'mtn_quarry', region: 'mountain', name: '北岭采石场', theme: 'quarry',
-    desc: '露天矿场：石料/铁矿主产区，大型机械可拆',
+    desc: '露天矿场：石料、铁矿与铜矿。外围寻找铜矿露头，装备镐开采；大型机械可拆。',
     risk: 'LOW',
     gates: [
       { x: 0, y: 42, targetMap: 'mtn_logging', targetX: 0, targetY: -42, name: '南下伐木场', icon: '🌲', desc: '返回黑松伐木场' },
@@ -908,7 +908,7 @@ export const SUBMAPS: Record<string, SubMapDef> = {
   },
   marsh_rift: {
     id: 'marsh_rift', region: 'marsh', name: '裂隙前线', theme: 'rift',
-    desc: '红区：晶石/首领/遗落宝箱，富贵险中求',
+    desc: '红区：晶石与领主出没，东南先锋宝箱有蓝图、暗核和守卫',
     risk: 'EXTREME',
     gates: [
       { x: 0, y: -42, targetMap: 'marsh_bog', targetX: 0, targetY: 42, name: '北撤沼泽', icon: '🌊', desc: '撤回泥沼泽' },
@@ -943,6 +943,7 @@ export const SUBMAPS: Record<string, SubMapDef> = {
       M('rf2', '多足蚀化潜行兽', -14, 8, 480, 2.5, 28),
       M('rf3', '多足蚀化潜行兽', 14, -8, 480, 2.5, 28),
       M('rf4', '虚空撕裂幼体', -8, -16, 320, 2.6, 20),
+      M('rf_cache_guard', '先锋宝箱守卫', 14, 12, 320, 2.6, 20),
     ],
     buildings: [
       { id: 'rift_cover_n1', type: 'iron_wall', name: '先锋队掩体残墙', x: 5, y: 5, hp: 300, maxHp: 850, level: 1, ownerName: '遗落先锋', facing: 'ew' },
@@ -958,7 +959,7 @@ export const SUBMAPS: Record<string, SubMapDef> = {
   },
   marsh_abyss: {
     id: 'marsh_abyss', region: 'marsh', name: '深渊裂口', theme: 'rift',
-    desc: '第二红区：晶石/暗核/次级领主，毕业前哨战',
+    desc: '第二红区：晶石、暗核与次级领主，东南补给箱有装备和守卫',
     risk: 'EXTREME',
     gates: [
       { x: -30, y: -30, targetMap: 'marsh_rift', targetX: 30, targetY: 30, name: '北撤裂隙前线', icon: '⚠️', desc: '返回裂隙前线' },
@@ -993,6 +994,7 @@ export const SUBMAPS: Record<string, SubMapDef> = {
       M('ab1', '深渊亚领主·蚀骸巨兽 (次级BOSS)', 0, -8, 1200, 2.2, 42),
       M('ab2', '多足蚀化潜行兽', -14, 8, 480, 2.5, 28),
       M('ab3', '虚空撕裂幼体', 12, -10, 320, 2.6, 20),
+      M('ab_cache_guard', '深渊宝箱守卫', 18, 16, 480, 2.5, 28),
     ],
     buildings: [
       { id: 'aby_cover_1', type: 'iron_wall', name: '深渊掩体残墙', x: 6, y: 6, hp: 300, maxHp: 850, level: 1, ownerName: '遗落先锋', facing: 'ew' },

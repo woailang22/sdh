@@ -55,7 +55,7 @@ export const TopMenuBar: React.FC<TopMenuBarProps> = ({
       <div className="flex items-center gap-2 pointer-events-auto shrink-0">
         {/* Brand Badge */}
         <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-950/90 backdrop-blur-md border border-cyan-500/50 shadow-[0_0_15px_rgba(6,182,212,0.3)]">
-          <div className="w-2.5 h-2.5 rounded-full bg-cyan-400 animate-pulse shadow-[0_0_8px_#22d3ee]" />
+          <div className="w-2.5 h-2.5 rounded-full bg-cyan-400 shadow-[0_0_8px_#22d3ee]" />
           <div className="flex flex-col leading-none">
             <span className="text-xs font-black tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-sky-300 to-indigo-300 font-mono">
               坍界行者
@@ -129,7 +129,7 @@ export const TopMenuBar: React.FC<TopMenuBarProps> = ({
             className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg border border-emerald-500/40 bg-emerald-950/40 text-emerald-300 hover:bg-emerald-900/50 transition-all text-xs font-medium"
             title="查看当前服务器所有在线探索者 (快捷键: Tab)"
           >
-            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+            <span className="w-2 h-2 rounded-full bg-emerald-400" />
             <span>战区: {onlineCount}人</span>
             <span className="text-[10px] text-emerald-400/80 font-mono">({ping}ms)</span>
           </button>

@@ -35,6 +35,7 @@ import { dayKey, isNextDay } from './game/daily';
 import { BASE_PLOTS } from './game/spawn';
 import { homeMapIdFor } from './game/home';
 import { WORLD_LOCATIONS } from './game/world';
+import { weatherInfo } from './game/weather';
 import { CampPanel } from './components/CampPanel';
 import type { GameStateSnapshot } from '../server/worldState';
 import { CraftOrder } from './components/WorkbenchModal';
@@ -130,14 +131,8 @@ export default function App() {
   const [isConnected, setIsConnected] = useState<boolean>(false);
 
   // Weather System State
-  const [weatherState, setWeatherState] = useState<WeatherState>({
-    current: 'clear',
-    name: '恒界破晓',
-    icon: '☀️',
-    desc: '晴空破晓，全图视野清澈明亮！',
-    effectLabel: '搜刮掉落提升 25%',
-    durationLeft: 180,
-  });
+  const [weatherState, setWeatherState] = useState<WeatherState>(() => weatherInfo('clear'));
+  const serverWeatherRef = useRef({ state: weatherState, receivedAt: Date.now() });
 
   // Player Stats（单人末日生存零开局：1级/空钱包/空晶石）
   const [playerStats, setPlayerStats] = useState<PlayerStats>({
@@ -225,7 +220,7 @@ export default function App() {
   const lootPanelRef = useRef<{ id: string; name: string; items: LootEntry[] } | null>(null);
   lootPanelRef.current = lootPanel;
 
-  // 新手引路进度（累计量，不随花费减少）
+  // 在线引路进度来自服务端存档，不随花费、刷新或重登减少。
   const [totalWood, setTotalWood] = useState(0);
   const [totalStone, setTotalStone] = useState(0);
   const [totalScrap, setTotalScrap] = useState(0);
@@ -532,17 +527,19 @@ export default function App() {
     setEquipment(p.equipment);
     setPlayerWood(p.resources.wood); setPlayerStone(p.resources.stone);
     setPlayerScrap(p.resources.scrap); setPlayerParts(p.resources.parts);
-    setTotalWood(v => v + Math.max(0, p.resources.wood - (prev?.player.resources.wood ?? 0)));
-    setTotalStone(v => v + Math.max(0, p.resources.stone - (prev?.player.resources.stone ?? 0)));
+    setTotalWood(p.onboarding.wood);
+    setTotalStone(p.onboarding.stone);
     setTotalScrap(v => v + Math.max(0, p.resources.scrap - (prev?.player.resources.scrap ?? 0)));
     setPlayerStats(v => ({ ...v, hp: p.hp, maxHp: p.maxHp, shield: p.shield, maxShield: p.maxShield, satiety: p.satiety, credits: p.resources.credits, shards: p.resources.shard, level: p.level, title: p.title, xp: p.xp, maxXp: p.maxXp }));
     setKillCount(p.kills);
     setClaimedPlot(!!p.campId);
-    setPickaxeCrafted(!!p.equipment.tool?.id.includes('pickaxe') || p.inventory.some(it => it?.id.includes('pickaxe')));
+    setMovedFar(p.onboarding.explored);
+    setAteFood(p.onboarding.ateFood);
+    setPickaxeCrafted(p.onboarding.toolEquipped);
     const owned = state.buildings.filter(b => b.ownerId === p.id);
-    setWorkbenchBuilt(v => v || owned.some(b => b.type === 'workbench'));
+    setWorkbenchBuilt(p.onboarding.workbenchBuilt);
     setSafeDoorBuilt(v => v || owned.some(b => b.type === 'safe_door'));
-    setTurretBuilt(v => v || owned.some(b => b.type === 'turret'));
+    setTurretBuilt(p.onboarding.turretBuilt);
     setRaidDoor(v => v ? state.buildings.find(b => b.id === v.id) ?? null : null);
     setManagedBuilding(v => v ? state.buildings.find(b => b.id === v.id) ?? null : null);
     if (state.loot) setLootPanel(state.loot.items.length ? { ...state.loot, items: state.loot.items.map(it => ({ ...it, taken: false })) } : null);
@@ -561,7 +558,7 @@ export default function App() {
       eng.player.x = p.x; eng.player.y = p.y;
       eng.targetMovePoint = null;
     }
-    if (prev?.player.mapId === p.mapId && (p.hp < prev.player.hp || (p.shield < prev.player.shield && p.maxShield >= prev.player.maxShield))) {
+    if (prev?.player.mapId === p.mapId && p.lastDamageAt > prev.player.lastDamageAt && (p.hp < prev.player.hp || (p.shield < prev.player.shield && p.maxShield >= prev.player.maxShield))) {
       eng.receiveAuthoritativeDamage(Math.max(0, prev.player.hp - p.hp) + Math.max(0, prev.player.shield - p.shield));
     }
     eng.player.hp = p.hp; eng.player.maxHp = p.maxHp;
@@ -810,9 +807,10 @@ export default function App() {
           }
         }
         if (data.weather) {
+          serverWeatherRef.current = { state: data.weather, receivedAt: Date.now() };
           setWeatherState(data.weather);
           if (currentMapIdRef.current !== 'sanctuary' && engineRef.current) {
-            engineRef.current.setWeather(data.weather.current);
+            engineRef.current.setWeather(data.weather.current, data.weather.durationLeft);
           }
         }
       },
@@ -874,9 +872,10 @@ export default function App() {
         });
       },
       onWeatherUpdate: (wState) => {
+        serverWeatherRef.current = { state: wState, receivedAt: Date.now() };
         setWeatherState(wState);
         if (engineRef.current && currentMapIdRef.current !== 'sanctuary') {
-          engineRef.current.setWeather(wState.current);
+          engineRef.current.setWeather(wState.current, wState.durationLeft);
         }
       },
       onChatMessage: (msg) => {
@@ -969,6 +968,8 @@ export default function App() {
     });
 
     engineRef.current = engine;
+    const latestWeather = serverWeatherRef.current;
+    engine.setWeather(latestWeather.state.current, Math.max(0, latestWeather.state.durationLeft - (Date.now() - latestWeather.receivedAt) / 1000));
     if (selfId) {
       engine.localPlayerId = selfId;
     }
@@ -1017,7 +1018,7 @@ export default function App() {
       eng.player.maxSatiety = ps.maxSatiety;
 
       // 新手引路：走出第一步
-      if (!movedRef.current && Math.hypot(eng.player.x, eng.player.y) > 2.5) {
+      if (!gameStateRef.current && !movedRef.current && Math.hypot(eng.player.x, eng.player.y) > 2.5) {
         movedRef.current = true;
         setMovedFar(true);
       }
@@ -1082,7 +1083,6 @@ export default function App() {
   // Item effects and consumption are committed by the server.
   const handleUseItem = useCallback((index: number) => {
     sendGameAction('use_item', { index });
-    if (hotbarSlotsRef.current[index]?.category === 'food') setAteFood(true);
   }, [sendGameAction]);
 
   const handleToggleBuildMode = useCallback(() => {
@@ -1206,7 +1206,7 @@ export default function App() {
     { id: 'move', title: '探索公共荒野', desc: 'WASD 或右键移动，沿道路进入林地、矿场和城镇；打开地图标记目的地。', progressText: movedFar ? '1/1' : '0/1', done: movedFar },
     { id: 'wood', title: '收集木材', desc: '捡取枯枝、搜刮农舍；装备斧后伐木更快。按住 E/F 可连续采集。', progressText: `${Math.min(totalWood, 20)}/20`, done: totalWood >= 20 },
     { id: 'stone', title: '收集石料', desc: '捡取碎石或开采石堆，制作镐来提升效率。满包不会扣除未收到的物资。', progressText: `${Math.min(totalStone, 10)}/10`, done: totalStone >= 10 },
-    { id: 'pickaxe', title: '制作并装备工具', desc: '从制造面板制作开山镐（8木、6石），在背包中装备。', progressText: pickaxeCrafted ? '1/1' : '0/1', done: pickaxeCrafted },
+    { id: 'pickaxe', title: '制作并装备开山镐', desc: '从制造面板制作开山镐（8木、6石），在背包中装备。完成后更换工具不影响进度。', progressText: pickaxeCrafted ? '1/1' : '0/1', done: pickaxeCrafted },
     { id: 'claim', title: '在野外建立营地', desc: '收集20木、10石，在道路和地标外选址，打开营地面板插旗；开局没有私人领地。', progressText: claimedPlot ? '1/1' : '0/1', done: claimedPlot },
     { id: 'workbench', title: '建设与储存', desc: '走到野外入口进入独立营地，建造仓库和工作台。营地始终可被攻击。', progressText: workbenchBuilt ? '1/1' : '0/1', done: workbenchBuilt },
     { id: 'turret', title: '准备离线防御', desc: '布置墙门、地刺和炮塔，靠近炮塔按 E 装填弹药；主人离线后仍会防守。', progressText: turretBuilt ? '1/1' : '0/1', done: turretBuilt },
@@ -1218,7 +1218,7 @@ export default function App() {
       grantedQuestsRef.current.add(step.id);
       pushSystemMsg(`引路完成：${step.title}`);
     }
-  }, [movedFar, totalWood, totalStone, totalScrap, pickaxeCrafted, claimedPlot, workbenchBuilt, safeDoorBuilt, turretBuilt]);
+  }, [movedFar, totalWood, totalStone, totalScrap, pickaxeCrafted, claimedPlot, workbenchBuilt, safeDoorBuilt, turretBuilt, ateFood]);
 
   return (
     <div className="relative w-screen h-screen overflow-hidden bg-slate-950 font-sans select-none">
@@ -1272,7 +1272,7 @@ export default function App() {
       )}
 
       {/* HUD 区域：开屏期间 display:none，HUD 图标/Panel 贴图（~7MB）延后到进入游戏才加载 */}
-      <div hidden={showBoot}>
+      <div hidden={showBoot} className="game-hud">
       {/* Top Menu Bar with Weather Widget, Online Ping & Roster Button */}
       <TopMenuBar
         onOpenModal={(modal) => { if (modal === 'anchor') { setManagedBuilding(null); setCampOpen(true); } else setActiveModal(modal); }}

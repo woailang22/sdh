@@ -10,6 +10,24 @@ import {
 } from './world';
 
 describe('continuous world coordinates', () => {
+  it('provides several mineable copper sources around the quarry without spreading them across starter land', () => {
+    const quarry = WORLD_LOCATIONS.find(l => l.sourceMapId === 'mtn_quarry')!;
+    const center = worldToChunk(quarry.x, quarry.y);
+    const nodes = [];
+    for (let x = center.x - 4; x <= center.x + 4; x++) for (let y = center.y - 4; y <= center.y + 4; y++) nodes.push(...generateWorldChunk(x, y).interactables);
+    const copper = nodes.filter(n => n.type === 'boulder' && n.lootTable?.some(drop => drop.itemId === 'ore_copper'));
+    expect(copper.length).toBeGreaterThanOrEqual(4);
+    for (const vein of copper) {
+      expect(Math.hypot(vein.x - quarry.x, vein.y - quarry.y)).toBeLessThanOrEqual(96);
+      expect(worldLocationAt(vein.x, vein.y).sourceMapId).toBe('mtn_quarry');
+      expect(vein.stock).toBe(3);
+      expect(getWorldInteractable(vein.id)).toEqual(vein);
+    }
+    const starterCopper = [];
+    for (let x = -3; x <= 3; x++) for (let y = -3; y <= 3; y++) starterCopper.push(...generateWorldChunk(x, y).interactables.filter(n => n.type === 'boulder' && n.lootTable?.some(drop => drop.itemId === 'ore_copper')));
+    expect(starterCopper).toHaveLength(0);
+  });
+
   it('uses floor division for negative coordinates and keeps the inclusive edge in the last chunk', () => {
     expect([WORLD_MIN, WORLD_MAX, CHUNK_SIZE]).toEqual([-1024, 1024, 32]);
     expect(worldToChunk(-0.01, -32.01)).toEqual({ x: -1, y: -2 });

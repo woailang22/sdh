@@ -158,7 +158,7 @@ export const WorkbenchModal: React.FC<WorkbenchModalProps> = ({
         <div className="px-6 py-3 bg-slate-950/90 border-t border-slate-800 text-xs text-slate-400 flex items-center justify-between">
           <span className="flex items-center gap-1.5">
             <ShieldCheck className="w-4 h-4 text-cyan-400" />
-            制造品直接进快捷背包，每次制造获得经验
+            制造消耗配方材料，成品进入背包；结果以服务器确认为准
           </span>
           <span className="font-mono text-cyan-400">自建工作台 [B]建造→设施</span>
         </div>

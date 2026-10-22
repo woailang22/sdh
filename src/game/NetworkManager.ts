@@ -7,6 +7,7 @@ import {
   MapZoneId,
 } from '../types/game';
 import type { GameStateSnapshot } from '../../server/worldState';
+import { StateDecoder } from './stateSync';
 
 export interface NetworkCallbacks {
   onGameState?: (state: GameStateSnapshot) => void;
@@ -40,6 +41,8 @@ export class NetworkManager {
   private reconnectTimer: any = null;
   private disposed: boolean = false; // 销毁后不再重连（防幽灵连接）
   private sessionPending = false;
+  private stateDecoder = new StateDecoder();
+  private awaitingBaseline = false;
   public selfId: string = '';
 
   constructor(callbacks: NetworkCallbacks) {
@@ -64,9 +67,11 @@ export class NetworkManager {
       this.ws = new WebSocket(wsUrl);
 
       this.ws.onopen = () => {
+        this.stateDecoder.reset(); this.awaitingBaseline = false;
         this.isConnected = true;
         this.callbacks.onConnectionChange(true, this.ping);
         this.startPingLoop();
+        this.send({ type: 'state_sync', payload: { version: 1 } });
         console.log('[Multiplayer] Connected to game server:', wsUrl);
       };
 
@@ -80,6 +85,7 @@ export class NetworkManager {
       };
 
       this.ws.onclose = (event) => {
+        this.stateDecoder.reset(); this.awaitingBaseline = false;
         this.isConnected = false;
         this.stopPingLoop();
         this.callbacks.onConnectionChange(false, 0);
@@ -214,10 +220,23 @@ export class NetworkManager {
   private handleMessage(msg: NetMessage) {
     switch (msg.type) {
       case 'game_state': {
+        this.stateDecoder.reset(); this.awaitingBaseline = false;
         this.callbacks.onGameState?.(msg.payload);
         break;
       }
+      case 'game_state_patch': {
+        const state = this.stateDecoder.decode(msg.payload);
+        if (state) {
+          this.awaitingBaseline = false;
+          this.callbacks.onGameState?.(state);
+        } else if (!this.awaitingBaseline) {
+          this.awaitingBaseline = true;
+          this.send({ type: 'state_sync', payload: { version: 1 } });
+        }
+        break;
+      }
       case 'init': {
+        this.stateDecoder.reset(); this.awaitingBaseline = false;
         this.selfId = msg.payload.selfId;
         this.callbacks.onInit(msg.payload);
         break;
@@ -278,6 +297,7 @@ export class NetworkManager {
   }
 
   public disconnect() {
+    this.stateDecoder.reset(); this.awaitingBaseline = false;
     this.disposed = true;
     this.stopPingLoop();
     if (this.reconnectTimer) clearTimeout(this.reconnectTimer);

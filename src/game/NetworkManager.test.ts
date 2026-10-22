@@ -1,5 +1,8 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { NetworkManager } from './NetworkManager';
+import { StateEncoder } from './stateSync';
+import { GameWorld } from '../../server/worldState';
+import { createMemoryDb } from '../../server/db';
 
 class Socket {
   static OPEN = 1; static CONNECTING = 0;
@@ -17,7 +20,7 @@ function setup() {
   vi.stubGlobal('window', { location: { protocol: 'http:', host: 'localhost:3000' } });
   vi.stubGlobal('fetch', vi.fn(async () => ({ ok: true })));
   vi.stubGlobal('WebSocket', Socket);
-  const callbacks = { onConnectionChange: vi.fn(), onGameState: vi.fn() } as any;
+  const callbacks = { onConnectionChange: vi.fn(), onGameState: vi.fn(), onInit: vi.fn() } as any;
   return { network: new NetworkManager(callbacks), callbacks };
 }
 afterEach(() => { vi.useRealTimers(); vi.unstubAllGlobals(); });
@@ -88,5 +91,47 @@ describe('guest connection lifecycle', () => {
     network.disconnect(); complete({ ok: true });
     await connecting;
     expect(sockets).toHaveLength(0);
+  });
+});
+
+describe('negotiated state synchronization', () => {
+  function state() {
+    const game = new GameWorld(createMemoryDb(), { nodeAt: () => undefined, nodesNear: () => [], buildingsNear: () => [], campSiteAllowed: () => true, migrate: (_id, x, y) => ({ mapId: 'world', x, y }) }, () => 10000);
+    game.connect('owner', '行者'); return game.snapshot('owner');
+  }
+  const receive = (socket: Socket, type: string, payload: unknown) => socket.onmessage?.({ data: JSON.stringify({ type, payload }) });
+
+  it('opts in after opening and still accepts legacy complete snapshots', async () => {
+    vi.useFakeTimers();
+    const { network, callbacks } = setup(); await network.connect();
+    sockets[0].readyState = Socket.OPEN; sockets[0].onopen?.();
+    expect(sockets[0].send).toHaveBeenCalledWith(JSON.stringify({ type: 'state_sync', payload: { version: 1 } }));
+    const full = state(); receive(sockets[0], 'game_state', full);
+    expect(callbacks.onGameState).toHaveBeenLastCalledWith(full); network.disconnect();
+  });
+  it('passes reconstructed complete state to the existing game callback', async () => {
+    const { network, callbacks } = setup(); await network.connect();
+    const encoder = new StateEncoder(), full = state();
+    receive(sockets[0], 'game_state_patch', encoder.encode(full, 0));
+    full.player.resources.wood = 3; full.nodes = [{ id: 'tree', stock: 0, respawnAt: 300000 }];
+    receive(sockets[0], 'game_state_patch', encoder.encode(full, 200));
+    expect(callbacks.onGameState).toHaveBeenLastCalledWith(full); network.disconnect();
+  });
+  it('requests a fresh baseline once for a gap and resumes only after complete state', async () => {
+    const { network, callbacks } = setup(); await network.connect(); const send = vi.spyOn(network, 'send');
+    const encoder = new StateEncoder(), full = state();
+    encoder.encode(full, 0); const delta = encoder.encode(full, 200);
+    receive(sockets[0], 'game_state_patch', delta); receive(sockets[0], 'game_state_patch', delta);
+    expect(callbacks.onGameState).not.toHaveBeenCalled();
+    expect(send).toHaveBeenCalledTimes(1); expect(send).toHaveBeenCalledWith({ type: 'state_sync', payload: { version: 1 } });
+    receive(sockets[0], 'game_state_patch', encoder.encode(full, 5000));
+    expect(callbacks.onGameState).toHaveBeenLastCalledWith(full); network.disconnect();
+  });
+  it('clears the old baseline on disconnect and never merges it into a new connection', async () => {
+    const { network, callbacks } = setup(); await network.connect(); const encoder = new StateEncoder(), full = state();
+    receive(sockets[0], 'game_state_patch', encoder.encode(full, 0));
+    network.disconnect(); await network.connect(); callbacks.onGameState.mockClear();
+    receive(sockets[1], 'game_state_patch', encoder.encode(full, 200));
+    expect(callbacks.onGameState).not.toHaveBeenCalled(); network.disconnect();
   });
 });

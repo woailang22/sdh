@@ -35,7 +35,7 @@ export const LootPanel: React.FC<LootPanelProps> = ({ target, onTake, onTakeAll,
             </div>
             <div>
               <h2 className="text-sm font-bold text-slate-100">🔍 {target.name}</h2>
-              <p className="text-[10px] text-slate-400">背包6格有限，挑值钱的拿（金＞紫＞蓝＞绿＞白）</p>
+              <p className="text-[10px] text-slate-400">预留背包空位，优先带走需要的物资</p>
             </div>
           </div>
           <button
