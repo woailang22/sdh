@@ -1,0 +1,2513 @@
+{
+  "date": "2026-10-23",
+  "baselineCommit": "4a9a1d0756cdbed1926376367844a3984c3c3600",
+  "runtimeEquivalentTo": "2434b0e3beb5df18e222e9f3ce861aa2d6e21447",
+  "decision": "Observation only. No runtime fix or new overall performance acceptance. Correlated GPU/GC work narrows investigation; layer ablation does not justify visual removal or a new whole-house cache. Original58/63.5ms draws and381.7ms independent RAF failure remain unresolved.",
+  "failedCapture": {
+    "fixture": "world-frame-trace-20261023-a1",
+    "runnerSuccess": false,
+    "recordedLegs": [
+      {
+        "round": 1,
+        "direction": 1,
+        "seconds": 50.913,
+        "pos": {
+          "x": 193.4268399999961,
+          "y": 7
+        },
+        "serverPos": {
+          "x": 192.94233999999614,
+          "y": 7
+        },
+        "draw": {
+          "count": 3027,
+          "p50": 1.5,
+          "p95": 3.2000000029802322,
+          "p99": 6.0999999940395355,
+          "max": 19.5,
+          "over50": 0
+        },
+        "independentBrowserRaf": {
+          "count": 7835,
+          "p50": 6.099999999998545,
+          "p95": 11.900000000001455,
+          "p99": 18.19999999999709,
+          "max": 42.599999999998545,
+          "over50": 0
+        },
+        "longTasks": {
+          "count": 0,
+          "p50": 0,
+          "p95": 0,
+          "p99": 0,
+          "max": 0,
+          "over50": 0
+        },
+        "boundaries": [
+          {
+            "window": "1,0",
+            "duration": 1.7000000029802322,
+            "x": 32.00701999999975,
+            "y": 7
+          },
+          {
+            "window": "2,0",
+            "duration": 1.5999999940395355,
+            "x": 64.01517999999919,
+            "y": 7
+          },
+          {
+            "window": "3,0",
+            "duration": 1.7000000029802322,
+            "x": 96.02220000000281,
+            "y": 7
+          },
+          {
+            "window": "4,0",
+            "duration": 2.0999999940395355,
+            "x": 128.00642000000545,
+            "y": 7
+          },
+          {
+            "window": "5,0",
+            "duration": 2.2000000029802322,
+            "x": 160.01458000000113,
+            "y": 7
+          },
+          {
+            "window": "6,0",
+            "duration": 1.2999999970197678,
+            "x": 192.02159999999625,
+            "y": 7
+          }
+        ],
+        "corrections": 0
+      },
+      {
+        "round": 1,
+        "direction": -1,
+        "seconds": 51.152,
+        "pos": {
+          "x": 0.08132000000087922,
+          "y": 7
+        },
+        "serverPos": {
+          "x": 1.8088000000008466,
+          "y": 7
+        },
+        "draw": {
+          "count": 3043,
+          "p50": 1.1000000089406967,
+          "p95": 2.0999999940395355,
+          "p99": 3.5,
+          "max": 7.299999997019768,
+          "over50": 0
+        },
+        "independentBrowserRaf": {
+          "count": 8271,
+          "p50": 6.099999999991269,
+          "p95": 6.19999999999709,
+          "p99": 6.600000000005821,
+          "max": 369.70000000001164,
+          "over50": 1
+        },
+        "longTasks": {
+          "count": 0,
+          "p50": 0,
+          "p95": 0,
+          "p99": 0,
+          "max": 0,
+          "over50": 0
+        },
+        "boundaries": [
+          {
+            "window": "5,0",
+            "duration": 0.30000001192092896,
+            "x": 191.99917999999636,
+            "y": 7
+          },
+          {
+            "window": "4,0",
+            "duration": 0.20000000298023224,
+            "x": 159.99178000000177,
+            "y": 7
+          },
+          {
+            "window": "3,0",
+            "duration": 0.20000000298023224,
+            "x": 127.98438000000726,
+            "y": 7
+          },
+          {
+            "window": "2,0",
+            "duration": 0.20000000298023224,
+            "x": 95.99978000000387,
+            "y": 7
+          },
+          {
+            "window": "1,0",
+            "duration": 0.10000000894069672,
+            "x": 63.99276000000025,
+            "y": 7
+          },
+          {
+            "window": "0,0",
+            "duration": 0,
+            "x": 31.984980000000814,
+            "y": 7
+          }
+        ],
+        "corrections": 0
+      },
+      {
+        "round": 2,
+        "direction": 1,
+        "seconds": 50.908,
+        "pos": {
+          "x": 193.5073999999983,
+          "y": 7
+        },
+        "serverPos": {
+          "x": 192.67823999999837,
+          "y": 7
+        },
+        "draw": {
+          "count": 3053,
+          "p50": 1,
+          "p95": 1.5,
+          "p99": 3.2000000029802322,
+          "max": 17.799999997019768,
+          "over50": 0
+        },
+        "independentBrowserRaf": {
+          "count": 8339,
+          "p50": 6.099999999976717,
+          "p95": 6.2000000000116415,
+          "p99": 6.300000000017462,
+          "max": 18.300000000017462,
+          "over50": 0
+        },
+        "longTasks": {
+          "count": 0,
+          "p50": 0,
+          "p95": 0,
+          "p99": 0,
+          "max": 0,
+          "over50": 0
+        },
+        "boundaries": [
+          {
+            "window": "1,0",
+            "duration": 0.10000000894069672,
+            "x": 32.01918000000087,
+            "y": 7
+          },
+          {
+            "window": "2,0",
+            "duration": 0.10000000894069672,
+            "x": 64.00378000000025,
+            "y": 7
+          },
+          {
+            "window": "3,0",
+            "duration": 0.3999999910593033,
+            "x": 96.01118000000375,
+            "y": 7
+          },
+          {
+            "window": "4,0",
+            "duration": 0.10000000894069672,
+            "x": 128.0185800000073,
+            "y": 7
+          },
+          {
+            "window": "5,0",
+            "duration": 0,
+            "x": 160.003180000003,
+            "y": 7
+          },
+          {
+            "window": "6,0",
+            "duration": 0.20000000298023224,
+            "x": 192.0101999999985,
+            "y": 7
+          }
+        ],
+        "corrections": 0
+      },
+      {
+        "round": 2,
+        "direction": -1,
+        "seconds": 50.857,
+        "pos": {
+          "x": 0.26600000000112667,
+          "y": 7
+        },
+        "serverPos": {
+          "x": 3.0749600000011745,
+          "y": 7
+        },
+        "draw": {
+          "count": 3050,
+          "p50": 1,
+          "p95": 1.7000000029802322,
+          "p99": 3.2999999970197678,
+          "max": 4.5,
+          "over50": 0
+        },
+        "independentBrowserRaf": {
+          "count": 8318,
+          "p50": 6.099999999976717,
+          "p95": 6.2000000000116415,
+          "p99": 6.300000000017462,
+          "max": 24.300000000017462,
+          "over50": 0
+        },
+        "longTasks": {
+          "count": 0,
+          "p50": 0,
+          "p95": 0,
+          "p99": 0,
+          "max": 0,
+          "over50": 0
+        },
+        "boundaries": [
+          {
+            "window": "5,0",
+            "duration": 0,
+            "x": 191.98739999999853,
+            "y": 7
+          },
+          {
+            "window": "4,0",
+            "duration": 0.10000000894069672,
+            "x": 159.98038000000307,
+            "y": 7
+          },
+          {
+            "window": "3,0",
+            "duration": 0.20000000298023224,
+            "x": 127.99578000000734,
+            "y": 7
+          },
+          {
+            "window": "2,0",
+            "duration": 0.09999999403953552,
+            "x": 95.98838000000386,
+            "y": 7
+          },
+          {
+            "window": "1,0",
+            "duration": 0.09999999403953552,
+            "x": 63.9813600000004,
+            "y": 7
+          },
+          {
+            "window": "0,0",
+            "duration": 0.09999999403953552,
+            "x": 31.996760000001007,
+            "y": 7
+          }
+        ],
+        "corrections": 0
+      },
+      {
+        "round": 3,
+        "direction": 1,
+        "seconds": 50.798,
+        "pos": {
+          "x": 193.27787999999782,
+          "y": 7
+        },
+        "serverPos": {
+          "x": 192.7253599999978,
+          "y": 7
+        },
+        "draw": {
+          "count": 3039,
+          "p50": 1.2000000029802322,
+          "p95": 2.2000000029802322,
+          "p99": 3.7000000029802322,
+          "max": 13.5,
+          "over50": 0
+        },
+        "independentBrowserRaf": {
+          "count": 8203,
+          "p50": 6.099999999976717,
+          "p95": 6.2000000000116415,
+          "p99": 12.10000000000582,
+          "max": 60.70000000001164,
+          "over50": 1
+        },
+        "longTasks": {
+          "count": 0,
+          "p50": 0,
+          "p95": 0,
+          "p99": 0,
+          "max": 0,
+          "over50": 0
+        },
+        "boundaries": [
+          {
+            "window": "1,0",
+            "duration": 0.10000000894069672,
+            "x": 32.020320000000986,
+            "y": 7
+          },
+          {
+            "window": "2,0",
+            "duration": 0.20000000298023224,
+            "x": 64.00492000000031,
+            "y": 7
+          },
+          {
+            "window": "3,0",
+            "duration": 0.10000000894069672,
+            "x": 96.0119400000038,
+            "y": 7
+          },
+          {
+            "window": "4,0",
+            "duration": 0.10000000894069672,
+            "x": 128.01934000000682,
+            "y": 7
+          },
+          {
+            "window": "5,0",
+            "duration": 0.10000000894069672,
+            "x": 160.00394000000233,
+            "y": 7
+          },
+          {
+            "window": "6,0",
+            "duration": 0.20000000298023224,
+            "x": 192.01171999999784,
+            "y": 7
+          }
+        ],
+        "corrections": 0
+      },
+      {
+        "round": 3,
+        "direction": -1,
+        "seconds": 50.928,
+        "pos": {
+          "x": -0.21735999999570876,
+          "y": 7
+        },
+        "serverPos": {
+          "x": 0.3815200000042028,
+          "y": 7
+        },
+        "draw": {
+          "count": 3041,
+          "p50": 1.2000000029802322,
+          "p95": 2.2999999970197678,
+          "p99": 3.7999999970197678,
+          "max": 25.5,
+          "over50": 0
+        },
+        "independentBrowserRaf": {
+          "count": 8221,
+          "p50": 6.099999999976717,
+          "p95": 6.2000000000116415,
+          "p99": 12.100000000034925,
+          "max": 66.70000000001164,
+          "over50": 1
+        },
+        "longTasks": {
+          "count": 0,
+          "p50": 0,
+          "p95": 0,
+          "p99": 0,
+          "max": 0,
+          "over50": 0
+        },
+        "boundaries": [
+          {
+            "window": "5,0",
+            "duration": 0.19999998807907104,
+            "x": 191.988919999998,
+            "y": 7
+          },
+          {
+            "window": "4,0",
+            "duration": 0.20000000298023224,
+            "x": 159.98152000000266,
+            "y": 7
+          },
+          {
+            "window": "3,0",
+            "duration": 0.20000000298023224,
+            "x": 127.99692000000759,
+            "y": 7
+          },
+          {
+            "window": "2,0",
+            "duration": 0.09999999403953552,
+            "x": 95.98952000000493,
+            "y": 7
+          },
+          {
+            "window": "1,0",
+            "duration": 0.10000000894069672,
+            "x": 63.98212000000213,
+            "y": 7
+          },
+          {
+            "window": "0,0",
+            "duration": 0.20000000298023224,
+            "x": 31.997520000004133,
+            "y": 7
+          },
+          {
+            "window": "-1,0",
+            "duration": 1.2000000029802322,
+            "x": -0.009879999995797237,
+            "y": 7
+          }
+        ],
+        "corrections": 0
+      }
+    ],
+    "error": "QA trace completion not received within old10s window; runner terminated its own browser/server in finally. CPU profile and detailed draw histories saved, no timeline retained. No conclusion about every reason for missing completion.",
+    "gameDrawStartIntervals": {
+      "count": 6080,
+      "p50": 18,
+      "p95": 19.200000002980232,
+      "p99": 26.099999994039536,
+      "max": 68.29999999701977,
+      "over50": 2
+    },
+    "limit": "All6 recorded legs completed, but trace acquisition failed; this is not a successful full trace or a root-cause proof."
+  },
+  "captureRepair": {
+    "scope": "Ignored QA harness only; no production transport change.",
+    "smokes": [
+      "Fresh about:blank page tracing and browser tracing both delivered completion streams.",
+      "Separate20s canvas+1ms CPU profiler delivered no-loss trace completion after1867ms."
+    ],
+    "newWait": "Wait for explicit tracingComplete while the CDP connection is OPEN; progress is observed on the same live process, not restarted on observation timeout.",
+    "observedWaitMs": 15738,
+    "interpretation": "New real game trace took15738ms to complete;10s is demonstrably insufficient for some exports. It does not prove what would have happened after the first run was killed."
+  },
+  "captured": {
+    "fixture": "world-frame-trace-20261023-a2",
+    "scope": "Diagnostic trace on one normal-speed road round; independent fresh fixture; no runtime changes, no formal acceptance claim",
+    "runtime": true,
+    "runnerSuccess": true,
+    "drawGateOnly": true,
+    "traceLoss": false,
+    "traceBytes": 269148533,
+    "traceEvents": 1510875,
+    "rawArtifacts": "Ignored local data contains original trace JSON and CPU profile, not published because raw browser trace may contain URLs/internal values.",
+    "legs": [
+      {
+        "round": 1,
+        "direction": 1,
+        "seconds": 51.026,
+        "pos": {
+          "x": 193.86383999999416,
+          "y": 7
+        },
+        "serverPos": {
+          "x": 193.0810399999943,
+          "y": 7
+        },
+        "draw": {
+          "count": 3041,
+          "p50": 1.4000000059604645,
+          "p95": 2.7999999970197678,
+          "p99": 5.700000002980232,
+          "max": 18.200000002980232,
+          "over50": 0
+        },
+        "independentBrowserRaf": {
+          "count": 8137,
+          "p50": 6.099999999998545,
+          "p95": 6.200000000004366,
+          "p99": 12.19999999999709,
+          "max": 36.400000000001455,
+          "over50": 0
+        },
+        "longTasks": {
+          "count": 0,
+          "p50": 0,
+          "p95": 0,
+          "p99": 0,
+          "max": 0,
+          "over50": 0
+        },
+        "boundaries": [
+          {
+            "window": "1,0",
+            "duration": 1.5,
+            "x": 32.007399999999684,
+            "y": 7
+          },
+          {
+            "window": "2,0",
+            "duration": 2.0999999940395355,
+            "x": 64.0151799999991,
+            "y": 7
+          },
+          {
+            "window": "3,0",
+            "duration": 2.5999999940395355,
+            "x": 96.02220000000247,
+            "y": 7
+          },
+          {
+            "window": "4,0",
+            "duration": 1.2999999970197678,
+            "x": 128.00680000000588,
+            "y": 7
+          },
+          {
+            "window": "5,0",
+            "duration": 2.2999999970197678,
+            "x": 160.01457999999985,
+            "y": 7
+          },
+          {
+            "window": "6,0",
+            "duration": 3.2000000029802322,
+            "x": 192.02197999999456,
+            "y": 7
+          }
+        ],
+        "corrections": 0
+      },
+      {
+        "round": 1,
+        "direction": -1,
+        "seconds": 51.07,
+        "pos": {
+          "x": -0.16188000000127806,
+          "y": 7
+        },
+        "serverPos": {
+          "x": 3.2926999999987476,
+          "y": 7
+        },
+        "draw": {
+          "count": 3050,
+          "p50": 1.300000011920929,
+          "p95": 2.5,
+          "p99": 4.700000002980232,
+          "max": 29,
+          "over50": 0
+        },
+        "independentBrowserRaf": {
+          "count": 8227,
+          "p50": 6.099999999991269,
+          "p95": 6.19999999999709,
+          "p99": 12,
+          "max": 36.5,
+          "over50": 0
+        },
+        "longTasks": {
+          "count": 0,
+          "p50": 0,
+          "p95": 0,
+          "p99": 0,
+          "max": 0,
+          "over50": 0
+        },
+        "boundaries": [
+          {
+            "window": "5,0",
+            "duration": 0.10000000894069672,
+            "x": 191.99841999999438,
+            "y": 7
+          },
+          {
+            "window": "4,0",
+            "duration": 0.5,
+            "x": 159.9678399999999,
+            "y": 7
+          },
+          {
+            "window": "3,0",
+            "duration": 0.09999999403953552,
+            "x": 127.98362000000527,
+            "y": 7
+          },
+          {
+            "window": "2,0",
+            "duration": 0.20000000298023224,
+            "x": 95.9990200000017,
+            "y": 7
+          },
+          {
+            "window": "1,0",
+            "duration": 0.09999999403953552,
+            "x": 63.99199999999818,
+            "y": 7
+          },
+          {
+            "window": "0,0",
+            "duration": 0.20000000298023224,
+            "x": 31.984599999998775,
+            "y": 7
+          },
+          {
+            "window": "-1,0",
+            "duration": 1.2000000029802322,
+            "x": -1.2559363271602564e-12,
+            "y": 7
+          }
+        ],
+        "corrections": 0
+      }
+    ],
+    "actualGameDrawStartIntervals": {
+      "count": 6091,
+      "p50": 17.900000005960464,
+      "p95": 20.299999997019768,
+      "p99": 27.799999997019768,
+      "max": 51.20000000298023,
+      "over50": 1
+    },
+    "intervalMeaning": "Draw-start timing measured in engine.render; not physical GPU presentation. Independent browser RAF remains a separate measurement. A single probed round passing the draw-duration gate does not replace original3-round acceptance.",
+    "clock": {
+      "method": "Match render label start to retained frame, subtract recorded frame.end from trace marker ts; marker emission follows end with small overhead. Do not subtract start.",
+      "anchorCount": 56,
+      "offsetUs": {
+        "count": 56,
+        "min": 93047464322.00002,
+        "p50": 93047464410,
+        "p95": 93047464482,
+        "max": 93047464493
+      },
+      "chosenOffsetUs": 93047464410,
+      "anchors": [
+        {
+          "start": 19021.5,
+          "offsetUs": 93047464434
+        },
+        {
+          "start": 20053.89999999106,
+          "offsetUs": 93047464382.00002
+        },
+        {
+          "start": 22187.09999999404,
+          "offsetUs": 93047464392
+        },
+        {
+          "start": 118731,
+          "offsetUs": 93047464385
+        },
+        {
+          "start": 120859.79999999702,
+          "offsetUs": 93047464410
+        },
+        {
+          "start": 121920.69999998808,
+          "offsetUs": 93047464324.00002
+        }
+      ]
+    },
+    "cpu": {
+      "startTime": 93065285604,
+      "endTime": 93171747378,
+      "lastSampleTime": 93171746864,
+      "samples": 137367,
+      "sampleGapUs": {
+        "count": 137367,
+        "min": -815,
+        "p50": 773,
+        "p95": 1625,
+        "max": 27682
+      },
+      "negativeDeltas": 98,
+      "rangeInsideTrace": true,
+      "interpretation": "Time-range compatibility and known stage/sample-stack intersections cross-checked, not exact physical CPU timing.98 negative timeDeltas accumulated unchanged; counts of requested1ms samples are not CPU milliseconds."
+    },
+    "slowDraws": [
+      {
+        "startMs": 79588.2,
+        "durationMs": 29,
+        "detail": {
+          "start": 79588.19999998808,
+          "interval": 14,
+          "stages": {
+            "renderMapGround": 0.10000000894069672,
+            "drawHouse": 17.400000020861626,
+            "renderParticles": 0,
+            "renderDynamicLighting": 9.199999988079071,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0,
+            "renderInteractionHUD": 0
+          },
+          "x": 163.85941999999926,
+          "y": 7,
+          "weather": "clear",
+          "heap": 11040035,
+          "duration": 29,
+          "end": 79617.19999998808
+        },
+        "cpuSamples": [
+          {
+            "nodeId": 566,
+            "scriptId": "4",
+            "name": "(anonymous)",
+            "line": 8,
+            "column": 112894,
+            "samples": 2,
+            "stack": [
+              "(anonymous)",
+              "L",
+              "Ke",
+              "drawHouse",
+              "engine.<computed>",
+              "render",
+              "(anonymous)",
+              "render",
+              "engine.render",
+              "engine.render",
+              "t",
+              "(root)"
+            ]
+          },
+          {
+            "nodeId": 449,
+            "scriptId": "4",
+            "name": "ze",
+            "line": 8,
+            "column": 111885,
+            "samples": 1,
+            "stack": [
+              "ze",
+              "Ve",
+              "render",
+              "engine.render",
+              "engine.render",
+              "t",
+              "(root)"
+            ]
+          },
+          {
+            "nodeId": 494,
+            "scriptId": "0",
+            "name": "save",
+            "line": -1,
+            "column": -1,
+            "samples": 1,
+            "stack": [
+              "save",
+              "Ke",
+              "drawHouse",
+              "engine.<computed>",
+              "render",
+              "(anonymous)",
+              "render",
+              "engine.render",
+              "engine.render",
+              "t",
+              "(root)"
+            ]
+          },
+          {
+            "nodeId": 575,
+            "scriptId": "4",
+            "name": "L",
+            "line": 8,
+            "column": 112862,
+            "samples": 1,
+            "stack": [
+              "L",
+              "Ue",
+              "Ke",
+              "drawHouse",
+              "engine.<computed>",
+              "render",
+              "(anonymous)",
+              "render",
+              "engine.render",
+              "engine.render",
+              "t",
+              "(root)"
+            ]
+          },
+          {
+            "nodeId": 114,
+            "scriptId": "4",
+            "name": "S",
+            "line": 8,
+            "column": 115209,
+            "samples": 1,
+            "stack": [
+              "S",
+              "C",
+              "Ke",
+              "drawHouse",
+              "engine.<computed>",
+              "render",
+              "(anonymous)",
+              "render",
+              "engine.render",
+              "engine.render",
+              "t",
+              "(root)"
+            ]
+          },
+          {
+            "nodeId": 529,
+            "scriptId": "0",
+            "name": "createRadialGradient",
+            "line": -1,
+            "column": -1,
+            "samples": 1,
+            "stack": [
+              "createRadialGradient",
+              "renderDynamicLighting",
+              "engine.<computed>",
+              "render",
+              "engine.render",
+              "engine.render",
+              "t",
+              "(root)"
+            ]
+          }
+        ]
+      },
+      {
+        "startMs": 41337.7,
+        "durationMs": 18.2,
+        "detail": {
+          "start": 41337.69999998808,
+          "interval": 16.799999997019768,
+          "stages": {
+            "renderMapGroundUncached": 13.700000002980232,
+            "renderGroundDetails": 0.20000000298023224,
+            "renderMapGround": 15.5,
+            "drawHouse": 0.699999988079071,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0,
+            "renderInteractionHUD": 0
+          },
+          "x": 89.22970000000177,
+          "y": 7,
+          "weather": "clear",
+          "heap": 18428205,
+          "duration": 18.200000002980232,
+          "end": 41355.89999999106
+        },
+        "cpuSamples": [
+          {
+            "nodeId": 183,
+            "scriptId": "0",
+            "name": "drawImage",
+            "line": -1,
+            "column": -1,
+            "samples": 2,
+            "stack": [
+              "drawImage",
+              "drawTileTexture",
+              "renderMapGroundUncached",
+              "engine.<computed>",
+              "i",
+              "e",
+              "renderMapGround",
+              "engine.<computed>",
+              "render",
+              "engine.render",
+              "engine.render",
+              "t",
+              "(root)"
+            ]
+          },
+          {
+            "nodeId": 174,
+            "scriptId": "4",
+            "name": "renderMapGroundUncached",
+            "line": 8,
+            "column": 210912,
+            "samples": 2,
+            "stack": [
+              "renderMapGroundUncached",
+              "engine.<computed>",
+              "i",
+              "e",
+              "renderMapGround",
+              "engine.<computed>",
+              "render",
+              "engine.render",
+              "engine.render",
+              "t",
+              "(root)"
+            ]
+          },
+          {
+            "nodeId": 632,
+            "scriptId": "0",
+            "name": "stroke",
+            "line": -1,
+            "column": -1,
+            "samples": 1,
+            "stack": [
+              "stroke",
+              "drawWorldGroundDetail",
+              "renderMapGroundUncached",
+              "engine.<computed>",
+              "i",
+              "e",
+              "renderMapGround",
+              "engine.<computed>",
+              "render",
+              "engine.render",
+              "engine.render",
+              "t",
+              "(root)"
+            ]
+          },
+          {
+            "nodeId": 607,
+            "scriptId": "0",
+            "name": "fill",
+            "line": -1,
+            "column": -1,
+            "samples": 1,
+            "stack": [
+              "fill",
+              "renderMapGroundUncached",
+              "engine.<computed>",
+              "i",
+              "e",
+              "renderMapGround",
+              "engine.<computed>",
+              "render",
+              "engine.render",
+              "engine.render",
+              "t",
+              "(root)"
+            ]
+          },
+          {
+            "nodeId": 634,
+            "scriptId": "0",
+            "name": "save",
+            "line": -1,
+            "column": -1,
+            "samples": 1,
+            "stack": [
+              "save",
+              "renderGroundDetails",
+              "engine.<computed>",
+              "i",
+              "e",
+              "renderMapGround",
+              "engine.<computed>",
+              "render",
+              "engine.render",
+              "engine.render",
+              "t",
+              "(root)"
+            ]
+          },
+          {
+            "nodeId": 461,
+            "scriptId": "4",
+            "name": "getGroundTheme",
+            "line": 8,
+            "column": 155885,
+            "samples": 1,
+            "stack": [
+              "getGroundTheme",
+              "render",
+              "engine.render",
+              "engine.render",
+              "t",
+              "(root)"
+            ]
+          },
+          {
+            "nodeId": 353,
+            "scriptId": "0",
+            "name": "restore",
+            "line": -1,
+            "column": -1,
+            "samples": 1,
+            "stack": [
+              "restore",
+              "drawWorldScenery",
+              "render",
+              "(anonymous)",
+              "render",
+              "engine.render",
+              "engine.render",
+              "t",
+              "(root)"
+            ]
+          }
+        ]
+      },
+      {
+        "startMs": 20053.9,
+        "durationMs": 15.8,
+        "detail": {
+          "start": 20053.89999999106,
+          "interval": 17.799999997019768,
+          "stages": {
+            "renderMapGroundUncached": 12.599999994039536,
+            "renderGroundDetails": 0,
+            "renderMapGround": 14.100000008940697,
+            "drawHouse": 0.7000000029802322,
+            "renderParticles": 0.09999999403953552,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0.09999999403953552,
+            "renderThemeAtmosphere": 0,
+            "renderInteractionHUD": 0
+          },
+          "x": 8.358860000000007,
+          "y": 7,
+          "weather": "clear",
+          "heap": 7689003,
+          "duration": 15.799999997019768,
+          "end": 20069.69999998808
+        },
+        "cpuSamples": [
+          {
+            "nodeId": 241,
+            "scriptId": "0",
+            "name": "drawImage",
+            "line": -1,
+            "column": -1,
+            "samples": 5,
+            "stack": [
+              "drawImage",
+              "tilePatch",
+              "drawTileTexture",
+              "renderMapGroundUncached",
+              "engine.<computed>",
+              "i",
+              "e",
+              "renderMapGround",
+              "engine.<computed>",
+              "render",
+              "engine.render",
+              "engine.render",
+              "t",
+              "(root)"
+            ]
+          },
+          {
+            "nodeId": 242,
+            "scriptId": "4",
+            "name": "hash2",
+            "line": 8,
+            "column": 227131,
+            "samples": 1,
+            "stack": [
+              "hash2",
+              "drawWorldGroundDetail",
+              "renderMapGroundUncached",
+              "engine.<computed>",
+              "i",
+              "e",
+              "renderMapGround",
+              "engine.<computed>",
+              "render",
+              "engine.render",
+              "engine.render",
+              "t",
+              "(root)"
+            ]
+          },
+          {
+            "nodeId": 183,
+            "scriptId": "0",
+            "name": "drawImage",
+            "line": -1,
+            "column": -1,
+            "samples": 1,
+            "stack": [
+              "drawImage",
+              "drawTileTexture",
+              "renderMapGroundUncached",
+              "engine.<computed>",
+              "i",
+              "e",
+              "renderMapGround",
+              "engine.<computed>",
+              "render",
+              "engine.render",
+              "engine.render",
+              "t",
+              "(root)"
+            ]
+          },
+          {
+            "nodeId": 243,
+            "scriptId": "0",
+            "name": "beginPath",
+            "line": -1,
+            "column": -1,
+            "samples": 1,
+            "stack": [
+              "beginPath",
+              "drawWorldGroundDetail",
+              "renderMapGroundUncached",
+              "engine.<computed>",
+              "i",
+              "e",
+              "renderMapGround",
+              "engine.<computed>",
+              "render",
+              "engine.render",
+              "engine.render",
+              "t",
+              "(root)"
+            ]
+          },
+          {
+            "nodeId": 177,
+            "scriptId": "4",
+            "name": "tilePatch",
+            "line": 8,
+            "column": 153750,
+            "samples": 1,
+            "stack": [
+              "tilePatch",
+              "drawTileTexture",
+              "renderMapGroundUncached",
+              "engine.<computed>",
+              "i",
+              "e",
+              "renderMapGround",
+              "engine.<computed>",
+              "render",
+              "engine.render",
+              "engine.render",
+              "t",
+              "(root)"
+            ]
+          },
+          {
+            "nodeId": 33,
+            "scriptId": "0",
+            "name": "drawImage",
+            "line": -1,
+            "column": -1,
+            "samples": 1,
+            "stack": [
+              "drawImage",
+              "renderMapGround",
+              "engine.<computed>",
+              "render",
+              "engine.render",
+              "engine.render",
+              "t",
+              "(root)"
+            ]
+          },
+          {
+            "nodeId": 246,
+            "scriptId": "0",
+            "name": "lineTo",
+            "line": -1,
+            "column": -1,
+            "samples": 1,
+            "stack": [
+              "lineTo",
+              "(anonymous)",
+              "x",
+              "C",
+              "Ke",
+              "drawHouse",
+              "engine.<computed>",
+              "render",
+              "(anonymous)",
+              "render",
+              "engine.render",
+              "engine.render",
+              "t",
+              "(root)"
+            ]
+          },
+          {
+            "nodeId": 4,
+            "scriptId": "14",
+            "name": "engine.render",
+            "line": 0,
+            "column": 188,
+            "samples": 1,
+            "stack": [
+              "engine.render",
+              "t",
+              "(root)"
+            ]
+          }
+        ]
+      }
+    ],
+    "longDrawStartIntervals": [
+      {
+        "frame": {
+          "start": 38188.89999999106,
+          "interval": 51.20000000298023,
+          "stages": {
+            "renderMapGround": 0,
+            "drawHouse": 2.000000014901161,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0.09999999403953552,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0,
+            "renderInteractionHUD": 0
+          },
+          "x": 77.25552000000046,
+          "y": 7,
+          "weather": "clear",
+          "heap": 6367628,
+          "duration": 6.5,
+          "end": 38195.39999999106
+        },
+        "window": {
+          "startMs": 38137.69999998808,
+          "endMs": 38188.89999999106,
+          "durationMs": 51.20000000298023,
+          "mainThreadEvents": [
+            {
+              "name": "FireAnimationFrame",
+              "durationMs": 7.826,
+              "overlapMs": 7.574000015258789,
+              "startRelativeMs": -0.25199998474121094
+            },
+            {
+              "name": "v8.callFunction",
+              "durationMs": 7.777,
+              "overlapMs": 7.564000015258789,
+              "startRelativeMs": -0.21299998474121093
+            },
+            {
+              "name": "FunctionCall",
+              "durationMs": 7.771,
+              "overlapMs": 7.560000015258789,
+              "startRelativeMs": -0.21099998474121093
+            },
+            {
+              "name": "MajorGC",
+              "durationMs": 2.643,
+              "overlapMs": 2.643,
+              "startRelativeMs": 28.95400001525879
+            },
+            {
+              "name": "V8.GCFinalizeMC",
+              "durationMs": 2.487,
+              "overlapMs": 2.487,
+              "startRelativeMs": 28.96100001525879
+            },
+            {
+              "name": "V8.GC_MARK_COMPACTOR",
+              "durationMs": 2.469,
+              "overlapMs": 2.469,
+              "startRelativeMs": 28.97200001525879
+            },
+            {
+              "name": "v8.callFunction",
+              "durationMs": 2.269,
+              "overlapMs": 2.269,
+              "startRelativeMs": 43.64600001525879
+            },
+            {
+              "name": "FunctionCall",
+              "durationMs": 2.206,
+              "overlapMs": 2.206,
+              "startRelativeMs": 43.65000001525879
+            }
+          ],
+          "mainThreadGC": [
+            {
+              "name": "MajorGC",
+              "durationMs": 2.643,
+              "overlapMs": 2.643
+            },
+            {
+              "name": "V8.GCFinalizeMC",
+              "durationMs": 2.487,
+              "overlapMs": 2.487
+            },
+            {
+              "name": "V8.GC_MARK_COMPACTOR",
+              "durationMs": 2.469,
+              "overlapMs": 2.469
+            },
+            {
+              "name": "V8.GC_MC_EVACUATE",
+              "durationMs": 1.015,
+              "overlapMs": 1.015
+            }
+          ],
+          "gpuEvents": [
+            {
+              "name": "Scheduler::RunTask",
+              "pid": 47308,
+              "tid": 37120,
+              "durationMs": 24.794,
+              "overlapMs": 24.794
+            },
+            {
+              "name": "GpuChannel::ExecuteDeferredRequest",
+              "pid": 47308,
+              "tid": 37120,
+              "durationMs": 24.788,
+              "overlapMs": 24.788
+            },
+            {
+              "name": "RendererMainThread",
+              "pid": 47308,
+              "tid": 37120,
+              "durationMs": 24.754,
+              "overlapMs": 24.754
+            },
+            {
+              "name": "CommandBuffer::Flush",
+              "pid": 47308,
+              "tid": 37120,
+              "durationMs": 24.752,
+              "overlapMs": 24.752
+            },
+            {
+              "name": "CommandBufferStub::OnAsyncFlush",
+              "pid": 47308,
+              "tid": 37120,
+              "durationMs": 24.75,
+              "overlapMs": 24.75
+            },
+            {
+              "name": "CommandBufferService:PutChanged",
+              "pid": 47308,
+              "tid": 37120,
+              "durationMs": 24.744,
+              "overlapMs": 24.744
+            },
+            {
+              "name": "RasterDecoderImpl::DoEndRasterCHROMIUM",
+              "pid": 47308,
+              "tid": 37120,
+              "durationMs": 21.505,
+              "overlapMs": 21.505
+            },
+            {
+              "name": "RasterDecoderImpl::DoEndRasterCHROMIUM::Flush",
+              "pid": 47308,
+              "tid": 37120,
+              "durationMs": 21.443,
+              "overlapMs": 21.443
+            },
+            {
+              "name": "Scheduler::RunTask",
+              "pid": 47308,
+              "tid": 37120,
+              "durationMs": 7.58,
+              "overlapMs": 7.58
+            },
+            {
+              "name": "Scheduler::RunTask",
+              "pid": 47308,
+              "tid": 37120,
+              "durationMs": 6.097,
+              "overlapMs": 6.097
+            }
+          ],
+          "cpuSamples": [
+            {
+              "nodeId": 2,
+              "scriptId": "0",
+              "name": "(program)",
+              "line": -1,
+              "column": -1,
+              "samples": 34,
+              "stack": [
+                "(program)",
+                "(root)"
+              ]
+            },
+            {
+              "nodeId": 18,
+              "scriptId": "0",
+              "name": "(idle)",
+              "line": -1,
+              "column": -1,
+              "samples": 15,
+              "stack": [
+                "(idle)",
+                "(root)"
+              ]
+            },
+            {
+              "nodeId": 33,
+              "scriptId": "0",
+              "name": "drawImage",
+              "line": -1,
+              "column": -1,
+              "samples": 2,
+              "stack": [
+                "drawImage",
+                "renderMapGround",
+                "engine.<computed>",
+                "render",
+                "engine.render",
+                "engine.render",
+                "t",
+                "(root)"
+              ]
+            },
+            {
+              "nodeId": 71,
+              "scriptId": "0",
+              "name": "(garbage collector)",
+              "line": -1,
+              "column": -1,
+              "samples": 2,
+              "stack": [
+                "(garbage collector)",
+                "(root)"
+              ]
+            },
+            {
+              "nodeId": 183,
+              "scriptId": "0",
+              "name": "drawImage",
+              "line": -1,
+              "column": -1,
+              "samples": 1,
+              "stack": [
+                "drawImage",
+                "drawTileTexture",
+                "renderMapGroundUncached",
+                "engine.<computed>",
+                "i",
+                "e",
+                "renderMapGround",
+                "engine.<computed>",
+                "render",
+                "engine.render",
+                "engine.render",
+                "t",
+                "(root)"
+              ]
+            },
+            {
+              "nodeId": 174,
+              "scriptId": "4",
+              "name": "renderMapGroundUncached",
+              "line": 8,
+              "column": 210912,
+              "samples": 1,
+              "stack": [
+                "renderMapGroundUncached",
+                "engine.<computed>",
+                "i",
+                "e",
+                "renderMapGround",
+                "engine.<computed>",
+                "render",
+                "engine.render",
+                "engine.render",
+                "t",
+                "(root)"
+              ]
+            },
+            {
+              "nodeId": 486,
+              "scriptId": "0",
+              "name": "beginPath",
+              "line": -1,
+              "column": -1,
+              "samples": 1,
+              "stack": [
+                "beginPath",
+                "drawInteractable",
+                "render",
+                "(anonymous)",
+                "render",
+                "engine.render",
+                "engine.render",
+                "t",
+                "(root)"
+              ]
+            },
+            {
+              "nodeId": 198,
+              "scriptId": "4",
+              "name": "(anonymous)",
+              "line": 8,
+              "column": 194010,
+              "samples": 1,
+              "stack": [
+                "(anonymous)",
+                "update",
+                "engine.update",
+                "t",
+                "(root)"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "frame": {
+          "start": 85718.19999998808,
+          "interval": 49.599999994039536,
+          "stages": {
+            "renderMapGround": 0,
+            "drawHouse": 0.800000011920929,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0,
+            "renderInteractionHUD": 0.09999999403953552
+          },
+          "x": 140.5559200000032,
+          "y": 7,
+          "weather": "clear",
+          "heap": 26144132,
+          "duration": 2.2000000029802322,
+          "end": 85720.39999999106
+        },
+        "window": {
+          "startMs": 85668.59999999404,
+          "endMs": 85718.19999998808,
+          "durationMs": 49.599999994039536,
+          "mainThreadEvents": [
+            {
+              "name": "FireAnimationFrame",
+              "durationMs": 5.512,
+              "overlapMs": 5.163,
+              "startRelativeMs": -0.349
+            },
+            {
+              "name": "v8.callFunction",
+              "durationMs": 5.485,
+              "overlapMs": 5.152,
+              "startRelativeMs": -0.333
+            },
+            {
+              "name": "FunctionCall",
+              "durationMs": 5.48,
+              "overlapMs": 5.148,
+              "startRelativeMs": -0.332
+            },
+            {
+              "name": "v8.callFunction",
+              "durationMs": 1.057,
+              "overlapMs": 1.057,
+              "startRelativeMs": 15.21
+            },
+            {
+              "name": "FunctionCall",
+              "durationMs": 1.029,
+              "overlapMs": 1.029,
+              "startRelativeMs": 15.21
+            },
+            {
+              "name": "RasterImplementation::RasterCHROMIUM",
+              "durationMs": 0.505,
+              "overlapMs": 0.505,
+              "startRelativeMs": 3.027
+            },
+            {
+              "name": "UpdateLayoutTree",
+              "durationMs": 0.453,
+              "overlapMs": 0.453,
+              "startRelativeMs": 47.893
+            },
+            {
+              "name": "Layout",
+              "durationMs": 0.351,
+              "overlapMs": 0.351,
+              "startRelativeMs": 48.374
+            }
+          ],
+          "mainThreadGC": [],
+          "gpuEvents": [
+            {
+              "name": "Scheduler::RunTask",
+              "pid": 47308,
+              "tid": 37120,
+              "durationMs": 29.793,
+              "overlapMs": 29.793
+            },
+            {
+              "name": "GpuChannel::ExecuteDeferredRequest",
+              "pid": 47308,
+              "tid": 37120,
+              "durationMs": 29.788,
+              "overlapMs": 29.788
+            },
+            {
+              "name": "RendererMainThread",
+              "pid": 47308,
+              "tid": 37120,
+              "durationMs": 29.762,
+              "overlapMs": 29.762
+            },
+            {
+              "name": "CommandBuffer::Flush",
+              "pid": 47308,
+              "tid": 37120,
+              "durationMs": 29.76,
+              "overlapMs": 29.76
+            },
+            {
+              "name": "CommandBufferStub::OnAsyncFlush",
+              "pid": 47308,
+              "tid": 37120,
+              "durationMs": 29.759,
+              "overlapMs": 29.759
+            },
+            {
+              "name": "CommandBufferService:PutChanged",
+              "pid": 47308,
+              "tid": 37120,
+              "durationMs": 29.751,
+              "overlapMs": 29.751
+            },
+            {
+              "name": "RasterDecoderImpl::DoEndRasterCHROMIUM",
+              "pid": 47308,
+              "tid": 37120,
+              "durationMs": 26.663,
+              "overlapMs": 26.663
+            },
+            {
+              "name": "RasterDecoderImpl::DoEndRasterCHROMIUM::Flush",
+              "pid": 47308,
+              "tid": 37120,
+              "durationMs": 26.586,
+              "overlapMs": 26.586
+            },
+            {
+              "name": "Scheduler::RunTask",
+              "pid": 47308,
+              "tid": 37120,
+              "durationMs": 5.601,
+              "overlapMs": 5.601
+            },
+            {
+              "name": "GpuChannel::ExecuteDeferredRequest",
+              "pid": 47308,
+              "tid": 37120,
+              "durationMs": 5.593,
+              "overlapMs": 5.593
+            }
+          ],
+          "cpuSamples": [
+            {
+              "nodeId": 18,
+              "scriptId": "0",
+              "name": "(idle)",
+              "line": -1,
+              "column": -1,
+              "samples": 26,
+              "stack": [
+                "(idle)",
+                "(root)"
+              ]
+            },
+            {
+              "nodeId": 2,
+              "scriptId": "0",
+              "name": "(program)",
+              "line": -1,
+              "column": -1,
+              "samples": 22,
+              "stack": [
+                "(program)",
+                "(root)"
+              ]
+            },
+            {
+              "nodeId": 183,
+              "scriptId": "0",
+              "name": "drawImage",
+              "line": -1,
+              "column": -1,
+              "samples": 2,
+              "stack": [
+                "drawImage",
+                "drawTileTexture",
+                "renderMapGroundUncached",
+                "engine.<computed>",
+                "i",
+                "e",
+                "renderMapGround",
+                "engine.<computed>",
+                "render",
+                "engine.render",
+                "engine.render",
+                "t",
+                "(root)"
+              ]
+            },
+            {
+              "nodeId": 217,
+              "scriptId": "4",
+              "name": "L",
+              "line": 8,
+              "column": 112862,
+              "samples": 1,
+              "stack": [
+                "L",
+                "(anonymous)",
+                "render",
+                "engine.render",
+                "engine.render",
+                "t",
+                "(root)"
+              ]
+            },
+            {
+              "nodeId": 332,
+              "scriptId": "0",
+              "name": "fillRect",
+              "line": -1,
+              "column": -1,
+              "samples": 1,
+              "stack": [
+                "fillRect",
+                "(anonymous)",
+                "p",
+                "(root)"
+              ]
+            },
+            {
+              "nodeId": 20,
+              "scriptId": "4",
+              "name": "update",
+              "line": 8,
+              "column": 180141,
+              "samples": 1,
+              "stack": [
+                "update",
+                "engine.update",
+                "t",
+                "(root)"
+              ]
+            },
+            {
+              "nodeId": 706,
+              "scriptId": "4",
+              "name": "Ai",
+              "line": 7,
+              "column": 28877,
+              "samples": 1,
+              "stack": [
+                "Ai",
+                "a",
+                "l",
+                "p",
+                "h",
+                "_",
+                "(anonymous)",
+                "Mc",
+                "ul",
+                "Zd",
+                "Jd",
+                "qd",
+                "Fd",
+                "jf",
+                "D",
+                "(root)"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "frame": {
+          "start": 42446.29999999702,
+          "interval": 42.900000005960464,
+          "stages": {
+            "renderMapGround": 0.10000000894069672,
+            "drawHouse": 1.800000011920929,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0,
+            "renderInteractionHUD": 0
+          },
+          "x": 93.4435200000022,
+          "y": 7,
+          "weather": "clear",
+          "heap": 14097405,
+          "duration": 2.7999999970197678,
+          "end": 42449.09999999404
+        },
+        "window": {
+          "startMs": 42403.39999999106,
+          "endMs": 42446.29999999702,
+          "durationMs": 42.900000005960464,
+          "mainThreadEvents": [
+            {
+              "name": "FireAnimationFrame",
+              "durationMs": 8.056,
+              "overlapMs": 7.532000015258789,
+              "startRelativeMs": -0.5239999847412109
+            },
+            {
+              "name": "v8.callFunction",
+              "durationMs": 8.017,
+              "overlapMs": 7.5230000152587895,
+              "startRelativeMs": -0.49399998474121093
+            },
+            {
+              "name": "FunctionCall",
+              "durationMs": 8.01,
+              "overlapMs": 7.518000015258789,
+              "startRelativeMs": -0.4919999847412109
+            },
+            {
+              "name": "Layout",
+              "durationMs": 0.99,
+              "overlapMs": 0.99,
+              "startRelativeMs": 11.97200001525879
+            },
+            {
+              "name": "RasterImplementation::RasterCHROMIUM",
+              "durationMs": 0.892,
+              "overlapMs": 0.892,
+              "startRelativeMs": 5.006000015258789
+            },
+            {
+              "name": "FireAnimationFrame",
+              "durationMs": 3.563,
+              "overlapMs": 0.728,
+              "startRelativeMs": 42.17200001525879
+            },
+            {
+              "name": "v8.callFunction",
+              "durationMs": 3.505,
+              "overlapMs": 0.677,
+              "startRelativeMs": 42.22300001525879
+            },
+            {
+              "name": "FunctionCall",
+              "durationMs": 3.499,
+              "overlapMs": 0.673,
+              "startRelativeMs": 42.22700001525879
+            }
+          ],
+          "mainThreadGC": [],
+          "gpuEvents": [
+            {
+              "name": "Scheduler::RunTask",
+              "pid": 47308,
+              "tid": 37120,
+              "durationMs": 22.893,
+              "overlapMs": 22.893
+            },
+            {
+              "name": "GpuChannel::ExecuteDeferredRequest",
+              "pid": 47308,
+              "tid": 37120,
+              "durationMs": 22.887,
+              "overlapMs": 22.887
+            },
+            {
+              "name": "RendererMainThread",
+              "pid": 47308,
+              "tid": 37120,
+              "durationMs": 22.857,
+              "overlapMs": 22.857
+            },
+            {
+              "name": "CommandBuffer::Flush",
+              "pid": 47308,
+              "tid": 37120,
+              "durationMs": 22.856,
+              "overlapMs": 22.856
+            },
+            {
+              "name": "CommandBufferStub::OnAsyncFlush",
+              "pid": 47308,
+              "tid": 37120,
+              "durationMs": 22.854,
+              "overlapMs": 22.854
+            },
+            {
+              "name": "CommandBufferService:PutChanged",
+              "pid": 47308,
+              "tid": 37120,
+              "durationMs": 22.847,
+              "overlapMs": 22.847
+            },
+            {
+              "name": "RasterDecoderImpl::DoEndRasterCHROMIUM",
+              "pid": 47308,
+              "tid": 37120,
+              "durationMs": 19.637,
+              "overlapMs": 19.637
+            },
+            {
+              "name": "RasterDecoderImpl::DoEndRasterCHROMIUM::Flush",
+              "pid": 47308,
+              "tid": 37120,
+              "durationMs": 19.587,
+              "overlapMs": 19.587
+            },
+            {
+              "name": "Scheduler::RunTask",
+              "pid": 47308,
+              "tid": 37120,
+              "durationMs": 5.57,
+              "overlapMs": 5.57
+            },
+            {
+              "name": "Scheduler::RunTask",
+              "pid": 47308,
+              "tid": 37120,
+              "durationMs": 4.094,
+              "overlapMs": 4.094
+            }
+          ],
+          "cpuSamples": [
+            {
+              "nodeId": 18,
+              "scriptId": "0",
+              "name": "(idle)",
+              "line": -1,
+              "column": -1,
+              "samples": 20,
+              "stack": [
+                "(idle)",
+                "(root)"
+              ]
+            },
+            {
+              "nodeId": 2,
+              "scriptId": "0",
+              "name": "(program)",
+              "line": -1,
+              "column": -1,
+              "samples": 13,
+              "stack": [
+                "(program)",
+                "(root)"
+              ]
+            },
+            {
+              "nodeId": 183,
+              "scriptId": "0",
+              "name": "drawImage",
+              "line": -1,
+              "column": -1,
+              "samples": 1,
+              "stack": [
+                "drawImage",
+                "drawTileTexture",
+                "renderMapGroundUncached",
+                "engine.<computed>",
+                "i",
+                "e",
+                "renderMapGround",
+                "engine.<computed>",
+                "render",
+                "engine.render",
+                "engine.render",
+                "t",
+                "(root)"
+              ]
+            },
+            {
+              "nodeId": 607,
+              "scriptId": "0",
+              "name": "fill",
+              "line": -1,
+              "column": -1,
+              "samples": 1,
+              "stack": [
+                "fill",
+                "renderMapGroundUncached",
+                "engine.<computed>",
+                "i",
+                "e",
+                "renderMapGround",
+                "engine.<computed>",
+                "render",
+                "engine.render",
+                "engine.render",
+                "t",
+                "(root)"
+              ]
+            },
+            {
+              "nodeId": 360,
+              "scriptId": "4",
+              "name": "(anonymous)",
+              "line": 8,
+              "column": 134040,
+              "samples": 1,
+              "stack": [
+                "(anonymous)",
+                "Et",
+                "kt",
+                "renderMapGroundUncached",
+                "engine.<computed>",
+                "i",
+                "e",
+                "renderMapGround",
+                "engine.<computed>",
+                "render",
+                "engine.render",
+                "engine.render",
+                "t",
+                "(root)"
+              ]
+            },
+            {
+              "nodeId": 33,
+              "scriptId": "0",
+              "name": "drawImage",
+              "line": -1,
+              "column": -1,
+              "samples": 1,
+              "stack": [
+                "drawImage",
+                "renderMapGround",
+                "engine.<computed>",
+                "render",
+                "engine.render",
+                "engine.render",
+                "t",
+                "(root)"
+              ]
+            },
+            {
+              "nodeId": 264,
+              "scriptId": "4",
+              "name": "artImage",
+              "line": 8,
+              "column": 151874,
+              "samples": 1,
+              "stack": [
+                "artImage",
+                "drawArtFrame",
+                "drawWorldSprite",
+                "tryBuildingSprite",
+                "drawBuildingShape",
+                "drawBuildingUncached",
+                "drawBuilding",
+                "render",
+                "(anonymous)",
+                "render",
+                "engine.render",
+                "engine.render",
+                "t",
+                "(root)"
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "slowUpdateWindows": [],
+    "correlationLimit": "51.2ms interval overlaps MajorGC2.643ms and GPU scheduler24.794ms with nested raster flush21.443ms. Concurrent/nested durations cannot be added or prove a blocking dependency, nor explain earlier381.7ms stall. Slow-update threshold4ms not exceeded; updates still cost work."
+  },
+  "ablation": {
+    "failedStartup": {
+      "fixture": "gpu-layer-ablation-20261023-a1",
+      "status": "Driver exited1 after server-starting; no phase/results or server log content retained. Cause unlocated. No measurement used."
+    },
+    "fixture": "gpu-layer-ablation-20261023-a2",
+    "success": true,
+    "totalPhaseSeconds": 133.362,
+    "scope": "QA-only stationary default empty100HP character at0,7; seven fixed-order phases alternate normal with omitted house/lighting drawing and restore normal at end. No production source or game-world state overrides; omitted layers are diagnostic, never a product solution.",
+    "phases": [
+      {
+        "mode": "normal",
+        "seconds": 20.258,
+        "pos": {
+          "x": 0,
+          "y": 7
+        },
+        "map": "world",
+        "hp": 100,
+        "satiety": 93.26125000000002,
+        "endWeather": "clear",
+        "draw": {
+          "count": 1215,
+          "p50": 1.1000000089406967,
+          "p95": 2.3999999910593033,
+          "max": 5.5999999940395355
+        },
+        "attemptedCalls": {
+          "house": 9720,
+          "light": 1215
+        },
+        "errorCount": 0,
+        "diagnosticCount": 0,
+        "samples": [
+          {
+            "processCount": 12,
+            "gpu": {
+              "maxSingleEnginePercent": 33,
+              "sharedMiB": 163.66015625,
+              "dedicatedMiB": 0
+            },
+            "gpuError": null
+          },
+          {
+            "processCount": 10,
+            "gpu": {
+              "maxSingleEnginePercent": 40,
+              "sharedMiB": 182.55859375,
+              "dedicatedMiB": 0
+            },
+            "gpuError": null
+          },
+          {
+            "processCount": 10,
+            "gpu": {
+              "maxSingleEnginePercent": 37,
+              "sharedMiB": 163.6484375,
+              "dedicatedMiB": 0
+            },
+            "gpuError": null
+          }
+        ]
+      },
+      {
+        "mode": "no-houses",
+        "seconds": 19.572,
+        "pos": {
+          "x": 0,
+          "y": 7
+        },
+        "map": "world",
+        "hp": 100,
+        "satiety": 88.33775000000003,
+        "endWeather": "clear",
+        "draw": {
+          "count": 1174,
+          "p50": 0.7999999970197678,
+          "p95": 1.300000011920929,
+          "max": 2.7999999970197678
+        },
+        "attemptedCalls": {
+          "house": 9392,
+          "light": 1174
+        },
+        "errorCount": 0,
+        "diagnosticCount": 0,
+        "samples": [
+          {
+            "processCount": 9,
+            "gpu": {
+              "maxSingleEnginePercent": 29,
+              "sharedMiB": 130.31640625,
+              "dedicatedMiB": 0
+            },
+            "gpuError": null
+          },
+          {
+            "processCount": 9,
+            "gpu": {
+              "maxSingleEnginePercent": 30,
+              "sharedMiB": 130.3125,
+              "dedicatedMiB": 0
+            },
+            "gpuError": null
+          },
+          {
+            "processCount": 9,
+            "gpu": {
+              "maxSingleEnginePercent": 34,
+              "sharedMiB": 130.3203125,
+              "dedicatedMiB": 0
+            },
+            "gpuError": null
+          }
+        ]
+      },
+      {
+        "mode": "normal",
+        "seconds": 18.394,
+        "pos": {
+          "x": 0,
+          "y": 7
+        },
+        "map": "world",
+        "hp": 100,
+        "satiety": 83.95775000000006,
+        "endWeather": "clear",
+        "draw": {
+          "count": 1104,
+          "p50": 1,
+          "p95": 1.4000000059604645,
+          "max": 2.2000000029802322
+        },
+        "attemptedCalls": {
+          "house": 8832,
+          "light": 1104
+        },
+        "errorCount": 0,
+        "diagnosticCount": 0,
+        "samples": [
+          {
+            "processCount": 9,
+            "gpu": {
+              "maxSingleEnginePercent": 29,
+              "sharedMiB": 130.3203125,
+              "dedicatedMiB": 0
+            },
+            "gpuError": null
+          },
+          {
+            "processCount": 9,
+            "gpu": {
+              "maxSingleEnginePercent": 30,
+              "sharedMiB": 130.3203125,
+              "dedicatedMiB": 0
+            },
+            "gpuError": null
+          },
+          {
+            "processCount": 9,
+            "gpu": {
+              "maxSingleEnginePercent": 30,
+              "sharedMiB": 130.265625,
+              "dedicatedMiB": 0
+            },
+            "gpuError": null
+          }
+        ]
+      },
+      {
+        "mode": "no-lighting",
+        "seconds": 18.933,
+        "pos": {
+          "x": 0,
+          "y": 7
+        },
+        "map": "world",
+        "hp": 100,
+        "satiety": 79.06275000000005,
+        "endWeather": "clear",
+        "draw": {
+          "count": 1136,
+          "p50": 1,
+          "p95": 1.800000011920929,
+          "max": 3.2000000029802322
+        },
+        "attemptedCalls": {
+          "house": 9088,
+          "light": 1136
+        },
+        "errorCount": 0,
+        "diagnosticCount": 0,
+        "samples": [
+          {
+            "processCount": 9,
+            "gpu": {
+              "maxSingleEnginePercent": 31,
+              "sharedMiB": 130.265625,
+              "dedicatedMiB": 0
+            },
+            "gpuError": null
+          },
+          {
+            "processCount": 9,
+            "gpu": {
+              "maxSingleEnginePercent": 32,
+              "sharedMiB": 130.265625,
+              "dedicatedMiB": 0
+            },
+            "gpuError": null
+          },
+          {
+            "processCount": 9,
+            "gpu": {
+              "maxSingleEnginePercent": 28,
+              "sharedMiB": 130.265625,
+              "dedicatedMiB": 0
+            },
+            "gpuError": null
+          }
+        ]
+      },
+      {
+        "mode": "normal",
+        "seconds": 18.588,
+        "pos": {
+          "x": 0,
+          "y": 7
+        },
+        "map": "world",
+        "hp": 100,
+        "satiety": 74.41675000000008,
+        "endWeather": "clear",
+        "draw": {
+          "count": 1115,
+          "p50": 1,
+          "p95": 1.4000000059604645,
+          "max": 2.199999988079071
+        },
+        "attemptedCalls": {
+          "house": 8920,
+          "light": 1115
+        },
+        "errorCount": 0,
+        "diagnosticCount": 0,
+        "samples": [
+          {
+            "processCount": 9,
+            "gpu": {
+              "maxSingleEnginePercent": 41,
+              "sharedMiB": 130.265625,
+              "dedicatedMiB": 0
+            },
+            "gpuError": null
+          },
+          {
+            "processCount": 9,
+            "gpu": {
+              "maxSingleEnginePercent": 29,
+              "sharedMiB": 130.265625,
+              "dedicatedMiB": 0
+            },
+            "gpuError": null
+          },
+          {
+            "processCount": 9,
+            "gpu": {
+              "maxSingleEnginePercent": 44,
+              "sharedMiB": 130.265625,
+              "dedicatedMiB": 0
+            },
+            "gpuError": null
+          }
+        ]
+      },
+      {
+        "mode": "neither",
+        "seconds": 19.128,
+        "pos": {
+          "x": 0,
+          "y": 7
+        },
+        "map": "world",
+        "hp": 100,
+        "satiety": 69.77400000000009,
+        "endWeather": "clear",
+        "draw": {
+          "count": 1147,
+          "p50": 0.7000000029802322,
+          "p95": 1.2000000029802322,
+          "max": 1.8999999910593033
+        },
+        "attemptedCalls": {
+          "house": 9176,
+          "light": 1147
+        },
+        "errorCount": 0,
+        "diagnosticCount": 0,
+        "samples": [
+          {
+            "processCount": 9,
+            "gpu": {
+              "maxSingleEnginePercent": 40,
+              "sharedMiB": 130.265625,
+              "dedicatedMiB": 0
+            },
+            "gpuError": null
+          },
+          {
+            "processCount": 9,
+            "gpu": {
+              "maxSingleEnginePercent": 30,
+              "sharedMiB": 130.265625,
+              "dedicatedMiB": 0
+            },
+            "gpuError": null
+          },
+          {
+            "processCount": 9,
+            "gpu": {
+              "maxSingleEnginePercent": 29,
+              "sharedMiB": 130.265625,
+              "dedicatedMiB": 0
+            },
+            "gpuError": null
+          }
+        ]
+      },
+      {
+        "mode": "normal",
+        "seconds": 18.489,
+        "pos": {
+          "x": 0,
+          "y": 7
+        },
+        "map": "world",
+        "hp": 100,
+        "satiety": 65.11450000000009,
+        "endWeather": "clear",
+        "draw": {
+          "count": 1110,
+          "p50": 1,
+          "p95": 1.4000000059604645,
+          "max": 2.7000000029802322
+        },
+        "attemptedCalls": {
+          "house": 8880,
+          "light": 1110
+        },
+        "errorCount": 0,
+        "diagnosticCount": 0,
+        "samples": [
+          {
+            "processCount": 9,
+            "gpu": {
+              "maxSingleEnginePercent": 32,
+              "sharedMiB": 130.265625,
+              "dedicatedMiB": 0
+            },
+            "gpuError": null
+          },
+          {
+            "processCount": 9,
+            "gpu": {
+              "maxSingleEnginePercent": 27,
+              "sharedMiB": 130.265625,
+              "dedicatedMiB": 0
+            },
+            "gpuError": null
+          },
+          {
+            "processCount": 9,
+            "gpu": {
+              "maxSingleEnginePercent": 32,
+              "sharedMiB": 130.265625,
+              "dedicatedMiB": 0
+            },
+            "gpuError": null
+          }
+        ]
+      }
+    ],
+    "finding": "Normal restored drawP95 about1.4ms vs no-house1.3/neither1.2; no-lighting1.8. GPU max-single-engine samples overlap across normal/omitted layers; first normal33/40/37 then restored29/30/30 highlights warmup/variation. No demonstrated stable GPU improvement attributable solely to houses or lighting.",
+    "limits": [
+      "PowerShell/CIM sampling remains inside each phase timing; its shared-machine disturbance is included.",
+      "Weather only recorded at phase end (allclear); do not silently assume a complete weather timeline.",
+      "Fixed scene/order, no randomization or multiple trials per mode; frequency/background/cache/recovery/retained-allocation changes confound causal subtraction.",
+      "AttemptedCalls counted before skip, not actual draw operations. GPU percentages are sampled max single-engine values, not isolated GPU milliseconds or total-device utilization.",
+      "Restored screenshot inspected normal. Stationary ablation does not test movement/world rebuilds/all biomes/weather/combat/siege."
+    ]
+  },
+  "verification": {
+    "runtimeSourceChanged": false,
+    "tests": "No new production/test change; did not repeat the previously passed562 tests/typecheck/build for a documentation-only update.",
+    "review": "Independent read-only method/analysis review caught node-aggregation P2, corrected to exact CPU nodeID. Added long draw-start/update windows, corrected independent a2 scope, preserved negative deltas and all causal limits. Final evidence/source-mapping/credential review passed with no P1/P2; reviewer ran no tests/builds/loads and did not reparse the large raw trace.",
+    "safety": "Only fresh owned synthetic DBs and ignored QA scripts; real data/sdc.sqlite never opened. Owned browser/server processes closed. No cookies/tokens/playerIDs/raw URLs exported."
+  },
+  "remaining": [
+    "Original slow-frame cause not fully established; no stable-flow/60FPS or long-session memory acceptance.",
+    "World-wide routes/unique-chunk eviction, actual siege capacity and population-resource-economic acceptance remain unfinished.",
+    "Keep prior rejected receiver experiment and a7/a12 failures; do not reinterpret new narrow samples as their resolution."
+  ]
+}

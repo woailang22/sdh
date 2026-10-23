@@ -1545,3 +1545,17 @@ formal-a18原WAL合并审计通过：native559/556实际扣弹余1441/1444；背
 图片/画布的MiB是像素数×4的RGBA理论估算，和实测进程/GPU指标分开；浏览器进程数从12降至9也会影响进程树内存，不能把工作集下降全部归因游戏回收。原始11次样本保留进程数，未隐去这项变量。
 
 计划docs/superpowers/plans/2026-10-23-repeated-world-memory.md，去凭据数据docs/verification/2026-10-23-repeated-world-memory-results.json，独立只读审查方法/数字，无新P1/P2。真实存档未打开，所属Chrome/服务器关闭。下一步需要慢帧与实际draw间隔、GC、浏览器/GPU及OS调度的同时间轴证据，避免再猜一个优化；三轮同工作集缓存观察不代替全世界路线、持续新chunk淘汰、长期内存、多人攻防和人口资源经济。完整游戏目标继续进行中。
+
+## 慢帧调用轨迹与图层排除诊断检查点（2026-10-23）
+
+4a9a1d0后生产仍2434b0e。独立fresh world-frame-trace-a1默认空角色真实三往返，第三轮才开启Chrome timeline/V8/GC/GPU trace、1ms CPU采样与各128条慢draw/update记录。六段实际走完，第三轮draw13.5/25.5ms、独立RAF60.7/66.7ms，实际draw-start最大68.3ms；但QA只等trace完成10秒即失败并finally关闭自有进程，留下CPU/detailed无timeline。这是采集失败，不冒称完整trace或游戏修复，也没丢弃上一轮58/63.5ms绘制及381.7ms停顿。
+
+另独立短用例确认page/browser CDP都能返回stream，20秒canvas+CPU采样用例完成回执约1867ms。新world-frame-trace-a2为单往返独立诊断（不是又一次第三轮预热验收），CDP连接活着就继续等原采集；15738ms后收到no-loss回执，原269148533字节/1510875事件及CPU留ignored data，原始浏览器trace可能含内部值所以不直接发布。10秒确实不足以判断某些导出失败，但不能据a2证明被关闭a1后来会怎样。A2原draw gate通过仅指draw耗时，单轮且有探针，不替代原三轮验收。
+
+56个marker先按label.start匹配frame，再用marker.ts-frame.end*1000校准，offset中位93047464410µs、范围约171µs，不能错拿start相减包含draw耗时。CPU范围与trace相容，并核41.3377秒帧uncached13.7ms与drawImage栈、79.5882秒drawHouse17.4/lighting9.2ms与对应栈；不宣称精确物理CPU时间。独立审查发现按函数名+行列聚合会混匿名脚本/父栈，已按实际nodeID修正，补长draw-start和update窗口。CPU98个负timeDelta保留原值累计，样本次数不算CPU毫秒。当前56条未超128 ring，方法仍说明一般情况下会淘汰旧慢帧。
+
+A2实际game draw-start P50约17.9/P9520.3/P9927.8/max51.2ms，与独立RAF和物理呈现分开。51.2ms区间内main MajorGC2.643ms及GPU scheduler24.794ms、内部raster flush21.443ms重叠；后两项高度嵌套，不能相加，也不能仅由同窗口重叠认定阻塞依赖/全部卡顿单因。没有>4ms update记录不等于update免费；未匹配main X GC也不能排除并发/其他phase的GC。正常样本draw18.2/29ms也有不同阶段分配，不据单个stage尾值直接改代码。
+
+另gpu-layer-ablation-a1启动仅留server-starting即驱动exit1、无phase/results/服务日志，原因未知保留，不用于性能结论。新a2固定(0,7)默认空角色，正常→不画house→正常→不画lighting→正常→两者不画→正常，七阶段总133.362秒，HP100、每阶段末weatherclear、截图最终恢复正常。每阶段3次CIM/GPU采样和PowerShell启动仍在draw测量时间内，是带干扰的固定顺序/构图诊断，只有phase末天气不冒称完整天气轨迹。qaCalls是跳过判断前的尝试次数；不画图层绝不是产品方案。正常恢复drawP95均约1.4ms，不画house1.3、两者1.2、不画lighting1.8；GPU单engine采样大量重叠，最初正常33/40/37而恢复29/30/30，暖缓存/频率/后台/恢复成本不能被假装成纯图层收益。没有证据支持删房屋/光照或贸然加整屋缓存来修复既有停顿，故本轮不改生产代码。
+
+计划docs/superpowers/plans/2026-10-23-world-frame-trace.md，去凭据数据docs/verification/2026-10-23-world-frame-trace-results.json。独立只读审查校验数字/时钟边界/分析修正，原始trace/CPU未公开，真实存档未打开，所有自有浏览器/服务器关闭。只有记录变化，没有重跑上轮562测试/type/build来刷成绩。仍保留原慢帧/a7停步/a12重放观测未定位；后续需要更强的GPU提交/浏览器调度干预证据，并继续全世界连续路线/新chunk淘汰、真实攻防容量和人口资源经济验收。完整目标保持进行中，不把这组有限诊断说成游戏已经流畅或整体完成。
