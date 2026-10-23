@@ -1,0 +1,15 @@
+# 联机未就绪时的状态和操作边界
+
+承接已批准的大世界服务器权威设计、断线保护与“继续”执行授权。上一轮3d56382路面修复已交付，本轮处理已实际发现的断线仍显信号强/0ms且可本地走动。此项是网络与交互正确性，不冒称解决GPU、绘制慢帧或所有走路卡顿。
+
+事实：NetworkManager在WebSocket open即置isConnected=true，尚未应用init/game_state；close后React仅更新isConnected/ping，Engine输入屏蔽不依赖连接。RadioChat硬编码信号强，TopMenuBar未接连接状态；Engine.update不检查inputBlocked，Dpad直写joystick、已排队路径仍可继续移动。现有生命/饱食已由服务器权威结算，不改其规则。
+
+选择沿用现有isConnected表达“可应用完整世界状态后操作”，不增加连接状态机或全局暂停引擎。另一方案仅改标签无法阻止虚假移动；完全stop引擎会连最后场景、诊断与天气动画都停，恢复更复杂，均不采用。
+
+连接打开先保持未就绪、清空旧延迟，仍发送state_sync；init含gameState、legacy game_state或成功解码patch应用回调后才可操作。解码缺基线期间先暂停，仅请求一次完整状态，恢复后解锁；pong不能把未就绪变成就绪。位置/game_action在底层send也拒绝未就绪发送，避免绕开App的背包等直接动作调用；不缓存/重放离线动作。延迟用null表示未测、首个有效pong后显示真实非负RTT，不伪造最低12ms。close/disconnect清理旧延迟、时钟和decoder，4001替换登录维持既有不抢回身份规则。此次只处理明确断开/初始化/基线缺失，不新增半开TCP超时策略。
+
+App初建Engine与后续输入屏蔽同时纳入未就绪；关闭连接立即清当前按键/寻路，快照恢复时强制用服务器坐标对齐，恢复回调不能越过仍打开的面板。Engine每次blocked update清键盘/joystick/开火/当前寻路及未提交采集进度，继续天气与绘制；modal阻塞同样执行，避免Dpad绕过和阻塞前已排队操作在解锁后回放。联网生存/营地防御不会因本地输入屏蔽停止。
+
+顶部、聊天和在线名录都接真实连接状态；未就绪不展示旧人数为当前在线、不展示0ms/旧ping或固定信号强。场景中显示小型“等待世界同步，移动与交互已暂停”状态卡，不挡背包查看、设置和诊断。已接通未测ping显示测量中；聊天显示已连接而非未经测量的信号强，未就绪禁用发送且不创建伪本地已发送消息。
+
+验证：Network实际socket消息回归覆盖open未就绪、init/legacy/patch回调顺序、基线缺失/恢复、pong不提前解锁、close/reconnect延迟清理、低层阻止动作/位置且允许控制包、4001和disposed既有规则；Engine真实update覆盖keyboard/Dpad/path/fire及未完成搜刮清理、解锁不回放/新输入恢复，既有standalone与在线移动不变。组件SSR覆盖连接/测量中/断开三种文本，原生同一新空owned QA存档实际移动、停自有服务、断线后键盘/方向控件/右键/面板关闭均不移动、同DB正常重启恢复后新输入服务器接受。审计资产/坐标/纠正、backup恢复，记录冷启动/错误/慢帧界限。正式data/sdc.sqlite不打开；按已授权普通推送sdh/main。
