@@ -1,0 +1,669 @@
+{
+  "status": "verified-first-earned-native-camp-food-loop",
+  "overallGoalComplete": false,
+  "productionUnchangedFrom": "1e69e9df4a6a0a86607911dd75ad2e223590e234",
+  "productionCodeChanged": false,
+  "verification": {
+    "freshTypesIncludingOwnedQa": "passed",
+    "freshNativeActionsAndLedgerAudit": "passed",
+    "freshSqliteIntegrityAndConsistentBackupRestore": "passed",
+    "previousProductionSuite": {
+      "tests": 722,
+      "files": 45,
+      "rerunThisTurn": false,
+      "sourceUnchanged": true
+    },
+    "productionBuild": "Unchanged index-CVuLyfU- bytes; no new build claimed"
+  },
+  "native": {
+    "passed": true,
+    "normalRulesAndClocks": true,
+    "noStateOrIdentityEdits": true,
+    "sameEarnedCharacter": true,
+    "phases": [
+      {
+        "name": "native-initial-wait-stopped",
+        "packets": 4706,
+        "rejected": 1,
+        "corrections": 3,
+        "errors": 0,
+        "actions": 0,
+        "overflow": 0
+      },
+      {
+        "name": "recovery-food-approach-failed",
+        "packets": 153,
+        "rejected": 0,
+        "corrections": 1,
+        "errors": 0,
+        "actions": 1,
+        "overflow": 0
+      },
+      {
+        "name": "food-food-phase-stopped",
+        "packets": 85,
+        "rejected": 0,
+        "corrections": 1,
+        "errors": 0,
+        "actions": 0,
+        "overflow": 0
+      },
+      {
+        "name": "door-final",
+        "packets": 4940,
+        "rejected": 1,
+        "corrections": 20,
+        "errors": 1,
+        "actions": 62,
+        "overflow": 0
+      }
+    ],
+    "actions": {
+      "total": 63,
+      "successful": 62,
+      "rejectedRapidFoodUse": 1,
+      "handledIncludingSource": 67,
+      "uniqueRequests": true
+    },
+    "materials": {
+      "wood": {
+        "earned": 48,
+        "spent": 48
+      },
+      "stone": {
+        "earned": 24,
+        "spent": 24
+      },
+      "scrap": {
+        "earned": 2,
+        "spent": 2
+      },
+      "gatherHits": 24,
+      "axeEnhancedHits": 12,
+      "pickEnhancedHits": 3
+    },
+    "camp": {
+      "entrance": [
+        -60,
+        20
+      ],
+      "size": 64,
+      "createdCost": {
+        "wood": 20,
+        "stone": 10
+      },
+      "entry": [
+        0,
+        28
+      ],
+      "entryDoesNotHealOrGrantItems": true,
+      "onlyCoreAndPaidFarm": true
+    },
+    "farm": {
+      "position": [
+        4,
+        26
+      ],
+      "cost": {
+        "wood": 8,
+        "stone": 4
+      },
+      "recipe": "grow_potato",
+      "startCost": {
+        "wood": 2,
+        "scrap": 2,
+        "seed_potato": 1
+      },
+      "normalDurationSeconds": 60,
+      "clockEvidence": "Normal server readyAt, initial disabled60s UI, retained source/harvest file timestamps bracketing readyAt, accepted normal collect; no per-action wall timestamp observer",
+      "collected": 4,
+      "eaten": 1,
+      "remaining": 3,
+      "satietyGained": 25,
+      "hpBefore": 100,
+      "hpAfter": 100,
+      "healRuleThreeCapped": true,
+      "repeatCollectUiAbsent": true,
+      "duplicateRequestNotSent": true
+    },
+    "survival": {
+      "initialIdleStarvationDeathRetained": true,
+      "ownDropFullyRecovered": true,
+      "foundFood": 3,
+      "foundWater": 2,
+      "foundSeed": 1,
+      "normalFoodUses": 4
+    },
+    "final": {
+      "x": 3.2811027439261933,
+      "y": 26.80347633128295,
+      "hp": 100,
+      "shield": 50,
+      "satiety": 58.650500000000044,
+      "items": [
+        [
+          "food",
+          1
+        ],
+        [
+          "water",
+          4
+        ],
+        [
+          "seed_potato",
+          1
+        ],
+        [
+          "axe_stone",
+          1
+        ],
+        [
+          "crop_potato",
+          3
+        ]
+      ],
+      "tool": "pickaxe_stone",
+      "resourcesZero": true
+    },
+    "persistence": {
+      "savedMatches": true,
+      "backupRestored": true,
+      "integrity": "ok",
+      "checkpointSatiety": 58.650500000000044,
+      "savedSatiety": 58.39000000000004,
+      "normalStopTickMs": 1042,
+      "satietyMatchesNormalQuarterPointPerSecondDecay": true,
+      "backupSatietyExactlyMatchesSaved": true
+    },
+    "finalPageOnly": {
+      "renderErrors": [],
+      "slowFrames": 5,
+      "allCurrentPageSlowRecordsRetained": true,
+      "maxDrawMs": 0.7000000178813934,
+      "maxRafGapMs": 83.5,
+      "environment": {
+        "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
+        "viewport": {
+          "width": 1280,
+          "height": 720
+        },
+        "canvas": {
+          "width": 1280,
+          "height": 720
+        },
+        "devicePixelRatio": 1.5,
+        "modulePath": "/assets/index-CVuLyfU-.js",
+        "jsHeap": {
+          "used": 18548750,
+          "total": 29377302
+        },
+        "graphicsBackend": "unknown"
+      },
+      "previousClosedPagesDiagnosticsNotExported": true,
+      "performanceAccepted": false
+    },
+    "overallGoalComplete": false
+  },
+  "cleanup": {
+    "ownedServersTerminal": true,
+    "ownedPids": [
+      21472,
+      29332,
+      12060,
+      25840
+    ],
+    "port": 39138,
+    "listenerCount": 0,
+    "ownedTabsRemaining": 0,
+    "viewportRestored": true,
+    "productionSaveOpened": false
+  },
+  "review": {
+    "independent": "Read-only final source/evidence review",
+    "status": "passed-no-P1-P2"
+  },
+  "limits": [
+    "All gameplay used native CUA keyboard/clicks, the same legitimately earned QA character and normal clocks. Static existing world definitions guided routes. No GM, health, coordinates, identity, assets, production time or resource density edits.",
+    "Initial online model delay caused starvation death; closed-door approaches, wrong screen-origin calculation, selector mismatch, native path wall collisions, one rapid-food server rejection and one final-camp transition movement rejection remain in the evidence. Native-phase death also rejected one stale movement packet.",
+    "Across all four phases there were9884 movement packets,2 rejected packets,25 corrections,1 action error,0 observer overflow. Reconnect/full-state corrections are included; this is not a zero-correction run.",
+    "63 new action requests include62 successful and1 rapid-food rejection. Source5 + new62 =67 handled. No duplicate production request/replay was sent; disappearance of the collect UI after collection is narrower evidence.",
+    "Normal60-second production is evidenced by original readyAt, disabled60s initial UI and accepted mature collection, with file timestamps bracketing readyAt. Observer action records do not include an independent per-action wall timestamp.",
+    "Potato gave25 satiety at full HP100; HP remained100. The configured3HP heal was capped; no low-health3HP heal was verified.",
+    "First audit comparison failed because normal survival tick advanced1042ms between checkpoint and graceful stop, reducing satiety58.6505 to58.39. The audit now verifies the exact0.25/second decay and backup equals actual saved58.39. It does not alter the stored state.",
+    "Tools, camp, farm and crop spend all48 wood24 stone2 scrap. Final food1,water4,seed1,axe in bag,pick equipped,potato3. The initial death drop was fully recovered. No free walls, warehouse, workbench or defense was granted.",
+    "This is one first-cycle functional route, with ordinary page-close/offline breaks. Harvest gives no seeds; one remaining seed is sufficient seed for only one further cycle, which still requires gathering2wood and2scrap because all carried resources were spent. Not proof of self-sufficiency, newbie pacing or long-run economy balance.",
+    "Final page only exported errors[] and all5 slow samples, maxRAF gap83.5ms. Earlier closed pages have no exported frame/error diagnostic collection, so no all-pages error-free or performance conclusion. JS heap alone is not browser total memory.",
+    "All owned services/tabs closed and viewport restored. The actual production sdc.sqlite was never opened. Ordinary repository push is not external website deployment.",
+    "Map/building variety, further progression/seed supply, paid defensive camps and multiplayer loops, cold ground stalls, strict continuous60seconds, physical presentation, fullP95, GPU and long-session memory remain unaccepted."
+  ],
+  "sources": [
+    {
+      "path": "data/audit-camp-food-loop-20261024.ts",
+      "sha256": "84c6b54feed1a8ef21c6049b961f857a9f6e5ba83a7077440188538872bd1096"
+    },
+    {
+      "path": "data/cadence-boundary-full-20261024.log",
+      "sha256": "edb05b6e4747493a9ca9f81d4b8b3bea55910a6f6bd3ed8202d96b457f214045"
+    },
+    {
+      "path": "data/camp-food-loop-audit-20261024.log",
+      "sha256": "17ed4fd5c626b75e6c0689a2c2cb03f969b76714e098713202d4991263807813"
+    },
+    {
+      "path": "data/camp-food-loop-audit-checkpoint-tick-mismatch-20261024.log",
+      "sha256": "fedae25967d706a829707238e4263eb06f6e6c722c42c48b4957062ef80e60b4"
+    },
+    {
+      "path": "data/camp-food-loop-audit-final-20261024.log",
+      "sha256": "17ed4fd5c626b75e6c0689a2c2cb03f969b76714e098713202d4991263807813"
+    },
+    {
+      "path": "data/camp-food-loop-cleanup-20261024.json",
+      "sha256": "a96c4b530612fee1c85feb22c720e12ecb3f5ce8c6b0d0c715a14dcbf5b03f79"
+    },
+    {
+      "path": "data/camp-food-loop-review-20261024.json",
+      "sha256": "65eaa9756df00fc8858fe21abeedf08a8bf123c54d7353d7e134fd50f37bcba4"
+    },
+    {
+      "path": "data/camp-food-loop-source-backup-20261024.json",
+      "sha256": "e4acc17602bc5190696a81d535d7c927eacf9bc2337388146061ef63eef0d8c0"
+    },
+    {
+      "path": "data/camp-food-loop-static-nearby-20261024.json",
+      "sha256": "9e5ce0d18c572b1b91dc40af397f315d5bb3e29395cc8156d7cd1ce7133c112f"
+    },
+    {
+      "path": "data/camp-food-loop-types-20261024.log",
+      "sha256": "58c2631264457d148ab16c2141705ee8f0ade9e0ec9da20ff9596589fabd8cf2"
+    },
+    {
+      "path": "data/camp-food-loop-types-final-20261024.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "data/capture-cua-camp-food-loop-20261024.ts",
+      "sha256": "074a5fc562451af603523a7ba32fe1d0fb6cdd952399558b214e04003bf65973"
+    },
+    {
+      "path": "data/control-cua-camp-food-loop-20261024.cjs",
+      "sha256": "dc7b7d5c2b02557af2c976636402d09d75c8ac717565fa8875d6c758d8eab6fa"
+    },
+    {
+      "path": "data/control-cua-camp-food-loop-door-20261024.cjs",
+      "sha256": "70b83f7fb2f4d180595adc9c04f0faed61ad08b8f3e2b2acf89cb2a805063598"
+    },
+    {
+      "path": "data/control-cua-camp-food-loop-food-20261024.cjs",
+      "sha256": "2c7ba92f3a7e0f1a3e23b2a178b057041a2fa18803760ccdd46066d5cb4958c4"
+    },
+    {
+      "path": "data/control-cua-camp-food-loop-recovery-20261024.cjs",
+      "sha256": "638a6afa84ee0a69bfce4636a4c3dad087c4809b177e565f919ca35f47b7b899"
+    },
+    {
+      "path": "data/cua-camp-food-loop-20261024-a1-audit.json",
+      "sha256": "c2f5f048dae4c9ef6f5b7ee2273ffdbf99591b5c9ea2e61bc497ecc0dd16c49b"
+    },
+    {
+      "path": "data/cua-camp-food-loop-20261024-a1-axe-equipped.png",
+      "sha256": "87531dc25af8e029eaf5c66cebd7f4bb752d0382b07658c5ec05da1f50d28717"
+    },
+    {
+      "path": "data/cua-camp-food-loop-20261024-a1-axe-stages.json",
+      "sha256": "565bebac35aa3ab8221d84a9bd702ae39a475fa25f46761b7baa63a6817d43e7"
+    },
+    {
+      "path": "data/cua-camp-food-loop-20261024-a1-axe-trees-one-stages.json",
+      "sha256": "52ed723bfbc88f433f34065ebe47f496174e76991fcaeaca94e1eea2d46afcd9"
+    },
+    {
+      "path": "data/cua-camp-food-loop-20261024-a1-axe-trees-one.png",
+      "sha256": "f505c678f0dff9e284a4ebaaf511cde1aa2c08dd1f0f3d9a10d313f4c97d6c87"
+    },
+    {
+      "path": "data/cua-camp-food-loop-20261024-a1-camp-materials.png",
+      "sha256": "2d6891066ae8ed863953cafbc7b093d793d719ba7d2827013aa06578b440608a"
+    },
+    {
+      "path": "data/cua-camp-food-loop-20261024-a1-craft-axe-stages.json",
+      "sha256": "c52040e9161dbc858836b2e5a9b2bf04d4baf5bed75bbd75716f5f4ffade02fd"
+    },
+    {
+      "path": "data/cua-camp-food-loop-20261024-a1-create-camp-stages-private.json",
+      "sha256": "374e5d4d1d40a6561c635604c5320b0afe0d02fadfaefced721b3e90ba97dd25"
+    },
+    {
+      "path": "data/cua-camp-food-loop-20261024-a1-door-axe-attempt-events.json",
+      "sha256": "f555b27aa0a56c294a939461c336ccdd7513154540657ed049743673b889f3a6"
+    },
+    {
+      "path": "data/cua-camp-food-loop-20261024-a1-door-axe-attempt-world-private.json",
+      "sha256": "dea03d30aa7218b7d989741ab935b67b907bc3dd71dc33660eb318e37c204de1"
+    },
+    {
+      "path": "data/cua-camp-food-loop-20261024-a1-door-axe-equipped-events.json",
+      "sha256": "9845eba75f569b95c4b8fbc6da77dd1b19e55ff865e02f34af5ca23970c64a6e"
+    },
+    {
+      "path": "data/cua-camp-food-loop-20261024-a1-door-axe-equipped-world-private.json",
+      "sha256": "1bdb11f88f6a45d009e234421c6abc1e7756d035e7d7865a0b9324d17342edbc"
+    },
+    {
+      "path": "data/cua-camp-food-loop-20261024-a1-door-connected-world-private.json",
+      "sha256": "604c0ec6e5212694b4fe5cf1df61f7056d7c40b7b9de0fc87a2ba17db477395e"
+    },
+    {
+      "path": "data/cua-camp-food-loop-20261024-a1-door-door-phase-offline-events.json",
+      "sha256": "030e09d6207c135864e71186bce52850bd5bd2c4e8eaa3e82538c349bb578dd9"
+    },
+    {
+      "path": "data/cua-camp-food-loop-20261024-a1-door-door-phase-offline-world-private.json",
+      "sha256": "e1e8cf0633c3123a55e5c89b4318efc81f02c28de3db162c359b0355a583e7b6"
+    },
+    {
+      "path": "data/cua-camp-food-loop-20261024-a1-door-drop-recovered-events.json",
+      "sha256": "5456d52a83c1ebbd391d5020af6f0c76b7f54283321481eaa5a2eebe7a7407db"
+    },
+    {
+      "path": "data/cua-camp-food-loop-20261024-a1-door-drop-recovered-world-private.json",
+      "sha256": "de5480cb7d94a2478392bdf3712569178f8520ac7a8680acfe42b2bf60adf75a"
+    },
+    {
+      "path": "data/cua-camp-food-loop-20261024-a1-door-final-events.json",
+      "sha256": "90c103666b199c4036654ed79806c0a80a421658cc06393aa79387824364cf01"
+    },
+    {
+      "path": "data/cua-camp-food-loop-20261024-a1-door-final-world-private.json",
+      "sha256": "0a6bcdddaaf858a3753c2b0f74d3a2f75512ee35c73a0a14476612275d302c71"
+    },
+    {
+      "path": "data/cua-camp-food-loop-20261024-a1-door-food.png",
+      "sha256": "c2fe2e3cff4d1dd02fdfcbe6c411a3717c42313e21e6d4ae9c1aee4b7c0e2d7d"
+    },
+    {
+      "path": "data/cua-camp-food-loop-20261024-a1-door-harvested-eaten-events.json",
+      "sha256": "2b49dfb750c15f63dadf171b9750ecbd53b504626a107429c9173e417cc6efe3"
+    },
+    {
+      "path": "data/cua-camp-food-loop-20261024-a1-door-harvested-eaten-world-private.json",
+      "sha256": "a103bf79ccd4a7324409eb3a7711d2d0ded7178a1ac6be5e4d4295e5a76afe63"
+    },
+    {
+      "path": "data/cua-camp-food-loop-20261024-a1-door-materials-ready-events.json",
+      "sha256": "1870c7d9cfc1051717123f63e92a87dcede7ee5d8efdbcc58e70989e5f5e563f"
+    },
+    {
+      "path": "data/cua-camp-food-loop-20261024-a1-door-materials-ready-world-private.json",
+      "sha256": "164a0f29eeaabde0a2432d5cbdb97196afee49c0369a58358420bf993abfa4c6"
+    },
+    {
+      "path": "data/cua-camp-food-loop-20261024-a1-door-potato-started-events.json",
+      "sha256": "c126d694e487999ec802f37dd64eca9533e64018d4eeaf37c2d3d4b3736d5bea"
+    },
+    {
+      "path": "data/cua-camp-food-loop-20261024-a1-door-potato-started-world-private.json",
+      "sha256": "e118ee4436855abc9bf44299c3a6e16571a293bd323c9c36c117e19905fb6947"
+    },
+    {
+      "path": "data/cua-camp-food-loop-20261024-a1-door-rescued-offline-events.json",
+      "sha256": "044af5e13fd4351d7ac73e8b1ebaf5e9f64cbdfca90b57ae2fc462d53fb4a2c2"
+    },
+    {
+      "path": "data/cua-camp-food-loop-20261024-a1-door-rescued-offline-world-private.json",
+      "sha256": "80fb6549d189b5d42646acbc2c0cd52917e43764c4046f93a5d4b858335b35c4"
+    },
+    {
+      "path": "data/cua-camp-food-loop-20261024-a1-door-server.log",
+      "sha256": "a200b7c41ec4c64dd1ae8ca59db678d70c0a00a343ce9cb4b2552a9e47572cdb"
+    },
+    {
+      "path": "data/cua-camp-food-loop-20261024-a1-door-stages.json",
+      "sha256": "69518ee1ed84c083395a1b487a4c124f38ad6a469796b433617f86d07a698045"
+    },
+    {
+      "path": "data/cua-camp-food-loop-20261024-a1-drop-stone-stages.json",
+      "sha256": "d34011355302deecbc18cf7ed1d0fd1f54fcbadf69ffc06f7f59b4b896517ffe"
+    },
+    {
+      "path": "data/cua-camp-food-loop-20261024-a1-farm-build-stages-private.json",
+      "sha256": "2f1cd22d9a65ba16c59164e61760de711b90a76b8a913d13cb5400f9abcdd85f"
+    },
+    {
+      "path": "data/cua-camp-food-loop-20261024-a1-farm-placed-private.png",
+      "sha256": "5ba4b32ee9192c60ecad27a70133e219db6e2dcc79a454bc48fa3e3e1bedf6d2"
+    },
+    {
+      "path": "data/cua-camp-food-loop-20261024-a1-final-errors.json",
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "path": "data/cua-camp-food-loop-20261024-a1-final-frames-private.json",
+      "sha256": "74a216fca50be0eb8614f12e45039867105340ccb601f44afab3e2a1ee628790"
+    },
+    {
+      "path": "data/cua-camp-food-loop-20261024-a1-final-hud-crop.png",
+      "sha256": "6fd7448634de60cf7e1af8c3404a513206c7d308959a3c168a08b37bcf1f63bf"
+    },
+    {
+      "path": "data/cua-camp-food-loop-20261024-a1-final-material-stages.json",
+      "sha256": "098f7732eec4804441a97dd4bd2a850942a641766010a92a09ed6f48d18f6c6f"
+    },
+    {
+      "path": "data/cua-camp-food-loop-20261024-a1-final-stages-private.json",
+      "sha256": "ce1d259e716deee3dd56ab065a21cde07626c2a41e205c4aabc7f4b6aaba5961"
+    },
+    {
+      "path": "data/cua-camp-food-loop-20261024-a1-final-verified-stages-private.json",
+      "sha256": "d60abc85f702b78cd4e2867c3667ffc0f9ec317077d9ac63dc5009d45316a986"
+    },
+    {
+      "path": "data/cua-camp-food-loop-20261024-a1-first-materials-stages.json",
+      "sha256": "0fe5dac7910ae9cf5f99275e32d543d9343702edbded1d851ec06e6aacdb6497"
+    },
+    {
+      "path": "data/cua-camp-food-loop-20261024-a1-first-materials.png",
+      "sha256": "71b4a5076b3d0780a043ef3cf35e8ad8dbd53ef48f3e8f69b3f85e50cf134d46"
+    },
+    {
+      "path": "data/cua-camp-food-loop-20261024-a1-food-connected-world-private.json",
+      "sha256": "805feecad4e3b49567b2e831835eca1ee7a416a882a7534cf65048655385f3bb"
+    },
+    {
+      "path": "data/cua-camp-food-loop-20261024-a1-food-food-phase-stopped-events.json",
+      "sha256": "ade834e47184f912896321982195443b15a06b6c0cb9c9c6b13fa421b66667be"
+    },
+    {
+      "path": "data/cua-camp-food-loop-20261024-a1-food-food-phase-stopped-world-private.json",
+      "sha256": "bd308e278215c92910e3547c064028c5f25497263872025a1b49377e0cd71f2b"
+    },
+    {
+      "path": "data/cua-camp-food-loop-20261024-a1-food-phase-stages.json",
+      "sha256": "4fee2363647cd497fe8ddfd7a67deea8dbba854a74e1bb60395619eba1b33568"
+    },
+    {
+      "path": "data/cua-camp-food-loop-20261024-a1-food-phase.png",
+      "sha256": "5fbe12d002163d504da2c4af593d970579876f942c82732a9230b778b938fcfd"
+    },
+    {
+      "path": "data/cua-camp-food-loop-20261024-a1-food-server.log",
+      "sha256": "a200b7c41ec4c64dd1ae8ca59db678d70c0a00a343ce9cb4b2552a9e47572cdb"
+    },
+    {
+      "path": "data/cua-camp-food-loop-20261024-a1-harvest-eaten.png",
+      "sha256": "3358e1cf0625275699e9dffe298285201a06ba238924e8210e516593e12d2899"
+    },
+    {
+      "path": "data/cua-camp-food-loop-20261024-a1-harvest-stages-private.json",
+      "sha256": "205d3a4fa1cbfd243dbc8656bd3c6d653e949fbeff839ee0db841ec6076daab3"
+    },
+    {
+      "path": "data/cua-camp-food-loop-20261024-a1-initial-wait-ax.txt",
+      "sha256": "20e86af29d5461a2d2de4bc6ee5485340c5e14caca82aef30a33052faba38a4f"
+    },
+    {
+      "path": "data/cua-camp-food-loop-20261024-a1-native-connected-world-private.json",
+      "sha256": "9bdca2f0a09ea3c66cd05dbb04e03bac1a48bde1683938f1851f6e54d453366e"
+    },
+    {
+      "path": "data/cua-camp-food-loop-20261024-a1-native-initial-wait-stopped-events.json",
+      "sha256": "d344d107be923f702ce92aa55598ec767c0bce7ddd26071842741ade8b8fda89"
+    },
+    {
+      "path": "data/cua-camp-food-loop-20261024-a1-native-initial-wait-stopped-world-private.json",
+      "sha256": "7c509157d304f53667f15d9b4ece711ddf412a1b871e9fe3f840a6d91ecb99ef"
+    },
+    {
+      "path": "data/cua-camp-food-loop-20261024-a1-native-resumed-events.json",
+      "sha256": "4328357afc8122f52792ccb3e3876b875fd5cef34dc9c44dc94b77cc69e2afdc"
+    },
+    {
+      "path": "data/cua-camp-food-loop-20261024-a1-native-resumed-world-private.json",
+      "sha256": "af65789fbb274a619e379be9650fe153a17a9302cc7d0ca5aca22ecbb927afe9"
+    },
+    {
+      "path": "data/cua-camp-food-loop-20261024-a1-native-server.log",
+      "sha256": "a200b7c41ec4c64dd1ae8ca59db678d70c0a00a343ce9cb4b2552a9e47572cdb"
+    },
+    {
+      "path": "data/cua-camp-food-loop-20261024-a1-new-camp.png",
+      "sha256": "b0697d0ab3717adb666dac9e00bdfd875d412328a016f872bc41d57dee078eab"
+    },
+    {
+      "path": "data/cua-camp-food-loop-20261024-a1-pick-craft-stages.json",
+      "sha256": "6d653fb6d3c29d183d411b1eaeb0febaaf2ae3e014db317a85998869d3094491"
+    },
+    {
+      "path": "data/cua-camp-food-loop-20261024-a1-pick-equipped.png",
+      "sha256": "01c6a3a782481d091c410e4da1694f0f4fc96621145a48617eafefa9e5aea7fc"
+    },
+    {
+      "path": "data/cua-camp-food-loop-20261024-a1-potato-start-private.png",
+      "sha256": "d1bc3b9a64690170f2d846b6bc5bc6dceda93daedbed1d80e851a0c8c8c0ca92"
+    },
+    {
+      "path": "data/cua-camp-food-loop-20261024-a1-potato-start-stages-private.json",
+      "sha256": "d3fd54cfdf342ec4e8140d4cca77f9d9f7a0661b2017178a7798bfddc8063e83"
+    },
+    {
+      "path": "data/cua-camp-food-loop-20261024-a1-ready-camp.png",
+      "sha256": "c9b8092da5c0e4e32e0b85be339c35207f22803de46da0a1a281a4e662e0da14"
+    },
+    {
+      "path": "data/cua-camp-food-loop-20261024-a1-recovery-connected-world-private.json",
+      "sha256": "ead1adee186222f6aee88af0251affcd9fa5c457aefb46e6f79071d13d7fcc16"
+    },
+    {
+      "path": "data/cua-camp-food-loop-20261024-a1-recovery-food-approach-failed-events.json",
+      "sha256": "e19fd05925dc0edaacb914a6f8f778e18a780ec2d2c0835f0785d621626fcb66"
+    },
+    {
+      "path": "data/cua-camp-food-loop-20261024-a1-recovery-food-approach-failed-world-private.json",
+      "sha256": "f6c08db2974132a8ea21f548cbd0c674c68b5ad55082d8439b2a17cad90d2fc3"
+    },
+    {
+      "path": "data/cua-camp-food-loop-20261024-a1-recovery-server.log",
+      "sha256": "a200b7c41ec4c64dd1ae8ca59db678d70c0a00a343ce9cb4b2552a9e47572cdb"
+    },
+    {
+      "path": "data/cua-camp-food-loop-20261024-a1-recovery-stages-ax.json",
+      "sha256": "dbad17b06247bde9e48d0c834ff824f5509b2dae96d9a24fc9e403d57342d03a"
+    },
+    {
+      "path": "data/cua-camp-food-loop-20261024-a1-rescue-stages.json",
+      "sha256": "ee6d749afd74e3fe4697252f140a04e56392caeed05e79ca342cf220e6c73611"
+    },
+    {
+      "path": "data/cua-camp-food-loop-20261024-a1-rescue.png",
+      "sha256": "c5abeebf765c80675bdfd140b7fd42f14f8600be2bc9c158ad9daf23f999e5ec"
+    },
+    {
+      "path": "data/cua-camp-food-loop-20261024-a1-southern-stages.json",
+      "sha256": "557aa9d4df08fec31c9ce8ee76dbc7688ac14dbd91fe4d242154ea96f160e28c"
+    },
+    {
+      "path": "data/cua-camp-food-loop-20261024-a1-tools-materials-stages.json",
+      "sha256": "8a88e36cf3e70e8c80040668e9edf0f4557e047ccd931f38fd2775a75c20611c"
+    },
+    {
+      "path": "data/cua-camp-food-loop-20261024-a1-tools-materials.png",
+      "sha256": "015b85329f9523988b5bbfbcb94e02644f45d9b3e0144e5e6373426e74c0180a"
+    },
+    {
+      "path": "data/cua-camp-food-loop-20261024-a1-wood-stone-stages.json",
+      "sha256": "14b14acb00713f1b0ccf19b040b81f038e66f2d1ad0e8c832b19fe109ea6d836"
+    },
+    {
+      "path": "data/cua-camp-food-loop-20261024-a1-wood-stone.png",
+      "sha256": "b4bcbc74cbc46228c2e378a6b971da2602e1e2908636f16b461032718d41563d"
+    },
+    {
+      "path": "data/inspect-camp-food-buildings-20261024.ts",
+      "sha256": "0712810427fadca3bcbb71c9af0b2da9ee12693be0e62f6dbbf3c37d4a854047"
+    },
+    {
+      "path": "data/inspect-camp-food-static-20261024.ts",
+      "sha256": "147480328aa983e66bc836b845cbefff791b09262ce36d4dfae0e49723726b85"
+    },
+    {
+      "path": "data/prepare-camp-food-loop-backup-20261024.ts",
+      "sha256": "6cce865f7e3911c2b3daa98fb3b078a971a95d80562400a2f173139d17c00694"
+    },
+    {
+      "path": "data/publish-camp-food-loop-20261024.cjs",
+      "sha256": "d6052361185b44e952df33b5004d627c0185e6d8736ffe8cf1c42d01e7aeee33"
+    },
+    {
+      "path": "dist/assets/index-CVuLyfU-.js",
+      "sha256": "8bf28eb7a7d262658e7a760bf197955eaed4dace058e5b74b49eaaa73511c7b5"
+    },
+    {
+      "path": "docs/superpowers/plans/2026-10-20-seamless-world-camps.md",
+      "sha256": "0206fe529e3bee53531212478931519683206677ac4f4bdce1df2c367d6d131a"
+    },
+    {
+      "path": "docs/superpowers/plans/2026-10-24-earned-native-camp-food-loop.md",
+      "sha256": "9f5d5d7eaec04b7988fccc4331f54298e9db05c80b48200c411c2ce08e05d09b"
+    },
+    {
+      "path": "docs/verification/2026-10-24-render-cadence-boundary-results.json",
+      "sha256": "cea099bdfebba27e48230a7ace4c3d28a6457182a74bf3335d90232c4a7bab6a"
+    },
+    {
+      "path": "server/db.ts",
+      "sha256": "9cf91e65d64e6372bb897d98b8bdda843a03f42f409240f272abc4ed09d83f0f"
+    },
+    {
+      "path": "server/worldState.ts",
+      "sha256": "829140066d1e04a3521ba2286e4130b39ccdcdf825a7a4340dc34e416ff6f5f1"
+    },
+    {
+      "path": "src/App.tsx",
+      "sha256": "f7680b75b5153fa1fbf0e053d648e57c4a98c607af3e401c602ff5efb0387181"
+    },
+    {
+      "path": "src/components/BuildingBar.tsx",
+      "sha256": "af65dc14a7456d261f3c335733c25cc5e21369b32e43de16df885ad626c175dd"
+    },
+    {
+      "path": "src/components/CampPanel.tsx",
+      "sha256": "7c467530fb97ebf15291f041d02cb8361f6643cac58ee1d05063b731c72d4a1b"
+    },
+    {
+      "path": "src/game/buildingRecipes.ts",
+      "sha256": "4514d33da6faf0d91fe9c41c095816a6559f8d335894acbcf31ab853d949df13"
+    },
+    {
+      "path": "src/game/crafting.ts",
+      "sha256": "eb43bd22c9ee159759a1b23a76d64bbbdaeaf0c3a89cbc22fa7df87c90d34105"
+    },
+    {
+      "path": "src/game/equipmentRules.ts",
+      "sha256": "3db65447d65e43458a07e339e5e3ea5cc8cbff96f467b9f7fa6907bf176ed9e6"
+    },
+    {
+      "path": "src/game/items.ts",
+      "sha256": "96337485eff172cbc3936f742af827a4c975275f800d8445b232f050649317f0"
+    }
+  ]
+}
