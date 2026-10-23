@@ -459,6 +459,48 @@ describe('authoritative acid rain', () => {
   });
 });
 
+describe('session persistence failures', () => {
+  it.each(['online', 'body'])('rolls back a rejected %s admission without losing private progress or extending body lifetime', mode => {
+    const db = createMemoryDb(); let time = 10000, initializing = false;
+    const sessionRules = { ...rules,
+      buildingsNear: () => initializing ? [{ id: 'blocked', type: 'storage_box' as const, name: '', x: 0, y: 0, hp: 100, maxHp: 100, level: 1, mapId: 'world' as const }] : [],
+      monstersNear: () => initializing ? [{ id: 'discovered', x: 1, y: 1, hp: 100 }] : [],
+    };
+    const game = new GameWorld(db, sessionRules, () => time); game.connect('p', '行者'); const p = game.state.players.p;
+    p.hp = 73; p.equipment.weapon = makeItem('rifle', 1); p.resources.ammo = 10; p.inventory[0] = makeItem('food', 2); game.persist();
+    expect(game.actionPlayer('p', { action: 'fire', requestId: 'paid-before-admission' }).error).toBeUndefined();
+    if (mode === 'body') { p.combatUntil = 40000; game.disconnect('p'); }
+    const before = structuredClone(game.state), commits = db.listWorldPlayerCommits(), save = db.checkpointWorld;
+    initializing = true; time = 10500; db.checkpointWorld = () => { throw Error('admission save failed'); };
+    expect(() => game.connect('p', '重连')).toThrow('admission save failed');
+    expect(game.state).toEqual(before); expect(game.state.players.p).toBe(p); expect(db.listWorldPlayerCommits()).toEqual(commits);
+    time = 40000; expect(game.visiblePlayers('p').some(v => v.id === 'p')).toBe(mode === 'online');
+    time = 10500; db.checkpointWorld = save; game.connect('p', '重连');
+    expect(p.hp).toBe(73); expect(p.resources.ammo).toBe(9); expect(p.inventory[0]?.count).toBe(2);
+    expect(p.disconnectUntil).toBe(0); expect(p.y).toBe(1); expect(game.state.monsters).toHaveProperty('discovered');
+    const restored = new GameWorld(db, sessionRules, () => 10500);
+    expect(restored.state.players.p.resources.ammo).toBe(9); expect(restored.state.handled.p).toEqual(['paid-before-admission']);
+  });
+  it('removes a failed first admission completely before a later successful retry', () => {
+    const { game, db } = setup(), before = structuredClone(game.state), save = db.checkpointWorld;
+    db.checkpointWorld = () => { throw Error('new profile save failed'); };
+    expect(() => game.connect('new', '新人')).toThrow('new profile save failed'); expect(game.state).toEqual(before);
+    expect(game.visiblePlayers('owner').some(p => p.id === 'new')).toBe(false);
+    db.checkpointWorld = save; game.connect('new', '新人');
+    expect(game.visiblePlayers('owner').filter(p => p.id === 'new')).toHaveLength(1);
+  });
+  it('keeps a real disconnect deadline in memory after failed persistence and retries saving without extending it', () => {
+    const { game, db, p, advance } = campSetup(), save = db.checkpointWorld;
+    p.hp = 73; p.resources.ammo = 9; advance(2000); db.checkpointWorld = () => { throw Error('disconnect save failed'); };
+    expect(() => game.disconnect('owner')).toThrow('disconnect save failed'); expect(p.disconnectUntil).toBe(42000);
+    expect(p.hp).toBe(73); expect(p.resources.ammo).toBe(9);
+    advance(29999); expect(game.visiblePlayers('owner').some(v => v.id === 'owner')).toBe(true);
+    db.checkpointWorld = save; game.persist(); expect(p.disconnectUntil).toBe(42000);
+    const restored = new GameWorld(db, rules, () => 41999); expect(restored.visiblePlayers('owner').some(v => v.id === 'owner')).toBe(true);
+    expect(new GameWorld(db, rules, () => 42000).visiblePlayers('owner').some(v => v.id === 'owner')).toBe(false);
+  });
+});
+
 describe('private survival commits', () => {
   it('rolls back failed defense death, expired drops and life context without losing an earlier private shot', () => {
     const { game, db, p, advance } = campSetup();

@@ -1,0 +1,96 @@
+import { expect, it } from 'vitest';
+import { spawn } from 'node:child_process';
+import { once } from 'node:events';
+import { mkdtempSync } from 'node:fs';
+import { createServer, type AddressInfo } from 'node:net';
+import { tmpdir } from 'node:os';
+import { join, resolve } from 'node:path';
+import { pathToFileURL } from 'node:url';
+import Database from 'better-sqlite3';
+import { WebSocket } from 'ws';
+import { createDb } from './db';
+import { resolveGuest } from './identity';
+import { GameWorld, type WorldRules } from './worldState';
+import { makeItem } from '../src/game/items';
+
+const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+const rules: WorldRules = { nodeAt: () => undefined, nodesNear: () => [], buildingsNear: () => [], monstersNear: () => [], campSiteAllowed: () => false, migrate: (_map, x, y) => ({ mapId: 'world', x, y }) };
+
+it('rejects failed admissions without replacing live sockets and retries a real disconnect checkpoint without extending its body deadline', async () => {
+  const file = join(mkdtempSync(join(tmpdir(), 'sdc-session-recovery-')), 'world.sqlite'), db = createDb(file);
+  const owner = resolveGuest(db), observer = resolveGuest(db), fresh = resolveGuest(db), game = new GameWorld(db, rules, () => 10000), mapId = 'home_session_recovery';
+  game.connect(owner.playerId, '主人'); game.connect(observer.playerId, '旁观者');
+  game.state.camps[mapId] = { id: mapId, ownerId: owner.playerId, ownerName: '主人', mapId: 'world', x: 100, y: 100, members: [], size: 64 };
+  game.state.buildings.core = { id: 'core', type: 'anchor_core', x: 0, y: 0, hp: 300, maxHp: 300, level: 1, name: '核心', ownerId: owner.playerId, mapId };
+  for (const [i, actor] of [owner, observer].entries()) Object.assign(game.state.players[actor.playerId], { mapId, x: i + 1, y: 28 });
+  const p = game.state.players[owner.playerId]; p.hp = 73; p.equipment.weapon = makeItem('rifle', 1); p.resources.ammo = 10;
+  game.persist(); db.setMeta('public-house-layout', '2');
+  const probe = createServer(); await new Promise<void>(resolve => probe.listen(0, '127.0.0.1', resolve));
+  const port = (probe.address() as AddressInfo).port; await new Promise<void>((resolve, reject) => probe.close(error => error ? reject(error) : resolve()));
+  // Keep the real periodic checkpoint and WebSocket handlers. Isolate the lifecycle
+  // from simulation saves so only the existing five-second retry can pass this gate.
+  const source = `import { GameWorld } from ${JSON.stringify(pathToFileURL(resolve('server/worldState.ts')).href)};
+    let clock=10000;Date.now=()=>clock;process.on('message',m=>{clock=m.clock;process.send({clock});});
+    GameWorld.prototype.tick=function(){return false};
+    const connect=GameWorld.prototype.connect;GameWorld.prototype.connect=function(id,name){try{return connect.call(this,id,name)}catch(error){const p=this.state.players[id];process.send({admission:id,exists:!!p,survivalAt:p?.survivalAt,deadline:p?.disconnectUntil});throw error;}};
+    const disconnect=GameWorld.prototype.disconnect;GameWorld.prototype.disconnect=function(id){try{return disconnect.call(this,id)}finally{process.send({disconnected:id,deadline:this.state.players[id]?.disconnectUntil,visible:this.visiblePlayers(${JSON.stringify(observer.playerId)}).some(p=>p.id===id)});}};
+    await import(${JSON.stringify(pathToFileURL(resolve('server.ts')).href)});`;
+  const child = spawn(process.execPath, ['--import', 'tsx', '--input-type=module', '--eval', source], { cwd: process.cwd(), windowsHide: true, env: { ...process.env, NODE_ENV: 'production', PORT: String(port), DB_PATH: file }, stdio: ['ignore', 'pipe', 'pipe', 'ipc'] });
+  const exited = once(child, 'exit'), control = new Database(file), diagnostics: any[] = [];
+  const peers: { ws: WebSocket; messages: any[]; code?: number }[] = [];
+  let started = false, stderr = '', stopped = false;
+  child.stdout!.on('data', c => { started ||= String(c).includes('[Rift Walker]'); }); child.stderr!.on('data', c => { stderr += String(c); });
+  child.on('message', m => diagnostics.push(m));
+  const until = async (predicate: () => boolean, timeout = 5000) => { const end = Date.now() + timeout; while (Date.now() < end) { if (child.exitCode !== null || child.signalCode !== null) throw Error('Production server stopped during session recovery'); if (predicate()) return; await delay(5); } throw Error('Session recovery timed out'); };
+  const stop = async () => { if (!stopped) { stopped = true; child.kill('SIGKILL'); await exited; } };
+  const url = 'http://127.0.0.1:' + port;
+  const open = (actor: typeof owner) => {
+    const peer = { ws: new WebSocket(url.replace('http', 'ws') + '/ws', { headers: { Cookie: 'sdc_guest=' + actor.token, Origin: url } }), messages: [] as any[], code: undefined as number | undefined };
+    peer.ws.on('message', raw => peer.messages.push(JSON.parse(String(raw)))); peer.ws.on('error', () => {}); peer.ws.on('close', code => { peer.code = code; }); peers.push(peer); return peer;
+  };
+  const send = (peer: typeof peers[number], type: string, payload: unknown = {}) => peer.ws.send(JSON.stringify({ type, payload }));
+  const stateOf = (m: any) => m.type === 'game_state_patch' ? m.payload.state : m.type === 'game_state' ? m.payload : undefined;
+  const shot = async (peer: typeof peers[number], requestId: string) => { send(peer, 'game_action', { action: 'fire', requestId }); await until(() => peer.messages.some(m => stateOf(m)?.requestId === requestId)); return peer.messages.map(stateOf).find(s => s?.requestId === requestId); };
+  const rejectSaves = () => control.exec("CREATE TRIGGER reject_session BEFORE UPDATE ON meta WHEN NEW.k='authoritative-world-v2' BEGIN SELECT RAISE(ABORT, 'qa session save failure'); END");
+  const allowSaves = () => control.exec('DROP TRIGGER reject_session');
+  try {
+    await until(() => started);
+    const a = open(owner), b = open(observer); await until(() => [a, b].every(peer => peer.messages.some(m => m.type === 'init')));
+    send(a, 'state_sync', { version: 1 }); await until(() => a.messages.some(m => m.type === 'game_state_patch'));
+    const first = await shot(a, 'before-admission-failure'); expect(first.error).toBeUndefined(); expect(first.player.resources.ammo).toBe(9);
+    rejectSaves(); child.send({ clock: 12000 }); await until(() => diagnostics.some(d => d.clock === 12000));
+    const cFailed = open(fresh); await until(() => cFailed.code !== undefined);
+    expect(cFailed.code).toBe(1011); expect(cFailed.messages.some(m => m.type === 'init')).toBe(false);
+    expect(diagnostics.find(d => d.admission === fresh.playerId)).toMatchObject({ exists: false });
+    const aFailed = open(owner); await until(() => aFailed.code !== undefined);
+    expect(aFailed.code).toBe(1011); expect(aFailed.messages.some(m => m.type === 'init')).toBe(false);
+    expect(diagnostics.find(d => d.admission === owner.playerId)).toMatchObject({ exists: true, survivalAt: 10000, deadline: 0 });
+    expect(a.ws.readyState).toBe(WebSocket.OPEN); expect(a.code).toBeUndefined();
+    expect((await (await fetch(url + '/api/health')).json()).onlineCount).toBe(2);
+    const second = await shot(a, 'after-admission-failure'); expect(second.error).toBeUndefined(); expect(second.player.resources.ammo).toBe(8); expect(second.player.hp).toBe(73);
+    const commit = JSON.parse(db.listWorldPlayerCommits().find(c => c.id === owner.playerId)!.data);
+    expect(commit.player.resources.ammo).toBe(8); expect(commit.handled).toEqual(['before-admission-failure', 'after-admission-failure']);
+    allowSaves(); const replacement = open(owner); await until(() => replacement.messages.some(m => m.type === 'init') && a.code !== undefined);
+    expect(a.code).toBe(4001); expect(replacement.messages.find(m => m.type === 'init').payload.gameState.player.resources.ammo).toBe(8);
+    const c = open(fresh); await until(() => c.messages.some(m => m.type === 'init'));
+    expect(c.messages.find(m => m.type === 'init').payload.gameState.player.resources.ammo).toBe(0);
+    c.ws.close(); await until(() => diagnostics.some(d => d.disconnected === fresh.playerId));
+    rejectSaves(); replacement.ws.close(); await until(() => diagnostics.some(d => d.disconnected === owner.playerId));
+    expect(diagnostics.find(d => d.disconnected === owner.playerId)).toMatchObject({ deadline: 42000, visible: true });
+    await until(() => b.messages.some(m => m.type === 'player_left' && m.payload.playerId === owner.playerId));
+    send(b, 'ping'); await until(() => b.messages.some(m => m.type === 'pong'));
+    expect((await (await fetch(url + '/api/health')).json()).onlineCount).toBe(1);
+    expect(JSON.parse(db.getMeta('authoritative-world-v2')!).players[owner.playerId].disconnectUntil).toBe(0);
+    allowSaves(); await until(() => JSON.parse(db.getMeta('authoritative-world-v2')!).players[owner.playerId].disconnectUntil === 42000, 7000);
+    expect(diagnostics.filter(d => d.disconnected === owner.playerId)).toHaveLength(1);
+    await stop();
+    const restored = new GameWorld(createDb(file), rules, () => 41999), expired = new GameWorld(createDb(file), rules, () => 42000);
+    expect(restored.state.players[owner.playerId]).toMatchObject({ hp: 73, disconnectUntil: 42000, resources: { ammo: 8 } });
+    expect(restored.visiblePlayers(observer.playerId).some(p => p.id === owner.playerId)).toBe(true);
+    expect(expired.visiblePlayers(observer.playerId).some(p => p.id === owner.playerId)).toBe(false);
+    expect(restored.state.handled[owner.playerId]).toEqual(['before-admission-failure', 'after-admission-failure']);
+    expect(restored.state.buildings.core.hp).toBe(300);
+    expect(stderr).toContain('[ws] session admission failed'); expect(stderr).toContain('[ws] disconnect state save failed');
+    expect(control.pragma('integrity_check', { simple: true })).toBe('ok');
+  } finally { await stop(); for (const peer of peers) peer.ws.terminate(); control.close(); }
+}, 25000);

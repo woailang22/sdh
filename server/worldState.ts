@@ -204,13 +204,20 @@ export class GameWorld {
   }
 
   connect(id: string, name: string) {
-    const p = this.state.players[id] ||= this.newPlayer(id, name);
-    this.clearSpawn(p);
-    p.moveBudget ??= 0.25; p.moveAt ??= this.now(); p.lastSeen = this.now(); p.survivalAt = this.now(); p.disconnectUntil = 0;
-    this.deriveArmor(p);
-    this.ensureMonsters(p);
-    this.active.set(id, Infinity);
-    this.persist();
+    const undo = new TickUndo();
+    let p: Player;
+    try {
+      undo.entry(this.state.players, id);
+      p = this.state.players[id] ||= this.newPlayer(id, name);
+      undo.object(p);
+      this.clearSpawn(p);
+      p.moveBudget ??= 0.25; p.moveAt ??= this.now(); p.lastSeen = this.now(); p.survivalAt = this.now(); p.disconnectUntil = 0;
+      this.deriveArmor(p);
+      this.ensureMonsters(p, undo);
+      undo.map(this.active, id);
+      this.active.set(id, Infinity);
+      this.persist();
+    } catch (error) { undo.rollback(); throw error; }
     return this.publicPlayer(p);
   }
 
@@ -218,6 +225,7 @@ export class GameWorld {
     const p = this.state.players[id];
     if (!p) return;
     // A disconnected intruder remains attackable for 30 seconds, in the same persistent instance.
+    // Keep this physical disconnect fact on save failure; later checkpoints retry without extending it.
     p.disconnectUntil = p.mapId.startsWith('home_') || p.combatUntil > this.now() ? this.now() + 30_000 : this.now();
     this.active.set(id, p.disconnectUntil);
     this.persist();

@@ -1,0 +1,38 @@
+{
+  "date": "2026-10-23",
+  "baseCommit": "43ae1e07e7b9fef74db112a40342b3a405cbac61",
+  "scope": "Admission rollback and physical disconnect checkpoint failure containment",
+  "fixture": "Unique OS-temp synthetic SQLite; production server.ts child process; actual WebSockets, timers and SQLite WAL/FULL commits. No real save opened; no identity credentials included.",
+  "clock": "Authority Date.now controlled at 10000 then 12000 to check exact deadlines; GameWorld.tick disabled only in the lifecycle integration fixture so survival/shared tick saves cannot satisfy the periodic checkpoint assertion.",
+  "unit": {
+    "beforeFix": "Three failures: rejected online/body admissions retained spawn relocation, discovered monster and updated fields; rejected new admission retained a ghost profile. Physical disconnect deadline test already passed.",
+    "afterFix": "All four session persistence cases pass, preserving player references/private progress and original active/body expiry. Failed first admission is removed; later retry succeeds. Failed physical disconnect retains its original finite deadline."
+  },
+  "productionLifecycle": {
+    "injection": "SQLite trigger rejects authoritative-world-v2 updates after initial connections; private player commit table remains writable.",
+    "failedFirstAdmission": "New socket closes 1011 without init; no player remains in memory.",
+    "failedReplacement": "New socket closes 1011 without init; existing socket stays open, online count remains two, original survivalAt and active status remain unchanged.",
+    "privateProgress": "Successful old-socket shots before and after failed admission consume 10 -> 9 -> 8 ammo, retain HP 73 and exactly two handled IDs in the private commit row.",
+    "successfulRetry": "After trigger removal, replacement receives 8 ammo and old socket closes 4001; previously rejected fresh identity admits normally with zero ammo.",
+    "failedDisconnect": "Real replacement socket close under rejected checkpoint retains body visibility and deadline 42000 from disconnect time 12000; observer receives player_left, ping succeeds, HTTP online count becomes one.",
+    "periodicRetry": "After trigger removal, unchanged real five-second periodic save writes deadline 42000; disconnect executes only once, no recomputed deadline.",
+    "restart": "After forced process stop following successful periodic checkpoint, body is visible at 41999 and absent at 42000; HP73, ammo8, both handled IDs and core HP300 retained; integrity_check ok."
+  },
+  "negativeControls": [
+    "Removing only admission error containment makes the real integration fail: socket closes abnormally 1006 instead of 1011.",
+    "Removing only disconnect error containment makes the real integration fail: production server stops during recovery.",
+    "Both temporary mutations restored in finally; final full suite runs restored production sources."
+  ],
+  "verification": {
+    "npm test -- --reporter=dot": "36 files, 506 tests passed, 13.51 seconds wall time; test timing is not a performance result.",
+    "npm run lint": "Passed (tsc --noEmit).",
+    "npm run build": "Passed; client asset remains index-BRl8LPRa.js. Existing Vite native-loader and chunk-size warnings remain.",
+    "git diff --check": "Passed.",
+    "independentReview": "Read-only review found no P1/P2; reviewer did not run tests/build."
+  },
+  "limits": [
+    "If persistence never recovers and the process dies, an uncommitted disconnect fact cannot be guaranteed on restart.",
+    "Arbitrary post-commit snapshot or transport failures are outside this lifecycle persistence change.",
+    "No new native performance run. Prior crowded-combat single refusal remains unresolved; this is not whole-game or raid-capacity acceptance."
+  ]
+}

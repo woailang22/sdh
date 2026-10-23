@@ -157,14 +157,18 @@ app.get('/api/session', (req, res) => {
 });
 
 wss.on('connection', (ws, req) => {
+  ws.on('error', error => console.error('[ws]', error.message));
   const token = guestTokenFromCookie(req.headers.cookie);
   if (!token || !sameOrigin(req.headers.origin, req.headers.host)) { ws.close(1008, 'Create a same-origin guest session first'); return; }
-  const session = resolveGuest(db, token);
-  // A forged cookie must not silently establish an identity unknown to its holder.
-  if (session.token !== token) { ws.close(1008, 'Invalid guest session'); return; }
-  const id = session.playerId;
+  let id: string, self: ReturnType<GameWorld['connect']>;
+  try {
+    const session = resolveGuest(db, token);
+    // A forged cookie must not silently establish an identity unknown to its holder.
+    if (session.token !== token) { ws.close(1008, 'Invalid guest session'); return; }
+    id = session.playerId;
+    self = game.connect(id, '废土流浪者 #' + id.slice(-4));
+  } catch (error) { console.error('[ws] session admission failed', error); ws.close(1011, 'Could not restore player state'); return; }
   const previous = clients.get(id);
-  const self = game.connect(id, '废土流浪者 #' + id.slice(-4));
   const client: Client = { ws, id, isGM: false, visible: new Set(), lastSeen: Date.now(), lastCorrection: 0, lastMessageAt: Date.now(), messageCount: 0, lastSnapshot: 0, mapId: self.mapId, fireQueue: new FireQueue(), fullPhaseMs: previous?.fullPhaseMs ?? allocateStatePhase() };
   clients.set(id, client);
   if (previous) { stateChecks.cancel(previous); previous.fireQueue.cancel(); previous.ws.close(4001, 'Guest identity connected elsewhere'); }
@@ -220,10 +224,11 @@ wss.on('connection', (ws, req) => {
     client.fireQueue.cancel();
     // A replaced connection cannot disconnect or persist over the new socket's player.
     if (clients.get(id)?.ws !== ws) return;
-    clients.delete(id); game.disconnect(id);
+    clients.delete(id);
+    try { game.disconnect(id); }
+    catch (error) { console.error('[ws] disconnect state save failed', error); }
     for (const other of clients.values()) if (other.visible.has(id)) { other.visible.delete(id); send(other.ws, 'player_left', { playerId: id }); }
   });
-  ws.on('error', error => console.error('[ws]', error.message));
 });
 
 setInterval(() => {

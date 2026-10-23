@@ -1,4 +1,4 @@
-/** Short-lived simulation preimages; never copies untouched world collections. */
+/** Short-lived state preimages; never copies untouched world collections. */
 export class TickUndo {
   private undos: (() => void)[] = [];
   private captured = new WeakSet<object>();
