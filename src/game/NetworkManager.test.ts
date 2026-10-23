@@ -135,3 +135,118 @@ describe('negotiated state synchronization', () => {
     expect(callbacks.onGameState).not.toHaveBeenCalled(); network.disconnect();
   });
 });
+
+describe('authoritative gameplay connection readiness', () => {
+  function snapshot() {
+    const game = new GameWorld(createMemoryDb(), { nodeAt: () => undefined, nodesNear: () => [], buildingsNear: () => [], campSiteAllowed: () => false, migrate: (_id, x, y) => ({ mapId: 'world', x, y }) }, () => 10000);
+    game.connect('owner', '行者'); return game.snapshot('owner');
+  }
+  const receive = (socket: Socket, type: string, payload: unknown) => socket.onmessage?.({ data: JSON.stringify({ type, payload }) });
+  async function opened() {
+    const result = setup(); await result.network.connect();
+    const socket = sockets[0]; socket.readyState = Socket.OPEN; socket.onopen?.();
+    return { ...result, socket };
+  }
+
+  it('keeps an open transport unready until authoritative world state is applied', async () => {
+    const { network, callbacks, socket } = await opened();
+    expect(network.isConnected).toBe(false); expect(network.ping).toBeNull();
+    expect(callbacks.onConnectionChange).not.toHaveBeenCalledWith(true, expect.anything());
+    expect(socket.send).toHaveBeenCalledWith(JSON.stringify({ type: 'state_sync', payload: { version: 1 } }));
+    network.disconnect();
+  });
+
+  it.each(['init', 'game_state', 'game_state_patch'])('unblocks only after the actual%s callback has applied its snapshot', async type => {
+    const { network, callbacks, socket } = await opened(), full = snapshot();
+    const applied = vi.fn(() => { expect(network.isConnected).toBe(false); });
+    if (type === 'init') callbacks.onInit.mockImplementation(applied);
+    else callbacks.onGameState.mockImplementation(applied);
+    receive(socket, type, type === 'init' ? { selfId: full.player.id, gameState: full } : type === 'game_state_patch' ? new StateEncoder().encode(full, 0) : full);
+    expect(applied).toHaveBeenCalledOnce(); expect(network.isConnected).toBe(true);
+    expect(callbacks.onConnectionChange).toHaveBeenLastCalledWith(true, null);
+    callbacks.onGameState.mockImplementation(() => {}); const count = callbacks.onConnectionChange.mock.calls.length;
+    receive(socket, 'game_state', full); expect(callbacks.onConnectionChange).toHaveBeenCalledTimes(count);
+    network.disconnect();
+  });
+
+  it('does not treat an identity-only legacy init as restored gameplay state', async () => {
+    const { network, socket } = await opened();
+    receive(socket, 'init', { selfId: 'owner', players: [], buildings: [] });
+    expect(network.isConnected).toBe(false);
+    receive(socket, 'game_state', snapshot()); expect(network.isConnected).toBe(true); network.disconnect();
+  });
+
+  it('does not unlock after a snapshot application failure', async () => {
+    const { network, callbacks, socket } = await opened(); vi.spyOn(console, 'error').mockImplementation(() => {});
+    callbacks.onGameState.mockImplementation(() => { throw Error('application rejected'); });
+    receive(socket, 'game_state', snapshot()); expect(network.isConnected).toBe(false);
+    callbacks.onGameState.mockImplementation(() => {}); receive(socket, 'game_state', snapshot());
+    expect(network.isConnected).toBe(true); network.disconnect(); vi.restoreAllMocks();
+  });
+
+  it('pauses on a delta gap, requests one baseline, and resumes after it is applied', async () => {
+    const { network, callbacks, socket } = await opened(), encoder = new StateEncoder(), full = snapshot();
+    receive(socket, 'game_state_patch', encoder.encode(full, 0)); expect(network.isConnected).toBe(true);
+    encoder.encode(full, 200); const gap = encoder.encode(full, 400); socket.send.mockClear();
+    receive(socket, 'game_state_patch', gap); receive(socket, 'game_state_patch', gap);
+    expect(network.isConnected).toBe(false); expect(callbacks.onConnectionChange).toHaveBeenLastCalledWith(false, null);
+    expect(socket.send.mock.calls.map(call => JSON.parse(call[0]))).toEqual([{ type: 'state_sync', payload: { version: 1 } }]);
+    receive(socket, 'pong', {}); expect(network.isConnected).toBe(false);
+    receive(socket, 'game_state_patch', encoder.encode(full, 5000)); expect(network.isConnected).toBe(true);
+    network.disconnect();
+  });
+
+  it('blocks real action and position sends before baseline, without queuing them for recovery', async () => {
+    const { network, socket } = await opened(); socket.send.mockClear();
+    network.gameAction('use_item', { index: 0 }); network.send({ type: 'player_sync', payload: { x: 100, y: 100 } });
+    expect(socket.send).not.toHaveBeenCalled();
+    receive(socket, 'game_state', snapshot()); expect(socket.send).not.toHaveBeenCalled();
+    network.gameAction('use_item', { index: 0 }); network.send({ type: 'player_sync', payload: { x: 1, y: 1 } });
+    expect(socket.send.mock.calls.map(call => JSON.parse(call[0]).type)).toEqual(['game_action', 'player_sync']);
+    network.disconnect();
+  });
+
+  it('measures the real pong RTT rather than fabricating a minimum latency', async () => {
+    vi.useFakeTimers(); vi.setSystemTime(10000);
+    const { network, callbacks, socket } = await opened(); receive(socket, 'game_state', snapshot());
+    await vi.advanceTimersByTimeAsync(3000); expect(JSON.parse(socket.send.mock.calls.at(-1)![0]).type).toBe('ping');
+    await vi.advanceTimersByTimeAsync(5); receive(socket, 'pong', {});
+    expect(network.ping).toBe(5); expect(callbacks.onConnectionChange).toHaveBeenLastCalledWith(true, 5);
+    network.disconnect(); expect(network.ping).toBeNull();
+  });
+
+  it('clears the old RTT and never lets a reconnect pong unlock gameplay before its baseline', async () => {
+    vi.useFakeTimers(); vi.setSystemTime(10000);
+    const { network, callbacks, socket } = await opened(); receive(socket, 'game_state', snapshot());
+    await vi.advanceTimersByTimeAsync(3000); await vi.advanceTimersByTimeAsync(35); receive(socket, 'pong', {});
+    expect(network.ping).toBe(35); socket.readyState = 3; socket.onclose?.({ code: 1006 });
+    expect(network.isConnected).toBe(false); expect(network.ping).toBeNull();
+    expect(callbacks.onConnectionChange).toHaveBeenLastCalledWith(false, null);
+    await vi.advanceTimersByTimeAsync(2500); expect(sockets).toHaveLength(2);
+    sockets[1].readyState = Socket.OPEN; sockets[1].onopen?.(); receive(sockets[1], 'pong', {});
+    expect(network.isConnected).toBe(false); expect(network.ping).toBeNull();
+    receive(sockets[1], 'game_state', snapshot()); expect(network.isConnected).toBe(true);
+    expect(callbacks.onConnectionChange).toHaveBeenLastCalledWith(true, null); network.disconnect();
+  });
+
+  it('does not under-report a slow pong when its RTT exceeds the three-second send interval', async () => {
+    vi.useFakeTimers(); vi.setSystemTime(10000);
+    const { network, socket } = await opened(); receive(socket, 'game_state', snapshot());
+    await vi.advanceTimersByTimeAsync(3000); await vi.advanceTimersByTimeAsync(4000); receive(socket, 'pong', {});
+    expect(network.ping).toBe(4000);
+    expect(socket.send.mock.calls.filter(call => JSON.parse(call[0]).type === 'ping')).toHaveLength(1);
+    await vi.advanceTimersByTimeAsync(2000);
+    expect(socket.send.mock.calls.filter(call => JSON.parse(call[0]).type === 'ping')).toHaveLength(2);
+    network.disconnect();
+  });
+
+  it('ignores a duplicate pong after its outstanding measurement has been completed', async () => {
+    vi.useFakeTimers(); vi.setSystemTime(10000);
+    const { network, callbacks, socket } = await opened(); receive(socket, 'game_state', snapshot());
+    await vi.advanceTimersByTimeAsync(3000); await vi.advanceTimersByTimeAsync(5); receive(socket, 'pong', {});
+    const count = callbacks.onConnectionChange.mock.calls.length;
+    await vi.advanceTimersByTimeAsync(100); receive(socket, 'pong', {});
+    expect(network.ping).toBe(5); expect(callbacks.onConnectionChange).toHaveBeenCalledTimes(count);
+    network.disconnect();
+  });
+});

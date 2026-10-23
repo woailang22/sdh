@@ -7,7 +7,7 @@ import { displayName } from '../game/maps';
 interface OnlinePlayersModalProps {
   players: OnlinePlayer[];
   selfId: string;
-  ping: number;
+  ping: number | null;
   isConnected: boolean;
   onClose: () => void;
   onInviteToSquad?: (player: OnlinePlayer) => void;
@@ -42,9 +42,9 @@ export function OnlinePlayersModal({
                 </span>
               </div>
               <p className="text-xs text-slate-400 flex items-center gap-3">
-                <span>在线探索者: <strong className="text-cyan-300">{players.length}</strong> 人</span>
+                <span>{isConnected ? '在线探索者' : '上次同步探索者'}: <strong className="text-cyan-300">{players.length}</strong> 人</span>
                 <span className="flex items-center gap-1">
-                  <Wifi className="w-3.5 h-3.5 text-emerald-400" /> 延迟: <strong className="text-emerald-400">{ping}ms</strong>
+                  <Wifi className="w-3.5 h-3.5 text-emerald-400" /> 延迟: <strong className="text-emerald-400">{!isConnected ? '等待连接' : ping === null ? '测量中' : `${ping}ms`}</strong>
                 </span>
                 <span>全双工实时同步节点: <strong className="text-slate-300">Edge-Shard-01</strong></span>
               </p>

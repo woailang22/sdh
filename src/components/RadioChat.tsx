@@ -6,9 +6,10 @@ import { soundManager } from '../audio/soundManager';
 interface RadioChatProps {
   messages: ChatMessage[];
   onSendMessage: (text: string, channel: 'team' | 'world') => void;
+  isConnected?: boolean;
 }
 
-export const RadioChat: React.FC<RadioChatProps> = ({ messages, onSendMessage }) => {
+export const RadioChat: React.FC<RadioChatProps> = ({ messages, onSendMessage, isConnected = false }) => {
   const [activeChannel, setActiveChannel] = useState<'team' | 'world'>('team');
   const [inputText, setInputText] = useState('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -19,7 +20,7 @@ export const RadioChat: React.FC<RadioChatProps> = ({ messages, onSendMessage })
 
   const handleSend = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!inputText.trim()) return;
+    if (!isConnected || !inputText.trim()) return;
     onSendMessage(inputText.trim(), activeChannel);
     setInputText('');
     soundManager.playClick();
@@ -49,8 +50,8 @@ export const RadioChat: React.FC<RadioChatProps> = ({ messages, onSendMessage })
         >
           世界
         </button>
-        <span className="ml-auto text-[9px] font-mono text-emerald-400 flex items-center gap-1">
-          <Radio className="w-2.5 h-2.5" /> 信号强
+        <span className={`ml-auto text-[9px] font-mono flex items-center gap-1 ${isConnected ? 'text-emerald-400' : 'text-amber-300'}`}>
+          <Radio className="w-2.5 h-2.5" /> {isConnected ? '已连接' : '等待连接'}
         </span>
       </div>
 
@@ -72,6 +73,7 @@ export const RadioChat: React.FC<RadioChatProps> = ({ messages, onSendMessage })
         <MessageSquare className="w-3.5 h-3.5 text-cyan-400 shrink-0 ml-1" />
         <input
           type="text"
+          disabled={!isConnected}
           value={inputText}
           onChange={(e) => setInputText(e.target.value)}
           placeholder={activeChannel === 'team' ? '组队频道发言...' : '世界无线电广播...'}
@@ -79,6 +81,7 @@ export const RadioChat: React.FC<RadioChatProps> = ({ messages, onSendMessage })
         />
         <button
           type="submit"
+          disabled={!isConnected}
           className="p-1 rounded bg-cyan-600/30 hover:bg-cyan-600/50 text-cyan-300 transition-colors"
         >
           <Send className="w-3 h-3" />

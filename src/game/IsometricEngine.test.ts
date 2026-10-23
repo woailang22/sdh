@@ -83,6 +83,63 @@ describe('world road texture alignment', () => {
   });
 });
 
+describe('blocked gameplay input continuity', () => {
+  it('cancels an unfinished search even when a connection blocker is restored before the next frame', () => {
+    const { engine } = setup(); engine.warpToMap('home_self', 0, 0); engine.buildings = []; engine.monsters = [];
+    const action = vi.fn(); (engine as any).callbacks.onGameAction = action;
+    engine.isLooting = true; engine.lootProgress = .9;
+    (engine as any).lootTarget = { id: 'box', type: 'box', searchDuration: 1.2 }; (engine as any).lootingTimer = .02;
+    engine.inputBlocked = true; engine.clearKeys(); engine.targetMovePoint = null;
+    engine.inputBlocked = false;
+    (engine as any).update(.1);
+    expect(action).not.toHaveBeenCalled(); expect(engine.isLooting).toBe(false);
+    expect((engine as any).lootTarget).toBeNull(); expect(engine.lootProgress).toBe(0);
+  });
+
+  it.each(['keyboard', 'joystick', 'path'])('stops an already pending%s movement and does not replay it after unblocking', mode => {
+    const { engine, win } = setup(); engine.warpToMap('home_self', 0, 0); engine.buildings = [];
+    (engine as any).callbacks.onGameAction = vi.fn();
+    if (mode === 'keyboard') { const event = new Event('keydown'); Object.assign(event, { key: 'd', code: 'KeyD' }); win.dispatchEvent(event); }
+    if (mode === 'joystick') engine.virtualJoystick = { x: 1, y: 0 };
+    if (mode === 'path') engine.navigateTo(3, 0);
+    engine.inputBlocked = true;
+    (engine as any).update(.1);
+    expect({ x: engine.player.x, y: engine.player.y }).toEqual({ x: 0, y: 0 });
+    expect(engine.targetMovePoint).toBeNull(); expect((engine as any).movePath).toEqual([]);
+    expect(engine.virtualJoystick).toEqual({ x: 0, y: 0 }); expect(engine.player.vx).toBe(0); expect(engine.player.vy).toBe(0);
+    engine.inputBlocked = false; (engine as any).update(.1); expect(engine.player.x).toBe(0); expect(engine.player.y).toBe(0);
+    engine.virtualJoystick = { x: 1, y: 0 }; (engine as any).update(.1);
+    expect(Math.hypot(engine.player.x, engine.player.y)).toBeCloseTo(.38, 9);
+  });
+
+  it('does not let a newly written virtual joystick bypass an open input blocker', () => {
+    const { engine } = setup(); engine.warpToMap('home_self', 0, 0); engine.buildings = [];
+    engine.inputBlocked = true;
+    for (let i=0;i<3;i++) { engine.virtualJoystick = { x: 1, y: 1 }; (engine as any).update(.1); }
+    expect(engine.player.x).toBe(0); expect(engine.player.y).toBe(0);
+  });
+
+  it('stops held fire without spending predicted ammunition or emitting a deferred shot', () => {
+    const { engine } = setup(); engine.warpToMap('home_self', 0, 0); engine.buildings = []; engine.monsters = [];
+    const action = vi.fn(); (engine as any).callbacks.onGameAction = action;
+    engine.player.ammo = 30; engine.hasRangedWeapon = true; engine.player.isFiring = true;
+    engine.inputBlocked = true; (engine as any).update(.1);
+    expect(engine.player.ammo).toBe(30); expect(engine.player.isFiring).toBe(false); expect(action).not.toHaveBeenCalled();
+    engine.inputBlocked = false; (engine as any).update(.1); expect(engine.player.ammo).toBe(30); expect(action).not.toHaveBeenCalled();
+  });
+
+  it('cancels an unfinished authoritative search and never submits it after the blocker clears', () => {
+    const { engine } = setup(); engine.warpToMap('home_self', 0, 0); engine.buildings = []; engine.monsters = [];
+    const action = vi.fn(); (engine as any).callbacks.onGameAction = action;
+    engine.isLooting = true; engine.lootProgress = .9;
+    (engine as any).lootTarget = { id: 'box', type: 'box', searchDuration: 1.2 }; (engine as any).lootingTimer = .02;
+    engine.inputBlocked = true; (engine as any).update(.1);
+    expect(engine.isLooting).toBe(false); expect(engine.lootProgress).toBe(0); expect((engine as any).lootTarget).toBeNull();
+    expect(action).not.toHaveBeenCalled();
+    engine.inputBlocked = false; (engine as any).update(.1); expect(action).not.toHaveBeenCalled();
+  });
+});
+
 describe('fresh client movement geometry window', () => {
   it.each([[.016, false], [.1, false], [.016, true], [.1, true]])('skips distant floor geometry while preserving actual%s-second movement (dash=%s)', (dt, dash) => {
     const { engine } = setup(); engine.warpToMap('home_self', 0, 0);

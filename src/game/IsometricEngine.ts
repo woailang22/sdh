@@ -104,7 +104,12 @@ export class IsometricEngine {
   public campEntrances: { id: string; ownerId: string; ownerName: string; x: number; y: number }[] = [];
   public friendlyPlayerIds: Set<string> = new Set();
   public campSize = 64;
-  public inputBlocked = false;
+  private _inputBlocked = false;
+  public get inputBlocked() { return this._inputBlocked; }
+  public set inputBlocked(blocked: boolean) {
+    this._inputBlocked = blocked;
+    if (blocked) this.cancelPendingInput();
+  }
 
   // Multiplayer Online State
   public localPlayerId: string = '';
@@ -1344,6 +1349,11 @@ export class IsometricEngine {
     this.mouse.isDown = false;
   }
 
+  private cancelPendingInput() {
+    this.clearKeys(); this.targetMovePoint = null; this.movePath = [];
+    this.isLooting = false; this.lootTarget = null; this.lootingTimer = 0; this.lootProgress = 0;
+  }
+
   private setupListeners() {
     const options = { signal: this.listenerController.signal };
     window.addEventListener('resize', () => this.resize(), options);
@@ -2163,6 +2173,7 @@ export class IsometricEngine {
 
   // --- UPDATE LOOP ---
   private update(dt: number) {
+    if (this.inputBlocked) this.cancelPendingInput();
     this.gameTime += dt;
     this.refreshWorld();
 

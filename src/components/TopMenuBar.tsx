@@ -7,7 +7,8 @@ interface TopMenuBarProps {
   activeModal: string | null;
   weatherWidget?: React.ReactNode;
   onlineCount?: number;
-  ping?: number;
+  ping?: number | null;
+  isConnected?: boolean;
   onOpenOnlinePlayers?: () => void;
   mapName?: string;
   coords?: { x: number; y: number };
@@ -20,7 +21,8 @@ export const TopMenuBar: React.FC<TopMenuBarProps> = ({
   activeModal,
   weatherWidget,
   onlineCount = 1,
-  ping = 24,
+  ping = null,
+  isConnected = false,
   onOpenOnlinePlayers,
   mapName = '恒界营地 · 营地广场',
   coords = { x: 0, y: 0 },
@@ -126,12 +128,12 @@ export const TopMenuBar: React.FC<TopMenuBarProps> = ({
           {/* 战区在线行者名录 Online Roster */}
           <button
             onClick={() => { onOpenOnlinePlayers?.(); soundManager.playClick(); }}
-            className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg border border-emerald-500/40 bg-emerald-950/40 text-emerald-300 hover:bg-emerald-900/50 transition-all text-xs font-medium"
+            className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg border transition-all text-xs font-medium ${isConnected ? 'border-emerald-500/40 bg-emerald-950/40 text-emerald-300 hover:bg-emerald-900/50' : 'border-amber-500/40 bg-amber-950/40 text-amber-200'}`}
             title="查看当前服务器所有在线探索者 (快捷键: Tab)"
           >
-            <span className="w-2 h-2 rounded-full bg-emerald-400" />
-            <span>战区: {onlineCount}人</span>
-            <span className="text-[10px] text-emerald-400/80 font-mono">({ping}ms)</span>
+            <span className={`w-2 h-2 rounded-full ${isConnected ? 'bg-emerald-400' : 'bg-amber-400'}`} />
+            <span>{isConnected ? `战区: ${onlineCount}人` : '等待连接'}</span>
+            {isConnected && <span className="text-[10px] text-emerald-400/80 font-mono">({ping === null ? '测量中' : `${ping}ms`})</span>}
           </button>
 
           {/* 我的 Profile */}

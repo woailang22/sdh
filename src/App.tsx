@@ -131,7 +131,7 @@ export default function App() {
   // Multiplayer Network State
   const [onlinePlayers, setOnlinePlayers] = useState<OnlinePlayer[]>([]);
   const [selfId, setSelfId] = useState<string>('');
-  const [ping, setPing] = useState<number>(24);
+  const [ping, setPing] = useState<number | null>(null);
   const [isConnected, setIsConnected] = useState<boolean>(false);
 
   // Weather System State
@@ -805,12 +805,12 @@ export default function App() {
   // Initialize Realtime Multiplayer Network Manager（只连一次，切图不断线：身份保持，防幽灵连接刷人数）
   useEffect(() => {
     const netManager = new NetworkManager({
-      onGameState: applyGameState,
+      onGameState: state => applyGameState(netManager.isConnected ? state : { ...state, correction: true }),
       onInit: (data) => {
         // 过期 manager 的回包直接丢弃（防僵尸连接劫持身份）
         if (netManagerRef.current && netManagerRef.current !== netManager) return;
         setSelfId(data.selfId);
-        if (data.gameState) applyGameState(data.gameState);
+        if (data.gameState) applyGameState({ ...data.gameState, correction: true });
         setOnlinePlayers(data.players);
         if (engineRef.current) {
           engineRef.current.localPlayerId = data.selfId;
@@ -897,6 +897,9 @@ export default function App() {
       onConnectionChange: (connected, pingMs) => {
         setIsConnected(connected);
         setPing(pingMs);
+        if (!connected && engineRef.current) {
+          engineRef.current.inputBlocked = true;
+        }
         // 重连后自动续 GM 身份
         if (connected) {
           try {
@@ -989,7 +992,7 @@ export default function App() {
       engine.localPlayerId = selfId;
     }
     if (gameStateRef.current) applyGameState({ ...gameStateRef.current, correction: true });
-    engine.inputBlocked = !!activeModal || campOpen || !!raidDoor;
+    engine.inputBlocked = !netManagerRef.current?.isConnected || !!activeModal || campOpen || !!raidDoor;
     engine.start();
 
     // Sync state interval (60ms)
@@ -1085,9 +1088,8 @@ export default function App() {
   useEffect(() => {
     const engine = engineRef.current;
     if (!engine) return;
-    engine.inputBlocked = !!activeModal || campOpen || !!raidDoor || !!lootPanel || isOnlinePlayersOpen || renderDetailsOpen;
-    if (engine.inputBlocked) { engine.clearKeys(); engine.targetMovePoint = null; }
-  }, [activeModal, campOpen, raidDoor, lootPanel, isOnlinePlayersOpen, renderDetailsOpen]);
+    engine.inputBlocked = !isConnected || !!activeModal || campOpen || !!raidDoor || !!lootPanel || isOnlinePlayersOpen || renderDetailsOpen;
+  }, [isConnected, activeModal, campOpen, raidDoor, lootPanel, isOnlinePlayersOpen, renderDetailsOpen]);
 
   const handleSelectSlot = useCallback((slotIdx: number) => {
     setActiveSlot(slotIdx);
@@ -1120,19 +1122,10 @@ export default function App() {
       if (netManagerRef.current && netManagerRef.current.isConnected) {
         netManagerRef.current.sendChat(channel, text);
       } else {
-        const newMsg: ChatMessage = {
-          id: Date.now().toString(),
-          channel,
-          sender: '废土流浪者',
-          senderTitle: `Lv.${playerStats.level} 独行者`,
-          text,
-          timestamp: new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' }),
-          isSelf: true,
-        };
-        setChatMessages((prev) => [...prev.slice(-30), newMsg]);
+        pushSystemMsg('连接未就绪，消息尚未发送。');
       }
     },
-    [playerStats.level]
+    [pushSystemMsg]
   );
 
   const markDestination = useCallback((x: number, y: number, name = '目的地') => {
@@ -1248,6 +1241,10 @@ export default function App() {
     <div className="relative w-screen h-screen overflow-hidden bg-slate-950 font-sans select-none">
       {/* 2.5D Isometric Canvas Engine */}
       <canvas ref={canvasRef} className="absolute inset-0 w-full h-full cursor-crosshair" />
+      {!showBoot && !isConnected && <div role="status" className="pointer-events-none absolute left-1/2 top-1/3 z-40 w-[calc(100%-2rem)] max-w-sm -translate-x-1/2 rounded-xl border border-amber-500/60 bg-slate-950/95 p-4 text-center text-amber-100 shadow-lg">
+        <p className="font-bold">等待世界同步</p>
+        <p className="mt-1 text-sm">移动与交互已暂停，连接恢复后继续。</p>
+      </div>}
       {renderDetailsOpen && <div role="alert" className="absolute inset-0 z-[90] flex items-center justify-center bg-slate-950/90 p-4 text-slate-100">
         <div className="w-full max-w-xl space-y-4 rounded-xl border border-amber-700/50 bg-slate-900 p-6 text-center">
           <p>{renderIssue ?? (frameDetailsText !== null ? '卡顿记录（仅保留在本地，刷新后清空）' : readRenderDiagnostics() === '[]' ? '暂无画面错误记录' : '画面已恢复，错误信息已保留')}</p>
@@ -1303,6 +1300,7 @@ export default function App() {
         activeModal={activeModal}
         onlineCount={Math.max(1, onlinePlayers.length)}
         ping={ping}
+        isConnected={isConnected}
         onOpenOnlinePlayers={() => setIsOnlinePlayersOpen(true)}
         isGM={isGM}
         dailyRedDot={dailyRedDot}
@@ -1341,12 +1339,12 @@ export default function App() {
       <div className="absolute bottom-4 left-4 z-20 flex items-end gap-3 pointer-events-none">
         <div className="flex flex-col gap-2 pointer-events-auto">
           <CharacterHUD stats={playerStats} onOpenInventory={() => { soundManager.playClick(); setActiveModal('inventory'); }} />
-          <RadioChat messages={chatMessages} onSendMessage={handleSendMessage} />
+          <RadioChat messages={chatMessages} onSendMessage={handleSendMessage} isConnected={isConnected} />
         </div>
         <div className="pointer-events-auto mb-1">
           <TacticalDpad
             onDirectionChange={(dir) => {
-              if (engineRef.current) {
+              if (engineRef.current && !engineRef.current.inputBlocked) {
                 engineRef.current.virtualJoystick = dir;
               }
             }}
@@ -1451,7 +1449,7 @@ export default function App() {
               isFiring: false,
               isDashing: false,
               color: '#06b6d4',
-              ping: ping,
+              ping: ping ?? 0,
               lastSeen: Date.now(),
               currentAction: '战备',
             }

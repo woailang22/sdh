@@ -26,7 +26,7 @@ export interface NetworkCallbacks {
   onRaidResult: (raidEvent: RaidEvent) => void;
   onWeatherUpdate: (weather: WeatherState) => void;
   onChatMessage: (msg: any) => void;
-  onConnectionChange: (connected: boolean, ping: number) => void;
+  onConnectionChange: (connected: boolean, ping: number | null) => void;
   onGMStatus: (ok: boolean, error?: string) => void;
   onPvpHit?: (hit: { attackerId: string; attackerName: string; damage: number }) => void;
 }
@@ -35,7 +35,7 @@ export class NetworkManager {
   private ws: WebSocket | null = null;
   private callbacks: NetworkCallbacks;
   public isConnected: boolean = false;
-  public ping: number = 0;
+  public ping: number | null = null;
   private pingInterval: any = null;
   private lastPingSent: number = 0;
   private reconnectTimer: any = null;
@@ -68,8 +68,8 @@ export class NetworkManager {
 
       this.ws.onopen = () => {
         this.stateDecoder.reset(); this.awaitingBaseline = false;
-        this.isConnected = true;
-        this.callbacks.onConnectionChange(true, this.ping);
+        this.isConnected = false; this.ping = null; this.lastPingSent = 0;
+        this.callbacks.onConnectionChange(false, null);
         this.startPingLoop();
         this.send({ type: 'state_sync', payload: { version: 1 } });
         console.log('[Multiplayer] Connected to game server:', wsUrl);
@@ -86,9 +86,9 @@ export class NetworkManager {
 
       this.ws.onclose = (event) => {
         this.stateDecoder.reset(); this.awaitingBaseline = false;
-        this.isConnected = false;
+        this.isConnected = false; this.ping = null; this.lastPingSent = 0;
         this.stopPingLoop();
-        this.callbacks.onConnectionChange(false, 0);
+        this.callbacks.onConnectionChange(false, null);
         if (event.code === 4001) {
           this.disposed = true;
           return;
@@ -120,7 +120,7 @@ export class NetworkManager {
   private startPingLoop() {
     this.stopPingLoop();
     this.pingInterval = setInterval(() => {
-      if (this.isConnected && this.ws?.readyState === WebSocket.OPEN) {
+      if (this.isConnected && this.ws?.readyState === WebSocket.OPEN && this.lastPingSent === 0) {
         this.lastPingSent = Date.now();
         this.send({ type: 'ping', payload: {} });
       }
@@ -135,6 +135,7 @@ export class NetworkManager {
   }
 
   public send(msg: NetMessage) {
+    if (!this.isConnected && (msg.type === 'game_action' || msg.type === 'player_sync')) return;
     if (this.ws && this.ws.readyState === WebSocket.OPEN) {
       this.ws.send(JSON.stringify(msg));
     }
@@ -217,11 +218,18 @@ export class NetworkManager {
     this.gameAction('enter_camp', { campId: `home_${selfId}` });
   }
 
+  private markGameplayReady() {
+    if (this.isConnected) return;
+    this.isConnected = true;
+    this.callbacks.onConnectionChange(true, this.ping);
+  }
+
   private handleMessage(msg: NetMessage) {
     switch (msg.type) {
       case 'game_state': {
         this.stateDecoder.reset(); this.awaitingBaseline = false;
         this.callbacks.onGameState?.(msg.payload);
+        this.markGameplayReady();
         break;
       }
       case 'game_state_patch': {
@@ -229,8 +237,11 @@ export class NetworkManager {
         if (state) {
           this.awaitingBaseline = false;
           this.callbacks.onGameState?.(state);
+          this.markGameplayReady();
         } else if (!this.awaitingBaseline) {
           this.awaitingBaseline = true;
+          this.isConnected = false; this.ping = null; this.lastPingSent = 0;
+          this.callbacks.onConnectionChange(false, null);
           this.send({ type: 'state_sync', payload: { version: 1 } });
         }
         break;
@@ -239,6 +250,7 @@ export class NetworkManager {
         this.stateDecoder.reset(); this.awaitingBaseline = false;
         this.selfId = msg.payload.selfId;
         this.callbacks.onInit(msg.payload);
+        if (msg.payload.gameState) this.markGameplayReady();
         break;
       }
 
@@ -283,8 +295,9 @@ export class NetworkManager {
       }
 
       case 'pong': {
-        if (this.lastPingSent > 0) {
-          this.ping = Math.max(12, Date.now() - this.lastPingSent);
+        if (this.isConnected && this.lastPingSent > 0) {
+          this.ping = Math.max(0, Date.now() - this.lastPingSent);
+          this.lastPingSent = 0;
           this.callbacks.onConnectionChange(true, this.ping);
         }
         break;
@@ -310,6 +323,6 @@ export class NetworkManager {
       try { this.ws.close(); } catch { /* ignore */ }
       this.ws = null;
     }
-    this.isConnected = false;
+    this.isConnected = false; this.ping = null; this.lastPingSent = 0;
   }
 }

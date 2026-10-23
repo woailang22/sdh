@@ -1,0 +1,1150 @@
+{
+  "kind": "authoritative-connection-readiness-and-input-recovery",
+  "date": "2026-10-24",
+  "baselineRevision": "3d563829490ab28236cae71aa28e4499ba871f19",
+  "planningRevision": "7a27b4d",
+  "unchangedServerGenerationNavigationHashesBound": true,
+  "changes": [
+    "Mark gameplay ready only after authoritative init/full/decoded state is applied; missing baseline pauses until recovery, pong cannot prematurely unlock.",
+    "Gate action/position sends before readiness without queuing; clear stale RTT, represent unmeasured ping as null and report actual nonnegative pong RTT.",
+    "Combine readiness and existing modal blockers in App; reset coordinates from authoritative recovery; Engine blocked updates clear lingering controls/path/fire/search while retaining update/draw.",
+    "Show actual connection state in top bar/radio/roster and a small world-sync card; do not fake offline sent chat or show stale online latency.",
+    "inputBlocked setter synchronously cancels all pending input/search even when recovery occurs before next rAF; every-frame blocked cleanup remains.",
+    "Keep one outstanding ping until its pong, then clear pending; do not overwrite slow RTT or remeasure duplicate pong."
+  ],
+  "tests": {
+    "added": 26,
+    "initialPhase": {
+      "added": 23,
+      "redFailed": 22,
+      "redPassed": 160,
+      "focusPassed": 182,
+      "fullPassed": 690,
+      "modulePath": "/assets/index-CeH3_Iu3.js"
+    },
+    "followUps": {
+      "slowAndDuplicatePongFailedBeforeFix": 2,
+      "shortGapSearchFailedBeforeFix": 1
+    },
+    "focusPassed": 185,
+    "enginePassed": 156,
+    "networkPassed": 22,
+    "uiPassed": 7,
+    "fullPassed": 693,
+    "files": 45,
+    "finalTypesPassed": true,
+    "buildPassed": true,
+    "modulePath": "/assets/index-nEVhS7Dn.js",
+    "finalNegativeControls": [
+      {
+        "removed": "synchronous setter cleanup",
+        "failed": 1,
+        "restoredByteForByte": true
+      },
+      {
+        "removed": "per-frame blocked cleanup",
+        "failed": 1,
+        "restoredByteForByte": true
+      },
+      {
+        "removed": "low-level action/position send guard",
+        "failed": 1,
+        "restoredByteForByte": true
+      },
+      {
+        "removed": "single outstanding ping guard",
+        "failed": 1,
+        "restoredByteForByte": true
+      }
+    ],
+    "intermediateNegativeControls": {
+      "engineFailed": 6,
+      "sendFailed": 1,
+      "scope": "Earlier per-frame-only version; two original output names were reused by a later intermediate rerun, final manifest binds existing rerun logs only."
+    },
+    "initialTypeFailure": "nullable RTT was projected as undefined into legacy numeric OnlinePlayer.ping DTO; corrected to compatibility0 (not used for UI latency), original failure retained.",
+    "initialAuditFailure": "A broad substring matched inventory button help as if a modal remained open; changed to exact modal heading, preserved initial script/log.",
+    "existingViteWarningsRetained": true
+  },
+  "results": {
+    "status": "passed-final-version-native-reconnect",
+    "modulePath": "/assets/index-nEVhS7Dn.js",
+    "newDefaultGuest": true,
+    "initialAssetsEmpty": true,
+    "normalClocksRulesNoStateEdits": true,
+    "native": {
+      "firstHeldSSeconds": 1.5,
+      "offlineHeldDSeconds": 1.5,
+      "offlineDpadHeldSeconds": 0.5,
+      "sameOfflineAndOnlineUiPosition": {
+        "x": 4.2,
+        "y": 5.2
+      },
+      "samePageAutomaticallyRecovered": true,
+      "inventoryStayedOpen": true,
+      "acceptedStationaryPacketsWhileInventoryOpen": 499,
+      "recoveredHeldDBlockedSeconds": 1,
+      "recoveredNewHeldDSeconds": 1.5,
+      "remainingMovementAccepted": true
+    },
+    "movement": [
+      {
+        "phase": "final-end",
+        "packets": 357,
+        "movingPackets": 28,
+        "stationaryPackets": 329,
+        "distance": 5.95232,
+        "rejected": 0,
+        "errors": 0,
+        "corrections": 1,
+        "overflow": 0
+      },
+      {
+        "phase": "recovered-end",
+        "packets": 7029,
+        "movingPackets": 28,
+        "stationaryPackets": 7001,
+        "distance": 5.756619999999968,
+        "rejected": 0,
+        "errors": 0,
+        "corrections": 1,
+        "overflow": 0
+      }
+    ],
+    "assets": {
+      "allResourcesZero": true,
+      "emptyInventoryAndEquipment": true,
+      "noCamp": true,
+      "noNodeOrGameAction": true,
+      "sharedAssetsUnchanged": true,
+      "restartPlayerFieldsIdentical": true,
+      "backupRestored": true,
+      "backupPath": "data/cua-connection-readiness-20261024-a2.sqlite.backup-2026-10-23T19-29-44-229Z"
+    },
+    "performance": {
+      "environment": {
+        "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
+        "viewport": {
+          "width": 1920,
+          "height": 1080
+        },
+        "canvas": {
+          "width": 1920,
+          "height": 1080
+        },
+        "devicePixelRatio": 1.0000000298023224,
+        "modulePath": "/assets/index-nEVhS7Dn.js",
+        "jsHeap": {
+          "used": 34629436,
+          "total": 70342024
+        },
+        "graphicsBackend": "unknown"
+      },
+      "totalSlowFrames": 9,
+      "samples": [
+        {
+          "atMs": 9224.300000011921,
+          "updateMs": 0.5,
+          "drawMs": 3.5,
+          "rafGapMs": 67.59999999403954,
+          "drawGapMs": 68,
+          "scene": {
+            "map": "world",
+            "x": 0,
+            "y": 1,
+            "chunks": 25,
+            "buildings": 388,
+            "interactables": 132,
+            "monsters": 0,
+            "players": 0,
+            "inputBlocked": false
+          }
+        },
+        {
+          "atMs": 9253.09999999404,
+          "updateMs": 0,
+          "drawMs": 94.60000002384186,
+          "rafGapMs": 28.799999982118607,
+          "drawGapMs": 28.299999982118607,
+          "scene": {
+            "map": "world",
+            "x": 0,
+            "y": 1,
+            "chunks": 25,
+            "buildings": 388,
+            "interactables": 132,
+            "monsters": 0,
+            "players": 0,
+            "inputBlocked": false
+          }
+        },
+        {
+          "atMs": 9408,
+          "updateMs": 0.6000000238418579,
+          "drawMs": 66.89999997615814,
+          "rafGapMs": 154.90000000596046,
+          "drawGapMs": 155.60000002384186,
+          "scene": {
+            "map": "world",
+            "x": 0,
+            "y": 1,
+            "chunks": 25,
+            "buildings": 388,
+            "interactables": 132,
+            "monsters": 0,
+            "players": 0,
+            "inputBlocked": false
+          }
+        },
+        {
+          "atMs": 9495.700000017881,
+          "updateMs": 0.3999999761581421,
+          "drawMs": 17.900000005960464,
+          "rafGapMs": 87.7000000178814,
+          "drawGapMs": 87.39999997615814,
+          "scene": {
+            "map": "world",
+            "x": 0,
+            "y": 1,
+            "chunks": 25,
+            "buildings": 388,
+            "interactables": 132,
+            "monsters": 0,
+            "players": 0,
+            "inputBlocked": false
+          }
+        },
+        {
+          "atMs": 9602.09999999404,
+          "updateMs": 0.5999999940395355,
+          "drawMs": 1.4000000059604645,
+          "rafGapMs": 106.39999997615814,
+          "drawGapMs": 106.7000000178814,
+          "scene": {
+            "map": "world",
+            "x": 0.26870057685088805,
+            "y": 1.268700576850888,
+            "chunks": 25,
+            "buildings": 388,
+            "interactables": 132,
+            "monsters": 0,
+            "players": 0,
+            "inputBlocked": false
+          }
+        },
+        {
+          "atMs": 9688.700000017881,
+          "updateMs": 0.29999998211860657,
+          "drawMs": 1.0999999940395355,
+          "rafGapMs": 82.10000002384186,
+          "drawGapMs": 82,
+          "scene": {
+            "map": "world",
+            "x": 0.49655866602043913,
+            "y": 1.4965586660204393,
+            "chunks": 25,
+            "buildings": 388,
+            "interactables": 132,
+            "monsters": 0,
+            "players": 0,
+            "inputBlocked": false
+          }
+        },
+        {
+          "atMs": 43347.40000000596,
+          "updateMs": 0.09999999403953552,
+          "drawMs": 1.2000000178813934,
+          "rafGapMs": 8.5,
+          "drawGapMs": 61.099999994039536,
+          "scene": {
+            "map": "world",
+            "x": 4.208925835792309,
+            "y": 5.208925835792312,
+            "chunks": 25,
+            "buildings": 388,
+            "interactables": 132,
+            "monsters": 0,
+            "players": 0,
+            "inputBlocked": true
+          }
+        },
+        {
+          "atMs": 89856.09999999404,
+          "updateMs": 0.6000000238418579,
+          "drawMs": 62.19999998807907,
+          "rafGapMs": 6.299999982118607,
+          "drawGapMs": 18.400000005960464,
+          "scene": {
+            "map": "world",
+            "x": 6.668073515131616,
+            "y": 2.749778156452998,
+            "chunks": 25,
+            "buildings": 388,
+            "interactables": 132,
+            "monsters": 0,
+            "players": 0,
+            "inputBlocked": false
+          }
+        },
+        {
+          "atMs": 89919.90000000596,
+          "updateMs": 0.30000001192092896,
+          "drawMs": 2,
+          "rafGapMs": 63.80000001192093,
+          "drawGapMs": 63.599999994039536,
+          "scene": {
+            "map": "world",
+            "x": 6.830637364126403,
+            "y": 2.587214307458211,
+            "chunks": 25,
+            "buildings": 388,
+            "interactables": 132,
+            "monsters": 0,
+            "players": 0,
+            "inputBlocked": false
+          }
+        }
+      ],
+      "movingSlowRecords": 4,
+      "movingDrawOver50Ms": true,
+      "maxDrawMs": 94.60000002384186,
+      "maxRafGapMs": 154.90000000596046,
+      "acceptancePassed": false
+    },
+    "survival": {
+      "observedMovementPacketsHp": 100,
+      "lastSavedNativeUi": {
+        "hp": 100,
+        "shield": 19,
+        "satiety": 0
+      },
+      "afterBrowserClosedAndNormalBodyGrace": {
+        "hp": 69.9925,
+        "shield": 0,
+        "satiety": 0
+      },
+      "explanation": "QA conversation/idle time lasted into natural acid-rain/hunger. Screenshot precedes final checkpoint; no food/HP reset or changed survival rules. Input blocking does not pause the authoritative server or normal disconnected body grace."
+    },
+    "final": {
+      "x": 8.279470874506389,
+      "y": 1.138380797078231,
+      "map": "world",
+      "hp": 69.9925,
+      "shield": 0,
+      "satiety": 0
+    },
+    "limits": [
+      "Single ordinary player/short movements, no P95/full world/multiplayer/long-memory or physical GPU acceptance.",
+      "The9 retained slow records include4 with movement, including a62.2ms draw after reconnect and two early-loading moving records. Do not claim smooth walking or all cold frames stationary.",
+      "Short within-one-frame baseline-gap search cancellation and slow/duplicate pong timing are regression/negative-control verified, not deliberately reproduced via native packet injection.",
+      "Final native shot showsHP100/shield19/satiety0; subsequent normal body grace reduced HP to the final recorded value. No full-health-final-state claim."
+    ]
+  },
+  "cleanup": {
+    "ownedPort": 39132,
+    "listeners": 0,
+    "ownedServerPids": [
+      7336,
+      46092,
+      36916,
+      42612,
+      3488
+    ],
+    "runningOwnedProcesses": 0,
+    "browserTabs": [],
+    "viewportRestored": true
+  },
+  "review": {
+    "status": "final-independent-read-only-review-passed-no-P1-P2",
+    "candidateP2Closed": "A true-to-false input blocker between frames no longer submits the old search: synchronous setter cleanup, failing-then-passing real Engine test and isolated negative control verified.",
+    "scope": "Final source,118 hashes,185 focused and693 full-suite logs,four final negative controls,raw native counts/screenshots,version boundaries and persistence audit assertions. Reviewer did not run loads, services, browser or SQLite.",
+    "limitsConfirmed": "Retained moving62.2ms draw, normal body-grace finalHP69.9925, and incomplete overall performance/multiplayer/memory acceptance."
+  },
+  "goalComplete": false,
+  "sources": [
+    {
+      "path": "src/App.tsx",
+      "sha256": "67a6441c8e8f2bffc02338f806cae77f2fb4c5f4ffd0c50701d506dc5b51367e"
+    },
+    {
+      "path": "src/game/IsometricEngine.ts",
+      "sha256": "03668b40dce9423748a3482acd4ff83dc028a2b8cb07b6c25a9ab92b8ed8169e"
+    },
+    {
+      "path": "src/game/IsometricEngine.test.ts",
+      "sha256": "6796678bee22c24d99a5a00e10781ffa172ad31c25af5f31d645a01699729139"
+    },
+    {
+      "path": "src/game/NetworkManager.ts",
+      "sha256": "f0ba5b04ad2dd34bc5c65e37343bf546b1f385d088d0c68a60f55c348c3fd882"
+    },
+    {
+      "path": "src/game/NetworkManager.test.ts",
+      "sha256": "244f8af67f47b90934ba71a833be3ef7a1573031f1440c525c2efed9b9f21b07"
+    },
+    {
+      "path": "src/game/stateSync.ts",
+      "sha256": "cfb25fc761a622ab0f90077849adc9e0375f800f315af9dca0a09560926b28a0"
+    },
+    {
+      "path": "src/components/TopMenuBar.tsx",
+      "sha256": "b060cd2420ff0ee3f768dfd6b1a4339b2fa52780f506febb667aeb83636a3f24"
+    },
+    {
+      "path": "src/components/RadioChat.tsx",
+      "sha256": "1588ac8e5767130eae14100206dc458965027d505c7fd184d4d92d80a972d9e5"
+    },
+    {
+      "path": "src/components/OnlinePlayersModal.tsx",
+      "sha256": "0085fab64d6b236d9869edf1dc83ed374b7d2d372fbab39ae1c373a2fad763d3"
+    },
+    {
+      "path": "src/components/ConnectionStatus.test.tsx",
+      "sha256": "6fd49c5f21410b80785c1551b24f71a96f9c049128a8040f1af7f84fb1ad6575"
+    },
+    {
+      "path": "server.ts",
+      "sha256": "550676757754175a4482ce81da1f581f4ab3b0254478b3fa846d3f9479ca0ff1"
+    },
+    {
+      "path": "server/worldState.ts",
+      "sha256": "def88edd22a2755a2a176c143cd4ca015592d49ce76db89af54558baffaef233"
+    },
+    {
+      "path": "server/db.ts",
+      "sha256": "9cf91e65d64e6372bb897d98b8bdda843a03f42f409240f272abc4ed09d83f0f"
+    },
+    {
+      "path": "src/game/world.ts",
+      "sha256": "9ad6447e3e2cce3f9f391856bd3008856a49c2849a35d71aa1368b1893510949"
+    },
+    {
+      "path": "src/game/navigation.ts",
+      "sha256": "defeedf6c1670922f76b115c5da0a1bdce4f64afa8fb5b7eca0ee5c48065b662"
+    },
+    {
+      "path": "docs/verification/2026-10-24-world-road-textures-results.json",
+      "sha256": "124bb0e37fce0dfd3341d060935c93cf99363a4d21d5a5d8a9d683b0fc79f193"
+    },
+    {
+      "path": "docs/superpowers/specs/2026-10-24-connection-gameplay-readiness-design.md",
+      "sha256": "dc498215d83b4fa667699cd57ef36aaa4e5ac2c7a8aa2961dd2ae237aaae76b8"
+    },
+    {
+      "path": "data/capture-cua-connection-readiness-20261024.ts",
+      "sha256": "c1d45514a461af19de1e080c5e3e2ff7ae7c01d4f2cfdf644ef8561ab932e3de"
+    },
+    {
+      "path": "data/control-cua-connection-readiness-20261024.cjs",
+      "sha256": "32148a332a49b7e21f4ce5b0f45b9a8a7897e5452bc7864c067e653f92b5a161"
+    },
+    {
+      "path": "data/control-cua-connection-readiness-resume-20261024.cjs",
+      "sha256": "d6f69b1cc02c0597751fa244838535976b82efad4d36943d16fa3bb6b7f2c79a"
+    },
+    {
+      "path": "data/read-connection-readiness-save-20261024.ts",
+      "sha256": "672ef5019617900f4039121226fe00f2007defe401e5dea1dfb39514a2d8f371"
+    },
+    {
+      "path": "data/audit-connection-readiness-20261024.ts",
+      "sha256": "fbe292d3fcb36e97d0587905becfa4c52b6868a4b69c0a7d89de0a0e26813f06"
+    },
+    {
+      "path": "data/audit-connection-readiness-20261024-initial.txt",
+      "sha256": "34279734d378b779a53c0c0c2dc31b9a5dce47ad6e89d229b1c171eae60a2e61"
+    },
+    {
+      "path": "data/negative-connection-readiness-20261024.cjs",
+      "sha256": "179eeb4d498fb706b5290477b7ef0083f86a77d6d7ecef20c657863370efae6d"
+    },
+    {
+      "path": "data/connection-readiness-cleanup-20261024.json",
+      "sha256": "c22ae59fe9f7e3b3d47a2dbeb59a6c63456425a8605ced3fef7f598c6182ecfe"
+    },
+    {
+      "path": "data/connection-readiness-red-20261024.log",
+      "sha256": "4c3b932ebce1095de0a50b0651f58076a41bc1d79a5380207630bbddbcf39ec8"
+    },
+    {
+      "path": "data/connection-readiness-ui-red-20261024.log",
+      "sha256": "53a4e50e9d143d8152ea120e3b89b85dddde16a87c008254c18e3fd86e6cbe15"
+    },
+    {
+      "path": "data/connection-readiness-focus-20261024.log",
+      "sha256": "5a238e9bad9245e0d034c1a28cbd317192013a2294f2283a55c333732b61e567"
+    },
+    {
+      "path": "data/connection-readiness-types-20261024.log",
+      "sha256": "ac6f923bdc9056ed708d175c4e2c22dae822072adbe8b7580ed56d7c2080f27a"
+    },
+    {
+      "path": "data/connection-readiness-types-final-20261024.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "data/connection-readiness-types-complete-20261024.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "data/connection-readiness-full-tests-20261024.log",
+      "sha256": "9608137d365845524501a3becbf974b485de901eb6e1d664e6c56ea229b3bbdf"
+    },
+    {
+      "path": "data/connection-readiness-build-20261024.log",
+      "sha256": "c8014d0774aa18b881ef404927fb0c2e9429d2d8d1298bd4cb2a7ca762ff735e"
+    },
+    {
+      "path": "data/connection-readiness-negative-engine-20261024.log",
+      "sha256": "aae33f315e99d139e027ce76875ac6931fac42c44364776fcfd7fad8cdde9c2c"
+    },
+    {
+      "path": "data/connection-readiness-negative-send-20261024.log",
+      "sha256": "4437be7e487f318c6881ccfb980f5dd863afeee8547ff8ac2701d9f9eaec294d"
+    },
+    {
+      "path": "data/connection-readiness-audit-20261024.log",
+      "sha256": "b3fa761695f61d9be7df9bfd508058b127ae6363dedd0179d1e6cb3b11f79201"
+    },
+    {
+      "path": "data/connection-readiness-audit-final-20261024.log",
+      "sha256": "5317c0f52f9fa434121b84c7e7b28e53d3741b8632c9dfa2a7d03724a023973d"
+    },
+    {
+      "path": "data/cua-connection-readiness-20261024-a1-before-online-ax.txt",
+      "sha256": "b42a6a7f2ec3680e1abfc6729e31f9fc37f3a48ec04c6e781ca810f1f885a746"
+    },
+    {
+      "path": "data/cua-connection-readiness-20261024-a1-before-offline.png",
+      "sha256": "6994337d7e00b4d3bbed882a583caf2bcee4e8bdcf05c858282e25d11a8283db"
+    },
+    {
+      "path": "data/cua-connection-readiness-20261024-a1-before-offline-ax.txt",
+      "sha256": "63d29bdaaf72b8dc9923cb611856ab990dfeae485f8f6afa7337e4ecc50c97b3"
+    },
+    {
+      "path": "data/cua-connection-readiness-20261024-a1-before-stopped-world-private.json",
+      "sha256": "451c17234b8542313fd0330c8690691aedab100b28c41908b28172e106b82657"
+    },
+    {
+      "path": "data/cua-connection-readiness-20261024-a1-after-restored-ax.txt",
+      "sha256": "d07fc0e6db2dc394a3c6d812e0183d63de2437dccee4992c0d2864257bd2d6a6"
+    },
+    {
+      "path": "data/cua-connection-readiness-20261024-a1-after-offline-start-ax.txt",
+      "sha256": "a40645eeeb7d994a53c61cb9f0703a66fd07642b4ce8f8a6afa54672c0f0700b"
+    },
+    {
+      "path": "data/cua-connection-readiness-20261024-a1-after-offline-keyboard-ax.txt",
+      "sha256": "93371917af7d8224b663925333fca20472daffce2d0ccc7433af83505236081b"
+    },
+    {
+      "path": "data/cua-connection-readiness-20261024-a1-after-offline-dpad-ax.txt",
+      "sha256": "0de871f2a687d66dc87442e74fc9c7ab2ee1d48b1a17a32ee0dcd2c3da2138ef"
+    },
+    {
+      "path": "data/cua-connection-readiness-20261024-a1-after-offline-context-ax.txt",
+      "sha256": "54e728b89fb83273d82f8c6e86d2f02e92ffd26dc040f646962b23eab54a8d44"
+    },
+    {
+      "path": "data/cua-connection-readiness-20261024-a1-after-offline-panel-close-ax.txt",
+      "sha256": "0a2f652242656429cd194eedd2ea34a63762193929bfc2c2728edbe25afaa348"
+    },
+    {
+      "path": "data/cua-connection-readiness-20261024-a1-after-offline.png",
+      "sha256": "c895f554b4827f7cd15b46ecadc2071d906921076e89ae224fad6431fee63061"
+    },
+    {
+      "path": "data/cua-connection-readiness-20261024-a1-after-stopped-world-private.json",
+      "sha256": "21a5801f351ba4cf9d186d3abab7edd21c0263b063bc8db514607a3355ed2ce3"
+    },
+    {
+      "path": "data/cua-connection-readiness-20261024-a1-recovered-panel-blocked-ax.txt",
+      "sha256": "0a987a76568b4ec54a9c23f52d34f63b8a0d3b313a1582d8d9c36648b7e38b24"
+    },
+    {
+      "path": "data/cua-connection-readiness-20261024-a1-recovered-blocked-events.json",
+      "sha256": "202f5119898e49d4a1b25871f3ce78938ffcc849647f7011b2fc895d757a5313"
+    },
+    {
+      "path": "data/cua-connection-readiness-20261024-a1-recovered-blocked-world-private.json",
+      "sha256": "d583a0a5de8a1709054b3ac2f84b7ebc663281cf16af0839c41681ba3231e6f3"
+    },
+    {
+      "path": "data/cua-connection-readiness-20261024-a1-recovered-walk-ax.txt",
+      "sha256": "bf38982fc328971a1f183dfd5be61207c00528a9155d275743668d07f5c13258"
+    },
+    {
+      "path": "data/cua-connection-readiness-20261024-a1-recovered.png",
+      "sha256": "05c0c6400f0462981ecb4d58ddf29dae0f086e0c84510118873bd4c8c658ed7e"
+    },
+    {
+      "path": "data/cua-connection-readiness-20261024-a1-recovered-final-ax.txt",
+      "sha256": "e02b35cc58520633efcbc079e56d6f7cd7866a4ea199ecbfccd984637e975366"
+    },
+    {
+      "path": "data/cua-connection-readiness-20261024-a1-after-frames.json",
+      "sha256": "d7794800347cacc24530f5ed2f2939e950770bf302d40104e6ee0b40589e57fc"
+    },
+    {
+      "path": "data/cua-connection-readiness-20261024-a1-after-errors.json",
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "path": "data/cua-connection-readiness-20261024-a1-offline-mobile.png",
+      "sha256": "89ec853e9eb9437e81cb90b7457e8205c196e2e6c2d2be4568f58a33bdbbd2ad"
+    },
+    {
+      "path": "data/cua-connection-readiness-20261024-a1-offline-mobile-layout.json",
+      "sha256": "dd73aed797325fcc47400c2600c3bd05a827f3629a69b25472bcf2ae1b010e12"
+    },
+    {
+      "path": "data/cua-connection-readiness-20261024-a1-final-stopped-world-private.json",
+      "sha256": "1ca222ab9bb834aaa1181ab2ae48cbb8f211c8c28a66850031e85ae666c01e9d"
+    },
+    {
+      "path": "data/cua-connection-readiness-20261024-a1-audit.json",
+      "sha256": "d3b01f7fc5f1e881e755826a5fc2974246589e487e3ddb48d782b78176168ac0"
+    },
+    {
+      "path": "data/cua-connection-readiness-20261024-a1-before-connected-world-private.json",
+      "sha256": "fb28ecb7b245b38e7ca0f61baeaf97cc173bceb8ad5249a72a1163d52ea3c729"
+    },
+    {
+      "path": "data/cua-connection-readiness-20261024-a1-before-end-world-private.json",
+      "sha256": "cf9e268d4db267443d856062ed1836a767239e3ac945ec24deb5fcb7b1a5491e"
+    },
+    {
+      "path": "data/cua-connection-readiness-20261024-a1-before-end-events.json",
+      "sha256": "d0cca0ae214c5eea43231567ba4398b2038565bef5cbc0f934e20c26a17df157"
+    },
+    {
+      "path": "data/cua-connection-readiness-20261024-a1-before-server.log",
+      "sha256": "448d818e6c61b8e908e7c527b09aa58392ff933675e3286090248c32f1008295"
+    },
+    {
+      "path": "data/cua-connection-readiness-20261024-a1-after-connected-world-private.json",
+      "sha256": "902cc8118a906e0321602781acc76e813d92afd80a0420a5be60a7bfeb9a431d"
+    },
+    {
+      "path": "data/cua-connection-readiness-20261024-a1-after-end-world-private.json",
+      "sha256": "e55da9143dfbae03e6705bb54afba58beb53271c75272a10e97ffebf55baf0b0"
+    },
+    {
+      "path": "data/cua-connection-readiness-20261024-a1-after-end-events.json",
+      "sha256": "9a413299f5b5c234f21bcad76b681e2bda8238aa0d8bc4ffc6b41bb6f59fb0ea"
+    },
+    {
+      "path": "data/cua-connection-readiness-20261024-a1-after-server.log",
+      "sha256": "87ad8f338e6ff8d7a88890b45fe6f0e8850c64d0a9d139bb828db25b62fa2e34"
+    },
+    {
+      "path": "data/cua-connection-readiness-20261024-a1-recovered-connected-world-private.json",
+      "sha256": "d4d03701a7c76d8ddf5b5c02bd972d4ca1582549d483ec618978117dd49cbc98"
+    },
+    {
+      "path": "data/cua-connection-readiness-20261024-a1-recovered-final-world-private.json",
+      "sha256": "e36899605057164bf7b487ec915d97d34343c4af5efa530620c3d34b341f463f"
+    },
+    {
+      "path": "data/cua-connection-readiness-20261024-a1-recovered-final-events.json",
+      "sha256": "5a83f6e1c8346f7ef3ed63903af5c9100f44956bb3a54d8bb94773c79a689cef"
+    },
+    {
+      "path": "data/cua-connection-readiness-20261024-a1-recovered-server.log",
+      "sha256": "87ad8f338e6ff8d7a88890b45fe6f0e8850c64d0a9d139bb828db25b62fa2e34"
+    },
+    {
+      "path": "dist/index.html",
+      "sha256": "b0e918300c6507667c51b3fc6d16abafac790b6b8518d68f8a602d361f4b33d7"
+    },
+    {
+      "path": "data/connection-readiness-initial-results.json",
+      "sha256": "303d7b7a173cbda985d141af3c489994cce28e1ba1bbe2648bd80058202571b3"
+    },
+    {
+      "path": "data/connection-readiness-initial-NetworkManager.txt",
+      "sha256": "e8753456bf071b085cc107cb0b61bc9b76126e13563b04559f44449bbba95651"
+    },
+    {
+      "path": "data/connection-readiness-initial-bundle-CeH3_Iu3.js",
+      "sha256": "328bfd733f9124c86c6620429b64183b6c462367e66373fb5735c16ae27b107c"
+    },
+    {
+      "path": "data/connection-readiness-initial-index.html",
+      "sha256": "282f4b872ca5a16876aefdddf9168157a67a9a6e786fd2a377c800bb67b822db"
+    },
+    {
+      "path": "data/negative-connection-readiness-20261024-before-synchronous.txt",
+      "sha256": "179eeb4d498fb706b5290477b7ef0083f86a77d6d7ecef20c657863370efae6d"
+    },
+    {
+      "path": "data/negative-connection-readiness-final-20261024.cjs",
+      "sha256": "fda4ada94c5e07b6af70cb6e01f90642cbea35f7fcd7f382ffa5456581b5402f"
+    },
+    {
+      "path": "data/capture-cua-connection-readiness-final-20261024.ts",
+      "sha256": "7450d4c77222bc77d8cf6539a158681769bdfe4bfbdd4e3eabaf9050a06fd2ba"
+    },
+    {
+      "path": "data/control-cua-connection-readiness-final-20261024.cjs",
+      "sha256": "101020a100d1ec39660df68cd9bc308a403cdaf8438aed0ec5eb7d4a61f921af"
+    },
+    {
+      "path": "data/audit-connection-readiness-final-20261024.ts",
+      "sha256": "5551861014b212548900a5235e9d0cd5a66a49132dd6c4c5205c56fc8252842a"
+    },
+    {
+      "path": "data/connection-readiness-rtt-red-20261024.log",
+      "sha256": "f0a4280ae4c541628954e293895a19058bf53055320a9276ae46902a6049672a"
+    },
+    {
+      "path": "data/connection-readiness-short-gap-red-20261024.log",
+      "sha256": "e907b309a8e3828256e373f587306f56e45e4779ae4543893b1d7963727d3037"
+    },
+    {
+      "path": "data/connection-readiness-focus-final-20261024.log",
+      "sha256": "cd3ebea3854794f2460881a41d5fba1e7f74da44bba168c34c17ddd2837f550f"
+    },
+    {
+      "path": "data/connection-readiness-focus-complete-20261024.log",
+      "sha256": "5356a6843262fbd7ff0d2d7db6eaa8baa1a66b784966f7f7eb1a3ab71c48ce2e"
+    },
+    {
+      "path": "data/connection-readiness-full-tests-final-20261024.log",
+      "sha256": "353c430835fb30c1e0affb37a7ff4ed0f2baef9530625a0ebe4e6a96f77a8fd2"
+    },
+    {
+      "path": "data/connection-readiness-build-final-20261024.log",
+      "sha256": "4b2ad60ad8a540441c4b2d69a2dd83238de6baf1d87f2ee71e447c5af88dcd47"
+    },
+    {
+      "path": "data/connection-readiness-types-final-version-20261024.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "data/connection-readiness-audit-a2-20261024.log",
+      "sha256": "1d9ee233e9150f7116b125b4e1c3aeea11d7e565422f919c006a1b5d8bb66f60"
+    },
+    {
+      "path": "data/connection-readiness-negative-engine-intermediate-20261024.log",
+      "sha256": "aae33f315e99d139e027ce76875ac6931fac42c44364776fcfd7fad8cdde9c2c"
+    },
+    {
+      "path": "data/connection-readiness-negative-send-intermediate-20261024.log",
+      "sha256": "4437be7e487f318c6881ccfb980f5dd863afeee8547ff8ac2701d9f9eaec294d"
+    },
+    {
+      "path": "data/connection-readiness-negative-final-immediate-20261024.log",
+      "sha256": "128d27ec859234d24db5d3f268eeb7a438065496a732f7bbca5947b4179ce063"
+    },
+    {
+      "path": "data/connection-readiness-negative-final-frame-20261024.log",
+      "sha256": "f06a6aa0b0945d49b539d60c0f1b65847f89b9fb86fb02eb29cb7d83395081bc"
+    },
+    {
+      "path": "data/connection-readiness-negative-final-send-20261024.log",
+      "sha256": "796ee6e4e385e86a2972bb3b1f522c0e6da3a0fcd6d5782fd8a8410a105dda97"
+    },
+    {
+      "path": "data/connection-readiness-negative-final-rtt-20261024.log",
+      "sha256": "239e88f866e7f64d788ce341ebbb2cc08c7138c830923e8f05241946b9680e49"
+    },
+    {
+      "path": "data/cua-connection-readiness-20261024-a2-online-ax.txt",
+      "sha256": "3f99bef05d598992dea166e9874742835a2c87541800a05d08d7888b5d2948dc"
+    },
+    {
+      "path": "data/cua-connection-readiness-20261024-a2-offline.png",
+      "sha256": "f85b33c6cd85de1c04e55ad69cbd99ad938646e27585ddaea661bacfb5a28c08"
+    },
+    {
+      "path": "data/cua-connection-readiness-20261024-a2-offline-ax.txt",
+      "sha256": "84a12792babb24ede80f9726df8353932a81e6ca9e82464ca94877988a3a3f48"
+    },
+    {
+      "path": "data/cua-connection-readiness-20261024-a2-recovered-blocked-ax.txt",
+      "sha256": "df8f2d4784bd00aa5cf3ad95c410b8ed2fa78136abda606ec58de90ae0238c87"
+    },
+    {
+      "path": "data/cua-connection-readiness-20261024-a2-recovered-walk-ax.txt",
+      "sha256": "9fe30383f644402e646d3a37c4ac6e434e8e8c1ff30452b299d0776d0ac8abb9"
+    },
+    {
+      "path": "data/cua-connection-readiness-20261024-a2-recovered.png",
+      "sha256": "f656ec562b0f587f417f2c0727f3dbaf837f816d38af95f51b259037fa7884f1"
+    },
+    {
+      "path": "data/cua-connection-readiness-20261024-a2-final-ax.txt",
+      "sha256": "d816b48a8611150854d1e2b99226e218894b7eb1181f2088749344acbfc682d7"
+    },
+    {
+      "path": "data/cua-connection-readiness-20261024-a2-frames.json",
+      "sha256": "e4bd7f1730a60ea940cad673516418af62ac9126e7b354e69c73956e04292f77"
+    },
+    {
+      "path": "data/cua-connection-readiness-20261024-a2-errors.json",
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "path": "data/cua-connection-readiness-20261024-a2-audit.json",
+      "sha256": "f773fd362a19f2b463d611da1f776b27be7ed455efa7e7928219f13c4217b1a4"
+    },
+    {
+      "path": "data/cua-connection-readiness-20261024-a2-recovered-blocked-events.json",
+      "sha256": "051f8b7f124f5ef639b468a8f0fbad9b521d7bbab6a835c8905e6cfe0685a231"
+    },
+    {
+      "path": "data/cua-connection-readiness-20261024-a2-recovered-blocked-world-private.json",
+      "sha256": "0f5c70ba0e41000677079b698186618a43edef9ca6e975af21a75735961d1e80"
+    },
+    {
+      "path": "data/cua-connection-readiness-20261024-a2-final-connected-world-private.json",
+      "sha256": "097632292c0eade398f2fc3ef1a42f364e87ca79922df858962dd5a78bcfdbb4"
+    },
+    {
+      "path": "data/cua-connection-readiness-20261024-a2-final-end-world-private.json",
+      "sha256": "63ed2898e8ce7cc434a12667ae195771feb85dc31d391f01a4d009becbc8a3f1"
+    },
+    {
+      "path": "data/cua-connection-readiness-20261024-a2-final-end-events.json",
+      "sha256": "5b0b73f05eceeb5e491ea73337b91244c8729e395e83c48eebc37113ac5dd00b"
+    },
+    {
+      "path": "data/cua-connection-readiness-20261024-a2-final-server.log",
+      "sha256": "a7c8fee8cb92e3c21eb591e22e7f7f9b8d96e3434c797ec7088ef7ba69d7f88e"
+    },
+    {
+      "path": "data/cua-connection-readiness-20261024-a2-recovered-connected-world-private.json",
+      "sha256": "9df53ceeb5e55dc7d96f266b425e210e1c683fc01e2cd27d34741e11faf5394e"
+    },
+    {
+      "path": "data/cua-connection-readiness-20261024-a2-recovered-end-world-private.json",
+      "sha256": "36c46c5f8b4d4d11b50f6c9e50037a2f80945229f0a8a8754a019853c29c0f4a"
+    },
+    {
+      "path": "data/cua-connection-readiness-20261024-a2-recovered-end-events.json",
+      "sha256": "1915bcb617bb64a553dca041543cc13345cdbf558e6689d3320be8353f540109"
+    },
+    {
+      "path": "data/cua-connection-readiness-20261024-a2-recovered-server.log",
+      "sha256": "87ad8f338e6ff8d7a88890b45fe6f0e8850c64d0a9d139bb828db25b62fa2e34"
+    },
+    {
+      "path": "dist/assets/index-nEVhS7Dn.js",
+      "sha256": "d6f3639dfc41b8cd7dfdef0a6c5e6976aef5b5884f8a0eda51101c8b50c0288c"
+    }
+  ],
+  "intermediateVersionResults": {
+    "modulePath": "/assets/index-CeH3_Iu3.js",
+    "scope": "Initial normal close/reconnect and mobile evidence before synchronous-search/RTT follow-ups; not final-version acceptance.",
+    "results": {
+      "status": "passed-bounded-native-connection-recovery",
+      "singleDefaultGuest": true,
+      "initial": {
+        "x": 0,
+        "y": 1,
+        "hp": 100,
+        "shield": 0,
+        "satiety": 100,
+        "allAssetsEmpty": true,
+        "noCamp": true
+      },
+      "oldBug": {
+        "serverActuallyStopped": true,
+        "uiOnlineCoordinate": {
+          "x": 5.6,
+          "y": 6.6
+        },
+        "uiOfflineCoordinate": {
+          "x": 11,
+          "y": 1.2
+        },
+        "roundedUiLocalDistance": 7.636753236814713,
+        "falseZeroMsAndStrongSignal": true,
+        "persistedPosition": {
+          "x": 5.5849414898457015,
+          "y": 6.584941489845698
+        },
+        "offlineLocalMovementNotPersisted": true
+      },
+      "newBehavior": {
+        "nativeInputsWhileDisconnected": [
+          "D held2s",
+          "Dpad nativeclick held1.5s",
+          "ground right-click",
+          "E held0.5s",
+          "Escape closes inventory then S held2s"
+        ],
+        "allOfflineUiCoordinates": {
+          "x": 25.6,
+          "y": -11.5
+        },
+        "noFalseOnlineLatencyOrSignal": true,
+        "automaticSameTabReconnect": true,
+        "openedInventoryStillBlocksAfterReconnect": true,
+        "acceptedStationaryPacketsBeforeInventoryClosed": 667,
+        "newNativeS2sAcceptedAfterInventoryClosed": true,
+        "positionOnRestartPreserved": true,
+        "mobileStatusBounds": {
+          "status": [
+            {
+              "height": 81.33333587646484,
+              "text": "等待世界同步移动与交互已暂停，连接恢复后继续。",
+              "width": 358,
+              "x": 16,
+              "y": 281.32293701171875
+            }
+          ],
+          "viewport": {
+            "height": 844,
+            "width": 390
+          }
+        }
+      },
+      "movement": [
+        {
+          "phase": "before-end",
+          "packets": 705,
+          "movingPackets": 38,
+          "stationaryPackets": 667,
+          "distance": 7.898299999999988,
+          "rejected": 0,
+          "actionErrors": 0,
+          "corrections": 1,
+          "overflow": 0
+        },
+        {
+          "phase": "after-end",
+          "packets": 1056,
+          "movingPackets": 160,
+          "stationaryPackets": 896,
+          "distance": 32.65535882320523,
+          "rejected": 0,
+          "actionErrors": 0,
+          "corrections": 1,
+          "overflow": 0
+        },
+        {
+          "phase": "recovered-final",
+          "packets": 1822,
+          "movingPackets": 38,
+          "stationaryPackets": 1784,
+          "distance": 7.690820000000111,
+          "rejected": 0,
+          "actionErrors": 0,
+          "corrections": 1,
+          "overflow": 0
+        }
+      ],
+      "assets": {
+        "resourcesAllZero": true,
+        "inventoryAndEquipmentEmpty": true,
+        "noCamp": true,
+        "noTouchedNodes": true,
+        "noGameActionsPersisted": true,
+        "sharedAssetsUnchanged": true,
+        "hpAlways100": true,
+        "shieldNaturallyRegeneratedTo50": true,
+        "satietyFinal": 42.123500000000085,
+        "restartsPreservePlayerState": true,
+        "consistentBackupRestore": true,
+        "backupPath": "data/cua-connection-readiness-20261024-a1.sqlite.backup-2026-10-23T19-11-59-092Z"
+      },
+      "performance": {
+        "environment": {
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
+          "viewport": {
+            "width": 1920,
+            "height": 1080
+          },
+          "canvas": {
+            "width": 1920,
+            "height": 1080
+          },
+          "devicePixelRatio": 1.0000000298023224,
+          "modulePath": "/assets/index-CeH3_Iu3.js",
+          "jsHeap": {
+            "used": 19012767,
+            "total": 69780775
+          },
+          "graphicsBackend": "unknown"
+        },
+        "allSlowSamples": [
+          {
+            "atMs": 6491.29999999702,
+            "updateMs": 0.29999999701976776,
+            "drawMs": 2.2999999970197678,
+            "rafGapMs": 54.8999999910593,
+            "drawGapMs": 55.1000000089407,
+            "scene": {
+              "map": "world",
+              "x": 5.5849414898457015,
+              "y": 6.584941489845698,
+              "chunks": 25,
+              "buildings": 388,
+              "interactables": 132,
+              "monsters": 0,
+              "players": 0,
+              "inputBlocked": false
+            }
+          },
+          {
+            "atMs": 6547,
+            "updateMs": 0.20000000298023224,
+            "drawMs": 78.29999999701977,
+            "rafGapMs": 19.5,
+            "drawGapMs": 19.5,
+            "scene": {
+              "map": "world",
+              "x": 5.5849414898457015,
+              "y": 6.584941489845698,
+              "chunks": 25,
+              "buildings": 388,
+              "interactables": 132,
+              "monsters": 0,
+              "players": 0,
+              "inputBlocked": false
+            }
+          },
+          {
+            "atMs": 6640.20000000298,
+            "updateMs": 0.29999999701976776,
+            "drawMs": 56.599999994039536,
+            "rafGapMs": 93.20000000298023,
+            "drawGapMs": 93.20000000298023,
+            "scene": {
+              "map": "world",
+              "x": 5.5849414898457015,
+              "y": 6.584941489845698,
+              "chunks": 25,
+              "buildings": 388,
+              "interactables": 132,
+              "monsters": 0,
+              "players": 0,
+              "inputBlocked": false
+            }
+          },
+          {
+            "atMs": 6746.29999999702,
+            "updateMs": 0.20000000298023224,
+            "drawMs": 91,
+            "rafGapMs": 106.09999999403954,
+            "drawGapMs": 106,
+            "scene": {
+              "map": "world",
+              "x": 5.5849414898457015,
+              "y": 6.584941489845698,
+              "chunks": 25,
+              "buildings": 388,
+              "interactables": 132,
+              "monsters": 0,
+              "players": 0,
+              "inputBlocked": false
+            }
+          },
+          {
+            "atMs": 6858.5,
+            "updateMs": 0.4000000059604645,
+            "drawMs": 1.7999999970197678,
+            "rafGapMs": 112.20000000298023,
+            "drawGapMs": 112.40000000596046,
+            "scene": {
+              "map": "world",
+              "x": 5.5849414898457015,
+              "y": 6.584941489845698,
+              "chunks": 25,
+              "buildings": 388,
+              "interactables": 132,
+              "monsters": 0,
+              "players": 0,
+              "inputBlocked": false
+            }
+          },
+          {
+            "atMs": 6965.4000000059605,
+            "updateMs": 0.29999999701976776,
+            "drawMs": 1.2999999970197678,
+            "rafGapMs": 102.40000000596046,
+            "drawGapMs": 106.79999999701977,
+            "scene": {
+              "map": "world",
+              "x": 5.5849414898457015,
+              "y": 6.584941489845698,
+              "chunks": 25,
+              "buildings": 388,
+              "interactables": 132,
+              "monsters": 0,
+              "players": 0,
+              "inputBlocked": false
+            }
+          },
+          {
+            "atMs": 171611,
+            "updateMs": 0.20000000298023224,
+            "drawMs": 1.2000000029802322,
+            "rafGapMs": 52.29999999701977,
+            "drawGapMs": 66.70000000298023,
+            "scene": {
+              "map": "world",
+              "x": 25.63495575535951,
+              "y": -11.548437582336451,
+              "chunks": 30,
+              "buildings": 376,
+              "interactables": 149,
+              "monsters": 0,
+              "players": 0,
+              "inputBlocked": true
+            }
+          },
+          {
+            "atMs": 272517.59999999404,
+            "updateMs": 0.20000000298023224,
+            "drawMs": 3.4000000059604645,
+            "rafGapMs": 6.299999997019768,
+            "drawGapMs": 53.5,
+            "scene": {
+              "map": "world",
+              "x": 31.07318673024476,
+              "y": -6.110206607451295,
+              "chunks": 30,
+              "buildings": 376,
+              "interactables": 149,
+              "monsters": 0,
+              "players": 0,
+              "inputBlocked": true
+            }
+          }
+        ],
+        "totalSlowFrames": 8,
+        "coldAtOriginalStationaryPosition": 6,
+        "blockedLater": 2,
+        "maxDrawMs": 91,
+        "maxRafGapMs": 112.20000000298023,
+        "fullFrameDistributionOrP95": false,
+        "gpuOrPresentation": false,
+        "longMemory": false
+      },
+      "final": {
+        "x": 31.07318673024476,
+        "y": -6.110206607451295,
+        "map": "world",
+        "hp": 100,
+        "shield": 50,
+        "satiety": 42.123500000000085
+      },
+      "limits": [
+        "Network/input correctness only; no claim that CPU/GPU, original walking hitches, P95, multiplayer or overall game goals are complete.",
+        "All native QA uses one ordinary player and real clocks/rules. No HP, inventory, location, map, time or GM edits.",
+        "The online right-click path reached its destination before the service stop; this native attempt does not prove cancellation mid-path. Existing-pending-path/fire/search cancellation is covered by the real Engine regression and its negative control.",
+        "Before build page did not collect a browser frame environment; only the actual1920x1080 screenshot and known then-served prior build identify its setting. Do not infer its DPR or performance comparison.",
+        "Initial transport wait, legacy/gap sequencing, RTT and low-level open-socket rejection use real NetworkManager with fake transport/unit controls; native covers actual close/reconnect and ordinary server movement.",
+        "A coarse-clock real local RTT may display0ms after a valid pong; only unmeasured/disconnected zero is suppressed. No half-open TCP timeout added.",
+        "The saved recovered screenshot is earlier than final persisted satiety. During viewport switching one transient scaled frame was observed before the settled mobile image; neither the mobile frame nor tiny status card establishes complete mobile HUD layout acceptance.",
+        "Readonly after-stopped capture was dispatched while stopped but its terminal result was polled after server restart; the saved values exactly match both the prior checkpoint and next connection baseline, without claiming process completion order."
+      ]
+    }
+  },
+  "intermediateReportArchiveLimit": "The ignored initial75-source report is a chronological draft with mutable source paths, not a complete immutable75-file archive. Only the copied original NetworkManager/bundle/index are explicitly bound to its recorded hashes; this final manifest binds all current deliverables and retained evidence.",
+  "nextPerformanceInvestigation": "Retained final native moving draw62.2ms and callback63.8ms; collect stage attribution and complete fixed-route frame/presentation/memory gates. No source attribution or smoothness claim yet."
+}
