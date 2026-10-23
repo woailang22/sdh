@@ -1016,6 +1016,24 @@ describe('equipment progression and inventory capacity', () => {
     expect(Object.values(restored.state.drops).flatMap(d => d.items).filter(i => i.itemId === 'food')).toHaveLength(1);
   });
 
+  it('awards one wood with a pick and three after equipping an axe, persisting each consumed stock only once', () => {
+    const db = createMemoryDb(); let now = 1_000;
+    const game = new GameWorld(db, rules, () => now); game.connect('cutter', '伐木者');
+    const p = game.state.players.cutter; p.equipment.tool = makeItem('pickaxe_stone', 1);
+    const first = game.action('cutter', { requestId: 'pick-cut', action: 'gather', targetId: tree.id });
+    expect(first.error).toBeUndefined(); expect(p.resources.wood).toBe(1); expect(game.state.nodes[tree.id].stock).toBe(1);
+    p.inventory[0] = makeItem('axe_stone', 1);
+    expect(game.action('cutter', { requestId: 'equip-axe', action: 'equip', slot: 'tool', index: 0 }).error).toBeUndefined();
+    expect(p.equipment.tool?.id).toBe('axe_stone'); expect(p.inventory[0]?.id).toBe('pickaxe_stone');
+    now += 801;
+    const cut = { requestId: 'axe-cut', action: 'gather' as const, targetId: tree.id };
+    expect(game.action('cutter', cut).error).toBeUndefined(); expect(p.resources.wood).toBe(4); expect(game.state.nodes[tree.id].stock).toBe(0);
+    expect(game.action('cutter', cut).error).toBeUndefined(); expect(p.resources.wood).toBe(4);
+    const restored = new GameWorld(db, rules, () => now);
+    expect(restored.state.players.cutter.resources.wood).toBe(4); expect(restored.state.nodes[tree.id].stock).toBe(0);
+    expect(restored.state.handled.cutter).toEqual(['pick-cut', 'equip-axe', 'axe-cut']);
+  });
+
   it('gives copper picks a real mining improvement without granting axe benefits', () => {
     const rock = { ...tree, type: 'boulder' as const, id: 'ore', lootTable: [{ itemId: 'ore_copper', name: '铜矿', count: 1 }] };
     for (const [tool, expected] of [['pickaxe_stone', 3], ['pickaxe_copper', 4], ['axe_stone', 1]] as const) {

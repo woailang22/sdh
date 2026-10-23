@@ -1,0 +1,398 @@
+{
+  "status": "implemented-exact-axe-wood-bonus",
+  "overallGoalComplete": false,
+  "base": "1295a5cc4886a2bd08887c6547101d6b33150fe7",
+  "production": {
+    "file": "src/game/equipmentRules.ts",
+    "change": "Exact equality for canonical axe_stone and legacy stone_axe; preserve3wood for axes and1 for picks/unarmed/rod",
+    "historicalInventoryRecalculated": false,
+    "stoneMiningFishingCostsCooldownStockAndPersistenceChanged": false
+  },
+  "verification": {
+    "newTests": 7,
+    "focused": 162,
+    "red": {
+      "failed": 2,
+      "passed": 160
+    },
+    "negative": {
+      "failedAsExpected": 2,
+      "passed": 160,
+      "originalBytesRestored": true,
+      "helperSha256": "7add9af028a73655c1da136dc90fe21075bef19ef04f3316f507795ee3466f62"
+    },
+    "full": {
+      "files": 46,
+      "tests": 739
+    },
+    "typesIncludingOwnedQa": "passed",
+    "build": {
+      "exitCode": 0,
+      "bundle": "index-DJiOwxsC.js",
+      "existingWarning": "chunk over500kB"
+    }
+  },
+  "native": {
+    "passed": true,
+    "sameEarnedCharacter": true,
+    "noStateEdits": true,
+    "normalRulesAndClocks": true,
+    "actions": {
+      "new": 7,
+      "sourceHandled": 76,
+      "finalHandled": 83,
+      "unique": true,
+      "errors": 0,
+      "gathers": 2,
+      "gearSwaps": 3
+    },
+    "gather": {
+      "tools": [
+        "pickaxe_stone",
+        "axe_stone"
+      ],
+      "woodEarned": [
+        1,
+        3
+      ],
+      "sameNode": true,
+      "stockBefore": 2,
+      "stockAfter": 0,
+      "sourceWood": 1,
+      "finalWood": 5
+    },
+    "movement": {
+      "packets": 521,
+      "rejected": 0,
+      "corrections": 6,
+      "overflow": 0
+    },
+    "final": {
+      "x": -57.802297981936846,
+      "y": 7.0881311805843605,
+      "hp": 100,
+      "shield": 0,
+      "satiety": 55.30850000000023,
+      "items": [
+        [
+          "water",
+          4
+        ],
+        [
+          "pickaxe_stone",
+          1
+        ],
+        [
+          "crop_potato",
+          5
+        ]
+      ],
+      "tool": "axe_stone"
+    },
+    "survival": {
+      "carriedFoodSpent": 1,
+      "satietyGained": 35,
+      "shieldFrom": 50,
+      "shieldTo": 0,
+      "acidRainObserved": true,
+      "noCombatDamageClockChange": true
+    },
+    "persistence": {
+      "integrity": "ok",
+      "savedMatches": true,
+      "backupRestored": true,
+      "stopTickMs": 0,
+      "savedSatiety": 55.30850000000023
+    },
+    "diagnostics": {
+      "scope": "Final reconnect diagnostics page only; initial short-attempt page separately exported, intermediate closed pages not exported",
+      "errors": [],
+      "slowFrames": 3,
+      "environment": {
+        "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
+        "viewport": {
+          "width": 1280,
+          "height": 720
+        },
+        "canvas": {
+          "width": 1280,
+          "height": 720
+        },
+        "devicePixelRatio": 1.5,
+        "modulePath": "/assets/index-DJiOwxsC.js",
+        "jsHeap": {
+          "used": 15168222,
+          "total": 30000958
+        },
+        "graphicsBackend": "unknown"
+      },
+      "performanceAccepted": false
+    },
+    "limitations": [
+      "Initial E100 inputs were interrupted by menus before completing1.8s resource search; no gather action. The1.5s axe attempt was interrupted by movement before completion. Both attempts retained.",
+      "Pick completed after1.5s held input plus normal observation delay; final axe used2.2s held input. HUD can precede authoritative action result; protocol and next native page confirm1/3.",
+      "Shield naturally drained during acid rain; no shield, HP, clock or materials were edited. HP remains100. This does not test combat interrupt behavior.",
+      "This validates one earned tree/tool comparison, not whole-world density, pacing, self-sustaining crops, P95, GPU, physical presentation, browser800MB or long-memory use."
+    ],
+    "overallGoalComplete": false
+  },
+  "cleanup": {
+    "ownedServerTerminal": true,
+    "pid": 36140,
+    "port": 39140,
+    "listeners": 0,
+    "tabs": 0,
+    "viewportRestored": true,
+    "productionSaveOpened": false
+  },
+  "review": {
+    "source": "Independent read-only review: noP1/P2",
+    "finalEvidence": "passed-no-P1-P2"
+  },
+  "limits": [
+    "Native controls used the same consistently backed-up earned character with ordinary paid tools, food and resource stock; passive observer only, no state or clock edits.",
+    "Native comparison does not re-test copper mining or legacy axe; shared matrix and real-server regression cover those rules. Duplicate request was tested by server regression, not sent natively.",
+    "A short-input attempt and a premature movement cancellation remain in evidence; native1/3 is based on completed gather actions and following HUD, not incomplete reads.",
+    "Only final reconnect diagnostics page has accepted errors[]; early short-input page separately exported. Intermediate closed pages were not exported. No performance/whole-map/black-screen conclusion.",
+    "Audit initially expected use_item.itemId but native action used index; corrected audit to verify food in that slot and real one-item loss, without modifying actions or save.",
+    "Ordinary push does not deploy the external website. Seed routes, camp storage/workbench/defenses, economy, cold rendering, strict continuous60s, GPU and whole-browser memory remain unaccepted."
+  ],
+  "sources": [
+    {
+      "path": "data/audit-tool-match-20261024.ts",
+      "sha256": "315e1086e281d628d3e7bd3f57d7f2ccb5f6bfe6e722668816e9fdf3bfa934e9"
+    },
+    {
+      "path": "data/capture-cua-tool-match-20261024.ts",
+      "sha256": "61db09b4e069662537bd7daf96127a2ad9454dee687b1f4d892341b0da8e9b95"
+    },
+    {
+      "path": "data/control-cua-tool-match-20261024.cjs",
+      "sha256": "3b2918df522efc5d7abe72f7d1dffb4f527f61fc4eadefa0e35f1a422500189b"
+    },
+    {
+      "path": "data/cua-tool-match-20261024-a1-accepted-errors.json",
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "path": "data/cua-tool-match-20261024-a1-accepted-frames-private.json",
+      "sha256": "a2d0a5682789c75025c4dc016dd63f8f30ac3f96870623b04801df58d8a15faf"
+    },
+    {
+      "path": "data/cua-tool-match-20261024-a1-accepted-hud.png",
+      "sha256": "3e07274e9d786ecb6acf695490b7e0ff0a6cd4981044240e2ad80a5d7a0357dc"
+    },
+    {
+      "path": "data/cua-tool-match-20261024-a1-audit.json",
+      "sha256": "e0dfc2249173bf5091f03cbba1c15878c4296259d55e77c6b35f0cb65d1d0a1f"
+    },
+    {
+      "path": "data/cua-tool-match-20261024-a1-axe-complete-hud.png",
+      "sha256": "e5ef4e58e00a6cdb745966e0958c70f311fecd9faa58d54cb4dd8f48801e7731"
+    },
+    {
+      "path": "data/cua-tool-match-20261024-a1-axe-complete-stages-private.json",
+      "sha256": "e217fbc6c6de71f44ceee4b547e57c91ed609094d12b783b0e6fe2d89c763738"
+    },
+    {
+      "path": "data/cua-tool-match-20261024-a1-axe-hud.png",
+      "sha256": "b6ac45b82dee4842c47536e2e5b62c6439c3c53cb067c9f5ab70f8423e07d712"
+    },
+    {
+      "path": "data/cua-tool-match-20261024-a1-complete-stages-private.json",
+      "sha256": "dd0deb86e7f9f0ec70081636c2df02f169b3a802ac935cdd08e2a956a85e7b22"
+    },
+    {
+      "path": "data/cua-tool-match-20261024-a1-diag-stages-private.json",
+      "sha256": "66717ad8689f539790cd76d09f72c13c2cc082574857f40fc98a0efed98ccb2d"
+    },
+    {
+      "path": "data/cua-tool-match-20261024-a1-errors.json",
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "path": "data/cua-tool-match-20261024-a1-final-hud.png",
+      "sha256": "c600bf35f8b09af59b383bf179f971315e568acf5d708e0b84e0aebe85350005"
+    },
+    {
+      "path": "data/cua-tool-match-20261024-a1-final-stages-private.json",
+      "sha256": "8f2e7469db6d5ae9b2ee33c2fe38a589710f9eee19a2a248e24f57ac4e41f7d3"
+    },
+    {
+      "path": "data/cua-tool-match-20261024-a1-frames-private.json",
+      "sha256": "263f1d32e0a54771c96f9ad631c2fbe90ee919a07e005b593bc1b4aaaa32d659"
+    },
+    {
+      "path": "data/cua-tool-match-20261024-a1-native-axe-complete-attempt-events.json",
+      "sha256": "ab76ecb998f5998c9bc834d6364756a3abac6ffdc3526db615ef4837a8be3073"
+    },
+    {
+      "path": "data/cua-tool-match-20261024-a1-native-axe-complete-attempt-world-private.json",
+      "sha256": "3cef0e1cc12248ad2a8f1f8eee2fffb26bddbdd3e66f611b069618765bea17be"
+    },
+    {
+      "path": "data/cua-tool-match-20261024-a1-native-axe-confirmed-events.json",
+      "sha256": "23a247994d61fec17033c15cb856e81233914d39e4cf50f8926bcee6bfbf2337"
+    },
+    {
+      "path": "data/cua-tool-match-20261024-a1-native-axe-confirmed-world-private.json",
+      "sha256": "fd50e7175852a9736dbba2fa387262a2f2f0326b799d5da9bf6aa46dafc903fb"
+    },
+    {
+      "path": "data/cua-tool-match-20261024-a1-native-connected-world-private.json",
+      "sha256": "65a5cc25996c95083397b14b3d8fc88d32c3a42512ae1a3579676fd20d8e41f1"
+    },
+    {
+      "path": "data/cua-tool-match-20261024-a1-native-final-events.json",
+      "sha256": "858ec4d4648a4333813786f760d9b848765ae50d70beef582afad2134ba6cc87"
+    },
+    {
+      "path": "data/cua-tool-match-20261024-a1-native-final-world-private.json",
+      "sha256": "23599c408cfd0398cf40561123f4f4b75430c944db9b143d9843a0e24e56f167"
+    },
+    {
+      "path": "data/cua-tool-match-20261024-a1-native-pick-complete-attempt-events.json",
+      "sha256": "ee89dacdc4d2dd5f2a663a40ce6a2779392b90c1821c6e97f9c55394c546243b"
+    },
+    {
+      "path": "data/cua-tool-match-20261024-a1-native-pick-complete-attempt-world-private.json",
+      "sha256": "5b29a6c7dca396d493445926e1b9e750aceef2e98d432c2ac3426d8677d68095"
+    },
+    {
+      "path": "data/cua-tool-match-20261024-a1-native-server.log",
+      "sha256": "730343c1a79c2b475eb72d95ccc8a7605ff7877c470cfd5d545824365e45a469"
+    },
+    {
+      "path": "data/cua-tool-match-20261024-a1-native-short-interaction-attempt-events.json",
+      "sha256": "71549f9f20b953f06cbce5d03534fbd41e8f59b87e4bba364e608ea564ede26c"
+    },
+    {
+      "path": "data/cua-tool-match-20261024-a1-native-short-interaction-attempt-world-private.json",
+      "sha256": "de125e3b268d0025459e6a9e37a83abf5bff0ce6d6dee6acef2340577ec723bc"
+    },
+    {
+      "path": "data/cua-tool-match-20261024-a1-pick-complete-hud.png",
+      "sha256": "d4d0f4f6878684e63c0fc5b93239cddbb38cb65bd2dd3de32bc7960af863f2be"
+    },
+    {
+      "path": "data/cua-tool-match-20261024-a1-pick-confirmed-hud.png",
+      "sha256": "66f22f893817807247d9ce4cd25f1e53727587d3cbca8d1ade1f252b91ca559a"
+    },
+    {
+      "path": "data/cua-tool-match-20261024-a1-pick-hud.png",
+      "sha256": "6a8ed92e03359f4b76a544f9d738b9987f430ba780d2c869540fd7e565c54eed"
+    },
+    {
+      "path": "data/cua-tool-match-20261024-a1-stages-private.json",
+      "sha256": "728d43b4c3ee811d36db5f6e327ae7e89cb068dd4ea829390f147d376798f8f0"
+    },
+    {
+      "path": "data/negative-tool-match-20261024.cjs",
+      "sha256": "8f1d8e2347667b1e6332f7ca17d0e261e78d6210ad0de2e41efae6334d6d32aa"
+    },
+    {
+      "path": "data/prepare-tool-match-20261024.ts",
+      "sha256": "fcf44a9ec371c93c816797d51f0f2b17c79333a6968afc3efabf87bfdc8b7e3a"
+    },
+    {
+      "path": "data/publish-tool-match-20261024.cjs",
+      "sha256": "6f9283aa6bc114e985aa7370e249ba8d7b458905dd1453422c5cc0341acace0e"
+    },
+    {
+      "path": "data/tool-match-accepted-bundle-DJiOwxsC.js",
+      "sha256": "b4155c4038e9ed1784d6e5e6e9740e6928e7a8ce6446cb4c1d17b1a823473bd2"
+    },
+    {
+      "path": "data/tool-match-accepted-index.html",
+      "sha256": "edcd1b58f151dd1ae38076ddd7a57c0351a9e68b886e9ba635406ba3535e167b"
+    },
+    {
+      "path": "data/tool-match-audit-20261024.log",
+      "sha256": "bdddb402a83e017141d42eca8b4d685e1a000179b0a467c2fb39963b7ad55dac"
+    },
+    {
+      "path": "data/tool-match-build-20261024.log",
+      "sha256": "e19e4094db07505c418db9850e61c2a2783c6d96d8bb28ee93396106d215df03"
+    },
+    {
+      "path": "data/tool-match-build-exit-20261024.json",
+      "sha256": "620c6d927dd4c44a87a9d4cba7c3c9fa4e5fe18badaa9e4c07db52d8a7708b46"
+    },
+    {
+      "path": "data/tool-match-cleanup-20261024.json",
+      "sha256": "4399199c3da2c3e27a6e0932f049e09e75bfd2ae12f704278229abb95f78db4c"
+    },
+    {
+      "path": "data/tool-match-full-20261024.log",
+      "sha256": "4741ef618dc2e517a4f77e8deacb58ff1fb36608ed77ccacca1975a45ce7c471"
+    },
+    {
+      "path": "data/tool-match-green-20261024.log",
+      "sha256": "5bf5b336aa1650fbdd58b20e0b6e209a6128e61f542eb8e3c7d72eeb14501c63"
+    },
+    {
+      "path": "data/tool-match-negative-20261024.log",
+      "sha256": "cf2abdd58c2bd26ba623e6b52e7a4150bff201c097da7267ad59b3f6c80c2d0f"
+    },
+    {
+      "path": "data/tool-match-negative-receipt-20261024.json",
+      "sha256": "bd7c30c11cf16d30ca1b2d2ac3195a625666f7f50529aa63e9563443449a5323"
+    },
+    {
+      "path": "data/tool-match-red-20261024.log",
+      "sha256": "42c19f6d557afa1c86051b7834586da8e59091cd89f9a3c6ddaf80f794503815"
+    },
+    {
+      "path": "data/tool-match-review-20261024.json",
+      "sha256": "9e1ac5bb245a1a6b6dc068297704a2ade6ef6c0fb11bf18e97b487ab7fccfe1b"
+    },
+    {
+      "path": "data/tool-match-source-backup-20261024.json",
+      "sha256": "ee60ed3c767f60fb43fd3056a3bdadcb23f3067ff181faa7b939758635eeddb3"
+    },
+    {
+      "path": "data/tool-match-types-20261024.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "data/tool-match-types-allqa-final-20261024.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "dist/assets/index-DJiOwxsC.js",
+      "sha256": "b4155c4038e9ed1784d6e5e6e9740e6928e7a8ce6446cb4c1d17b1a823473bd2"
+    },
+    {
+      "path": "dist/index.html",
+      "sha256": "edcd1b58f151dd1ae38076ddd7a57c0351a9e68b886e9ba635406ba3535e167b"
+    },
+    {
+      "path": "docs/superpowers/plans/2026-10-20-seamless-world-camps.md",
+      "sha256": "96492c35c78a7de1dbd5cba56861d300fb01cbbdd0bfef2f225b407f72011bab"
+    },
+    {
+      "path": "docs/superpowers/plans/2026-10-24-gathering-tool-match.md",
+      "sha256": "61524efaea3d14fdc9686f8dc187daf4c3e05e44c6da2b90243a4ca1fc690868"
+    },
+    {
+      "path": "docs/superpowers/specs/2026-10-24-gathering-tool-match-design.md",
+      "sha256": "4ea8e7d0ab3c64a49c6b0f352268466a8a4438d5602dc968434b1405c78e1023"
+    },
+    {
+      "path": "server/worldState.test.ts",
+      "sha256": "b2bfa413d508df4e14eaee6a5e070c9425e580dd51ca766033eb871bf2764bc8"
+    },
+    {
+      "path": "server/worldState.ts",
+      "sha256": "829140066d1e04a3521ba2286e4130b39ccdcdf825a7a4340dc34e416ff6f5f1"
+    },
+    {
+      "path": "src/game/equipmentRules.test.ts",
+      "sha256": "471eb4398b4f8f1629d332bb05a1cca45acb0d2919aa3b48c45017b5e4948d8a"
+    },
+    {
+      "path": "src/game/equipmentRules.ts",
+      "sha256": "7add9af028a73655c1da136dc90fe21075bef19ef04f3316f507795ee3466f62"
+    }
+  ]
+}

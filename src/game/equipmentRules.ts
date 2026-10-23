@@ -20,7 +20,7 @@ export function resizeInventory<T>(slots: readonly (T | null)[], capacity: numbe
 export function gatheringEffects(toolId = '') {
   const canMine = /pickaxe/.test(toolId), canFish = /rod/.test(toolId);
   return {
-    wood: /axe_stone|stone_axe/.test(toolId) ? 3 : 1,
+    wood: toolId === 'axe_stone' || toolId === 'stone_axe' ? 3 : 1,
     stone: canMine ? toolId === 'pickaxe_copper' ? 4 : 3 : 1,
     canMine, canFish,
   };
