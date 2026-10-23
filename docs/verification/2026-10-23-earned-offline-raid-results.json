@@ -1,0 +1,1373 @@
+{
+  "sourceCommit": "4fb33b5dbb597e7ba2d27ded9a049109d8bd2407",
+  "runtimeRulesChanged": false,
+  "overallGoalAccepted": false,
+  "methodology": "Consistent paid earned-camp copy plus default empty guest. Real production server/WS/rules/NPC/survival/clock; programmed known route below normal speed, not native browser or blind play. Source opened read-only. Original a1 operator interruption/failure retained; same-world a2 normal food acquisition, collinear path compression and ordinary server restarts/weather/survival changes explicitly segmented.",
+  "a1": {
+    "success": false,
+    "operatorInterruption": {
+      "operatorStop": true,
+      "reason": "Missing normal food waypoint and known half-cell protocol movement overhead; stopped owned listener while character alive, kept original success=false/State baseline timeout and same SQLite/earned3C4+20ammo. Not a product failure or reset.",
+      "continuation": "a2 normal food acquisition from current state; compress only collinear protocol navigation points, do not alter speed/server validation."
+    },
+    "error": "State baseline timeout",
+    "steps": [
+      {
+        "step": "owner-closed-door-and-disconnected",
+        "at": "2026-10-23T13:01:15.899Z",
+        "size": 64,
+        "buildings": 60,
+        "towerAmmo": 10
+      },
+      {
+        "step": "default-raider-baseline",
+        "at": "2026-10-23T13:01:16.002Z",
+        "map": "world",
+        "x": 0,
+        "y": 1,
+        "hp": 100,
+        "shield": 0,
+        "satiety": 100,
+        "resources": {
+          "wood": 0,
+          "stone": 0,
+          "scrap": 0,
+          "parts": 0,
+          "food": 0,
+          "ammo": 0,
+          "c4": 0,
+          "medical": 0,
+          "credits": 0,
+          "shard": 0
+        },
+        "items": [],
+        "corrections": 0
+      },
+      {
+        "step": "route-progress",
+        "at": "2026-10-23T13:01:57.082Z",
+        "role": "raider",
+        "position": {
+          "x": 0,
+          "y": -90.71428571428571
+        },
+        "hp": 100,
+        "satiety": 89.91275
+      },
+      {
+        "step": "route-progress",
+        "at": "2026-10-23T13:02:37.273Z",
+        "role": "raider",
+        "position": {
+          "x": 0,
+          "y": -182.42857142857142
+        },
+        "hp": 100,
+        "satiety": 79.84599999999999
+      },
+      {
+        "step": "route-progress",
+        "at": "2026-10-23T13:03:17.483Z",
+        "role": "raider",
+        "position": {
+          "x": 0,
+          "y": -274.14285714285717
+        },
+        "hp": 100,
+        "satiety": 69.77300000000002
+      },
+      {
+        "step": "walk-complete",
+        "at": "2026-10-23T13:03:37.653Z",
+        "role": "raider",
+        "target": {
+          "x": 0,
+          "y": -320
+        },
+        "seconds": 141.65017379999998,
+        "map": "world",
+        "x": 0,
+        "y": -320,
+        "hp": 100,
+        "shield": 50,
+        "satiety": 64.63300000000001,
+        "resources": {
+          "wood": 0,
+          "stone": 0,
+          "scrap": 0,
+          "parts": 0,
+          "food": 0,
+          "ammo": 0,
+          "c4": 0,
+          "medical": 0,
+          "credits": 0,
+          "shard": 0
+        },
+        "items": [],
+        "corrections": 0
+      },
+      {
+        "step": "route-progress",
+        "at": "2026-10-23T13:04:18.480Z",
+        "role": "raider",
+        "position": {
+          "x": -93.33333333333333,
+          "y": -320
+        },
+        "hp": 100,
+        "satiety": 54.555750000000025
+      },
+      {
+        "step": "walk-complete",
+        "at": "2026-10-23T13:04:38.787Z",
+        "role": "raider",
+        "target": {
+          "x": -140,
+          "y": -320
+        },
+        "seconds": 61.13452729999999,
+        "map": "world",
+        "x": -140,
+        "y": -320,
+        "hp": 100,
+        "shield": 17.478499999999983,
+        "satiety": 49.39675000000003,
+        "resources": {
+          "wood": 0,
+          "stone": 0,
+          "scrap": 0,
+          "parts": 0,
+          "food": 0,
+          "ammo": 0,
+          "c4": 0,
+          "medical": 0,
+          "credits": 0,
+          "shard": 0
+        },
+        "items": [],
+        "corrections": 0
+      },
+      {
+        "step": "walk-complete",
+        "at": "2026-10-23T13:04:47.919Z",
+        "role": "raider",
+        "target": {
+          "x": -140,
+          "y": -341.2
+        },
+        "seconds": 9.131317899999994,
+        "map": "world",
+        "x": -140,
+        "y": -341.2,
+        "hp": 100,
+        "shield": 3.6214999999999815,
+        "satiety": 47.08725000000003,
+        "resources": {
+          "wood": 0,
+          "stone": 0,
+          "scrap": 0,
+          "parts": 0,
+          "food": 0,
+          "ammo": 0,
+          "c4": 0,
+          "medical": 0,
+          "credits": 0,
+          "shard": 0
+        },
+        "items": [],
+        "corrections": 0
+      },
+      {
+        "step": "quarry-supplies-earned",
+        "at": "2026-10-23T13:04:49.749Z",
+        "map": "world",
+        "x": -140,
+        "y": -341.2,
+        "hp": 100,
+        "shield": 0.5434999999999817,
+        "satiety": 46.57425000000003,
+        "resources": {
+          "wood": 0,
+          "stone": 0,
+          "scrap": 0,
+          "parts": 0,
+          "food": 0,
+          "ammo": 20,
+          "c4": 3,
+          "medical": 0,
+          "credits": 0,
+          "shard": 0
+        },
+        "items": [],
+        "corrections": 0
+      },
+      {
+        "step": "walk-complete",
+        "at": "2026-10-23T13:04:58.922Z",
+        "role": "raider",
+        "target": {
+          "x": -140,
+          "y": -320
+        },
+        "seconds": 9.173033900000009,
+        "map": "world",
+        "x": -140,
+        "y": -320,
+        "hp": 100,
+        "shield": 0,
+        "satiety": 44.25175000000003,
+        "resources": {
+          "wood": 0,
+          "stone": 0,
+          "scrap": 0,
+          "parts": 0,
+          "food": 0,
+          "ammo": 20,
+          "c4": 3,
+          "medical": 0,
+          "credits": 0,
+          "shard": 0
+        },
+        "items": [],
+        "corrections": 0
+      },
+      {
+        "step": "run-failed",
+        "at": "2026-10-23T13:05:11.811Z",
+        "message": "State baseline timeout",
+        "raider": {
+          "map": "world",
+          "x": -122.5,
+          "y": -320,
+          "hp": 100,
+          "shield": 0,
+          "satiety": 42.450750000000035,
+          "resources": {
+            "wood": 0,
+            "stone": 0,
+            "scrap": 0,
+            "parts": 0,
+            "food": 0,
+            "ammo": 20,
+            "c4": 3,
+            "medical": 0,
+            "credits": 0,
+            "shard": 0
+          },
+          "items": [],
+          "corrections": 0
+        }
+      }
+    ],
+    "actions": [
+      {
+        "role": "owner",
+        "action": "toggle_door",
+        "latencyMs": 6.8192000000000235,
+        "error": null
+      },
+      {
+        "role": "raider",
+        "action": "search",
+        "latencyMs": 5.454900000011548,
+        "error": null
+      },
+      {
+        "role": "raider",
+        "action": "take_loot",
+        "latencyMs": 3.723200000007637,
+        "error": null
+      },
+      {
+        "role": "raider",
+        "action": "take_loot",
+        "latencyMs": 5.8334000000031665,
+        "error": null
+      }
+    ]
+  },
+  "a2": {
+    "success": true,
+    "steps": [
+      {
+        "step": "resume-same-earned-raider",
+        "at": "2026-10-23T13:08:24.711Z",
+        "map": "world",
+        "x": -123.5,
+        "y": -320,
+        "hp": 100,
+        "shield": 0,
+        "satiety": 42.450750000000035,
+        "resources": {
+          "wood": 0,
+          "stone": 0,
+          "scrap": 0,
+          "parts": 0,
+          "food": 0,
+          "ammo": 20,
+          "c4": 3,
+          "medical": 0,
+          "credits": 0,
+          "shard": 0
+        },
+        "items": [],
+        "corrections": 0
+      },
+      {
+        "step": "route-progress",
+        "at": "2026-10-23T13:08:51.657Z",
+        "role": "raider",
+        "position": {
+          "x": -37.5,
+          "y": -320
+        },
+        "hp": 100,
+        "satiety": 35.69350000000005
+      },
+      {
+        "step": "walk-complete",
+        "at": "2026-10-23T13:08:58.354Z",
+        "role": "raider",
+        "target": {
+          "x": -16,
+          "y": -320
+        },
+        "seconds": 33.6420399,
+        "map": "world",
+        "x": -16,
+        "y": -320,
+        "hp": 100,
+        "shield": 50,
+        "satiety": 34.14775000000005,
+        "resources": {
+          "wood": 0,
+          "stone": 0,
+          "scrap": 0,
+          "parts": 0,
+          "food": 0,
+          "ammo": 20,
+          "c4": 3,
+          "medical": 0,
+          "credits": 0,
+          "shard": 0
+        },
+        "items": [],
+        "corrections": 0
+      },
+      {
+        "step": "route-progress",
+        "at": "2026-10-23T13:09:25.293Z",
+        "role": "raider",
+        "position": {
+          "x": -16,
+          "y": -234.85714285714286
+        },
+        "hp": 100,
+        "satiety": 27.46075000000005
+      },
+      {
+        "step": "walk-complete",
+        "at": "2026-10-23T13:09:48.933Z",
+        "role": "raider",
+        "target": {
+          "x": -16,
+          "y": -171
+        },
+        "seconds": 50.5786885,
+        "map": "world",
+        "x": -16,
+        "y": -171,
+        "hp": 100,
+        "shield": 50,
+        "satiety": 21.548500000000047,
+        "resources": {
+          "wood": 0,
+          "stone": 0,
+          "scrap": 0,
+          "parts": 0,
+          "food": 0,
+          "ammo": 20,
+          "c4": 3,
+          "medical": 0,
+          "credits": 0,
+          "shard": 0
+        },
+        "items": [],
+        "corrections": 0
+      },
+      {
+        "step": "walk-complete",
+        "at": "2026-10-23T13:09:51.580Z",
+        "role": "raider",
+        "target": {
+          "x": -18,
+          "y": -176
+        },
+        "seconds": 2.646160699999993,
+        "map": "world",
+        "x": -18,
+        "y": -176,
+        "hp": 100,
+        "shield": 50,
+        "satiety": 20.777000000000047,
+        "resources": {
+          "wood": 0,
+          "stone": 0,
+          "scrap": 0,
+          "parts": 0,
+          "food": 0,
+          "ammo": 20,
+          "c4": 3,
+          "medical": 0,
+          "credits": 0,
+          "shard": 0
+        },
+        "items": [],
+        "corrections": 0
+      },
+      {
+        "step": "real-roadside-food",
+        "at": "2026-10-23T13:09:53.412Z",
+        "source": "world:-1:-6:poi:supplies",
+        "beforeSatiety": 20.265750000000047,
+        "map": "world",
+        "x": -18,
+        "y": -176,
+        "hp": 100,
+        "shield": 50,
+        "satiety": 55.26575000000005,
+        "resources": {
+          "wood": 0,
+          "stone": 0,
+          "scrap": 0,
+          "parts": 0,
+          "food": 4,
+          "ammo": 20,
+          "c4": 3,
+          "medical": 0,
+          "credits": 0,
+          "shard": 0
+        },
+        "items": [
+          {
+            "id": "food",
+            "count": 2
+          },
+          {
+            "id": "water",
+            "count": 2
+          }
+        ],
+        "corrections": 0
+      },
+      {
+        "step": "walk-complete",
+        "at": "2026-10-23T13:09:55.732Z",
+        "role": "raider",
+        "target": {
+          "x": -16,
+          "y": -171
+        },
+        "seconds": 2.3195283999999954,
+        "map": "world",
+        "x": -16,
+        "y": -171,
+        "hp": 100,
+        "shield": 50,
+        "satiety": 54.75150000000005,
+        "resources": {
+          "wood": 0,
+          "stone": 0,
+          "scrap": 0,
+          "parts": 0,
+          "food": 4,
+          "ammo": 20,
+          "c4": 3,
+          "medical": 0,
+          "credits": 0,
+          "shard": 0
+        },
+        "items": [
+          {
+            "id": "food",
+            "count": 2
+          },
+          {
+            "id": "water",
+            "count": 2
+          }
+        ],
+        "corrections": 0
+      },
+      {
+        "step": "walk-complete",
+        "at": "2026-10-23T13:10:00.703Z",
+        "role": "raider",
+        "target": {
+          "x": 0,
+          "y": -171
+        },
+        "seconds": 4.971513100000011,
+        "map": "world",
+        "x": 0,
+        "y": -171,
+        "hp": 100,
+        "shield": 50,
+        "satiety": 53.46300000000005,
+        "resources": {
+          "wood": 0,
+          "stone": 0,
+          "scrap": 0,
+          "parts": 0,
+          "food": 4,
+          "ammo": 20,
+          "c4": 3,
+          "medical": 0,
+          "credits": 0,
+          "shard": 0
+        },
+        "items": [
+          {
+            "id": "food",
+            "count": 2
+          },
+          {
+            "id": "water",
+            "count": 2
+          }
+        ],
+        "corrections": 0
+      },
+      {
+        "step": "route-progress",
+        "at": "2026-10-23T13:10:28.990Z",
+        "role": "raider",
+        "position": {
+          "x": 0,
+          "y": -81.5
+        },
+        "hp": 100,
+        "satiety": 46.50875000000007
+      },
+      {
+        "step": "route-progress",
+        "at": "2026-10-23T13:10:57.944Z",
+        "role": "raider",
+        "position": {
+          "x": 0,
+          "y": 7.9999999999999964
+        },
+        "hp": 100,
+        "satiety": 39.31750000000008
+      },
+      {
+        "step": "walk-complete",
+        "at": "2026-10-23T13:10:57.944Z",
+        "role": "raider",
+        "target": {
+          "x": 0,
+          "y": 8
+        },
+        "seconds": 57.24065570000002,
+        "map": "world",
+        "x": 0,
+        "y": 7.9999999999999964,
+        "hp": 100,
+        "shield": 50,
+        "satiety": 39.31750000000008,
+        "resources": {
+          "wood": 0,
+          "stone": 0,
+          "scrap": 0,
+          "parts": 0,
+          "food": 4,
+          "ammo": 20,
+          "c4": 3,
+          "medical": 0,
+          "credits": 0,
+          "shard": 0
+        },
+        "items": [
+          {
+            "id": "food",
+            "count": 2
+          },
+          {
+            "id": "water",
+            "count": 2
+          }
+        ],
+        "corrections": 0
+      },
+      {
+        "step": "walk-complete",
+        "at": "2026-10-23T13:11:16.799Z",
+        "role": "raider",
+        "target": {
+          "x": -60,
+          "y": 8
+        },
+        "seconds": 18.854576999999992,
+        "map": "world",
+        "x": -60,
+        "y": 8,
+        "hp": 100,
+        "shield": 50,
+        "satiety": 34.40825000000009,
+        "resources": {
+          "wood": 0,
+          "stone": 0,
+          "scrap": 0,
+          "parts": 0,
+          "food": 4,
+          "ammo": 20,
+          "c4": 3,
+          "medical": 0,
+          "credits": 0,
+          "shard": 0
+        },
+        "items": [
+          {
+            "id": "food",
+            "count": 2
+          },
+          {
+            "id": "water",
+            "count": 2
+          }
+        ],
+        "corrections": 0
+      },
+      {
+        "step": "walk-complete",
+        "at": "2026-10-23T13:11:20.610Z",
+        "role": "raider",
+        "target": {
+          "x": -60,
+          "y": 20
+        },
+        "seconds": 3.8103355999999913,
+        "map": "world",
+        "x": -60,
+        "y": 20,
+        "hp": 100,
+        "shield": 50,
+        "satiety": 33.637000000000086,
+        "resources": {
+          "wood": 0,
+          "stone": 0,
+          "scrap": 0,
+          "parts": 0,
+          "food": 4,
+          "ammo": 20,
+          "c4": 3,
+          "medical": 0,
+          "credits": 0,
+          "shard": 0
+        },
+        "items": [
+          {
+            "id": "food",
+            "count": 2
+          },
+          {
+            "id": "water",
+            "count": 2
+          }
+        ],
+        "corrections": 0
+      },
+      {
+        "step": "entered-offline-earned-camp",
+        "at": "2026-10-23T13:11:20.620Z",
+        "map": "camp",
+        "x": 0,
+        "y": 28,
+        "hp": 100,
+        "shield": 50,
+        "satiety": 33.637000000000086,
+        "resources": {
+          "wood": 0,
+          "stone": 0,
+          "scrap": 0,
+          "parts": 0,
+          "food": 4,
+          "ammo": 20,
+          "c4": 3,
+          "medical": 0,
+          "credits": 0,
+          "shard": 0
+        },
+        "items": [
+          {
+            "id": "food",
+            "count": 2
+          },
+          {
+            "id": "water",
+            "count": 2
+          }
+        ],
+        "corrections": 0
+      },
+      {
+        "step": "walk-complete",
+        "at": "2026-10-23T13:11:28.415Z",
+        "role": "raider",
+        "target": {
+          "x": -16,
+          "y": 21
+        },
+        "seconds": 7.794472000000009,
+        "map": "camp",
+        "x": -15.999999999999996,
+        "y": 21,
+        "hp": 100,
+        "shield": 50,
+        "satiety": 31.56175000000009,
+        "resources": {
+          "wood": 0,
+          "stone": 0,
+          "scrap": 0,
+          "parts": 0,
+          "food": 4,
+          "ammo": 20,
+          "c4": 3,
+          "medical": 0,
+          "credits": 0,
+          "shard": 0
+        },
+        "items": [
+          {
+            "id": "food",
+            "count": 2
+          },
+          {
+            "id": "water",
+            "count": 2
+          }
+        ],
+        "corrections": 0
+      },
+      {
+        "step": "actual-door-line-cover",
+        "at": "2026-10-23T13:11:29.958Z",
+        "towerAmmo": 10,
+        "closedLos": false,
+        "onlyDoorOpenedLos": true,
+        "map": "camp",
+        "x": -15.999999999999996,
+        "y": 21,
+        "hp": 100,
+        "shield": 50,
+        "satiety": 31.30050000000009,
+        "resources": {
+          "wood": 0,
+          "stone": 0,
+          "scrap": 0,
+          "parts": 0,
+          "food": 4,
+          "ammo": 20,
+          "c4": 3,
+          "medical": 0,
+          "credits": 0,
+          "shard": 0
+        },
+        "items": [
+          {
+            "id": "food",
+            "count": 2
+          },
+          {
+            "id": "water",
+            "count": 2
+          }
+        ],
+        "corrections": 0
+      },
+      {
+        "step": "walk-complete",
+        "at": "2026-10-23T13:11:31.872Z",
+        "role": "raider",
+        "target": {
+          "x": -14,
+          "y": 17.8
+        },
+        "seconds": 1.9016549999999988,
+        "map": "camp",
+        "x": -14,
+        "y": 17.8,
+        "hp": 100,
+        "shield": 26,
+        "satiety": 30.783750000000087,
+        "resources": {
+          "wood": 0,
+          "stone": 0,
+          "scrap": 0,
+          "parts": 0,
+          "food": 4,
+          "ammo": 20,
+          "c4": 2,
+          "medical": 0,
+          "credits": 0,
+          "shard": 0
+        },
+        "items": [
+          {
+            "id": "food",
+            "count": 2
+          },
+          {
+            "id": "water",
+            "count": 2
+          }
+        ],
+        "corrections": 0
+      },
+      {
+        "step": "real-storage-taken",
+        "at": "2026-10-23T13:11:31.887Z",
+        "map": "camp",
+        "x": -14,
+        "y": 17.8,
+        "hp": 100,
+        "shield": 26,
+        "satiety": 30.783750000000087,
+        "resources": {
+          "wood": 7,
+          "stone": 0,
+          "scrap": 0,
+          "parts": 0,
+          "food": 4,
+          "ammo": 20,
+          "c4": 1,
+          "medical": 0,
+          "credits": 0,
+          "shard": 0
+        },
+        "items": [
+          {
+            "id": "food",
+            "count": 2
+          },
+          {
+            "id": "water",
+            "count": 2
+          }
+        ],
+        "corrections": 0,
+        "towerAmmo": 8
+      },
+      {
+        "step": "walk-complete",
+        "at": "2026-10-23T13:11:33.593Z",
+        "role": "raider",
+        "target": {
+          "x": -14,
+          "y": 23
+        },
+        "seconds": 1.7057700999999943,
+        "map": "camp",
+        "x": -14,
+        "y": 23,
+        "hp": 100,
+        "shield": 14,
+        "satiety": 30.267250000000086,
+        "resources": {
+          "wood": 7,
+          "stone": 0,
+          "scrap": 0,
+          "parts": 0,
+          "food": 4,
+          "ammo": 20,
+          "c4": 1,
+          "medical": 0,
+          "credits": 0,
+          "shard": 0
+        },
+        "items": [
+          {
+            "id": "food",
+            "count": 2
+          },
+          {
+            "id": "water",
+            "count": 2
+          }
+        ],
+        "corrections": 0
+      },
+      {
+        "step": "walk-complete",
+        "at": "2026-10-23T13:11:37.946Z",
+        "role": "raider",
+        "target": {
+          "x": -6,
+          "y": 28
+        },
+        "seconds": 4.352227099999989,
+        "map": "camp",
+        "x": -6,
+        "y": 28,
+        "hp": 100,
+        "shield": 16.64,
+        "satiety": 29.244500000000084,
+        "resources": {
+          "wood": 7,
+          "stone": 0,
+          "scrap": 0,
+          "parts": 0,
+          "food": 4,
+          "ammo": 20,
+          "c4": 1,
+          "medical": 0,
+          "credits": 0,
+          "shard": 0
+        },
+        "items": [
+          {
+            "id": "food",
+            "count": 2
+          },
+          {
+            "id": "water",
+            "count": 2
+          }
+        ],
+        "corrections": 0
+      },
+      {
+        "step": "walk-complete",
+        "at": "2026-10-23T13:11:39.953Z",
+        "role": "raider",
+        "target": {
+          "x": 0,
+          "y": 28
+        },
+        "seconds": 2.006687000000005,
+        "map": "camp",
+        "x": 0,
+        "y": 28,
+        "hp": 100,
+        "shield": 32.952,
+        "satiety": 28.734750000000084,
+        "resources": {
+          "wood": 7,
+          "stone": 0,
+          "scrap": 0,
+          "parts": 0,
+          "food": 4,
+          "ammo": 20,
+          "c4": 1,
+          "medical": 0,
+          "credits": 0,
+          "shard": 0
+        },
+        "items": [
+          {
+            "id": "food",
+            "count": 2
+          },
+          {
+            "id": "water",
+            "count": 2
+          }
+        ],
+        "corrections": 0
+      },
+      {
+        "step": "normal-live-exit",
+        "at": "2026-10-23T13:11:39.958Z",
+        "map": "world",
+        "x": -60,
+        "y": 20,
+        "hp": 100,
+        "shield": 32.952,
+        "satiety": 28.734750000000084,
+        "resources": {
+          "wood": 7,
+          "stone": 0,
+          "scrap": 0,
+          "parts": 0,
+          "food": 4,
+          "ammo": 20,
+          "c4": 1,
+          "medical": 0,
+          "credits": 0,
+          "shard": 0
+        },
+        "items": [
+          {
+            "id": "food",
+            "count": 2
+          },
+          {
+            "id": "water",
+            "count": 2
+          }
+        ],
+        "corrections": 0
+      },
+      {
+        "step": "owner-restart-loss-report",
+        "at": "2026-10-23T13:11:40.633Z",
+        "towerAmmo": 7,
+        "damagedBuildings": [
+          {
+            "type": "storage_box",
+            "hp": 0,
+            "maxHp": 400
+          },
+          {
+            "type": "door",
+            "hp": 0,
+            "maxHp": 650
+          }
+        ],
+        "reports": [
+          "攻击者 攻击 自动防卫电控门，剩余耐久 0/650",
+          "攻击者 攻击 战术领地储物箱，剩余耐久 0/400",
+          "攻击者 从仓库取走 优质原木 ×7"
+        ]
+      },
+      {
+        "step": "restart-transfer-replay-once",
+        "at": "2026-10-23T13:11:40.748Z",
+        "before": {
+          "map": "world",
+          "x": -60,
+          "y": 20,
+          "hp": 100,
+          "shield": 32.952,
+          "satiety": 28.734750000000084,
+          "resources": {
+            "wood": 7,
+            "stone": 0,
+            "scrap": 0,
+            "parts": 0,
+            "food": 4,
+            "ammo": 20,
+            "c4": 1,
+            "medical": 0,
+            "credits": 0,
+            "shard": 0
+          },
+          "items": [
+            {
+              "id": "food",
+              "count": 2
+            },
+            {
+              "id": "water",
+              "count": 2
+            }
+          ],
+          "corrections": 0
+        },
+        "after": {
+          "map": "world",
+          "x": -60,
+          "y": 20,
+          "hp": 100,
+          "shield": 32.952,
+          "satiety": 28.734750000000084,
+          "resources": {
+            "wood": 7,
+            "stone": 0,
+            "scrap": 0,
+            "parts": 0,
+            "food": 4,
+            "ammo": 20,
+            "c4": 1,
+            "medical": 0,
+            "credits": 0,
+            "shard": 0
+          },
+          "items": [
+            {
+              "id": "food",
+              "count": 2
+            },
+            {
+              "id": "water",
+              "count": 2
+            }
+          ],
+          "corrections": 0
+        }
+      }
+    ],
+    "actions": [
+      {
+        "role": "raider",
+        "action": "search",
+        "latencyMs": 5.53159999998752,
+        "error": null
+      },
+      {
+        "role": "raider",
+        "action": "take_loot",
+        "latencyMs": 4.32839999999851,
+        "error": null
+      },
+      {
+        "role": "raider",
+        "action": "take_loot",
+        "latencyMs": 4.750500000009197,
+        "error": null
+      },
+      {
+        "role": "raider",
+        "action": "use_item",
+        "latencyMs": 5.026899999997113,
+        "error": null
+      },
+      {
+        "role": "raider",
+        "action": "enter_camp",
+        "latencyMs": 10.050099999993108,
+        "error": null
+      },
+      {
+        "role": "raider",
+        "action": "raid",
+        "latencyMs": 12.232599999988452,
+        "error": null
+      },
+      {
+        "role": "raider",
+        "action": "search",
+        "latencyMs": 1.8285999999789055,
+        "error": "仓库尚未攻破"
+      },
+      {
+        "role": "raider",
+        "action": "raid",
+        "latencyMs": 4.380800000013551,
+        "error": null
+      },
+      {
+        "role": "raider",
+        "action": "search",
+        "latencyMs": 3.8570999999938067,
+        "error": null
+      },
+      {
+        "role": "raider",
+        "action": "take_loot",
+        "latencyMs": 3.0755000000062864,
+        "error": null
+      },
+      {
+        "role": "raider",
+        "action": "leave_camp",
+        "latencyMs": 5.075799999991432,
+        "error": null
+      },
+      {
+        "role": "raider",
+        "action": "take_loot",
+        "latencyMs": 1.6026999999885447,
+        "error": null
+      }
+    ]
+  },
+  "audit": {
+    "integrity": "ok",
+    "consistentBackupRestore": true,
+    "sourcePlayers": 2,
+    "finalPlayers": 3,
+    "otherExistingPlayerAssetsUnchanged": true,
+    "initialAuditFailure": "First audit incorrectly assumed source contained one player; actual owned source contains two. Preserved assertion failure, derived membership from source and checked pre-existing other assets unchanged; no game/database edits.",
+    "originalCampBuildings": 60,
+    "completeUnchangedBuildings": 58,
+    "damaged": {
+      "door": {
+        "before": 650,
+        "after": 0
+      },
+      "storage": {
+        "before": 400,
+        "after": 0
+      }
+    },
+    "ownerAssetsUnchanged": true,
+    "storageWood": {
+      "before": 7,
+      "after": 0,
+      "raider": 7,
+      "combinedConserved": true
+    },
+    "turretAmmo": {
+      "tested": {
+        "before": 10,
+        "after": 7,
+        "spent": 3
+      },
+      "other": 20
+    },
+    "defense": {
+      "unarmored": true,
+      "hpBefore": 100,
+      "hpAfter": 100,
+      "shieldBefore": 50,
+      "shieldAfterThreeShots": 14,
+      "damage": 36,
+      "exitShield": 32.952,
+      "exitShieldIncludesNaturalRegen": true
+    },
+    "actualEarned": {
+      "c4": 3,
+      "ammo": 20,
+      "food": 3,
+      "water": 2
+    },
+    "actualSpent": {
+      "c4": 2,
+      "food": 1
+    },
+    "raiderFinal": {
+      "wood": 7,
+      "c4": 1,
+      "ammo": 20,
+      "items": [
+        {
+          "id": "food",
+          "count": 2
+        },
+        {
+          "id": "water",
+          "count": 2
+        }
+      ]
+    },
+    "powderRemaining": [
+      {
+        "id": "throw_frag",
+        "count": 1
+      },
+      {
+        "id": "throw_smoke",
+        "count": 1
+      },
+      {
+        "id": "throw_flash",
+        "count": 1
+      }
+    ],
+    "foodRemaining": [
+      {
+        "id": "seed_potato",
+        "count": 1
+      }
+    ],
+    "containersFullyDepleted": false,
+    "raidReports": [
+      "攻击者 攻击 自动防卫电控门，剩余耐久 0/650",
+      "攻击者 攻击 战术领地储物箱，剩余耐久 0/400",
+      "攻击者 从仓库取走 优质原木 ×7"
+    ],
+    "transferReplayCount": 1,
+    "originalSourceProjection": {
+      "beforeSha256": "8008eadd37e97fcf0b9e97c34db5362b9ed92f2380ff748c7f2da3fc49cf793a",
+      "afterSha256": "8008eadd37e97fcf0b9e97c34db5362b9ed92f2380ff748c7f2da3fc49cf793a",
+      "same": true,
+      "scope": "Actually captured before/after source player assets/positions/equipment, camp and building HP/coordinates/ammo/storage projection; not every raw table/row."
+    },
+    "originalSourceHashes": {
+      "source": "data/earned-shelter-loop-20261023-a1.sqlite",
+      "archived": "data/earned-shelter-loop-20261023-a1.sqlite.backup-2026-10-23T10-03-28-539Z",
+      "sourceByteSha256": "6989c215a2d1836b4d3d4d9ce48fcf64fbf4d5f84f4344137bddec8ca33df957",
+      "archiveByteSha256": "3ee105731c15ed355495ffb93bda32b3c0cbcc4382cb023991f4c5032a955a99",
+      "sourceContentSha256": "faf5854ddb199233e083b93e1fafc0193d0cbc4b7703576b1bab677aed3e14af",
+      "archiveContentSha256": "243512d22e949ef4fe7ce11bb8d3786f9ff93c8bf665f0c0c4f22ffeb4a216d6",
+      "preRunWholeFileHashCaptured": false,
+      "scope": "Post-run full source/schema-row hashes bind current inspected source, not a missing pre-a1 digest. Existing archived backup was previously used by GameWorld restore (constructor persists normalized runtime timestamps), so cannot assume it is an untouched byte/logical baseline. Initial equality assertion failed and was not treated as proof of source change; full archival difference remains recorded. Separate actual pre/post projection comparison covers source player assets/positions/camp/building state, not every table row."
+    }
+  },
+  "limits": [
+    "Two lives were not used; raider remained100HP throughout observed steps, shield naturally drained in acid weather then recovered; no weapon/armor/medical grants.",
+    "a1 original half-cell protocol path slower than client, omitted food waypoint and intentionally stopped alive; do not call its terminal failure a product bug.",
+    "a2 uses same saved state; time spent while the owned server was stopped does not simulate an uninterrupted expedition, and ordinary weather restarts. No exact blind-player trip/balance timing claim.",
+    "Door-only geometric counterfactual uses detached snapshot fields; actual live closed-cover/breach/ammo/damage also checked. No runtime door or world mutation outside legal actions.",
+    "Partial container items remain, so neither box depleted; normal expired resources elsewhere may regenerate and NPC simulation continues.",
+    "One programmed attacker/camp and chosen7wood stock cannot establish overall raid profitability, many-player capacity, scarcity or advanced economy.",
+    "No new rendering, GPU, long-memory or full-world acceptance.",
+    "Full source digest was not captured beforea1. The pre-existing backup full-content equality check failed and is not used as a before digest; current hashes only bind inspected source. Actual before/after asset-position projection hashes match. All original-source access in this workflow was read-only."
+  ],
+  "review": "Final independent read-only review: code, original failures, raw steps/actions, bounded audit,22source hashes, desktop/mobile screenshots/layout and explicit full-source-before-hash limits checked; no remainingP1/P2. No reviewer workload/database/browser access.",
+  "sourceHashes": [
+    {
+      "path": "data/earned-offline-raid-20261023-a1-results.json",
+      "sha256": "4140cefbeff2dcef6f9f698810585b6a85d9a1162d125e21e636080982f6cd5a"
+    },
+    {
+      "path": "data/earned-offline-raid-20261023-a1-interruption.json",
+      "sha256": "1d8b6884694fb5a91ae019dbaa1049809a9655399bc6f4c4558c53ffbdc21fb2"
+    },
+    {
+      "path": "data/earned-offline-raid-20261023-a2-results.json",
+      "sha256": "0ad95d3717dfb8ab2cd2149c455a5f30f6d2d253a9c7cbde20589a667758c10f"
+    },
+    {
+      "path": "data/validate-earned-offline-raid-20261023-a1.ts",
+      "sha256": "eff33ae06731be8ad5bfec53524ee972ccf93180ab60c8534f4e035f12e52cda"
+    },
+    {
+      "path": "data/validate-earned-offline-raid-20261023-a2.ts",
+      "sha256": "d97985666d8ae1a66273fff7082c73c1c156abff2f4250aa28a42286cc3edd6a"
+    },
+    {
+      "path": "data/earned-raid-food-options-20261023.json",
+      "sha256": "4f59ca33bdb8b09bd10253f20a3d9ba111c2c250a3409454c942cafe6b194767"
+    },
+    {
+      "path": "data/earned-offline-raid-a2-types-20261023.log",
+      "sha256": "7f3594d7a965c703e6361ae50c0ef50cf9c344c621d801592b074b48554f4235"
+    },
+    {
+      "path": "data/earned-siege-source-summary-20261023.json",
+      "sha256": "8008eadd37e97fcf0b9e97c34db5362b9ed92f2380ff748c7f2da3fc49cf793a"
+    },
+    {
+      "path": "data/earned-siege-source-summary-final-20261023.json",
+      "sha256": "8008eadd37e97fcf0b9e97c34db5362b9ed92f2380ff748c7f2da3fc49cf793a"
+    },
+    {
+      "path": "data/earned-raid-source-hashes-20261023.json",
+      "sha256": "b7299d163d5a044f001a52482a271b886c02b509956902f44fae08fbb7d5fea2"
+    },
+    {
+      "path": "data/earned-offline-raid-audit-attempt1-20261023.log",
+      "sha256": "e4fe95068dbdb27e4ac325c5cab8a4f2b8867941826a0d67af0388b40c2425e4"
+    },
+    {
+      "path": "data/earned-offline-raid-audit-20261023.log",
+      "sha256": "b87c34984ce352138cfbfaafa046611cd907c5e54f8fedefaed2557803d33045"
+    },
+    {
+      "path": "data/north-raid-route-final-types-attempt1-20261023.log",
+      "sha256": "1743a5c552559285503f46ad828c9d2fcfac6881e8a56185737720dd99c85f7f"
+    },
+    {
+      "path": "data/north-raid-route-final-types-20261023.log",
+      "sha256": "7f3594d7a965c703e6361ae50c0ef50cf9c344c621d801592b074b48554f4235"
+    },
+    {
+      "path": "data/north-raid-route-final-build-20261023.log",
+      "sha256": "8d27b3431e817be0fdc7d724978e4bf86e4ab278d356441bd9d9d74c9255d04c"
+    }
+  ],
+  "verificationFinal": {
+    "fullSuite": {
+      "files": 43,
+      "tests": 616,
+      "passed": true
+    },
+    "typeCheck": "passed",
+    "build": "passed",
+    "bundle": "/assets/index-DDxiteV-.js",
+    "css": "/assets/index-BSHs5Xmo.css",
+    "scope": "Map-only production change; rule runs were on4fb33b5 with identical server/world rules. Native map tested final feature build; no render/economy/capacity acceptance."
+  }
+}

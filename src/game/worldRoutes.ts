@@ -44,10 +44,12 @@ export const WORLD_SUPPLY_ROUTES: SupplyRoute[] = [
   {
     id: 'north', name: '北上采矿线', view: { x: -256, y: -416, size: 448 }, axis: 'y',
     stops: [
+      { id: 'world:-1:-6:poi:supplies', name: '北路补给农舍', x: -18, y: -178, supplies: '食物 · 饮水 · 种子', color: '#c5ac72', labelOffset: { x: 26, y: 10 }, description: '由农舍南侧入口进入，物资柜可搜食物、饮水和种子。北上前先准备往返补给，已被搜取的物资不会因离开地图而补满。' },
       { id: 'world:-4:-9:node:6', name: '矿场南缘铜矿', x: -124, y: -265, supplies: '铜矿 · 石料', color: '#c68b5c', description: '北岭矿场外围的铜矿露头，需装备镐。每 3 份铜矿和 2 原木可在营地熔炉炼成 1 铜锭，用于研究后的高级制造。' },
       { id: 'world:-3:-9:node:6', name: '东侧铜矿露头', x: -89, y: -265, supplies: '铜矿 · 石料', color: '#c68b5c', labelOffset: { x: 26, y: 10 }, description: '沿矿场南缘向东补充铜矿。矿点耗尽后需要等待恢复，带足食物，保留回营冶炼的木材。' },
       { id: 'world:-3:-9:node:4', name: '坡脚铜矿露头', x: -79, y: -275, supplies: '铜矿 · 石料', color: '#c68b5c', labelOffset: { x: 26, y: -28 }, description: '第三处外围矿点，可继续补齐铜矿，不必为采矿深入值班室。铜锭需回营地熔炉加工。' },
       { id: 'world:-4:-11:i:mtn_quarry:q_dozer', name: '采石推土机残骸', x: -120, y: -346, supplies: '废铁 · 零件', color: '#b77b52', description: '矿场机械残骸提供废铁和零件，附近有怪物，先观察再搜刮。零件不足可先走西行材料线；带材料回营再制造。' },
+      { id: 'world:-5:-11:i:mtn_quarry:q_powder', name: '采石场炸药库', x: -140, y: -344, supplies: 'C4 · 弹药', color: '#c58a77', labelOffset: { x: -26, y: 60 }, description: '搜刮矿场现有炸药与弹药，注意附近怪物。攻营破拆会消耗携带的真实炸药，破门本身不产生战利品；先带足食物并规划撤离路线，留意营地自动防御。' },
     ],
   },
 ];

@@ -4,6 +4,26 @@ import { WORLD_SUPPLY_ROUTES, WORLD_ROADSIDE_STOPS } from './worldRoutes';
 import { craftingRecipe } from './crafting';
 
 describe('world supply route intelligence', () => {
+  it('marks real northern food before the guarded powder store without inventing loot', () => {
+    const north = WORLD_SUPPLY_ROUTES.find(route => route.id === 'north')!;
+    const food = north.stops.find(stop => stop.id === 'world:-1:-6:poi:supplies');
+    const powder = north.stops.find(stop => stop.id === 'world:-5:-11:i:mtn_quarry:q_powder');
+    expect(food, 'prepare at the existing northern farmhouse').toBeDefined();
+    expect(powder, 'existing raid supplies can be found on the map').toBeDefined();
+    for (const stop of [food!, powder!]) {
+      const node = getWorldInteractable(stop.id)!;
+      expect({ x: stop.x, y: stop.y }).toEqual({ x: node.x, y: node.y });
+    }
+    const supplies = (id: string) => getWorldInteractable(id)!.lootTable!.map(item => [item.itemId, item.count]);
+    expect(supplies(food!.id)).toEqual([['food', 3], ['water', 2], ['seed_potato', 1]]);
+    expect(supplies(powder!.id)).toContainEqual(['c4_explosive', 3]);
+    expect(supplies(powder!.id)).toContainEqual(['ammo', 20]);
+    expect(north.stops.indexOf(food!)).toBeLessThan(north.stops.indexOf(powder!));
+    expect(food!.description).toContain('南侧'); expect(food!.description).toContain('食物');
+    expect(powder!.description).toContain('怪物'); expect(powder!.description).toContain('消耗');
+    expect(powder!.description).toContain('撤离');
+  });
+
   it('keeps southern room definitions separate from western map-only targets', () => {
     const south = WORLD_SUPPLY_ROUTES.find(route => route.id === 'south')!;
     expect(south.stops.map(point => point.id)).toEqual(WORLD_ROADSIDE_STOPS.map(point => point.id));

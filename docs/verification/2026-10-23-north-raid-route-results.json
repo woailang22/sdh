@@ -1,0 +1,213 @@
+{
+  "baseCommit": "4fb33b5dbb597e7ba2d27ded9a049109d8bd2407",
+  "overallGoalAccepted": false,
+  "change": "Existing north-route now includes actual farmhouse food/water/seed and quarry C4/ammo nodes, food first, risk/consumption/retreat guidance. Four original stops/name/view/world definitions/loot/economy unchanged. No new bitmap required for existing map markers.",
+  "verification": {
+    "failFirst": "Original map lacked food/powder points: business assertion failed, then4route tests passed",
+    "fullSuite": {
+      "files": 43,
+      "tests": 616,
+      "passed": true
+    },
+    "typeCheck": "passed",
+    "build": "passed",
+    "bundle": "/assets/index-DDxiteV-.js",
+    "css": "/assets/index-BSHs5Xmo.css",
+    "warning": "Existing bundle>500kB warning retained"
+  },
+  "ui": {
+    "fixture": "Separate owned empty-guest SQLite, not earned-raid world or real save",
+    "desktop": {
+      "width": 1280,
+      "height": 720,
+      "selected": "采石场炸药库",
+      "target": {
+        "x": -140,
+        "y": -344
+      },
+      "markerNotice": "已标记 采石场炸药库（-140, -344），沿道路前往。",
+      "playerStayed": {
+        "x": 0,
+        "y": 1
+      }
+    },
+    "mobile": {
+      "width": 390,
+      "height": 844,
+      "layout": {
+        "documentWidth": 390,
+        "select": {
+          "right": 346.0000114440918,
+          "width": 317.3333435058594,
+          "x": 28.666667938232425
+        },
+        "selected": "采石场炸药库",
+        "values": [
+          {
+            "text": "北路补给农舍",
+            "value": "world:-1:-6:poi:supplies"
+          },
+          {
+            "text": "矿场南缘铜矿",
+            "value": "world:-4:-9:node:6"
+          },
+          {
+            "text": "东侧铜矿露头",
+            "value": "world:-3:-9:node:6"
+          },
+          {
+            "text": "坡脚铜矿露头",
+            "value": "world:-3:-9:node:4"
+          },
+          {
+            "text": "采石推土机残骸",
+            "value": "world:-4:-11:i:mtn_quarry:q_dozer"
+          },
+          {
+            "text": "采石场炸药库",
+            "value": "world:-5:-11:i:mtn_quarry:q_powder"
+          }
+        ],
+        "viewportWidth": 390
+      },
+      "markerNotice": "已标记 采石场炸药库（-140, -344），沿道路前往。",
+      "playerStayed": {
+        "x": 0,
+        "y": 1
+      },
+      "verticalScroll": "Long details/mark button scroll within map panel; native selector and mark action worked"
+    },
+    "labelGeometry": [
+      {
+        "size": "desktop",
+        "newLabels": [
+          {
+            "height": 10.666707992553713,
+            "text": "北路补给农舍",
+            "width": 46.7332763671875,
+            "x": 538.351318359375,
+            "y": 367.8857116699219
+          },
+          {
+            "height": 10.66664695739746,
+            "text": "采石场炸药库",
+            "width": 46.73331832885742,
+            "x": 367.5390319824219,
+            "y": 223.34750366210935
+          }
+        ],
+        "neighbor": {
+          "height": 10.66664695739746,
+          "text": "采石推土机残骸",
+          "width": 54.47998046875,
+          "x": 378.4420776367187,
+          "y": 211.28805541992188
+        },
+        "newTextBoxOverlaps": 0,
+        "scope": "Unexpanded SVG text bounding rectangles, excluding outlines/regions and interactive hit areas; screenshots visually inspected."
+      },
+      {
+        "size": "mobile",
+        "newLabels": [
+          {
+            "height": 7.9999799728393555,
+            "text": "北路补给农舍",
+            "width": 39.06663131713867,
+            "x": 202.68490600585935,
+            "y": 335.1068115234375
+          },
+          {
+            "height": 8,
+            "text": "采石场炸药库",
+            "width": 39.066627502441406,
+            "x": 59.79874420166016,
+            "y": 214.1949462890625
+          }
+        ],
+        "neighbor": {
+          "height": 8.000020980834961,
+          "text": "采石推土机残骸",
+          "width": 45.54661178588867,
+          "x": 68.9148178100586,
+          "y": 204.10679626464844
+        },
+        "newTextBoxOverlaps": 0,
+        "scope": "Unexpanded SVG text bounding rectangles, excluding outlines/regions and interactive hit areas; screenshots visually inspected."
+      }
+    ],
+    "screenshots": [
+      "data/north-raid-map-desktop-20261023.png",
+      "data/north-raid-map-mobile-20261023.png"
+    ],
+    "browser": "Actual IAB DOM/native control with production server, not emulated hardware/mobile touch performance",
+    "cleanup": "Owned tab closed, viewport override reset, owned QA server stopped"
+  },
+  "raidEvidence": "2026-10-23-earned-offline-raid-results.json",
+  "review": "Final independent read-only review: code, original failures, raw steps/actions, bounded audit,22source hashes, desktop/mobile screenshots/layout and explicit full-source-before-hash limits checked; no remainingP1/P2. No reviewer workload/database/browser access.",
+  "sourceHashes": [
+    {
+      "path": "data/north-raid-route-red-20261023.log",
+      "sha256": "d0c111331570c0484b7924c67bac3448d8d162c92e17ab0630d39371496de91a"
+    },
+    {
+      "path": "data/north-raid-route-green-20261023.log",
+      "sha256": "f5a4f3cecb477aef0b821580a82504ba57921131e61b474a7fc4060027fca2b1"
+    },
+    {
+      "path": "data/north-raid-route-full-20261023.log",
+      "sha256": "b1c9d010874bc7dfdfcb31d3682fe82b87552c0f5fe703ab981d3b6086efc233"
+    },
+    {
+      "path": "data/north-raid-route-types-20261023.log",
+      "sha256": "7f3594d7a965c703e6361ae50c0ef50cf9c344c621d801592b074b48554f4235"
+    },
+    {
+      "path": "data/north-raid-route-build-20261023.log",
+      "sha256": "c9fa744027bad5b248eeb46485af9161cd1630bda879ff434ff8316d405ccaf3"
+    },
+    {
+      "path": "data/north-raid-map-desktop-20261023-labels.json",
+      "sha256": "7f354fb96ba546813d1cb3755cf9606554f6a3dd623aa7d3d9f54503f1f981ab"
+    },
+    {
+      "path": "data/north-raid-map-mobile-20261023-labels.json",
+      "sha256": "788e43f156f1dede7843212d2b5213faed089e73cbcfc87d158f0e90de66d4ee"
+    },
+    {
+      "path": "data/north-raid-map-mobile-20261023-layout.json",
+      "sha256": "923de8d074120d0fddc8971f61adea08cd77845734e940bb3f70714c8b7aca93"
+    },
+    {
+      "path": "data/north-raid-map-desktop-20261023.png",
+      "sha256": "751b8834d9bdd9b0ac98e01b2009aeb20393d9053b84fccd2f6d8a4f968191e1"
+    },
+    {
+      "path": "data/north-raid-map-mobile-20261023.png",
+      "sha256": "faed6c5789eaf6c7a3379a21b640f7d7fc3a993e81222305dcee7a3de966112d"
+    },
+    {
+      "path": "data/north-raid-route-final-types-attempt1-20261023.log",
+      "sha256": "1743a5c552559285503f46ad828c9d2fcfac6881e8a56185737720dd99c85f7f"
+    },
+    {
+      "path": "data/north-raid-route-final-types-20261023.log",
+      "sha256": "7f3594d7a965c703e6361ae50c0ef50cf9c344c621d801592b074b48554f4235"
+    },
+    {
+      "path": "data/north-raid-route-final-build-20261023.log",
+      "sha256": "8d27b3431e817be0fdc7d724978e4bf86e4ab278d356441bd9d9d74c9255d04c"
+    }
+  ],
+  "verificationFinal": {
+    "fullSuite": {
+      "files": 43,
+      "tests": 616,
+      "passed": true
+    },
+    "typeCheck": "passed",
+    "build": "passed",
+    "bundle": "/assets/index-DDxiteV-.js",
+    "css": "/assets/index-BSHs5Xmo.css",
+    "scope": "Map-only production change; rule runs were on4fb33b5 with identical server/world rules. Native map tested final feature build; no render/economy/capacity acceptance."
+  }
+}

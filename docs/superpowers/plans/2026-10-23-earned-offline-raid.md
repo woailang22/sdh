@@ -1,0 +1,35 @@
+# Earned supplies against an earned offline camp
+
+Previous goal turn4fb33b5 was progress: delivered local actual-client stall reporting,615 tests/type/build and actual UI validation. Overall goal remains active; neither stall cause nor full-world/long-memory/multiplayer economy accepted.
+
+**Purpose:** Close the gap between synthetic raid fixtures and obtaining actual raid supplies. Reuse the paid60-building earned-shelter source as a consistent independent SQLite backup; create one genuinely default empty guest, without moving/granting/editing either character. Owner uses ordinary toggle_door from actual current position, then disconnects. New guest normally walks north, searches existing quarry powder stock, carries real C4 back, enters the camp, tests closed-door cover, breaches door/storage, withdraws real7wood and retreats. Inspect damage/ammo/reports/assets after actual server restart.
+
+This is production server/WebSocket protocol validation with real clock/survival/NPC/collision/economy, not native browser input, blind-player timing, rendering performance or many-player capacity. Reuse actual navigation and static world queries to plan bounded paths, move below normal3.8 units/sec. No time overrides, equipment/resource/position assignments, NPC disabling, GM actions, synthetic target health or modified world rules. Full original source remains read-only. Preserve failure/cost/death if run fails; continue the same world rather than resetting a favorable outcome.
+
+Success requires a real default baseline, actual requested-container item reduction and transfer (not whole-container depletion), owner absent during defense, cover consumes no shots, real defenses consume finite ammo/damage, real supplies consumed once, storage transfer conserves materials, normal exit/no teleport, same assets/damage/remaining ammo after restart and replay. SQLite integrity/consistent backup+GameWorld restore and source asset/position projection plus current content digest delimit scope (full pre-a1 digest was not captured). A failed route is evidence to inspect, not automatically a production bug.
+
+- [x] Prepare exact source copy/default guest and literal protocol harness checks; save initial authoritative state privately.
+- [x] Run normal-clock production server, owner close/disconnect, default guest northward outbound/search/return, actual offline raid and withdrawal/exit. Record requests/latency/position/corrections/life/assets, bounded milestones, preserve failures.
+- [x] Restart same owned server/database, inspect owner damage/loss reports and raider possessions; replay committed transfer without duplication. Audit integrity/backup/complete material ledger.
+- [x] If a demonstrated production defect exists, fail-first tests/minimal fix and required checks/review. Otherwise evidence only. Independent read-only review/sanitized checkpoint/pushsdh/main; goal stays active.
+
+## Current checkpoint and necessary map follow-up
+
+a1 actually collected3C4/20ammo from untouched quarry stock, then the operator stopped the owned server alive100HP to add a missing food waypoint. Original terminalexit1/State baseline timeout retained; this was an intentional QA stop, not a game failure. Original half-cell path stepping was slower than client movement. a2 resumes the SAME SQLite/role/assets/position/satiety, compresses only collinear protocol path points and normally gathers/eats existing roadside food. No reset/grant/speed-rule change. Server restart also restarts ordinary weather and active-only survival; segmented runs cannot establish uninterrupted expedition timing or balance.
+
+Independent read-only review corrected two evidence boundaries: original(-14,22) ray was blocked by adjacent wall, not solely the door; a2 uses(-16,21), checks closed LOS false/only-door-opened LOS true on the authoritative scene, then actual ammo/damage after breach. TakingC4/ammo leaves three throwables, so audit the container quantities rather than claim full-box depletion. Assert specific owner loss/attack reports and audit turret damage/ammunition, not only successful request counts.
+
+The observed missing food preparation point and absent explosive location in the northern map are addressed by the narrow north-raid-route design, reusing existing nodes rather than changing their loot or density:
+
+- [x] Fail-first map-intelligence tests for real food/powder coordinates/content, ordering/risk/preparation/actual consumption guidance.
+- [x] Add the two existing targets to the existing northern route, separate neighboring labels and preserve world IDs/rules.
+- [x] After exclusive live server run, focused/full/type/build, actual desktop/mobile dropdown/marker views and independent review; audit all route run outcomes separately.
+
+
+## Verified result and limitations
+
+a2 normally searched3food/2water and ate1food, then two realC4 actions broke650HPdoor/400HPstorage; intact storage correctly refused search. Actual7wood transferred and raider walked to(0,28), exited to registered(-60,20) alive100HP with1C4/20ammo/2food/2water. New turret10→7; cover shield50→26 after two shots→14 after third=36damage. Natural shield regeneration raised exit shield32.952. Actual restart preserved damages, ammo and3owner reports; replayed transfer still7wood/1C4/20ammo withone handled entry. One programmed attacker versusone paid camp does not establish overall raid profitability/capacity or native-input play.
+
+Initial audit incorrectly assumedone existing source player; actualsource2→final3. Failed2≠1assertion retained, fixed audit derives membership and checks all pre-existing assets.58building objects unchanged, onlydoor/storage damaged; owner materials/inventory/equipment/HP/XP/blueprints and other stocks/20oldturret rounds unchanged. Partial boxes retain3throwables/1seed. SQLite integrity/consistent backup+GameWorld restore passed. Full pre-a1 source digest missing: equality check against a previously restore-tested backup failed and is not used as an unchanged baseline. Current full-source digest only binds inspected source. Actual pre/post source player-assets/position/equipment/camp/building projection hashes match8008eadd37e97fcf0b9e97c34db5362b9ed92f2380ff748c7f2da3fc49cf793a; this is not every table row. All source opens were read-only.
+
+New map test failed missingfood point then4route tests passed;43files616fulltests and finaltype/build passed. New ignored QAhash script initially lackedrow annotation (failure retained), fixedrow:unknown then rechecked. Finaltested assetindex-DDxiteV-.js/index-BSHs5Xmo.css, existing>500kBwarning retained. Actual IAB1280×720/390×844: north selectsfood first,6native options, powder target(-140,-344)/mark notice/player stays(0,1). New label rectangles0overlap; screenshots inspected (outlines/hit areas not measured). Mobile document390/selectright346; vertical scroll and mark action work. Viewportreset/tabclosed/ownedserverstopped; realdata/sdc.sqlite untouched. Independent final read-only review foundnoP1/P2, matched22hashes/screenshots/evidence/limits. Authorizedpush and remoteverification atdelivery; full goal remainsactive.
