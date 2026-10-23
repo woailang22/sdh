@@ -9,7 +9,7 @@ import { drawHouseLayer, drawWaterHousePlatform, waterHousePlatformBounds } from
 import { frameContent, angleToSurvivorFrame, interactableSprite, buildingSprite } from './art';
 import { isHostile, canOperateDoor } from './diplomacy';
 import { CHUNK_SIZE, WORLD_MIN, WORLD_MAX, generateWorldChunk, worldToChunk, worldThemeAt, worldLocationAt, worldIsRoad, type WorldChunk } from './world';
-import { findPath, isPositionBlocked, hasLineOfSight } from './navigation';
+import { findPath, isPositionBlocked, hasLineOfSight, MAX_BUILDING_HALF_EXTENT, PLAYER_COLLISION_RADIUS } from './navigation';
 import { campExitPosition } from './home';
 import { BUILD_RECIPES } from './buildingRecipes';
 import { recordRenderFailure } from './renderDiagnostics';
@@ -2259,6 +2259,12 @@ export class IsometricEngine {
     const len = Math.hypot(mx, my);
     const speed = this.player.isDashing ? this.player.speed * 2.2 : this.player.speed;
     if (len > 0) {
+      // Include all turns and axis steps within this frame's maximum travel.
+      const padding = MAX_BUILDING_HALF_EXTENT + PLAYER_COLLISION_RADIUS + Math.abs(speed * dt) + 1e-9;
+      const minX = this.player.x - padding, maxX = this.player.x + padding, minY = this.player.y - padding, maxY = this.player.y + padding;
+      const movementBuildings = this.buildings.length <= 64 ? this.buildings : this.buildings.filter(b =>
+        !(b.x < minX || b.x > maxX || b.y < minY || b.y > maxY)
+        || (b.type === 'door' || b.type === 'safe_door') && !Number.isFinite(b.doorWidth ?? 1));
       this.player.vx = mx * speed;
       this.player.vy = my * speed;
       // Automatic movement stops at each point, then spends the remaining time on the next.
@@ -2266,9 +2272,9 @@ export class IsometricEngine {
       do {
         const movementTime = Math.min(remainingTime, pathDistance / speed);
         const nextX = this.player.x + this.player.vx * movementTime;
-        if (!isPositionBlocked(nextX, this.player.y, this.buildings)) this.player.x = nextX;
+        if (!isPositionBlocked(nextX, this.player.y, movementBuildings)) this.player.x = nextX;
         const nextY = this.player.y + this.player.vy * movementTime;
-        if (!isPositionBlocked(this.player.x, nextY, this.buildings)) this.player.y = nextY;
+        if (!isPositionBlocked(this.player.x, nextY, movementBuildings)) this.player.y = nextY;
         remainingTime -= movementTime;
         if (!pathPoint || Math.hypot(this.player.x - pathPoint.x, this.player.y - pathPoint.y) > 1e-6 || !this.movePath.length) break;
         this.movePath.shift();

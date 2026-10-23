@@ -1,0 +1,1379 @@
+{
+  "date": "2026-10-24 Asia/Shanghai",
+  "baselineCommit": "a12a208f5edaa7705f1ea5082433b303c31f02f9",
+  "overallPerformanceAccepted": false,
+  "originalNativeFailureResolved": false,
+  "change": "Only client Engine.update movement candidate selection. For >64 buildings, one fresh conservative center filter per moving frame uses max building half extent2 + player radius.22 + abs(speed*dt) +1e-9. Exact collision calls and the automatic-path time budget remain original. Small arrays keep their original references. No cross-frame index/cache, no shared navigation or server change.",
+  "reasoning": "Initial shared geometry coarse checks reduced large-list work but increased all5 small25-list microtests, including an attempted small-list branch variant. Reject both shared-library candidates. Server move already returns a small fresh nearby list; client can narrow its much larger list once for both axes/multiple waypoints without affecting the server helper path.",
+  "correctness": {
+    "newEngineCases": 8,
+    "focusedTests": 133,
+    "fullFiles": 44,
+    "fullTests": 651,
+    "redFailures": 4,
+    "redPasses": 128,
+    "negativeControlWithoutCandidateFailures": 4,
+    "negativeControlWithoutTravelPaddingFailures": 2,
+    "negativeControlsFinallyRestored": true,
+    "negativeControlScope": "Controls ran with132focused cases before one slide case and widening the existing yard to70extra floors; final133-focused/full651 cover the final source. Production source unchanged since these controls.",
+    "checks": [
+      "Actual ordinary/dash movement distance at16/100ms preserved, far1000floor HP getter reads in exact collision0 rather than4000. Coordinate scan and other update loops still run; not zero overall building work.",
+      "A width4 closed door initially outside static2.22 range still blocks when approached during a normal/dash frame; live opening permits original displacement.",
+      "Directly inserted/relocated/destroyed wall takes effect next frame; large71-building diagonal motion slides on the unblocked axis.",
+      "Existing yard ordinary/dash actual low-frame sync test now includes70far floors in both engine/server;150packets each accepted, with an asserted dash crossing an actual corner in both axes.",
+      "Small arrays, offline/online existing behavior, local navigation, shooting, geometry, survival and server persistence checks remain in the full suite."
+    ],
+    "types": "passed",
+    "build": "passed",
+    "actualBundle": "/assets/index-D2IaO3Aa.js",
+    "warnings": "Existing native Vite config warning and >500kB chunk warning retained"
+  },
+  "microbenchmark": {
+    "scope": "Memory-only complete Engine.update comparison with real388-public/5675-synthetic/small25/blocked-dense arrays. Online callbacks/noop canvas/no render/NPC/interactables, normaldt.016 oscillating native-equivalent direction,160warm+1600measured updates,5rotating-order paired rounds. Both classes are same full source except import rebasing and candidate movement window. Not browser/FPS/GPU/SQLite/whole-game or all-world acceptance. Same process JIT/GC/order variance remains; all chosen final player states deep equal.",
+    "pairedFinalPlayerStateEqual": true,
+    "trials": [
+      {
+        "round": 0,
+        "mode": "before",
+        "scene": "public388",
+        "buildings": 388,
+        "updates": 1600,
+        "wallMs": 102.30539999999996
+      },
+      {
+        "round": 0,
+        "mode": "after",
+        "scene": "public388",
+        "buildings": 388,
+        "updates": 1600,
+        "wallMs": 46.38969999999995
+      },
+      {
+        "round": 0,
+        "mode": "before",
+        "scene": "dense5675",
+        "buildings": 5675,
+        "updates": 1600,
+        "wallMs": 1043.4798999999998
+      },
+      {
+        "round": 0,
+        "mode": "after",
+        "scene": "dense5675",
+        "buildings": 5675,
+        "updates": 1600,
+        "wallMs": 573.3435
+      },
+      {
+        "round": 0,
+        "mode": "before",
+        "scene": "small25",
+        "buildings": 25,
+        "updates": 1600,
+        "wallMs": 7.04569999999967
+      },
+      {
+        "round": 0,
+        "mode": "after",
+        "scene": "small25",
+        "buildings": 25,
+        "updates": 1600,
+        "wallMs": 7.012500000000273
+      },
+      {
+        "round": 0,
+        "mode": "before",
+        "scene": "blocked-dense",
+        "buildings": 5676,
+        "updates": 1600,
+        "wallMs": 1242.8013999999998
+      },
+      {
+        "round": 0,
+        "mode": "after",
+        "scene": "blocked-dense",
+        "buildings": 5676,
+        "updates": 1600,
+        "wallMs": 777.7078999999999
+      },
+      {
+        "round": 1,
+        "mode": "after",
+        "scene": "public388",
+        "buildings": 388,
+        "updates": 1600,
+        "wallMs": 62.72450000000026
+      },
+      {
+        "round": 1,
+        "mode": "before",
+        "scene": "public388",
+        "buildings": 388,
+        "updates": 1600,
+        "wallMs": 143.30159999999978
+      },
+      {
+        "round": 1,
+        "mode": "after",
+        "scene": "dense5675",
+        "buildings": 5675,
+        "updates": 1600,
+        "wallMs": 752.1333999999997
+      },
+      {
+        "round": 1,
+        "mode": "before",
+        "scene": "dense5675",
+        "buildings": 5675,
+        "updates": 1600,
+        "wallMs": 1527.9158000000007
+      },
+      {
+        "round": 1,
+        "mode": "after",
+        "scene": "small25",
+        "buildings": 25,
+        "updates": 1600,
+        "wallMs": 8.240200000000186
+      },
+      {
+        "round": 1,
+        "mode": "before",
+        "scene": "small25",
+        "buildings": 25,
+        "updates": 1600,
+        "wallMs": 6.955200000000332
+      },
+      {
+        "round": 1,
+        "mode": "after",
+        "scene": "blocked-dense",
+        "buildings": 5676,
+        "updates": 1600,
+        "wallMs": 797.4548000000004
+      },
+      {
+        "round": 1,
+        "mode": "before",
+        "scene": "blocked-dense",
+        "buildings": 5676,
+        "updates": 1600,
+        "wallMs": 1537.5810999999994
+      },
+      {
+        "round": 2,
+        "mode": "before",
+        "scene": "public388",
+        "buildings": 388,
+        "updates": 1600,
+        "wallMs": 199.3819999999996
+      },
+      {
+        "round": 2,
+        "mode": "after",
+        "scene": "public388",
+        "buildings": 388,
+        "updates": 1600,
+        "wallMs": 52.64040000000023
+      },
+      {
+        "round": 2,
+        "mode": "before",
+        "scene": "dense5675",
+        "buildings": 5675,
+        "updates": 1600,
+        "wallMs": 1633.4665000000005
+      },
+      {
+        "round": 2,
+        "mode": "after",
+        "scene": "dense5675",
+        "buildings": 5675,
+        "updates": 1600,
+        "wallMs": 769.454099999999
+      },
+      {
+        "round": 2,
+        "mode": "before",
+        "scene": "small25",
+        "buildings": 25,
+        "updates": 1600,
+        "wallMs": 5.78440000000046
+      },
+      {
+        "round": 2,
+        "mode": "after",
+        "scene": "small25",
+        "buildings": 25,
+        "updates": 1600,
+        "wallMs": 4.51969999999892
+      },
+      {
+        "round": 2,
+        "mode": "before",
+        "scene": "blocked-dense",
+        "buildings": 5676,
+        "updates": 1600,
+        "wallMs": 1405.6453999999994
+      },
+      {
+        "round": 2,
+        "mode": "after",
+        "scene": "blocked-dense",
+        "buildings": 5676,
+        "updates": 1600,
+        "wallMs": 696.6376
+      },
+      {
+        "round": 3,
+        "mode": "after",
+        "scene": "public388",
+        "buildings": 388,
+        "updates": 1600,
+        "wallMs": 54.60189999999966
+      },
+      {
+        "round": 3,
+        "mode": "before",
+        "scene": "public388",
+        "buildings": 388,
+        "updates": 1600,
+        "wallMs": 170.8192999999992
+      },
+      {
+        "round": 3,
+        "mode": "after",
+        "scene": "dense5675",
+        "buildings": 5675,
+        "updates": 1600,
+        "wallMs": 720.1241000000009
+      },
+      {
+        "round": 3,
+        "mode": "before",
+        "scene": "dense5675",
+        "buildings": 5675,
+        "updates": 1600,
+        "wallMs": 1356.1304000000018
+      },
+      {
+        "round": 3,
+        "mode": "after",
+        "scene": "small25",
+        "buildings": 25,
+        "updates": 1600,
+        "wallMs": 5.567699999999604
+      },
+      {
+        "round": 3,
+        "mode": "before",
+        "scene": "small25",
+        "buildings": 25,
+        "updates": 1600,
+        "wallMs": 4.449000000000524
+      },
+      {
+        "round": 3,
+        "mode": "after",
+        "scene": "blocked-dense",
+        "buildings": 5676,
+        "updates": 1600,
+        "wallMs": 737.5685999999987
+      },
+      {
+        "round": 3,
+        "mode": "before",
+        "scene": "blocked-dense",
+        "buildings": 5676,
+        "updates": 1600,
+        "wallMs": 1360.2345999999998
+      },
+      {
+        "round": 4,
+        "mode": "before",
+        "scene": "public388",
+        "buildings": 388,
+        "updates": 1600,
+        "wallMs": 139.94830000000002
+      },
+      {
+        "round": 4,
+        "mode": "after",
+        "scene": "public388",
+        "buildings": 388,
+        "updates": 1600,
+        "wallMs": 54.8096000000005
+      },
+      {
+        "round": 4,
+        "mode": "before",
+        "scene": "dense5675",
+        "buildings": 5675,
+        "updates": 1600,
+        "wallMs": 1357.1703000000016
+      },
+      {
+        "round": 4,
+        "mode": "after",
+        "scene": "dense5675",
+        "buildings": 5675,
+        "updates": 1600,
+        "wallMs": 778.6558000000005
+      },
+      {
+        "round": 4,
+        "mode": "before",
+        "scene": "small25",
+        "buildings": 25,
+        "updates": 1600,
+        "wallMs": 6.221399999998539
+      },
+      {
+        "round": 4,
+        "mode": "after",
+        "scene": "small25",
+        "buildings": 25,
+        "updates": 1600,
+        "wallMs": 3.6755000000011933
+      },
+      {
+        "round": 4,
+        "mode": "before",
+        "scene": "blocked-dense",
+        "buildings": 5676,
+        "updates": 1600,
+        "wallMs": 1405.5519999999997
+      },
+      {
+        "round": 4,
+        "mode": "after",
+        "scene": "blocked-dense",
+        "buildings": 5676,
+        "updates": 1600,
+        "wallMs": 802.8277999999991
+      }
+    ],
+    "summary": [
+      {
+        "scene": "public388",
+        "updatesPerTrial": 1600,
+        "beforeMedianMs": 143.30159999999978,
+        "afterMedianMs": 54.60189999999966,
+        "afterFasterPairs": 5,
+        "totalPairs": 5
+      },
+      {
+        "scene": "dense5675",
+        "updatesPerTrial": 1600,
+        "beforeMedianMs": 1357.1703000000016,
+        "afterMedianMs": 752.1333999999997,
+        "afterFasterPairs": 5,
+        "totalPairs": 5
+      },
+      {
+        "scene": "small25",
+        "updatesPerTrial": 1600,
+        "beforeMedianMs": 6.221399999998539,
+        "afterMedianMs": 5.567699999999604,
+        "afterFasterPairs": 3,
+        "totalPairs": 5
+      },
+      {
+        "scene": "blocked-dense",
+        "updatesPerTrial": 1600,
+        "beforeMedianMs": 1405.5519999999997,
+        "afterMedianMs": 777.7078999999999,
+        "afterFasterPairs": 5,
+        "totalPairs": 5
+      }
+    ],
+    "additionalScope": "Every geometry scene runs inside home_benchmark with campSize128 to prevent public chunk swaps. public388 refers to real spawn-window building definitions, not a measured public streaming update. Both classes share modules; constructor teleport playLevelUp is replaced with noop equally, no audio or rendering measured. Modeled joystick input only, not native browser input. Median is descriptive, not acceptance threshold; small25 has2/5slower pairs.",
+    "firstFailure": "The initial node harness had no AudioContext and failed in constructor playLevelUp before timing. Initial script/raw failed log retained; final harness uses a shared playLevelUp noop and passed. One earlier shell-quoting attempt to save baseline failed before any snapshot/production mutation."
+  },
+  "rejectedExperiments": [
+    {
+      "variant": "shared inline coarse checks",
+      "adopted": false,
+      "scope": "Same-process5rotating-order pairs; memory-only real generated public25chunks and copied synthetic5675-building camp arrays;200warm iterations/2000measured, each2point+1shortLOS calls. No server, browser, SQLite I/O, physical frames or standalone CPU attribution. Equal geometry results only on chosen near-clear corridor; differential boundaries need separate validation.",
+      "productionChanged": false,
+      "pairs": [
+        {
+          "mode": "before",
+          "round": 0,
+          "set": "public-window",
+          "buildings": 388,
+          "calls": 6000,
+          "wallMs": 111.95989999999995,
+          "blocked": 0,
+          "clear": 2000
+        },
+        {
+          "mode": "candidate",
+          "round": 0,
+          "set": "public-window",
+          "buildings": 388,
+          "calls": 6000,
+          "wallMs": 52.533000000000015,
+          "blocked": 0,
+          "clear": 2000
+        },
+        {
+          "mode": "before",
+          "round": 0,
+          "set": "dense-camp",
+          "buildings": 5675,
+          "calls": 6000,
+          "wallMs": 1257.6174,
+          "blocked": 0,
+          "clear": 2000
+        },
+        {
+          "mode": "candidate",
+          "round": 0,
+          "set": "dense-camp",
+          "buildings": 5675,
+          "calls": 6000,
+          "wallMs": 769.3823000000002,
+          "blocked": 0,
+          "clear": 2000
+        },
+        {
+          "mode": "before",
+          "round": 0,
+          "set": "server-preculled",
+          "buildings": 25,
+          "calls": 6000,
+          "wallMs": 5.24350000000004,
+          "blocked": 0,
+          "clear": 2000
+        },
+        {
+          "mode": "candidate",
+          "round": 0,
+          "set": "server-preculled",
+          "buildings": 25,
+          "calls": 6000,
+          "wallMs": 7.749299999999948,
+          "blocked": 0,
+          "clear": 2000
+        },
+        {
+          "mode": "candidate",
+          "round": 1,
+          "set": "public-window",
+          "buildings": 388,
+          "calls": 6000,
+          "wallMs": 79.22969999999987,
+          "blocked": 0,
+          "clear": 2000
+        },
+        {
+          "mode": "before",
+          "round": 1,
+          "set": "public-window",
+          "buildings": 388,
+          "calls": 6000,
+          "wallMs": 241.91190000000006,
+          "blocked": 0,
+          "clear": 2000
+        },
+        {
+          "mode": "candidate",
+          "round": 1,
+          "set": "dense-camp",
+          "buildings": 5675,
+          "calls": 6000,
+          "wallMs": 1266.2863000000002,
+          "blocked": 0,
+          "clear": 2000
+        },
+        {
+          "mode": "before",
+          "round": 1,
+          "set": "dense-camp",
+          "buildings": 5675,
+          "calls": 6000,
+          "wallMs": 1691.1162999999997,
+          "blocked": 0,
+          "clear": 2000
+        },
+        {
+          "mode": "candidate",
+          "round": 1,
+          "set": "server-preculled",
+          "buildings": 25,
+          "calls": 6000,
+          "wallMs": 5.919700000000375,
+          "blocked": 0,
+          "clear": 2000
+        },
+        {
+          "mode": "before",
+          "round": 1,
+          "set": "server-preculled",
+          "buildings": 25,
+          "calls": 6000,
+          "wallMs": 4.5931000000000495,
+          "blocked": 0,
+          "clear": 2000
+        },
+        {
+          "mode": "before",
+          "round": 2,
+          "set": "public-window",
+          "buildings": 388,
+          "calls": 6000,
+          "wallMs": 188.83860000000004,
+          "blocked": 0,
+          "clear": 2000
+        },
+        {
+          "mode": "candidate",
+          "round": 2,
+          "set": "public-window",
+          "buildings": 388,
+          "calls": 6000,
+          "wallMs": 54.34869999999955,
+          "blocked": 0,
+          "clear": 2000
+        },
+        {
+          "mode": "before",
+          "round": 2,
+          "set": "dense-camp",
+          "buildings": 5675,
+          "calls": 6000,
+          "wallMs": 1567.5002000000004,
+          "blocked": 0,
+          "clear": 2000
+        },
+        {
+          "mode": "candidate",
+          "round": 2,
+          "set": "dense-camp",
+          "buildings": 5675,
+          "calls": 6000,
+          "wallMs": 748.8317000000006,
+          "blocked": 0,
+          "clear": 2000
+        },
+        {
+          "mode": "before",
+          "round": 2,
+          "set": "server-preculled",
+          "buildings": 25,
+          "calls": 6000,
+          "wallMs": 3.6677999999992608,
+          "blocked": 0,
+          "clear": 2000
+        },
+        {
+          "mode": "candidate",
+          "round": 2,
+          "set": "server-preculled",
+          "buildings": 25,
+          "calls": 6000,
+          "wallMs": 4.1547000000009575,
+          "blocked": 0,
+          "clear": 2000
+        },
+        {
+          "mode": "candidate",
+          "round": 3,
+          "set": "public-window",
+          "buildings": 388,
+          "calls": 6000,
+          "wallMs": 61.14220000000023,
+          "blocked": 0,
+          "clear": 2000
+        },
+        {
+          "mode": "before",
+          "round": 3,
+          "set": "public-window",
+          "buildings": 388,
+          "calls": 6000,
+          "wallMs": 187.29709999999977,
+          "blocked": 0,
+          "clear": 2000
+        },
+        {
+          "mode": "candidate",
+          "round": 3,
+          "set": "dense-camp",
+          "buildings": 5675,
+          "calls": 6000,
+          "wallMs": 704.0350999999991,
+          "blocked": 0,
+          "clear": 2000
+        },
+        {
+          "mode": "before",
+          "round": 3,
+          "set": "dense-camp",
+          "buildings": 5675,
+          "calls": 6000,
+          "wallMs": 1508.8320999999996,
+          "blocked": 0,
+          "clear": 2000
+        },
+        {
+          "mode": "candidate",
+          "round": 3,
+          "set": "server-preculled",
+          "buildings": 25,
+          "calls": 6000,
+          "wallMs": 4.4372999999995955,
+          "blocked": 0,
+          "clear": 2000
+        },
+        {
+          "mode": "before",
+          "round": 3,
+          "set": "server-preculled",
+          "buildings": 25,
+          "calls": 6000,
+          "wallMs": 4.0578999999997905,
+          "blocked": 0,
+          "clear": 2000
+        },
+        {
+          "mode": "before",
+          "round": 4,
+          "set": "public-window",
+          "buildings": 388,
+          "calls": 6000,
+          "wallMs": 235.63520000000062,
+          "blocked": 0,
+          "clear": 2000
+        },
+        {
+          "mode": "candidate",
+          "round": 4,
+          "set": "public-window",
+          "buildings": 388,
+          "calls": 6000,
+          "wallMs": 61.52989999999954,
+          "blocked": 0,
+          "clear": 2000
+        },
+        {
+          "mode": "before",
+          "round": 4,
+          "set": "dense-camp",
+          "buildings": 5675,
+          "calls": 6000,
+          "wallMs": 1564.7033999999985,
+          "blocked": 0,
+          "clear": 2000
+        },
+        {
+          "mode": "candidate",
+          "round": 4,
+          "set": "dense-camp",
+          "buildings": 5675,
+          "calls": 6000,
+          "wallMs": 715.1026999999995,
+          "blocked": 0,
+          "clear": 2000
+        },
+        {
+          "mode": "before",
+          "round": 4,
+          "set": "server-preculled",
+          "buildings": 25,
+          "calls": 6000,
+          "wallMs": 3.249100000000908,
+          "blocked": 0,
+          "clear": 2000
+        },
+        {
+          "mode": "candidate",
+          "round": 4,
+          "set": "server-preculled",
+          "buildings": 25,
+          "calls": 6000,
+          "wallMs": 6.065399999999499,
+          "blocked": 0,
+          "clear": 2000
+        }
+      ]
+    },
+    {
+      "variant": "shared coarse check with small-array branch",
+      "adopted": false,
+      "scope": "Same-process5rotating-order pairs; memory-only real generated public25chunks and copied synthetic5675-building camp arrays;200warm iterations/2000measured, each2point+1shortLOS calls. No server, browser, SQLite I/O, physical frames or standalone CPU attribution. Equal geometry results only on chosen near-clear corridor; differential boundaries need separate validation.",
+      "productionChanged": false,
+      "pairs": [
+        {
+          "mode": "before",
+          "round": 0,
+          "set": "public-window",
+          "buildings": 388,
+          "calls": 6000,
+          "wallMs": 120.5983,
+          "blocked": 0,
+          "clear": 2000
+        },
+        {
+          "mode": "candidate",
+          "round": 0,
+          "set": "public-window",
+          "buildings": 388,
+          "calls": 6000,
+          "wallMs": 59.2543,
+          "blocked": 0,
+          "clear": 2000
+        },
+        {
+          "mode": "before",
+          "round": 0,
+          "set": "dense-camp",
+          "buildings": 5675,
+          "calls": 6000,
+          "wallMs": 1223.8892,
+          "blocked": 0,
+          "clear": 2000
+        },
+        {
+          "mode": "candidate",
+          "round": 0,
+          "set": "dense-camp",
+          "buildings": 5675,
+          "calls": 6000,
+          "wallMs": 717.4527,
+          "blocked": 0,
+          "clear": 2000
+        },
+        {
+          "mode": "before",
+          "round": 0,
+          "set": "server-preculled",
+          "buildings": 25,
+          "calls": 6000,
+          "wallMs": 3.953599999999824,
+          "blocked": 0,
+          "clear": 2000
+        },
+        {
+          "mode": "candidate",
+          "round": 0,
+          "set": "server-preculled",
+          "buildings": 25,
+          "calls": 6000,
+          "wallMs": 5.638699999999972,
+          "blocked": 0,
+          "clear": 2000
+        },
+        {
+          "mode": "candidate",
+          "round": 1,
+          "set": "public-window",
+          "buildings": 388,
+          "calls": 6000,
+          "wallMs": 58.677799999999934,
+          "blocked": 0,
+          "clear": 2000
+        },
+        {
+          "mode": "before",
+          "round": 1,
+          "set": "public-window",
+          "buildings": 388,
+          "calls": 6000,
+          "wallMs": 179.32940000000008,
+          "blocked": 0,
+          "clear": 2000
+        },
+        {
+          "mode": "candidate",
+          "round": 1,
+          "set": "dense-camp",
+          "buildings": 5675,
+          "calls": 6000,
+          "wallMs": 969.7963999999997,
+          "blocked": 0,
+          "clear": 2000
+        },
+        {
+          "mode": "before",
+          "round": 1,
+          "set": "dense-camp",
+          "buildings": 5675,
+          "calls": 6000,
+          "wallMs": 1653.8766,
+          "blocked": 0,
+          "clear": 2000
+        },
+        {
+          "mode": "candidate",
+          "round": 1,
+          "set": "server-preculled",
+          "buildings": 25,
+          "calls": 6000,
+          "wallMs": 7.660300000000461,
+          "blocked": 0,
+          "clear": 2000
+        },
+        {
+          "mode": "before",
+          "round": 1,
+          "set": "server-preculled",
+          "buildings": 25,
+          "calls": 6000,
+          "wallMs": 4.52809999999954,
+          "blocked": 0,
+          "clear": 2000
+        },
+        {
+          "mode": "before",
+          "round": 2,
+          "set": "public-window",
+          "buildings": 388,
+          "calls": 6000,
+          "wallMs": 177.9469999999992,
+          "blocked": 0,
+          "clear": 2000
+        },
+        {
+          "mode": "candidate",
+          "round": 2,
+          "set": "public-window",
+          "buildings": 388,
+          "calls": 6000,
+          "wallMs": 57.42440000000079,
+          "blocked": 0,
+          "clear": 2000
+        },
+        {
+          "mode": "before",
+          "round": 2,
+          "set": "dense-camp",
+          "buildings": 5675,
+          "calls": 6000,
+          "wallMs": 1340.9123999999993,
+          "blocked": 0,
+          "clear": 2000
+        },
+        {
+          "mode": "candidate",
+          "round": 2,
+          "set": "dense-camp",
+          "buildings": 5675,
+          "calls": 6000,
+          "wallMs": 779.1529,
+          "blocked": 0,
+          "clear": 2000
+        },
+        {
+          "mode": "before",
+          "round": 2,
+          "set": "server-preculled",
+          "buildings": 25,
+          "calls": 6000,
+          "wallMs": 6.324500000000626,
+          "blocked": 0,
+          "clear": 2000
+        },
+        {
+          "mode": "candidate",
+          "round": 2,
+          "set": "server-preculled",
+          "buildings": 25,
+          "calls": 6000,
+          "wallMs": 7.325399999999718,
+          "blocked": 0,
+          "clear": 2000
+        },
+        {
+          "mode": "candidate",
+          "round": 3,
+          "set": "public-window",
+          "buildings": 388,
+          "calls": 6000,
+          "wallMs": 59.16020000000026,
+          "blocked": 0,
+          "clear": 2000
+        },
+        {
+          "mode": "before",
+          "round": 3,
+          "set": "public-window",
+          "buildings": 388,
+          "calls": 6000,
+          "wallMs": 208.05959999999868,
+          "blocked": 0,
+          "clear": 2000
+        },
+        {
+          "mode": "candidate",
+          "round": 3,
+          "set": "dense-camp",
+          "buildings": 5675,
+          "calls": 6000,
+          "wallMs": 755.9205999999995,
+          "blocked": 0,
+          "clear": 2000
+        },
+        {
+          "mode": "before",
+          "round": 3,
+          "set": "dense-camp",
+          "buildings": 5675,
+          "calls": 6000,
+          "wallMs": 1516.2675,
+          "blocked": 0,
+          "clear": 2000
+        },
+        {
+          "mode": "candidate",
+          "round": 3,
+          "set": "server-preculled",
+          "buildings": 25,
+          "calls": 6000,
+          "wallMs": 9.504800000000614,
+          "blocked": 0,
+          "clear": 2000
+        },
+        {
+          "mode": "before",
+          "round": 3,
+          "set": "server-preculled",
+          "buildings": 25,
+          "calls": 6000,
+          "wallMs": 7.680100000001403,
+          "blocked": 0,
+          "clear": 2000
+        },
+        {
+          "mode": "before",
+          "round": 4,
+          "set": "public-window",
+          "buildings": 388,
+          "calls": 6000,
+          "wallMs": 166.58829999999944,
+          "blocked": 0,
+          "clear": 2000
+        },
+        {
+          "mode": "candidate",
+          "round": 4,
+          "set": "public-window",
+          "buildings": 388,
+          "calls": 6000,
+          "wallMs": 63.98580000000038,
+          "blocked": 0,
+          "clear": 2000
+        },
+        {
+          "mode": "before",
+          "round": 4,
+          "set": "dense-camp",
+          "buildings": 5675,
+          "calls": 6000,
+          "wallMs": 1397.4861,
+          "blocked": 0,
+          "clear": 2000
+        },
+        {
+          "mode": "candidate",
+          "round": 4,
+          "set": "dense-camp",
+          "buildings": 5675,
+          "calls": 6000,
+          "wallMs": 732.7139999999999,
+          "blocked": 0,
+          "clear": 2000
+        },
+        {
+          "mode": "before",
+          "round": 4,
+          "set": "server-preculled",
+          "buildings": 25,
+          "calls": 6000,
+          "wallMs": 3.516700000000128,
+          "blocked": 0,
+          "clear": 2000
+        },
+        {
+          "mode": "candidate",
+          "round": 4,
+          "set": "server-preculled",
+          "buildings": 25,
+          "calls": 6000,
+          "wallMs": 5.2444999999988795,
+          "blocked": 0,
+          "clear": 2000
+        }
+      ]
+    }
+  ],
+  "validationFailures": [
+    {
+      "source": "data/client-movement-window-full-tests-20261024.log",
+      "kind": "First full run ended with tinypool ERR_IPC_CHANNEL_CLOSED before a final summary. No passing full-suite claim. Cause not established. The later full run passed all651 without relaxing assertions/timeouts."
+    },
+    {
+      "source": "data/client-movement-window-types-20261024.log",
+      "kind": "QA baseline copy had2 inline type imports still using ../types/game. Fixed only these paths, archived original text and asserted esbuild runtime output byte-identical; reverse-binding to real Git source passed. Corrected type check passes."
+    }
+  ],
+  "nativeRoute": {
+    "status": "passed",
+    "singleDefaultGuest": true,
+    "packets": 1906,
+    "movingPackets": 554,
+    "stationaryPackets": 1352,
+    "allRecordedMovesAccepted": true,
+    "rejected": 0,
+    "actionErrors": 0,
+    "observedStateCorrections": 1,
+    "overflow": 0,
+    "acceptedDistance": 114.26178795179523,
+    "serverObserverSeconds": 159.511,
+    "initial": {
+      "x": 0,
+      "y": 1,
+      "hp": 100,
+      "satiety": 100
+    },
+    "final": {
+      "x": 0.3966508820532052,
+      "y": 0.8607398112068517,
+      "hp": 100,
+      "shield": 50,
+      "satiety": 68.08299999999996,
+      "map": "world"
+    },
+    "noCamp": true,
+    "noAssetsGranted": true,
+    "playerAssetsAndHpUnchanged": true,
+    "sharedAssetStateUnchanged": true,
+    "consistentBackupRestore": true,
+    "sourceBindingAgainstGitPassed": true,
+    "oldBaselineTypeOnlyRebaseRuntimeIdentical": true,
+    "actualBundle": "/assets/index-D2IaO3Aa.js",
+    "slowFrames": 5,
+    "finalCacheObserved": 36,
+    "limits": [
+      "Actual CUA held keys totaled30s; observer elapsed includes idle/diagnostic time. No precise input timestamp alignment.",
+      "Single public-world guest only; no firing/loot/food consumption/new camp or native multiplayer gate.",
+      "One cumulative correction observed; individual event/timing/cause not captured.",
+      "Successful slow-frame record only: no complete frame distribution/GPU/physical presentation, no before/after native timing claim.",
+      "No cache eviction or long memory gate exercised.",
+      "Default shield regenerates normally to50; it is not an asset grant or manual reset."
+    ],
+    "frames": {
+      "kind": "local-frame-diagnostics",
+      "version": 1,
+      "capturedAt": "2026-10-23T16:45:00.842Z",
+      "timing": "Milliseconds of JavaScript work and callback/draw-start intervals; not GPU time or physical displayed frames. Latest 20 visible successful slow samples (>50ms), including initial loading. Refresh clears records.",
+      "totalSlowFrames": 5,
+      "samples": [
+        {
+          "atMs": 24316.70000000298,
+          "updateMs": 0.29999999701976776,
+          "drawMs": 2.1000000089406967,
+          "rafGapMs": 68.59999999403954,
+          "drawGapMs": 68.59999999403954,
+          "scene": {
+            "map": "world",
+            "x": 0,
+            "y": 1,
+            "chunks": 25,
+            "buildings": 388,
+            "interactables": 132,
+            "monsters": 0,
+            "players": 0,
+            "inputBlocked": false
+          }
+        },
+        {
+          "atMs": 24343.80000001192,
+          "updateMs": 0.09999999403953552,
+          "drawMs": 77.5,
+          "rafGapMs": 27.100000008940697,
+          "drawGapMs": 26.900000005960464,
+          "scene": {
+            "map": "world",
+            "x": 0,
+            "y": 1,
+            "chunks": 25,
+            "buildings": 388,
+            "interactables": 132,
+            "monsters": 0,
+            "players": 0,
+            "inputBlocked": false
+          }
+        },
+        {
+          "atMs": 24456.20000000298,
+          "updateMs": 0.4000000059604645,
+          "drawMs": 23.299999997019768,
+          "rafGapMs": 112.3999999910593,
+          "drawGapMs": 112.70000000298023,
+          "scene": {
+            "map": "world",
+            "x": 0,
+            "y": 1,
+            "chunks": 25,
+            "buildings": 388,
+            "interactables": 132,
+            "monsters": 0,
+            "players": 0,
+            "inputBlocked": false
+          }
+        },
+        {
+          "atMs": 24551.30000001192,
+          "updateMs": 0.5,
+          "drawMs": 12.199999988079071,
+          "rafGapMs": 95.1000000089407,
+          "drawGapMs": 95.20000000298023,
+          "scene": {
+            "map": "world",
+            "x": 0,
+            "y": 1,
+            "chunks": 25,
+            "buildings": 388,
+            "interactables": 132,
+            "monsters": 0,
+            "players": 0,
+            "inputBlocked": false
+          }
+        },
+        {
+          "atMs": 78307.30000001192,
+          "updateMs": 0.19999998807907104,
+          "drawMs": 1.2000000029802322,
+          "rafGapMs": 7.600000008940697,
+          "drawGapMs": 61,
+          "scene": {
+            "map": "world",
+            "x": 0.3966508820532052,
+            "y": 0.8607398112068517,
+            "chunks": 36,
+            "buildings": 388,
+            "interactables": 132,
+            "monsters": 0,
+            "players": 0,
+            "inputBlocked": true
+          }
+        }
+      ],
+      "environment": {
+        "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
+        "viewport": {
+          "width": 1280,
+          "height": 720
+        },
+        "canvas": {
+          "width": 1280,
+          "height": 720
+        },
+        "devicePixelRatio": 1.5,
+        "modulePath": "/assets/index-D2IaO3Aa.js",
+        "jsHeap": {
+          "used": 19821209,
+          "total": 42029529
+        },
+        "graphicsBackend": "unknown"
+      }
+    },
+    "scope": "Actual CUA ordinary guest with default empty inventory/equipment/resources on new owned DB, current production build/normal rules/clock,30s held keys d+s10s,d5s,a+w10s,a5s. Passive server observer has overhead. No input injection/warp/asset grant. Server/window accepted path and resources checked after owned stop.",
+    "nativeInputNotBeforeAfterBenchmark": true,
+    "noObservedErrorOverlay": true,
+    "exceptionScope": "No full browser console/error collector; existing successful slow frame report only.",
+    "ownedServerTerminal": true,
+    "ownedTabClosed": true
+  },
+  "limits": [
+    "Only exact movement geometry work is reduced. Existing renderer/GPU scheduling stalls, long memory, full-world streaming and old native multiplayer failures remain unaccepted.",
+    "Engine microbenchmarks are same-process/noop-render modeled updates, not gameFPS/GPU or standalone CPU time; JIT, GC, class-module and order variance remain. Small-list micro results2/5slower retained.",
+    "Selected paired final states are equal, not a proof for every malformed custom speed/property getter. Product speed remains3.8 and dash2.2; no change to its semantics.",
+    "Native1906packets include1352stationary packets;159.511s observer time is not continuous walking. Actual554moving packets cover114.2618units.",
+    "One cumulative correction has no per-event timing/cause attribution. Five slow records include4at spawn and1with input blocked; no complete frame distribution or physical presentation.",
+    "Actual native route observed36cached chunks and did not test64chunk eviction, long-session heap or multicamp PvP/earned economy.",
+    "No actual gathering/looting/firing/building occurred in this native walk. Default shield naturally regenerated to50; resources/HP unchanged and no gifts.",
+    "No new image assets needed for this geometric work."
+  ],
+  "review": "Independent final read-only source/test/evidence review complete; no P1/P2 or public overstatement. All43 original hashes, raw40trials/statistics and native1906events were checked, as were failures, screenshot, audits and privacy. No SQLite or load/browser/test work by reviewer.",
+  "sourceHashes": [
+    {
+      "path": "src/game/IsometricEngine.ts",
+      "sha256": "772b5710377b2c92e009fc32f2efa3e7ce02dc75ced1cd7524175b8f13663cee"
+    },
+    {
+      "path": "src/game/IsometricEngine.test.ts",
+      "sha256": "642ac152a5d83f79fec4383543e8a53711d24afcb64c27daebd6321786520952"
+    },
+    {
+      "path": "src/game/navigation.ts",
+      "sha256": "defeedf6c1670922f76b115c5da0a1bdce4f64afa8fb5b7eca0ee5c48065b662"
+    },
+    {
+      "path": "server/worldState.ts",
+      "sha256": "def88edd22a2755a2a176c143cd4ca015592d49ce76db89af54558baffaef233"
+    },
+    {
+      "path": "data/prepare-navigation-proximity-20261024.cjs",
+      "sha256": "ef81cebb785a93c1406874b68907f60c8ab950e20776c667e129642a79f23ece"
+    },
+    {
+      "path": "data/navigation-proximity-binding-20261024.json",
+      "sha256": "052174b2434a0460b269ecc338269ff54022f1921efdf91d88c9549c64cc64a8"
+    },
+    {
+      "path": "data/navigation-proximity-before-20261024.ts",
+      "sha256": "defeedf6c1670922f76b115c5da0a1bdce4f64afa8fb5b7eca0ee5c48065b662"
+    },
+    {
+      "path": "data/navigation-proximity-candidate-20261024.ts",
+      "sha256": "a3a6d67cc15911f6826f6e6e16478cd0363c0a9a48bfa16aea65c986c661c573"
+    },
+    {
+      "path": "data/navigation-proximity-bounded-20261024.ts",
+      "sha256": "61578af8309dfda51e5840461a4b2196d26767670e6cadd9fbe8d0c8b56903de"
+    },
+    {
+      "path": "data/navigation-proximity-microbenchmark-20261024-results.json",
+      "sha256": "dbf3cf82d1560711305eedffde738f16d48f40d842d4bda281d7444d0a47fa9d"
+    },
+    {
+      "path": "data/navigation-proximity-bounded-microbenchmark-20261024-results.json",
+      "sha256": "5d94dedd822bef0ee51b7249de2e88ae831a4dbdd1d1425c3cbaa030ac70ff40"
+    },
+    {
+      "path": "data/navigation-proximity-differential-20261024-results.json",
+      "sha256": "0d3bc1bbb65c13e30e31ad8a10e50ca0a0a6f62d1b48d668688401db888cec4f"
+    },
+    {
+      "path": "data/prepare-client-movement-window-20261024.cjs",
+      "sha256": "e315618bd0244022683f6cdb0b2f63989d511a6c4f50f33a501cc685497d7fe2"
+    },
+    {
+      "path": "data/client-movement-window-binding-20261024.json",
+      "sha256": "d5d29c8d0450325dc24d97b65ea352a1c585844e3bfd262d7e21b3f75ba14f29"
+    },
+    {
+      "path": "data/IsometricEngine-movement-before-initial-20261024.txt",
+      "sha256": "1311345b1392afd5310a8454897a3322464344f8a8d83f848474ceb708ccf115"
+    },
+    {
+      "path": "data/IsometricEngine-movement-before-20261024.ts",
+      "sha256": "1d5f98a02ccec0c0e4d0c40a8362b9d689966ec00c038808296a47dc0a8c000a"
+    },
+    {
+      "path": "data/correct-client-movement-baseline-types-20261024.cjs",
+      "sha256": "124c11b3f5c6fe5f5fc9c86d13b00a93a360645ea861d2907bb93d4e60fd8cba"
+    },
+    {
+      "path": "data/benchmark-client-movement-window-20261024.ts",
+      "sha256": "5df603c64248bb3b8b4ea6b759a249d8df8834016a928559683678bef1c20246"
+    },
+    {
+      "path": "data/client-movement-window-microbenchmark-20261024-results.json",
+      "sha256": "0899ef66312fba13a0f6d187d9aa1d76d21da7f49497ba0cea3fe661b1dcec60"
+    },
+    {
+      "path": "data/client-movement-window-microbenchmark-final-20261024.log",
+      "sha256": "68db93990aba2375c48b17202ee72490eaab2d19bc9b41199c95463765f2ab18"
+    },
+    {
+      "path": "data/client-movement-window-microbenchmark-20261024.log",
+      "sha256": "9b4ece0f3b85cdca9fc93a153172a5caeb2f45ab6cbc0f8882119c731ca56f2f"
+    },
+    {
+      "path": "data/client-movement-window-red-20261024.log",
+      "sha256": "a9d36395ca57bee120c431ed4dc2c38e91b931ee95958fff2458e4b81aa3c634"
+    },
+    {
+      "path": "data/client-movement-window-green-20261024.log",
+      "sha256": "d4c71f22a16fc05a356b44484cc006900bcc62f0b57f21a2644e39e3f35e5113"
+    },
+    {
+      "path": "data/client-movement-window-negative-control-20261024.log",
+      "sha256": "e08d1941a86f4b09c209883e310ad0667ebfda60d715a82ac95bf1a1da13ac77"
+    },
+    {
+      "path": "data/client-movement-window-travel-negative-20261024.log",
+      "sha256": "f171e1ad28f548604d2e09fb190b483f89fdddf7a2f38bfb66e2ae488036b839"
+    },
+    {
+      "path": "data/client-movement-window-final-focused-20261024.log",
+      "sha256": "2577058df9774049764ba3e89c6e1806e7ebacab19c698039e04be5eda6d0039"
+    },
+    {
+      "path": "data/client-movement-window-full-tests-20261024.log",
+      "sha256": "c17e7a17674204392e82e1615f9d80ec89102a8016174a6bc60cc28094cfbca2"
+    },
+    {
+      "path": "data/client-movement-window-types-20261024.log",
+      "sha256": "16c1ae5dac7e1bd15cb92449fce3573d0a578a5d4edddfd37cdb211dc4c316c2"
+    },
+    {
+      "path": "data/client-movement-window-final-tests-20261024.log",
+      "sha256": "5162743d0b5bf731fb3c28a0e674f79931fad49e785fb39f2f5e3b25c9accb4a"
+    },
+    {
+      "path": "data/client-movement-window-final-types-20261024.log",
+      "sha256": "7f3594d7a965c703e6361ae50c0ef50cf9c344c621d801592b074b48554f4235"
+    },
+    {
+      "path": "data/client-movement-window-build-20261024.log",
+      "sha256": "9f13fe92a64a925cf36181a85e6f485d94a1ba731b426fcf77a9c4dde98b93f1"
+    },
+    {
+      "path": "data/capture-cua-client-movement-20261024.ts",
+      "sha256": "867863cf2edd9ff0af69a7303a028f4f4abdf2b2b866b9403a42f6c8358a7fe9"
+    },
+    {
+      "path": "data/control-cua-client-movement-20261024.cjs",
+      "sha256": "84444ba56f34fab877a2fe7708f2865c0def63c99b014fcd9a30f230fe14e99c"
+    },
+    {
+      "path": "data/cua-client-movement-20261024-a1-final-events.json",
+      "sha256": "b5de547e72bf88731bb46b470912773700098696bad93ea73ad92aefa63c683a"
+    },
+    {
+      "path": "data/cua-client-movement-20261024-a1-audit.json",
+      "sha256": "b946b61c92576b1bff43acd500193d609f46007c850275fa1f1908c06c13912d"
+    },
+    {
+      "path": "data/client-movement-window-audit-20261024.log",
+      "sha256": "eda6ee5ae0ee58efd61bf717d66745ccb71e14e403a87f8b03159e9e045f0a6c"
+    },
+    {
+      "path": "data/audit-client-movement-window-20261024.ts",
+      "sha256": "4c514357e88037622d22fd977fb1dcbe3b3dc6b44fb21675dafc75ee21b403b6"
+    },
+    {
+      "path": "data/cua-client-movement-20261024-a1-spawn-ax.txt",
+      "sha256": "9799927b4ca183426af1f6c06053b438076c201a403110e87da81c22ac8873b4"
+    },
+    {
+      "path": "data/cua-client-movement-20261024-a1-outward-ax.txt",
+      "sha256": "3b345d50c69b08ab953e78da7bb284738dfa3b4ea0d48ee86b99ac75b479d372"
+    },
+    {
+      "path": "data/cua-client-movement-20261024-a1-return-ax.txt",
+      "sha256": "6aac7332e3adf2490c7e8fb6a238747f8d54e372014291ee49da6de2b10e7e23"
+    },
+    {
+      "path": "data/cua-client-movement-20261024-a1-frames.json",
+      "sha256": "04db3e2d4c413190e6cac6d490b891e2ea6c99e634dedd55234408e88c39ba84"
+    },
+    {
+      "path": "data/cua-client-movement-20261024-a1-final.png",
+      "sha256": "382fc35d36641f8acbc3fc111d02e7315c582d377334e629491bf62faae9b8ec"
+    },
+    {
+      "path": "data/publish-client-movement-window-20261024.cjs",
+      "sha256": "5a368eb4a6bdc0c930bbffff68a07260f6d0e58d21012eebb00dd787f9939598"
+    },
+    {
+      "path": "data/client-movement-window-delivery-types-20261024.log",
+      "sha256": "7f3594d7a965c703e6361ae50c0ef50cf9c344c621d801592b074b48554f4235"
+    }
+  ]
+}

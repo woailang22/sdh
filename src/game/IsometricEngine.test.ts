@@ -38,6 +38,52 @@ function setup() {
 
 afterEach(() => { vi.restoreAllMocks(); vi.unstubAllGlobals(); });
 
+describe('fresh client movement geometry window', () => {
+  it.each([[.016, false], [.1, false], [.016, true], [.1, true]])('skips distant floor geometry while preserving actual%s-second movement (dash=%s)', (dt, dash) => {
+    const { engine } = setup(); engine.warpToMap('home_self', 0, 0);
+    (engine as any).callbacks.onGameAction = vi.fn(); engine.monsters = []; engine.interactables = [];
+    let reads = 0;
+    engine.buildings = Array.from({ length: 1000 }, (_, i) => ({ id: String(i), type: 'wood_floor' as const, name: '远处地板', x: 20 + i % 30, y: 20 + Math.floor(i / 30), get hp() { reads++; return 100; }, maxHp: 100, level: 1 }));
+    engine.virtualJoystick = { x: 1, y: .5 }; if (dash) engine.performDash();
+    (engine as any).update(dt);
+    expect(engine.player.x).toBeCloseTo(3.8 * (dash ? 2.2 : 1) * dt, 10); expect(engine.player.y).toBeCloseTo(0, 10);
+    expect(reads, 'far nonblocking floors must not enter the exact collision checks').toBe(0);
+  });
+
+  it.each([false, true])('includes a wide door approached during this frame, then immediately honors opening (dash=%s)', dash => {
+    const { engine } = setup(); engine.warpToMap('home_self', 0, 0);
+    (engine as any).callbacks.onGameAction = vi.fn(); engine.monsters = []; engine.interactables = [];
+    const door = { id: 'wide', type: 'door' as const, name: '宽门', x: dash ? 2.8 : 2.35, y: 0, hp: 100, maxHp: 100, level: 1, facing: 'ew' as const, doorWidth: 4, isOpen: false };
+    engine.buildings = [...Array.from({ length: 70 }, (_, i) => ({ ...door, id: String(i), type: 'wood_floor' as const, x: 20 + i, y: 20 })), door];
+    engine.virtualJoystick = { x: 1, y: .5 }; if (dash) engine.performDash();
+    (engine as any).update(.1); expect(engine.player.x).toBe(0);
+    door.isOpen = true; if (dash) engine.player.isDashing = true;
+    (engine as any).update(.1); expect(engine.player.x).toBeCloseTo(3.8 * (dash ? 2.2 : 1) * .1, 10);
+  });
+
+  it('rechecks newly inserted and directly relocated structures on the next frame', () => {
+    const { engine } = setup(); engine.warpToMap('home_self', 0, 0);
+    (engine as any).callbacks.onGameAction = vi.fn(); engine.monsters = []; engine.interactables = [];
+    engine.buildings = Array.from({ length: 70 }, (_, i) => ({ id: String(i), type: 'wood_floor' as const, name: '地板', x: 20 + i, y: 20, hp: 100, maxHp: 100, level: 1 }));
+    engine.virtualJoystick = { x: 1, y: .5 }; (engine as any).update(.1); expect(engine.player.x).toBeCloseTo(.38, 10);
+    const wall = { id: 'new', type: 'wood_wall' as const, name: '新墙', x: 1.4, y: 0, hp: 100, maxHp: 100, level: 1 };
+    engine.buildings.push(wall); (engine as any).update(.1); expect(engine.player.x).toBeCloseTo(.38, 10);
+    wall.x = 50; (engine as any).update(.1); expect(engine.player.x).toBeCloseTo(.76, 10);
+    wall.x = 1.5; (engine as any).update(.1); expect(engine.player.x).toBeCloseTo(.76, 10);
+    wall.hp = 0; (engine as any).update(.1); expect(engine.player.x).toBeCloseTo(1.14, 10);
+  });
+
+  it('slides along a wall on the unblocked axis with a large building list', () => {
+    const { engine } = setup(); engine.warpToMap('home_self', 0, 0);
+    (engine as any).callbacks.onGameAction = vi.fn(); engine.monsters = []; engine.interactables = [];
+    engine.buildings = [...Array.from({ length: 70 }, (_, i) => ({ id: String(i), type: 'wood_floor' as const, name: '地板', x: 20 + i % 10, y: 20, hp: 100, maxHp: 100, level: 1 })),
+      { id: 'wall', type: 'wood_wall', name: '墙', x: .55, y: 0, hp: 100, maxHp: 100, level: 1, facing: 'ns' }];
+    engine.keys.s = true; (engine as any).update(.1);
+    expect(engine.player.x).toBe(0); expect(engine.player.y).toBeCloseTo(.38 / Math.SQRT2, 10);
+    expect(isPositionBlocked(engine.player.x, engine.player.y, engine.buildings)).toBe(false);
+  });
+});
+
 function stubImageLoading() {
   vi.stubGlobal('Image', class extends EventTarget {
     complete = false; naturalWidth = 512; naturalHeight = 512; src = ''; decoding = '';
@@ -48,13 +94,14 @@ describe('click-to-move arrival', () => {
   it.each([false, true])('keeps actual low-frame-rate sync packets authoritative while turning around a yard (dash=%s)', dash => {
     const { engine } = setup(); engine.warpToMap('home_self', 0, -5);
     const walls = buildCompoundWalls({ idPrefix: 'yard', cx: 0, cy: 0, w: 6, h: 6, wallType: 'wood_wall', wallName: '墙', ownerName: '测试', doorSide: 'S', doorType: 'door', doorName: '门', doorExtra: { isOpen: true } });
-    engine.buildings = walls; engine.monsters = []; engine.interactables = [];
+    const buildings = [...walls, ...Array.from({ length: 70 }, (_, i) => ({ id: 'far-floor-' + i, type: 'wood_floor' as const, name: '远处地板', x: 10 + i % 10, y: 18 + Math.floor(i / 10), hp: 100, maxHp: 100, level: 1 }))];
+    engine.buildings = buildings; engine.monsters = []; engine.interactables = [];
     const rules: WorldRules = { nodeAt: () => undefined, nodesNear: () => [], buildingsNear: () => [], campSiteAllowed: () => false, migrate: (_mapId, x, y) => ({ mapId: 'world', x, y }), monstersNear: () => [] };
     let time = 10000, packets = 0, dashedAtCorner = false, dashCrossedCorner = false;
     const game = new GameWorld(createMemoryDb(), rules, () => time); game.connect('self', '测试');
     const player = game.state.players.self;
     Object.assign(player, { mapId: 'home_self', x: 0, y: -5, moveAt: time });
-    for (const wall of walls) game.state.buildings[wall.id] = { ...wall, mapId: 'home_self' };
+    for (const building of buildings) game.state.buildings[building.id] = { ...building, mapId: 'home_self' };
     Object.assign((engine as any).callbacks, { onGameAction: vi.fn(), onPlayerSyncNeeded: (packet: any) => {
       packets++;
       if (packet.isDashing && player.x > -4 && Math.abs(player.y + 3.5) < 1e-6 && Math.abs(packet.x + 4) < 1e-6 && packet.y > -3.5) dashCrossedCorner = true;
