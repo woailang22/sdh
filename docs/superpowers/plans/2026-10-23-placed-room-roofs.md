@@ -12,7 +12,7 @@
 - [x] Verify focused tests with effective negative controls, full suite/type/build. Fix only demonstrated defects.
 - [x] Native continuation of same earned shelter DB: outside/inside screenshots, door/storage operation, restart; unchanged resource/building/ammo and consistent-backup restore audit. No concurrent load/tests during native run.
 - [x] Inspect images, export sanitized evidence/checkpoint and independent review. No P1/P2 remain; build asset provenance is explicit.
-- [ ] Commit/pushsdh/main and verify remote SHA; keep broad goal active and report limitations.
+- [x] Commit/pushsdh/main and verify remote SHA; keep broad goal active and report limitations. Runtime97957e24640873d10737fa8da7621d2b1350c3a1 was pushed and matched the remote main ref; this delivery note is documentation only.
 
 Initial house red:3 failed/7 passed (negative cases pass before recognition exists); initial engine red:2 failed. The renderer fixture inherited buildCompound's open-door default and initially expected the closed-door caption; fixed only that fixture to explicitly close its door. Additional multi-door/damaged-roof furniture assertions first failed twice, then passed. Independent review found two P2s: furniture drawn after the front layer covers actors, and retained0HP structure plus a live paid replacement prevents room recognition. Added three failing business cases, restored paid furniture's normal actor depth and selected the unique live boundary piece. Final review confirmed both fixes. No server, price, collision, damage or persistence modification.
 
