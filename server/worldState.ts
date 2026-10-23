@@ -54,6 +54,7 @@ export interface WorldRules {
 }
 export interface GameAction { requestId: string; action: string; [key: string]: unknown }
 export const isUntargetedFire = (packet: Record<string, unknown>) => packet.action === 'fire' && packet.monsterId === undefined && packet.targetId === undefined;
+const fireInterval = (weaponId: string) => (WEAPONS[weaponId]?.fireRate ?? 0.12) * 1000;
 
 const SAVE_KEY = 'authoritative-world-v2';
 const resourceKeys: ResourceKey[] = ['wood', 'stone', 'scrap', 'parts', 'food', 'ammo', 'c4', 'medical', 'credits', 'shard'];
@@ -86,6 +87,7 @@ export class GameWorld {
   state: PersistedWorld;
   private active = new Map<string, number>();
   private defenseAt = new Map<string, number>();
+  private respawns = new Map<string, number>();
   private npcTickAt: number;
   private tickSharedChange = false;
   get sharedTickChanged() { return this.tickSharedChange; }
@@ -404,6 +406,21 @@ export class GameWorld {
     for (let i = 0; i < p.inventory.length && count > 0; i++) if (!p.inventory[i]) { const n = Math.min(count, ITEM_DEFS[itemId].maxCount); p.inventory[i] = makeItem(itemId, n); count -= n; }
   }
 
+  fireContext(id: string) {
+    const p = this.state.players[id];
+    return JSON.stringify([p?.mapId, p?.equipment.weapon, this.respawns.get(id) || 0]);
+  }
+
+  fireWindow(id: string, packet: GameAction) {
+    const p = this.state.players[id];
+    if (packet?.action !== 'fire' || typeof packet.requestId !== 'string' || !packet.requestId || packet.requestId.length > 120 || this.state.handled[id]?.includes(packet.requestId) || !p?.equipment.weapon || p.resources.ammo <= 0) return;
+    const interval = fireInterval(p.equipment.weapon.id);
+    const delayMs = (p.actionAt.attack ?? -Infinity) + interval - this.now();
+    // Keep existing small-jitter debt handling. Larger gaps wait rather than
+    // applying damage early, and cannot reserve more than one weapon interval.
+    if (delayMs > Math.min(20, interval / 4) && delayMs <= interval) return { delayMs, maxDelayMs: interval, context: this.fireContext(id) };
+  }
+
   action(id: string, packet: GameAction) {
     return this.runAction(id, packet, (...args) => this.snapshot(...args));
   }
@@ -422,6 +439,7 @@ export class GameWorld {
     if (this.state.handled[id]?.includes(requestId)) return reply(id, requestId);
     // Untargeted fire mutates only this player and their replay ledger. Shared
     // combat (including every targeted shot) still needs the full rollback copy.
+    const beforeRespawns = isUntargetedFire(packet) ? undefined : new Map(this.respawns);
     const before = isUntargetedFire(packet) ? {
       ...this.state,
       players: { ...this.state.players, [id]: clone(p) },
@@ -438,6 +456,7 @@ export class GameWorld {
         this.db.saveWorldPlayerCommit(id, JSON.stringify({ player: p, handled: this.state.handled[id] }));
       } else this.persist(); // Both sides of transfers and their replay guards stay in one durable checkpoint.
     } catch (error) {
+      if (beforeRespawns) this.respawns = beforeRespawns;
       // Failed validation is side effect free; disk failures also roll back the complete transaction.
       for (const [key, oldPlayer] of Object.entries(before.players)) {
         if (this.state.players[key]) Object.assign(this.state.players[key], oldPlayer);
@@ -709,7 +728,7 @@ export class GameWorld {
     }
     if (a.action === 'fire') {
       requireRule(p.equipment.weapon && p.resources.ammo > 0, '武器或弹药不足');
-      const interval = (WEAPONS[p.equipment.weapon.id]?.fireRate ?? 0.12) * 1000;
+      const interval = fireInterval(p.equipment.weapon.id);
       // A frame's receive jitter becomes debt on the next shot, not a faster rate.
       const firedAt = this.cooldown(p, 'attack', interval, receivedAt, Math.min(20, interval / 4));
       requireRule(a.monsterId === undefined || a.targetId === undefined, '攻击只能指定一个目标');
@@ -752,6 +771,7 @@ export class GameWorld {
     p.lastDamageAt = this.now();
     const shield = Math.min(p.shield, amount); p.shield -= shield; p.hp -= amount - shield; p.combatUntil = this.now() + 30_000;
     if (p.hp > 0) return;
+    this.respawns.set(p.id, (this.respawns.get(p.id) || 0) + 1);
     const items: LootItem[] = p.inventory.filter((item): item is Item => !!item).map(item => ({ itemId: item.id, name: item.name, count: item.count }));
     for (const key of resourceKeys) if (p.resources[key] > 0 && !['food', 'medical'].includes(key)) {
       const itemId = resourceItemId(key); items.push({ itemId, name: ITEM_DEFS[itemId]?.name || itemId, count: p.resources[key] }); p.resources[key] = 0;

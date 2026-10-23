@@ -6,7 +6,8 @@ import fs from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { createDb, backupDatabase } from './server/db.js';
 import { guestTokenFromCookie, resolveGuest } from './server/identity.js';
-import { GameWorld, isUntargetedFire, type GameStateSnapshot, type PlayerActionSnapshot, type WorldRules } from './server/worldState.js';
+import { GameWorld, isUntargetedFire, type GameAction, type GameStateSnapshot, type PlayerActionSnapshot, type WorldRules } from './server/worldState.js';
+import { FireQueue } from './server/fireQueue.js';
 import { createWorldQueries } from './server/worldQueries.js';
 import { StateEncoder } from './src/game/stateSync.js';
 import { sendMessage as send } from './server/transport.js';
@@ -40,7 +41,7 @@ const rules: WorldRules = {
 };
 const game = new GameWorld(db, rules);
 db.setMeta('public-house-layout', '2');
-interface Client { ws: WebSocket; id: string; isGM: boolean; visible: Set<string>; lastSeen: number; lastCorrection: number; lastMessageAt: number; messageCount: number; lastSnapshot: number; mapId: MapZoneId; stateEncoder?: StateEncoder }
+interface Client { ws: WebSocket; id: string; isGM: boolean; visible: Set<string>; lastSeen: number; lastCorrection: number; lastMessageAt: number; messageCount: number; lastSnapshot: number; mapId: MapZoneId; stateEncoder?: StateEncoder; fireQueue: FireQueue }
 const clients = new Map<string, Client>();
 const GM_TOKEN = process.env.GM_TOKEN || 'rift-gm';
 let weatherIndex = 0;
@@ -78,6 +79,59 @@ function sameOrigin(origin: string | undefined, host: string | undefined) {
   if (!origin) return true;
   try { return new URL(origin).host === host; } catch { return false; }
 }
+function rejectGameAction(client: Client, requestId: string, error: string) {
+  if (client.stateEncoder) playerStateTo(client, game.snapshotPlayer(client.id, requestId, error));
+  else stateTo(client, game.snapshot(client.id, requestId, error));
+}
+function cancelChangedFire(client: Client) {
+  const requestId = client.fireQueue.requestId;
+  if (requestId && client.fireQueue.context !== game.fireContext(client.id)) {
+    client.fireQueue.cancel(); rejectGameAction(client, requestId, '状态已变化，待发射击已取消');
+  }
+}
+function executeGameAction(client: Client, payload: GameAction) {
+  try {
+    if (client.stateEncoder && isUntargetedFire(payload)) playerStateTo(client, game.actionPlayer(client.id, payload));
+    else {
+      const state = game.action(client.id, payload);
+      stateTo(client, state);
+      // Empty shots only change the shooter's private ammunition/cooldown.
+      // Positions and firing animation still use the regular visibility tick.
+      if (!state.error && !isUntargetedFire(payload)) {
+        for (const c of clients.values()) {
+          if (c.id === client.id) continue;
+          const p = game.state.players[c.id];
+          if (p.mapId === state.player.mapId && (p.mapId !== 'world' || Math.hypot(p.x - state.player.x, p.y - state.player.y) <= 80) || payload.action === 'create_camp') stateTo(c);
+        }
+      }
+    }
+  } finally {
+    // Cancel immediately on a context change, including switching away and back
+    // before the timer would observe the final value. Failed actions roll back.
+    for (const c of clients.values()) cancelChangedFire(c);
+  }
+}
+function receiveGameAction(client: Client, payload: GameAction) {
+  client.fireQueue.flushDue();
+  const requestId = payload?.requestId;
+  // A request ID identifies its first input, including while it is pending.
+  if (requestId && client.fireQueue.requestId === requestId) return;
+  if (payload?.action === 'fire' && typeof requestId === 'string' && requestId.length > 0 && requestId.length <= 120 && !game.state.handled[client.id]?.includes(requestId)) {
+    if (client.fireQueue.requestId) { rejectGameAction(client, requestId, '射击请求过快'); return; }
+    const window = game.fireWindow(client.id, payload);
+    if (window) {
+      client.fireQueue.schedule({ ...window, requestId, execute: () => {
+        if (clients.get(client.id) !== client || client.ws.readyState !== WebSocket.OPEN) return;
+        try {
+          if (game.fireContext(client.id) !== window.context) rejectGameAction(client, requestId, '状态已变化，待发射击已取消');
+          else executeGameAction(client, payload);
+        } catch (error) { console.error('[ws] message rejected', error); }
+      } });
+      return;
+    }
+  }
+  executeGameAction(client, payload);
+}
 app.get('/api/health', (_req, res) => res.json({ status: 'ok', onlineCount: clients.size, timestamp: Date.now(), serverTime: new Date().toISOString() }));
 app.get('/api/session', (req, res) => {
   if (!sameOrigin(req.headers.origin, req.headers.host)) { res.status(403).json({ error: 'Origin rejected' }); return; }
@@ -96,9 +150,9 @@ wss.on('connection', (ws, req) => {
   const id = session.playerId;
   const previous = clients.get(id);
   const self = game.connect(id, '废土流浪者 #' + id.slice(-4));
-  const client: Client = { ws, id, isGM: false, visible: new Set(), lastSeen: Date.now(), lastCorrection: 0, lastMessageAt: Date.now(), messageCount: 0, lastSnapshot: 0, mapId: self.mapId };
+  const client: Client = { ws, id, isGM: false, visible: new Set(), lastSeen: Date.now(), lastCorrection: 0, lastMessageAt: Date.now(), messageCount: 0, lastSnapshot: 0, mapId: self.mapId, fireQueue: new FireQueue() };
   clients.set(id, client);
-  if (previous) previous.ws.close(4001, 'Guest identity connected elsewhere');
+  if (previous) { previous.fireQueue.cancel(); previous.ws.close(4001, 'Guest identity connected elsewhere'); }
   const snapshot = game.snapshot(id);
   const players = game.visiblePlayers(id);
   client.visible = new Set(players.map(p => p.id));
@@ -125,21 +179,7 @@ wss.on('connection', (ws, req) => {
           break;
         }
         case 'game_action': {
-          if (client.stateEncoder && isUntargetedFire(payload)) {
-            playerStateTo(client, game.actionPlayer(id, payload)); break;
-          }
-          const state = game.action(id, payload);
-          stateTo(client, state);
-          // Empty shots only change the shooter's private ammunition/cooldown.
-          // Positions and firing animation still use the regular visibility tick.
-          if (!state.error && !isUntargetedFire(payload)) {
-            for (const c of clients.values()) {
-              if (c.id === id) continue;
-              const p = game.state.players[c.id];
-              if (p.mapId === state.player.mapId && (p.mapId !== 'world' || Math.hypot(p.x - state.player.x, p.y - state.player.y) <= 80) || payload.action === 'create_camp') stateTo(c);
-            }
-          }
-          break;
+          receiveGameAction(client, payload); break;
         }
         case 'building_placed': case 'raid_attempt': case 'pvp_hit':
           stateTo(client, game.snapshot(id, undefined, '请使用服务器游戏操作协议')); break;
@@ -161,6 +201,7 @@ wss.on('connection', (ws, req) => {
     } catch (error) { console.error('[ws] message rejected', error); }
   });
   ws.on('close', () => {
+    client.fireQueue.cancel();
     // A replaced connection cannot disconnect or persist over the new socket's player.
     if (clients.get(id)?.ws !== ws) return;
     clients.delete(id); game.disconnect(id);
@@ -174,6 +215,7 @@ setInterval(() => {
   const dirty = game.tick();
   for (const client of clients.values()) {
     if (now - client.lastSeen > 60000) { client.ws.terminate(); continue; }
+    cancelChangedFire(client);
     refreshVisibility(client);
     if (dirty && game.sharedTickChanged || now - client.lastSnapshot >= 2000) stateTo(client);
     else if (dirty) {

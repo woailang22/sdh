@@ -279,6 +279,36 @@ describe('exploration rewards and the market catalogue', () => {
   });
 });
 describe('firing receipt times', () => {
+  it.each([['rifle', 120], ['crude_gun', 280], ['wp_plasma', 120]] as const)('offers a bounded authoritative waiting window for %s without spending', (weapon, interval) => {
+    const { game, act, advance } = setup(); const p = game.state.players.owner;
+    p.equipment.weapon = makeItem(weapon, 1); p.resources.ammo = 10;
+    const request = { action: 'fire', requestId: 'later', interval: 1, timestamp: 999999999 };
+    expect(game.fireWindow('owner', request)).toBeUndefined();
+    expect(act('owner', 'fire').error).toBeUndefined(); advance(30);
+    expect(game.fireWindow('owner', request)).toEqual({ delayMs: interval - 30, maxDelayMs: interval, context: game.fireContext('owner') });
+    expect(p.resources.ammo).toBe(9); expect(game.state.handled.owner).toHaveLength(1);
+    advance(interval - 40); expect(game.fireWindow('owner', request)).toBeUndefined();
+    expect(game.action('owner', request).error).toBeUndefined();
+    expect(game.fireWindow('owner', request)).toBeUndefined();
+    expect(game.fireWindow('owner', { ...request, requestId: '' })).toBeUndefined();
+    expect(game.fireWindow('owner', { ...request, requestId: 'x'.repeat(121) })).toBeUndefined();
+    expect(game.fireWindow('owner', { action: 'gather', requestId: 'g' })).toBeUndefined();
+    p.resources.ammo = 0; expect(game.fireWindow('owner', { ...request, requestId: 'empty' })).toBeUndefined();
+  });
+  it('invalidates life context even when death restores the same map and weapon, and rolls back a failed death commit', () => {
+    const { game, db, act } = setup(); const p = game.state.players.owner;
+    p.equipment.weapon = makeItem('rifle', 1); p.resources.ammo = 10;
+    const original = game.fireContext('owner');
+    p.mapId = 'home_owner'; expect(game.fireContext('owner')).not.toBe(original); p.mapId = 'world';
+    p.equipment.weapon = makeItem('crude_gun', 1); expect(game.fireContext('owner')).not.toBe(original); p.equipment.weapon = makeItem('rifle', 1);
+    expect(game.fireContext('owner')).toBe(original);
+    p.hp = 0; p.shield = 0; game.persist(); const save = db.checkpointWorld;
+    db.checkpointWorld = () => { throw Error('disk failure'); };
+    expect(act('owner', 'die').error).toBe('disk failure'); expect(game.fireContext('owner')).toBe(original);
+    db.checkpointWorld = save;
+    expect(act('owner', 'die').error).toBeUndefined(); expect(p.mapId).toBe('world');
+    expect(p.equipment.weapon?.id).toBe('rifle'); expect(game.fireContext('owner')).not.toBe(original);
+  });
   it('does not charge validation work against the next legal shot interval', () => {
     let time = 10000, processing = false;
     const game = new GameWorld(createMemoryDb(), { ...rules,

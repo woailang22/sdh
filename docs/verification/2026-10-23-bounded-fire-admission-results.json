@@ -1,0 +1,560 @@
+{
+  "date": "2026-10-23",
+  "baselineCommit": "24036f293bb6c14718b83f68e255dbff7a4c51bc",
+  "result": "Two native browsers passed zero-refusal gate; the later two-native plus six-protocol stage FAILED with one occupied-slot refusal per native browser. Full game goal remains active.",
+  "design": "docs/superpowers/plans/2026-10-23-bounded-fire-admission.md",
+  "changes": [
+    "One connection-owned fire slot, monotonic deadline, planned delay at most the server weapon interval. Existing rate validator and20ms cooldown debt unchanged. Distinct extra input is bounded; duplicates wait for first input even if they change action. Due fire drains before other actions.",
+    "Targeted and untargeted fire use the same admission and existing transactional action paths. At execution validate current ammunition, target, map, range, walls, friendliness and rate; commit before reply. No client timing authority.",
+    "Map/weapon value and ephemeral death generation invalidate pending input. Check after every action/tick and at execution; disconnect/replacement cancel timers. Restore death generation on failed full action commits. Queue/timers are not persisted."
+  ],
+  "verification": {
+    "testFiles": 32,
+    "tests": 474,
+    "typecheck": "passed",
+    "build": "passed; client index-Ci3C41xg.js unchanged",
+    "warnings": [
+      "Existing Vite native-config warning",
+      "Existing client bundle>500kB warning"
+    ],
+    "independentReview": "Final static review found no P1/P2. Review added immediate away-and-back context cancellation and first-input request-ID reservation across action types.",
+    "redGreen": [
+      "Queue/time-window helpers absent before implementation;8 queue and4 world regressions then passed. Existing validator spam/rate tests unchanged.",
+      "Real-server compressed fire returned immediate errors before admission; after implementation waits, commits once and respects280ms crude-gun intervals.",
+      "Same pending ID with changed equip action returned2 conflicting replies before first-ID guard; after guard only original fire commits."
+    ],
+    "integrationCoverage": [
+      "Modern and legacy replies; no early acknowledgement or persisted ammunition spend; one occupied slot, duplicate coalescing, replay while another request is pending",
+      "Queued targeted PvP hit deals55 real damage; later target leaving its map is rejected without spending",
+      "Equipment/map away-and-back cancellation; already-due fire before equip; lethal PvP cancels input even after same-map/same-weapon respawn,19 ammo in real drop",
+      "SQLite trigger rejects queued private commit: rollback then one retry; queued reply failure stays durable, timer survives and replay does not spend again",
+      "Force-kill actual server after committed shot plus ping-confirmed pending input: only committed shot/replay guard survives. Disconnect/replacement also do not spend pending input. Existing WAL/backup/full checkpoint regressions pass."
+    ],
+    "testClock": "Socket integration controls GameWorld and queue clocks to prevent host-load-dependent deadline races, while keeping real timers/sockets/SQLite. Queue unit tests independently test monotonic/wall-clock behavior. Native benchmark uses unmodified real clocks.",
+    "benchmarkCodeBoundary": "After timed benchmark, only the same-pending-ID guard was moved before action-type branching to reject changed-action duplicates. Native benchmark uses distinct IDs. Final code subsequently passed full474 tests/typecheck/build and native shared/restart/replay checks; timing was not rerun to erase the eight-connection failure."
+  },
+  "benchmark": {
+    "environment": "Same synthetic128camp5675 buildings4000floors18turrets540ammo, two independent headless Chrome1551920x1080DPR1 visible documents, production server/client, normal route and mouse-held fire.20s idle+60s two-native+30s two-native/six-protocol. No real economy/PvP performance claim. No concurrent tests/builds/profilers/extra QA browsers. Initial synthetic reset only before measurement.",
+    "before": {
+      "nativeCooldownRefusals": [
+        3,
+        4
+      ],
+      "nativeReplyP95Ms": [
+        22.4,
+        20.3
+      ]
+    },
+    "overallPassed": false,
+    "phases": [
+      {
+        "name": "two-native-idle",
+        "seconds": 20.454,
+        "clients": [
+          {
+            "client": 1,
+            "sent": 0,
+            "acknowledged": 0,
+            "pending": 0,
+            "rejected": 0,
+            "errorKinds": [],
+            "startAmmo": 2000,
+            "ammo": 2000,
+            "reply": {
+              "count": 0,
+              "p50": 0,
+              "p95": 0,
+              "p99": 0,
+              "max": 0,
+              "over50": 0
+            },
+            "render": {
+              "count": 905,
+              "p50": 4,
+              "p95": 5.5,
+              "p99": 6.300000004470348,
+              "max": 7.399999998509884,
+              "over50": 0
+            },
+            "raf": {
+              "count": 910,
+              "p50": 24.200000000000728,
+              "p95": 24.399999999999636,
+              "p99": 30.30000000000109,
+              "max": 66.60000000000218,
+              "over50": 3
+            },
+            "longTasks": {
+              "count": 0,
+              "p50": 0,
+              "p95": 0,
+              "p99": 0,
+              "max": 0,
+              "over50": 0
+            },
+            "corrections": 0,
+            "diagnostics": 0,
+            "buildings": 5675,
+            "floors": 4000,
+            "connected": true
+          },
+          {
+            "client": 2,
+            "sent": 0,
+            "acknowledged": 0,
+            "pending": 0,
+            "rejected": 0,
+            "errorKinds": [],
+            "startAmmo": 2000,
+            "ammo": 2000,
+            "reply": {
+              "count": 0,
+              "p50": 0,
+              "p95": 0,
+              "p99": 0,
+              "max": 0,
+              "over50": 0
+            },
+            "render": {
+              "count": 896,
+              "p50": 4.399999998509884,
+              "p95": 5.700000002980232,
+              "p99": 6.700000002980232,
+              "max": 7.800000004470348,
+              "over50": 0
+            },
+            "raf": {
+              "count": 902,
+              "p50": 24.200000000000728,
+              "p95": 30.200000000000728,
+              "p99": 30.400000000001455,
+              "max": 66.70000000000073,
+              "over50": 4
+            },
+            "longTasks": {
+              "count": 0,
+              "p50": 0,
+              "p95": 0,
+              "p99": 0,
+              "max": 0,
+              "over50": 0
+            },
+            "corrections": 0,
+            "diagnostics": 0,
+            "buildings": 5675,
+            "floors": 4000,
+            "connected": true
+          }
+        ],
+        "protocolActors": []
+      },
+      {
+        "name": "two-native-walk-and-fire",
+        "seconds": 60.667,
+        "clients": [
+          {
+            "client": 1,
+            "sent": 390,
+            "acknowledged": 390,
+            "pending": 0,
+            "rejected": 0,
+            "errorKinds": [],
+            "startAmmo": 2000,
+            "ammo": 1610,
+            "reply": {
+              "count": 390,
+              "p50": 7.5,
+              "p95": 35.30000000447035,
+              "p99": 88.30000000447035,
+              "max": 93.70000000298023,
+              "over50": 12
+            },
+            "render": {
+              "count": 2472,
+              "p50": 4.200000002980232,
+              "p95": 5.800000004470348,
+              "p99": 7.399999998509884,
+              "max": 21.900000005960464,
+              "over50": 0
+            },
+            "raf": {
+              "count": 2489,
+              "p50": 24.200000000004366,
+              "p95": 30.30000000000291,
+              "p99": 48.5,
+              "max": 72.80000000000291,
+              "over50": 18
+            },
+            "longTasks": {
+              "count": 0,
+              "p50": 0,
+              "p95": 0,
+              "p99": 0,
+              "max": 0,
+              "over50": 0
+            },
+            "corrections": 0,
+            "diagnostics": 0,
+            "buildings": 5675,
+            "floors": 4000,
+            "connected": true
+          },
+          {
+            "client": 2,
+            "sent": 390,
+            "acknowledged": 390,
+            "pending": 0,
+            "rejected": 0,
+            "errorKinds": [],
+            "startAmmo": 2000,
+            "ammo": 1610,
+            "reply": {
+              "count": 390,
+              "p50": 8.200000002980232,
+              "p95": 26.700000002980232,
+              "p99": 84.5,
+              "max": 94.69999999552965,
+              "over50": 12
+            },
+            "render": {
+              "count": 2333,
+              "p50": 4.600000001490116,
+              "p95": 6.399999998509884,
+              "p99": 8.100000001490116,
+              "max": 23,
+              "over50": 0
+            },
+            "raf": {
+              "count": 2339,
+              "p50": 24.299999999995634,
+              "p95": 30.400000000001455,
+              "p99": 48.5,
+              "max": 84.90000000000146,
+              "over50": 20
+            },
+            "longTasks": {
+              "count": 0,
+              "p50": 0,
+              "p95": 0,
+              "p99": 0,
+              "max": 0,
+              "over50": 0
+            },
+            "corrections": 0,
+            "diagnostics": 0,
+            "buildings": 5675,
+            "floors": 4000,
+            "connected": true
+          }
+        ],
+        "protocolActors": []
+      },
+      {
+        "name": "two-native-plus-six-protocol-walk-and-fire",
+        "seconds": 30.558,
+        "clients": [
+          {
+            "client": 1,
+            "sent": 192,
+            "acknowledged": 192,
+            "pending": 0,
+            "rejected": 1,
+            "errorKinds": [
+              "射击请求过快"
+            ],
+            "startAmmo": 1610,
+            "ammo": 1419,
+            "reply": {
+              "count": 192,
+              "p50": 34.100000001490116,
+              "p95": 116.89999999850988,
+              "p99": 143.5,
+              "max": 149.89999999850988,
+              "over50": 59
+            },
+            "render": {
+              "count": 1210,
+              "p50": 4.399999998509884,
+              "p95": 5.899999998509884,
+              "p99": 7.5,
+              "max": 9.399999998509884,
+              "over50": 0
+            },
+            "raf": {
+              "count": 1215,
+              "p50": 24.20000000001164,
+              "p95": 30.39999999999418,
+              "p99": 48.5,
+              "max": 72.69999999999709,
+              "over50": 9
+            },
+            "longTasks": {
+              "count": 0,
+              "p50": 0,
+              "p95": 0,
+              "p99": 0,
+              "max": 0,
+              "over50": 0
+            },
+            "corrections": 0,
+            "diagnostics": 0,
+            "buildings": 5675,
+            "floors": 4000,
+            "connected": true
+          },
+          {
+            "client": 2,
+            "sent": 192,
+            "acknowledged": 192,
+            "pending": 0,
+            "rejected": 1,
+            "errorKinds": [
+              "射击请求过快"
+            ],
+            "startAmmo": 1610,
+            "ammo": 1419,
+            "reply": {
+              "count": 192,
+              "p50": 12.200000002980232,
+              "p95": 127.10000000149012,
+              "p99": 171,
+              "max": 171.19999999552965,
+              "over50": 40
+            },
+            "render": {
+              "count": 1142,
+              "p50": 4.799999997019768,
+              "p95": 6.300000004470348,
+              "p99": 7.700000002980232,
+              "max": 9.699999995529652,
+              "over50": 0
+            },
+            "raf": {
+              "count": 1145,
+              "p50": 24.30000000000291,
+              "p95": 30.40000000000873,
+              "p99": 48.60000000000582,
+              "max": 78.80000000000291,
+              "over50": 10
+            },
+            "longTasks": {
+              "count": 0,
+              "p50": 0,
+              "p95": 0,
+              "p99": 0,
+              "max": 0,
+              "over50": 0
+            },
+            "corrections": 0,
+            "diagnostics": 0,
+            "buildings": 5675,
+            "floors": 4000,
+            "connected": true
+          }
+        ],
+        "protocolActors": [
+          {
+            "sent": 149,
+            "acked": 149,
+            "pending": false,
+            "rtt": {
+              "count": 149,
+              "p50": 8.449800000002142,
+              "p95": 44.44659999999567,
+              "p99": 73.03659999999218,
+              "max": 149.42600000000675,
+              "over50": 7
+            },
+            "errors": [],
+            "connected": true
+          },
+          {
+            "sent": 149,
+            "acked": 149,
+            "pending": false,
+            "rtt": {
+              "count": 149,
+              "p50": 15.596099999995204,
+              "p95": 51.95219999999972,
+              "p99": 109.80899999999383,
+              "max": 156.25329999999667,
+              "over50": 9
+            },
+            "errors": [],
+            "connected": true
+          },
+          {
+            "sent": 149,
+            "acked": 149,
+            "pending": false,
+            "rtt": {
+              "count": 149,
+              "p50": 21.96490000000631,
+              "p95": 63.84729999999399,
+              "p99": 110.03740000000107,
+              "max": 163.26919999999518,
+              "over50": 14
+            },
+            "errors": [],
+            "connected": true
+          },
+          {
+            "sent": 148,
+            "acked": 147,
+            "pending": true,
+            "rtt": {
+              "count": 147,
+              "p50": 28.88269999998738,
+              "p95": 75.2502999999997,
+              "p99": 113.00419999999576,
+              "max": 214.73889999999665,
+              "over50": 23
+            },
+            "errors": [],
+            "connected": true
+          },
+          {
+            "sent": 148,
+            "acked": 147,
+            "pending": true,
+            "rtt": {
+              "count": 147,
+              "p50": 35.94430000000284,
+              "p95": 82.43310000000929,
+              "p99": 120.43510000000242,
+              "max": 214.82099999999627,
+              "over50": 31
+            },
+            "errors": [],
+            "connected": true
+          },
+          {
+            "sent": 148,
+            "acked": 147,
+            "pending": true,
+            "rtt": {
+              "count": 147,
+              "p50": 43.259600000004866,
+              "p95": 90.08599999999569,
+              "p99": 127.9091000000044,
+              "max": 220.14190000000235,
+              "over50": 42
+            },
+            "errors": [],
+            "connected": true
+          }
+        ]
+      }
+    ],
+    "browserExceptions": 0,
+    "hotReloads": 0,
+    "limits": "Two-native success is780 real paid rounds without refusals. Eight-connection stage remains failed; six protocol peers are not six native browsers. Three protocol peers had one in-flight reply at phase sampling; final database contains148 spent rounds each. No FPS/GPU/long-term memory/real siege capacity claim."
+  },
+  "audit": {
+    "integrity": "ok",
+    "version": 3,
+    "pendingCommitRows": 8,
+    "buildings": 5675,
+    "defensiveAmmo": 540,
+    "checks": {
+      "buildings": true,
+      "camps": true,
+      "storage": true,
+      "ammo": true,
+      "production": true,
+      "nodes": true,
+      "drops": true,
+      "monsters": true
+    },
+    "players": [
+      {
+        "actor": 1,
+        "ammo": 1419,
+        "spent": 581,
+        "hp": 100,
+        "satiety": 69.52725000000005
+      },
+      {
+        "actor": 2,
+        "ammo": 1419,
+        "spent": 581,
+        "hp": 100,
+        "satiety": 70.31299999999995
+      },
+      {
+        "actor": 3,
+        "ammo": 1851,
+        "spent": 149,
+        "hp": 100,
+        "satiety": 92.22449999999999
+      },
+      {
+        "actor": 4,
+        "ammo": 1851,
+        "spent": 149,
+        "hp": 100,
+        "satiety": 92.21074999999999
+      },
+      {
+        "actor": 5,
+        "ammo": 1851,
+        "spent": 149,
+        "hp": 100,
+        "satiety": 92.48099999999998
+      },
+      {
+        "actor": 6,
+        "ammo": 1852,
+        "spent": 148,
+        "hp": 100,
+        "satiety": 92.51949999999998
+      },
+      {
+        "actor": 7,
+        "ammo": 1852,
+        "spent": 148,
+        "hp": 100,
+        "satiety": 92.50925000000001
+      },
+      {
+        "actor": 8,
+        "ammo": 1852,
+        "spent": 148,
+        "hp": 100,
+        "satiety": 92.48124999999999
+      }
+    ]
+  },
+  "sharedRestartReplay": {
+    "success": true,
+    "steps": [
+      {
+        "step": "door-shared",
+        "open": false,
+        "owner": true,
+        "buddy": true
+      },
+      {
+        "step": "door-shared",
+        "open": true,
+        "owner": true,
+        "buddy": true
+      },
+      {
+        "step": "restart-and-replay",
+        "client": 1,
+        "ammo": 1419,
+        "duplicateSpent": 0
+      },
+      {
+        "step": "restart-and-replay",
+        "client": 2,
+        "ammo": 1419,
+        "duplicateSpent": 0
+      }
+    ],
+    "exceptions": 0,
+    "hotReloads": 0
+  },
+  "remaining": "Keep single-slot bound and original cadence. Diagnose the extra shared baseline/encoding/checkpoint and event-loop work under eight connections; those are hypotheses for the remaining compressed arrivals, not a measured root cause in this phase. Complete real targeted-combat load, broader balance and the full game plan separately."
+}
