@@ -17,6 +17,7 @@ export class StateEncoder {
   private mapId = '';
   private nextFullAt = -Infinity;
   private lists = new Map<ListKey, string>();
+  private wireLists = new WeakMap<StatePatch, Map<string, { value: unknown; json: string }>>();
   constructor(private readonly fullPhaseMs?: number) {}
 
   encodePlayer(snapshot: PlayerActionSnapshot, fullSnapshot: () => GameStateSnapshot, now = Date.now()): StatePatch {
@@ -31,9 +32,13 @@ export class StateEncoder {
     const full = !this.sequence || snapshot.player.mapId !== this.mapId || now >= this.nextFullAt;
     const { player, correction, requestId, error, loot } = snapshot;
     const state: StatePatch['state'] = { player, correction, requestId, error, loot };
+    const wireLists = new Map<string, { value: unknown; json: string }>();
     for (const key of LISTS) {
       const encoded = JSON.stringify(snapshot[key]);
-      if (full || this.lists.get(key) !== encoded) Object.assign(state, { [key]: snapshot[key] });
+      if (full || this.lists.get(key) !== encoded) {
+        Object.assign(state, { [key]: snapshot[key] });
+        wireLists.set(key, { value: snapshot[key], json: encoded });
+      }
       this.lists.set(key, encoded);
     }
     const baseSequence = full ? null : this.sequence;
@@ -44,7 +49,22 @@ export class StateEncoder {
         : (this.fullPhaseMs - now % FULL_STATE_REFRESH_MS + FULL_STATE_REFRESH_MS) % FULL_STATE_REFRESH_MS || FULL_STATE_REFRESH_MS;
       this.nextFullAt = now + wait;
     }
-    return { version: 1, sequence: this.sequence, baseSequence, state };
+    const patch: StatePatch = { version: 1, sequence: this.sequence, baseSequence, state };
+    this.wireLists.set(patch, wireLists);
+    return patch;
+  }
+
+  /** Send immediately after encoding; do not mutate an encoded list in place. */
+  serialize(patch: StatePatch): string {
+    const lists = this.wireLists.get(patch);
+    if (!lists) return JSON.stringify(patch);
+    const fields: string[] = [];
+    for (const [key, value] of Object.entries(patch.state)) {
+      const cached = lists.get(key);
+      const json = cached && cached.value === value ? cached.json : JSON.stringify(value);
+      if (json !== undefined) fields.push(JSON.stringify(key) + ':' + json);
+    }
+    return JSON.stringify({ ...patch, state: undefined }).slice(0, -1) + ',"state":{' + fields.join(',') + '}}';
   }
 }
 

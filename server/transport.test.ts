@@ -11,6 +11,36 @@ function socket(bufferedAmount = 0) {
 }
 
 describe('bounded server output', () => {
+  it('uses lazy pre-encoded payloads inside the unchanged envelope', () => {
+    const ws = socket(), value = { text: '中文"\\\n', empty: [], absent: undefined }, serialize = vi.fn(() => JSON.stringify(value));
+    expect(sendMessage(ws, 'game_state_patch', { ignored: true }, serialize)).toBe(true);
+    expect(serialize).toHaveBeenCalledOnce();
+    expect(JSON.parse(ws.send.mock.calls[0][0])).toEqual({ type: 'game_state_patch', payload: JSON.parse(JSON.stringify(value)), timestamp: expect.any(Number) });
+  });
+  it('does not invoke a lazy serializer for a closed or already backlogged connection', () => {
+    const serialize = vi.fn(() => { throw Error('Must not serialize'); }), closed = socket(), backlogged = socket(BASE_QUEUE_BYTES);
+    closed.readyState = WebSocket.CLOSED;
+    expect(sendMessage(closed, 'game_state_patch', {}, serialize)).toBe(false);
+    expect(sendMessage(backlogged, 'game_state_patch', {}, serialize)).toBe(false);
+    expect(serialize).not.toHaveBeenCalled(); expect(backlogged.terminate).toHaveBeenCalledOnce();
+  });
+  it('retains exact UTF-8 and header accounting for lazy payloads', () => {
+    const payload = { text: '荒'.repeat(1000) }, serialize = () => JSON.stringify(payload);
+    vi.spyOn(Date, 'now').mockReturnValue(10000);
+    try {
+      const length = Buffer.byteLength(JSON.stringify({ type: 'game_state_patch', payload, timestamp: 10000 }));
+      const fits = socket(BASE_QUEUE_BYTES - length - 10), over = socket(BASE_QUEUE_BYTES - length - 9);
+      expect(sendMessage(fits, 'game_state_patch', {}, serialize)).toBe(true);
+      expect(sendMessage(over, 'game_state_patch', {}, serialize)).toBe(false);
+      expect(over.send).not.toHaveBeenCalled(); expect(over.terminate).toHaveBeenCalledOnce();
+    } finally { vi.restoreAllMocks(); }
+  });
+  it('propagates lazy serialization failure without sending or terminating an otherwise usable socket', () => {
+    const ws = socket();
+    expect(() => sendMessage(ws, 'game_state_patch', {}, () => { throw Error('encoding failed'); })).toThrow('encoding failed');
+    expect(ws.send).not.toHaveBeenCalled(); expect(ws.terminate).not.toHaveBeenCalled();
+    expect(sendMessage(ws, 'chat', { text: 'retry' })).toBe(true);
+  });
   it('sends normal complete state and feedback using the original envelope', () => {
     const ws = socket();
     expect(sendMessage(ws, 'game_state', { requestId: 'take', loot: { items: ['蓝图'] } })).toBe(true);

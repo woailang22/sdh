@@ -4,10 +4,13 @@ export const BASE_QUEUE_BYTES = 1024 * 1024;
 type Socket = Pick<WebSocket, 'readyState' | 'bufferedAmount' | 'send' | 'terminate'>;
 const budgets = new WeakMap<Socket, number>();
 
-export function sendMessage(ws: Socket, type: string, payload: unknown): boolean {
+export function sendMessage(ws: Socket, type: string, payload: unknown, serializePayload?: () => string): boolean {
   if (ws.readyState !== WebSocket.OPEN) return false;
   if (ws.bufferedAmount >= (budgets.get(ws) ?? BASE_QUEUE_BYTES)) { ws.terminate(); return false; }
-  const message = JSON.stringify({ type, payload, timestamp: Date.now() });
+  const timestamp = Date.now();
+  const message = serializePayload
+    ? '{"type":' + JSON.stringify(type) + ',"payload":' + serializePayload() + ',"timestamp":' + JSON.stringify(timestamp) + '}'
+    : JSON.stringify({ type, payload, timestamp });
   const bytes = Buffer.byteLength(message) + 10;
   // Initial connection sends init and complete baselines back-to-back. Large
   // camps must still fit that burst; retain only one numeric budget, no queue.

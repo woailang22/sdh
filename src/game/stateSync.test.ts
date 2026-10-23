@@ -15,6 +15,56 @@ function snapshot(): GameStateSnapshot {
 const copy = <T,>(value: T): T => JSON.parse(JSON.stringify(value));
 
 describe('nearby state transport', () => {
+  it('serializes an encoded full patch without serializing its shared lists again', () => {
+    const encoder = new StateEncoder(), state = snapshot(), name = state.buildings[0].name;
+    const readName = vi.fn(() => name);
+    Object.defineProperty(state.buildings[0], 'name', { enumerable: true, get: readName });
+    const patch = encoder.encode(state, 0);
+    const expected = copy(patch), serialization = vi.spyOn(JSON, 'stringify');
+    readName.mockClear();
+    let text: string;
+    try {
+      text = encoder.serialize(patch);
+      expect(readName).not.toHaveBeenCalled();
+      for (const list of [state.buildings, state.camps, state.nodes, state.drops, state.monsters, state.reports]) expect(serialization.mock.calls.some(args => args[0] === list)).toBe(false);
+    } finally { serialization.mockRestore(); }
+    expect(JSON.parse(text!)).toEqual(expected);
+  });
+  it('keeps each encoded patch bound to its own lists across later changes and map transitions', () => {
+    const encoder = new StateEncoder(), firstState = snapshot(), first = encoder.encode(firstState, 0), expected = copy(first);
+    const changed = copy(firstState); changed.buildings[0].isOpen = true;
+    const second = encoder.encode(changed, 200), secondExpected = copy(second);
+    const entered = encoder.encode({ ...copy(changed), player: { ...changed.player, mapId: 'home_other' }, buildings: [] }, 400);
+    expect(JSON.parse(encoder.serialize(first))).toEqual(expected);
+    expect(JSON.parse(encoder.serialize(second))).toEqual(secondExpected);
+    expect(JSON.parse(encoder.serialize(entered))).toEqual(copy(entered));
+  });
+  it('preserves escaping, undefined omission, null and empty lists exactly', () => {
+    const encoder = new StateEncoder(), state = snapshot();
+    state.buildings[0].name = '中文"引号\\路径\n新行\u2028';
+    state.drops = []; state.reports = []; state.loot = null as any;
+    state.error = '错误: },"sequence":999,{ <script> & \\';
+    const patch = encoder.encode(state, 0);
+    expect(JSON.parse(encoder.serialize(patch))).toEqual(copy(patch));
+    expect(JSON.parse(encoder.serialize(patch)).state).not.toHaveProperty('requestId');
+  });
+  it('does not add old shared lists to private feedback and handles a failed full fallback', () => {
+    const encoder = new StateEncoder(), state = snapshot(); encoder.encode(state, 0);
+    const live = { player: state.player, correction: false, requestId: 'fire', error: '失败', loot: undefined };
+    const privatePatch = encoder.encodePlayer(live, () => state, 100);
+    expect(JSON.parse(encoder.serialize(privatePatch))).toEqual(copy(privatePatch));
+    expect(JSON.parse(encoder.serialize(privatePatch)).state).not.toHaveProperty('buildings');
+    expect(() => encoder.encodePlayer(live, () => { throw Error('view failed'); }, 5000)).toThrow('view failed');
+    const recovered = encoder.encodePlayer(live, () => ({ ...state, ...live }), 5001);
+    expect(recovered.baseSequence).toBeNull(); expect(JSON.parse(encoder.serialize(recovered))).toEqual(copy(recovered));
+  });
+  it('falls back for unknown patches and replaced shared-list references', () => {
+    const encoder = new StateEncoder(), patch = encoder.encode(snapshot(), 0);
+    const unknown = copy(patch); unknown.state.buildings = [];
+    expect(JSON.parse(encoder.serialize(unknown))).toEqual(unknown);
+    patch.state.buildings = [];
+    expect(JSON.parse(encoder.serialize(patch))).toEqual(copy(patch));
+  });
   it('spreads eight complete-refresh deadlines across the same five-second cycle without losing state or feedback', () => {
     const state = snapshot(), encoders = Array.from({ length: 8 }, (_, i) => new StateEncoder(i * 600)), decoders = encoders.map(() => new StateDecoder());
     encoders.forEach((e, i) => expect(decoders[i].decode(copy(e.encode(state, 0)))).toEqual(state));

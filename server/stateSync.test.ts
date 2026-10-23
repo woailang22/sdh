@@ -19,7 +19,7 @@ async function until(predicate: () => boolean, ms = 5000) {
   throw Error('State synchronization timed out');
 }
 
-it.each(['paused', 'survival'])('keeps shared checks and door broadcasts during private fire, and full replies for legacy clients (%s)', async mode => {
+it.each(['paused', 'survival', 'serialize-failure', 'serialize-shared-failure'])('keeps shared checks and door broadcasts during private fire, and full replies for legacy clients (%s)', async mode => {
   const file = join(mkdtempSync(join(tmpdir(), 'sdc-state-sync-')), 'world.sqlite');
   const db = createDb(file), a = resolveGuest(db), b = resolveGuest(db);
   const rules: WorldRules = { nodeAt: () => undefined, nodesNear: () => [], buildingsNear: () => [], monstersNear: () => [], campSiteAllowed: () => true, migrate: (_map, x, y) => ({ mapId: 'world', x, y }) };
@@ -41,13 +41,16 @@ it.each(['paused', 'survival'])('keeps shared checks and door broadcasts during 
   const source = `import { GameWorld } from ${JSON.stringify(pathToFileURL(resolve('server/worldState.ts')).href)};
     import { StateEncoder } from ${JSON.stringify(pathToFileURL(resolve('src/game/stateSync.ts')).href)};
     const encode=StateEncoder.prototype.encode,privateEncode=StateEncoder.prototype.encodePlayer;
+    const serialize=StateEncoder.prototype.serialize;let lost=false;
+    StateEncoder.prototype.serialize=function(patch){process.send?.({wire:{requestId:patch.state.requestId,shared:Object.hasOwn(patch.state,'buildings')}});if(${mode.startsWith('serialize-')}&&patch.state.requestId===${JSON.stringify(mode === 'serialize-shared-failure' ? 'shared-door' : 'lost-wire')}&&!lost){lost=true;process.send?.({wireFailed:true});throw Error('qa wire serialization failed');}return serialize.call(this,patch);};
     StateEncoder.prototype.encode=function(state){return encode.call(this,state,0);};
     StateEncoder.prototype.encodePlayer=function(state,full){return privateEncode.call(this,state,full,0);};
-    const tick=GameWorld.prototype.tick; GameWorld.prototype.tick=function(){const changed=${mode === 'paused' ? 'false' : 'tick.call(this)'};process.send?.({changed,shared:this.sharedTickChanged});return changed;}; await import(${JSON.stringify(pathToFileURL(resolve('server.ts')).href)});`;
+    const tick=GameWorld.prototype.tick; GameWorld.prototype.tick=function(){const changed=${mode !== 'survival' ? 'false' : 'tick.call(this)'};process.send?.({changed,shared:this.sharedTickChanged});return changed;}; await import(${JSON.stringify(pathToFileURL(resolve('server.ts')).href)});`;
   const child = spawn(process.execPath, ['--import', 'tsx', '--input-type=module', '--eval', source], { cwd: process.cwd(), windowsHide: true, env: { ...process.env, DB_PATH: file, PORT: String(port), NODE_ENV: 'production' }, stdio: ['ignore', 'pipe', 'pipe', 'ipc'] });
   const exited = once(child, 'exit'); let started = false, stderr = '';
   const ticks: { changed: boolean; shared: boolean }[] = [];
-  child.on('message', message => { ticks.push(message as { changed: boolean; shared: boolean }); });
+  const diagnostics: any[] = [];
+  child.on('message', message => { diagnostics.push(message); ticks.push(message as { changed: boolean; shared: boolean }); });
   child.stdout!.on('data', chunk => { started ||= String(chunk).includes('[Rift Walker]'); });
   child.stderr!.on('data', chunk => { stderr += String(chunk); });
   const sockets: WebSocket[] = [];
@@ -69,21 +72,46 @@ it.each(['paused', 'survival'])('keeps shared checks and door broadcasts during 
     expect(legacyReply.type).toBe('game_state'); expect(legacyReply.payload.player.resources.ammo).toBe(99);
     expect(legacyReply.payload.buildings).toHaveLength(2);
     modern.send('game_action', { action: 'toggle_door', targetId: 'door', requestId: 'shared-door' });
+    if (mode === 'serialize-shared-failure') {
+      await until(() => diagnostics.some(d => d.wireFailed));
+      expect(modern.messages.some(m => m.payload?.state?.requestId === 'shared-door')).toBe(false);
+      expect(JSON.parse(db.getMeta('authoritative-world-v2')!).buildings.door.isOpen).toBe(true);
+      modern.send('game_action', { action: 'toggle_door', targetId: 'door', requestId: 'shared-door' });
+    }
     await until(() => legacy.messages.some(m => m.type === 'game_state' && m.payload.buildings?.find((v: any) => v.id === 'door')?.isOpen));
     await until(() => modern.messages.some(m => m.payload?.state?.requestId === 'shared-door'));
+    if (mode === 'serialize-shared-failure') {
+      const replay = modern.messages.find(m => m.payload?.state?.requestId === 'shared-door');
+      expect(replay.payload.baseSequence).toBeNull();
+      expect(replay.payload.state.buildings.find((b: any) => b.id === 'door').isOpen).toBe(true);
+    }
+    expect(diagnostics.some(d => d.wire?.shared)).toBe(true);
+    if (mode === 'serialize-failure') {
+      const lost = { action: 'fire', requestId: 'lost-wire' };
+      modern.send('game_action', lost); await until(() => diagnostics.some(d => d.wireFailed));
+      expect(modern.messages.some(m => m.payload?.state?.requestId === 'lost-wire')).toBe(false);
+      const commit = JSON.parse(db.listWorldPlayerCommits().find(c => c.id === a.playerId)!.data);
+      expect(commit.player.resources.ammo).toBe(99); expect(commit.handled).toEqual(['shared-door', 'lost-wire']);
+      modern.send('game_action', lost); await until(() => modern.messages.some(m => m.payload?.state?.requestId === 'lost-wire'));
+      const replay = modern.messages.find(m => m.payload?.state?.requestId === 'lost-wire');
+      expect(replay.payload.baseSequence).toBeNull(); expect(replay.payload.state.player.resources.ammo).toBe(99);
+      expect(replay.payload.state.buildings.find((b: any) => b.id === 'door').isOpen).toBe(true);
+    }
     const began = Date.now(); let sent = 0;
     while (Date.now() - began < 2800) { modern.send('game_action', { action: 'fire', requestId: 'private-' + sent++ }); await delay(200); }
     await until(() => modern.messages.filter(m => m.payload?.state?.requestId?.startsWith('private-')).length === sent);
     const replies = modern.messages.filter(m => m.payload?.state?.requestId?.startsWith('private-'));
     expect(replies.every(m => !m.payload.state.error && !Object.hasOwn(m.payload.state, 'buildings'))).toBe(true);
-    expect(replies.at(-1).payload.state.player.resources.ammo).toBe(100 - sent);
+    expect(replies.at(-1).payload.state.player.resources.ammo).toBe((mode === 'serialize-failure' ? 99 : 100) - sent);
+    expect(diagnostics.some(d => d.wire?.requestId?.startsWith('private-') && !d.wire.shared)).toBe(true);
     expect(modern.messages.some(m => m.type === 'game_state_patch' && m.payload.baseSequence !== null && !m.payload.state.requestId)).toBe(true);
     if (mode === 'survival') {
       expect(ticks.some(t => t.changed && !t.shared)).toBe(true); expect(ticks.some(t => t.shared)).toBe(false);
       expect(replies.at(-1).payload.state.player.satiety).toBeLessThan(100);
       expect(legacy.messages.some(m => m.type === 'game_state' && !m.payload.requestId && m.payload.player.satiety < 100)).toBe(true);
     }
-    expect(stderr).toBe('');
+    if (mode.startsWith('serialize-')) expect(stderr).toContain('qa wire serialization failed');
+    else expect(stderr).toBe('');
   } finally {
     for (const ws of sockets) ws.terminate();
     child.kill('SIGKILL'); await exited;

@@ -70,7 +70,11 @@ function stateTo(client: Client, snapshot?: GameStateSnapshot, correction = fals
   const life = game.respawnVersion(client.id);
   state.correction ||= correction || client.mapId !== state.player.mapId || client.respawnVersion !== life;
   client.mapId = state.player.mapId; client.lastSnapshot = Date.now();
-  if (client.stateEncoder) send(client.ws, 'game_state_patch', client.stateEncoder.encode(state));
+  if (client.stateEncoder) {
+    const encoder = client.stateEncoder, patch = encoder.encode(state);
+    try { send(client.ws, 'game_state_patch', patch, () => encoder.serialize(patch)); }
+    catch (error) { client.stateEncoder = new StateEncoder(client.fullPhaseMs); throw error; }
+  }
   else send(client.ws, 'game_state', state);
   client.respawnVersion = life;
 }
@@ -78,12 +82,14 @@ function playerStateTo(client: Client, state: PlayerActionSnapshot) {
   if (client.ws.readyState !== WebSocket.OPEN || !client.stateEncoder) return;
   const life = game.respawnVersion(client.id);
   state.correction ||= client.mapId !== state.player.mapId || client.respawnVersion !== life;
-  const patch = client.stateEncoder.encodePlayer(state, () => game.snapshot(client.id, state.requestId, state.error, state.loot, state.correction));
+  const encoder = client.stateEncoder;
+  const patch = encoder.encodePlayer(state, () => game.snapshot(client.id, state.requestId, state.error, state.loot, state.correction));
   client.mapId = state.player.mapId;
   // Only shared snapshots refresh this clock; private fire must not postpone
   // the periodic shared check when no simulation entity is dirty.
   if (patch.baseSequence === null) client.lastSnapshot = Date.now();
-  send(client.ws, 'game_state_patch', patch);
+  try { send(client.ws, 'game_state_patch', patch, () => encoder.serialize(patch)); }
+  catch (error) { client.stateEncoder = new StateEncoder(client.fullPhaseMs); throw error; }
   client.respawnVersion = life;
 }
 function refreshVisibility(client: Client) {
