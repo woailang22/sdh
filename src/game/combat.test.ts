@@ -1,10 +1,28 @@
 // src/game/combat.test.ts
 import { describe, expect, it } from 'vitest';
+import * as combat from './combat';
 import {
   WEAPONS, MELEE, ARMOR_REDUCTION,
   rollCrit, calcRangedDamage, calcMonsterHit, absorbShieldFirst,
   aggroRangeFor, killReward, isEnraged, weatherCritBonus,
 } from './combat';
+
+describe('authoritative search interruption', () => {
+  const before = { hp: 100, shield: 10, maxShield: 50, lastDamageAt: 1000, lastCombatDamageAt: 1000 };
+  it.each([
+    ['starvation alone', { ...before, hp: 97.5, lastDamageAt: 2000 }, 0],
+    ['a real hit followed by starvation in the same snapshot', { ...before, hp: 95, shield: 0, lastDamageAt: 3000, lastCombatDamageAt: 2000 }, 15],
+    ['armor removal', { ...before, shield: 0, maxShield: 0 }, 0],
+    ['a hit without net damage', { ...before, lastDamageAt: 2000, lastCombatDamageAt: 2000 }, 0],
+  ])('%s', (_name, after, expected) => {
+    expect((combat as any).authoritativeDamageSince?.(before, after)).toBe(expected);
+  });
+  it('retains the old damage clock when the server omits the new field', () => {
+    const legacy = { hp: 100, shield: 10, maxShield: 50, lastDamageAt: 1000 };
+    expect((combat as any).authoritativeDamageSince?.(legacy, { ...legacy, shield: 0, lastDamageAt: 2000 })).toBe(10);
+    expect((combat as any).authoritativeDamageSince?.(legacy, { ...legacy, shield: 0, maxShield: 0, lastDamageAt: 2000 })).toBe(0);
+  });
+});
 
 describe('combat weapons', () => {
   it('rifle hits harder and faster than crude_gun', () => {

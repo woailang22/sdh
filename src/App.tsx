@@ -28,7 +28,7 @@ import { MapEditorModal } from './components/MapEditorModal';
 import { LootPanel, LootEntry } from './components/LootPanel';
 import { lootResourceOf, RARITY, skillLevel, skillYieldMult, LootResource, SUBMAPS, displayName } from './game/maps';
 import { ITEM_DEFS, getItemDef, makeItem, WEAPON_DAMAGE, ARMOR_BONUS_TABLE, MED_HEAL, FOOD_VALUE } from './game/items';
-import { killReward, WEAPONS, ARMOR_REDUCTION } from './game/combat';
+import { killReward, WEAPONS, ARMOR_REDUCTION, authoritativeDamageSince } from './game/combat';
 import { calcDeathDrop } from './game/death';
 import { ALL_QUESTS } from './game/quests';
 import { dayKey, isNextDay } from './game/daily';
@@ -567,8 +567,9 @@ export default function App() {
       eng.player.x = p.x; eng.player.y = p.y;
       eng.targetMovePoint = null;
     }
-    if (prev?.player.mapId === p.mapId && p.lastDamageAt > prev.player.lastDamageAt && (p.hp < prev.player.hp || (p.shield < prev.player.shield && p.maxShield >= prev.player.maxShield))) {
-      eng.receiveAuthoritativeDamage(Math.max(0, prev.player.hp - p.hp) + Math.max(0, prev.player.shield - p.shield));
+    const damage = prev?.player.mapId === p.mapId ? authoritativeDamageSince(prev.player, p) : 0;
+    if (damage > 0) {
+      eng.receiveAuthoritativeDamage(damage);
     }
     eng.player.hp = p.hp; eng.player.maxHp = p.maxHp;
     eng.player.shield = p.shield; eng.player.maxShield = p.maxShield;

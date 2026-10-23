@@ -2,8 +2,57 @@ import { describe, expect, it } from 'vitest';
 import { getWorldInteractable } from './world';
 import { WORLD_SUPPLY_ROUTES, WORLD_ROADSIDE_STOPS } from './worldRoutes';
 import { craftingRecipe } from './crafting';
+import { BUILD_RECIPES } from './buildingRecipes';
 
 describe('world supply route intelligence', () => {
+  it('offers an eastern route to seven existing nodes with exact coordinates and a complete view', () => {
+    const east = WORLD_SUPPLY_ROUTES.find(route => route.id === 'east');
+    expect(east, 'eastern industrial exploration must be discoverable').toBeDefined();
+    expect(east!.name).toBe('东行工业线'); expect(east!.axis).toBe('x');
+    expect(east!.stops.map(stop => stop.id)).toEqual([
+      'world:4:0:poi:supplies', 'world:6:0:poi:supplies', 'world:7:0:i:town_gas:gas_tanker',
+      'world:13:0:i:town_street:st_hardware', 'world:14:1:i:town_street:st_diner',
+      'world:19:-3:i:town_factory:fac_press', 'world:20:-3:i:town_factory:fac_shelves',
+    ]);
+    for (const stop of east!.stops) {
+      const node = getWorldInteractable(stop.id)!; expect(node, stop.name).toBeDefined();
+      expect({ x: stop.x, y: stop.y }).toEqual({ x: node.x, y: node.y });
+      expect(stop.x).toBeGreaterThanOrEqual(east!.view.x); expect(stop.x).toBeLessThanOrEqual(east!.view.x + east!.view.size);
+      expect(stop.y).toBeGreaterThanOrEqual(east!.view.y); expect(stop.y).toBeLessThanOrEqual(east!.view.y + east!.view.size);
+      expect(node.stock).toBeGreaterThan(0); expect(node.respawnSec).toBeGreaterThan(0);
+    }
+    const ids = WORLD_SUPPLY_ROUTES.flatMap(route => route.stops.map(stop => stop.id));
+    expect(new Set(ids).size).toBe(ids.length);
+  });
+
+  it('places food and usable workshop materials before guarded salvage and explains the extra requirements', () => {
+    const east = WORLD_SUPPLY_ROUTES.find(route => route.id === 'east');
+    expect(east).toBeDefined();
+    const [farm, workshop, tanker] = east!.stops;
+    const loot = (id: string) => getWorldInteractable(id)!.lootTable!;
+    expect(loot(farm.id).map(i => [i.itemId, i.count])).toEqual([['food', 3], ['water', 2], ['seed_potato', 1]]);
+    const stock = loot(workshop.id);
+    expect(stock.find(i => i.itemId === 'scrap')!.count).toBeGreaterThanOrEqual(BUILD_RECIPES.workbench!.scrap! + BUILD_RECIPES.storage_box!.scrap!);
+    expect(stock.find(i => i.itemId === 'part')!.count).toBeGreaterThanOrEqual(BUILD_RECIPES.workbench!.parts!);
+    expect(farm.description).toContain('南侧'); expect(workshop.description).toContain('南侧');
+    expect(workshop.description).toContain('木材'); expect(workshop.description).toContain('石料'); expect(workshop.description).toContain('回营');
+    expect(tanker.description).toContain('怪物'); expect(tanker.description).toContain('交易'); expect(tanker.description).not.toContain('熔炉');
+    expect(loot(tanker.id).some(i => i.itemId === 'fuel')).toBe(true);
+  });
+
+  it('connects deeper finite salvage to actual research, turret and ammo costs while retaining food and combat conditions', () => {
+    const east = WORLD_SUPPLY_ROUTES.find(route => route.id === 'east'); expect(east).toBeDefined();
+    const [diner, press, shelves] = east!.stops.slice(4);
+    expect(getWorldInteractable(diner.id)!.lootTable!.map(i => [i.itemId, i.count])).toEqual([['food', 10], ['water', 6]]);
+    const stock = [press, shelves].flatMap(stop => getWorldInteractable(stop.id)!.lootTable!);
+    const amount = (id: string) => stock.filter(i => i.itemId === id).reduce((sum, i) => sum + i.count, 0);
+    const ammo = craftingRecipe('ammo_pack')!.cost;
+    expect(amount('scrap')).toBeGreaterThanOrEqual(BUILD_RECIPES.research_table!.scrap! + BUILD_RECIPES.turret!.scrap! + ammo.scrap);
+    expect(amount('part')).toBeGreaterThanOrEqual(BUILD_RECIPES.research_table!.parts! + BUILD_RECIPES.turret!.parts! + ammo.parts);
+    expect(press.description).toContain('高风险'); expect(press.description).toContain('研究台'); expect(press.description).toContain('蓝图');
+    expect(shelves.description).toContain('炮塔'); expect(shelves.description).toContain('装弹'); expect(diner.description).toContain('返程');
+  });
+
   it('marks real northern food before the guarded powder store without inventing loot', () => {
     const north = WORLD_SUPPLY_ROUTES.find(route => route.id === 'north')!;
     const food = north.stops.find(stop => stop.id === 'world:-1:-6:poi:supplies');

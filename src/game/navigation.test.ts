@@ -98,6 +98,7 @@ describe('world navigation interface', () => {
     expect(html).toContain('废墟');
     expect(html).toContain('缩小地图');
     expect(html).toContain('西行材料线');
+    expect(html).toContain('东行工业线');
     expect(html).not.toContain('<img');
     expect(html).not.toContain('直接折跃');
   });

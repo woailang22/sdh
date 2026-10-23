@@ -52,4 +52,16 @@ export const WORLD_SUPPLY_ROUTES: SupplyRoute[] = [
       { id: 'world:-5:-11:i:mtn_quarry:q_powder', name: '采石场炸药库', x: -140, y: -344, supplies: 'C4 · 弹药', color: '#c58a77', labelOffset: { x: -26, y: 60 }, description: '搜刮矿场现有炸药与弹药，注意附近怪物。攻营破拆会消耗携带的真实炸药，破门本身不产生战利品；先带足食物并规划撤离路线，留意营地自动防御。' },
     ],
   },
+  {
+    id: 'east', name: '东行工业线', view: { x: -32, y: -320, size: 768 }, axis: 'x',
+    stops: [
+      { id: 'world:4:0:poi:supplies', name: '东路口粮农舍', x: 150, y: 22, supplies: '食物 · 饮水 · 种子', color: '#c5ac72', labelOffset: { x: -26, y: 48 }, description: '东行前先由农舍南侧入口进屋搜柜，补充食物、饮水和种子。留出返程口粮；物资已被搜取时，沿路另找农舍，不必空腹赶往城区。' },
+      { id: 'world:6:0:poi:supplies', name: '东路维修工棚', x: 206, y: 14, supplies: '废铁 · 零件', color: '#b77b52', labelOffset: { x: -26, y: -42 }, description: '由南侧入口进入，废铁和零件可用于工作台与仓库，仍需自备木材、石料。材料够用即可回营建设，不必为了走完整线进入战斗区。' },
+      { id: 'world:7:0:i:town_gas:gas_tanker', name: '翻倒油罐车', x: 255, y: 4, supplies: '废铁 · 燃油', color: '#b77b52', labelOffset: { x: 26, y: 48 }, description: '加油站附近有怪物，先备护具和弹药，再决定是否搜车。废铁可用于补弹与防御设施；燃油可带回公共补给点交易，负重或补给不足时先撤离。' },
+      { id: 'world:13:0:i:town_street:st_hardware', name: '五金工具店', x: 438, y: 22, supplies: '零件 · 废铁', color: '#b77b52', labelOffset: { x: -26, y: -42 }, description: '商业街的五金货架提供废铁和零件，可带回营地补充加工与建设材料。附近有怪物，先观察街口；已有足够材料时可在此返营。' },
+      { id: 'world:14:1:i:town_street:st_diner', name: '街角餐馆后厨', x: 460, y: 38, supplies: '食物 · 饮水', color: '#c5ac72', labelOffset: { x: 26, y: 48 }, description: '继续去工厂前补充食物和饮水，并预留返程份量。城区有怪物，不要为装满材料丢掉口粮；补给不足就从这里返回。' },
+      { id: 'world:19:-3:i:town_factory:fac_press', name: '万吨冲压机残骸', x: 622, y: -80, supplies: '废铁 · 零件', color: '#c58a77', labelOffset: { x: -26, y: 135 }, description: '高风险厂区的批量工业材料来源，适合准备充分后补熔炉、研究台和防御设施的材料。木石与研究蓝图仍需另备；缺料再深入，够用就撤。' },
+      { id: 'world:20:-3:i:town_factory:fac_shelves', name: '工厂配件货架', x: 656, y: -82, supplies: '零件 · 废铁 · 扩容弹匣', color: '#c58a77', labelOffset: { x: 26, y: 135 }, description: '工厂内另一处零件与废铁来源，还可找到扩容弹匣。附近有怪物；回营建造炮塔后仍需另外装弹，制造弹药也要靠近工作台并支付材料。' },
+    ],
+  },
 ];

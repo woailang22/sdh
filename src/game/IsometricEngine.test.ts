@@ -8,6 +8,7 @@ import { isPositionBlocked } from './navigation';
 import { worldThemeAt } from './world';
 import { createMemoryDb } from '../../server/db';
 import { GameWorld, type WorldRules } from '../../server/worldState';
+import { authoritativeDamageSince } from './combat';
 
 vi.mock('../audio/soundManager', () => ({ soundManager: { playLevelUp: vi.fn(), playHit: vi.fn(), playGunshot: vi.fn(), playReload: vi.fn() } }));
 
@@ -1464,6 +1465,33 @@ describe('camp interaction priority', () => {
 });
 
 describe('continuous public world', () => {
+  it('finishes a real server food search through hunger ticks while real hits still cancel it', () => {
+    const { engine } = setup(); let time = 10000;
+    const food = { id: 'food-box', type: 'box' as const, name: '口粮柜', x: 0, y: 0, radius: 1, prompt: '搜索', available: true, stock: 1, maxStock: 1, searchDuration: 1.2, lootTable: [{ itemId: 'food', name: '口粮', count: 3 }] };
+    const worldRules: WorldRules = { nodeAt: id => id === food.id ? food : undefined, nodesNear: () => [food], buildingsNear: () => [], monstersNear: () => [], campSiteAllowed: () => false, migrate: (_map, x, y) => ({ mapId: 'world', x, y }) };
+    const game = new GameWorld(createMemoryDb(), worldRules, () => time); game.connect('self', '饥饿玩家');
+    const p = game.state.players.self; p.satiety = 0; p.shield = 0;
+    const results: any[] = [];
+    (engine as any).callbacks.onGameAction = (action: string, params: object) => results.push(game.action('self', { requestId: crypto.randomUUID(), action, ...params }));
+    engine.player.x = engine.player.y = 0; engine.buildings = []; engine.nearestBuilding = null; engine.nearestInteractable = food;
+    (engine as any).gameTime = 10; engine.triggerInteraction(); expect(engine.isLooting).toBe(true);
+    let previous = game.snapshot('self').player;
+    for (let i = 0; i < 15; i++) {
+      time += 100; game.tick(); const current = game.snapshot('self').player;
+      const damage = authoritativeDamageSince(previous, current);
+      if (damage > 0) engine.receiveAuthoritativeDamage(damage);
+      Object.assign(engine.player, { hp: current.hp, shield: current.shield, satiety: current.satiety }); previous = current;
+      (engine as any).update(.1);
+    }
+    expect(p.hp).toBe(97.5); expect(engine.player.hp).toBe(97.5);
+    expect(results).toHaveLength(1); expect(results[0].error).toBeUndefined();
+    expect(results[0].loot.items).toEqual([{ itemId: 'food', name: '口粮', count: 3 }]);
+    engine.gatherCooldown = 0; engine.nearestBuilding = null; engine.nearestInteractable = food;
+    engine.triggerInteraction(); expect(engine.isLooting).toBe(true);
+    const hit = authoritativeDamageSince(previous, { ...previous, hp: previous.hp - 12, lastDamageAt: time + 1, lastCombatDamageAt: time + 1 });
+    engine.receiveAuthoritativeDamage(hit); expect(engine.isLooting).toBe(false);
+    (engine as any).update(.1); expect(results).toHaveLength(1);
+  });
   it('does not flood the screen with depleted-resource notices while gathering is held', () => {
     const { engine } = setup();
     (engine as any).callbacks.onGameAction = vi.fn();

@@ -27,9 +27,10 @@ interface Player extends OnlinePlayer {
   blueprints: string[];
   disconnectUntil: number;
   lastDamageAt: number;
+  lastCombatDamageAt: number;
   xp: number; maxXp: number; kills: number;
 }
-export interface PlayerState extends OnlinePlayer { inventory: (Item | null)[]; equipment: Equipment; resources: Resources; campId: string | null; satiety: number; blueprints: string[]; xp: number; maxXp: number; kills: number; onboarding: OnboardingProgress; lastDamageAt: number }
+export interface PlayerState extends OnlinePlayer { inventory: (Item | null)[]; equipment: Equipment; resources: Resources; campId: string | null; satiety: number; blueprints: string[]; xp: number; maxXp: number; kills: number; onboarding: OnboardingProgress; lastDamageAt: number; lastCombatDamageAt?: number }
 export type WorldMonsterDefinition = Pick<MonsterEntity, 'id' | 'x' | 'y'> & Partial<MonsterEntity>;
 export type AuthoritativeMonster = MonsterEntity & { respawnAt?: number; targetId?: string };
 export type ProductionJob = NonNullable<BuildingEntity['production']>;
@@ -117,7 +118,7 @@ export class GameWorld {
       this.state.production ||= {};
       this.state.monsters ||= {};
       this.state.defenseAt ||= {};
-      for (const p of Object.values(this.state.players)) { p.satiety ??= 100; p.survivalAt = this.now(); p.blueprints ||= []; p.disconnectUntil ??= 0; p.lastDamageAt ??= this.now(); p.xp ??= 0; p.maxXp ||= p.level * 100; p.kills ??= 0; this.deriveArmor(p); }
+      for (const p of Object.values(this.state.players)) { p.satiety ??= 100; p.survivalAt = this.now(); p.blueprints ||= []; p.disconnectUntil ??= 0; p.lastDamageAt ??= this.now(); p.lastCombatDamageAt ??= p.lastDamageAt; p.xp ??= 0; p.maxXp ||= p.level * 100; p.kills ??= 0; this.deriveArmor(p); }
       for (const p of Object.values(this.state.players)) while (p.inventory.length < inventoryCapacity(p.equipment.pack?.id)) p.inventory.push(null);
       for (const camp of Object.values(this.state.camps)) { camp.members ||= []; camp.level ||= 1; camp.size ||= 64; camp.state = this.core(camp)?.hp === 0 ? 'breached' : 'active'; }
       for (const p of Object.values(this.state.players)) {
@@ -198,7 +199,7 @@ export class GameWorld {
     return { id, name, level: 1, title: '废土流浪者', avatarSeed: id, x: 0, y: 0, angle: 0, mapId: 'world', hp: 100, maxHp: 100, shield: 0, maxShield: 50,
       isFiring: false, isDashing: false, color: '#06b6d4', ping: 0, lastSeen: this.now(), currentAction: '徒手求生',
       inventory: Array(BASE_INVENTORY_SLOTS).fill(null), equipment: { weapon: null, armor: null, tool: null, pack: null }, resources: emptyResources(), campId: null, onboarding: emptyOnboarding(),
-      moveAt: this.now(), moveBudget: 0.25, actionAt: {}, combatUntil: 0, satiety: 100, survivalAt: this.now(), dashUntil: 0, dashReadyAt: 0, blueprints: [], disconnectUntil: 0, lastDamageAt: this.now(), xp: 0, maxXp: 100, kills: 0 };
+      moveAt: this.now(), moveBudget: 0.25, actionAt: {}, combatUntil: 0, satiety: 100, survivalAt: this.now(), dashUntil: 0, dashReadyAt: 0, blueprints: [], disconnectUntil: 0, lastDamageAt: this.now(), lastCombatDamageAt: this.now(), xp: 0, maxXp: 100, kills: 0 };
   }
 
   private legacyEntrance(): { x: number; y: number } {
@@ -302,7 +303,7 @@ export class GameWorld {
     resources.medical = p.inventory.reduce((sum, item) => sum + (item?.category === 'medical' ? item.count : 0), 0);
     const equipment = { ...p.equipment };
     for (const slot of ['weapon', 'armor', 'tool', 'pack'] as const) equipment[slot] = describedItem(equipment[slot]);
-    return { ...this.publicPlayer(p), inventory: p.inventory.map(describedItem), equipment, resources, campId: p.campId, satiety: p.satiety, blueprints: p.blueprints, xp: p.xp, maxXp: p.maxXp, kills: p.kills, onboarding: p.onboarding, lastDamageAt: p.lastDamageAt };
+    return { ...this.publicPlayer(p), inventory: p.inventory.map(describedItem), equipment, resources, campId: p.campId, satiety: p.satiety, blueprints: p.blueprints, xp: p.xp, maxXp: p.maxXp, kills: p.kills, onboarding: p.onboarding, lastDamageAt: p.lastDamageAt, lastCombatDamageAt: p.lastCombatDamageAt };
   }
 
   snapshotPlayer(id: string, requestId?: string, error?: string, loot?: { id: string; name: string; items: LootItem[] }, correction = false) {
@@ -842,11 +843,12 @@ export class GameWorld {
   private storageLoot(b: BuildingEntity) {
     return { id: b.id, name: b.name, items: Object.entries(this.state.storage[b.id] || {}).filter(([, count]) => count > 0).map(([itemId, count]) => ({ itemId, name: ITEM_DEFS[itemId]?.name || itemId, count })) };
   }
-  private damage(p: Player, amount: number, undo?: TickUndo) {
+  private damage(p: Player, amount: number, undo?: TickUndo, interruptsSearch = true) {
     undo?.object(p);
     const reduction = p.equipment.armor ? ARMOR_REDUCTION[p.equipment.armor.id] || 0 : 0;
     if (reduction > 0) amount = Math.max(1, Math.floor(amount * (1 - reduction)));
     p.lastDamageAt = this.now();
+    if (interruptsSearch) p.lastCombatDamageAt = p.lastDamageAt;
     const shield = Math.min(p.shield, amount); p.shield -= shield; p.hp -= amount - shield; p.combatUntil = this.now() + 30_000;
     if (p.hp > 0) return;
     undo?.map(this.respawns, p.id); this.respawns.set(p.id, (this.respawns.get(p.id) || 0) + 1);
@@ -932,7 +934,7 @@ export class GameWorld {
         undo.object(p); changedPlayers.push(p);
         const shieldRegenTime = Math.min(elapsed, Math.max(0, (time - Math.max(p.survivalAt, p.lastDamageAt + 5000)) / 1000));
         p.satiety = Math.max(0, p.satiety - elapsed * 0.25); p.survivalAt = time;
-        if (p.satiety <= 0) { this.damage(p, elapsed * 2.5, undo); dirty = true; }
+        if (p.satiety <= 0) { this.damage(p, elapsed * 2.5, undo, false); dirty = true; }
         else if (p.satiety > 50 && p.combatUntil < time) p.hp = Math.min(p.maxHp, p.hp + elapsed * 1.2);
         if (p.mapId === 'world' && this.rules.weather?.() === 'acid_rain') p.shield = Math.max(0, p.shield - elapsed * ACID_SHIELD_DRAIN);
         else if (p.satiety > 0 && shieldRegenTime > 0) p.shield = Math.min(p.maxShield, p.shield + shieldRegenTime * 8);

@@ -515,6 +515,46 @@ function npcHit(game: GameWorld, advance: (ms: number) => void, playerId = 'owne
   delete game.state.monsters.fixture_hit; game.persist();
 }
 
+describe('starvation search damage clock', () => {
+  it('keeps hunger damage and combat grace while leaving the search interruption clock unchanged', () => {
+    const { game, advance } = setup(); const p = game.state.players.owner;
+    p.satiety = 0; p.shield = 0;
+    advance(1000); game.tick();
+    expect(p).toMatchObject({ hp: 97.5, shield: 0, satiety: 0, lastDamageAt: 11000, combatUntil: 41000 });
+    expect(game.snapshot('owner').player).toMatchObject({ lastCombatDamageAt: 10000 });
+  });
+  it('preserves a real attack marker when hunger is the later damage source', () => {
+    const { game, advance, act } = setup(); const p = game.state.players.owner, raider = game.state.players.raider;
+    Object.assign(p, { x: 200, y: 200, satiety: 0, shield: 0 }); Object.assign(raider, { x: 201, y: 200 });
+    advance(500); expect(act('raider', 'attack', { targetId: 'owner' }).error).toBeUndefined();
+    expect(p.hp).toBe(88);
+    expect(game.snapshot('owner').player).toMatchObject({ lastDamageAt: 10500, lastCombatDamageAt: 10500 });
+    advance(1000); game.tick();
+    expect(p.hp).toBe(84.25);
+    expect(game.snapshot('owner').player).toMatchObject({ lastDamageAt: 11500, lastCombatDamageAt: 10500 });
+  });
+  it('migrates an old save from its last damage clock and persists the distinction after restart', () => {
+    const { game, db } = setup(); const p = game.state.players.owner;
+    p.lastDamageAt = 9000; delete (p as any).lastCombatDamageAt; game.persist();
+    let time = 10000;
+    const restored = new GameWorld(db, rules, () => time); restored.connect('owner', '主人');
+    expect(restored.snapshot('owner').player).toMatchObject({ lastDamageAt: 9000, lastCombatDamageAt: 9000 });
+    Object.assign(restored.state.players.owner, { satiety: 0, shield: 0 });
+    time += 1000; restored.tick();
+    expect(new GameWorld(db, rules, () => 12000).snapshot('owner').player).toMatchObject({ hp: 97.5, lastDamageAt: 11000, lastCombatDamageAt: 9000 });
+  });
+  it('rolls back the new attack marker together with a failed NPC damage commit', () => {
+    const { game, db, advance } = setup(); const p = game.state.players.owner;
+    Object.assign(p, { x: 200, y: 200, shield: 0 });
+    game.state.monsters.hit = { id: 'hit', name: '兽', x: 201, y: 200, spawnX: 201, spawnY: 200, hp: 100, maxHp: 100, speed: 1, damage: 10, state: 'attack', animTime: 0, attackCooldown: 0, windup: .1, targetId: 'owner' };
+    const save = db.checkpointWorld; db.checkpointWorld = () => { throw Error('damage commit failed'); };
+    advance(200); expect(() => game.tick()).toThrow('damage commit failed'); db.checkpointWorld = save;
+    expect(p.hp).toBe(100);
+    expect(game.snapshot('owner').player).toMatchObject({ lastDamageAt: 10000, lastCombatDamageAt: 10000 });
+    game.tick(); expect(game.snapshot('owner').player).toMatchObject({ hp: 90, lastCombatDamageAt: 10200 });
+  });
+});
+
 describe('authoritative acid rain', () => {
   function weatherSetup() {
     let time = 10_000, weather: WeatherType = 'acid_rain';

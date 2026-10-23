@@ -1,5 +1,16 @@
 import type { WeatherType } from '../types/game';
 
+interface DamageSnapshot {
+  hp: number; shield: number; maxShield: number; lastDamageAt: number; lastCombatDamageAt?: number;
+}
+
+export function authoritativeDamageSince(previous: DamageSnapshot, current: DamageSnapshot): number {
+  const before = previous.lastCombatDamageAt ?? previous.lastDamageAt;
+  const after = current.lastCombatDamageAt ?? current.lastDamageAt;
+  if (after <= before || !(current.hp < previous.hp || current.shield < previous.shield && current.maxShield >= previous.maxShield)) return 0;
+  return Math.max(0, previous.hp - current.hp) + Math.max(0, previous.shield - current.shield);
+}
+
 export interface WeaponDef {
   id: string;
   name: string;

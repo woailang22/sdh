@@ -1,0 +1,687 @@
+{
+  "status": "verified-east-route-and-starvation-search-recovery",
+  "overallGoalComplete": false,
+  "route": {
+    "id": "east",
+    "stops": [
+      {
+        "name": "东路口粮农舍",
+        "coordinates": [
+          150,
+          22
+        ]
+      },
+      {
+        "name": "东路维修工棚",
+        "coordinates": [
+          206,
+          14
+        ]
+      },
+      {
+        "name": "翻倒油罐车",
+        "coordinates": [
+          255,
+          4
+        ]
+      },
+      {
+        "name": "五金工具店",
+        "coordinates": [
+          438,
+          22
+        ]
+      },
+      {
+        "name": "街角餐馆后厨",
+        "coordinates": [
+          460,
+          38
+        ]
+      },
+      {
+        "name": "万吨冲压机残骸",
+        "coordinates": [
+          622,
+          -80
+        ]
+      },
+      {
+        "name": "工厂配件货架",
+        "coordinates": [
+          656,
+          -82
+        ]
+      }
+    ],
+    "worldNodesChecked": 91,
+    "chunksChecked": 147,
+    "worldNodeDefinitionsUnchanged": true,
+    "usesExistingMapUI": true,
+    "addsResourcesOrLoot": false,
+    "lateFactoryLabelsAvoidRegionTitles": true,
+    "actualNativeFrontStops": [
+      "东路口粮农舍",
+      "东路维修工棚"
+    ],
+    "deepCombatRouteCompleted": false
+  },
+  "bugfix": {
+    "rootCause": "Hunger damage advanced the same lastDamageAt clock that App used to cancel 1.2s searches every survival tick.",
+    "change": "A server lastCombatDamageAt clock drives search interruption. Hunger still uses the original damage/death/armor/combat/regen/offline rules but does not advance this clock. App uses the shared snapshot helper.",
+    "oldSaveMigration": true,
+    "legacySnapshotFallback": true,
+    "mixedAttackThenHungerCovered": true,
+    "rollbackCovered": true,
+    "deployment": "New server and client both required; Git push is not deployment to the external website."
+  },
+  "verification": {
+    "routeRed": {
+      "failed": 4,
+      "passed": 23
+    },
+    "routeFocusedPassed": 27,
+    "routeNegativeFailed": 4,
+    "clockHelperRed": {
+      "failed": 9,
+      "passed": 179
+    },
+    "clockHelperFocusedPassed": 188,
+    "realGameWorldToHelperToEngineSearchCovered": true,
+    "hungerFlagNegativeFailed": 4,
+    "full": {
+      "files": 45,
+      "tests": 711,
+      "maxWorkers": 2
+    },
+    "defaultConcurrencyAttempt": "Failed with server startup until started timeouts and ERR_IPC_CHANNEL_CLOSED; reason not established; retained logs. No timeout increase.",
+    "types": "Final including owned QA passed",
+    "build": "index-BnKU6z5d.js; existing chunk-size warning retained"
+  },
+  "native": {
+    "passed": true,
+    "sameCharacter": true,
+    "normalRulesAndClocks": true,
+    "noStateEdits": true,
+    "priorNaturalDeathPreserved": true,
+    "oldDroppedSeedNormallyRecovered": true,
+    "initialFailure": {
+      "packets": 18987,
+      "actions": 9,
+      "corrections": 3,
+      "noEastFarmSearch": true
+    },
+    "recovered": {
+      "packets": 8580,
+      "movingPackets": 1700,
+      "stationaryPackets": 6880,
+      "travelDistance": 347.60087118014803,
+      "rejected": 0,
+      "errors": 0,
+      "corrections": 1,
+      "actions": 16,
+      "combinedUniqueRequests": 25,
+      "hungrySearchSucceeded": true,
+      "foodUsed": 3,
+      "foodSatietyEach": 35,
+      "finalItems": [
+        [
+          "food",
+          3
+        ],
+        [
+          "water",
+          4
+        ],
+        [
+          "seed_potato",
+          3
+        ]
+      ],
+      "finalResources": {
+        "wood": 0,
+        "stone": 0,
+        "scrap": 8,
+        "parts": 2,
+        "food": 0,
+        "ammo": 0,
+        "c4": 0,
+        "medical": 0,
+        "credits": 0,
+        "shard": 0
+      },
+      "emptyEquipment": true,
+      "noCamp": true,
+      "workshopPathReachedSouthEntrance": true
+    },
+    "final": {
+      "x": 205.57910863200573,
+      "y": 13.480776782616015,
+      "hp": 100,
+      "shield": 50,
+      "satiety": 19.819750000000052
+    },
+    "savedStateMatches": true,
+    "backupRestored": true,
+    "performance": {
+      "environment": {
+        "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
+        "viewport": {
+          "width": 1280,
+          "height": 720
+        },
+        "canvas": {
+          "width": 1280,
+          "height": 720
+        },
+        "devicePixelRatio": 1.5,
+        "modulePath": "/assets/index-BnKU6z5d.js",
+        "jsHeap": {
+          "used": 20712022,
+          "total": 71934802
+        },
+        "graphicsBackend": "unknown"
+      },
+      "totalSlowFrames": 5,
+      "maxUpdateMs": 0.30000001192092896,
+      "maxDrawMs": 77.5,
+      "maxRafGapMs": 138,
+      "acceptancePassed": false
+    },
+    "ui": {
+      "sevenNativeDropdownSelections": true,
+      "mobileViewport": {
+        "height": 844,
+        "width": 390
+      },
+      "mapDialogHorizontalOverflow": false,
+      "markerCoordinates": [
+        656,
+        -82
+      ],
+      "markerDoesNotTeleport": true,
+      "finalPageMapChecked": true,
+      "versions": {
+        "initial": "index-E_6PO6tY.js",
+        "labelAdjustmentAndDetailedMapUI": "index-wcJ24XEd.js",
+        "starvationFixAndResumedGameplay": "index-BnKU6z5d.js"
+      }
+    }
+  },
+  "cleanup": {
+    "ownedFinalServicePid": 43552,
+    "serviceExited": "SIGTERM",
+    "port39135Released": true,
+    "temporaryTabsClosed": true,
+    "viewportDefault": true,
+    "productionDatabaseOpened": false
+  },
+  "review": {
+    "source": "Independent read-only review: no P1/P2",
+    "evidence": "Independent read-only evidence review completed"
+  },
+  "limits": [
+    "The first native attempt really starved to death; it is retained, followed by the same character/save and normal recovery of its one dropped seed. No state/HP/coordinate/time or inventory edits.",
+    "Map-only information and label changes do not claim a new biome, added houses, new terrain art or revised resource density. Existing art was sufficient for this scope.",
+    "The label audit verifies route-point labels against region titles; the existing city/industrial region-title boxes retain a small corner intersection outside the added route labels.",
+    "The detailed seven-stop/mobile/marker pass used the label-only build. Final build repeated the east map and actual front-stop gameplay. Existing global mobile HUD crowding remains.",
+    "Deep gas station/city/factory combat and a complete return to camp have not been natively completed. Real node/loot/industrial recipe relationships are separately tested; wood/stone/blueprints/ammo are still required.",
+    "Final page retained all five slow records: draw max77.5ms and RAF max138ms, including early/loading and movement/interaction. Older label-only page has11 retained records; initial E_6 page full diagnostics were not exported. No combined comparison or frame-rate improvement claim.",
+    "347.6 game units in the recovery session is segmented movement, not continuous60s/P95/GPU/physical-presentation/long-memory acceptance. Single JS heap is not browser process memory.",
+    "Passive server observer adds bounded logging and copying overhead. Native screenshots precede the final checkpoint and are not exact final satiety snapshots."
+  ],
+  "sources": [
+    {
+      "path": "data/audit-east-route-20261024.ts",
+      "sha256": "075ad58b566a22655c6fc08ffc29301223296959bbcbddafbe179854a5073ef6"
+    },
+    {
+      "path": "data/capture-cua-east-route-20261024.ts",
+      "sha256": "16df3cc0eed1598d5b716c7adf4c479dbe9746c0e824321237bfb701454686bc"
+    },
+    {
+      "path": "data/control-cua-east-route-resume-20261024.cjs",
+      "sha256": "ec7ea57dfe7059bbc1d6ae08a4bb592ae6441c98119bd28c82c529d673c6be27"
+    },
+    {
+      "path": "data/cua-east-route-20261024-a1-after-death-ax.txt",
+      "sha256": "8229ccdde4925c2d14ae5bba5cd0c7161f00967325374c1b1dd0bdccf7606ed8"
+    },
+    {
+      "path": "data/cua-east-route-20261024-a1-after-death.png",
+      "sha256": "03be823e7fe19e9c4e57d2956794f0e8404b6d72f6174b77683e5bc2dda80155"
+    },
+    {
+      "path": "data/cua-east-route-20261024-a1-audit.json",
+      "sha256": "326b640c578712500addcec9bf4f063da81903ea0790e38587c6c2d7c11b4938"
+    },
+    {
+      "path": "data/cua-east-route-20261024-a1-before-final-page-ax.txt",
+      "sha256": "c5b043a75ff86db4b338aa985345bcb0f697527fa0a0b4b2d5a3ec19907cf1f6"
+    },
+    {
+      "path": "data/cua-east-route-20261024-a1-desktop.png",
+      "sha256": "294b7b286eaed6e5a556865fb674dd490a0828e0a234ab0698eec6214633217f"
+    },
+    {
+      "path": "data/cua-east-route-20261024-a1-failed-errors.json",
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "path": "data/cua-east-route-20261024-a1-failed-frames.json",
+      "sha256": "6d202a51d699fc5a31b77cd4aa898a9eec67ebea9f0c9750b90f2868f485cf32"
+    },
+    {
+      "path": "data/cua-east-route-20261024-a1-labels-after.json",
+      "sha256": "6cb2e4460e63a3b70d36d102674764936d250b7a057b20ed90c8de9f8dfd4c59"
+    },
+    {
+      "path": "data/cua-east-route-20261024-a1-labels-before.json",
+      "sha256": "f33fbd4ad58662a2b0107ef05e01eeffa620d6dba2aa8c3dbad12183f55b3c05"
+    },
+    {
+      "path": "data/cua-east-route-20261024-a1-labels-before.png",
+      "sha256": "b42a82efe0208f0263072fdb0812f7920a76dddad3a4ddc8369d33fcfb24b216"
+    },
+    {
+      "path": "data/cua-east-route-20261024-a1-marked-ax.txt",
+      "sha256": "852c4b753658f85464515418857fbd350463c9e45aadf5894083ff3c6b8af027"
+    },
+    {
+      "path": "data/cua-east-route-20261024-a1-mobile-bounds.json",
+      "sha256": "20d9d2b4196bce2ea4e930b979531ce290bba2c3dad94841cf8447e9f1d3c42e"
+    },
+    {
+      "path": "data/cua-east-route-20261024-a1-mobile-details.png",
+      "sha256": "d9f8c51da2481d27fe8074d454ab6cb17f8de2e407de6a4b024789bbdf9f052b"
+    },
+    {
+      "path": "data/cua-east-route-20261024-a1-mobile-top.png",
+      "sha256": "6ea3c98f8583997f7f11ed1f272c57b329d38ba72a9b39d14e63040070d772bc"
+    },
+    {
+      "path": "data/cua-east-route-20261024-a1-native-after-natural-death-events.json",
+      "sha256": "a48e0dcb04a7acd422116163658b10a72750100909f46e78df0b87fde4a2c2f2"
+    },
+    {
+      "path": "data/cua-east-route-20261024-a1-native-after-natural-death-world-private.json",
+      "sha256": "06814e351f0bfa7ceb830115f19672f7a2f94ae00739535c316d506b70c803b4"
+    },
+    {
+      "path": "data/cua-east-route-20261024-a1-native-before-final-page-events.json",
+      "sha256": "c6eef2e608b186c59a84390015a33b09da4ec0c486a84edacf265080bbcdb4aa"
+    },
+    {
+      "path": "data/cua-east-route-20261024-a1-native-before-final-page-world-private.json",
+      "sha256": "af0a1080c670d96705fadc4d09951e90024f155bd696a50d45f56a3a1b93aa20"
+    },
+    {
+      "path": "data/cua-east-route-20261024-a1-native-connected-world-private.json",
+      "sha256": "383714c86f9e5bd60af5b2c26eca5bbaac87096858f14011511782203ce8e38c"
+    },
+    {
+      "path": "data/cua-east-route-20261024-a1-native-food-search-events.json",
+      "sha256": "4b7c9ef89275f76fe52174188ccbd6278b6bf6a45173f4fab4978fed8f84a90e"
+    },
+    {
+      "path": "data/cua-east-route-20261024-a1-native-food-search-world-private.json",
+      "sha256": "160e7e201d944dcd3708543137f0d236be04d94b35b488a5c97340b8f38f2916"
+    },
+    {
+      "path": "data/cua-east-route-20261024-a1-native-marker-after-events.json",
+      "sha256": "0f8c32ad7c19ac9e653dfa8b65e324194e56589b0898fbdbd365f635a6995d9b"
+    },
+    {
+      "path": "data/cua-east-route-20261024-a1-native-marker-after-world-private.json",
+      "sha256": "6ee57633bb6fc7bbec265307cd21694996a8befb87ea3ce8c5f2d1a72f4221fa"
+    },
+    {
+      "path": "data/cua-east-route-20261024-a1-native-marker-before-events.json",
+      "sha256": "e4f8b412bc04787351906b01b38139a5a5ebe8ad53d86b4c2c581b2d75b8bf4f"
+    },
+    {
+      "path": "data/cua-east-route-20261024-a1-native-marker-before-world-private.json",
+      "sha256": "4a5cc2e6e67ac42d7d91db5b7221b1d99873c4c5c1450de6842ba301cc6eafa9"
+    },
+    {
+      "path": "data/cua-east-route-20261024-a1-native-stopped-page-events.json",
+      "sha256": "558baf345062c71cfbf191c4f95839b1c00c2a742ad9d280053f5ec000ed3559"
+    },
+    {
+      "path": "data/cua-east-route-20261024-a1-native-stopped-page-world-private.json",
+      "sha256": "af0212da3d20bdd88a0a8726ad6299c919fdfa18498711bb8d1f89c46e6163e4"
+    },
+    {
+      "path": "data/cua-east-route-20261024-a1-native-travel-start-events.json",
+      "sha256": "79827748ccb4666817fe4d29b373d36dea60b5d66820c67c5c87c5d4bc3a625c"
+    },
+    {
+      "path": "data/cua-east-route-20261024-a1-native-travel-start-world-private.json",
+      "sha256": "20846601fa93d50035ebdc5cb28a63b31448af6ceb5bc17cc21e250d2b649661"
+    },
+    {
+      "path": "data/cua-east-route-20261024-a1-recovered-before-search-ax.txt",
+      "sha256": "0dd80eaffcb955e82edc0fbab21e803bb26df1322acab799117af46a3cb86370"
+    },
+    {
+      "path": "data/cua-east-route-20261024-a1-recovered-connected-world-private.json",
+      "sha256": "5c9bf2f837ba122591cc4526aad43b38edf6f5a89f86ac379707e38add52f37d"
+    },
+    {
+      "path": "data/cua-east-route-20261024-a1-recovered-east-farm-arrival-events.json",
+      "sha256": "af462f53b65543055a599a80e78c13f020969a0a157c2f14bd7ac2b4b73ddb0c"
+    },
+    {
+      "path": "data/cua-east-route-20261024-a1-recovered-east-farm-arrival-world-private.json",
+      "sha256": "fe40077d80869c8cefb374e989be3e150bde75f1465d069c0d965a7324ef0384"
+    },
+    {
+      "path": "data/cua-east-route-20261024-a1-recovered-east-farm-cabinet-ax.txt",
+      "sha256": "9d99a25be521d224586eff9984afa36d7d99dcbefe74a16e62d7445ca2d17d81"
+    },
+    {
+      "path": "data/cua-east-route-20261024-a1-recovered-east-farm-cabinet.png",
+      "sha256": "47198f69da3e6f204fdf78e36a5d0b38dc09c5825440c1f066a8097b0902cb7c"
+    },
+    {
+      "path": "data/cua-east-route-20261024-a1-recovered-east-farm-loot-ax.txt",
+      "sha256": "4beeb026f6c72135cc500d6c9ec61deba9bc1bb9e27d4b5b1831be49dd14db2b"
+    },
+    {
+      "path": "data/cua-east-route-20261024-a1-recovered-east-farm-loot.png",
+      "sha256": "46b20050561c92bae81d201f2df428eeda93cb928b11d900c9c1284230cfeeae"
+    },
+    {
+      "path": "data/cua-east-route-20261024-a1-recovered-east-farm-looted-events.json",
+      "sha256": "9b068a11a2faf262bf9102f66ec6d3744d0f2b62c4677b3eb2e28661bf48c4d6"
+    },
+    {
+      "path": "data/cua-east-route-20261024-a1-recovered-east-farm-looted-world-private.json",
+      "sha256": "8166814ea55fd319c5f31404bd18c0d4793d838be3fce24e534dfbd997404d2f"
+    },
+    {
+      "path": "data/cua-east-route-20261024-a1-recovered-errors.json",
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "path": "data/cua-east-route-20261024-a1-recovered-final-events.json",
+      "sha256": "9e3eed7fcec7004a116b1f8c7004b207062dc6bd7c269f49b20a66b26f2a094a"
+    },
+    {
+      "path": "data/cua-east-route-20261024-a1-recovered-final-world-private.json",
+      "sha256": "1b24bac428332f4db8757ef85e4b35047fc3502d6409bb516d3eb76b0a6e10dd"
+    },
+    {
+      "path": "data/cua-east-route-20261024-a1-recovered-frames.json",
+      "sha256": "51a1b9cb44b98de8f40a0328b31c14a370289ff126fb97543fe61b597d2a7181"
+    },
+    {
+      "path": "data/cua-east-route-20261024-a1-recovered-hunger-wait-events.json",
+      "sha256": "9829a7b0dc8934223798b2188f260dac253b1bb7a362f3d24d7dc0675f8628a3"
+    },
+    {
+      "path": "data/cua-east-route-20261024-a1-recovered-hunger-wait-world-private.json",
+      "sha256": "8b544beb95bb7709ab963337f00fe9d8f262d3c247613686546c30c5ec6e956f"
+    },
+    {
+      "path": "data/cua-east-route-20261024-a1-recovered-hungry-loot-ax.txt",
+      "sha256": "8fa0408b748e37719d493191e9f65d1bdc674055055c0d92b125122d05ed9be6"
+    },
+    {
+      "path": "data/cua-east-route-20261024-a1-recovered-hungry-loot.png",
+      "sha256": "b16906c37729b80f154dca52c09a5b41c2efcb588ce9bd526d29dddf08c4c092"
+    },
+    {
+      "path": "data/cua-east-route-20261024-a1-recovered-hungry-search-recovered-events.json",
+      "sha256": "d409d6bc95bc918d2190fe29bad23f7a439a1bc44dd8bfef30b3b8df526b8c12"
+    },
+    {
+      "path": "data/cua-east-route-20261024-a1-recovered-hungry-search-recovered-world-private.json",
+      "sha256": "1f109f4dd4ed4861bcbea6a02a9aee28c873e53bf04e39f9284690cd768a6886"
+    },
+    {
+      "path": "data/cua-east-route-20261024-a1-recovered-route-ax.txt",
+      "sha256": "e77dd97e36e39bcd2ac3868d0a89ebc2fd07b10d736e22493f90a31c886c4fbc"
+    },
+    {
+      "path": "data/cua-east-route-20261024-a1-recovered-route.png",
+      "sha256": "c910f60c291f897a20f430d284c88e5986a71cb61786d992e261e14b0b4d4b40"
+    },
+    {
+      "path": "data/cua-east-route-20261024-a1-recovered-workshop-arrival-events.json",
+      "sha256": "ecd5abda75a549bb70137b8a07beed8c25bc630bbf17a6836490733acc44abc6"
+    },
+    {
+      "path": "data/cua-east-route-20261024-a1-recovered-workshop-arrival-world-private.json",
+      "sha256": "781b2b7bd396f3ba5ab87a37288285a18ec8d25423819cf36363a685274971a6"
+    },
+    {
+      "path": "data/cua-east-route-20261024-a1-recovered-workshop-loot-ax.txt",
+      "sha256": "3cdfb794e28f97436bc04cab57416d7b8da4ead613c03ef85f2a944faa8132b6"
+    },
+    {
+      "path": "data/cua-east-route-20261024-a1-recovered-workshop-loot.png",
+      "sha256": "e0b410df6f5c00a9eb36dfd4c416dd7769215878bf451a4f7184d1d8514ea865"
+    },
+    {
+      "path": "data/cua-east-route-20261024-a1-seven-stops-ax.json",
+      "sha256": "4c6e1228304c896fff0d96c87d25946f98812070a4d4a407adee3dd25ae086e3"
+    },
+    {
+      "path": "data/east-final-build-20261024.log",
+      "sha256": "f2dae40de3aac92ccea6a0e5f1d13ccde6b27d25af643c4e3cb69ec719d4123e"
+    },
+    {
+      "path": "data/east-final-tests-20261024.log",
+      "sha256": "c0e3c27a023d56eda6c6dcadfc1c986207248df5bf509a069bcd95484d0ef555"
+    },
+    {
+      "path": "data/east-final-tests-bounded-20261024.log",
+      "sha256": "9c0c2762f3dd087a590299b68fc449a469f60ec93cb9c9c70d8cc01e21a76b21"
+    },
+    {
+      "path": "data/east-final-types-20261024.log",
+      "sha256": "7f3594d7a965c703e6361ae50c0ef50cf9c344c621d801592b074b48554f4235"
+    },
+    {
+      "path": "data/east-final-types-allqa-20261024.log",
+      "sha256": "7f3594d7a965c703e6361ae50c0ef50cf9c344c621d801592b074b48554f4235"
+    },
+    {
+      "path": "data/east-native-audit-20261024.log",
+      "sha256": "dea4e50bb191a699e94abb8f547567a7c9e2976cfa01821dc3ac06929262992b"
+    },
+    {
+      "path": "data/east-report-initial-assertion-20261024.log",
+      "sha256": "3ba7e13297658c778bdfb8b6bb2b881443dd35c4475be43991f978e5c394d9db"
+    },
+    {
+      "path": "data/east-report-marker-spacing-20261024.log",
+      "sha256": "b6b8aea249ba9589e95828045090ed383e9b66443348f76f6a14f06847d69cf8"
+    },
+    {
+      "path": "data/east-route-build-20261024.log",
+      "sha256": "9b937c30c1111aa36af6ac1913bd61907393dfe825ed9ef0e05e24cfcd7f337d"
+    },
+    {
+      "path": "data/east-route-build-final-20261024.log",
+      "sha256": "365cebb8cc68fee133ed7143355fd919f703aa87ac4f596daece1c7be16130f2"
+    },
+    {
+      "path": "data/east-route-cua-cleanup-20261024.json",
+      "sha256": "377c199bc6d15d93e24cd578e95f2e12173b41d6f85f97c7fffb5f1d8a8f51dc"
+    },
+    {
+      "path": "data/east-route-existing-nodes-20261024.json",
+      "sha256": "bdc32fced71e4dea1bb5a2d693d9032f469cbf535dce902dce2fe14b50f5f176"
+    },
+    {
+      "path": "data/east-route-existing-nodes-after-20261024.json",
+      "sha256": "bdc32fced71e4dea1bb5a2d693d9032f469cbf535dce902dce2fe14b50f5f176"
+    },
+    {
+      "path": "data/east-route-existing-nodes-before-20261024.json",
+      "sha256": "bdc32fced71e4dea1bb5a2d693d9032f469cbf535dce902dce2fe14b50f5f176"
+    },
+    {
+      "path": "data/east-route-final-bundle-BnKU6z5d.js",
+      "sha256": "a2f013411d82c6373a4176326e3e6137e6bac15d428174009494aab9a07b7f54"
+    },
+    {
+      "path": "data/east-route-final-index.html",
+      "sha256": "1f794e831b1cfa3331edc8dfa881526ba742e20bc6051bd251fff93617e160f8"
+    },
+    {
+      "path": "data/east-route-focus-20261024.log",
+      "sha256": "e6cde7170cccf796b01a15cb4674e677dc10515e2577271e75c659d909707f8e"
+    },
+    {
+      "path": "data/east-route-full-tests-20261024.log",
+      "sha256": "75e507e6dedf10fa143f590bc617484e956ebba30b616bae7ee7e5decbf1428a"
+    },
+    {
+      "path": "data/east-route-full-tests-final-20261024.log",
+      "sha256": "482c352cb3ed696b0b78f459f27858c55464e703829160fd53ed78ba0dfb2bd6"
+    },
+    {
+      "path": "data/east-route-native-path-options-20261024.json",
+      "sha256": "60552b1e5bb04636fac0365f233055cb22af56524e96b3fd3b9c55fcfea17a2b"
+    },
+    {
+      "path": "data/east-route-negative-20261024.log",
+      "sha256": "6f49425146ba0759fe2dc7d75bec15812dd826777ee0a99ae2462e5e37e037dc"
+    },
+    {
+      "path": "data/east-route-recovery-focus-20261024.log",
+      "sha256": "e426fc638dacc921c5d1f0d40e1a221b06d5a11252393e168686ceb5b92fffc8"
+    },
+    {
+      "path": "data/east-route-red-20261024.log",
+      "sha256": "ed6c1cbdd19af25d61f72bd6ed1d3e29c73312ed7df2ba7fefacc4f429c16d6a"
+    },
+    {
+      "path": "data/east-route-service-cleanup-20261024.json",
+      "sha256": "b0b55cf6472f2e54478bb1afa9d8fbd94f80e0ffb19abc6caa10fc6ff95f0d31"
+    },
+    {
+      "path": "data/east-route-types-20261024.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "data/east-starvation-chain-20261024.log",
+      "sha256": "0ac50288bc143c99e37d84521d71674fd0d80361b2f1a01fcb49c3faf47d6ad7"
+    },
+    {
+      "path": "data/east-starvation-focus-20261024.log",
+      "sha256": "69ad56e958850ea91b25e84e8983d3ba73b85fe1db6d7ca158f4daf7c28443e6"
+    },
+    {
+      "path": "data/east-starvation-negative-20261024.log",
+      "sha256": "82e0631541b37bc900ea975a6bf1b9520c20065e2765863ebae88cf97c5783ec"
+    },
+    {
+      "path": "data/east-starvation-red-20261024.log",
+      "sha256": "e5f059ff32fb4dd9b604eb78f9c838cfaec4f083b0886b8ac3d648ebf576f3e0"
+    },
+    {
+      "path": "data/negative-east-route-20261024.cjs",
+      "sha256": "aee443af4a0f0dbdb764e6fe147f5a27bceb99b860441e912b9d71f834456067"
+    },
+    {
+      "path": "data/negative-east-starvation-20261024.cjs",
+      "sha256": "53ecf2ec5bcb3433b4f6c14174251e3cb0bf28dc34f4de1630ada69c0d89767f"
+    },
+    {
+      "path": "data/publish-east-route-20261024.cjs",
+      "sha256": "9de3a6664600ad3bcfb88bd076976f3f20812b60ef52492b317e30c7fcbaf685"
+    },
+    {
+      "path": "data/publish-east-route-initial-20261024.cjs",
+      "sha256": "c8c355a3aa10cec901b0d46c1e1a8374fdfe2beca64a9b0163d19dffe1356db2"
+    },
+    {
+      "path": "data/publish-east-route-spacing-20261024.cjs",
+      "sha256": "7910e67ef3d08fff269880e2cdd55557eb2315df28d6b646367287fa0a3ecc6c"
+    },
+    {
+      "path": "docs/superpowers/plans/2026-10-24-east-industrial-route.md",
+      "sha256": "ef128ced014b38e4079b1d6b44e6af34f587ed500ac3386690d342092af51177"
+    },
+    {
+      "path": "docs/superpowers/specs/2026-10-24-east-industrial-route-design.md",
+      "sha256": "a96cf7f03d3b1153a9b2bd550d76defd61a6403b1c3ee8980a2deebda0ce5e8e"
+    },
+    {
+      "path": "server/db.ts",
+      "sha256": "9cf91e65d64e6372bb897d98b8bdda843a03f42f409240f272abc4ed09d83f0f"
+    },
+    {
+      "path": "server/worldState.test.ts",
+      "sha256": "57f27e24343ad23f5e91b4123fbbc96debecf7e0503226457b24f4f696c8cb5e"
+    },
+    {
+      "path": "server/worldState.ts",
+      "sha256": "829140066d1e04a3521ba2286e4130b39ccdcdf825a7a4340dc34e416ff6f5f1"
+    },
+    {
+      "path": "src/App.tsx",
+      "sha256": "f7680b75b5153fa1fbf0e053d648e57c4a98c607af3e401c602ff5efb0387181"
+    },
+    {
+      "path": "src/components/WorldMapModal.tsx",
+      "sha256": "b96565c6661634f79128206a74caaa3c4f044607ce2909964b6f1b7d2cb03685"
+    },
+    {
+      "path": "src/game/IsometricEngine.test.ts",
+      "sha256": "149002196085ea4ef9eba1efc83c5ca2e7b7b118ca77a8f84367e48eda6513ea"
+    },
+    {
+      "path": "src/game/IsometricEngine.ts",
+      "sha256": "ae2044d79919114d6a7b2db3b680dbf7c574c19b275c87d89735ca11c2fcb93d"
+    },
+    {
+      "path": "src/game/buildingRecipes.ts",
+      "sha256": "4514d33da6faf0d91fe9c41c095816a6559f8d335894acbcf31ab853d949df13"
+    },
+    {
+      "path": "src/game/combat.test.ts",
+      "sha256": "858fa7682cc5fdb81a0a68e8adc2b37e02b91cae653be5d763d0cc004ebf002b"
+    },
+    {
+      "path": "src/game/combat.ts",
+      "sha256": "d9f4155b8e4ecfe3158e90ecc5b6910823af4de6ac198397dd8c57c8b51c20b3"
+    },
+    {
+      "path": "src/game/crafting.ts",
+      "sha256": "eb43bd22c9ee159759a1b23a76d64bbbdaeaf0c3a89cbc22fa7df87c90d34105"
+    },
+    {
+      "path": "src/game/frameDiagnostics.ts",
+      "sha256": "ae00db37d16abd4eb2752f2510ddad89684b4e2bddc9973c34443c23cc1b33dc"
+    },
+    {
+      "path": "src/game/navigation.test.ts",
+      "sha256": "d5f0fc684ed3697ecfdf040d70fc78c1ee0aabf2401024e49883445a94f4076d"
+    },
+    {
+      "path": "src/game/navigation.ts",
+      "sha256": "defeedf6c1670922f76b115c5da0a1bdce4f64afa8fb5b7eca0ee5c48065b662"
+    },
+    {
+      "path": "src/game/stateSync.ts",
+      "sha256": "cfb25fc761a622ab0f90077849adc9e0375f800f315af9dca0a09560926b28a0"
+    },
+    {
+      "path": "src/game/world.ts",
+      "sha256": "9ad6447e3e2cce3f9f391856bd3008856a49c2849a35d71aa1368b1893510949"
+    },
+    {
+      "path": "src/game/worldRoutes.test.ts",
+      "sha256": "ea935a57ffe7c20c4f89826cef0a80cdae1cf2087d0124741982246b370dad6d"
+    },
+    {
+      "path": "src/game/worldRoutes.ts",
+      "sha256": "11b54c112ae4c37b0cf2dd0e16a7937c0b293e0bd4d04225eb4b2c4e2858ea81"
+    }
+  ]
+}
