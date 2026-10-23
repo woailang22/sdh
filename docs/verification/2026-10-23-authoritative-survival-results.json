@@ -1,0 +1,278 @@
+{
+  "sourceBaseCommit": "a156e24",
+  "runtimeBundle": "/assets/index-D-lv6nhw.js",
+  "fix": "Online HP/satiety are updated by server snapshots only; no local hunger damage or high-food healing. Offline preview survival unchanged. No cadence/world/balance/queue changes.",
+  "verification": {
+    "newCases": 6,
+    "initialRedFailures": 4,
+    "initialRedOtherPassing": 121,
+    "focusedPassing": 125,
+    "validNegativeControlBusinessFailures": 4,
+    "sourceRestoredAfterControl": true,
+    "fullTestFiles": 43,
+    "fullTests": 622,
+    "typeCheck": "passed again after final audit scripts; data/authoritative-survival-audit-types-final-20261023.log",
+    "build": "passed",
+    "buildWarnings": "Existing Vite native-config/__dirname and >500kB chunk warnings retained."
+  },
+  "actualClient": {
+    "synthetic": true,
+    "normalMaxHp": 100,
+    "preparedSatiety": 0,
+    "fixtureChangesBeforeStartupOnly": true,
+    "preparation": "New owned consistent copy of completed mixed-run fixture. Only target HP100/satiety0/deadline reset before startup. Assets/ammo/identity/position not granted or replaced. Normal server clock/armor/shield/starvation rules.",
+    "environment": {
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "canvas": {
+        "width": 1280,
+        "height": 720
+      },
+      "devicePixelRatio": 1.5,
+      "modulePath": "/assets/index-D-lv6nhw.js",
+      "jsHeap": {
+        "used": 37430703,
+        "total": 80727799
+      },
+      "graphicsBackend": "unknown"
+    },
+    "sequence": "Normal existing cookie reconnect. First server stops6s after actual connect. Same DB restarts without edits for40s, then20s after actual reconnect so shield absorbs hunger first and actual HP then falls. Every owned process has terminal exit observed. No browser state injection.",
+    "samples": [
+      {
+        "name": "after",
+        "at": 1792766281330,
+        "hp": 100,
+        "shield": 90,
+        "stamina": 100,
+        "satiety": 0
+      },
+      {
+        "name": "reconnected",
+        "at": 1792766427939,
+        "hp": 100,
+        "shield": 14,
+        "stamina": 100,
+        "satiety": 0
+      },
+      {
+        "name": "health-updated",
+        "at": 1792766553268,
+        "hp": 76,
+        "shield": 0,
+        "stamina": 100,
+        "satiety": 0
+      },
+      {
+        "name": "health-stable",
+        "at": 1792766630115,
+        "hp": 76,
+        "shield": 0,
+        "stamina": 100,
+        "satiety": 0
+      }
+    ],
+    "firstDisconnectedUiSpanMs": 116789,
+    "firstSampleLimit": "Initial ui-before stored AX diff omits HP; initial HP100/shield90 evidence is initial visible AX and ui.png screenshot, later full AX confirms100/90/0 after116789ms. Do not claim two full-text baseline snapshots for that span.",
+    "healthStableAfterDisconnectMs": 76847,
+    "actualClientMovement": "Held W1.5s and S2s after server stop visibly change local coordinates while HP/satiety stable; stored server position unchanged. This demonstrates renderer/update active, not accepted offline movement.",
+    "report": {
+      "kind": "local-frame-diagnostics",
+      "version": 1,
+      "capturedAt": "2026-10-23T14:44:11.124Z",
+      "timing": "Milliseconds of JavaScript work and callback/draw-start intervals; not GPU time or physical displayed frames. Latest 20 visible successful slow samples (>50ms), including initial loading. Refresh clears records.",
+      "totalSlowFrames": 3,
+      "samples": [
+        {
+          "atMs": 33427,
+          "updateMs": 0.5,
+          "drawMs": 66.8999999910593,
+          "rafGapMs": 13.800000011920929,
+          "drawGapMs": null,
+          "scene": {
+            "map": "camp",
+            "x": 0,
+            "y": 16,
+            "chunks": 25,
+            "buildings": 5675,
+            "interactables": 0,
+            "monsters": 0,
+            "players": 0,
+            "inputBlocked": false
+          }
+        },
+        {
+          "atMs": 33538.39999999106,
+          "updateMs": 0.9000000059604645,
+          "drawMs": 5.899999991059303,
+          "rafGapMs": 111.3999999910593,
+          "drawGapMs": 111.79999999701977,
+          "scene": {
+            "map": "camp",
+            "x": 0,
+            "y": 16,
+            "chunks": 25,
+            "buildings": 5675,
+            "interactables": 0,
+            "monsters": 0,
+            "players": 0,
+            "inputBlocked": false
+          }
+        },
+        {
+          "atMs": 527985.8999999911,
+          "updateMs": 1.5,
+          "drawMs": 5.299999997019768,
+          "rafGapMs": 6.0999999940395355,
+          "drawGapMs": 55,
+          "scene": {
+            "map": "camp",
+            "x": 5.389327469898284,
+            "y": 18.653686896979515,
+            "chunks": 25,
+            "buildings": 5675,
+            "interactables": 0,
+            "monsters": 0,
+            "players": 0,
+            "inputBlocked": true
+          }
+        }
+      ],
+      "environment": {
+        "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
+        "viewport": {
+          "width": 1280,
+          "height": 720
+        },
+        "canvas": {
+          "width": 1280,
+          "height": 720
+        },
+        "devicePixelRatio": 1.5,
+        "modulePath": "/assets/index-D-lv6nhw.js",
+        "jsHeap": {
+          "used": 37430703,
+          "total": 80727799
+        },
+        "graphicsBackend": "unknown"
+      }
+    }
+  },
+  "audit": {
+    "integrity": "ok",
+    "consistentBackupRestore": true,
+    "storedPlayers": 10,
+    "buildingsUnchanged": 5675,
+    "defenseAmmoUnchanged": 540,
+    "allInventoryEquipmentResourcesAndHandledUnchanged": true,
+    "otherNinePlayersVitalsUnchanged": true,
+    "serverVitals": {
+      "hp": 76,
+      "shield": 0,
+      "satiety": 0,
+      "ammo": 1648
+    },
+    "paidShots": 0,
+    "realSaveOpened": false
+  },
+  "limitations": [
+    "Fix addresses client drift/negative HP; no claim about walking stalls, original native a12 refusal, sustained FPS, GPU, long memory, siege capacity or earned economy acceptance.",
+    "Actual server starvation first damages shield after vest reduction, then HP; no fake healing/death/inventory reset during reconnect. Client freezes last snapshot during disconnection; server/offline-body rules still apply.",
+    "Initial clipboard read bridge returned empty despite copied feedback; visible textarea DOM used to save diagnostic report.",
+    "Initial negative-control exact LF anchor failed preflight before mutation/test; CRLF-aware QA regex then produced4 expected business failures and restored source."
+  ],
+  "review": "Independent final read-only review passed: no confirmed P1/P2, all37 source hashes across both reports verified, code/counters/asset-audit scope/UI screenshots/privacy and limitations checked. Reviewer did not open databases or run tests/services/browser loads.",
+  "sourceHashes": [
+    {
+      "path": "src/game/IsometricEngine.ts",
+      "sha256": "2d39872d05612b704cdb37dc308b69833d2243eec7a16f16f5c65296bf6c3ad0"
+    },
+    {
+      "path": "src/game/IsometricEngine.test.ts",
+      "sha256": "7a4192b10eadaf38594e79d0f5084dae9164d777928c52e102645558890da2b1"
+    },
+    {
+      "path": "data/authoritative-survival-red-20261023.log",
+      "sha256": "3f18902bfce535353f22ad6fab13b5afea5dea17356991ccb2eb997ab7b7eb1f"
+    },
+    {
+      "path": "data/authoritative-survival-green-20261023.log",
+      "sha256": "ddb34c6b623e7e388b6de817bd22acc2b66800de353a39e22204e70d5397856d"
+    },
+    {
+      "path": "data/authoritative-survival-negative-control-20261023.log",
+      "sha256": "240aaa3a914c1c39844b6474924a0d00a199dfce729c1230a70a3ffb2abb9d3b"
+    },
+    {
+      "path": "data/authoritative-survival-full-tests-20261023.log",
+      "sha256": "e425383d734a159a3a2babd4fb87e48c43845755e0a585956d2eeb7dd6224705"
+    },
+    {
+      "path": "data/authoritative-survival-final-types-20261023.log",
+      "sha256": "7f3594d7a965c703e6361ae50c0ef50cf9c344c621d801592b074b48554f4235"
+    },
+    {
+      "path": "data/authoritative-survival-build-20261023.log",
+      "sha256": "82f7b2c1a7b98a752af6187235984e8c24ad1e741b67ab287d4907aa84cbfadc"
+    },
+    {
+      "path": "data/run-cua-survival-fixed-20261023.cjs",
+      "sha256": "f34645babb92efae11e3d6db4f23c4945aecf852f86ce7db08dce5e74fea0884"
+    },
+    {
+      "path": "data/resume-cua-survival-fixed-20261023.cjs",
+      "sha256": "6589eca83a19a39f977dec39ef462d48a175aa5020642dd8746109a9026977e1"
+    },
+    {
+      "path": "data/resume-cua-survival-fixed-health-20261023.cjs",
+      "sha256": "976695c919093d8baa429158b3f0dabe5170b709f58d1f95400d02955eb0c19d"
+    },
+    {
+      "path": "data/capture-cua-survival-fixed-20261023.ts",
+      "sha256": "0cb7d7f10c9f06570a2d0eed7176ea00e664b6dca89f67a9aff1c58dbbb887cc"
+    },
+    {
+      "path": "data/cua-survival-fixed-20261023-a1-ui-after.json",
+      "sha256": "3aa8d2f08bf654c0758516df29326a048ce7e883357bcef3291193e43a1176b5"
+    },
+    {
+      "path": "data/cua-survival-fixed-20261023-a1-ui-reconnected.json",
+      "sha256": "3eebc096416bfb8879af10c7842af484b27a5e4e15d485b21120aa9103095fe9"
+    },
+    {
+      "path": "data/cua-survival-fixed-20261023-a1-ui-health-updated.json",
+      "sha256": "6250d77dd4f57fe091b302b0c59c02d86e4ad0fbb2a7f52d4877eef9c446b2f0"
+    },
+    {
+      "path": "data/cua-survival-fixed-20261023-a1-ui-health-stable.json",
+      "sha256": "ce973bef7e537cdeb252de9d68b647639827d3f1dd1f16d9efefabdd39f7920c"
+    },
+    {
+      "path": "data/cua-survival-fixed-20261023-a1-frames.json",
+      "sha256": "209a413e3776119f993152a78c4219bee0ce9e9e6b8b7bdc958cadf0d2717678"
+    },
+    {
+      "path": "data/audit-cua-survival-fixed-20261023.ts",
+      "sha256": "c502a183ed4b74e1a4c76a0ce7a7e4452a26beccafe91bd023cc0714d7479117"
+    },
+    {
+      "path": "data/cua-survival-fixed-audit-20261023.log",
+      "sha256": "4c888af0f28e7cdf7b85b8928c29a0197b293b878ce50850bcbe78c54ed80620"
+    },
+    {
+      "path": "data/authoritative-survival-audit-types-final-20261023.log",
+      "sha256": "7f3594d7a965c703e6361ae50c0ef50cf9c344c621d801592b074b48554f4235"
+    },
+    {
+      "path": "data/cua-survival-fixed-20261023-a1-ui.png",
+      "sha256": "8d8758e1b833fce180513fec76c3491352ef389ea13284e59ff333050eccbae4"
+    },
+    {
+      "path": "data/cua-survival-fixed-20261023-a1-final.png",
+      "sha256": "6b88ddc02a7cf1211a0ad26e67b50c2a4dbc2710798eb8d555e1bded27d8307c"
+    }
+  ],
+  "auditScriptTypeNote": "Initial final-audit type check found2 implicit-any callback parameters in ignored native audit TS; QA annotations corrected, failed log retained, fresh complete type check passed. Production source unchanged."
+}

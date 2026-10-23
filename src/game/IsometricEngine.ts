@@ -2326,16 +2326,18 @@ export class IsometricEngine {
     if (this.shake > 0) this.shake = Math.max(0, this.shake - 30 * dt);
     if (this.hurtFlash > 0) this.hurtFlash = Math.max(0, this.hurtFlash - dt);
 
-    // 饱食度：随时间流失；归零扣HP；高饱食缓慢回血
     this.gatherCooldown = Math.max(0, this.gatherCooldown - dt);
-    this.player.satiety = Math.max(0, this.player.satiety - 0.25 * dt);
-    if (this.player.satiety <= 0) {
-      this.player.hp -= 2.5 * dt;
-      if (Math.random() < 0.02) {
-        this.addTextParticle(this.player.x, this.player.y - 1.4, '饥饿难耐…HP流失！找吃的！', '#f87171');
+    // 联机生命/饱食由服务器结算；等待新快照时保留最后收到的值。
+    if (!this.callbacks.onGameAction) {
+      this.player.satiety = Math.max(0, this.player.satiety - 0.25 * dt);
+      if (this.player.satiety <= 0) {
+        this.player.hp -= 2.5 * dt;
+        if (Math.random() < 0.02) {
+          this.addTextParticle(this.player.x, this.player.y - 1.4, '饥饿难耐…HP流失！找吃的！', '#f87171');
+        }
+      } else if (this.player.satiety > 50 && this.player.hp < this.player.maxHp) {
+        this.player.hp = Math.min(this.player.maxHp, this.player.hp + 1.2 * dt);
       }
-    } else if (this.player.satiety > 50 && this.player.hp < this.player.maxHp) {
-      this.player.hp = Math.min(this.player.maxHp, this.player.hp + 1.2 * dt);
     }
 
     // 倒地：巡逻队救回庇护所（物品保留），致敬参考站的低惩罚

@@ -1,0 +1,1287 @@
+{
+  "sourceCommit": "790ecf975551c3e9cb2d3d6191b99b79f3ce86ca",
+  "runtimeBundle": "/assets/index-DDxiteV-.js",
+  "nativeInput": "CUA actual browser held click/key only, no injected engine/DOM events or browser CDP input; normal independent guest cookies on localhost vs127.0.0.1, production bundle. Two real IAB clients and six response-paced WebSocket roles,10 stored total.",
+  "synthetic": true,
+  "originalNativeGateAccepted": false,
+  "overallPerformanceAccepted": false,
+  "phases": [
+    {
+      "name": "input-proof",
+      "events": 2125,
+      "eventSpanMs": 61319.20330000001,
+      "cap": 20000,
+      "overflow": 0,
+      "loop": {
+        "p95": 15.892479,
+        "p99": 25.706495,
+        "max": 74.186751
+      },
+      "queueScheduled": 0,
+      "queueExecuted": 0,
+      "actors": [
+        {
+          "index": 0,
+          "native": true,
+          "arrivals": 0,
+          "committedShots": 0,
+          "errors": 0,
+          "firstArrivalMs": null,
+          "lastArrivalMs": null,
+          "arrivalGapsMs": {
+            "n": 0,
+            "p50": 0,
+            "p95": 0,
+            "max": 0
+          },
+          "serverArrivalToCoreReplyMs": {
+            "n": 0,
+            "p50": 0,
+            "p95": 0,
+            "max": 0
+          },
+          "hpAtCollect": 100,
+          "satietyAtCollect": 53.08575000000008,
+          "ammoAtCollect": 2000
+        },
+        {
+          "index": 1,
+          "native": true,
+          "arrivals": 12,
+          "committedShots": 12,
+          "errors": 0,
+          "firstArrivalMs": 92606.7766,
+          "lastArrivalMs": 94032.522,
+          "arrivalGapsMs": {
+            "n": 11,
+            "p50": 129.81759999999485,
+            "p95": 134.08199999999488,
+            "max": 134.08199999999488
+          },
+          "serverArrivalToCoreReplyMs": {
+            "n": 12,
+            "p50": 2.876799999998184,
+            "p95": 16.257200000007288,
+            "max": 16.257200000007288
+          },
+          "hpAtCollect": 100,
+          "satietyAtCollect": 52.84325000000011,
+          "ammoAtCollect": 1988
+        },
+        {
+          "index": 2,
+          "native": false,
+          "arrivals": 0,
+          "committedShots": 0,
+          "errors": 0,
+          "firstArrivalMs": null,
+          "lastArrivalMs": null,
+          "arrivalGapsMs": {
+            "n": 0,
+            "p50": 0,
+            "p95": 0,
+            "max": 0
+          },
+          "serverArrivalToCoreReplyMs": {
+            "n": 0,
+            "p50": 0,
+            "p95": 0,
+            "max": 0
+          },
+          "hpAtCollect": 100,
+          "satietyAtCollect": 100,
+          "ammoAtCollect": 2000
+        },
+        {
+          "index": 3,
+          "native": false,
+          "arrivals": 0,
+          "committedShots": 0,
+          "errors": 0,
+          "firstArrivalMs": null,
+          "lastArrivalMs": null,
+          "arrivalGapsMs": {
+            "n": 0,
+            "p50": 0,
+            "p95": 0,
+            "max": 0
+          },
+          "serverArrivalToCoreReplyMs": {
+            "n": 0,
+            "p50": 0,
+            "p95": 0,
+            "max": 0
+          },
+          "hpAtCollect": 100,
+          "satietyAtCollect": 100,
+          "ammoAtCollect": 2000
+        },
+        {
+          "index": 4,
+          "native": false,
+          "arrivals": 0,
+          "committedShots": 0,
+          "errors": 0,
+          "firstArrivalMs": null,
+          "lastArrivalMs": null,
+          "arrivalGapsMs": {
+            "n": 0,
+            "p50": 0,
+            "p95": 0,
+            "max": 0
+          },
+          "serverArrivalToCoreReplyMs": {
+            "n": 0,
+            "p50": 0,
+            "p95": 0,
+            "max": 0
+          },
+          "hpAtCollect": 100,
+          "satietyAtCollect": 100,
+          "ammoAtCollect": 2000
+        },
+        {
+          "index": 5,
+          "native": false,
+          "arrivals": 0,
+          "committedShots": 0,
+          "errors": 0,
+          "firstArrivalMs": null,
+          "lastArrivalMs": null,
+          "arrivalGapsMs": {
+            "n": 0,
+            "p50": 0,
+            "p95": 0,
+            "max": 0
+          },
+          "serverArrivalToCoreReplyMs": {
+            "n": 0,
+            "p50": 0,
+            "p95": 0,
+            "max": 0
+          },
+          "hpAtCollect": 100,
+          "satietyAtCollect": 100,
+          "ammoAtCollect": 2000
+        },
+        {
+          "index": 6,
+          "native": false,
+          "arrivals": 0,
+          "committedShots": 0,
+          "errors": 0,
+          "firstArrivalMs": null,
+          "lastArrivalMs": null,
+          "arrivalGapsMs": {
+            "n": 0,
+            "p50": 0,
+            "p95": 0,
+            "max": 0
+          },
+          "serverArrivalToCoreReplyMs": {
+            "n": 0,
+            "p50": 0,
+            "p95": 0,
+            "max": 0
+          },
+          "hpAtCollect": 100,
+          "satietyAtCollect": 100,
+          "ammoAtCollect": 2000
+        },
+        {
+          "index": 7,
+          "native": false,
+          "arrivals": 0,
+          "committedShots": 0,
+          "errors": 0,
+          "firstArrivalMs": null,
+          "lastArrivalMs": null,
+          "arrivalGapsMs": {
+            "n": 0,
+            "p50": 0,
+            "p95": 0,
+            "max": 0
+          },
+          "serverArrivalToCoreReplyMs": {
+            "n": 0,
+            "p50": 0,
+            "p95": 0,
+            "max": 0
+          },
+          "hpAtCollect": 100,
+          "satietyAtCollect": 100,
+          "ammoAtCollect": 2000
+        }
+      ]
+    },
+    {
+      "name": "dual-held-proof",
+      "events": 1940,
+      "eventSpanMs": 53991.35039999998,
+      "cap": 20000,
+      "overflow": 0,
+      "loop": {
+        "p95": 15.818751,
+        "p99": 22.806527,
+        "max": 63.700991
+      },
+      "queueScheduled": 0,
+      "queueExecuted": 0,
+      "actors": [
+        {
+          "index": 0,
+          "native": true,
+          "arrivals": 16,
+          "committedShots": 16,
+          "errors": 0,
+          "firstArrivalMs": 144291.846,
+          "lastArrivalMs": 146214.3137,
+          "arrivalGapsMs": {
+            "n": 15,
+            "p50": 127.9372999999905,
+            "p95": 134.75640000001295,
+            "max": 134.75640000001295
+          },
+          "serverArrivalToCoreReplyMs": {
+            "n": 16,
+            "p50": 2.3496999999915715,
+            "p95": 2.83719999997993,
+            "max": 2.83719999997993
+          },
+          "hpAtCollect": 100,
+          "satietyAtCollect": 39.65700000000008,
+          "ammoAtCollect": 1984
+        },
+        {
+          "index": 1,
+          "native": true,
+          "arrivals": 16,
+          "committedShots": 16,
+          "errors": 0,
+          "firstArrivalMs": 144294.9814,
+          "lastArrivalMs": 146208.8117,
+          "arrivalGapsMs": {
+            "n": 15,
+            "p50": 127.27110000001267,
+            "p95": 133.63119999997434,
+            "max": 133.63119999997434
+          },
+          "serverArrivalToCoreReplyMs": {
+            "n": 16,
+            "p50": 2.590700000000652,
+            "p95": 4.144299999985378,
+            "max": 4.144299999985378
+          },
+          "hpAtCollect": 100,
+          "satietyAtCollect": 39.41525000000012,
+          "ammoAtCollect": 1972
+        },
+        {
+          "index": 2,
+          "native": false,
+          "arrivals": 0,
+          "committedShots": 0,
+          "errors": 0,
+          "firstArrivalMs": null,
+          "lastArrivalMs": null,
+          "arrivalGapsMs": {
+            "n": 0,
+            "p50": 0,
+            "p95": 0,
+            "max": 0
+          },
+          "serverArrivalToCoreReplyMs": {
+            "n": 0,
+            "p50": 0,
+            "p95": 0,
+            "max": 0
+          },
+          "hpAtCollect": 100,
+          "satietyAtCollect": 100,
+          "ammoAtCollect": 2000
+        },
+        {
+          "index": 3,
+          "native": false,
+          "arrivals": 0,
+          "committedShots": 0,
+          "errors": 0,
+          "firstArrivalMs": null,
+          "lastArrivalMs": null,
+          "arrivalGapsMs": {
+            "n": 0,
+            "p50": 0,
+            "p95": 0,
+            "max": 0
+          },
+          "serverArrivalToCoreReplyMs": {
+            "n": 0,
+            "p50": 0,
+            "p95": 0,
+            "max": 0
+          },
+          "hpAtCollect": 100,
+          "satietyAtCollect": 100,
+          "ammoAtCollect": 2000
+        },
+        {
+          "index": 4,
+          "native": false,
+          "arrivals": 0,
+          "committedShots": 0,
+          "errors": 0,
+          "firstArrivalMs": null,
+          "lastArrivalMs": null,
+          "arrivalGapsMs": {
+            "n": 0,
+            "p50": 0,
+            "p95": 0,
+            "max": 0
+          },
+          "serverArrivalToCoreReplyMs": {
+            "n": 0,
+            "p50": 0,
+            "p95": 0,
+            "max": 0
+          },
+          "hpAtCollect": 100,
+          "satietyAtCollect": 100,
+          "ammoAtCollect": 2000
+        },
+        {
+          "index": 5,
+          "native": false,
+          "arrivals": 0,
+          "committedShots": 0,
+          "errors": 0,
+          "firstArrivalMs": null,
+          "lastArrivalMs": null,
+          "arrivalGapsMs": {
+            "n": 0,
+            "p50": 0,
+            "p95": 0,
+            "max": 0
+          },
+          "serverArrivalToCoreReplyMs": {
+            "n": 0,
+            "p50": 0,
+            "p95": 0,
+            "max": 0
+          },
+          "hpAtCollect": 100,
+          "satietyAtCollect": 100,
+          "ammoAtCollect": 2000
+        },
+        {
+          "index": 6,
+          "native": false,
+          "arrivals": 0,
+          "committedShots": 0,
+          "errors": 0,
+          "firstArrivalMs": null,
+          "lastArrivalMs": null,
+          "arrivalGapsMs": {
+            "n": 0,
+            "p50": 0,
+            "p95": 0,
+            "max": 0
+          },
+          "serverArrivalToCoreReplyMs": {
+            "n": 0,
+            "p50": 0,
+            "p95": 0,
+            "max": 0
+          },
+          "hpAtCollect": 100,
+          "satietyAtCollect": 100,
+          "ammoAtCollect": 2000
+        },
+        {
+          "index": 7,
+          "native": false,
+          "arrivals": 0,
+          "committedShots": 0,
+          "errors": 0,
+          "firstArrivalMs": null,
+          "lastArrivalMs": null,
+          "arrivalGapsMs": {
+            "n": 0,
+            "p50": 0,
+            "p95": 0,
+            "max": 0
+          },
+          "serverArrivalToCoreReplyMs": {
+            "n": 0,
+            "p50": 0,
+            "p95": 0,
+            "max": 0
+          },
+          "hpAtCollect": 100,
+          "satietyAtCollect": 100,
+          "ammoAtCollect": 2000
+        }
+      ]
+    },
+    {
+      "name": "two-native-held",
+      "events": 2944,
+      "eventSpanMs": 55910.2341,
+      "cap": 20000,
+      "overflow": 0,
+      "loop": {
+        "p95": 15.867903,
+        "p99": 20.709375,
+        "max": 78.839807
+      },
+      "queueScheduled": 2,
+      "queueExecuted": 2,
+      "actors": [
+        {
+          "index": 0,
+          "native": true,
+          "arrivals": 134,
+          "committedShots": 134,
+          "errors": 0,
+          "firstArrivalMs": 179258.9628,
+          "lastArrivalMs": 198536.7921,
+          "arrivalGapsMs": {
+            "n": 133,
+            "p50": 128.9371000000101,
+            "p95": 140.72969999999623,
+            "max": 830.0939999999828
+          },
+          "serverArrivalToCoreReplyMs": {
+            "n": 134,
+            "p50": 2.4813000000140164,
+            "p95": 3.37400000001071,
+            "max": 35.13949999999022
+          },
+          "hpAtCollect": 100,
+          "satietyAtCollect": 25.48425000000009,
+          "ammoAtCollect": 1850
+        },
+        {
+          "index": 1,
+          "native": true,
+          "arrivals": 135,
+          "committedShots": 135,
+          "errors": 0,
+          "firstArrivalMs": 179239.6056,
+          "lastArrivalMs": 199220.7383,
+          "arrivalGapsMs": {
+            "n": 134,
+            "p50": 127.7554999999993,
+            "p95": 144.0957000000053,
+            "max": 841.0092000000004
+          },
+          "serverArrivalToCoreReplyMs": {
+            "n": 135,
+            "p50": 2.4487999999837484,
+            "p95": 3.079200000007404,
+            "max": 10.59299999999348
+          },
+          "hpAtCollect": 100,
+          "satietyAtCollect": 25.500000000000103,
+          "ammoAtCollect": 1837
+        },
+        {
+          "index": 2,
+          "native": false,
+          "arrivals": 0,
+          "committedShots": 0,
+          "errors": 0,
+          "firstArrivalMs": null,
+          "lastArrivalMs": null,
+          "arrivalGapsMs": {
+            "n": 0,
+            "p50": 0,
+            "p95": 0,
+            "max": 0
+          },
+          "serverArrivalToCoreReplyMs": {
+            "n": 0,
+            "p50": 0,
+            "p95": 0,
+            "max": 0
+          },
+          "hpAtCollect": 100,
+          "satietyAtCollect": 100,
+          "ammoAtCollect": 2000
+        },
+        {
+          "index": 3,
+          "native": false,
+          "arrivals": 0,
+          "committedShots": 0,
+          "errors": 0,
+          "firstArrivalMs": null,
+          "lastArrivalMs": null,
+          "arrivalGapsMs": {
+            "n": 0,
+            "p50": 0,
+            "p95": 0,
+            "max": 0
+          },
+          "serverArrivalToCoreReplyMs": {
+            "n": 0,
+            "p50": 0,
+            "p95": 0,
+            "max": 0
+          },
+          "hpAtCollect": 100,
+          "satietyAtCollect": 100,
+          "ammoAtCollect": 2000
+        },
+        {
+          "index": 4,
+          "native": false,
+          "arrivals": 0,
+          "committedShots": 0,
+          "errors": 0,
+          "firstArrivalMs": null,
+          "lastArrivalMs": null,
+          "arrivalGapsMs": {
+            "n": 0,
+            "p50": 0,
+            "p95": 0,
+            "max": 0
+          },
+          "serverArrivalToCoreReplyMs": {
+            "n": 0,
+            "p50": 0,
+            "p95": 0,
+            "max": 0
+          },
+          "hpAtCollect": 100,
+          "satietyAtCollect": 100,
+          "ammoAtCollect": 2000
+        },
+        {
+          "index": 5,
+          "native": false,
+          "arrivals": 0,
+          "committedShots": 0,
+          "errors": 0,
+          "firstArrivalMs": null,
+          "lastArrivalMs": null,
+          "arrivalGapsMs": {
+            "n": 0,
+            "p50": 0,
+            "p95": 0,
+            "max": 0
+          },
+          "serverArrivalToCoreReplyMs": {
+            "n": 0,
+            "p50": 0,
+            "p95": 0,
+            "max": 0
+          },
+          "hpAtCollect": 100,
+          "satietyAtCollect": 100,
+          "ammoAtCollect": 2000
+        },
+        {
+          "index": 6,
+          "native": false,
+          "arrivals": 0,
+          "committedShots": 0,
+          "errors": 0,
+          "firstArrivalMs": null,
+          "lastArrivalMs": null,
+          "arrivalGapsMs": {
+            "n": 0,
+            "p50": 0,
+            "p95": 0,
+            "max": 0
+          },
+          "serverArrivalToCoreReplyMs": {
+            "n": 0,
+            "p50": 0,
+            "p95": 0,
+            "max": 0
+          },
+          "hpAtCollect": 100,
+          "satietyAtCollect": 100,
+          "ammoAtCollect": 2000
+        },
+        {
+          "index": 7,
+          "native": false,
+          "arrivals": 0,
+          "committedShots": 0,
+          "errors": 0,
+          "firstArrivalMs": null,
+          "lastArrivalMs": null,
+          "arrivalGapsMs": {
+            "n": 0,
+            "p50": 0,
+            "p95": 0,
+            "max": 0
+          },
+          "serverArrivalToCoreReplyMs": {
+            "n": 0,
+            "p50": 0,
+            "p95": 0,
+            "max": 0
+          },
+          "hpAtCollect": 100,
+          "satietyAtCollect": 100,
+          "ammoAtCollect": 2000
+        }
+      ]
+    },
+    {
+      "name": "eight-mixed-held",
+      "events": 15117,
+      "eventSpanMs": 75441.99250000002,
+      "cap": 20000,
+      "overflow": 0,
+      "loop": {
+        "p95": 20.430847,
+        "p99": 44.204031,
+        "max": 67.436543
+      },
+      "queueScheduled": 30,
+      "queueExecuted": 30,
+      "actors": [
+        {
+          "index": 0,
+          "native": true,
+          "arrivals": 202,
+          "committedShots": 202,
+          "errors": 0,
+          "firstArrivalMs": 254217.6605,
+          "lastArrivalMs": 284105.1222,
+          "arrivalGapsMs": {
+            "n": 201,
+            "p50": 127.57170000002952,
+            "p95": 161.4586999999883,
+            "max": 832.3110999999917
+          },
+          "serverArrivalToCoreReplyMs": {
+            "n": 202,
+            "p50": 2.1608000000123866,
+            "p95": 32.2215000000142,
+            "max": 56.92749999999069
+          },
+          "hpAtCollect": 100,
+          "satietyAtCollect": 6.501000000000079,
+          "ammoAtCollect": 1648
+        },
+        {
+          "index": 1,
+          "native": true,
+          "arrivals": 197,
+          "committedShots": 197,
+          "errors": 0,
+          "firstArrivalMs": 254110.1993,
+          "lastArrivalMs": 283426.8316,
+          "arrivalGapsMs": {
+            "n": 196,
+            "p50": 128.6261999999988,
+            "p95": 159.74339999997756,
+            "max": 842.9226999999955
+          },
+          "serverArrivalToCoreReplyMs": {
+            "n": 197,
+            "p50": 2.138600000005681,
+            "p95": 38.819900000002235,
+            "max": 53.4372999999905
+          },
+          "hpAtCollect": 100,
+          "satietyAtCollect": 6.203750000000095,
+          "ammoAtCollect": 1640
+        },
+        {
+          "index": 2,
+          "native": false,
+          "arrivals": 362,
+          "committedShots": 362,
+          "errors": 0,
+          "firstArrivalMs": 220958.403,
+          "lastArrivalMs": 296243.938,
+          "arrivalGapsMs": {
+            "n": 361,
+            "p50": 209.36230000003707,
+            "p95": 215.39559999998892,
+            "max": 226.59759999997914
+          },
+          "serverArrivalToCoreReplyMs": {
+            "n": 362,
+            "p50": 2.551500000001397,
+            "p95": 5.436900000000605,
+            "max": 8.814799999992829
+          },
+          "hpAtCollect": 100,
+          "satietyAtCollect": 80.98775,
+          "ammoAtCollect": 1638
+        },
+        {
+          "index": 3,
+          "native": false,
+          "arrivals": 362,
+          "committedShots": 362,
+          "errors": 0,
+          "firstArrivalMs": 220962.6479,
+          "lastArrivalMs": 296251.2646,
+          "arrivalGapsMs": {
+            "n": 361,
+            "p50": 209.4711000000243,
+            "p95": 217.97969999999623,
+            "max": 255.73549999998068
+          },
+          "serverArrivalToCoreReplyMs": {
+            "n": 362,
+            "p50": 2.028200000000652,
+            "p95": 2.9244000000180677,
+            "max": 6.11019999999553
+          },
+          "hpAtCollect": 100,
+          "satietyAtCollect": 80.98550000000002,
+          "ammoAtCollect": 1638
+        },
+        {
+          "index": 4,
+          "native": false,
+          "arrivals": 362,
+          "committedShots": 362,
+          "errors": 0,
+          "firstArrivalMs": 220965.9633,
+          "lastArrivalMs": 296257.6764,
+          "arrivalGapsMs": {
+            "n": 361,
+            "p50": 209.2899000000034,
+            "p95": 233.28169999999227,
+            "max": 255.02109999998356
+          },
+          "serverArrivalToCoreReplyMs": {
+            "n": 362,
+            "p50": 1.9935000000114087,
+            "p95": 2.6701999999932013,
+            "max": 8.86040000000503
+          },
+          "hpAtCollect": 100,
+          "satietyAtCollect": 80.97775000000007,
+          "ammoAtCollect": 1638
+        },
+        {
+          "index": 5,
+          "native": false,
+          "arrivals": 362,
+          "committedShots": 362,
+          "errors": 0,
+          "firstArrivalMs": 220969.3774,
+          "lastArrivalMs": 296261.1531,
+          "arrivalGapsMs": {
+            "n": 361,
+            "p50": 209.14529999997467,
+            "p95": 241.51230000000214,
+            "max": 255.0232000000251
+          },
+          "serverArrivalToCoreReplyMs": {
+            "n": 362,
+            "p50": 1.9804000000003725,
+            "p95": 2.6920999999856576,
+            "max": 5.560700000001816
+          },
+          "hpAtCollect": 100,
+          "satietyAtCollect": 81.01425000000008,
+          "ammoAtCollect": 1638
+        },
+        {
+          "index": 6,
+          "native": false,
+          "arrivals": 362,
+          "committedShots": 362,
+          "errors": 0,
+          "firstArrivalMs": 220972.9342,
+          "lastArrivalMs": 296264.4001,
+          "arrivalGapsMs": {
+            "n": 361,
+            "p50": 209.37350000004517,
+            "p95": 244.39340000000084,
+            "max": 254.44649999999092
+          },
+          "serverArrivalToCoreReplyMs": {
+            "n": 362,
+            "p50": 2.0010999999940395,
+            "p95": 2.5904999999911524,
+            "max": 5.868200000026263
+          },
+          "hpAtCollect": 100,
+          "satietyAtCollect": 81.25550000000001,
+          "ammoAtCollect": 1638
+        },
+        {
+          "index": 7,
+          "native": false,
+          "arrivals": 362,
+          "committedShots": 362,
+          "errors": 0,
+          "firstArrivalMs": 220977.2909,
+          "lastArrivalMs": 296268.1532,
+          "arrivalGapsMs": {
+            "n": 361,
+            "p50": 209.1298999999999,
+            "p95": 245.92790000000969,
+            "max": 254.4253000000026
+          },
+          "serverArrivalToCoreReplyMs": {
+            "n": 362,
+            "p50": 2.0032999999821186,
+            "p95": 2.5786000000080094,
+            "max": 6.167199999996228
+          },
+          "hpAtCollect": 100,
+          "satietyAtCollect": 81.24525000000006,
+          "ammoAtCollect": 1638
+        }
+      ]
+    }
+  ],
+  "audit": {
+    "integrity": "ok",
+    "paidRounds": 2884,
+    "players": [
+      {
+        "index": 0,
+        "native": true,
+        "paidRounds": 352,
+        "ammoBefore": 2000,
+        "ammoAfter": 1648,
+        "hp": 100,
+        "satiety": 6.501000000000079,
+        "otherAssetsUnchanged": true
+      },
+      {
+        "index": 1,
+        "native": true,
+        "paidRounds": 360,
+        "ammoBefore": 2000,
+        "ammoAfter": 1640,
+        "hp": 100,
+        "satiety": 6.203750000000095,
+        "otherAssetsUnchanged": true
+      },
+      {
+        "index": 2,
+        "native": false,
+        "paidRounds": 362,
+        "ammoBefore": 2000,
+        "ammoAfter": 1638,
+        "hp": 100,
+        "satiety": 80.98775,
+        "otherAssetsUnchanged": true
+      },
+      {
+        "index": 3,
+        "native": false,
+        "paidRounds": 362,
+        "ammoBefore": 2000,
+        "ammoAfter": 1638,
+        "hp": 100,
+        "satiety": 80.98550000000002,
+        "otherAssetsUnchanged": true
+      },
+      {
+        "index": 4,
+        "native": false,
+        "paidRounds": 362,
+        "ammoBefore": 2000,
+        "ammoAfter": 1638,
+        "hp": 100,
+        "satiety": 80.97775000000007,
+        "otherAssetsUnchanged": true
+      },
+      {
+        "index": 5,
+        "native": false,
+        "paidRounds": 362,
+        "ammoBefore": 2000,
+        "ammoAfter": 1638,
+        "hp": 100,
+        "satiety": 81.01425000000008,
+        "otherAssetsUnchanged": true
+      },
+      {
+        "index": 6,
+        "native": false,
+        "paidRounds": 362,
+        "ammoBefore": 2000,
+        "ammoAfter": 1638,
+        "hp": 100,
+        "satiety": 81.25550000000001,
+        "otherAssetsUnchanged": true
+      },
+      {
+        "index": 7,
+        "native": false,
+        "paidRounds": 362,
+        "ammoBefore": 2000,
+        "ammoAfter": 1638,
+        "hp": 100,
+        "satiety": 81.24525000000006,
+        "otherAssetsUnchanged": true
+      }
+    ],
+    "storedPlayers": 10,
+    "inactiveOriginalActorsUnchanged": 2,
+    "sharedBuildingsUnchanged": 5675,
+    "floorsUnchanged": 4000,
+    "defenseAmmoUnchanged": 540,
+    "otherSharedAssetsUnchanged": true,
+    "consistentBackupRestore": true,
+    "coreLastRequestReplays": 8
+  },
+  "clientReports": [
+    {
+      "role": "a",
+      "report": {
+        "kind": "local-frame-diagnostics",
+        "version": 1,
+        "capturedAt": "2026-10-23T14:27:26.249Z",
+        "timing": "Milliseconds of JavaScript work and callback/draw-start intervals; not GPU time or physical displayed frames. Latest 20 visible successful slow samples (>50ms), including initial loading. Refresh clears records.",
+        "totalSlowFrames": 7,
+        "samples": [
+          {
+            "atMs": 17892.40000000596,
+            "updateMs": 0.8999999910593033,
+            "drawMs": 6.799999997019768,
+            "rafGapMs": 56,
+            "drawGapMs": 56.3999999910593,
+            "scene": {
+              "map": "camp",
+              "x": 0,
+              "y": 16,
+              "chunks": 25,
+              "buildings": 5675,
+              "interactables": 0,
+              "monsters": 0,
+              "players": 1,
+              "inputBlocked": false
+            }
+          },
+          {
+            "atMs": 18005.90000000596,
+            "updateMs": 0.4000000059604645,
+            "drawMs": 14.599999994039536,
+            "rafGapMs": 90.1000000089407,
+            "drawGapMs": 90,
+            "scene": {
+              "map": "camp",
+              "x": 0,
+              "y": 16,
+              "chunks": 25,
+              "buildings": 5675,
+              "interactables": 0,
+              "monsters": 0,
+              "players": 1,
+              "inputBlocked": false
+            }
+          },
+          {
+            "atMs": 18056.90000000596,
+            "updateMs": 0.7999999970197678,
+            "drawMs": 4.399999991059303,
+            "rafGapMs": 51,
+            "drawGapMs": 51.29999999701977,
+            "scene": {
+              "map": "camp",
+              "x": 0,
+              "y": 16,
+              "chunks": 25,
+              "buildings": 5675,
+              "interactables": 0,
+              "monsters": 0,
+              "players": 1,
+              "inputBlocked": false
+            }
+          },
+          {
+            "atMs": 18342.59999999404,
+            "updateMs": 0.6000000089406967,
+            "drawMs": 3.3999999910593033,
+            "rafGapMs": 64.8999999910593,
+            "drawGapMs": 65.1000000089407,
+            "scene": {
+              "map": "camp",
+              "x": 0,
+              "y": 16,
+              "chunks": 25,
+              "buildings": 5675,
+              "interactables": 0,
+              "monsters": 0,
+              "players": 1,
+              "inputBlocked": false
+            }
+          },
+          {
+            "atMs": 18501.20000000298,
+            "updateMs": 0.5999999940395355,
+            "drawMs": 4.600000008940697,
+            "rafGapMs": 73.90000000596046,
+            "drawGapMs": 74.09999999403954,
+            "scene": {
+              "map": "camp",
+              "x": 0,
+              "y": 16,
+              "chunks": 25,
+              "buildings": 5675,
+              "interactables": 0,
+              "monsters": 0,
+              "players": 1,
+              "inputBlocked": false
+            }
+          },
+          {
+            "atMs": 240165,
+            "updateMs": 1.5,
+            "drawMs": 8.599999994039536,
+            "rafGapMs": 41.29999999701977,
+            "drawGapMs": 56.5,
+            "scene": {
+              "map": "camp",
+              "x": 0,
+              "y": 16,
+              "chunks": 25,
+              "buildings": 5675,
+              "interactables": 0,
+              "monsters": 0,
+              "players": 7,
+              "inputBlocked": false
+            }
+          },
+          {
+            "atMs": 453771.90000000596,
+            "updateMs": 1.2999999970197678,
+            "drawMs": 9.799999997019768,
+            "rafGapMs": 57.30000001192093,
+            "drawGapMs": 58,
+            "scene": {
+              "map": "camp",
+              "x": 0,
+              "y": 16,
+              "chunks": 25,
+              "buildings": 5675,
+              "interactables": 0,
+              "monsters": 0,
+              "players": 7,
+              "inputBlocked": true
+            }
+          }
+        ],
+        "environment": {
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
+          "viewport": {
+            "width": 1280,
+            "height": 720
+          },
+          "canvas": {
+            "width": 1280,
+            "height": 720
+          },
+          "devicePixelRatio": 1.5,
+          "modulePath": "/assets/index-DDxiteV-.js",
+          "jsHeap": {
+            "used": 41155000,
+            "total": 81505552
+          },
+          "graphicsBackend": "unknown"
+        }
+      }
+    },
+    {
+      "role": "b",
+      "report": {
+        "kind": "local-frame-diagnostics",
+        "version": 1,
+        "capturedAt": "2026-10-23T14:25:07.245Z",
+        "timing": "Milliseconds of JavaScript work and callback/draw-start intervals; not GPU time or physical displayed frames. Latest 20 visible successful slow samples (>50ms), including initial loading. Refresh clears records.",
+        "totalSlowFrames": 5,
+        "samples": [
+          {
+            "atMs": 17942.39999999106,
+            "updateMs": 1.2000000029802322,
+            "drawMs": 9,
+            "rafGapMs": 54.79999999701977,
+            "drawGapMs": 55.5,
+            "scene": {
+              "map": "camp",
+              "x": 0,
+              "y": 20,
+              "chunks": 25,
+              "buildings": 5675,
+              "interactables": 0,
+              "monsters": 0,
+              "players": 0,
+              "inputBlocked": false
+            }
+          },
+          {
+            "atMs": 18025.09999999404,
+            "updateMs": 1,
+            "drawMs": 38.29999999701977,
+            "rafGapMs": 71,
+            "drawGapMs": 71.6000000089407,
+            "scene": {
+              "map": "camp",
+              "x": 0,
+              "y": 20,
+              "chunks": 25,
+              "buildings": 5675,
+              "interactables": 0,
+              "monsters": 0,
+              "players": 1,
+              "inputBlocked": false
+            }
+          },
+          {
+            "atMs": 18093.5,
+            "updateMs": 0.3999999910593033,
+            "drawMs": 3.800000011920929,
+            "rafGapMs": 68.40000000596046,
+            "drawGapMs": 67.69999998807907,
+            "scene": {
+              "map": "camp",
+              "x": 0,
+              "y": 20,
+              "chunks": 25,
+              "buildings": 5675,
+              "interactables": 0,
+              "monsters": 0,
+              "players": 1,
+              "inputBlocked": false
+            }
+          },
+          {
+            "atMs": 18184,
+            "updateMs": 0.7000000029802322,
+            "drawMs": 4.0999999940395355,
+            "rafGapMs": 73.20000000298023,
+            "drawGapMs": 73.30000001192093,
+            "scene": {
+              "map": "camp",
+              "x": 0,
+              "y": 20,
+              "chunks": 25,
+              "buildings": 5675,
+              "interactables": 0,
+              "monsters": 0,
+              "players": 1,
+              "inputBlocked": false
+            }
+          },
+          {
+            "atMs": 304311.5,
+            "updateMs": 0.29999999701976776,
+            "drawMs": 4.5,
+            "rafGapMs": 51.79999999701977,
+            "drawGapMs": 51.599999994039536,
+            "scene": {
+              "map": "camp",
+              "x": -4.103057808513061,
+              "y": 15.896942191486945,
+              "chunks": 25,
+              "buildings": 5675,
+              "interactables": 0,
+              "monsters": 0,
+              "players": 7,
+              "inputBlocked": true
+            }
+          }
+        ],
+        "environment": {
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
+          "viewport": {
+            "width": 1280,
+            "height": 720
+          },
+          "canvas": {
+            "width": 1280,
+            "height": 720
+          },
+          "devicePixelRatio": 1.5,
+          "modulePath": "/assets/index-DDxiteV-.js",
+          "jsHeap": {
+            "used": 20076540,
+            "total": 79473416
+          },
+          "graphicsBackend": "unknown"
+        }
+      }
+    }
+  ],
+  "limits": [
+    "Nominal held-input requests: B moves1.5s and fires1.5s, dual2s proof, dual20s, mixed dual30s. Captured phases span larger61.3/54.0/55.9/75.4s due orchestration and observation gaps. Bots run throughout mixed phase and are response-paced. Do not claim fixed-duration constant offered load or use full mixed totals as30s throughput.",
+    "Actual first/last native shot overlap in mixed phase is about29.209s. Server event clocks are not aligned to client report clocks. Frame report includes startup/settings/after-stop samples, only latest20 slow visible successful frames; no proof of phase-specific FPS, all-tab visibility, GPU or physical presentation.",
+    "Read-only server hooks, parsing and event-loop probes add overhead. Server arrival-to-core reply is not network RTT or physical input latency. No client correction count was captured; do not assert zero corrections.",
+    "This different IAB1280x720/DPR1.5 sample does not erase original a12 two-native/six-protocol rejection at original1920x1080/DPR1 or accept capacity. Current zero errors cannot establish original root cause.",
+    "Before measurement, QA initially launched with closed stdin and exited; resumed the same empty bootstrap via PTY after terminal verification. Preparation mistakenly used Camp.mapId (external world), corrected to Camp.id before any movement/fire measurement without resource or HP/satiety reset; this was a fixture error, not a product bug.",
+    "After owned server stop, original client continued local starvation and displayed negative HP while authoritative stored HP remained100. This is the separately repaired authoritative-survival regression, not evidence of server asset loss or stall cause. Clipboard bridge read was empty despite UI copied feedback; reports saved by reading the visible textarea instead.",
+    "Only owned synthetic/backup/memory DBs; no realdata/sdc.sqlite. No world/cadence/loot/defense-cost modification. All actual fire empty/untargeted, no actual hostile siege or earned economy acceptance."
+  ],
+  "review": "Independent final read-only review passed: no confirmed P1/P2, all37 source hashes across both reports verified, code/counters/asset-audit scope/UI screenshots/privacy and limitations checked. Reviewer did not open databases or run tests/services/browser loads.",
+  "sourceHashes": [
+    {
+      "path": "data/control-cua-native-input-20261023.cjs",
+      "sha256": "60a3533ef9632a48fc95926885ab15b72ce3536f9b963bc11854561238f3dbb8"
+    },
+    {
+      "path": "data/capture-cua-native-input-20261023.ts",
+      "sha256": "2ea08a3108183faad3e211db9736565d20446bfcce8f91c958e8447a85bf0224"
+    },
+    {
+      "path": "data/cua-native-input-20261023-a1-prepared-world-private.json",
+      "sha256": "aafd284e6403532d54404f8a4453b939326cc80cc9ce3ea76e46f3a9f78c75ed"
+    },
+    {
+      "path": "data/cua-native-input-20261023-a1-input-proof-private-events.json",
+      "sha256": "41ffa28f46bc04ed453237252a30e9d597023a9c30aa29bc01a8a160d643162b"
+    },
+    {
+      "path": "data/cua-native-input-20261023-a1-dual-held-proof-private-events.json",
+      "sha256": "bc559ee5a92d3ccc6055d4bf0164dc91be5ce51206b3702a3ab7867e423ca80c"
+    },
+    {
+      "path": "data/cua-native-input-20261023-a1-two-native-held-private-events.json",
+      "sha256": "537b0735e8b8a87b688b21cf0208f38ee45c1bfd79d587bc7ed8d1ea101e693a"
+    },
+    {
+      "path": "data/cua-native-input-20261023-a1-eight-mixed-held-private-events.json",
+      "sha256": "05ed8d1072f49f005a9a5736b72304da19904b1cabd799eb66bb055218f0204c"
+    },
+    {
+      "path": "data/cua-native-input-20261023-a1-client-a-frames.json",
+      "sha256": "8a3934e0a27ff108194fc5d56f414ad6c6d0983f68accdd06c640ce97b8bd6c2"
+    },
+    {
+      "path": "data/cua-native-input-20261023-a1-client-b-frames.json",
+      "sha256": "55e3b24d9f178ccd98e18de502e29ebdf341ddfb2e622d7cb2b5d77a73865226"
+    },
+    {
+      "path": "data/audit-cua-native-input-20261023.ts",
+      "sha256": "7d64b3156a9b98e26e354c6fd4d91556bb93221e46855626b6c25cbc2f4dc750"
+    },
+    {
+      "path": "data/cua-native-input-audit-final-20261023.log",
+      "sha256": "5f6fd2eff73017ee567f5203dcd0e52f692b9205492412c884dd0c479ff602f4"
+    },
+    {
+      "path": "data/authoritative-survival-audit-types-final-20261023.log",
+      "sha256": "7f3594d7a965c703e6361ae50c0ef50cf9c344c621d801592b074b48554f4235"
+    },
+    {
+      "path": "data/cua-native-input-20261023-a1-bots-results.json",
+      "sha256": "c2eb941bb196188b3962c97cad43fcd51481312f9c0843be92e385512bc1ac7b"
+    },
+    {
+      "path": "data/cua-native-input-20261023-a1-client-a-frames.png",
+      "sha256": "a1e9f6bc72a25ef9485e3751caf3079da58b2ee1126289eb0c0a3056d9e0d6f6"
+    },
+    {
+      "path": "data/cua-native-input-20261023-a1-client-b-frames.png",
+      "sha256": "c4d27d79222c5555fdbd8c9a484a2e0a59c317c94e83d50f5bee1c4bc05f09b5"
+    }
+  ],
+  "auditScriptTypeNote": "Initial final-audit type check found2 implicit-any callback parameters in ignored native audit TS; QA annotations corrected, failed log retained, fresh complete type check passed. Production source unchanged."
+}

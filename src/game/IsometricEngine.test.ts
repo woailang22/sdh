@@ -494,6 +494,63 @@ describe('server weather synchronization', () => {
   });
 });
 
+describe('authoritative survival values', () => {
+  function survivalEngine(online: boolean) {
+    const { engine } = setup();
+    if (online) (engine as any).callbacks.onGameAction = vi.fn();
+    engine.warpToMap('home_self', 0, 0);
+    engine.monsters = []; engine.buildings = []; engine.interactables = [];
+    return engine;
+  }
+
+  it.each([
+    { hp: 1, satiety: 0 },
+    { hp: 50, satiety: 80 },
+    { hp: 50, satiety: 1 },
+  ])('keeps the last server HP/satiety without snapshots: %j', state => {
+    const engine = survivalEngine(true);
+    Object.assign(engine.player, state);
+    const death = vi.fn(); (engine as any).callbacks.onPlayerDeathDrop = death;
+    const particles = vi.spyOn(engine, 'addTextParticle');
+    for (let i = 0; i < 100; i++) (engine as any).update(.1);
+    expect(engine.player.hp).toBe(state.hp);
+    expect(engine.player.satiety).toBe(state.satiety);
+    expect(death).not.toHaveBeenCalled();
+    expect(particles.mock.calls.some(args => String(args[2]).includes('饥饿'))).toBe(false);
+  });
+
+  it('retains the next received server values without locally advancing them', () => {
+    const engine = survivalEngine(true);
+    Object.assign(engine.player, { hp: 50, satiety: 80 });
+    (engine as any).update(.1);
+    // App applies a newly received authoritative player to these same fields.
+    Object.assign(engine.player, { hp: 8, satiety: .01 });
+    (engine as any).update(.1);
+    expect(engine.player.hp).toBe(8);
+    expect(engine.player.satiety).toBe(.01);
+  });
+
+  it('preserves offline hunger damage and satiety decay', () => {
+    const engine = survivalEngine(false);
+    Object.assign(engine.player, { hp: 10, satiety: 0 });
+    (engine as any).update(.5);
+    expect(engine.player.hp).toBe(8.75);
+    expect(engine.player.satiety).toBe(0);
+    engine.player.satiety = 20;
+    (engine as any).update(.5);
+    expect(engine.player.hp).toBe(8.75);
+    expect(engine.player.satiety).toBe(19.875);
+  });
+
+  it('preserves offline high-satiety healing', () => {
+    const engine = survivalEngine(false);
+    Object.assign(engine.player, { hp: 50, satiety: 80 });
+    (engine as any).update(.5);
+    expect(engine.player.hp).toBe(50.6);
+    expect(engine.player.satiety).toBe(79.875);
+  });
+});
+
 describe('ground rendering cost', () => {
   it('shares one backing surface across every sample of a terrain variant without rebaking a cached cell', () => {
     const { engine } = setup(); stubImageLoading();
