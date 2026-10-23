@@ -161,6 +161,33 @@ describe('click-to-move arrival', () => {
   });
 });
 
+describe('construction reach preview', () => {
+  it('warns about a bed on the placement line and shows the actual building name until the player walks around it', () => {
+    const { engine, context } = setup(); engine.warpToMap('home_self', -15, 15);
+    (engine as any).callbacks.onGameAction = vi.fn(); engine.selectedBuildType = 'wood_wall';
+    engine.buildings = [{ id: 'bed', type: 'bed', name: '床', x: -16, y: 15, hp: 300, maxHp: 300, level: 1 }];
+    engine.mouse.worldX = -17; engine.mouse.worldY = 15;
+    const fills: unknown[] = []; context.fill.mockImplementation(() => fills.push((context as any).fillStyle));
+    (engine as any).drawBuildGhost();
+    expect(fills.at(-1)).toBe('rgba(239, 68, 68, 0.45)');
+    expect(context.fillText).toHaveBeenCalledWith(expect.stringContaining('建筑遮挡'), expect.any(Number), expect.any(Number));
+    expect(context.fillText).toHaveBeenCalledWith(expect.stringContaining('加固原木围墙'), expect.any(Number), expect.any(Number));
+    expect(context.fillText.mock.calls.some(call => String(call[0]).includes('wood_wall'))).toBe(false);
+    engine.player.x = -16; engine.player.y = 17; context.fillText.mockClear();
+    (engine as any).drawBuildGhost();
+    expect(fills.at(-1)).toBe('rgba(6, 182, 212, 0.45)');
+    expect(context.fillText.mock.calls.some(call => String(call[0]).includes('遮挡'))).toBe(false);
+  });
+
+  it.each([[3, true, false], [3.01, true, true], [4.5, true, true], [4.5, false, false]] as const)('matches the %s-cell reach hint online=%s (too far=%s)', (distance, online, tooFar) => {
+    const { engine, context } = setup(); engine.warpToMap('home_self', -distance, 5);
+    if (online) (engine as any).callbacks.onGameAction = vi.fn();
+    engine.buildings = []; engine.mouse.worldX = 0; engine.mouse.worldY = 5;
+    (engine as any).drawBuildGhost();
+    expect(context.fillText.mock.calls.some(call => String(call[0]).includes('距离过远'))).toBe(tooFar);
+  });
+});
+
 describe('real-time firing cadence', () => {
   function pointerGun() {
     let time = 1000; vi.spyOn(performance, 'now').mockImplementation(() => time);

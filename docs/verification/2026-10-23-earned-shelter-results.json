@@ -1,0 +1,7780 @@
+{
+  "integrity": "ok",
+  "consistentBackupRestore": true,
+  "earnedSourceUnedited": true,
+  "originalBuildingsUnchanged": 8,
+  "addedBuildings": {
+    "wood_floor": 25,
+    "bed": 1,
+    "storage_box": 1,
+    "turret": 1,
+    "wood_wall": 23,
+    "door": 1
+  },
+  "constructionCost": {
+    "wood": 262,
+    "stone": 0,
+    "scrap": 25,
+    "parts": 3
+  },
+  "foodProductionCost": {
+    "wood": 2,
+    "scrap": 2,
+    "seed_potato": 1
+  },
+  "grownPotatoes": 4,
+  "harvested": {
+    "trees": 30,
+    "wood": 270,
+    "maintenanceCabinet": {
+      "scrap": 8,
+      "parts": 2
+    }
+  },
+  "finalPhysicalCounters": {
+    "wood": 1,
+    "stone": 32,
+    "scrap": 21,
+    "parts": 0,
+    "food": 0,
+    "ammo": 47,
+    "c4": 0,
+    "medical": 0,
+    "credits": 552,
+    "shard": 9
+  },
+  "itemDelta": {
+    "water": -2,
+    "seed_potato": -1,
+    "wood": 7,
+    "crop_potato": -1
+  },
+  "storedWood": 7,
+  "ammunition": {
+    "initialCarry": 57,
+    "initialDefense": 20,
+    "finalCarry": 47,
+    "oldDefense": 20,
+    "newDefense": 10,
+    "total": 77
+  },
+  "food": {
+    "initialStoredPotatoes": 2,
+    "grown": 4,
+    "consumedPotatoes": 5,
+    "consumedWater": 2,
+    "remainingPotatoes": 1
+  },
+  "fullHealth": 120,
+  "priorStops": {
+    "a1": "QA food policy at49 satiety, no food left; no game error",
+    "a2": "Correct authority rejection through bed; uncharged. Ghost feedback defect now fixed"
+  },
+  "native": {
+    "resumed": [
+      {
+        "stage": "resumed-half-built-room",
+        "elapsedSec": 0.003,
+        "position": {
+          "x": -14.993412122936665,
+          "y": 14.890327141297545,
+          "map": "own-camp"
+        },
+        "hp": 120,
+        "shield": 110,
+        "satiety": 43.20250000000125,
+        "resources": {
+          "wood": 66,
+          "stone": 32,
+          "scrap": 25,
+          "parts": 1,
+          "food": 2,
+          "ammo": 57,
+          "c4": 0,
+          "medical": 7,
+          "credits": 552,
+          "shard": 9
+        },
+        "inventory": [
+          {
+            "id": "ore_copper",
+            "name": "铜矿石",
+            "count": 1
+          },
+          {
+            "id": "att_foregrip",
+            "name": "垂直握把",
+            "count": 1
+          },
+          {
+            "id": "rifle",
+            "name": "战术突击步枪",
+            "count": 1
+          },
+          {
+            "id": "pickaxe_stone",
+            "name": "开山镐",
+            "count": 1
+          },
+          {
+            "id": "crop_potato",
+            "name": "土豆",
+            "count": 2
+          },
+          {
+            "id": "battery",
+            "name": "高耐腐蚀电池",
+            "count": 3
+          },
+          {
+            "id": "medkit",
+            "name": "纳米急救箱",
+            "count": 2
+          },
+          {
+            "id": "key_red",
+            "name": "红色房卡",
+            "count": 1
+          },
+          {
+            "id": "med_bloodbag",
+            "name": "血袋",
+            "count": 1
+          },
+          {
+            "id": "bandage",
+            "name": "草药绷带",
+            "count": 3
+          },
+          {
+            "id": "antidote",
+            "name": "抗酸蚀解毒剂",
+            "count": 1
+          },
+          {
+            "id": "fuel",
+            "name": "高纯度燃油",
+            "count": 2
+          },
+          {
+            "id": "helmet_t4",
+            "name": "4级重型头盔",
+            "count": 1
+          },
+          {
+            "id": "crude_gun",
+            "name": "土铳",
+            "count": 1
+          },
+          {
+            "id": "seed_starfruit",
+            "name": "星果种子",
+            "count": 1
+          }
+        ],
+        "equipment": {
+          "weapon": "wp_plasma",
+          "armor": "vest",
+          "tool": "axe_stone"
+        },
+        "buildings": [
+          {
+            "type": "anchor_core",
+            "x": 0,
+            "y": 0,
+            "hp": 1200,
+            "maxHp": 1200,
+            "ammo": 0
+          },
+          {
+            "type": "workbench",
+            "x": -3,
+            "y": 24,
+            "facing": "ew",
+            "hp": 500,
+            "maxHp": 500,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "storage_box",
+            "x": 3,
+            "y": 24,
+            "facing": "ew",
+            "hp": 400,
+            "maxHp": 400,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "farm_plot",
+            "x": 6,
+            "y": 22,
+            "facing": "ew",
+            "hp": 250,
+            "maxHp": 250,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "campfire",
+            "x": -6,
+            "y": 22,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "turret",
+            "x": 3,
+            "y": 19,
+            "facing": "ew",
+            "hp": 750,
+            "maxHp": 750,
+            "ammo": 20,
+            "isOpen": false
+          },
+          {
+            "type": "furnace",
+            "x": -8,
+            "y": 19,
+            "facing": "ew",
+            "hp": 600,
+            "maxHp": 600,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "research_table",
+            "x": 9,
+            "y": 18,
+            "facing": "ew",
+            "hp": 500,
+            "maxHp": 500,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -16,
+            "y": 14,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -15,
+            "y": 14,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -14,
+            "y": 14,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -13,
+            "y": 14,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -12,
+            "y": 14,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -16,
+            "y": 15,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -15,
+            "y": 15,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -14,
+            "y": 15,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -13,
+            "y": 15,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -12,
+            "y": 15,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -16,
+            "y": 16,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -15,
+            "y": 16,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -14,
+            "y": 16,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -13,
+            "y": 16,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -12,
+            "y": 16,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -16,
+            "y": 17,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -15,
+            "y": 17,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -14,
+            "y": 17,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -13,
+            "y": 17,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -12,
+            "y": 17,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -16,
+            "y": 18,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -15,
+            "y": 18,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -14,
+            "y": 18,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -13,
+            "y": 18,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -12,
+            "y": 18,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "bed",
+            "x": -16,
+            "y": 15,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "storage_box",
+            "x": -14,
+            "y": 15,
+            "facing": "ew",
+            "hp": 400,
+            "maxHp": 400,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "turret",
+            "x": -12,
+            "y": 16,
+            "facing": "ew",
+            "hp": 750,
+            "maxHp": 750,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -17,
+            "y": 13,
+            "facing": "ew",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -16,
+            "y": 13,
+            "facing": "ew",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -15,
+            "y": 13,
+            "facing": "ew",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -14,
+            "y": 13,
+            "facing": "ew",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -13,
+            "y": 13,
+            "facing": "ew",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -12,
+            "y": 13,
+            "facing": "ew",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -11,
+            "y": 13,
+            "facing": "ew",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -17,
+            "y": 19,
+            "facing": "ew",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -16,
+            "y": 19,
+            "facing": "ew",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -15,
+            "y": 19,
+            "facing": "ew",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -13,
+            "y": 19,
+            "facing": "ew",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -12,
+            "y": 19,
+            "facing": "ew",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -11,
+            "y": 19,
+            "facing": "ew",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -17,
+            "y": 14,
+            "facing": "ns",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          }
+        ],
+        "errors": [],
+        "diagnostics": []
+      },
+      {
+        "stage": "placed-5",
+        "elapsedSec": 12.112,
+        "position": {
+          "x": -13.113228014793288,
+          "y": 14.000853533222935,
+          "map": "own-camp"
+        },
+        "hp": 120,
+        "shield": 110,
+        "satiety": 65.10800000000123,
+        "resources": {
+          "wood": 36,
+          "stone": 32,
+          "scrap": 25,
+          "parts": 1,
+          "food": 1,
+          "ammo": 57,
+          "c4": 0,
+          "medical": 7,
+          "credits": 552,
+          "shard": 9
+        },
+        "inventory": [
+          {
+            "id": "ore_copper",
+            "name": "铜矿石",
+            "count": 1
+          },
+          {
+            "id": "att_foregrip",
+            "name": "垂直握把",
+            "count": 1
+          },
+          {
+            "id": "rifle",
+            "name": "战术突击步枪",
+            "count": 1
+          },
+          {
+            "id": "pickaxe_stone",
+            "name": "开山镐",
+            "count": 1
+          },
+          {
+            "id": "crop_potato",
+            "name": "土豆",
+            "count": 1
+          },
+          {
+            "id": "battery",
+            "name": "高耐腐蚀电池",
+            "count": 3
+          },
+          {
+            "id": "medkit",
+            "name": "纳米急救箱",
+            "count": 2
+          },
+          {
+            "id": "key_red",
+            "name": "红色房卡",
+            "count": 1
+          },
+          {
+            "id": "med_bloodbag",
+            "name": "血袋",
+            "count": 1
+          },
+          {
+            "id": "bandage",
+            "name": "草药绷带",
+            "count": 3
+          },
+          {
+            "id": "antidote",
+            "name": "抗酸蚀解毒剂",
+            "count": 1
+          },
+          {
+            "id": "fuel",
+            "name": "高纯度燃油",
+            "count": 2
+          },
+          {
+            "id": "helmet_t4",
+            "name": "4级重型头盔",
+            "count": 1
+          },
+          {
+            "id": "crude_gun",
+            "name": "土铳",
+            "count": 1
+          },
+          {
+            "id": "seed_starfruit",
+            "name": "星果种子",
+            "count": 1
+          }
+        ],
+        "equipment": {
+          "weapon": "wp_plasma",
+          "armor": "vest",
+          "tool": "axe_stone"
+        },
+        "buildings": [
+          {
+            "type": "anchor_core",
+            "x": 0,
+            "y": 0,
+            "hp": 1200,
+            "maxHp": 1200,
+            "ammo": 0
+          },
+          {
+            "type": "workbench",
+            "x": -3,
+            "y": 24,
+            "facing": "ew",
+            "hp": 500,
+            "maxHp": 500,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "storage_box",
+            "x": 3,
+            "y": 24,
+            "facing": "ew",
+            "hp": 400,
+            "maxHp": 400,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "farm_plot",
+            "x": 6,
+            "y": 22,
+            "facing": "ew",
+            "hp": 250,
+            "maxHp": 250,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "campfire",
+            "x": -6,
+            "y": 22,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "turret",
+            "x": 3,
+            "y": 19,
+            "facing": "ew",
+            "hp": 750,
+            "maxHp": 750,
+            "ammo": 20,
+            "isOpen": false
+          },
+          {
+            "type": "furnace",
+            "x": -8,
+            "y": 19,
+            "facing": "ew",
+            "hp": 600,
+            "maxHp": 600,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "research_table",
+            "x": 9,
+            "y": 18,
+            "facing": "ew",
+            "hp": 500,
+            "maxHp": 500,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -16,
+            "y": 14,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -15,
+            "y": 14,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -14,
+            "y": 14,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -13,
+            "y": 14,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -12,
+            "y": 14,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -16,
+            "y": 15,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -15,
+            "y": 15,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -14,
+            "y": 15,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -13,
+            "y": 15,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -12,
+            "y": 15,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -16,
+            "y": 16,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -15,
+            "y": 16,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -14,
+            "y": 16,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -13,
+            "y": 16,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -12,
+            "y": 16,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -16,
+            "y": 17,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -15,
+            "y": 17,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -14,
+            "y": 17,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -13,
+            "y": 17,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -12,
+            "y": 17,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -16,
+            "y": 18,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -15,
+            "y": 18,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -14,
+            "y": 18,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -13,
+            "y": 18,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -12,
+            "y": 18,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "bed",
+            "x": -16,
+            "y": 15,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "storage_box",
+            "x": -14,
+            "y": 15,
+            "facing": "ew",
+            "hp": 400,
+            "maxHp": 400,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "turret",
+            "x": -12,
+            "y": 16,
+            "facing": "ew",
+            "hp": 750,
+            "maxHp": 750,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -17,
+            "y": 13,
+            "facing": "ew",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -16,
+            "y": 13,
+            "facing": "ew",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -15,
+            "y": 13,
+            "facing": "ew",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -14,
+            "y": 13,
+            "facing": "ew",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -13,
+            "y": 13,
+            "facing": "ew",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -12,
+            "y": 13,
+            "facing": "ew",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -11,
+            "y": 13,
+            "facing": "ew",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -17,
+            "y": 19,
+            "facing": "ew",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -16,
+            "y": 19,
+            "facing": "ew",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -15,
+            "y": 19,
+            "facing": "ew",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -13,
+            "y": 19,
+            "facing": "ew",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -12,
+            "y": 19,
+            "facing": "ew",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -11,
+            "y": 19,
+            "facing": "ew",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -17,
+            "y": 14,
+            "facing": "ns",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -17,
+            "y": 15,
+            "facing": "ns",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -17,
+            "y": 16,
+            "facing": "ns",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -17,
+            "y": 17,
+            "facing": "ns",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -17,
+            "y": 18,
+            "facing": "ns",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -11,
+            "y": 14,
+            "facing": "ns",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          }
+        ],
+        "errors": [],
+        "diagnostics": []
+      },
+      {
+        "stage": "placed-10",
+        "elapsedSec": 20.724,
+        "position": {
+          "x": -13.890523534492742,
+          "y": 17.994146968601136,
+          "map": "own-camp"
+        },
+        "hp": 120,
+        "shield": 110,
+        "satiety": 63.035500000001235,
+        "resources": {
+          "wood": 8,
+          "stone": 32,
+          "scrap": 21,
+          "parts": 0,
+          "food": 1,
+          "ammo": 57,
+          "c4": 0,
+          "medical": 7,
+          "credits": 552,
+          "shard": 9
+        },
+        "inventory": [
+          {
+            "id": "ore_copper",
+            "name": "铜矿石",
+            "count": 1
+          },
+          {
+            "id": "att_foregrip",
+            "name": "垂直握把",
+            "count": 1
+          },
+          {
+            "id": "rifle",
+            "name": "战术突击步枪",
+            "count": 1
+          },
+          {
+            "id": "pickaxe_stone",
+            "name": "开山镐",
+            "count": 1
+          },
+          {
+            "id": "crop_potato",
+            "name": "土豆",
+            "count": 1
+          },
+          {
+            "id": "battery",
+            "name": "高耐腐蚀电池",
+            "count": 3
+          },
+          {
+            "id": "medkit",
+            "name": "纳米急救箱",
+            "count": 2
+          },
+          {
+            "id": "key_red",
+            "name": "红色房卡",
+            "count": 1
+          },
+          {
+            "id": "med_bloodbag",
+            "name": "血袋",
+            "count": 1
+          },
+          {
+            "id": "bandage",
+            "name": "草药绷带",
+            "count": 3
+          },
+          {
+            "id": "antidote",
+            "name": "抗酸蚀解毒剂",
+            "count": 1
+          },
+          {
+            "id": "fuel",
+            "name": "高纯度燃油",
+            "count": 2
+          },
+          {
+            "id": "helmet_t4",
+            "name": "4级重型头盔",
+            "count": 1
+          },
+          {
+            "id": "crude_gun",
+            "name": "土铳",
+            "count": 1
+          },
+          {
+            "id": "seed_starfruit",
+            "name": "星果种子",
+            "count": 1
+          }
+        ],
+        "equipment": {
+          "weapon": "wp_plasma",
+          "armor": "vest",
+          "tool": "axe_stone"
+        },
+        "buildings": [
+          {
+            "type": "anchor_core",
+            "x": 0,
+            "y": 0,
+            "hp": 1200,
+            "maxHp": 1200,
+            "ammo": 0
+          },
+          {
+            "type": "workbench",
+            "x": -3,
+            "y": 24,
+            "facing": "ew",
+            "hp": 500,
+            "maxHp": 500,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "storage_box",
+            "x": 3,
+            "y": 24,
+            "facing": "ew",
+            "hp": 400,
+            "maxHp": 400,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "farm_plot",
+            "x": 6,
+            "y": 22,
+            "facing": "ew",
+            "hp": 250,
+            "maxHp": 250,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "campfire",
+            "x": -6,
+            "y": 22,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "turret",
+            "x": 3,
+            "y": 19,
+            "facing": "ew",
+            "hp": 750,
+            "maxHp": 750,
+            "ammo": 20,
+            "isOpen": false
+          },
+          {
+            "type": "furnace",
+            "x": -8,
+            "y": 19,
+            "facing": "ew",
+            "hp": 600,
+            "maxHp": 600,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "research_table",
+            "x": 9,
+            "y": 18,
+            "facing": "ew",
+            "hp": 500,
+            "maxHp": 500,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -16,
+            "y": 14,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -15,
+            "y": 14,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -14,
+            "y": 14,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -13,
+            "y": 14,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -12,
+            "y": 14,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -16,
+            "y": 15,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -15,
+            "y": 15,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -14,
+            "y": 15,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -13,
+            "y": 15,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -12,
+            "y": 15,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -16,
+            "y": 16,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -15,
+            "y": 16,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -14,
+            "y": 16,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -13,
+            "y": 16,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -12,
+            "y": 16,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -16,
+            "y": 17,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -15,
+            "y": 17,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -14,
+            "y": 17,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -13,
+            "y": 17,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -12,
+            "y": 17,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -16,
+            "y": 18,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -15,
+            "y": 18,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -14,
+            "y": 18,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -13,
+            "y": 18,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -12,
+            "y": 18,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "bed",
+            "x": -16,
+            "y": 15,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "storage_box",
+            "x": -14,
+            "y": 15,
+            "facing": "ew",
+            "hp": 400,
+            "maxHp": 400,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "turret",
+            "x": -12,
+            "y": 16,
+            "facing": "ew",
+            "hp": 750,
+            "maxHp": 750,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -17,
+            "y": 13,
+            "facing": "ew",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -16,
+            "y": 13,
+            "facing": "ew",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -15,
+            "y": 13,
+            "facing": "ew",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -14,
+            "y": 13,
+            "facing": "ew",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -13,
+            "y": 13,
+            "facing": "ew",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -12,
+            "y": 13,
+            "facing": "ew",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -11,
+            "y": 13,
+            "facing": "ew",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -17,
+            "y": 19,
+            "facing": "ew",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -16,
+            "y": 19,
+            "facing": "ew",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -15,
+            "y": 19,
+            "facing": "ew",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -13,
+            "y": 19,
+            "facing": "ew",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -12,
+            "y": 19,
+            "facing": "ew",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -11,
+            "y": 19,
+            "facing": "ew",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -17,
+            "y": 14,
+            "facing": "ns",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -17,
+            "y": 15,
+            "facing": "ns",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -17,
+            "y": 16,
+            "facing": "ns",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -17,
+            "y": 17,
+            "facing": "ns",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -17,
+            "y": 18,
+            "facing": "ns",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -11,
+            "y": 14,
+            "facing": "ns",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -11,
+            "y": 15,
+            "facing": "ns",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -11,
+            "y": 16,
+            "facing": "ns",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -11,
+            "y": 17,
+            "facing": "ns",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -11,
+            "y": 18,
+            "facing": "ns",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "door",
+            "x": -14,
+            "y": 19,
+            "facing": "ew",
+            "hp": 650,
+            "maxHp": 650,
+            "ammo": 0,
+            "isOpen": false
+          }
+        ],
+        "errors": [],
+        "diagnostics": []
+      },
+      {
+        "stage": "paid-shelter-completed",
+        "elapsedSec": 26.621,
+        "position": {
+          "x": -13.999999998927217,
+          "y": 17.10657993225997,
+          "map": "own-camp"
+        },
+        "hp": 120,
+        "shield": 110,
+        "satiety": 61.48800000000124,
+        "resources": {
+          "wood": 8,
+          "stone": 32,
+          "scrap": 21,
+          "parts": 0,
+          "food": 1,
+          "ammo": 47,
+          "c4": 0,
+          "medical": 7,
+          "credits": 552,
+          "shard": 9
+        },
+        "inventory": [
+          {
+            "id": "ore_copper",
+            "name": "铜矿石",
+            "count": 1
+          },
+          {
+            "id": "att_foregrip",
+            "name": "垂直握把",
+            "count": 1
+          },
+          {
+            "id": "rifle",
+            "name": "战术突击步枪",
+            "count": 1
+          },
+          {
+            "id": "pickaxe_stone",
+            "name": "开山镐",
+            "count": 1
+          },
+          {
+            "id": "crop_potato",
+            "name": "土豆",
+            "count": 1
+          },
+          {
+            "id": "battery",
+            "name": "高耐腐蚀电池",
+            "count": 3
+          },
+          {
+            "id": "medkit",
+            "name": "纳米急救箱",
+            "count": 2
+          },
+          {
+            "id": "key_red",
+            "name": "红色房卡",
+            "count": 1
+          },
+          {
+            "id": "med_bloodbag",
+            "name": "血袋",
+            "count": 1
+          },
+          {
+            "id": "bandage",
+            "name": "草药绷带",
+            "count": 3
+          },
+          {
+            "id": "antidote",
+            "name": "抗酸蚀解毒剂",
+            "count": 1
+          },
+          {
+            "id": "fuel",
+            "name": "高纯度燃油",
+            "count": 2
+          },
+          {
+            "id": "helmet_t4",
+            "name": "4级重型头盔",
+            "count": 1
+          },
+          {
+            "id": "crude_gun",
+            "name": "土铳",
+            "count": 1
+          },
+          {
+            "id": "seed_starfruit",
+            "name": "星果种子",
+            "count": 1
+          }
+        ],
+        "equipment": {
+          "weapon": "wp_plasma",
+          "armor": "vest",
+          "tool": "axe_stone"
+        },
+        "buildings": [
+          {
+            "type": "anchor_core",
+            "x": 0,
+            "y": 0,
+            "hp": 1200,
+            "maxHp": 1200,
+            "ammo": 0
+          },
+          {
+            "type": "workbench",
+            "x": -3,
+            "y": 24,
+            "facing": "ew",
+            "hp": 500,
+            "maxHp": 500,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "storage_box",
+            "x": 3,
+            "y": 24,
+            "facing": "ew",
+            "hp": 400,
+            "maxHp": 400,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "farm_plot",
+            "x": 6,
+            "y": 22,
+            "facing": "ew",
+            "hp": 250,
+            "maxHp": 250,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "campfire",
+            "x": -6,
+            "y": 22,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "turret",
+            "x": 3,
+            "y": 19,
+            "facing": "ew",
+            "hp": 750,
+            "maxHp": 750,
+            "ammo": 20,
+            "isOpen": false
+          },
+          {
+            "type": "furnace",
+            "x": -8,
+            "y": 19,
+            "facing": "ew",
+            "hp": 600,
+            "maxHp": 600,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "research_table",
+            "x": 9,
+            "y": 18,
+            "facing": "ew",
+            "hp": 500,
+            "maxHp": 500,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -16,
+            "y": 14,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -15,
+            "y": 14,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -14,
+            "y": 14,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -13,
+            "y": 14,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -12,
+            "y": 14,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -16,
+            "y": 15,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -15,
+            "y": 15,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -14,
+            "y": 15,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -13,
+            "y": 15,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -12,
+            "y": 15,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -16,
+            "y": 16,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -15,
+            "y": 16,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -14,
+            "y": 16,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -13,
+            "y": 16,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -12,
+            "y": 16,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -16,
+            "y": 17,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -15,
+            "y": 17,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -14,
+            "y": 17,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -13,
+            "y": 17,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -12,
+            "y": 17,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -16,
+            "y": 18,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -15,
+            "y": 18,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -14,
+            "y": 18,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -13,
+            "y": 18,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -12,
+            "y": 18,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "bed",
+            "x": -16,
+            "y": 15,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "storage_box",
+            "x": -14,
+            "y": 15,
+            "facing": "ew",
+            "hp": 400,
+            "maxHp": 400,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "turret",
+            "x": -12,
+            "y": 16,
+            "facing": "ew",
+            "hp": 750,
+            "maxHp": 750,
+            "ammo": 10,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -17,
+            "y": 13,
+            "facing": "ew",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -16,
+            "y": 13,
+            "facing": "ew",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -15,
+            "y": 13,
+            "facing": "ew",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -14,
+            "y": 13,
+            "facing": "ew",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -13,
+            "y": 13,
+            "facing": "ew",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -12,
+            "y": 13,
+            "facing": "ew",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -11,
+            "y": 13,
+            "facing": "ew",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -17,
+            "y": 19,
+            "facing": "ew",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -16,
+            "y": 19,
+            "facing": "ew",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -15,
+            "y": 19,
+            "facing": "ew",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -13,
+            "y": 19,
+            "facing": "ew",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -12,
+            "y": 19,
+            "facing": "ew",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -11,
+            "y": 19,
+            "facing": "ew",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -17,
+            "y": 14,
+            "facing": "ns",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -17,
+            "y": 15,
+            "facing": "ns",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -17,
+            "y": 16,
+            "facing": "ns",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -17,
+            "y": 17,
+            "facing": "ns",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -17,
+            "y": 18,
+            "facing": "ns",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -11,
+            "y": 14,
+            "facing": "ns",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -11,
+            "y": 15,
+            "facing": "ns",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -11,
+            "y": 16,
+            "facing": "ns",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -11,
+            "y": 17,
+            "facing": "ns",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -11,
+            "y": 18,
+            "facing": "ns",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "door",
+            "x": -14,
+            "y": 19,
+            "facing": "ew",
+            "hp": 650,
+            "maxHp": 650,
+            "ammo": 0,
+            "isOpen": true
+          }
+        ],
+        "errors": [],
+        "diagnostics": []
+      },
+      {
+        "stage": "new-storage-used-paid-wood",
+        "elapsedSec": 28.348,
+        "position": {
+          "x": -13.999999999943036,
+          "y": 16.11591993225999,
+          "map": "own-camp"
+        },
+        "hp": 120,
+        "shield": 110,
+        "satiety": 61.23300000000124,
+        "resources": {
+          "wood": 1,
+          "stone": 32,
+          "scrap": 21,
+          "parts": 0,
+          "food": 1,
+          "ammo": 47,
+          "c4": 0,
+          "medical": 7,
+          "credits": 552,
+          "shard": 9
+        },
+        "inventory": [
+          {
+            "id": "ore_copper",
+            "name": "铜矿石",
+            "count": 1
+          },
+          {
+            "id": "att_foregrip",
+            "name": "垂直握把",
+            "count": 1
+          },
+          {
+            "id": "rifle",
+            "name": "战术突击步枪",
+            "count": 1
+          },
+          {
+            "id": "pickaxe_stone",
+            "name": "开山镐",
+            "count": 1
+          },
+          {
+            "id": "crop_potato",
+            "name": "土豆",
+            "count": 1
+          },
+          {
+            "id": "battery",
+            "name": "高耐腐蚀电池",
+            "count": 3
+          },
+          {
+            "id": "medkit",
+            "name": "纳米急救箱",
+            "count": 2
+          },
+          {
+            "id": "key_red",
+            "name": "红色房卡",
+            "count": 1
+          },
+          {
+            "id": "med_bloodbag",
+            "name": "血袋",
+            "count": 1
+          },
+          {
+            "id": "bandage",
+            "name": "草药绷带",
+            "count": 3
+          },
+          {
+            "id": "antidote",
+            "name": "抗酸蚀解毒剂",
+            "count": 1
+          },
+          {
+            "id": "fuel",
+            "name": "高纯度燃油",
+            "count": 2
+          },
+          {
+            "id": "helmet_t4",
+            "name": "4级重型头盔",
+            "count": 1
+          },
+          {
+            "id": "crude_gun",
+            "name": "土铳",
+            "count": 1
+          },
+          {
+            "id": "seed_starfruit",
+            "name": "星果种子",
+            "count": 1
+          }
+        ],
+        "equipment": {
+          "weapon": "wp_plasma",
+          "armor": "vest",
+          "tool": "axe_stone"
+        },
+        "buildings": [
+          {
+            "type": "anchor_core",
+            "x": 0,
+            "y": 0,
+            "hp": 1200,
+            "maxHp": 1200,
+            "ammo": 0
+          },
+          {
+            "type": "workbench",
+            "x": -3,
+            "y": 24,
+            "facing": "ew",
+            "hp": 500,
+            "maxHp": 500,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "storage_box",
+            "x": 3,
+            "y": 24,
+            "facing": "ew",
+            "hp": 400,
+            "maxHp": 400,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "farm_plot",
+            "x": 6,
+            "y": 22,
+            "facing": "ew",
+            "hp": 250,
+            "maxHp": 250,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "campfire",
+            "x": -6,
+            "y": 22,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "turret",
+            "x": 3,
+            "y": 19,
+            "facing": "ew",
+            "hp": 750,
+            "maxHp": 750,
+            "ammo": 20,
+            "isOpen": false
+          },
+          {
+            "type": "furnace",
+            "x": -8,
+            "y": 19,
+            "facing": "ew",
+            "hp": 600,
+            "maxHp": 600,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "research_table",
+            "x": 9,
+            "y": 18,
+            "facing": "ew",
+            "hp": 500,
+            "maxHp": 500,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -16,
+            "y": 14,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -15,
+            "y": 14,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -14,
+            "y": 14,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -13,
+            "y": 14,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -12,
+            "y": 14,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -16,
+            "y": 15,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -15,
+            "y": 15,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -14,
+            "y": 15,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -13,
+            "y": 15,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -12,
+            "y": 15,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -16,
+            "y": 16,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -15,
+            "y": 16,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -14,
+            "y": 16,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -13,
+            "y": 16,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -12,
+            "y": 16,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -16,
+            "y": 17,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -15,
+            "y": 17,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -14,
+            "y": 17,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -13,
+            "y": 17,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -12,
+            "y": 17,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -16,
+            "y": 18,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -15,
+            "y": 18,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -14,
+            "y": 18,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -13,
+            "y": 18,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -12,
+            "y": 18,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "bed",
+            "x": -16,
+            "y": 15,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "storage_box",
+            "x": -14,
+            "y": 15,
+            "facing": "ew",
+            "hp": 400,
+            "maxHp": 400,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "turret",
+            "x": -12,
+            "y": 16,
+            "facing": "ew",
+            "hp": 750,
+            "maxHp": 750,
+            "ammo": 10,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -17,
+            "y": 13,
+            "facing": "ew",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -16,
+            "y": 13,
+            "facing": "ew",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -15,
+            "y": 13,
+            "facing": "ew",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -14,
+            "y": 13,
+            "facing": "ew",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -13,
+            "y": 13,
+            "facing": "ew",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -12,
+            "y": 13,
+            "facing": "ew",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -11,
+            "y": 13,
+            "facing": "ew",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -17,
+            "y": 19,
+            "facing": "ew",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -16,
+            "y": 19,
+            "facing": "ew",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -15,
+            "y": 19,
+            "facing": "ew",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -13,
+            "y": 19,
+            "facing": "ew",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -12,
+            "y": 19,
+            "facing": "ew",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -11,
+            "y": 19,
+            "facing": "ew",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -17,
+            "y": 14,
+            "facing": "ns",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -17,
+            "y": 15,
+            "facing": "ns",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -17,
+            "y": 16,
+            "facing": "ns",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -17,
+            "y": 17,
+            "facing": "ns",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -17,
+            "y": 18,
+            "facing": "ns",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -11,
+            "y": 14,
+            "facing": "ns",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -11,
+            "y": 15,
+            "facing": "ns",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -11,
+            "y": 16,
+            "facing": "ns",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -11,
+            "y": 17,
+            "facing": "ns",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -11,
+            "y": 18,
+            "facing": "ns",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "door",
+            "x": -14,
+            "y": 19,
+            "facing": "ew",
+            "hp": 650,
+            "maxHp": 650,
+            "ammo": 0,
+            "isOpen": true
+          }
+        ],
+        "errors": [],
+        "diagnostics": []
+      },
+      {
+        "stage": "new-bed-rest-at-health-cap",
+        "elapsedSec": 30.066,
+        "position": {
+          "x": -15.901254524644566,
+          "y": 16.000469406755688,
+          "map": "own-camp"
+        },
+        "hp": 120,
+        "shield": 110,
+        "satiety": 60.718750000001236,
+        "resources": {
+          "wood": 1,
+          "stone": 32,
+          "scrap": 21,
+          "parts": 0,
+          "food": 1,
+          "ammo": 47,
+          "c4": 0,
+          "medical": 7,
+          "credits": 552,
+          "shard": 9
+        },
+        "inventory": [
+          {
+            "id": "ore_copper",
+            "name": "铜矿石",
+            "count": 1
+          },
+          {
+            "id": "att_foregrip",
+            "name": "垂直握把",
+            "count": 1
+          },
+          {
+            "id": "rifle",
+            "name": "战术突击步枪",
+            "count": 1
+          },
+          {
+            "id": "pickaxe_stone",
+            "name": "开山镐",
+            "count": 1
+          },
+          {
+            "id": "crop_potato",
+            "name": "土豆",
+            "count": 1
+          },
+          {
+            "id": "battery",
+            "name": "高耐腐蚀电池",
+            "count": 3
+          },
+          {
+            "id": "medkit",
+            "name": "纳米急救箱",
+            "count": 2
+          },
+          {
+            "id": "key_red",
+            "name": "红色房卡",
+            "count": 1
+          },
+          {
+            "id": "med_bloodbag",
+            "name": "血袋",
+            "count": 1
+          },
+          {
+            "id": "bandage",
+            "name": "草药绷带",
+            "count": 3
+          },
+          {
+            "id": "antidote",
+            "name": "抗酸蚀解毒剂",
+            "count": 1
+          },
+          {
+            "id": "fuel",
+            "name": "高纯度燃油",
+            "count": 2
+          },
+          {
+            "id": "helmet_t4",
+            "name": "4级重型头盔",
+            "count": 1
+          },
+          {
+            "id": "crude_gun",
+            "name": "土铳",
+            "count": 1
+          },
+          {
+            "id": "seed_starfruit",
+            "name": "星果种子",
+            "count": 1
+          }
+        ],
+        "equipment": {
+          "weapon": "wp_plasma",
+          "armor": "vest",
+          "tool": "axe_stone"
+        },
+        "buildings": [
+          {
+            "type": "anchor_core",
+            "x": 0,
+            "y": 0,
+            "hp": 1200,
+            "maxHp": 1200,
+            "ammo": 0
+          },
+          {
+            "type": "workbench",
+            "x": -3,
+            "y": 24,
+            "facing": "ew",
+            "hp": 500,
+            "maxHp": 500,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "storage_box",
+            "x": 3,
+            "y": 24,
+            "facing": "ew",
+            "hp": 400,
+            "maxHp": 400,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "farm_plot",
+            "x": 6,
+            "y": 22,
+            "facing": "ew",
+            "hp": 250,
+            "maxHp": 250,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "campfire",
+            "x": -6,
+            "y": 22,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "turret",
+            "x": 3,
+            "y": 19,
+            "facing": "ew",
+            "hp": 750,
+            "maxHp": 750,
+            "ammo": 20,
+            "isOpen": false
+          },
+          {
+            "type": "furnace",
+            "x": -8,
+            "y": 19,
+            "facing": "ew",
+            "hp": 600,
+            "maxHp": 600,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "research_table",
+            "x": 9,
+            "y": 18,
+            "facing": "ew",
+            "hp": 500,
+            "maxHp": 500,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -16,
+            "y": 14,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -15,
+            "y": 14,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -14,
+            "y": 14,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -13,
+            "y": 14,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -12,
+            "y": 14,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -16,
+            "y": 15,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -15,
+            "y": 15,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -14,
+            "y": 15,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -13,
+            "y": 15,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -12,
+            "y": 15,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -16,
+            "y": 16,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -15,
+            "y": 16,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -14,
+            "y": 16,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -13,
+            "y": 16,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -12,
+            "y": 16,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -16,
+            "y": 17,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -15,
+            "y": 17,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -14,
+            "y": 17,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -13,
+            "y": 17,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -12,
+            "y": 17,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -16,
+            "y": 18,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -15,
+            "y": 18,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -14,
+            "y": 18,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -13,
+            "y": 18,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -12,
+            "y": 18,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "bed",
+            "x": -16,
+            "y": 15,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "storage_box",
+            "x": -14,
+            "y": 15,
+            "facing": "ew",
+            "hp": 400,
+            "maxHp": 400,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "turret",
+            "x": -12,
+            "y": 16,
+            "facing": "ew",
+            "hp": 750,
+            "maxHp": 750,
+            "ammo": 10,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -17,
+            "y": 13,
+            "facing": "ew",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -16,
+            "y": 13,
+            "facing": "ew",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -15,
+            "y": 13,
+            "facing": "ew",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -14,
+            "y": 13,
+            "facing": "ew",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -13,
+            "y": 13,
+            "facing": "ew",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -12,
+            "y": 13,
+            "facing": "ew",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -11,
+            "y": 13,
+            "facing": "ew",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -17,
+            "y": 19,
+            "facing": "ew",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -16,
+            "y": 19,
+            "facing": "ew",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -15,
+            "y": 19,
+            "facing": "ew",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -13,
+            "y": 19,
+            "facing": "ew",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -12,
+            "y": 19,
+            "facing": "ew",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -11,
+            "y": 19,
+            "facing": "ew",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -17,
+            "y": 14,
+            "facing": "ns",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -17,
+            "y": 15,
+            "facing": "ns",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -17,
+            "y": 16,
+            "facing": "ns",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -17,
+            "y": 17,
+            "facing": "ns",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -17,
+            "y": 18,
+            "facing": "ns",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -11,
+            "y": 14,
+            "facing": "ns",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -11,
+            "y": 15,
+            "facing": "ns",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -11,
+            "y": 16,
+            "facing": "ns",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -11,
+            "y": 17,
+            "facing": "ns",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -11,
+            "y": 18,
+            "facing": "ns",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "door",
+            "x": -14,
+            "y": 19,
+            "facing": "ew",
+            "hp": 650,
+            "maxHp": 650,
+            "ammo": 0,
+            "isOpen": true
+          }
+        ],
+        "errors": [],
+        "diagnostics": []
+      },
+      {
+        "stage": "completed-before-restart",
+        "elapsedSec": 30.069,
+        "position": {
+          "x": -15.901254524644566,
+          "y": 16.000469406755688,
+          "map": "own-camp"
+        },
+        "hp": 120,
+        "shield": 110,
+        "satiety": 60.718750000001236,
+        "resources": {
+          "wood": 1,
+          "stone": 32,
+          "scrap": 21,
+          "parts": 0,
+          "food": 1,
+          "ammo": 47,
+          "c4": 0,
+          "medical": 7,
+          "credits": 552,
+          "shard": 9
+        },
+        "inventory": [
+          {
+            "id": "ore_copper",
+            "name": "铜矿石",
+            "count": 1
+          },
+          {
+            "id": "att_foregrip",
+            "name": "垂直握把",
+            "count": 1
+          },
+          {
+            "id": "rifle",
+            "name": "战术突击步枪",
+            "count": 1
+          },
+          {
+            "id": "pickaxe_stone",
+            "name": "开山镐",
+            "count": 1
+          },
+          {
+            "id": "crop_potato",
+            "name": "土豆",
+            "count": 1
+          },
+          {
+            "id": "battery",
+            "name": "高耐腐蚀电池",
+            "count": 3
+          },
+          {
+            "id": "medkit",
+            "name": "纳米急救箱",
+            "count": 2
+          },
+          {
+            "id": "key_red",
+            "name": "红色房卡",
+            "count": 1
+          },
+          {
+            "id": "med_bloodbag",
+            "name": "血袋",
+            "count": 1
+          },
+          {
+            "id": "bandage",
+            "name": "草药绷带",
+            "count": 3
+          },
+          {
+            "id": "antidote",
+            "name": "抗酸蚀解毒剂",
+            "count": 1
+          },
+          {
+            "id": "fuel",
+            "name": "高纯度燃油",
+            "count": 2
+          },
+          {
+            "id": "helmet_t4",
+            "name": "4级重型头盔",
+            "count": 1
+          },
+          {
+            "id": "crude_gun",
+            "name": "土铳",
+            "count": 1
+          },
+          {
+            "id": "seed_starfruit",
+            "name": "星果种子",
+            "count": 1
+          }
+        ],
+        "equipment": {
+          "weapon": "wp_plasma",
+          "armor": "vest",
+          "tool": "axe_stone"
+        },
+        "buildings": [
+          {
+            "type": "anchor_core",
+            "x": 0,
+            "y": 0,
+            "hp": 1200,
+            "maxHp": 1200,
+            "ammo": 0
+          },
+          {
+            "type": "workbench",
+            "x": -3,
+            "y": 24,
+            "facing": "ew",
+            "hp": 500,
+            "maxHp": 500,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "storage_box",
+            "x": 3,
+            "y": 24,
+            "facing": "ew",
+            "hp": 400,
+            "maxHp": 400,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "farm_plot",
+            "x": 6,
+            "y": 22,
+            "facing": "ew",
+            "hp": 250,
+            "maxHp": 250,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "campfire",
+            "x": -6,
+            "y": 22,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "turret",
+            "x": 3,
+            "y": 19,
+            "facing": "ew",
+            "hp": 750,
+            "maxHp": 750,
+            "ammo": 20,
+            "isOpen": false
+          },
+          {
+            "type": "furnace",
+            "x": -8,
+            "y": 19,
+            "facing": "ew",
+            "hp": 600,
+            "maxHp": 600,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "research_table",
+            "x": 9,
+            "y": 18,
+            "facing": "ew",
+            "hp": 500,
+            "maxHp": 500,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -16,
+            "y": 14,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -15,
+            "y": 14,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -14,
+            "y": 14,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -13,
+            "y": 14,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -12,
+            "y": 14,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -16,
+            "y": 15,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -15,
+            "y": 15,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -14,
+            "y": 15,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -13,
+            "y": 15,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -12,
+            "y": 15,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -16,
+            "y": 16,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -15,
+            "y": 16,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -14,
+            "y": 16,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -13,
+            "y": 16,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -12,
+            "y": 16,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -16,
+            "y": 17,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -15,
+            "y": 17,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -14,
+            "y": 17,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -13,
+            "y": 17,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -12,
+            "y": 17,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -16,
+            "y": 18,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -15,
+            "y": 18,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -14,
+            "y": 18,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -13,
+            "y": 18,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -12,
+            "y": 18,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "bed",
+            "x": -16,
+            "y": 15,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "storage_box",
+            "x": -14,
+            "y": 15,
+            "facing": "ew",
+            "hp": 400,
+            "maxHp": 400,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "turret",
+            "x": -12,
+            "y": 16,
+            "facing": "ew",
+            "hp": 750,
+            "maxHp": 750,
+            "ammo": 10,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -17,
+            "y": 13,
+            "facing": "ew",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -16,
+            "y": 13,
+            "facing": "ew",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -15,
+            "y": 13,
+            "facing": "ew",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -14,
+            "y": 13,
+            "facing": "ew",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -13,
+            "y": 13,
+            "facing": "ew",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -12,
+            "y": 13,
+            "facing": "ew",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -11,
+            "y": 13,
+            "facing": "ew",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -17,
+            "y": 19,
+            "facing": "ew",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -16,
+            "y": 19,
+            "facing": "ew",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -15,
+            "y": 19,
+            "facing": "ew",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -13,
+            "y": 19,
+            "facing": "ew",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -12,
+            "y": 19,
+            "facing": "ew",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -11,
+            "y": 19,
+            "facing": "ew",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -17,
+            "y": 14,
+            "facing": "ns",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -17,
+            "y": 15,
+            "facing": "ns",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -17,
+            "y": 16,
+            "facing": "ns",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -17,
+            "y": 17,
+            "facing": "ns",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -17,
+            "y": 18,
+            "facing": "ns",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -11,
+            "y": 14,
+            "facing": "ns",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -11,
+            "y": 15,
+            "facing": "ns",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -11,
+            "y": 16,
+            "facing": "ns",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -11,
+            "y": 17,
+            "facing": "ns",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -11,
+            "y": 18,
+            "facing": "ns",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "door",
+            "x": -14,
+            "y": 19,
+            "facing": "ew",
+            "hp": 650,
+            "maxHp": 650,
+            "ammo": 0,
+            "isOpen": true
+          }
+        ],
+        "errors": [],
+        "diagnostics": []
+      },
+      {
+        "stage": "earned-shelter-after-restart",
+        "elapsedSec": 33.765,
+        "position": {
+          "x": -15.901254524644566,
+          "y": 16.000469406755688,
+          "map": "own-camp"
+        },
+        "hp": 120,
+        "shield": 110,
+        "satiety": 60.20275000000124,
+        "resources": {
+          "wood": 1,
+          "stone": 32,
+          "scrap": 21,
+          "parts": 0,
+          "food": 1,
+          "ammo": 47,
+          "c4": 0,
+          "medical": 7,
+          "credits": 552,
+          "shard": 9
+        },
+        "inventory": [
+          {
+            "id": "ore_copper",
+            "name": "铜矿石",
+            "count": 1
+          },
+          {
+            "id": "att_foregrip",
+            "name": "垂直握把",
+            "count": 1
+          },
+          {
+            "id": "rifle",
+            "name": "战术突击步枪",
+            "count": 1
+          },
+          {
+            "id": "pickaxe_stone",
+            "name": "开山镐",
+            "count": 1
+          },
+          {
+            "id": "crop_potato",
+            "name": "土豆",
+            "count": 1
+          },
+          {
+            "id": "battery",
+            "name": "高耐腐蚀电池",
+            "count": 3
+          },
+          {
+            "id": "medkit",
+            "name": "纳米急救箱",
+            "count": 2
+          },
+          {
+            "id": "key_red",
+            "name": "红色房卡",
+            "count": 1
+          },
+          {
+            "id": "med_bloodbag",
+            "name": "血袋",
+            "count": 1
+          },
+          {
+            "id": "bandage",
+            "name": "草药绷带",
+            "count": 3
+          },
+          {
+            "id": "antidote",
+            "name": "抗酸蚀解毒剂",
+            "count": 1
+          },
+          {
+            "id": "fuel",
+            "name": "高纯度燃油",
+            "count": 2
+          },
+          {
+            "id": "helmet_t4",
+            "name": "4级重型头盔",
+            "count": 1
+          },
+          {
+            "id": "crude_gun",
+            "name": "土铳",
+            "count": 1
+          },
+          {
+            "id": "seed_starfruit",
+            "name": "星果种子",
+            "count": 1
+          }
+        ],
+        "equipment": {
+          "weapon": "wp_plasma",
+          "armor": "vest",
+          "tool": "axe_stone"
+        },
+        "buildings": [
+          {
+            "type": "anchor_core",
+            "x": 0,
+            "y": 0,
+            "hp": 1200,
+            "maxHp": 1200,
+            "ammo": 0
+          },
+          {
+            "type": "workbench",
+            "x": -3,
+            "y": 24,
+            "facing": "ew",
+            "hp": 500,
+            "maxHp": 500,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "storage_box",
+            "x": 3,
+            "y": 24,
+            "facing": "ew",
+            "hp": 400,
+            "maxHp": 400,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "farm_plot",
+            "x": 6,
+            "y": 22,
+            "facing": "ew",
+            "hp": 250,
+            "maxHp": 250,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "campfire",
+            "x": -6,
+            "y": 22,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "turret",
+            "x": 3,
+            "y": 19,
+            "facing": "ew",
+            "hp": 750,
+            "maxHp": 750,
+            "ammo": 20,
+            "isOpen": false
+          },
+          {
+            "type": "furnace",
+            "x": -8,
+            "y": 19,
+            "facing": "ew",
+            "hp": 600,
+            "maxHp": 600,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "research_table",
+            "x": 9,
+            "y": 18,
+            "facing": "ew",
+            "hp": 500,
+            "maxHp": 500,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -16,
+            "y": 14,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -15,
+            "y": 14,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -14,
+            "y": 14,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -13,
+            "y": 14,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -12,
+            "y": 14,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -16,
+            "y": 15,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -15,
+            "y": 15,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -14,
+            "y": 15,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -13,
+            "y": 15,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -12,
+            "y": 15,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -16,
+            "y": 16,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -15,
+            "y": 16,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -14,
+            "y": 16,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -13,
+            "y": 16,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -12,
+            "y": 16,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -16,
+            "y": 17,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -15,
+            "y": 17,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -14,
+            "y": 17,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -13,
+            "y": 17,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -12,
+            "y": 17,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -16,
+            "y": 18,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -15,
+            "y": 18,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -14,
+            "y": 18,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -13,
+            "y": 18,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_floor",
+            "x": -12,
+            "y": 18,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "bed",
+            "x": -16,
+            "y": 15,
+            "facing": "ew",
+            "hp": 300,
+            "maxHp": 300,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "storage_box",
+            "x": -14,
+            "y": 15,
+            "facing": "ew",
+            "hp": 400,
+            "maxHp": 400,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "turret",
+            "x": -12,
+            "y": 16,
+            "facing": "ew",
+            "hp": 750,
+            "maxHp": 750,
+            "ammo": 10,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -17,
+            "y": 13,
+            "facing": "ew",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -16,
+            "y": 13,
+            "facing": "ew",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -15,
+            "y": 13,
+            "facing": "ew",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -14,
+            "y": 13,
+            "facing": "ew",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -13,
+            "y": 13,
+            "facing": "ew",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -12,
+            "y": 13,
+            "facing": "ew",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -11,
+            "y": 13,
+            "facing": "ew",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -17,
+            "y": 19,
+            "facing": "ew",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -16,
+            "y": 19,
+            "facing": "ew",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -15,
+            "y": 19,
+            "facing": "ew",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -13,
+            "y": 19,
+            "facing": "ew",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -12,
+            "y": 19,
+            "facing": "ew",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -11,
+            "y": 19,
+            "facing": "ew",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -17,
+            "y": 14,
+            "facing": "ns",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -17,
+            "y": 15,
+            "facing": "ns",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -17,
+            "y": 16,
+            "facing": "ns",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -17,
+            "y": 17,
+            "facing": "ns",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -17,
+            "y": 18,
+            "facing": "ns",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -11,
+            "y": 14,
+            "facing": "ns",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -11,
+            "y": 15,
+            "facing": "ns",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -11,
+            "y": 16,
+            "facing": "ns",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -11,
+            "y": 17,
+            "facing": "ns",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "wood_wall",
+            "x": -11,
+            "y": 18,
+            "facing": "ns",
+            "hp": 350,
+            "maxHp": 350,
+            "ammo": 0,
+            "isOpen": false
+          },
+          {
+            "type": "door",
+            "x": -14,
+            "y": 19,
+            "facing": "ew",
+            "hp": 650,
+            "maxHp": 650,
+            "ammo": 0,
+            "isOpen": true
+          }
+        ],
+        "errors": [],
+        "diagnostics": []
+      }
+    ],
+    "preview": [
+      "放置: 加固原木围墙 [南北·R旋转]",
+      "目标被建筑遮挡，请绕到旁边",
+      "放置: 加固原木围墙 [南北·R旋转]",
+      "目标被建筑遮挡，请绕到旁边",
+      "放置: 加固原木围墙 [南北·R旋转]",
+      "目标被建筑遮挡，请绕到旁边",
+      "放置: 加固原木围墙 [南北·R旋转]",
+      "目标被建筑遮挡，请绕到旁边",
+      "放置: 加固原木围墙 [南北·R旋转]",
+      "目标被建筑遮挡，请绕到旁边",
+      "放置: 加固原木围墙 [南北·R旋转]",
+      "目标被建筑遮挡，请绕到旁边",
+      "放置: 加固原木围墙 [南北·R旋转]",
+      "目标被建筑遮挡，请绕到旁边"
+    ],
+    "actions": [
+      {
+        "action": "build",
+        "packet": {
+          "buildType": "wood_wall",
+          "x": -17,
+          "y": 15,
+          "facing": "ns"
+        }
+      },
+      {
+        "action": "build",
+        "packet": {
+          "buildType": "wood_wall",
+          "x": -17,
+          "y": 16,
+          "facing": "ns"
+        }
+      },
+      {
+        "action": "build",
+        "packet": {
+          "buildType": "wood_wall",
+          "x": -17,
+          "y": 17,
+          "facing": "ns"
+        }
+      },
+      {
+        "action": "build",
+        "packet": {
+          "buildType": "wood_wall",
+          "x": -17,
+          "y": 18,
+          "facing": "ns"
+        }
+      },
+      {
+        "action": "build",
+        "packet": {
+          "buildType": "wood_wall",
+          "x": -11,
+          "y": 14,
+          "facing": "ns"
+        }
+      },
+      {
+        "action": "build",
+        "packet": {
+          "buildType": "wood_wall",
+          "x": -11,
+          "y": 15,
+          "facing": "ns"
+        }
+      },
+      {
+        "action": "build",
+        "packet": {
+          "buildType": "wood_wall",
+          "x": -11,
+          "y": 16,
+          "facing": "ns"
+        }
+      },
+      {
+        "action": "build",
+        "packet": {
+          "buildType": "wood_wall",
+          "x": -11,
+          "y": 17,
+          "facing": "ns"
+        }
+      },
+      {
+        "action": "build",
+        "packet": {
+          "buildType": "wood_wall",
+          "x": -11,
+          "y": 18,
+          "facing": "ns"
+        }
+      },
+      {
+        "action": "build",
+        "packet": {
+          "buildType": "door",
+          "x": -14,
+          "y": 19,
+          "facing": "ew"
+        }
+      },
+      {
+        "action": "toggle_door",
+        "packet": {}
+      }
+    ]
+  },
+  "limitations": [
+    "Experienced automated route using normal navigation and native interaction; not blind-player time",
+    "Loaded turret, no attack or offline defense combat in this run",
+    "Bed rest requested at full health; no healing amount claimed",
+    "Closed walls and operable door, no automatic roof",
+    "No performance or population capacity acceptance"
+  ],
+  "verification": {
+    "fullSuite": {
+      "files": 41,
+      "tests": 592,
+      "passed": true,
+      "log": "shelter-preview-final-tests-20261023.log"
+    },
+    "typeCheck": "passed after TS7053 display-only keyof assertion",
+    "build": "passed; index-qM16xx35.js; existing bundle-size/loader warnings retained",
+    "redGreen": {
+      "before": {
+        "failed": 4,
+        "passed": 2
+      },
+      "after": {
+        "passed": 6
+      },
+      "effectiveNegatives": [
+        "LOS disabled",
+        "online range incorrectly 4.5",
+        "raw ID instead of localized name"
+      ]
+    },
+    "review": "Independent read-only source/evidence review; no reviewer test or load runs"
+  },
+  "segments": [
+    {
+      "run": "a1",
+      "success": false,
+      "error": "Error: No earned food left",
+      "harvests": [
+        {
+          "name": "维修工棚物资柜",
+          "type": "shelves",
+          "x": -138,
+          "y": -42,
+          "before": {
+            "wood": 0,
+            "stone": 32,
+            "scrap": 38,
+            "parts": 1,
+            "food": 3,
+            "ammo": 57,
+            "c4": 0,
+            "medical": 7,
+            "credits": 552,
+            "shard": 9
+          },
+          "after": {
+            "wood": 0,
+            "stone": 32,
+            "scrap": 46,
+            "parts": 3,
+            "food": 3,
+            "ammo": 57,
+            "c4": 0,
+            "medical": 7,
+            "credits": 552,
+            "shard": 9
+          },
+          "elapsedSec": 46.121
+        },
+        {
+          "name": "黑松树",
+          "type": "tree",
+          "x": -143,
+          "y": -40,
+          "before": {
+            "wood": 0,
+            "stone": 32,
+            "scrap": 46,
+            "parts": 3,
+            "food": 3,
+            "ammo": 57,
+            "c4": 0,
+            "medical": 7,
+            "credits": 552,
+            "shard": 9
+          },
+          "after": {
+            "wood": 9,
+            "stone": 32,
+            "scrap": 46,
+            "parts": 3,
+            "food": 3,
+            "ammo": 57,
+            "c4": 0,
+            "medical": 7,
+            "credits": 552,
+            "shard": 9
+          },
+          "elapsedSec": 55.528
+        },
+        {
+          "name": "黑松树",
+          "type": "tree",
+          "x": -137,
+          "y": -49,
+          "before": {
+            "wood": 9,
+            "stone": 32,
+            "scrap": 46,
+            "parts": 3,
+            "food": 3,
+            "ammo": 57,
+            "c4": 0,
+            "medical": 7,
+            "credits": 552,
+            "shard": 9
+          },
+          "after": {
+            "wood": 18,
+            "stone": 32,
+            "scrap": 46,
+            "parts": 3,
+            "food": 3,
+            "ammo": 57,
+            "c4": 0,
+            "medical": 7,
+            "credits": 552,
+            "shard": 9
+          },
+          "elapsedSec": 65.337
+        },
+        {
+          "name": "林边松树",
+          "type": "tree",
+          "x": -133,
+          "y": -52,
+          "before": {
+            "wood": 18,
+            "stone": 32,
+            "scrap": 46,
+            "parts": 3,
+            "food": 3,
+            "ammo": 57,
+            "c4": 0,
+            "medical": 7,
+            "credits": 552,
+            "shard": 9
+          },
+          "after": {
+            "wood": 27,
+            "stone": 32,
+            "scrap": 46,
+            "parts": 3,
+            "food": 3,
+            "ammo": 57,
+            "c4": 0,
+            "medical": 7,
+            "credits": 552,
+            "shard": 9
+          },
+          "elapsedSec": 72.927
+        },
+        {
+          "name": "黑松树",
+          "type": "tree",
+          "x": -137,
+          "y": -60,
+          "before": {
+            "wood": 27,
+            "stone": 32,
+            "scrap": 46,
+            "parts": 3,
+            "food": 3,
+            "ammo": 57,
+            "c4": 0,
+            "medical": 7,
+            "credits": 552,
+            "shard": 9
+          },
+          "after": {
+            "wood": 36,
+            "stone": 32,
+            "scrap": 46,
+            "parts": 3,
+            "food": 3,
+            "ammo": 57,
+            "c4": 0,
+            "medical": 7,
+            "credits": 552,
+            "shard": 9
+          },
+          "elapsedSec": 81.709
+        },
+        {
+          "name": "黑松树",
+          "type": "tree",
+          "x": -136,
+          "y": -70,
+          "before": {
+            "wood": 36,
+            "stone": 32,
+            "scrap": 46,
+            "parts": 3,
+            "food": 3,
+            "ammo": 57,
+            "c4": 0,
+            "medical": 7,
+            "credits": 552,
+            "shard": 9
+          },
+          "after": {
+            "wood": 45,
+            "stone": 32,
+            "scrap": 46,
+            "parts": 3,
+            "food": 3,
+            "ammo": 57,
+            "c4": 0,
+            "medical": 7,
+            "credits": 552,
+            "shard": 9
+          },
+          "elapsedSec": 90.562
+        },
+        {
+          "name": "黑松树",
+          "type": "tree",
+          "x": -147,
+          "y": -73,
+          "before": {
+            "wood": 45,
+            "stone": 32,
+            "scrap": 46,
+            "parts": 3,
+            "food": 3,
+            "ammo": 57,
+            "c4": 0,
+            "medical": 7,
+            "credits": 552,
+            "shard": 9
+          },
+          "after": {
+            "wood": 54,
+            "stone": 32,
+            "scrap": 46,
+            "parts": 3,
+            "food": 3,
+            "ammo": 57,
+            "c4": 0,
+            "medical": 7,
+            "credits": 552,
+            "shard": 9
+          },
+          "elapsedSec": 99.984
+        },
+        {
+          "name": "林边松树",
+          "type": "tree",
+          "x": -148,
+          "y": -69,
+          "before": {
+            "wood": 54,
+            "stone": 32,
+            "scrap": 46,
+            "parts": 3,
+            "food": 2,
+            "ammo": 57,
+            "c4": 0,
+            "medical": 7,
+            "credits": 552,
+            "shard": 9
+          },
+          "after": {
+            "wood": 63,
+            "stone": 32,
+            "scrap": 46,
+            "parts": 3,
+            "food": 2,
+            "ammo": 57,
+            "c4": 0,
+            "medical": 7,
+            "credits": 552,
+            "shard": 9
+          },
+          "elapsedSec": 108.432
+        },
+        {
+          "name": "黑松树",
+          "type": "tree",
+          "x": -155,
+          "y": -70,
+          "before": {
+            "wood": 63,
+            "stone": 32,
+            "scrap": 46,
+            "parts": 3,
+            "food": 2,
+            "ammo": 57,
+            "c4": 0,
+            "medical": 7,
+            "credits": 552,
+            "shard": 9
+          },
+          "after": {
+            "wood": 72,
+            "stone": 32,
+            "scrap": 46,
+            "parts": 3,
+            "food": 2,
+            "ammo": 57,
+            "c4": 0,
+            "medical": 7,
+            "credits": 552,
+            "shard": 9
+          },
+          "elapsedSec": 116.477
+        },
+        {
+          "name": "黑松树",
+          "type": "tree",
+          "x": -157,
+          "y": -89,
+          "before": {
+            "wood": 72,
+            "stone": 32,
+            "scrap": 46,
+            "parts": 3,
+            "food": 2,
+            "ammo": 57,
+            "c4": 0,
+            "medical": 7,
+            "credits": 552,
+            "shard": 9
+          },
+          "after": {
+            "wood": 81,
+            "stone": 32,
+            "scrap": 46,
+            "parts": 3,
+            "food": 2,
+            "ammo": 57,
+            "c4": 0,
+            "medical": 7,
+            "credits": 552,
+            "shard": 9
+          },
+          "elapsedSec": 127.823
+        },
+        {
+          "name": "林边松树",
+          "type": "tree",
+          "x": -156,
+          "y": -100,
+          "before": {
+            "wood": 81,
+            "stone": 32,
+            "scrap": 46,
+            "parts": 3,
+            "food": 2,
+            "ammo": 57,
+            "c4": 0,
+            "medical": 7,
+            "credits": 552,
+            "shard": 9
+          },
+          "after": {
+            "wood": 90,
+            "stone": 32,
+            "scrap": 46,
+            "parts": 3,
+            "food": 2,
+            "ammo": 57,
+            "c4": 0,
+            "medical": 7,
+            "credits": 552,
+            "shard": 9
+          },
+          "elapsedSec": 136.905
+        },
+        {
+          "name": "黑松树",
+          "type": "tree",
+          "x": -154,
+          "y": -105,
+          "before": {
+            "wood": 90,
+            "stone": 32,
+            "scrap": 46,
+            "parts": 3,
+            "food": 2,
+            "ammo": 57,
+            "c4": 0,
+            "medical": 7,
+            "credits": 552,
+            "shard": 9
+          },
+          "after": {
+            "wood": 99,
+            "stone": 32,
+            "scrap": 46,
+            "parts": 3,
+            "food": 2,
+            "ammo": 57,
+            "c4": 0,
+            "medical": 7,
+            "credits": 552,
+            "shard": 9
+          },
+          "elapsedSec": 144.637
+        },
+        {
+          "name": "黑松树",
+          "type": "tree",
+          "x": -165,
+          "y": -114,
+          "before": {
+            "wood": 99,
+            "stone": 32,
+            "scrap": 46,
+            "parts": 3,
+            "food": 2,
+            "ammo": 57,
+            "c4": 0,
+            "medical": 7,
+            "credits": 552,
+            "shard": 9
+          },
+          "after": {
+            "wood": 108,
+            "stone": 32,
+            "scrap": 46,
+            "parts": 3,
+            "food": 2,
+            "ammo": 57,
+            "c4": 0,
+            "medical": 7,
+            "credits": 552,
+            "shard": 9
+          },
+          "elapsedSec": 155.344
+        },
+        {
+          "name": "林边松树",
+          "type": "tree",
+          "x": -179,
+          "y": -107,
+          "before": {
+            "wood": 108,
+            "stone": 32,
+            "scrap": 46,
+            "parts": 3,
+            "food": 2,
+            "ammo": 57,
+            "c4": 0,
+            "medical": 7,
+            "credits": 552,
+            "shard": 9
+          },
+          "after": {
+            "wood": 117,
+            "stone": 32,
+            "scrap": 46,
+            "parts": 3,
+            "food": 2,
+            "ammo": 57,
+            "c4": 0,
+            "medical": 7,
+            "credits": 552,
+            "shard": 9
+          },
+          "elapsedSec": 166.63
+        },
+        {
+          "name": "林边松树",
+          "type": "tree",
+          "x": -179,
+          "y": -93,
+          "before": {
+            "wood": 117,
+            "stone": 32,
+            "scrap": 46,
+            "parts": 3,
+            "food": 2,
+            "ammo": 57,
+            "c4": 0,
+            "medical": 7,
+            "credits": 552,
+            "shard": 9
+          },
+          "after": {
+            "wood": 126,
+            "stone": 32,
+            "scrap": 46,
+            "parts": 3,
+            "food": 2,
+            "ammo": 57,
+            "c4": 0,
+            "medical": 7,
+            "credits": 552,
+            "shard": 9
+          },
+          "elapsedSec": 176.422
+        },
+        {
+          "name": "林边松树",
+          "type": "tree",
+          "x": -188,
+          "y": -83,
+          "before": {
+            "wood": 126,
+            "stone": 32,
+            "scrap": 46,
+            "parts": 3,
+            "food": 2,
+            "ammo": 57,
+            "c4": 0,
+            "medical": 7,
+            "credits": 552,
+            "shard": 9
+          },
+          "after": {
+            "wood": 135,
+            "stone": 32,
+            "scrap": 46,
+            "parts": 3,
+            "food": 2,
+            "ammo": 57,
+            "c4": 0,
+            "medical": 7,
+            "credits": 552,
+            "shard": 9
+          },
+          "elapsedSec": 187.237
+        },
+        {
+          "name": "林边松树",
+          "type": "tree",
+          "x": -195,
+          "y": -84,
+          "before": {
+            "wood": 135,
+            "stone": 32,
+            "scrap": 46,
+            "parts": 3,
+            "food": 2,
+            "ammo": 57,
+            "c4": 0,
+            "medical": 7,
+            "credits": 552,
+            "shard": 9
+          },
+          "after": {
+            "wood": 144,
+            "stone": 32,
+            "scrap": 46,
+            "parts": 3,
+            "food": 2,
+            "ammo": 57,
+            "c4": 0,
+            "medical": 7,
+            "credits": 552,
+            "shard": 9
+          },
+          "elapsedSec": 195.182
+        },
+        {
+          "name": "黑松树",
+          "type": "tree",
+          "x": -197,
+          "y": -92,
+          "before": {
+            "wood": 144,
+            "stone": 32,
+            "scrap": 46,
+            "parts": 3,
+            "food": 1,
+            "ammo": 57,
+            "c4": 0,
+            "medical": 7,
+            "credits": 552,
+            "shard": 9
+          },
+          "after": {
+            "wood": 153,
+            "stone": 32,
+            "scrap": 46,
+            "parts": 3,
+            "food": 1,
+            "ammo": 57,
+            "c4": 0,
+            "medical": 7,
+            "credits": 552,
+            "shard": 9
+          },
+          "elapsedSec": 204.833
+        },
+        {
+          "name": "林边松树",
+          "type": "tree",
+          "x": -212,
+          "y": -100,
+          "before": {
+            "wood": 153,
+            "stone": 32,
+            "scrap": 46,
+            "parts": 3,
+            "food": 1,
+            "ammo": 57,
+            "c4": 0,
+            "medical": 7,
+            "credits": 552,
+            "shard": 9
+          },
+          "after": {
+            "wood": 162,
+            "stone": 32,
+            "scrap": 46,
+            "parts": 3,
+            "food": 1,
+            "ammo": 57,
+            "c4": 0,
+            "medical": 7,
+            "credits": 552,
+            "shard": 9
+          },
+          "elapsedSec": 216.479
+        },
+        {
+          "name": "林边松树",
+          "type": "tree",
+          "x": -204,
+          "y": -109,
+          "before": {
+            "wood": 162,
+            "stone": 32,
+            "scrap": 46,
+            "parts": 3,
+            "food": 1,
+            "ammo": 57,
+            "c4": 0,
+            "medical": 7,
+            "credits": 552,
+            "shard": 9
+          },
+          "after": {
+            "wood": 171,
+            "stone": 32,
+            "scrap": 46,
+            "parts": 3,
+            "food": 1,
+            "ammo": 57,
+            "c4": 0,
+            "medical": 7,
+            "credits": 552,
+            "shard": 9
+          },
+          "elapsedSec": 226.524
+        },
+        {
+          "name": "黑松树",
+          "type": "tree",
+          "x": -188,
+          "y": -121,
+          "before": {
+            "wood": 171,
+            "stone": 32,
+            "scrap": 46,
+            "parts": 3,
+            "food": 1,
+            "ammo": 57,
+            "c4": 0,
+            "medical": 7,
+            "credits": 552,
+            "shard": 9
+          },
+          "after": {
+            "wood": 180,
+            "stone": 32,
+            "scrap": 46,
+            "parts": 3,
+            "food": 1,
+            "ammo": 57,
+            "c4": 0,
+            "medical": 7,
+            "credits": 552,
+            "shard": 9
+          },
+          "elapsedSec": 239.558
+        },
+        {
+          "name": "林边松树",
+          "type": "tree",
+          "x": -188,
+          "y": -139,
+          "before": {
+            "wood": 180,
+            "stone": 32,
+            "scrap": 46,
+            "parts": 3,
+            "food": 1,
+            "ammo": 57,
+            "c4": 0,
+            "medical": 7,
+            "credits": 552,
+            "shard": 9
+          },
+          "after": {
+            "wood": 189,
+            "stone": 32,
+            "scrap": 46,
+            "parts": 3,
+            "food": 1,
+            "ammo": 57,
+            "c4": 0,
+            "medical": 7,
+            "credits": 552,
+            "shard": 9
+          },
+          "elapsedSec": 250.346
+        },
+        {
+          "name": "林边松树",
+          "type": "tree",
+          "x": -197,
+          "y": -140,
+          "before": {
+            "wood": 189,
+            "stone": 32,
+            "scrap": 46,
+            "parts": 3,
+            "food": 1,
+            "ammo": 57,
+            "c4": 0,
+            "medical": 7,
+            "credits": 552,
+            "shard": 9
+          },
+          "after": {
+            "wood": 198,
+            "stone": 32,
+            "scrap": 46,
+            "parts": 3,
+            "food": 1,
+            "ammo": 57,
+            "c4": 0,
+            "medical": 7,
+            "credits": 552,
+            "shard": 9
+          },
+          "elapsedSec": 258.825
+        },
+        {
+          "name": "黑松树",
+          "type": "tree",
+          "x": -199,
+          "y": -144,
+          "before": {
+            "wood": 198,
+            "stone": 32,
+            "scrap": 46,
+            "parts": 3,
+            "food": 0,
+            "ammo": 57,
+            "c4": 0,
+            "medical": 7,
+            "credits": 552,
+            "shard": 9
+          },
+          "after": {
+            "wood": 207,
+            "stone": 32,
+            "scrap": 46,
+            "parts": 3,
+            "food": 0,
+            "ammo": 57,
+            "c4": 0,
+            "medical": 7,
+            "credits": 552,
+            "shard": 9
+          },
+          "elapsedSec": 267.275
+        },
+        {
+          "name": "黑松树",
+          "type": "tree",
+          "x": -198,
+          "y": -155,
+          "before": {
+            "wood": 207,
+            "stone": 32,
+            "scrap": 46,
+            "parts": 3,
+            "food": 0,
+            "ammo": 57,
+            "c4": 0,
+            "medical": 7,
+            "credits": 552,
+            "shard": 9
+          },
+          "after": {
+            "wood": 216,
+            "stone": 32,
+            "scrap": 46,
+            "parts": 3,
+            "food": 0,
+            "ammo": 57,
+            "c4": 0,
+            "medical": 7,
+            "credits": 552,
+            "shard": 9
+          },
+          "elapsedSec": 276.497
+        },
+        {
+          "name": "黑松树",
+          "type": "tree",
+          "x": -211,
+          "y": -156,
+          "before": {
+            "wood": 216,
+            "stone": 32,
+            "scrap": 46,
+            "parts": 3,
+            "food": 0,
+            "ammo": 57,
+            "c4": 0,
+            "medical": 7,
+            "credits": 552,
+            "shard": 9
+          },
+          "after": {
+            "wood": 225,
+            "stone": 32,
+            "scrap": 46,
+            "parts": 3,
+            "food": 0,
+            "ammo": 57,
+            "c4": 0,
+            "medical": 7,
+            "credits": 552,
+            "shard": 9
+          },
+          "elapsedSec": 286.102
+        },
+        {
+          "name": "黑松树",
+          "type": "tree",
+          "x": -211,
+          "y": -135,
+          "before": {
+            "wood": 225,
+            "stone": 32,
+            "scrap": 46,
+            "parts": 3,
+            "food": 0,
+            "ammo": 57,
+            "c4": 0,
+            "medical": 7,
+            "credits": 552,
+            "shard": 9
+          },
+          "after": {
+            "wood": 234,
+            "stone": 32,
+            "scrap": 46,
+            "parts": 3,
+            "food": 0,
+            "ammo": 57,
+            "c4": 0,
+            "medical": 7,
+            "credits": 552,
+            "shard": 9
+          },
+          "elapsedSec": 297.996
+        },
+        {
+          "name": "黑松树",
+          "type": "tree",
+          "x": -231,
+          "y": -157,
+          "before": {
+            "wood": 234,
+            "stone": 32,
+            "scrap": 46,
+            "parts": 3,
+            "food": 0,
+            "ammo": 57,
+            "c4": 0,
+            "medical": 7,
+            "credits": 552,
+            "shard": 9
+          },
+          "after": {
+            "wood": 243,
+            "stone": 32,
+            "scrap": 46,
+            "parts": 3,
+            "food": 0,
+            "ammo": 57,
+            "c4": 0,
+            "medical": 7,
+            "credits": 552,
+            "shard": 9
+          },
+          "elapsedSec": 314.723
+        }
+      ],
+      "placements": [],
+      "foodUses": [
+        "土豆",
+        "土豆",
+        "高纯度饮用水",
+        "高纯度饮用水"
+      ],
+      "checkpoints": [
+        {
+          "step": "earned-shelter-start",
+          "elapsedSec": 0.004,
+          "hp": 120,
+          "satiety": 49.22150000000114,
+          "resources": {
+            "wood": 2,
+            "stone": 32,
+            "scrap": 40,
+            "parts": 1,
+            "food": 2,
+            "ammo": 57,
+            "c4": 0,
+            "medical": 7,
+            "credits": 552,
+            "shard": 9
+          },
+          "buildings": 8,
+          "position": {
+            "x": 2.996935833049166,
+            "y": 26.118454266018666,
+            "map": "own-camp"
+          }
+        },
+        {
+          "step": "food-started-earned-axe-equipped",
+          "elapsedSec": 6.491,
+          "hp": 120,
+          "satiety": 72.66350000000114,
+          "resources": {
+            "wood": 0,
+            "stone": 32,
+            "scrap": 38,
+            "parts": 1,
+            "food": 3,
+            "ammo": 57,
+            "c4": 0,
+            "medical": 7,
+            "credits": 552,
+            "shard": 9
+          },
+          "buildings": 8,
+          "position": {
+            "x": 3.999996107009286,
+            "y": 22.11876557110494,
+            "map": "own-camp"
+          }
+        },
+        {
+          "step": "gathered-5",
+          "elapsedSec": 81.712,
+          "hp": 120,
+          "satiety": 53.709250000001134,
+          "resources": {
+            "wood": 36,
+            "stone": 32,
+            "scrap": 46,
+            "parts": 3,
+            "food": 3,
+            "ammo": 57,
+            "c4": 0,
+            "medical": 7,
+            "credits": 552,
+            "shard": 9
+          },
+          "buildings": 0,
+          "position": {
+            "x": -136.41547552981768,
+            "y": -59.304089050623915,
+            "map": "world"
+          }
+        },
+        {
+          "step": "gathered-10",
+          "elapsedSec": 127.825,
+          "hp": 120,
+          "satiety": 67.31275000000117,
+          "resources": {
+            "wood": 81,
+            "stone": 32,
+            "scrap": 46,
+            "parts": 3,
+            "food": 2,
+            "ammo": 57,
+            "c4": 0,
+            "medical": 7,
+            "credits": 552,
+            "shard": 9
+          },
+          "buildings": 0,
+          "position": {
+            "x": -156.36252312357746,
+            "y": -88.30513635186195,
+            "map": "world"
+          }
+        },
+        {
+          "step": "gathered-15",
+          "elapsedSec": 176.427,
+          "hp": 120,
+          "satiety": 55.197000000001196,
+          "resources": {
+            "wood": 126,
+            "stone": 32,
+            "scrap": 46,
+            "parts": 3,
+            "food": 2,
+            "ammo": 57,
+            "c4": 0,
+            "medical": 7,
+            "credits": 552,
+            "shard": 9
+          },
+          "buildings": 0,
+          "position": {
+            "x": -178.3444661716004,
+            "y": -92.38805431164397,
+            "map": "world"
+          }
+        },
+        {
+          "step": "gathered-20",
+          "elapsedSec": 226.528,
+          "hp": 120,
+          "satiety": 57.46475000000121,
+          "resources": {
+            "wood": 171,
+            "stone": 32,
+            "scrap": 46,
+            "parts": 3,
+            "food": 1,
+            "ammo": 57,
+            "c4": 0,
+            "medical": 7,
+            "credits": 552,
+            "shard": 9
+          },
+          "buildings": 0,
+          "position": {
+            "x": -203.39158491344122,
+            "y": -108.33315616563681,
+            "map": "world"
+          }
+        },
+        {
+          "step": "gathered-25",
+          "elapsedSec": 276.502,
+          "hp": 120,
+          "satiety": 60.09475000000123,
+          "resources": {
+            "wood": 216,
+            "stone": 32,
+            "scrap": 46,
+            "parts": 3,
+            "food": 0,
+            "ammo": 57,
+            "c4": 0,
+            "medical": 7,
+            "credits": 552,
+            "shard": 9
+          },
+          "buildings": 0,
+          "position": {
+            "x": -197.4077153618814,
+            "y": -154.30373162126557,
+            "map": "world"
+          }
+        }
+      ]
+    },
+    {
+      "run": "a2",
+      "success": false,
+      "error": "Error: Timeout: serverState.buildings.length===51&&serverState.buildings.some(b=>b.type===\"wood_wall\"&&b.x===-17&&b.y===15)",
+      "harvests": [
+        {
+          "name": "林边松树",
+          "type": "tree",
+          "x": -60,
+          "y": 5,
+          "before": {
+            "wood": 243,
+            "stone": 32,
+            "scrap": 46,
+            "parts": 3,
+            "food": 3,
+            "ammo": 57,
+            "c4": 0,
+            "medical": 7,
+            "credits": 552,
+            "shard": 9
+          },
+          "after": {
+            "wood": 252,
+            "stone": 32,
+            "scrap": 46,
+            "parts": 3,
+            "food": 3,
+            "ammo": 57,
+            "c4": 0,
+            "medical": 7,
+            "credits": 552,
+            "shard": 9
+          },
+          "elapsedSec": 107.855
+        },
+        {
+          "name": "黑松树",
+          "type": "tree",
+          "x": -80,
+          "y": 14,
+          "before": {
+            "wood": 252,
+            "stone": 32,
+            "scrap": 46,
+            "parts": 3,
+            "food": 3,
+            "ammo": 57,
+            "c4": 0,
+            "medical": 7,
+            "credits": 552,
+            "shard": 9
+          },
+          "after": {
+            "wood": 261,
+            "stone": 32,
+            "scrap": 46,
+            "parts": 3,
+            "food": 3,
+            "ammo": 57,
+            "c4": 0,
+            "medical": 7,
+            "credits": 552,
+            "shard": 9
+          },
+          "elapsedSec": 121.105
+        },
+        {
+          "name": "黑松树",
+          "type": "tree",
+          "x": -82,
+          "y": 24,
+          "before": {
+            "wood": 261,
+            "stone": 32,
+            "scrap": 46,
+            "parts": 3,
+            "food": 2,
+            "ammo": 57,
+            "c4": 0,
+            "medical": 7,
+            "credits": 552,
+            "shard": 9
+          },
+          "after": {
+            "wood": 270,
+            "stone": 32,
+            "scrap": 46,
+            "parts": 3,
+            "food": 2,
+            "ammo": 57,
+            "c4": 0,
+            "medical": 7,
+            "credits": 552,
+            "shard": 9
+          },
+          "elapsedSec": 131.32
+        }
+      ],
+      "placements": [
+        {
+          "type": "wood_floor",
+          "x": -16,
+          "y": 14,
+          "facing": "ew",
+          "elapsedSec": 146.669
+        },
+        {
+          "type": "wood_floor",
+          "x": -15,
+          "y": 14,
+          "facing": "ew",
+          "elapsedSec": 148.22
+        },
+        {
+          "type": "wood_floor",
+          "x": -14,
+          "y": 14,
+          "facing": "ew",
+          "elapsedSec": 149.908
+        },
+        {
+          "type": "wood_floor",
+          "x": -13,
+          "y": 14,
+          "facing": "ew",
+          "elapsedSec": 151.371
+        },
+        {
+          "type": "wood_floor",
+          "x": -12,
+          "y": 14,
+          "facing": "ew",
+          "elapsedSec": 152.781
+        },
+        {
+          "type": "wood_floor",
+          "x": -16,
+          "y": 15,
+          "facing": "ew",
+          "elapsedSec": 155.111
+        },
+        {
+          "type": "wood_floor",
+          "x": -15,
+          "y": 15,
+          "facing": "ew",
+          "elapsedSec": 156.51
+        },
+        {
+          "type": "wood_floor",
+          "x": -14,
+          "y": 15,
+          "facing": "ew",
+          "elapsedSec": 157.884
+        },
+        {
+          "type": "wood_floor",
+          "x": -13,
+          "y": 15,
+          "facing": "ew",
+          "elapsedSec": 159.27
+        },
+        {
+          "type": "wood_floor",
+          "x": -12,
+          "y": 15,
+          "facing": "ew",
+          "elapsedSec": 160.653
+        },
+        {
+          "type": "wood_floor",
+          "x": -16,
+          "y": 16,
+          "facing": "ew",
+          "elapsedSec": 162.897
+        },
+        {
+          "type": "wood_floor",
+          "x": -15,
+          "y": 16,
+          "facing": "ew",
+          "elapsedSec": 164.288
+        },
+        {
+          "type": "wood_floor",
+          "x": -14,
+          "y": 16,
+          "facing": "ew",
+          "elapsedSec": 165.674
+        },
+        {
+          "type": "wood_floor",
+          "x": -13,
+          "y": 16,
+          "facing": "ew",
+          "elapsedSec": 167.066
+        },
+        {
+          "type": "wood_floor",
+          "x": -12,
+          "y": 16,
+          "facing": "ew",
+          "elapsedSec": 168.475
+        },
+        {
+          "type": "wood_floor",
+          "x": -16,
+          "y": 17,
+          "facing": "ew",
+          "elapsedSec": 170.717
+        },
+        {
+          "type": "wood_floor",
+          "x": -15,
+          "y": 17,
+          "facing": "ew",
+          "elapsedSec": 172.086
+        },
+        {
+          "type": "wood_floor",
+          "x": -14,
+          "y": 17,
+          "facing": "ew",
+          "elapsedSec": 173.456
+        },
+        {
+          "type": "wood_floor",
+          "x": -13,
+          "y": 17,
+          "facing": "ew",
+          "elapsedSec": 174.843
+        },
+        {
+          "type": "wood_floor",
+          "x": -12,
+          "y": 17,
+          "facing": "ew",
+          "elapsedSec": 176.228
+        },
+        {
+          "type": "wood_floor",
+          "x": -16,
+          "y": 18,
+          "facing": "ew",
+          "elapsedSec": 178.585
+        },
+        {
+          "type": "wood_floor",
+          "x": -15,
+          "y": 18,
+          "facing": "ew",
+          "elapsedSec": 179.976
+        },
+        {
+          "type": "wood_floor",
+          "x": -14,
+          "y": 18,
+          "facing": "ew",
+          "elapsedSec": 181.383
+        },
+        {
+          "type": "wood_floor",
+          "x": -13,
+          "y": 18,
+          "facing": "ew",
+          "elapsedSec": 182.768
+        },
+        {
+          "type": "wood_floor",
+          "x": -12,
+          "y": 18,
+          "facing": "ew",
+          "elapsedSec": 184.145
+        },
+        {
+          "type": "bed",
+          "x": -16,
+          "y": 15,
+          "facing": "ew",
+          "elapsedSec": 186.388
+        },
+        {
+          "type": "storage_box",
+          "x": -14,
+          "y": 15,
+          "facing": "ew",
+          "elapsedSec": 187.973
+        },
+        {
+          "type": "turret",
+          "x": -12,
+          "y": 16,
+          "facing": "ew",
+          "elapsedSec": 189.576
+        },
+        {
+          "type": "wood_wall",
+          "x": -17,
+          "y": 13,
+          "facing": "ew",
+          "elapsedSec": 192.514
+        },
+        {
+          "type": "wood_wall",
+          "x": -16,
+          "y": 13,
+          "facing": "ew",
+          "elapsedSec": 193.706
+        },
+        {
+          "type": "wood_wall",
+          "x": -15,
+          "y": 13,
+          "facing": "ew",
+          "elapsedSec": 195.115
+        },
+        {
+          "type": "wood_wall",
+          "x": -14,
+          "y": 13,
+          "facing": "ew",
+          "elapsedSec": 196.537
+        },
+        {
+          "type": "wood_wall",
+          "x": -13,
+          "y": 13,
+          "facing": "ew",
+          "elapsedSec": 197.933
+        },
+        {
+          "type": "wood_wall",
+          "x": -12,
+          "y": 13,
+          "facing": "ew",
+          "elapsedSec": 199.314
+        },
+        {
+          "type": "wood_wall",
+          "x": -11,
+          "y": 13,
+          "facing": "ew",
+          "elapsedSec": 200.488
+        },
+        {
+          "type": "wood_wall",
+          "x": -17,
+          "y": 19,
+          "facing": "ew",
+          "elapsedSec": 203.567
+        },
+        {
+          "type": "wood_wall",
+          "x": -16,
+          "y": 19,
+          "facing": "ew",
+          "elapsedSec": 204.757
+        },
+        {
+          "type": "wood_wall",
+          "x": -15,
+          "y": 19,
+          "facing": "ew",
+          "elapsedSec": 206.151
+        },
+        {
+          "type": "wood_wall",
+          "x": -13,
+          "y": 19,
+          "facing": "ew",
+          "elapsedSec": 207.876
+        },
+        {
+          "type": "wood_wall",
+          "x": -12,
+          "y": 19,
+          "facing": "ew",
+          "elapsedSec": 209.288
+        },
+        {
+          "type": "wood_wall",
+          "x": -11,
+          "y": 19,
+          "facing": "ew",
+          "elapsedSec": 210.451
+        },
+        {
+          "type": "wood_wall",
+          "x": -17,
+          "y": 14,
+          "facing": "ns",
+          "elapsedSec": 213.621
+        }
+      ],
+      "foodUses": [
+        "土豆",
+        "土豆"
+      ],
+      "checkpoints": [
+        {
+          "step": "resumed-earned243wood",
+          "elapsedSec": 0.012,
+          "hp": 120,
+          "satiety": 49.247500000001246,
+          "resources": {
+            "wood": 243,
+            "stone": 32,
+            "scrap": 46,
+            "parts": 3,
+            "food": 0,
+            "ammo": 57,
+            "c4": 0,
+            "medical": 7,
+            "credits": 552,
+            "shard": 9
+          },
+          "buildings": 0,
+          "position": {
+            "x": -236.31324872431145,
+            "y": -164.41307473763905,
+            "map": "world"
+          }
+        },
+        {
+          "step": "returned-for-paid-crop",
+          "elapsedSec": 95.361,
+          "hp": 120,
+          "satiety": 50.27900000000127,
+          "resources": {
+            "wood": 243,
+            "stone": 32,
+            "scrap": 46,
+            "parts": 3,
+            "food": 3,
+            "ammo": 57,
+            "c4": 0,
+            "medical": 7,
+            "credits": 552,
+            "shard": 9
+          },
+          "buildings": 8,
+          "position": {
+            "x": 3.8895015132851793,
+            "y": 22.041880375957007,
+            "map": "own-camp"
+          }
+        },
+        {
+          "step": "all-earned-room-materials",
+          "elapsedSec": 131.323,
+          "hp": 120,
+          "satiety": 66.25925000000126,
+          "resources": {
+            "wood": 270,
+            "stone": 32,
+            "scrap": 46,
+            "parts": 3,
+            "food": 2,
+            "ammo": 57,
+            "c4": 0,
+            "medical": 7,
+            "credits": 552,
+            "shard": 9
+          },
+          "buildings": 0,
+          "position": {
+            "x": -81.30253340896542,
+            "y": 24.596291759976623,
+            "map": "world"
+          }
+        },
+        {
+          "step": "returned-with-room-materials",
+          "elapsedSec": 138.361,
+          "hp": 120,
+          "satiety": 64.70900000000125,
+          "resources": {
+            "wood": 270,
+            "stone": 32,
+            "scrap": 46,
+            "parts": 3,
+            "food": 2,
+            "ammo": 57,
+            "c4": 0,
+            "medical": 7,
+            "credits": 552,
+            "shard": 9
+          },
+          "buildings": 8,
+          "position": {
+            "x": 0,
+            "y": 28,
+            "map": "own-camp"
+          }
+        },
+        {
+          "step": "placed-5",
+          "elapsedSec": 152.783,
+          "hp": 120,
+          "satiety": 61.05725000000126,
+          "resources": {
+            "wood": 250,
+            "stone": 32,
+            "scrap": 46,
+            "parts": 3,
+            "food": 2,
+            "ammo": 57,
+            "c4": 0,
+            "medical": 7,
+            "credits": 552,
+            "shard": 9
+          },
+          "buildings": 13,
+          "position": {
+            "x": -12.118260339357374,
+            "y": 14.000000871340829,
+            "map": "own-camp"
+          }
+        },
+        {
+          "step": "placed-10",
+          "elapsedSec": 160.656,
+          "hp": 120,
+          "satiety": 58.98125000000127,
+          "resources": {
+            "wood": 230,
+            "stone": 32,
+            "scrap": 46,
+            "parts": 3,
+            "food": 2,
+            "ammo": 57,
+            "c4": 0,
+            "medical": 7,
+            "credits": 552,
+            "shard": 9
+          },
+          "buildings": 18,
+          "position": {
+            "x": -12.099438989244545,
+            "y": 14.99999920661995,
+            "map": "own-camp"
+          }
+        },
+        {
+          "step": "placed-15",
+          "elapsedSec": 168.478,
+          "hp": 120,
+          "satiety": 57.168000000001264,
+          "resources": {
+            "wood": 210,
+            "stone": 32,
+            "scrap": 46,
+            "parts": 3,
+            "food": 2,
+            "ammo": 57,
+            "c4": 0,
+            "medical": 7,
+            "credits": 552,
+            "shard": 9
+          },
+          "buildings": 23,
+          "position": {
+            "x": -12.099472014544947,
+            "y": 15.99999920010753,
+            "map": "own-camp"
+          }
+        },
+        {
+          "step": "placed-20",
+          "elapsedSec": 176.23,
+          "hp": 120,
+          "satiety": 55.10050000000126,
+          "resources": {
+            "wood": 190,
+            "stone": 32,
+            "scrap": 46,
+            "parts": 3,
+            "food": 2,
+            "ammo": 57,
+            "c4": 0,
+            "medical": 7,
+            "credits": 552,
+            "shard": 9
+          },
+          "buildings": 28,
+          "position": {
+            "x": -12.09869161760934,
+            "y": 16.999999213914425,
+            "map": "own-camp"
+          }
+        },
+        {
+          "step": "placed-25",
+          "elapsedSec": 184.148,
+          "hp": 120,
+          "satiety": 53.04825000000126,
+          "resources": {
+            "wood": 170,
+            "stone": 32,
+            "scrap": 46,
+            "parts": 3,
+            "food": 2,
+            "ammo": 57,
+            "c4": 0,
+            "medical": 7,
+            "credits": 552,
+            "shard": 9
+          },
+          "buildings": 33,
+          "position": {
+            "x": -12.1002352957794,
+            "y": 17.999999178982257,
+            "map": "own-camp"
+          }
+        },
+        {
+          "step": "placed-30",
+          "elapsedSec": 193.712,
+          "hp": 120,
+          "satiety": 50.73100000000126,
+          "resources": {
+            "wood": 138,
+            "stone": 32,
+            "scrap": 25,
+            "parts": 1,
+            "food": 2,
+            "ammo": 57,
+            "c4": 0,
+            "medical": 7,
+            "credits": 552,
+            "shard": 9
+          },
+          "buildings": 38,
+          "position": {
+            "x": -15.899947858520068,
+            "y": 14.000057523417697,
+            "map": "own-camp"
+          }
+        },
+        {
+          "step": "placed-35",
+          "elapsedSec": 200.492,
+          "hp": 120,
+          "satiety": 49.18000000000126,
+          "resources": {
+            "wood": 108,
+            "stone": 32,
+            "scrap": 25,
+            "parts": 1,
+            "food": 2,
+            "ammo": 57,
+            "c4": 0,
+            "medical": 7,
+            "credits": 552,
+            "shard": 9
+          },
+          "buildings": 43,
+          "position": {
+            "x": -12.100327861137306,
+            "y": 14.000000000504931,
+            "map": "own-camp"
+          }
+        },
+        {
+          "step": "placed-40",
+          "elapsedSec": 209.29,
+          "hp": 120,
+          "satiety": 46.85625000000125,
+          "resources": {
+            "wood": 78,
+            "stone": 32,
+            "scrap": 25,
+            "parts": 1,
+            "food": 2,
+            "ammo": 57,
+            "c4": 0,
+            "medical": 7,
+            "credits": 552,
+            "shard": 9
+          },
+          "buildings": 48,
+          "position": {
+            "x": -12.100891409056956,
+            "y": 17.99999861558609,
+            "map": "own-camp"
+          }
+        }
+      ]
+    },
+    {
+      "run": "a3",
+      "success": true,
+      "harvests": [],
+      "placements": [
+        {
+          "type": "wood_wall",
+          "x": -17,
+          "y": 15,
+          "facing": "ns",
+          "elapsedSec": 5.028
+        },
+        {
+          "type": "wood_wall",
+          "x": -17,
+          "y": 16,
+          "facing": "ns",
+          "elapsedSec": 6.645
+        },
+        {
+          "type": "wood_wall",
+          "x": -17,
+          "y": 17,
+          "facing": "ns",
+          "elapsedSec": 8.054
+        },
+        {
+          "type": "wood_wall",
+          "x": -17,
+          "y": 18,
+          "facing": "ns",
+          "elapsedSec": 9.471
+        },
+        {
+          "type": "wood_wall",
+          "x": -11,
+          "y": 14,
+          "facing": "ns",
+          "elapsedSec": 12.11
+        },
+        {
+          "type": "wood_wall",
+          "x": -11,
+          "y": 15,
+          "facing": "ns",
+          "elapsedSec": 13.502
+        },
+        {
+          "type": "wood_wall",
+          "x": -11,
+          "y": 16,
+          "facing": "ns",
+          "elapsedSec": 16.012
+        },
+        {
+          "type": "wood_wall",
+          "x": -11,
+          "y": 17,
+          "facing": "ns",
+          "elapsedSec": 17.656
+        },
+        {
+          "type": "wood_wall",
+          "x": -11,
+          "y": 18,
+          "facing": "ns",
+          "elapsedSec": 19.062
+        },
+        {
+          "type": "door",
+          "x": -14,
+          "y": 19,
+          "facing": "ew",
+          "elapsedSec": 20.722
+        }
+      ],
+      "foodUses": [
+        "土豆"
+      ],
+      "checkpoints": [
+        {
+          "step": "resumed-half-built-room",
+          "elapsedSec": 0.003,
+          "hp": 120,
+          "satiety": 43.20250000000125,
+          "resources": {
+            "wood": 66,
+            "stone": 32,
+            "scrap": 25,
+            "parts": 1,
+            "food": 2,
+            "ammo": 57,
+            "c4": 0,
+            "medical": 7,
+            "credits": 552,
+            "shard": 9
+          },
+          "buildings": 50,
+          "position": {
+            "x": -14.993412122936665,
+            "y": 14.890327141297545,
+            "map": "own-camp"
+          }
+        },
+        {
+          "step": "placed-5",
+          "elapsedSec": 12.113,
+          "hp": 120,
+          "satiety": 65.10800000000123,
+          "resources": {
+            "wood": 36,
+            "stone": 32,
+            "scrap": 25,
+            "parts": 1,
+            "food": 1,
+            "ammo": 57,
+            "c4": 0,
+            "medical": 7,
+            "credits": 552,
+            "shard": 9
+          },
+          "buildings": 55,
+          "position": {
+            "x": -13.113228014793288,
+            "y": 14.000853533222935,
+            "map": "own-camp"
+          }
+        },
+        {
+          "step": "placed-10",
+          "elapsedSec": 20.725,
+          "hp": 120,
+          "satiety": 63.035500000001235,
+          "resources": {
+            "wood": 8,
+            "stone": 32,
+            "scrap": 21,
+            "parts": 0,
+            "food": 1,
+            "ammo": 57,
+            "c4": 0,
+            "medical": 7,
+            "credits": 552,
+            "shard": 9
+          },
+          "buildings": 60,
+          "position": {
+            "x": -13.890523534492742,
+            "y": 17.994146968601136,
+            "map": "own-camp"
+          }
+        },
+        {
+          "step": "paid-shelter-completed",
+          "elapsedSec": 26.624,
+          "hp": 120,
+          "satiety": 61.48800000000124,
+          "resources": {
+            "wood": 8,
+            "stone": 32,
+            "scrap": 21,
+            "parts": 0,
+            "food": 1,
+            "ammo": 47,
+            "c4": 0,
+            "medical": 7,
+            "credits": 552,
+            "shard": 9
+          },
+          "buildings": 60,
+          "position": {
+            "x": -13.999999998927217,
+            "y": 17.10657993225997,
+            "map": "own-camp"
+          }
+        },
+        {
+          "step": "new-storage-used-paid-wood",
+          "elapsedSec": 28.35,
+          "hp": 120,
+          "satiety": 61.23300000000124,
+          "resources": {
+            "wood": 1,
+            "stone": 32,
+            "scrap": 21,
+            "parts": 0,
+            "food": 1,
+            "ammo": 47,
+            "c4": 0,
+            "medical": 7,
+            "credits": 552,
+            "shard": 9
+          },
+          "buildings": 60,
+          "position": {
+            "x": -13.999999999943036,
+            "y": 16.11591993225999,
+            "map": "own-camp"
+          }
+        },
+        {
+          "step": "new-bed-rest-at-health-cap",
+          "elapsedSec": 30.067,
+          "hp": 120,
+          "satiety": 60.718750000001236,
+          "resources": {
+            "wood": 1,
+            "stone": 32,
+            "scrap": 21,
+            "parts": 0,
+            "food": 1,
+            "ammo": 47,
+            "c4": 0,
+            "medical": 7,
+            "credits": 552,
+            "shard": 9
+          },
+          "buildings": 60,
+          "position": {
+            "x": -15.901254524644566,
+            "y": 16.000469406755688,
+            "map": "own-camp"
+          }
+        },
+        {
+          "step": "completed-before-restart",
+          "elapsedSec": 30.07,
+          "hp": 120,
+          "satiety": 60.718750000001236,
+          "resources": {
+            "wood": 1,
+            "stone": 32,
+            "scrap": 21,
+            "parts": 0,
+            "food": 1,
+            "ammo": 47,
+            "c4": 0,
+            "medical": 7,
+            "credits": 552,
+            "shard": 9
+          },
+          "buildings": 60,
+          "position": {
+            "x": -15.901254524644566,
+            "y": 16.000469406755688,
+            "map": "own-camp"
+          }
+        },
+        {
+          "step": "earned-shelter-after-restart",
+          "elapsedSec": 33.767,
+          "hp": 120,
+          "satiety": 60.20275000000124,
+          "resources": {
+            "wood": 1,
+            "stone": 32,
+            "scrap": 21,
+            "parts": 0,
+            "food": 1,
+            "ammo": 47,
+            "c4": 0,
+            "medical": 7,
+            "credits": 552,
+            "shard": 9
+          },
+          "buildings": 60,
+          "position": {
+            "x": -15.901254524644566,
+            "y": 16.000469406755688,
+            "map": "own-camp"
+          }
+        }
+      ]
+    }
+  ],
+  "sourceHashes": [
+    {
+      "path": "data/earned-shelter-loop-20261023-a1-results.json",
+      "sha256": "99c8e98cea266591cebefdfff08264c9a1bc5e32e1d3503d802c7be97d79eb40"
+    },
+    {
+      "path": "data/earned-shelter-loop-20261023-a2-results.json",
+      "sha256": "9c8f116b64fd49ea5cff72526faeb13f74bb91f482b87634b8485919c61b3207"
+    },
+    {
+      "path": "data/earned-shelter-loop-20261023-a3-results.json",
+      "sha256": "86920c7ca50da15aa289d6cbe66223771dfacb981b28387ef19b979f9da796be"
+    },
+    {
+      "path": "data/shelter-preview-final-tests-20261023.log",
+      "sha256": "f622ecd129ad740396541b97d86ed3cfd2517f97011511305066583bfd2ce123"
+    },
+    {
+      "path": "data/shelter-preview-types-20261023.log",
+      "sha256": "7f3594d7a965c703e6361ae50c0ef50cf9c344c621d801592b074b48554f4235"
+    },
+    {
+      "path": "data/shelter-preview-build-20261023.log",
+      "sha256": "37dd42514d4db54e967c1dc1cab0a2c7801ce4f04d271aaf147fb633bdc8a4e8"
+    }
+  ],
+  "review": "Independent read-only final review matched all audit fields, three raw segments, 52 placements, 31 harvest records, seven food uses, six source hashes and verification logs; no P1/P2. Reviewer did not run tests, services or browsers or open databases."
+}

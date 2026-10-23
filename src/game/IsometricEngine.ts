@@ -11,6 +11,7 @@ import { isHostile, canOperateDoor } from './diplomacy';
 import { CHUNK_SIZE, WORLD_MIN, WORLD_MAX, generateWorldChunk, worldToChunk, worldThemeAt, worldLocationAt, worldIsRoad, type WorldChunk } from './world';
 import { findPath, isPositionBlocked, hasLineOfSight } from './navigation';
 import { campExitPosition } from './home';
+import { BUILD_RECIPES } from './buildingRecipes';
 import { recordRenderFailure } from './renderDiagnostics';
 import { generateWorldScenery, type WorldScenery } from './worldScenery';
 import { ROADSIDE_USES, WORLD_ROADSIDE_STOPS, type RoadsideStop } from './worldRoutes';
@@ -4977,6 +4978,10 @@ export class IsometricEngine {
     const snapX = Math.round(this.mouse.worldX);
     const snapY = Math.round(this.mouse.worldY);
     const s = this.toScreen(snapX, snapY);
+    const range = this.callbacks.onGameAction ? 3 : 4.5;
+    const tooFar = Math.hypot(this.player.x - snapX, this.player.y - snapY) > range;
+    const obstructed = !tooFar && !!this.callbacks.onGameAction && !hasLineOfSight(this.player, { x: snapX, y: snapY }, this.buildings);
+    const warning = tooFar ? `距离过远，请靠近至 ${range} 格内` : obstructed ? '目标被建筑遮挡，请绕到旁边' : null;
 
     this.ctx.save();
     this.ctx.beginPath();
@@ -4986,9 +4991,9 @@ export class IsometricEngine {
     this.ctx.lineTo(s.x - this.TILE_W / 2, s.y);
     this.ctx.closePath();
 
-    this.ctx.fillStyle = 'rgba(6, 182, 212, 0.45)';
+    this.ctx.fillStyle = warning ? 'rgba(239, 68, 68, 0.45)' : 'rgba(6, 182, 212, 0.45)';
     this.ctx.fill();
-    this.ctx.strokeStyle = '#38bdf8';
+    this.ctx.strokeStyle = warning ? '#f87171' : '#38bdf8';
     this.ctx.lineWidth = 2;
     this.ctx.setLineDash([4, 4]);
     this.ctx.stroke();
@@ -4997,7 +5002,12 @@ export class IsometricEngine {
     this.ctx.font = 'bold 11px sans-serif';
     this.ctx.textAlign = 'center';
     const facingLabel = this.buildFacing === 'ew' ? '东西⟷' : '南北';
-    this.ctx.fillText(`放置: ${this.selectedBuildType} [${facingLabel}·R旋转]`, s.x, s.y - 28);
+    const name = BUILD_RECIPES[this.selectedBuildType as keyof typeof BUILD_RECIPES]?.name ?? '建筑';
+    this.ctx.fillText(`放置: ${name} [${facingLabel}·R旋转]`, s.x, s.y - 28);
+    if (warning) {
+      this.ctx.fillStyle = '#fca5a5';
+      this.ctx.fillText(warning, s.x, s.y - 44);
+    }
     this.ctx.restore();
   }
 

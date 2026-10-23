@@ -409,6 +409,21 @@ describe('firing receipt times', () => {
     expect(restored.state.players.owner.resources.ammo).toBe(21);
   });
 });
+describe('construction obstruction feedback', () => {
+  it('explains furniture obstruction without charging, then permits the same wall from a clear nearby viewpoint', () => {
+    const { game, p, act } = campSetup(); Object.assign(p, { x: -15, y: 15 }); p.resources.wood = 6;
+    facility(game, 'bed', -16, 15);
+    const originalCount = Object.keys(game.state.buildings).length;
+    const blocked = act('owner', 'build', { buildType: 'wood_wall', x: -17, y: 15, facing: 'ns' });
+    expect(blocked.error).toBe('目标被建筑遮挡，请绕到旁边');
+    expect(p.resources.wood).toBe(6); expect(Object.keys(game.state.buildings)).toHaveLength(originalCount);
+    Object.assign(p, { x: -16, y: 17 });
+    expect(act('owner', 'build', { buildType: 'wood_wall', x: -17, y: 15, facing: 'ns' }).error).toBeUndefined();
+    expect(p.resources.wood).toBe(0);
+    expect(Object.values(game.state.buildings).find(b => b.type === 'wood_wall')).toMatchObject({ x: -17, y: 15, facing: 'ns', hp: 350 });
+  });
+});
+
 function setup(saved?: Partial<PersistedWorld>) {
   const db = createMemoryDb();
   let now = 10_000;

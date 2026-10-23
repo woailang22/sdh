@@ -378,7 +378,7 @@ export class GameWorld {
   private near(p: Player, target: { x: number; y: number; id?: string; mapId?: MapZoneId }, range = 3) {
     requireRule(!target.mapId || p.mapId === target.mapId, '目标不在当前空间');
     requireRule(distance(p, target) <= range, '距离过远');
-    requireRule(hasLineOfSight(p, target, this.buildingsFor(p), target.id), '目标被墙体遮挡');
+    requireRule(hasLineOfSight(p, target, this.buildingsFor(p), target.id), '目标被建筑遮挡，请绕到旁边');
   }
 
   private cooldown(p: Player, key: string, ms: number, at = this.now(), jitter = 0) {
