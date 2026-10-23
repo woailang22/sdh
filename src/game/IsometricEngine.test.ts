@@ -1261,6 +1261,60 @@ describe('ground rendering cost', () => {
 });
 
 describe('engine lifetime', () => {
+  function pacing() {
+    const context = setup(); let time = 1000;
+    vi.spyOn(performance, 'now').mockImplementation(() => time);
+    const update = vi.spyOn(context.engine as any, 'update').mockImplementation(() => {});
+    const draws: number[] = [];
+    vi.spyOn(context.engine as any, 'render').mockImplementation(() => { draws.push(time); });
+    const at = (next: number) => { time = next; vi.mocked(requestAnimationFrame).mock.calls.at(-1)![0](time); };
+    context.engine.start(); return { ...context, at, update, draws };
+  }
+
+  it.each([59.94, 60, 75, 120, 144, 165, 240])('keeps correct60fps pacing for a steady%sHz display without changing update time', hz => {
+    const { engine, at, update, draws } = pacing();
+    const callbacks = Math.floor(hz * 60);
+    for (let i = 1; i <= callbacks; i++) at(1000 + i * 1000 / hz);
+    expect(draws).toHaveLength(hz < 60 ? callbacks : 3600);
+    const gaps = draws.slice(1).map((t, i) => t - draws[i]);
+    expect(Math.max(...gaps)).toBeLessThanOrEqual(Math.ceil(hz / 60) * 1000 / hz + .001);
+    expect(update).toHaveBeenCalledTimes(callbacks);
+    expect(update.mock.calls.reduce((sum, args) => sum + Number(args[0]), 0)).toBeCloseTo(callbacks / hz, 8);
+    engine.stop();
+  });
+
+  it('renders each60Hz frame even when the browser quantizes timestamps to0.1ms', () => {
+    const { engine, at, draws } = pacing();
+    for (let i = 1; i <= 3600; i++) at(Math.round((1000 + i * 1000 / 60) * 10) / 10);
+    expect(draws).toHaveLength(3600);
+    expect(Math.max(...draws.slice(1).map((t, i) => t - draws[i]))).toBeLessThan(16.8);
+    engine.stop();
+  });
+
+  it('preserves the60fps cap with quantized240Hz callbacks', () => {
+    const { engine, at, draws } = pacing();
+    for (let i = 1; i <= 14400; i++) at(Math.round((1000 + i * 1000 / 240) * 10) / 10);
+    expect(draws).toHaveLength(3600);
+    expect(Math.min(...draws.slice(1).map((t, i) => t - draws[i]))).toBeGreaterThan(16.5);
+    engine.stop();
+  });
+
+  it('draws once after a delay and resumes the cap without catching up missed frames', () => {
+    const { engine, at, update, draws } = pacing();
+    at(1016.666666666); at(2016.666666666); at(2020); at(2033.333333333);
+    expect(draws).toHaveLength(3); expect(update).toHaveBeenCalledTimes(4);
+    expect(update.mock.calls[1][0]).toBe(.1);
+    engine.stop();
+  });
+
+  it('resumes on the next scheduled interval after hidden callbacks without rendering a burst', () => {
+    const { engine, doc, at, update, draws } = pacing();
+    at(1016.666666666); doc.hidden = true; at(5000); expect(draws).toHaveLength(1);
+    doc.hidden = false; at(5008.333333333); expect(draws).toHaveLength(1);
+    at(5016.666666666); expect(draws).toHaveLength(2);
+    expect(update).toHaveBeenCalledTimes(3); engine.stop();
+  });
+
   it('uses actual callback entry times when rAF frame timestamps lag behind blocked work', () => {
     const { engine } = setup(); let clock = 1000;
     vi.spyOn(performance, 'now').mockImplementation(() => clock);

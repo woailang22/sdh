@@ -2090,6 +2090,7 @@ export class IsometricEngine {
     this.lastTime = performance.now();
     this.lastRenderTime = this.lastTime;
     const frameInterval = 1000 / 60;
+    const renderEpsilon = 0.1; // Account for timestamp rounding without drifting the 60fps phase.
     const loop = (time: number) => {
       if (!this.running) return;
       const callbackAt = performance.now();
@@ -2106,9 +2107,9 @@ export class IsometricEngine {
           const updateMs = performance.now() - updateAt;
           let drawAt: number | null = null, drawMs: number | null = null;
           const elapsed = time - this.lastRenderTime;
-          if (elapsed >= frameInterval) {
+          if (elapsed + renderEpsilon >= frameInterval) {
             phase = 'render';
-            this.lastRenderTime = time - (elapsed % frameInterval);
+            this.lastRenderTime += Math.floor((elapsed + renderEpsilon) / frameInterval) * frameInterval;
             drawAt = performance.now();
             this.render();
             drawMs = performance.now() - drawAt;

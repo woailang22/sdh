@@ -1,0 +1,678 @@
+{
+  "status": "verified-render-scheduler-boundary-fix",
+  "overallGoalComplete": false,
+  "base": "247224ba568a772286161661c521e407fdb4ca6b",
+  "production": {
+    "onlyChanged": "IsometricEngine.start render deadline condition and integer-period phase advance",
+    "toleranceMs": 0.1,
+    "renderCapPerSecond": 60,
+    "unchanged": [
+      "simulation updates and dt",
+      "input and networking",
+      "visibility/context/retry lifecycle",
+      "world nodes and terrain",
+      "render quality and caches",
+      "survival, combat and persistence"
+    ]
+  },
+  "controlledEngineModel": {
+    "renderWorkMocked": true,
+    "old": [
+      {
+        "name": "59.94",
+        "hz": 59.94,
+        "callbacks": 3596,
+        "draws": 3596,
+        "p95DrawGapMs": 16.683350016684926,
+        "maxDrawGapMs": 16.683350016690383,
+        "gapOver25ms": 0
+      },
+      {
+        "name": "60",
+        "hz": 60,
+        "callbacks": 3600,
+        "draws": 2983,
+        "p95DrawGapMs": 33.33333333333212,
+        "maxDrawGapMs": 33.33333333333576,
+        "gapOver25ms": 615
+      },
+      {
+        "name": "75",
+        "hz": 75,
+        "callbacks": 4500,
+        "draws": 3600,
+        "p95DrawGapMs": 26.66666666666788,
+        "maxDrawGapMs": 26.666666666671517,
+        "gapOver25ms": 899
+      },
+      {
+        "name": "120",
+        "hz": 120,
+        "callbacks": 7200,
+        "draws": 3600,
+        "p95DrawGapMs": 16.666666666671517,
+        "maxDrawGapMs": 25,
+        "gapOver25ms": 0
+      },
+      {
+        "name": "144",
+        "hz": 144,
+        "callbacks": 8640,
+        "draws": 3600,
+        "p95DrawGapMs": 20.83333333333576,
+        "maxDrawGapMs": 20.83333333333576,
+        "gapOver25ms": 0
+      },
+      {
+        "name": "165",
+        "hz": 165,
+        "callbacks": 9900,
+        "draws": 3600,
+        "p95DrawGapMs": 18.181818181823473,
+        "maxDrawGapMs": 18.181818181823473,
+        "gapOver25ms": 0
+      },
+      {
+        "name": "240",
+        "hz": 240,
+        "callbacks": 14400,
+        "draws": 3600,
+        "p95DrawGapMs": 16.666666666671517,
+        "maxDrawGapMs": 20.83333333333394,
+        "gapOver25ms": 0
+      },
+      {
+        "name": "native165Hz-20sec",
+        "hz": 165,
+        "callbacks": 3301,
+        "draws": 1200,
+        "p95DrawGapMs": 18.299999999999272,
+        "maxDrawGapMs": 18.600000000002183,
+        "gapOver25ms": 0
+      }
+    ],
+    "new": [
+      {
+        "name": "59.94",
+        "hz": 59.94,
+        "callbacks": 3596,
+        "draws": 3596,
+        "p95DrawGapMs": 16.683350016684926,
+        "maxDrawGapMs": 16.683350016690383,
+        "gapOver25ms": 0
+      },
+      {
+        "name": "60",
+        "hz": 60,
+        "callbacks": 3600,
+        "draws": 3600,
+        "p95DrawGapMs": 16.666666666671517,
+        "maxDrawGapMs": 16.666666666671517,
+        "gapOver25ms": 0
+      },
+      {
+        "name": "75",
+        "hz": 75,
+        "callbacks": 4500,
+        "draws": 3600,
+        "p95DrawGapMs": 26.66666666666788,
+        "maxDrawGapMs": 26.666666666671517,
+        "gapOver25ms": 899
+      },
+      {
+        "name": "120",
+        "hz": 120,
+        "callbacks": 7200,
+        "draws": 3600,
+        "p95DrawGapMs": 16.666666666671517,
+        "maxDrawGapMs": 16.666666666671517,
+        "gapOver25ms": 0
+      },
+      {
+        "name": "144",
+        "hz": 144,
+        "callbacks": 8640,
+        "draws": 3600,
+        "p95DrawGapMs": 20.83333333333576,
+        "maxDrawGapMs": 20.833333333343035,
+        "gapOver25ms": 0
+      },
+      {
+        "name": "165",
+        "hz": 165,
+        "callbacks": 9900,
+        "draws": 3600,
+        "p95DrawGapMs": 18.181818181823473,
+        "maxDrawGapMs": 18.181818181823473,
+        "gapOver25ms": 0
+      },
+      {
+        "name": "240",
+        "hz": 240,
+        "callbacks": 14400,
+        "draws": 3600,
+        "p95DrawGapMs": 16.666666666671517,
+        "maxDrawGapMs": 16.666666666671517,
+        "gapOver25ms": 0
+      },
+      {
+        "name": "native165Hz-20sec",
+        "hz": 165,
+        "callbacks": 3301,
+        "draws": 1200,
+        "p95DrawGapMs": 18.299999999999272,
+        "maxDrawGapMs": 18.600000000002183,
+        "gapOver25ms": 0
+      }
+    ],
+    "sixtyHz": {
+      "callbacks": 3600,
+      "oldDraws": 2983,
+      "newDraws": 3600,
+      "oldGapsOver25ms": 615,
+      "newGapsOver25ms": 0
+    },
+    "actualDisplayOrGpuMeasurement": false
+  },
+  "nativeClock": {
+    "kind": "Independent lightweight page: normal browser RAF capture. Formula comparisons in page; actual source Engine.start replay in Node/Vitest using identical timestamp deltas rebased to start at1000ms.",
+    "durationTargetMs": 20000,
+    "sourceReplayTimeRebaseOriginMs": 1000,
+    "callbacks": 3301,
+    "medianCallbackGapMs": 6.099999999998545,
+    "approximateCallbackRateHz": 165,
+    "oldEngineReplay": {
+      "name": "native165Hz-20sec",
+      "hz": 165,
+      "callbacks": 3301,
+      "draws": 1200,
+      "p95DrawGapMs": 18.299999999999272,
+      "maxDrawGapMs": 18.600000000002183,
+      "gapOver25ms": 0
+    },
+    "newEngineReplay": {
+      "name": "native165Hz-20sec",
+      "hz": 165,
+      "callbacks": 3301,
+      "draws": 1200,
+      "p95DrawGapMs": 18.299999999999272,
+      "maxDrawGapMs": 18.600000000002183,
+      "gapOver25ms": 0
+    },
+    "improvementObserved": false
+  },
+  "precision": {
+    "initialCandidateMs": 0.001,
+    "initialCandidateRejectedForPointOneMsQuantization": true,
+    "quantizedSixtyHzDrawsPerMinute": {
+      "old": 2400,
+      "epsilonPoint001": 2400,
+      "epsilonPoint1": 3600
+    },
+    "references": [
+      {
+        "title": "W3C High Resolution Time, coarsen time (Working Draft)",
+        "url": "https://www.w3.org/TR/hr-time-3/#dfn-coarsen-time"
+      },
+      {
+        "title": "HTML Standard animation frames",
+        "url": "https://html.spec.whatwg.org/multipage/imagebitmap-and-animations.html#animation-frames"
+      }
+    ]
+  },
+  "verification": {
+    "newTests": 11,
+    "focusedRed": {
+      "failed": 7,
+      "passed": 165
+    },
+    "focusedGreen": 172,
+    "negativeControl": {
+      "failed": 7,
+      "passed": 165,
+      "originalBytesRestored": true
+    },
+    "full": {
+      "files": 45,
+      "tests": 722,
+      "maxWorkers": 2
+    },
+    "typesIncludingOwnedQa": "passed",
+    "build": "index-CVuLyfU-.js",
+    "existingBuildWarning": "chunk exceeds500kB"
+  },
+  "nativeGame": {
+    "passed": true,
+    "normalRulesAndClocks": true,
+    "noStateEdits": true,
+    "legs": [
+      {
+        "leg": "outbound",
+        "nativeKeyHoldsSeconds": [
+          30,
+          30
+        ],
+        "movingPackets": 1101,
+        "distance": 228.08283999999009,
+        "firstToLastMovingMs": 60301.410199999984,
+        "betweenRunsMs": 270.79039999999804,
+        "chunks": 12,
+        "runs": [
+          {
+            "firstAtMs": 193244.4756,
+            "lastAtMs": 223211.3331,
+            "distance": 114.00684000000078,
+            "packets": 549
+          },
+          {
+            "firstAtMs": 223482.1235,
+            "lastAtMs": 253545.8858,
+            "distance": 114.07599999998918,
+            "packets": 552
+          }
+        ],
+        "strictContinuous60Passed": false
+      },
+      {
+        "leg": "return",
+        "nativeKeyHoldsSeconds": [
+          30,
+          30
+        ],
+        "movingPackets": 1097,
+        "distance": 228.1041199999914,
+        "firstToLastMovingMs": 60301.70179999998,
+        "betweenRunsMs": 275.04609999997774,
+        "chunks": 12,
+        "runs": [
+          {
+            "firstAtMs": 296937.5582,
+            "lastAtMs": 326939.155,
+            "distance": 114.02925999999461,
+            "packets": 550
+          },
+          {
+            "firstAtMs": 327214.2011,
+            "lastAtMs": 357239.26,
+            "distance": 114.07485999999662,
+            "packets": 547
+          }
+        ],
+        "strictContinuous60Passed": false
+      }
+    ],
+    "movement": {
+      "packets": 7548,
+      "movingPackets": 2336,
+      "distance": 484.71773279378016,
+      "rejected": 0,
+      "errors": 0,
+      "corrections": 1,
+      "overflow": 0
+    },
+    "assets": {
+      "actions": 5,
+      "foodEarned": 3,
+      "foodUsed": 1,
+      "satietyPerUse": 35,
+      "finalItems": [
+        [
+          "food",
+          2
+        ],
+        [
+          "water",
+          2
+        ],
+        [
+          "seed_potato",
+          1
+        ]
+      ],
+      "resourcesZero": true,
+      "emptyEquipment": true,
+      "noCamp": true,
+      "uniqueHandled": 5
+    },
+    "final": {
+      "x": 9.419426249250902,
+      "y": 9.455683036049361,
+      "hp": 100,
+      "shield": 50,
+      "satiety": 29.243500000000076
+    },
+    "savedStateMatches": true,
+    "backupRestored": true,
+    "performance": {
+      "environment": {
+        "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
+        "viewport": {
+          "width": 1920,
+          "height": 1080
+        },
+        "canvas": {
+          "width": 1920,
+          "height": 1080
+        },
+        "devicePixelRatio": 1.5,
+        "modulePath": "/assets/index-CVuLyfU-.js",
+        "jsHeap": {
+          "used": 16995213,
+          "total": 70612201
+        },
+        "graphicsBackend": "unknown"
+      },
+      "initialSlowFrames": 5,
+      "finalSlowFrames": 10,
+      "maxDrawMs": 123.69999998807907,
+      "maxRafGapMs": 186.90000000596046,
+      "allSamplesRetained": true,
+      "strictContinuous60Passed": false,
+      "fullP95Passed": false,
+      "GpuOrMemoryPassed": false
+    },
+    "controls": {
+      "requestedSingleHoldMs": 60000,
+      "rejectedBeforeInput": true,
+      "supportedHoldMaxMs": 30000,
+      "noDocumentedKeyDownUpCapability": true,
+      "usedFourNative30SecondHolds": true,
+      "strictContinuous60Passed": false
+    },
+    "renderErrors": []
+  },
+  "cleanup": {
+    "services": [
+      {
+        "port": 39136,
+        "pid": 18228
+      },
+      {
+        "port": 39137,
+        "pid": 7476
+      }
+    ],
+    "portsReleased": true,
+    "processesExited": true,
+    "tabsClosed": true,
+    "viewportReset": true,
+    "productionSaveOpened": false
+  },
+  "review": {
+    "source": "Independent read-only review: no P1/P2",
+    "evidence": "Independent read-only evidence review completed"
+  },
+  "limits": [
+    "The original user device was not profiled here. The native clock sampled about165Hz and shows no old/new pacing improvement; the verified60Hz bug is not proof of the cause of all real-world stutters.",
+    "The0.1ms tolerance is phase preserving and bounded; tests cover fixed refresh rates and0.1ms rounding for60seconds. Arbitrary jitter, coarser clocks, all initial phases and long-session numerical error are not fully verified.",
+    "On affected60Hz clocks the fix restores intended render submissions from2983 to3600 per minute in the controlled model. More correct draws can increase work compared with the buggy under-rendering; reducedGPU or CPU use is not guaranteed.",
+    "75Hz has ordinary display-cycle quantization gaps of26.667ms at a60fps cap; this patch does not remove that behavior or raise the cap.",
+    "The tool rejected a60000ms native press before sending input. Two30second holds per leg have270.79/275.05ms moving-packet gaps and are explicitly segmented regression gameplay. Strict continuous60seconds remains unaccepted.",
+    "The final1920x1080/DPR1.5 page retained10/10 slow records, including cold ground121.6ms within draw123.7ms; maxRAF186.9ms remains. Five initial records are a prefix of the final ten. New samples have endpoint/farm positions, which alone cannot prove motion state.",
+    "No full-frame percentile, physical presentation, GPU usage, browser total800MB, long-memory or uninstrumented performance comparison is claimed. The observer adds diagnostic logging/copying overhead; JS heap is a single distinct metric.",
+    "Native final screenshot/AX precede final server checkpoint; satiety naturally differs. No GM, coordinate, inventory, health or clock edits were used.",
+    "Normal source push is not deployment of the external website. The complete exploration, multiplayer camp, economy and performance goal remains active."
+  ],
+  "sources": [
+    {
+      "path": "data/audit-cadence-boundary-20261024.ts",
+      "sha256": "185fc1dcd238462f94beca731130bc027d8a2723b70cb7b367b3eb1d2ba6c275"
+    },
+    {
+      "path": "data/cadence-boundary-build-20261024.log",
+      "sha256": "ee54c45c1df2b7f066d2d7a2de405e7092a1b4fc73afca6d6ce2b92ccfdf9c12"
+    },
+    {
+      "path": "data/cadence-boundary-cua-cleanup-20261024.json",
+      "sha256": "377c199bc6d15d93e24cd578e95f2e12173b41d6f85f97c7fffb5f1d8a8f51dc"
+    },
+    {
+      "path": "data/cadence-boundary-final-bundle-CVuLyfU-.js",
+      "sha256": "8bf28eb7a7d262658e7a760bf197955eaed4dace058e5b74b49eaaa73511c7b5"
+    },
+    {
+      "path": "data/cadence-boundary-final-index.html",
+      "sha256": "fa49831829e5f4dd0a564b428dfa5ae9c683a031076dbeb4f2e26280329bedd9"
+    },
+    {
+      "path": "data/cadence-boundary-focus-20261024.log",
+      "sha256": "44a2de5c557627c49d4f470e51c7ab6b2ed9097054137a4ac8c13ec85b97af06"
+    },
+    {
+      "path": "data/cadence-boundary-full-20261024.log",
+      "sha256": "edb05b6e4747493a9ca9f81d4b8b3bea55910a6f6bd3ed8202d96b457f214045"
+    },
+    {
+      "path": "data/cadence-boundary-native-audit-20261024.log",
+      "sha256": "8fbfbd398c3fff32f049fceabc581ef47d04c45be4cc13bb3681b4a327c471d7"
+    },
+    {
+      "path": "data/cadence-boundary-negative-20261024.log",
+      "sha256": "cf166618b2a1d68698682c6adccffd4f0576fa8d286b8904a0e84b4a5eb644c5"
+    },
+    {
+      "path": "data/cadence-boundary-red-20261024.log",
+      "sha256": "ffaff38dd320ac9c39ebed87871a85a14529d1e26f3777e60c8225a5130ee563"
+    },
+    {
+      "path": "data/cadence-boundary-service-cleanup-20261024.json",
+      "sha256": "cf04160b097a20bb1726d1fbcf6d5d05a61308f9c615f53975ad453996ac2d66"
+    },
+    {
+      "path": "data/cadence-boundary-types-20261024.log",
+      "sha256": "7f3594d7a965c703e6361ae50c0ef50cf9c344c621d801592b074b48554f4235"
+    },
+    {
+      "path": "data/cadence-boundary-types-allqa-20261024.log",
+      "sha256": "7f3594d7a965c703e6361ae50c0ef50cf9c344c621d801592b074b48554f4235"
+    },
+    {
+      "path": "data/cadence-clock-20261024.html",
+      "sha256": "8195d9d9061884a85e7e632a525623d5cbfbd126cde2e11c2e20b1fdb441d339"
+    },
+    {
+      "path": "data/cadence-clock-native-20261024.json",
+      "sha256": "332f4afeeff33933b0ff2051e677fb8bd44fd45dbab0b5f4103e5e74c4a26999"
+    },
+    {
+      "path": "data/cadence-clock-native-20261024.png",
+      "sha256": "4e5ba6ed917cf3553cde7d4d071c61fa763a6bf6c33f9dbda28f59fdb92833da"
+    },
+    {
+      "path": "data/cadence-precision-investigation-20261024.cjs",
+      "sha256": "f3b68b843cc3a16cdc44a76bfa5c7eef1468e7f7a27778a62edc0cd4fa653c09"
+    },
+    {
+      "path": "data/cadence-precision-investigation-20261024.json",
+      "sha256": "0953ca676c8b166d140a1a5bdde22a2ce52a543ff9a3f7b9804cf5b63280ce8e"
+    },
+    {
+      "path": "data/cadence-source-replay-after-20261024.log",
+      "sha256": "b91168df69c98a495997d1e9eabf415c74de5e9fcea9b92e6c452e6502af549b"
+    },
+    {
+      "path": "data/cadence-source-replay-before-20261024.log",
+      "sha256": "88834c73a5cb159aee8b1d86e6cdb4fb22303665e9591b0f62e415d24b6ace53"
+    },
+    {
+      "path": "data/capture-cua-cadence-boundary-20261024.ts",
+      "sha256": "9ecc5497285abdcec7640438929b59dacd77999ebe803e823f85297602664202"
+    },
+    {
+      "path": "data/control-cua-cadence-boundary-20261024.cjs",
+      "sha256": "1d589e4b17081bea8b5acf8f63bb4c6c9bde69112f85dab7834976b5e2d08405"
+    },
+    {
+      "path": "data/cua-cadence-boundary-20261024-a1-audit.json",
+      "sha256": "8981934256eddd51dc0f668f57bbdffe36b3848455ffdb13a674a1d165f74bdc"
+    },
+    {
+      "path": "data/cua-cadence-boundary-20261024-a1-final-ax.txt",
+      "sha256": "ec69116840cf9da5fc61741aafdf64258f7b9aa8687b0c7ebbd3b076e2fd6688"
+    },
+    {
+      "path": "data/cua-cadence-boundary-20261024-a1-final-errors.json",
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "path": "data/cua-cadence-boundary-20261024-a1-final-frames.json",
+      "sha256": "aaf0d40cee4f5bdb83ddcb54d01c63865423bfaef620eef9f0e8fe7d5c83d221"
+    },
+    {
+      "path": "data/cua-cadence-boundary-20261024-a1-final.png",
+      "sha256": "18ea953fdde429bb3e39c0867292aecd3bf59bb0dcd99febda6bec5a6dced3fc"
+    },
+    {
+      "path": "data/cua-cadence-boundary-20261024-a1-initial-frames.json",
+      "sha256": "c30abde130bca07542f9a8f702c588f45b24978b4457076f981cebfdbb2986da"
+    },
+    {
+      "path": "data/cua-cadence-boundary-20261024-a1-native-connected-world-private.json",
+      "sha256": "144c244b0012b683c89fec5874ea7ee2885903e615f57a2ee2e36cca8997723c"
+    },
+    {
+      "path": "data/cua-cadence-boundary-20261024-a1-native-final-events.json",
+      "sha256": "0fae81dd6241d343e27c658dcac11a975b313b97a75c2f18c4710b31133f30b5"
+    },
+    {
+      "path": "data/cua-cadence-boundary-20261024-a1-native-final-world-private.json",
+      "sha256": "a9a8bb69a5f9a57aeb5ebffab54b8af8ce53304ff964e33f323ab40a358094dd"
+    },
+    {
+      "path": "data/cua-cadence-boundary-20261024-a1-native-outbound-end-events.json",
+      "sha256": "eb04d2c8e3fd85f971818a7c5de14a6addc7ad0c5f810a9c2c18e58ff23d5ffe"
+    },
+    {
+      "path": "data/cua-cadence-boundary-20261024-a1-native-outbound-end-world-private.json",
+      "sha256": "842d5bc80fad5ba4cc8015de2961c8e9dd929152df27495aca240c823b4e5b8e"
+    },
+    {
+      "path": "data/cua-cadence-boundary-20261024-a1-native-outbound-start-actual-events.json",
+      "sha256": "a0f5f827999c8748494d72e94324e7283664c5c3bcaaf80cf87ad73529aecf77"
+    },
+    {
+      "path": "data/cua-cadence-boundary-20261024-a1-native-outbound-start-actual-world-private.json",
+      "sha256": "f4894bb6b552b71171fad0afe888bb34c10b2195b39cac348ea14c10f340e741"
+    },
+    {
+      "path": "data/cua-cadence-boundary-20261024-a1-native-outbound-start-events.json",
+      "sha256": "f119b264656db3971a2bf91066c07be9bea1031d68b5999be78102be44ce78c6"
+    },
+    {
+      "path": "data/cua-cadence-boundary-20261024-a1-native-outbound-start-world-private.json",
+      "sha256": "daa1f02c1cfefcaf28f0e604260786e884f76ccfa99de637adff6f9bf7151bef"
+    },
+    {
+      "path": "data/cua-cadence-boundary-20261024-a1-native-return-end-events.json",
+      "sha256": "16e7d899ec41644ef399084661d19ac39f5d6c2ff61a498c4675a6cd9849bba6"
+    },
+    {
+      "path": "data/cua-cadence-boundary-20261024-a1-native-return-end-world-private.json",
+      "sha256": "c1002e0e262ed86f4fcd644f5c7a30a2dfe0faa0542e70c400cbb6f817b35da4"
+    },
+    {
+      "path": "data/cua-cadence-boundary-20261024-a1-native-return-start-events.json",
+      "sha256": "25a461f899b47767f4a3e7e67a96bbfdd38d4975d60044408a77f0148281900b"
+    },
+    {
+      "path": "data/cua-cadence-boundary-20261024-a1-native-return-start-world-private.json",
+      "sha256": "86c518210a933e592dce7bb34b1c4bb02378f9d2fd2fafcfe896bb1b494b98aa"
+    },
+    {
+      "path": "data/cua-cadence-boundary-20261024-a1-outbound-mid-ax.txt",
+      "sha256": "90dc822c26e070ad75555ccce9b42c7baca35419a17927d76de915af21718ff3"
+    },
+    {
+      "path": "data/cua-cadence-boundary-20261024-a1-outbound.png",
+      "sha256": "6cd89d8aed6e9cc41bc78b9c7268b31b3ef9b66a472205dad5c4d7d2d6848632"
+    },
+    {
+      "path": "data/cua-cadence-boundary-20261024-a1-return-mid-ax.txt",
+      "sha256": "49ff584c7438923ffd6adec752538ce8ed95844dc8e6a2cb1bb015e81d0a262c"
+    },
+    {
+      "path": "data/engine-cadence-investigation-20261024.json",
+      "sha256": "822eea9911ce7db700c6432cae27142991c9116250a44063ad5065954daa909a"
+    },
+    {
+      "path": "data/engine-cadence-investigation-20261024.log",
+      "sha256": "7b03350f0e3e0a147ad61e5d640c720706dd791115a0b77049c569dd393fd7eb"
+    },
+    {
+      "path": "data/engine-cadence-investigation-20261024.qa.ts",
+      "sha256": "ddab4b0bf5c4519fc1bf2ea1c408ba82822d2d53d6570e93a6eae879e649ab71"
+    },
+    {
+      "path": "data/engine-cadence-investigation-fixture-failure-20261024.log",
+      "sha256": "2d222253c436d798a3e5290052877075edc753e40c875d636e8f34edded35dda"
+    },
+    {
+      "path": "data/engine-cadence-replay-20261024.qa.ts",
+      "sha256": "30303db9ee4a80f9c5e24f546e99d0ed9db49b777247b3410f381e18e783d368"
+    },
+    {
+      "path": "data/engine-cadence-source-replay-after-20261024.json",
+      "sha256": "40d102d52748ec94c78ded403dec9d9ca532a5c2b04b8d1a4dcddde33e631b43"
+    },
+    {
+      "path": "data/engine-cadence-source-replay-before-20261024.json",
+      "sha256": "cfa30f69e5ff6a91cfe0c214883202a5fe9c712692fd166a00649ff23090ec7c"
+    },
+    {
+      "path": "data/negative-cadence-boundary-20261024.cjs",
+      "sha256": "b940e1a3f228151a3ece52d4576474a26d73fa3bae3ed6f9a9b4059cb314fbbf"
+    },
+    {
+      "path": "data/publish-cadence-boundary-20261024.cjs",
+      "sha256": "2ce12a722404323f0230d9ce18325bb987f331383368186d0378fe32b74f8028"
+    },
+    {
+      "path": "data/serve-cadence-clock-20261024.cjs",
+      "sha256": "4a4c4af89486d27a45f7799cb4e148f5f1c37b8eae2403de03a2c43e839b7c3e"
+    },
+    {
+      "path": "docs/superpowers/plans/2026-10-20-seamless-world-camps.md",
+      "sha256": "d7bf1f696d85afba90935ca23ff776cef66c4a8451523c5fe4d385c94a300f27"
+    },
+    {
+      "path": "docs/superpowers/plans/2026-10-24-render-cadence-boundary.md",
+      "sha256": "0d28644202e392256fd4810c338656c2d1d38b5a30deee89f4bfbbc70b3ce9c7"
+    },
+    {
+      "path": "docs/superpowers/specs/2026-10-24-render-cadence-boundary-design.md",
+      "sha256": "ade8023187634e157aafa78b50222ce82a158368d49f86cae7541f9289155d6d"
+    },
+    {
+      "path": "server/db.ts",
+      "sha256": "9cf91e65d64e6372bb897d98b8bdda843a03f42f409240f272abc4ed09d83f0f"
+    },
+    {
+      "path": "server/worldState.ts",
+      "sha256": "829140066d1e04a3521ba2286e4130b39ccdcdf825a7a4340dc34e416ff6f5f1"
+    },
+    {
+      "path": "src/App.tsx",
+      "sha256": "f7680b75b5153fa1fbf0e053d648e57c4a98c607af3e401c602ff5efb0387181"
+    },
+    {
+      "path": "src/game/IsometricEngine.test.ts",
+      "sha256": "609e386d0f774af683b91b638e69c174dcf4cdfc3a37cebf295ddfd7aefadfad"
+    },
+    {
+      "path": "src/game/IsometricEngine.ts",
+      "sha256": "c1f88f17f57d1a1631fc4ebadf40d4f44ea8c47009d5a7fcf4aeccfdee9f0ee3"
+    },
+    {
+      "path": "src/game/frameDiagnostics.ts",
+      "sha256": "ae00db37d16abd4eb2752f2510ddad89684b4e2bddc9973c34443c23cc1b33dc"
+    },
+    {
+      "path": "src/game/navigation.ts",
+      "sha256": "defeedf6c1670922f76b115c5da0a1bdce4f64afa8fb5b7eca0ee5c48065b662"
+    },
+    {
+      "path": "src/game/world.ts",
+      "sha256": "9ad6447e3e2cce3f9f391856bd3008856a49c2849a35d71aa1368b1893510949"
+    }
+  ]
+}
