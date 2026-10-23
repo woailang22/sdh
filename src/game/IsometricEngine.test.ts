@@ -2,6 +2,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { IsometricEngine, type GameCallbacks } from './IsometricEngine';
 import { buildCompoundWalls } from './compound';
 import * as houseRenderer from './houseRenderer';
+import * as renderDiagnostics from './renderDiagnostics';
 import { isPositionBlocked } from './navigation';
 import { createMemoryDb } from '../../server/db';
 import { GameWorld, type WorldRules } from '../../server/worldState';
@@ -161,6 +162,91 @@ describe('click-to-move arrival', () => {
 });
 
 describe('real-time firing cadence', () => {
+  function pointerGun() {
+    let time = 1000; vi.spyOn(performance, 'now').mockImplementation(() => time);
+    const { engine, canvas, win } = setup(), fire = vi.fn(); engine.warpToMap('home_self', 0, 0);
+    Object.assign(canvas, { getBoundingClientRect: () => ({ left: 30, top: 20 }) });
+    (engine as any).callbacks.onGameAction = fire;
+    engine.hasRangedWeapon = true; engine.player.ammo = 30; engine.monsters = []; engine.buildings = [];
+    const point = engine.toScreen(3, -3);
+    return { engine, fire, win, press: (now: number) => { time = now; canvas.dispatchEvent(Object.assign(new Event('mousedown'), { button: 0, clientX: point.x + 30, clientY: point.y + 20 })); },
+      release: (now: number) => { time = now; win.dispatchEvent(Object.assign(new Event('mouseup'), { button: 0 })); },
+      at: (now: number) => { time = now; (engine as any).update(.001); } };
+  }
+
+  it('fires a correctly aimed short click exactly once when down and up occur between updates', () => {
+    const { engine, fire, press, release, at } = pointerGun();
+    engine.player.angle = Math.PI / 2;
+    engine.onlinePlayers.set('target', { id: 'target', x: 3, y: -3, mapId: 'home_self', hp: 100 } as any);
+    press(1000); release(1040); at(1060);
+    expect(engine.player.ammo).toBe(29);
+    expect(fire).toHaveBeenCalledExactlyOnceWith('fire', { angle: 0, targetId: 'target' });
+    expect(engine.player.isFiring).toBe(false);
+    at(1300);
+    expect(engine.player.ammo).toBe(29); expect(fire).toHaveBeenCalledTimes(1);
+  });
+
+  it('shares the original cooldown across press attempts and held updates without a duplicate first shot', () => {
+    const { engine, fire, press, release, at } = pointerGun();
+    press(1000); at(1000); expect(engine.player.ammo).toBe(29);
+    release(1010); press(1040); at(1040); expect(engine.player.ammo).toBe(29);
+    release(1050); at(1119); expect(engine.player.ammo).toBe(29);
+    press(1120); at(1120); expect(engine.player.ammo).toBe(28);
+    at(1200); expect(engine.player.ammo).toBe(28);
+    at(1240); expect(engine.player.ammo).toBe(27);
+    release(1241); at(1500); expect(engine.player.ammo).toBe(27);
+    expect(fire).toHaveBeenCalledTimes(3);
+  });
+
+  it('does not defer a released cooldown-blocked click into a later shot', () => {
+    const { engine, fire, press, release, at } = pointerGun();
+    press(1000); at(1000); release(1010);
+    press(1100); release(1110); at(1120); at(1500);
+    expect(engine.player.ammo).toBe(29); expect(fire).toHaveBeenCalledTimes(1);
+  });
+
+  it.each(['blocked', 'build', 'editor'])('keeps %s pointer actions out of ranged firing', mode => {
+    const { engine, fire, press, release, at } = pointerGun();
+    if (mode === 'blocked') engine.inputBlocked = true;
+    if (mode === 'build') { engine.isBuildMode = true; vi.spyOn(engine as any, 'tryPlaceBuilding').mockImplementation(() => {}); }
+    if (mode === 'editor') { engine.setEditMode(true); vi.spyOn(engine as any, 'editorPlace').mockImplementation(() => {}); }
+    press(1000); release(1040); at(1200);
+    expect(engine.player.ammo).toBe(30); expect(fire).not.toHaveBeenCalled();
+    expect(engine.player.isFiring).toBe(false);
+  });
+
+  it.each(['empty', 'unarmed'])('does not invent a ranged shot for an %s short click', mode => {
+    const { engine, fire, press, release, at } = pointerGun();
+    if (mode === 'empty') engine.player.ammo = 0; else engine.hasRangedWeapon = false;
+    press(1000); release(1040); at(1200);
+    expect(engine.player.ammo).toBe(mode === 'empty' ? 0 : 30); expect(fire).not.toHaveBeenCalled();
+  });
+
+  it.each(['blur', 'focus'])('stops held input on %s without replaying the already accepted press', type => {
+    const { engine, fire, win, press, at } = pointerGun();
+    press(1000); at(1000); win.dispatchEvent(new Event(type)); at(1200); at(1500);
+    expect(engine.player.ammo).toBe(29); expect(fire).toHaveBeenCalledTimes(1);
+    expect(engine.player.isFiring).toBe(false);
+  });
+
+  it('records a failed press action and stops held fire without automatically retrying it', () => {
+    const { engine, fire, press, at } = pointerGun(), status = vi.fn();
+    const diagnostic = vi.spyOn(renderDiagnostics, 'recordRenderFailure');
+    vi.spyOn(console, 'error').mockImplementation(() => {});
+    (engine as any).callbacks.onRenderStatus = status;
+    fire.mockImplementationOnce(() => { throw new Error('Injected action failure'); });
+    // Invoke the actual registered body directly: Node EventTarget otherwise rethrows on nextTick.
+    let mouseDown: (event: any) => void = () => {};
+    vi.spyOn((engine as any).canvas, 'addEventListener').mockImplementation((type: any, listener: any) => { if (type === 'mousedown') mouseDown = listener; });
+    (engine as any).setupListeners();
+    expect(() => mouseDown({ button: 0, clientX: 446, clientY: 200 })).not.toThrow();
+    expect(diagnostic).toHaveBeenCalledWith(expect.objectContaining({ message: 'Injected action failure' }), expect.objectContaining({ source: 'input', phase: 'fire', mapId: 'home_self' }));
+    expect(status).toHaveBeenCalledWith('射击操作发生错误，错误信息已保留');
+    expect(engine.player.isFiring).toBe(false); expect(engine.mouse.isDown).toBe(false);
+    at(1200); expect(fire).toHaveBeenCalledTimes(1);
+    press(1300); expect(fire).toHaveBeenCalledTimes(2);
+  });
+
   function armed() {
     let time = 1000;
     vi.spyOn(performance, 'now').mockImplementation(() => time);

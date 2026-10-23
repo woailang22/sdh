@@ -1439,6 +1439,19 @@ export class IsometricEngine {
         }
         this.mouse.isDown = true;
         this.player.isFiring = true;
+        const rect = this.canvas.getBoundingClientRect();
+        this.mouse.screenX = e.clientX - rect.left;
+        this.mouse.screenY = e.clientY - rect.top;
+        const origin = this.toScreen(this.player.x, this.player.y);
+        this.player.angle = Math.atan2(this.mouse.screenY - origin.y, this.mouse.screenX - origin.x);
+        try {
+          this.tryFireRangedWeapon(performance.now());
+        } catch (error) {
+          this.clearKeys();
+          recordRenderFailure(error, { source: 'input', phase: 'fire', mapId: this.currentMapId, x: this.player.x, y: this.player.y });
+          console.error('[game input]', error);
+          this.setRenderStatus('射击操作发生错误，错误信息已保留');
+        }
       }
     }, options);
 
@@ -2321,20 +2334,7 @@ export class IsometricEngine {
     const shotTime = performance.now();
     this.player.fireTimer = Math.max(0, (this.nextShotAt - shotTime) / 1000);
     if (this.player.isFiring && this.hasRangedWeapon && this.player.ammo > 0 && !this.isBuildMode) {
-      if (shotTime >= this.nextShotAt) {
-        this.nextShotAt = shotTime + this.player.fireRate * 1000;
-        this.player.fireTimer = this.player.fireRate;
-        this.player.ammo -= 1;
-        this.player.recoil = 8;
-        soundManager.playGunshot();
-
-        const muzzleDist = 0.8;
-        const direction = this.worldAimDirection(this.player.angle);
-        const flashWorldX = this.player.x + direction.x * muzzleDist;
-        const flashWorldY = this.player.y + direction.y * muzzleDist;
-        this.spawnMuzzleFlash(flashWorldX, flashWorldY);
-        this.fireBullet(flashWorldX, flashWorldY, this.player.angle);
-      }
+      this.tryFireRangedWeapon(shotTime);
     } else {
       // 有枪无弹：有备弹自动装填，无备弹则提示去向（2秒一次，免刷屏）
       if (this.player.isFiring && !this.isBuildMode && this.hasRangedWeapon && this.player.ammo <= 0) {
@@ -2893,6 +2893,22 @@ export class IsometricEngine {
     const y = Math.sin(angle) / this.TILE_H - Math.cos(angle) / this.TILE_W;
     const length = Math.hypot(x, y);
     return { x: x / length, y: y / length };
+  }
+
+  private tryFireRangedWeapon(shotTime: number) {
+    if (!this.hasRangedWeapon || this.player.ammo <= 0 || this.isBuildMode || shotTime < this.nextShotAt) return;
+    this.nextShotAt = shotTime + this.player.fireRate * 1000;
+    this.player.fireTimer = this.player.fireRate;
+    this.player.ammo -= 1;
+    this.player.recoil = 8;
+    soundManager.playGunshot();
+
+    const muzzleDist = 0.8;
+    const direction = this.worldAimDirection(this.player.angle);
+    const flashWorldX = this.player.x + direction.x * muzzleDist;
+    const flashWorldY = this.player.y + direction.y * muzzleDist;
+    this.spawnMuzzleFlash(flashWorldX, flashWorldY);
+    this.fireBullet(flashWorldX, flashWorldY, this.player.angle);
   }
 
   private fireBullet(startX: number, startY: number, angle: number) {

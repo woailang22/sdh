@@ -1573,3 +1573,17 @@ f5684d2后的本轮直接修改仅IsometricEngine导航/移动。真实右键公
 另单独静态生成4096chunk，57255建筑/32525节点、1866个至少8成员且含门的房屋组，其中1864普通door组内部均可达；不说世界只有这些建筑。半格四邻域从(0,1)洪泛，使用原AABB+.22半径，实际服务器查询/LOS核交互距离≤3，15地标≤8均有接近点。a1遗漏WORLD_MIN下边界半格内缩；a2按真实边界排除后可达16648841点、阻塞/边界128333点，另42非阻塞但未访问点（未导出其位置），结论不变，耗时约3002ms。仅6箱落在两个safe_door锁门据点，不为过审开锁。半格可能漏窄通道，只是fresh不可变定义，无保存的门修改/玩家营地/NPC生存/浏览器实走，不作为探索平衡或GPU/容量验收。
 
 计划docs/superpowers/plans/2026-10-23-occupied-navigation-arrival.md，去凭据证据docs/verification/2026-10-23-occupied-navigation-arrival-results.json。真实存档未打开，只操作独立合成/内存数据，所属进程关闭。已有GPU慢帧、a7停步/a12重放观测及本轮a17首击仍未定位，长期内存/连续新chunk淘汰/全世界实走、真实攻城与赚取经济还需完成；整体目标保持进行中。
+
+## 远程武器短点击漏采样检查点（2026-10-23）
+
+上一轮063abe8确实修复并交付导航，属于已完成的实际进展；整体目标仍未验收。本轮沿原a17首击超时继续查输入。新生产baselinea20三Chrome/正常100HP100盾、预置步枪30弹、正常R装弹、空地原生鼠标诊断：12次请求40ms均一弹，4次请求5ms中末次实际13.7ms，down/up之间无update、client0弹/fire0包/server0弹，明确证明了按下置true/松开置false而只在update取样的缺口。但a17没有时序，不能反推其40ms失败同因。a19忘R的readiness超时是QA错误，零试次，不算产品失败。
+
+直接修改只在IsometricEngine把原远程shot代码提成同一方法，由实际左键按下和原held update复用。按下先用canvas真实坐标/当前投影更新aim，立即按原nextShotAt校验；先推进冷却再发动作，下一帧/连点不多发，不加松开后的排队射击，也不改射速、服务器原单slot/接受规则或弹药、移动、地图、近战。复核提醒首次尝试移出frame异常边界，已用故障注入先红：按下射击失败时clearKeys，复用有界诊断source=input/phase=fire并提示错误，不自动重试或猜测回滚已可能发出的动作。
+
+11新增业务用例与既有3射速用例验证实际canvas/window down/up、老angle变更后的正确target、共用120ms冷却、提前松开的冷却点击不补发、blocked/build/editor/empty/unarmed、blur/focus和异常后独立点击恢复。首次aim负控因为oldangle默认0与点击相同而无效，发现后设PI/2，实际包角度/缺target断言红；error-stop初脚本CRLF锚点没匹配未执行，后修正实际断言红。最终press/cooldown/aim/error-stop四有效负控各业务断言失败且finally恢复。41文件586全测试、类型检查、构建及恢复后14射击用例通过，客户端index-gRKkYjdQ.js；原Vite提示保留，不夹带打包重构。
+
+新nativea21因Chrome端口文件EBUSY在启动阶段失败，零试次，结果原样保留；当时尚未登记的自有profile浏览器PID45556已按完整profile核身份关闭，驱动终态exit1，不将活句柄超时当完成。a22修正驱动为同实例/同文件ENOENT或EBUSY继续等，退出前只清理自有部分启动；与游戏无关。最终a22原12×40/4×5，加4×0请求共20点击全部client/server各一弹、一包；新增0请求组里两次实际1.7/1.9ms零update也正常。与原16试次组不同，不能算漏射率或延迟改善。a20raw success仅诊断跑完，不是行为通过；a22明确behaviorAccepted=true。正常时钟/位置/武器/世界，read-only事件和update探针仍有开销，不当性能测量。
+
+两份实际SQLite/WAL一致性备份经GameWorld恢复、资源装备检查：a20真实15弹余15，a22真实20弹余10，空地未伤3角色；所有5675建筑/540防御弹、共享库存与角色库存装备不变。另a23三Chrome/普通100HP100盾预置战斗夹具，原实际跨chunk三段、两次40ms定向点击、死亡权威纠正、重生后走到0,5、死亡包拿空与旁观面板关闭/继续走均通过，实耗2弹，射手58弹6木2食、victim物资清空保装备、observer零收益，完整资产/backup恢复审计通过。不能据a23成功抹除a17、冒称赚取生存经济或攻城容量已通过。
+
+计划docs/superpowers/plans/2026-10-23-short-click-firing.md，去凭据证据docs/verification/2026-10-23-short-click-firing-results.json。独立只读复核源代码/有效负控/原始数字，最终导出36试次、三条零update事件和a23步骤/审计逐项对应，无P1/P2或凭据导出，未代跑测试。真实存档未打开，只动独立合成/内存数据，所属进程关闭。原GPU慢帧、a17/a7/a12未定位，近战短按行为本轮未改；连续新chunk淘汰/全世界实走、长期内存、真实攻城与资源经济仍需推进，整体目标保持进行中。

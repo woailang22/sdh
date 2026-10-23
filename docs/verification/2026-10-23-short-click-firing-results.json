@@ -1,0 +1,944 @@
+{
+  "date": "2026-10-23",
+  "baseline": "063abe80d99edd5f365e9b5ca54c1456b84a99d7",
+  "scope": "Ready ranged mouse clicks must not depend on an intervening animation update; preserve held cadence, ammo and actual target direction. Not overall performance acceptance.",
+  "runtime": {
+    "files": [
+      "src/game/IsometricEngine.ts"
+    ],
+    "changes": [
+      "A ready left mousedown updates aim from actual canvas coordinates and immediately attempts the existing ranged shot.",
+      "Held update reuses the exact same shot method and nextShotAt cooldown advanced before ammo/action delivery.",
+      "Input shot exceptions stop held input, enter the existing bounded diagnostic store with source=input/phase=fire, and show an error; no automatic retry or guessed ammo rollback."
+    ],
+    "unchanged": [
+      "weapon stats/fire interval and spread",
+      "authoritative server validation and single pending fire slot",
+      "map/loot/economy/durable storage",
+      "automatic and manual movement",
+      "melee update behavior"
+    ],
+    "noPendingReleasedClickQueue": true
+  },
+  "checks": {
+    "newBusinessCases": 11,
+    "totalFiles": 41,
+    "totalTests": 586,
+    "commands": [
+      "npm test",
+      "npm run lint",
+      "npm run build"
+    ],
+    "types": "passed",
+    "build": "passed",
+    "clientAsset": "index-gRKkYjdQ.js",
+    "buildWarnings": "Existing Vite future native-loader warning and bundle-size advisory retained.",
+    "newCoverage": [
+      "Actual canvas down/window up with no intervening update spends one round and sends exactly one action aimed at the clicked remote target; next frames do not duplicate.",
+      "Repeat press/held update share original120ms cooldown; released early cooldown click does not fire later.",
+      "Blocked, build, editor, empty and unarmed inputs do not invent a ranged shot.",
+      "Blur/focus stops held input without replaying the accepted press.",
+      "Injected onGameAction exception is diagnosed, cancels held input, does not automatically retry, and a later independent click can try again."
+    ],
+    "failFirst": {
+      "shortClick": "Original ready down/up between updates left ammo30 instead of29.",
+      "inputException": "The actual listener body initially propagated Injected action failure; fixed branch records/stops it."
+    },
+    "negativeControls": [
+      {
+        "variant": "press",
+        "assertion": "Removing immediate press attempt leaves ammo30 instead of29.",
+        "failed": true
+      },
+      {
+        "variant": "cooldown",
+        "assertion": "Removing shared nextShotAt guard produces extra shots/ammo loss.",
+        "failed": true
+      },
+      {
+        "variant": "aim",
+        "assertion": "Removing press aim refresh emits old anglePI/2 without expected targetId.",
+        "failed": true
+      },
+      {
+        "variant": "error-stop",
+        "assertion": "Removing input-failure clearKeys leaves isFiring=true.",
+        "failed": true
+      }
+    ],
+    "sourceRestoredAfterEachNegative": true,
+    "restoredFocusedCases": 14,
+    "methodCorrections": [
+      "Initial aim negative passed because test old angle0 equalled the expected click angle. Test now starts atPI/2, and effective negative fails actual action angle/target assertion; initial ineffective result preserved.",
+      "First error-stop negative script did not match CRLF source and never ran that variant; corrected regex variant genuinely failed, source finally restored."
+    ],
+    "independentReview": "Final independent read-only review found noP1/P2. It matched all36 native pulse rows, three zero-update event snapshots, both pulse audits, a23 business steps/audit, effective negative logs and actual build asset to original evidence; checked exported documents for credentials. Reviewer did not run tests, load or browsers."
+  },
+  "nativePulse": {
+    "fixture": "Normal100HP/100shield preseeded combat actors,30 starting ammo, real production server/SQLite, three real headless Chrome instances at1920x1080/DPR1. Actual mouse clicks at empty world ground; ordinary nativeR reload; no frame delay, clock, speed or world overrides. Event/update probes add overhead; not a performance measurement.",
+    "baseline": {
+      "fixture": "native-player-duel-20261023-a20",
+      "runnerCompleted": true,
+      "behaviorAccepted": false,
+      "browser": {
+        "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/155.0.0.0 Safari/537.36",
+        "width": 1920,
+        "height": 1080,
+        "dpr": 1,
+        "hidden": false
+      },
+      "trials": [
+        {
+          "trial": 1,
+          "requestedHoldMs": 40,
+          "actualHoldMs": 57.3999999910593,
+          "updatesBetween": 1,
+          "cooldownReady": true,
+          "clientRounds": 1,
+          "serverRounds": 1,
+          "fireSends": 1,
+          "clientAmmo": 29,
+          "serverAmmo": 29,
+          "connected": true,
+          "errors": [],
+          "diagnostics": []
+        },
+        {
+          "trial": 2,
+          "requestedHoldMs": 40,
+          "actualHoldMs": 44.70000000298023,
+          "updatesBetween": 3,
+          "cooldownReady": true,
+          "clientRounds": 1,
+          "serverRounds": 1,
+          "fireSends": 1,
+          "clientAmmo": 28,
+          "serverAmmo": 28,
+          "connected": true,
+          "errors": [],
+          "diagnostics": []
+        },
+        {
+          "trial": 3,
+          "requestedHoldMs": 40,
+          "actualHoldMs": 51.20000000298023,
+          "updatesBetween": 4,
+          "cooldownReady": true,
+          "clientRounds": 1,
+          "serverRounds": 1,
+          "fireSends": 1,
+          "clientAmmo": 27,
+          "serverAmmo": 27,
+          "connected": true,
+          "errors": [],
+          "diagnostics": []
+        },
+        {
+          "trial": 4,
+          "requestedHoldMs": 40,
+          "actualHoldMs": 44.599999994039536,
+          "updatesBetween": 5,
+          "cooldownReady": true,
+          "clientRounds": 1,
+          "serverRounds": 1,
+          "fireSends": 1,
+          "clientAmmo": 26,
+          "serverAmmo": 26,
+          "connected": true,
+          "errors": [],
+          "diagnostics": []
+        },
+        {
+          "trial": 5,
+          "requestedHoldMs": 40,
+          "actualHoldMs": 44.599999994039536,
+          "updatesBetween": 7,
+          "cooldownReady": true,
+          "clientRounds": 1,
+          "serverRounds": 1,
+          "fireSends": 1,
+          "clientAmmo": 25,
+          "serverAmmo": 25,
+          "connected": true,
+          "errors": [],
+          "diagnostics": []
+        },
+        {
+          "trial": 6,
+          "requestedHoldMs": 40,
+          "actualHoldMs": 50.79999999701977,
+          "updatesBetween": 6,
+          "cooldownReady": true,
+          "clientRounds": 1,
+          "serverRounds": 1,
+          "fireSends": 1,
+          "clientAmmo": 24,
+          "serverAmmo": 24,
+          "connected": true,
+          "errors": [],
+          "diagnostics": []
+        },
+        {
+          "trial": 7,
+          "requestedHoldMs": 40,
+          "actualHoldMs": 42.8999999910593,
+          "updatesBetween": 4,
+          "cooldownReady": true,
+          "clientRounds": 1,
+          "serverRounds": 1,
+          "fireSends": 1,
+          "clientAmmo": 23,
+          "serverAmmo": 23,
+          "connected": true,
+          "errors": [],
+          "diagnostics": []
+        },
+        {
+          "trial": 8,
+          "requestedHoldMs": 40,
+          "actualHoldMs": 47.599999994039536,
+          "updatesBetween": 3,
+          "cooldownReady": true,
+          "clientRounds": 1,
+          "serverRounds": 1,
+          "fireSends": 1,
+          "clientAmmo": 22,
+          "serverAmmo": 22,
+          "connected": true,
+          "errors": [],
+          "diagnostics": []
+        },
+        {
+          "trial": 9,
+          "requestedHoldMs": 40,
+          "actualHoldMs": 58.099999994039536,
+          "updatesBetween": 3,
+          "cooldownReady": true,
+          "clientRounds": 1,
+          "serverRounds": 1,
+          "fireSends": 1,
+          "clientAmmo": 21,
+          "serverAmmo": 21,
+          "connected": true,
+          "errors": [],
+          "diagnostics": []
+        },
+        {
+          "trial": 10,
+          "requestedHoldMs": 40,
+          "actualHoldMs": 48.8999999910593,
+          "updatesBetween": 4,
+          "cooldownReady": true,
+          "clientRounds": 1,
+          "serverRounds": 1,
+          "fireSends": 1,
+          "clientAmmo": 20,
+          "serverAmmo": 20,
+          "connected": true,
+          "errors": [],
+          "diagnostics": []
+        },
+        {
+          "trial": 11,
+          "requestedHoldMs": 40,
+          "actualHoldMs": 43.29999999701977,
+          "updatesBetween": 4,
+          "cooldownReady": true,
+          "clientRounds": 1,
+          "serverRounds": 1,
+          "fireSends": 1,
+          "clientAmmo": 19,
+          "serverAmmo": 19,
+          "connected": true,
+          "errors": [],
+          "diagnostics": []
+        },
+        {
+          "trial": 12,
+          "requestedHoldMs": 40,
+          "actualHoldMs": 44.70000000298023,
+          "updatesBetween": 2,
+          "cooldownReady": true,
+          "clientRounds": 1,
+          "serverRounds": 1,
+          "fireSends": 1,
+          "clientAmmo": 18,
+          "serverAmmo": 18,
+          "connected": true,
+          "errors": [],
+          "diagnostics": []
+        },
+        {
+          "trial": 13,
+          "requestedHoldMs": 5,
+          "actualHoldMs": 8.299999997019768,
+          "updatesBetween": 1,
+          "cooldownReady": true,
+          "clientRounds": 1,
+          "serverRounds": 1,
+          "fireSends": 1,
+          "clientAmmo": 17,
+          "serverAmmo": 17,
+          "connected": true,
+          "errors": [],
+          "diagnostics": []
+        },
+        {
+          "trial": 14,
+          "requestedHoldMs": 5,
+          "actualHoldMs": 17.5,
+          "updatesBetween": 1,
+          "cooldownReady": true,
+          "clientRounds": 1,
+          "serverRounds": 1,
+          "fireSends": 1,
+          "clientAmmo": 16,
+          "serverAmmo": 16,
+          "connected": true,
+          "errors": [],
+          "diagnostics": []
+        },
+        {
+          "trial": 15,
+          "requestedHoldMs": 5,
+          "actualHoldMs": 14.299999997019768,
+          "updatesBetween": 1,
+          "cooldownReady": true,
+          "clientRounds": 1,
+          "serverRounds": 1,
+          "fireSends": 1,
+          "clientAmmo": 15,
+          "serverAmmo": 15,
+          "connected": true,
+          "errors": [],
+          "diagnostics": []
+        },
+        {
+          "trial": 16,
+          "requestedHoldMs": 5,
+          "actualHoldMs": 13.700000002980232,
+          "updatesBetween": 0,
+          "cooldownReady": true,
+          "clientRounds": 0,
+          "serverRounds": 0,
+          "fireSends": 0,
+          "clientAmmo": 15,
+          "serverAmmo": 15,
+          "connected": true,
+          "errors": [],
+          "diagnostics": [],
+          "mouseEvents": [
+            {
+              "kind": "mousedown",
+              "at": 17914.79999999702,
+              "firing": true,
+              "ammo": 15,
+              "nextShotAt": 17562.29999999702,
+              "blocked": false,
+              "ranged": true,
+              "build": false
+            },
+            {
+              "kind": "mouseup",
+              "at": 17928.5,
+              "firing": false,
+              "ammo": 15,
+              "nextShotAt": 17562.29999999702,
+              "blocked": false,
+              "ranged": true,
+              "build": false
+            }
+          ]
+        }
+      ],
+      "audit": {
+        "fixture": "native-player-duel-20261023-a20",
+        "trials": 16,
+        "paidRounds": 15,
+        "fireSends": 15,
+        "ownerAmmo": 15,
+        "assetsUnchanged": true,
+        "equipmentPreserved": true,
+        "inventoryPreserved": true,
+        "actorsUndamaged": true,
+        "buildings": 5675,
+        "defensiveAmmo": 540,
+        "integrity": "ok",
+        "consistentBackupGameWorldRestore": "passed",
+        "note": "Preseeded normal combat actors, empty-ground clicks; no PvP/earned progression/capacity/performance claim."
+      },
+      "assetNote": "Ran before building this source change, on preceding production build. No bundle filename was captured inside a20 itself."
+    },
+    "final": {
+      "fixture": "native-player-duel-20261023-a22",
+      "runnerCompleted": true,
+      "behaviorAccepted": true,
+      "browser": {
+        "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/155.0.0.0 Safari/537.36",
+        "width": 1920,
+        "height": 1080,
+        "dpr": 1,
+        "hidden": false
+      },
+      "asset": "index-gRKkYjdQ.js",
+      "zeroUpdateClicks": 2,
+      "trials": [
+        {
+          "trial": 1,
+          "requestedHoldMs": 40,
+          "actualHoldMs": 56.1000000089407,
+          "updatesBetween": 1,
+          "cooldownReady": true,
+          "clientRounds": 1,
+          "serverRounds": 1,
+          "fireSends": 1,
+          "clientAmmo": 29,
+          "serverAmmo": 29,
+          "connected": true,
+          "errors": [],
+          "diagnostics": []
+        },
+        {
+          "trial": 2,
+          "requestedHoldMs": 40,
+          "actualHoldMs": 44.29999999701977,
+          "updatesBetween": 2,
+          "cooldownReady": true,
+          "clientRounds": 1,
+          "serverRounds": 1,
+          "fireSends": 1,
+          "clientAmmo": 28,
+          "serverAmmo": 28,
+          "connected": true,
+          "errors": [],
+          "diagnostics": []
+        },
+        {
+          "trial": 3,
+          "requestedHoldMs": 40,
+          "actualHoldMs": 43.79999999701977,
+          "updatesBetween": 3,
+          "cooldownReady": true,
+          "clientRounds": 1,
+          "serverRounds": 1,
+          "fireSends": 1,
+          "clientAmmo": 27,
+          "serverAmmo": 27,
+          "connected": true,
+          "errors": [],
+          "diagnostics": []
+        },
+        {
+          "trial": 4,
+          "requestedHoldMs": 40,
+          "actualHoldMs": 46.20000000298023,
+          "updatesBetween": 9,
+          "cooldownReady": true,
+          "clientRounds": 1,
+          "serverRounds": 1,
+          "fireSends": 1,
+          "clientAmmo": 26,
+          "serverAmmo": 26,
+          "connected": true,
+          "errors": [],
+          "diagnostics": []
+        },
+        {
+          "trial": 5,
+          "requestedHoldMs": 40,
+          "actualHoldMs": 41.20000000298023,
+          "updatesBetween": 7,
+          "cooldownReady": true,
+          "clientRounds": 1,
+          "serverRounds": 1,
+          "fireSends": 1,
+          "clientAmmo": 25,
+          "serverAmmo": 25,
+          "connected": true,
+          "errors": [],
+          "diagnostics": []
+        },
+        {
+          "trial": 6,
+          "requestedHoldMs": 40,
+          "actualHoldMs": 50.79999999701977,
+          "updatesBetween": 6,
+          "cooldownReady": true,
+          "clientRounds": 1,
+          "serverRounds": 1,
+          "fireSends": 1,
+          "clientAmmo": 24,
+          "serverAmmo": 24,
+          "connected": true,
+          "errors": [],
+          "diagnostics": []
+        },
+        {
+          "trial": 7,
+          "requestedHoldMs": 40,
+          "actualHoldMs": 53.900000005960464,
+          "updatesBetween": 4,
+          "cooldownReady": true,
+          "clientRounds": 1,
+          "serverRounds": 1,
+          "fireSends": 1,
+          "clientAmmo": 23,
+          "serverAmmo": 23,
+          "connected": true,
+          "errors": [],
+          "diagnostics": []
+        },
+        {
+          "trial": 8,
+          "requestedHoldMs": 40,
+          "actualHoldMs": 46.20000000298023,
+          "updatesBetween": 2,
+          "cooldownReady": true,
+          "clientRounds": 1,
+          "serverRounds": 1,
+          "fireSends": 1,
+          "clientAmmo": 22,
+          "serverAmmo": 22,
+          "connected": true,
+          "errors": [],
+          "diagnostics": []
+        },
+        {
+          "trial": 9,
+          "requestedHoldMs": 40,
+          "actualHoldMs": 47.79999999701977,
+          "updatesBetween": 6,
+          "cooldownReady": true,
+          "clientRounds": 1,
+          "serverRounds": 1,
+          "fireSends": 1,
+          "clientAmmo": 21,
+          "serverAmmo": 21,
+          "connected": true,
+          "errors": [],
+          "diagnostics": []
+        },
+        {
+          "trial": 10,
+          "requestedHoldMs": 40,
+          "actualHoldMs": 50.6000000089407,
+          "updatesBetween": 5,
+          "cooldownReady": true,
+          "clientRounds": 1,
+          "serverRounds": 1,
+          "fireSends": 1,
+          "clientAmmo": 20,
+          "serverAmmo": 20,
+          "connected": true,
+          "errors": [],
+          "diagnostics": []
+        },
+        {
+          "trial": 11,
+          "requestedHoldMs": 40,
+          "actualHoldMs": 53.1000000089407,
+          "updatesBetween": 6,
+          "cooldownReady": true,
+          "clientRounds": 1,
+          "serverRounds": 1,
+          "fireSends": 1,
+          "clientAmmo": 19,
+          "serverAmmo": 19,
+          "connected": true,
+          "errors": [],
+          "diagnostics": []
+        },
+        {
+          "trial": 12,
+          "requestedHoldMs": 40,
+          "actualHoldMs": 54,
+          "updatesBetween": 6,
+          "cooldownReady": true,
+          "clientRounds": 1,
+          "serverRounds": 1,
+          "fireSends": 1,
+          "clientAmmo": 18,
+          "serverAmmo": 18,
+          "connected": true,
+          "errors": [],
+          "diagnostics": []
+        },
+        {
+          "trial": 13,
+          "requestedHoldMs": 5,
+          "actualHoldMs": 9.600000008940697,
+          "updatesBetween": 1,
+          "cooldownReady": true,
+          "clientRounds": 1,
+          "serverRounds": 1,
+          "fireSends": 1,
+          "clientAmmo": 17,
+          "serverAmmo": 17,
+          "connected": true,
+          "errors": [],
+          "diagnostics": []
+        },
+        {
+          "trial": 14,
+          "requestedHoldMs": 5,
+          "actualHoldMs": 28.900000005960464,
+          "updatesBetween": 1,
+          "cooldownReady": true,
+          "clientRounds": 1,
+          "serverRounds": 1,
+          "fireSends": 1,
+          "clientAmmo": 16,
+          "serverAmmo": 16,
+          "connected": true,
+          "errors": [],
+          "diagnostics": []
+        },
+        {
+          "trial": 15,
+          "requestedHoldMs": 5,
+          "actualHoldMs": 16.099999994039536,
+          "updatesBetween": 2,
+          "cooldownReady": true,
+          "clientRounds": 1,
+          "serverRounds": 1,
+          "fireSends": 1,
+          "clientAmmo": 15,
+          "serverAmmo": 15,
+          "connected": true,
+          "errors": [],
+          "diagnostics": []
+        },
+        {
+          "trial": 16,
+          "requestedHoldMs": 5,
+          "actualHoldMs": 9.200000002980232,
+          "updatesBetween": 1,
+          "cooldownReady": true,
+          "clientRounds": 1,
+          "serverRounds": 1,
+          "fireSends": 1,
+          "clientAmmo": 14,
+          "serverAmmo": 14,
+          "connected": true,
+          "errors": [],
+          "diagnostics": []
+        },
+        {
+          "trial": 17,
+          "requestedHoldMs": 0,
+          "actualHoldMs": 22.299999997019768,
+          "updatesBetween": 1,
+          "cooldownReady": true,
+          "clientRounds": 1,
+          "serverRounds": 1,
+          "fireSends": 1,
+          "clientAmmo": 13,
+          "serverAmmo": 13,
+          "connected": true,
+          "errors": [],
+          "diagnostics": []
+        },
+        {
+          "trial": 18,
+          "requestedHoldMs": 0,
+          "actualHoldMs": 1.7000000029802322,
+          "updatesBetween": 0,
+          "cooldownReady": true,
+          "clientRounds": 1,
+          "serverRounds": 1,
+          "fireSends": 1,
+          "clientAmmo": 12,
+          "serverAmmo": 12,
+          "connected": true,
+          "errors": [],
+          "diagnostics": [],
+          "mouseEvents": [
+            {
+              "kind": "mousedown",
+              "at": 18830.90000000596,
+              "firing": true,
+              "ammo": 12,
+              "nextShotAt": 18950.20000000298,
+              "blocked": false,
+              "ranged": true,
+              "build": false
+            },
+            {
+              "kind": "mouseup",
+              "at": 18832.60000000894,
+              "firing": false,
+              "ammo": 12,
+              "nextShotAt": 18950.20000000298,
+              "blocked": false,
+              "ranged": true,
+              "build": false
+            }
+          ]
+        },
+        {
+          "trial": 19,
+          "requestedHoldMs": 0,
+          "actualHoldMs": 6.700000002980232,
+          "updatesBetween": 1,
+          "cooldownReady": true,
+          "clientRounds": 1,
+          "serverRounds": 1,
+          "fireSends": 1,
+          "clientAmmo": 11,
+          "serverAmmo": 11,
+          "connected": true,
+          "errors": [],
+          "diagnostics": []
+        },
+        {
+          "trial": 20,
+          "requestedHoldMs": 0,
+          "actualHoldMs": 1.9000000059604645,
+          "updatesBetween": 0,
+          "cooldownReady": true,
+          "clientRounds": 1,
+          "serverRounds": 1,
+          "fireSends": 1,
+          "clientAmmo": 10,
+          "serverAmmo": 10,
+          "connected": true,
+          "errors": [],
+          "diagnostics": [],
+          "mouseEvents": [
+            {
+              "kind": "mousedown",
+              "at": 19803.70000000298,
+              "firing": true,
+              "ammo": 10,
+              "nextShotAt": 19923,
+              "blocked": false,
+              "ranged": true,
+              "build": false
+            },
+            {
+              "kind": "mouseup",
+              "at": 19805.60000000894,
+              "firing": false,
+              "ammo": 10,
+              "nextShotAt": 19923,
+              "blocked": false,
+              "ranged": true,
+              "build": false
+            }
+          ]
+        }
+      ],
+      "exceptions": [],
+      "hmr": [],
+      "audit": {
+        "fixture": "native-player-duel-20261023-a22",
+        "trials": 20,
+        "paidRounds": 20,
+        "fireSends": 20,
+        "ownerAmmo": 10,
+        "assetsUnchanged": true,
+        "equipmentPreserved": true,
+        "inventoryPreserved": true,
+        "actorsUndamaged": true,
+        "buildings": 5675,
+        "defensiveAmmo": 540,
+        "integrity": "ok",
+        "consistentBackupGameWorldRestore": "passed",
+        "note": "Preseeded normal combat actors, empty-ground clicks; no PvP/earned progression/capacity/performance claim."
+      }
+    },
+    "interpretation": [
+      "Baseline12 requested40ms clicks each fired once. Of4 requested5ms clicks, the last actually lasted13.7ms with no update between down/up; client spent0, sent0, server spent0. This confirms an input sampling gap.",
+      "Final12 requested40ms +4 requested5ms +4 requested0ms clicks each spent/sent exactly one; two zero-update clicks were in the additional requested0ms group and actually lasted1.7/1.9ms. These are correctness probes, not representative human click frequencies.",
+      "Final20-trial mix differs from baseline16-trial mix; do not report a comparative failure rate, latency gain or capacity improvement.",
+      "Baseline runner success only means diagnostic completion, not behavior accepted. Final explicitly asserts behaviorAccepted.",
+      "Earlier a17 untraced40ms first-shot timeout is still unexplained; passing a23 does not prove it had this cause.",
+      "All trial counters are exported; detailed mouse snapshots are exported only for zero-update trials. Full bounded event traces remain in owned ignored QA results."
+    ],
+    "excludedStartupFailures": [
+      {
+        "fixture": "native-player-duel-20261023-a19",
+        "cause": "Readiness expected loaded30 rounds without pressingR; no input trials ran. QA fixture mistake, not a product failure."
+      },
+      {
+        "fixture": "native-player-duel-20261023-a21",
+        "cause": "DevToolsActivePort transient EBUSY while starting a browser, no input trials. Failed result preserved. Only exact owned profile browser PID45556 was verified and closed, then driver exited1. Fresh a22 waits on that same browser/file through ENOENT/EBUSY and cleans partial startup failures."
+      }
+    ]
+  },
+  "nativeWorldRegression": {
+    "fixture": {
+      "synthetic": true,
+      "mode": "world",
+      "normalHp": 100,
+      "shield": 100,
+      "weapon": "rifle",
+      "victimArmor": "vest",
+      "buildings": 5675,
+      "note": "Prepared combat fixture, ordinary HP and real mouse/keys. No earned-economy or sustained-capacity claim."
+    },
+    "id": "native-player-duel-20261023-a23",
+    "success": true,
+    "steps": [
+      {
+        "step": "native-world-chunk-roundtrip",
+        "windows": [
+          {
+            "window": "-24,-29",
+            "client": {
+              "x": -768,
+              "y": -899.8915799999999
+            },
+            "server": {
+              "x": -768,
+              "y": -899.8915799999999
+            },
+            "errors": []
+          },
+          {
+            "window": "-25,-28",
+            "client": {
+              "x": -768.0084517126268,
+              "y": -895.1035892068741
+            },
+            "server": {
+              "x": -768,
+              "y": -895.1951599999999
+            },
+            "errors": []
+          },
+          {
+            "window": "-25,-28",
+            "client": {
+              "x": -768.0009313883718,
+              "y": -895.8407330084539
+            },
+            "server": {
+              "x": -768.0014736027525,
+              "y": -895.7480145938667
+            },
+            "errors": []
+          }
+        ]
+      },
+      {
+        "step": "normal-pair-ready",
+        "hp": 100,
+        "shield": 100,
+        "map": "world",
+        "client": {
+          "x": -768,
+          "y": -892
+        },
+        "width": 1920,
+        "height": 1080,
+        "dpr": 1,
+        "hidden": false
+      },
+      {
+        "step": "native-first-hit",
+        "hp": 95,
+        "shield": 0,
+        "visualDamage": [
+          105
+        ],
+        "errors": []
+      },
+      {
+        "step": "native-respawn",
+        "state": {
+          "hp": 100,
+          "shield": 0,
+          "map": "world",
+          "x": 0,
+          "y": 1,
+          "correction": true,
+          "request": false,
+          "at": 11105.90000000596
+        },
+        "client": {
+          "x": 0,
+          "y": 1,
+          "map": "world"
+        },
+        "inventory": 0,
+        "ammo": 0,
+        "errors": [],
+        "diagnostics": []
+      },
+      {
+        "step": "native-post-respawn-walk",
+        "client": {
+          "x": -0.006702166545366048,
+          "y": 4.914052679740081
+        },
+        "server": {
+          "x": 0,
+          "y": 4.407839999999995
+        },
+        "errors": []
+      },
+      {
+        "step": "native-death-loot-taken",
+        "wood": 6,
+        "ammo": 58,
+        "food": 2,
+        "serverDrops": 0,
+        "ghost": false,
+        "targetedShots": 2,
+        "errors": [],
+        "diagnostics": []
+      },
+      {
+        "step": "remote-bag-taken-observer",
+        "drops": 0,
+        "hasTakeAll": false,
+        "blocked": false,
+        "errors": []
+      },
+      {
+        "step": "native-observer-walk-after-remote-loot",
+        "errors": [],
+        "blocked": false,
+        "wood": 0,
+        "ammo": 0,
+        "inventory": 0
+      }
+    ],
+    "exceptions": [],
+    "hmr": [],
+    "audit": {
+      "fixture": "native-player-duel-20261023-a23",
+      "mode": "world",
+      "browsers": 3,
+      "ordinaryHp": 100,
+      "shieldAtStart": 100,
+      "paidShooterRounds": 2,
+      "ownerAmmo": 58,
+      "ownerWood": 6,
+      "ownerFood": 2,
+      "victimInventoryEmpty": true,
+      "victimRespawnWalkPersisted": true,
+      "noRemainingDrops": true,
+      "buildings": 5675,
+      "defensiveAmmo": 540,
+      "sharedAssetsUnchanged": true,
+      "equipmentPreserved": true,
+      "integrity": "ok",
+      "consistentBackupGameWorldRestore": "passed",
+      "nativeCapacityClaim": false
+    },
+    "limits": [
+      "Preseeded weapons/resources and normal100HP/100shield, not earned survival/economy or sustained capacity.",
+      "Actual cross-chunk right-click movement, two targeted40ms clicks, death correction/respawn walk, conserved bag pickup and observer panel closure/walk are covered.",
+      "No claim of zero world corrections: death explicitly requires an authoritative correction."
+    ]
+  },
+  "safety": "Only memory/temp or owned ignored synthetic databases, including their actual consistent SQLite backups. Real data/sdc.sqlite never opened. No credentials/cookies/raw browser trace exported. Owned QA processes closed.",
+  "remaining": [
+    "Existing graphics/frame stalls and overall performance gates remain open.",
+    "Earlier a17 shot timeout, a7 respawn-walk failure and a12 replay observation failure remain independently unexplained.",
+    "No melee short-press behavior change or broad input queue introduced.",
+    "Full-world traversal/new-chunk eviction/long memory, true siege capacity and earned survival/resource economy require further work."
+  ]
+}
