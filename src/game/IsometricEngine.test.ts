@@ -2,6 +2,9 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { IsometricEngine, type GameCallbacks } from './IsometricEngine';
 import { buildCompoundWalls } from './compound';
 import * as houseRenderer from './houseRenderer';
+import { isPositionBlocked } from './navigation';
+import { createMemoryDb } from '../../server/db';
+import { GameWorld, type WorldRules } from '../../server/worldState';
 
 vi.mock('../audio/soundManager', () => ({ soundManager: { playLevelUp: vi.fn(), playHit: vi.fn(), playGunshot: vi.fn(), playReload: vi.fn() } }));
 
@@ -38,6 +41,124 @@ function stubImageLoading() {
     complete = false; naturalWidth = 512; naturalHeight = 512; src = ''; decoding = '';
   });
 }
+
+describe('click-to-move arrival', () => {
+  it.each([false, true])('keeps actual low-frame-rate sync packets authoritative while turning around a yard (dash=%s)', dash => {
+    const { engine } = setup(); engine.warpToMap('home_self', 0, -5);
+    const walls = buildCompoundWalls({ idPrefix: 'yard', cx: 0, cy: 0, w: 6, h: 6, wallType: 'wood_wall', wallName: '墙', ownerName: '测试', doorSide: 'S', doorType: 'door', doorName: '门', doorExtra: { isOpen: true } });
+    engine.buildings = walls; engine.monsters = []; engine.interactables = [];
+    const rules: WorldRules = { nodeAt: () => undefined, nodesNear: () => [], buildingsNear: () => [], campSiteAllowed: () => false, migrate: (_mapId, x, y) => ({ mapId: 'world', x, y }), monstersNear: () => [] };
+    let time = 10000, packets = 0, dashedAtCorner = false, dashCrossedCorner = false;
+    const game = new GameWorld(createMemoryDb(), rules, () => time); game.connect('self', '测试');
+    const player = game.state.players.self;
+    Object.assign(player, { mapId: 'home_self', x: 0, y: -5, moveAt: time });
+    for (const wall of walls) game.state.buildings[wall.id] = { ...wall, mapId: 'home_self' };
+    Object.assign((engine as any).callbacks, { onGameAction: vi.fn(), onPlayerSyncNeeded: (packet: any) => {
+      packets++;
+      if (packet.isDashing && player.x > -4 && Math.abs(player.y + 3.5) < 1e-6 && Math.abs(packet.x + 4) < 1e-6 && packet.y > -3.5) dashCrossedCorner = true;
+      expect(game.move('self', packet), JSON.stringify({ packet, from: { x: player.x, y: player.y } })).toBe(true);
+      expect(isPositionBlocked(player.x, player.y, walls)).toBe(false);
+    } });
+    engine.navigateTo(0, 0);
+    expect((engine as any).movePath.some((point: { y: number }) => point.y > 3)).toBe(true);
+    for (let i = 0; i < 150; i++) {
+      const path = (engine as any).movePath as { x: number; y: number }[];
+      if (dash && !dashedAtCorner && path.length > 1) {
+        const [next] = path;
+        if (next.x === -4 && next.y === -3.5 && Math.hypot(next.x - engine.player.x, next.y - engine.player.y) < .8) { engine.performDash(); dashedAtCorner = true; }
+      }
+      time += 100; (engine as any).update(.1);
+    }
+    expect(packets).toBe(150);
+    expect(dashedAtCorner).toBe(dash);
+    expect(dashCrossedCorner).toBe(dash);
+    expect(Math.hypot(player.x, player.y)).toBeLessThanOrEqual(.12);
+    expect((engine as any).targetMovePoint).toBeNull();
+  });
+
+  it.each([.016, .05, .1])('stops beside an occupied destination with%s-second updates and permits the following search to finish', dt => {
+    const { engine } = setup(), action = vi.fn();
+    engine.warpToMap('home_self', -3.15, 0);
+    (engine as any).callbacks.onGameAction = action;
+    engine.buildings = [{ id: 'storage', type: 'storage_box', name: '仓库', x: 0, y: 0, hp: 100, maxHp: 100, level: 1 }];
+    engine.monsters = []; engine.interactables = [];
+    engine.navigateTo(0, 0);
+    for (let i = 0; i < Math.ceil(8 / dt); i++) (engine as any).update(dt);
+    expect(isPositionBlocked(engine.player.x, engine.player.y, engine.buildings)).toBe(false);
+    expect(Math.hypot(engine.player.x, engine.player.y)).toBeLessThanOrEqual(1.2);
+    expect((engine as any).targetMovePoint).toBeNull();
+    const stopped = { x: engine.player.x, y: engine.player.y };
+    for (let i = 0; i < 20; i++) (engine as any).update(.05);
+    expect({ x: engine.player.x, y: engine.player.y }).toEqual(stopped);
+    const target = { id: 'cabinet', type: 'box', x: -1, y: 1, searchDuration: .1 };
+    Object.assign(engine as any, { isLooting: true, lootTarget: target, lootingTimer: .1 });
+    (engine as any).update(.2);
+    expect(action).toHaveBeenCalledWith('search', { targetId: target.id });
+    expect(engine.isLooting).toBe(false);
+  });
+
+  it('still walks through an open entrance to a free indoor destination and cancels a closed route', () => {
+    const { engine } = setup(); engine.warpToMap('home_self', 0, 5);
+    const walls = buildCompoundWalls({ idPrefix: 'room', cx: 0, cy: 0, w: 6, h: 6, wallType: 'wood_wall', wallName: '墙', ownerName: '测试', doorSide: 'S', doorType: 'door', doorName: '门', doorExtra: { isOpen: true } });
+    engine.buildings = walls; engine.monsters = []; engine.interactables = [];
+    (engine as any).callbacks.onGameAction = vi.fn();
+    engine.navigateTo(0, 0);
+    for (let i = 0; i < 200; i++) { (engine as any).update(.02); expect(isPositionBlocked(engine.player.x, engine.player.y, walls)).toBe(false); }
+    expect(Math.hypot(engine.player.x, engine.player.y)).toBeLessThanOrEqual(.12);
+    expect((engine as any).targetMovePoint).toBeNull();
+    engine.player.y = 5; walls.find(b => b.type === 'door')!.isOpen = false;
+    engine.navigateTo(0, 0);
+    expect((engine as any).targetMovePoint).toBeNull();
+    (engine as any).update(.1); expect(engine.player.y).toBe(5);
+  });
+
+  it.each(['keyboard', 'joystick'])('preserves normal%s speed and manual cancellation of click navigation', input => {
+    const { engine } = setup(); engine.warpToMap('home_self', -3, 0);
+    engine.buildings = []; engine.monsters = []; engine.interactables = [];
+    (engine as any).callbacks.onGameAction = vi.fn();
+    engine.navigateTo(-2.9, 0);
+    if (input === 'joystick') engine.virtualJoystick = { x: 1, y: .5 };
+    else engine.keys.d = true;
+    const start = { x: engine.player.x, y: engine.player.y };
+    (engine as any).update(.1);
+    expect(Math.hypot(engine.player.x - start.x, engine.player.y - start.y)).toBeCloseTo(.38, 10);
+    expect((engine as any).targetMovePoint).toBeNull();
+  });
+
+  it.each([.016, .05, .1])('carries unused movement across path points at%s-second steps without reducing walking speed', dt => {
+    const { engine } = setup(); engine.warpToMap('home_self', -10, 0);
+    engine.buildings = []; engine.monsters = []; engine.interactables = [];
+    (engine as any).callbacks.onGameAction = vi.fn();
+    engine.navigateTo(10, 0);
+    for (let i = 0; i < 10; i++) (engine as any).update(dt);
+    expect(engine.player.x).toBeCloseTo(-10 + 3.8 * dt * 10, 10);
+    expect(engine.player.y).toBe(0);
+  });
+
+  it('carries the dash movement budget across multiple path points without overshooting them', () => {
+    const { engine } = setup(); engine.warpToMap('home_self', -10, 0);
+    engine.buildings = []; engine.monsters = []; engine.interactables = [];
+    (engine as any).callbacks.onGameAction = vi.fn();
+    engine.navigateTo(10, 0); engine.performDash(); (engine as any).update(.1);
+    expect(engine.player.x).toBeCloseTo(-10 + 3.8 * 2.2 * .1, 10);
+    expect(engine.player.y).toBe(0);
+  });
+
+  it('does not spend leftover movement beyond a door closed after planning and resumes when it opens', () => {
+    const { engine } = setup(); engine.warpToMap('home_self', 0, 5);
+    const walls = buildCompoundWalls({ idPrefix: 'room', cx: 0, cy: 0, w: 6, h: 6, wallType: 'wood_wall', wallName: '墙', ownerName: '测试', doorSide: 'S', doorType: 'door', doorName: '门', doorExtra: { isOpen: true } });
+    engine.buildings = walls; engine.monsters = []; engine.interactables = [];
+    (engine as any).callbacks.onGameAction = vi.fn();
+    engine.navigateTo(0, 0); const door = walls.find(b => b.type === 'door')!; door.isOpen = false;
+    for (let i = 0; i < 30; i++) (engine as any).update(.1);
+    expect(engine.player.y).toBeGreaterThan(3.3);
+    expect(isPositionBlocked(engine.player.x, engine.player.y, walls)).toBe(false);
+    door.isOpen = true;
+    for (let i = 0; i < 50; i++) (engine as any).update(.1);
+    expect(Math.hypot(engine.player.x, engine.player.y)).toBeLessThanOrEqual(.12);
+    expect((engine as any).targetMovePoint).toBeNull();
+  });
+});
 
 describe('real-time firing cadence', () => {
   function armed() {

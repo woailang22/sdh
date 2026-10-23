@@ -1,0 +1,642 @@
+{
+  "date": "2026-10-23",
+  "baseline": "f5684d2b5b80c44c9a665f57ee1e7b8b8b6651b1",
+  "scope": "Click navigation arrival correctness; separate fresh-world static reachability audit. No graphics/performance acceptance claim.",
+  "runtime": {
+    "files": [
+      "src/game/IsometricEngine.ts"
+    ],
+    "changes": [
+      "Destination is the final reachable point returned by existing findPath, rather than the occupied original click.",
+      "Automatic movement limits each step to the next point and carries unused time into following points only after reaching it. Manual input still takes one original step.",
+      "Existing arrival check clears the target on the next update, preserving movement interruption of searching."
+    ],
+    "unchanged": [
+      "bounded A*",
+      "walking/dash speed",
+      "collision and authoritative server LOS/budgets",
+      "map definitions/layout",
+      "input rates",
+      "loot/economy/storage/durability"
+    ]
+  },
+  "checks": {
+    "newBusinessCases": 13,
+    "totalFiles": 41,
+    "totalTests": 575,
+    "types": "passed",
+    "build": "passed",
+    "clientAsset": "index-DIawADNw.js",
+    "coverage": [
+      "Storage arrival at16/50/100ms, stable position, subsequent actual search callback",
+      "Open room entry, closed route cancellation, door closed after planning and reopening",
+      "Keyboard/joystick override and original speed",
+      "Exact walking distance at16/50/100ms and actual dash distance across multiple points",
+      "Actual100ms update sync packets fed into unchanged GameWorld.move:150 accepted in each normal/dash route; dash packet crosses outer turn(-4,-3.5) with both coordinates changing"
+    ],
+    "negativeControls": [
+      {
+        "change": "Original blocked click retained",
+        "businessAssertion": "Arrival target remains set",
+        "failed": true
+      },
+      {
+        "change": "Unlimited step past next point",
+        "businessAssertion": "100ms arrival oscillates and never settles",
+        "failed": true
+      },
+      {
+        "change": "Unused movement time discarded",
+        "businessAssertion": "100ms straight movement x=-6.62 instead of-6.2; dash x=-9.5 instead of-9.164",
+        "failed": true
+      }
+    ],
+    "sourceRestoredAfterEachNegative": true,
+    "commands": [
+      "npm test",
+      "npm run lint",
+      "npm run build"
+    ],
+    "independentReadOnlyReview": "No P1/P2; reviewer checked runtime, exact outer-corner dash case, raw arrival/audit comparisons, evidence limits and actual build asset; did not rerun tests."
+  },
+  "nativeArrival": {
+    "fixture": "Empty 100HP synthetic character seeded at (0,7), real production world/SQLite; real right mouse button clicks; no live position/time/speed/world overrides or resource grants",
+    "browser": {
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/155.0.0.0 Safari/537.36",
+      "width": 1920,
+      "height": 1080,
+      "dpr": 1,
+      "hidden": false
+    },
+    "baseline": {
+      "fixture": "occupied-arrival-before-20261023-a2",
+      "success": false,
+      "arrival": {
+        "pos": {
+          "x": -0.6400286565231124,
+          "y": -0.03124802344808554
+        },
+        "serverPos": {
+          "x": -0.6400286565231124,
+          "y": -0.031247997322520288
+        },
+        "target": {
+          "x": -0.031250000000001776,
+          "y": -0.031248032139215454
+        },
+        "path": [],
+        "vx": 3.8,
+        "vy": -5.6360915720280826e-8,
+        "map": "world",
+        "errors": [],
+        "diagnostics": [],
+        "resources": {
+          "wood": 0,
+          "stone": 0,
+          "scrap": 0,
+          "parts": 0,
+          "food": 0,
+          "ammo": 0,
+          "c4": 0,
+          "medical": 0,
+          "credits": 0,
+          "shard": 0
+        }
+      },
+      "failure": "Occupied click never settles"
+    },
+    "final": {
+      "fixture": "occupied-arrival-after-20261023-a2",
+      "success": true,
+      "arrival": {
+        "pos": {
+          "x": -0.9999955214891727,
+          "y": 0.10819254074765897
+        },
+        "serverPos": {
+          "x": -0.9999955214891727,
+          "y": 0.10819254074765897
+        },
+        "target": null,
+        "path": [],
+        "vx": 0,
+        "vy": 0,
+        "map": "world",
+        "errors": [],
+        "diagnostics": [],
+        "resources": {
+          "wood": 0,
+          "stone": 0,
+          "scrap": 0,
+          "parts": 0,
+          "food": 0,
+          "ammo": 0,
+          "c4": 0,
+          "medical": 0,
+          "credits": 0,
+          "shard": 0
+        },
+        "corrections": []
+      },
+      "freeArrival": {
+        "pos": {
+          "x": 3.3792840809485765,
+          "y": 1.4995261526750423
+        },
+        "target": null
+      },
+      "interaction": {
+        "opened": true,
+        "blocked": true
+      },
+      "exceptions": [],
+      "hmr": [],
+      "stablePositionForOneAdditionalSecond": true
+    },
+    "scopeLimits": [
+      "Synthetic empty100HP account seeded at(0,7), no earned progression.",
+      "Correction/error snapshot is the occupied-core arrival section; do not claim a full-world zero-correction traversal.",
+      "Browser opens actual crafting UI; search completion is verified in actual engine tests, not a new browser loot/economy run."
+    ],
+    "excludedIntermediate": [
+      {
+        "fixture": "occupied-arrival-before-20261023-a1",
+        "reason": "QA incorrectly searched blocking buildings for an interactable workbench; not a product red."
+      },
+      {
+        "fixture": "occupied-arrival-after-20261023-a1",
+        "reason": "Cap-only intermediate runtime passed arrival but slowed automatic walking/dash; replaced before final."
+      }
+    ]
+  },
+  "nativeWorldRegression": {
+    "fixture": "Preseeded three-account combat fixture, normal100HP/100shield, weapons/materials supplied for testing;5675 buildings. Real mouse/keys, production server/SQLite; not earned survival, multiplayer capacity or timing benchmark.",
+    "retainedFailure": {
+      "fixture": "native-player-duel-20261023-a17",
+      "success": false,
+      "failure": "First shot did not reach expected server ammo29; no damage/error observed. No input timing trace in this run, so cause remains unknown.",
+      "completed": [
+        {
+          "step": "native-world-chunk-roundtrip",
+          "windows": [
+            {
+              "window": "-24,-29",
+              "client": {
+                "x": -768,
+                "y": -899.9147600000002
+              },
+              "server": {
+                "x": -768,
+                "y": -899.9147600000002
+              },
+              "errors": []
+            },
+            {
+              "window": "-25,-28",
+              "client": {
+                "x": -768.0064036981397,
+                "y": -895.1255371054193
+              },
+              "server": {
+                "x": -768.0064036981397,
+                "y": -895.1255371054193
+              },
+              "errors": []
+            },
+            {
+              "window": "-25,-28",
+              "client": {
+                "x": -768.0145685063749,
+                "y": -895.9300711390218
+              },
+              "server": {
+                "x": -768.0145685063749,
+                "y": -895.9300711390218
+              },
+              "errors": []
+            }
+          ]
+        }
+      ],
+      "noFailureErasure": true
+    },
+    "instrumentedFollowup": {
+      "fixture": "native-player-duel-20261023-a18",
+      "sameMouseHoldMs": 40,
+      "success": true,
+      "steps": [
+        {
+          "step": "native-world-chunk-roundtrip",
+          "windows": [
+            {
+              "window": "-24,-29",
+              "client": {
+                "x": -768,
+                "y": -899.8904399999983
+              },
+              "server": {
+                "x": -768,
+                "y": -899.6605399999985
+              },
+              "errors": []
+            },
+            {
+              "window": "-25,-28",
+              "client": {
+                "x": -768.0066829466762,
+                "y": -895.1236636446067
+              },
+              "server": {
+                "x": -768.0066829466762,
+                "y": -895.1236636446067
+              },
+              "errors": []
+            },
+            {
+              "window": "-25,-28",
+              "client": {
+                "x": -768.0218403094549,
+                "y": -895.9269318752288
+              },
+              "server": {
+                "x": -768.0218403094549,
+                "y": -895.9269318752288
+              },
+              "errors": []
+            }
+          ]
+        },
+        {
+          "step": "normal-pair-ready",
+          "hp": 100,
+          "shield": 100,
+          "map": "world",
+          "client": {
+            "x": -768,
+            "y": -892
+          },
+          "width": 1920,
+          "height": 1080,
+          "dpr": 1,
+          "hidden": false
+        },
+        {
+          "step": "native-first-hit",
+          "hp": 95,
+          "shield": 0,
+          "visualDamage": [
+            105
+          ],
+          "errors": []
+        },
+        {
+          "step": "native-respawn",
+          "state": {
+            "hp": 100,
+            "shield": 0,
+            "map": "world",
+            "x": 0,
+            "y": 1,
+            "correction": true,
+            "request": false,
+            "at": 10500.39999999106
+          },
+          "client": {
+            "x": 0,
+            "y": 1,
+            "map": "world"
+          },
+          "inventory": 0,
+          "ammo": 0,
+          "errors": [],
+          "diagnostics": []
+        },
+        {
+          "step": "native-post-respawn-walk",
+          "client": {
+            "x": -0.009447859308977367,
+            "y": 4.936911630797091
+          },
+          "server": {
+            "x": 0,
+            "y": 4.453819999999998
+          },
+          "errors": []
+        },
+        {
+          "step": "native-death-loot-taken",
+          "wood": 6,
+          "ammo": 58,
+          "food": 2,
+          "serverDrops": 0,
+          "ghost": false,
+          "targetedShots": 2,
+          "errors": [],
+          "diagnostics": []
+        },
+        {
+          "step": "remote-bag-taken-observer",
+          "drops": 0,
+          "hasTakeAll": false,
+          "blocked": false,
+          "errors": []
+        },
+        {
+          "step": "native-observer-walk-after-remote-loot",
+          "errors": [],
+          "blocked": false,
+          "wood": 0,
+          "ammo": 0,
+          "inventory": 0
+        }
+      ],
+      "exceptions": [],
+      "hmr": [],
+      "inputProbe": {
+        "actualTraceEntries": 104,
+        "mouseEvents": [
+          {
+            "kind": "mousedown",
+            "at": 11308.90000000596,
+            "firing": true,
+            "ammo": 30,
+            "blocked": false
+          },
+          {
+            "kind": "mouseup",
+            "at": 11368.79999999702,
+            "firing": false,
+            "ammo": 29,
+            "blocked": false
+          },
+          {
+            "kind": "mousedown",
+            "at": 12739.5,
+            "firing": true,
+            "ammo": 29,
+            "blocked": false
+          },
+          {
+            "kind": "mouseup",
+            "at": 12789,
+            "firing": false,
+            "ammo": 28,
+            "blocked": false
+          },
+          {
+            "kind": "mousedown",
+            "at": 21851.09999999404,
+            "firing": false,
+            "ammo": 28,
+            "blocked": true
+          },
+          {
+            "kind": "mouseup",
+            "at": 21856,
+            "firing": false,
+            "ammo": 28,
+            "blocked": true
+          }
+        ],
+        "note": "Read-only mouse event snapshots and update wrapper add observation overhead. Update recording stops when total trace length reaches100; mouse event listeners can still append (six mouse events total in this short run). A passing followup does not explain or fix a17.",
+        "updateEntryLimit": 100,
+        "mouseEventEntries": 6
+      }
+    },
+    "audit": {
+      "fixture": "native-player-duel-20261023-a18",
+      "mode": "world",
+      "browsers": 3,
+      "ordinaryHp": 100,
+      "shieldAtStart": 100,
+      "paidShooterRounds": 2,
+      "ownerAmmo": 58,
+      "ownerWood": 6,
+      "ownerFood": 2,
+      "victimInventoryEmpty": true,
+      "victimRespawnWalkPersisted": true,
+      "noRemainingDrops": true,
+      "buildings": 5675,
+      "defensiveAmmo": 540,
+      "sharedAssetsUnchanged": true,
+      "equipmentPreserved": true,
+      "integrity": "ok",
+      "consistentBackupGameWorldRestore": "passed",
+      "nativeCapacityClaim": false
+    }
+  },
+  "staticFreshWorld": {
+    "fixture": "world-connectivity-20261023-a2",
+    "method": "Generate all4096 chunks. Half-cell4-neighbor flood from(0,1) with shared buildingBounds plus player.22 radius; enforce actual WORLD_MIN+.5 inset, use actual server building queries/LOS for approaches within3. All15 landmark approaches checked within8. No DB/runtime/NPC/saved overrides or player camps.",
+    "gridPoints": 16777216,
+    "reachablePoints": 16648841,
+    "blockedPoints": 128333,
+    "buildings": 57255,
+    "nodes": 32525,
+    "groupedDoorHouses": 1866,
+    "ordinaryGroupedDoorHouses": 1864,
+    "inaccessibleOrdinaryGroupedDoorHouses": [],
+    "unreachableNodes": [
+      {
+        "id": "world:-19:-5:container:mtn_deep:deep_parts_box",
+        "name": "佣兵零件箱",
+        "type": "box",
+        "x": -577,
+        "y": -152,
+        "lockedHouse": "world:mtn_deep:forest_post"
+      },
+      {
+        "id": "world:-18:-5:container:mtn_deep:deep_cache_box",
+        "name": "佣兵前哨补给箱",
+        "type": "box",
+        "x": -576,
+        "y": -152,
+        "lockedHouse": "world:mtn_deep:forest_post"
+      },
+      {
+        "id": "world:-18:-5:container:mtn_deep:deep_food_box",
+        "name": "佣兵口粮箱",
+        "type": "box",
+        "x": -575,
+        "y": -152,
+        "lockedHouse": "world:mtn_deep:forest_post"
+      },
+      {
+        "id": "world:24:5:container:town_ruins:rebel_chest",
+        "name": "掠夺者军火大储物箱",
+        "type": "box",
+        "x": 782,
+        "y": 170,
+        "lockedHouse": "world:town_ruins:rebel_post"
+      },
+      {
+        "id": "world:24:5:container:town_ruins:rebel_med",
+        "name": "掠夺者医疗箱",
+        "type": "box",
+        "x": 781,
+        "y": 170,
+        "lockedHouse": "world:town_ruins:rebel_post"
+      },
+      {
+        "id": "world:24:5:container:town_ruins:rebel_credits",
+        "name": "掠夺者赃款箱",
+        "type": "box",
+        "x": 783,
+        "y": 170,
+        "lockedHouse": "world:town_ruins:rebel_post"
+      }
+    ],
+    "landmarks": [
+      {
+        "id": "camp_plaza",
+        "x": 0,
+        "y": 0,
+        "approach": {
+          "x": 0,
+          "y": -1
+        }
+      },
+      {
+        "id": "camp_workshop",
+        "x": 64,
+        "y": 0,
+        "approach": {
+          "x": 64,
+          "y": 0
+        }
+      },
+      {
+        "id": "camp_outskirts",
+        "x": 0,
+        "y": 72,
+        "approach": {
+          "x": 0,
+          "y": 72
+        }
+      },
+      {
+        "id": "mtn_logging",
+        "x": -240,
+        "y": 0,
+        "approach": {
+          "x": -240,
+          "y": 0
+        }
+      },
+      {
+        "id": "mtn_deep",
+        "x": -560,
+        "y": -160,
+        "approach": {
+          "x": -560,
+          "y": -160
+        }
+      },
+      {
+        "id": "mtn_quarry",
+        "x": -128,
+        "y": -352,
+        "approach": {
+          "x": -128,
+          "y": -352
+        }
+      },
+      {
+        "id": "mtn_peak",
+        "x": -160,
+        "y": -720,
+        "approach": {
+          "x": -160,
+          "y": -720
+        }
+      },
+      {
+        "id": "town_gas",
+        "x": 240,
+        "y": 0,
+        "approach": {
+          "x": 240,
+          "y": 0
+        }
+      },
+      {
+        "id": "town_street",
+        "x": 448,
+        "y": 32,
+        "approach": {
+          "x": 448,
+          "y": 32
+        }
+      },
+      {
+        "id": "town_factory",
+        "x": 640,
+        "y": -64,
+        "approach": {
+          "x": 640,
+          "y": -64
+        }
+      },
+      {
+        "id": "town_ruins",
+        "x": 760,
+        "y": 176,
+        "approach": {
+          "x": 760,
+          "y": 176
+        }
+      },
+      {
+        "id": "marsh_docks",
+        "x": 0,
+        "y": 256,
+        "approach": {
+          "x": 0,
+          "y": 256
+        }
+      },
+      {
+        "id": "marsh_bog",
+        "x": -80,
+        "y": 480,
+        "approach": {
+          "x": -80,
+          "y": 480
+        }
+      },
+      {
+        "id": "marsh_rift",
+        "x": 96,
+        "y": 688,
+        "approach": {
+          "x": 96,
+          "y": 688
+        }
+      },
+      {
+        "id": "marsh_abyss",
+        "x": 160,
+        "y": 880,
+        "approach": {
+          "x": 160,
+          "y": 880
+        }
+      }
+    ],
+    "elapsedMs": 3001.9829,
+    "limits": [
+      "First a1 audit omitted runtime half-cell lower boundary inset; a2 corrects it; original sample preserved.",
+      "Half-cell grid can miss narrower passages; grouping counts are recognized house groups with at least8 members and a door, not every visual structure.",
+      "Six unavailable nodes lie in two closed safe-door outposts; do not open or remove locks merely to pass connectivity.",
+      "Static connectivity is not actual exploration, danger/reward balance, sustained resource pressure or graphics performance.",
+      "42 grid points are nonblocked but not reached; their exact locations were not exported, so no additional location claim."
+    ],
+    "unvisitedNonblockedPoints": 42
+  },
+  "openItems": [
+    "Existing GPU/frame stalls and repeated-route frame gate remain unresolved.",
+    "Unexplained a17 shot timeout, earlier a7 respawn-walk failure and a12 replay observation failure remain open.",
+    "Full-world native traversal/new-chunk eviction/long memory, real siege capacity and earned progression/economy need further verification."
+  ],
+  "dataSafety": "Only memory, unique temporary or owned ignored synthetic databases. Real data/sdc.sqlite never opened; private credentials/raw browser traces not exported."
+}

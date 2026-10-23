@@ -614,9 +614,8 @@ export class IsometricEngine {
   }
 
   public navigateTo(x: number, y: number) {
-    this.targetMovePoint = { x, y };
     this.movePath = findPath(this.player, { x, y }, this.buildings);
-    if (!this.movePath.length) this.targetMovePoint = null;
+    this.targetMovePoint = this.movePath.at(-1) ?? null;
   }
 
   private initEntitiesForMap(mapId: MapZoneId) {
@@ -2150,6 +2149,8 @@ export class IsometricEngine {
 
     let mx = 0;
     let my = 0;
+    let pathDistance = Infinity;
+    let pathPoint: { x: number; y: number } | null = null;
 
     if (screenDirX !== 0 || screenDirY !== 0) {
       // Physical keyboard or virtual joystick direction
@@ -2173,12 +2174,14 @@ export class IsometricEngine {
       // Right-Click to Move Auto-Pathing
       if (this.movePath.length && Math.hypot(this.movePath[0].x - this.player.x, this.movePath[0].y - this.player.y) < 0.2) this.movePath.shift();
       const next = this.movePath[0] ?? this.targetMovePoint;
+      pathPoint = next;
       const tdx = next.x - this.player.x;
       const tdy = next.y - this.player.y;
       const dist = Math.hypot(tdx, tdy);
       if (dist > 0.12) {
         mx = tdx / dist;
         my = tdy / dist;
+        pathDistance = dist;
       } else {
         // Arrived at destination
         this.targetMovePoint = null;
@@ -2190,10 +2193,25 @@ export class IsometricEngine {
     if (len > 0) {
       this.player.vx = mx * speed;
       this.player.vy = my * speed;
-      const nextX = this.player.x + this.player.vx * dt;
-      if (!isPositionBlocked(nextX, this.player.y, this.buildings)) this.player.x = nextX;
-      const nextY = this.player.y + this.player.vy * dt;
-      if (!isPositionBlocked(this.player.x, nextY, this.buildings)) this.player.y = nextY;
+      // Automatic movement stops at each point, then spends the remaining time on the next.
+      let remainingTime = dt;
+      do {
+        const movementTime = Math.min(remainingTime, pathDistance / speed);
+        const nextX = this.player.x + this.player.vx * movementTime;
+        if (!isPositionBlocked(nextX, this.player.y, this.buildings)) this.player.x = nextX;
+        const nextY = this.player.y + this.player.vy * movementTime;
+        if (!isPositionBlocked(this.player.x, nextY, this.buildings)) this.player.y = nextY;
+        remainingTime -= movementTime;
+        if (!pathPoint || Math.hypot(this.player.x - pathPoint.x, this.player.y - pathPoint.y) > 1e-6 || !this.movePath.length) break;
+        this.movePath.shift();
+        const next = this.movePath[0];
+        if (!next) break;
+        pathPoint = next;
+        const dx = next.x - this.player.x, dy = next.y - this.player.y;
+        pathDistance = Math.hypot(dx, dy);
+        this.player.vx = pathDistance ? dx / pathDistance * speed : 0;
+        this.player.vy = pathDistance ? dy / pathDistance * speed : 0;
+      } while (remainingTime > 1e-9);
     } else {
       this.player.vx = 0;
       this.player.vy = 0;
