@@ -1523,3 +1523,25 @@ WAL合并私有行守恒：native实际559/553耗弹、余1441/1447；所有5675
 WAL合并私有行审计：native584/579实际耗弹、余1416/1421，六protocol各149耗弹余1851；5675建筑、540防御弹、共享集合及库存装备蓝图/非弹资源守恒。另实际重启同存档shared-a15，双浏览器E关/开门即时同步，重放各一条正常回包且无重复扣弹，后置审计通过。另普通三Chrome world native-duel-a16实际鼠标跨chunk往返、正常100血100盾两击、权威死亡纠正及重生后走到0,5、原死亡包拿空和旁观者面板关闭后继续走均通过；射手只花2发、最终58弹6木2食，victim丢背包物资保装备，observer无收益，完整资产/integrity/一致性备份经GameWorld恢复通过。
 
 计划docs/superpowers/plans/2026-10-23-movement-building-window.md，去凭据证据docs/verification/2026-10-23-movement-building-window-results.json。真实存档未打开，只碰独立合成/临时/内存数据，所属QA进程关闭。后续应验证实际I/O批次公平性：已读当前安装ws receiver，allowSynchronousEvents默认为true，支持false用setImmediate分散同批消息；目前只是待验证假设，未修改生产设置。持久建筑空间查询、原a7/a12失败现场、长期内存/完整世界路线/实际攻城与人口资源经济仍需完成，完整目标保持进行中。
+
+## WebSocket输入分批实验拒绝检查点（2026-10-23）
+
+2434b0e后仅试验installed ws8.22.0的allowSynchronousEvents:false，不加应用队列、不改武器间隔或原单slot。两项真实server/WS/临时SQLite现代/旧客户端用独立immediate心跳确认8个合批移动原同epoch、实验每epoch最多1个，顺序/实际坐标仍正确。原付费枪/待发/篡改同ID/溢出/280ms间隔/重放/101条关闭1008/强杀恢复保留；测试暂停真实receiver continuation，实际替换连接完成admission后释放旧buffer，原身份/OPEN守卫阻止旧装备/移动/射击污染。移除option和移除旧连接守卫两个负控都失败，finally恢复。受控业务时间不是性能测量，强杀恢复也不能专称未合并journal路径。实验树42文件564测试/类型/构建与独立只读复核通过，仅证明上述行为。
+
+同40s诊断profile-a20→a21有3→0原生拒绝，回复P95约120/74→77/71ms；但原启动顺序formal-a17→a18失败，八连接30s原生拒绝0→21（11+10），回复P95约50.3/61.9→523.8/509.6ms。双端60s385/378全接受但RAFmax266.5/242.5ms；拥挤drawP95约11.1/10.6ms，RAFmax115.2/157.5ms。六protocol141/140/140/140/140/139发，第一人全ack、其余各1在途。不能以短诊断替代正式验收，亦不能将运行差异全部归因option；保留坏样本不重跑刷通过。决定拒绝此实验、恢复原生产设置，不宣称新性能修复。
+
+formal-a18原WAL合并审计通过：native559/556实际扣弹余1441/1444；背景实际141/140/140/140/140/139扣弹，包括关停前已提交的在途。全部5675建筑、540防御弹、共享集合及非弹物资/库存/装备/蓝图保持。没有为拒绝版本额外做重启/门/普通world实战，不冒用baseline已有成绩。精确实验source/test/原plan留忽略data/rejected-input-fairness-20261023.json，本次只保留计划和去凭据证据docs/verification/2026-10-23-websocket-input-fairness-results.json；无生产代码差异。撤回后重新41文件562测试、类型检查/构建通过，客户端仍index-DkvqxB-J.js、原Vite提示不变。独立只读复核数字/审计/撤回结论无P1/P2，真实存档未打开，QA进程关闭。完整目标保持进行中，下一步回到三轮重复公共世界步行的缓存与实际内存趋势，不能继续用小减负代替整体验收。
+
+## 三轮重复公共道路的缓存与内存观察检查点（2026-10-23）
+
+生产仍2434b0e，无新增runtime改动。world-repeat-memory-20261023-a1使用新独立SQLite、默认100HP空角色(0,7)，正常server/NPC/存盘，以现有virtualJoystick方向(1,.5)沿世界+x走到193再原速返回，三轮六段约306秒实际步行，非全原生键鼠路线/赚取经济/全世界或长期验收。1920×1080/DPR1独立headless Chrome可见document；计时不并行测试/构建/其它QA，探针小数组有界逐段替换，历史状态只留100条。停步采集进程/GPU内存及forcedGC不在行走段计时内，探针本身仍有开销。复用旧fixture文案误称预发资源，实际seed没有发物资/装备/营地，证据明确纠正而不重写原始样本。
+
+全部往返完成，无浏览器异常/渲染诊断/HMR/位置纠正，HP一直100、饱食按真实时间降至约12。第一次返程因250ms轮询略跨x0，实际中心chunk-1..6，缓存25→55→60后稳定60、tile画布8→12后稳定12，已解码20图约57.99MiB、tile像素约9.77MiB、ground约11.09MiB后不再增。没有压满64上限，不能据此证明LRU淘汰/连续新区域内存边界。
+
+三次home自然heap约11.147/20.482/9.049MiB，forcedGC后7.236/7.827/7.262MiB；匹配GC后的进程组private committed约486.3/489.0/504.8MiB，GPU shared170.6/175.2/171.7MiB。第二轮途中GPU415.7/private759.6MiB峰值后返回回落，未呈同路线逐轮线性堆积，但三轮短样本不能证明无长期泄漏。工作集合计初始1009、GC后877，最终自然586、GC后531MiB，各进程共享页可能重复求和，不能将此等同单页JS堆/游戏独占物理内存；GPU最大单engine单点30–57%不等于整机GPU总负载，也不能脱离设备/刷新率设通用800MB/50%通过标准。
+
+六段drawP95约2.2–3.1ms，但第三去程58ms和返程63.5ms超过50ms门槛，longtask82/69ms，最坏独立浏览器RAF381.7ms；第二返程RAF也115.2ms而无longtask。chunk refresh原冷max3.3ms、后续均较短，不能据此把所有慢帧归因区块或宣称root cause。独立RAF约6.1ms（约165Hz），实际draw约60次/秒；未采实际游戏presentation间隔分布，不说165游戏FPS或已稳定流畅。runner success仅脚本完成，原performanceAccepted只是draw gate且明确false，整体性能验收仍失败，不重跑刷过。第三轮截图已查看正常，不是黑屏替代场景。
+
+图片/画布的MiB是像素数×4的RGBA理论估算，和实测进程/GPU指标分开；浏览器进程数从12降至9也会影响进程树内存，不能把工作集下降全部归因游戏回收。原始11次样本保留进程数，未隐去这项变量。
+
+计划docs/superpowers/plans/2026-10-23-repeated-world-memory.md，去凭据数据docs/verification/2026-10-23-repeated-world-memory-results.json，独立只读审查方法/数字，无新P1/P2。真实存档未打开，所属Chrome/服务器关闭。下一步需要慢帧与实际draw间隔、GC、浏览器/GPU及OS调度的同时间轴证据，避免再猜一个优化；三轮同工作集缓存观察不代替全世界路线、持续新chunk淘汰、长期内存、多人攻防和人口资源经济。完整游戏目标继续进行中。

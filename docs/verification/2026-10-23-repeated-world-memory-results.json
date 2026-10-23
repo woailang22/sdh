@@ -1,0 +1,959 @@
+{
+  "date": "2026-10-23",
+  "runtimeCommit": "2434b0e3beb5df18e222e9f3ce861aa2d6e21447",
+  "fixture": "world-repeat-memory-20261023-a1",
+  "scope": "Observation only, no runtime change. New owned SQLite/default unarmed100HP character at0,7. Existing virtualJoystick input at normal speed: x0→193 and back three times. Normal server clocks/NPC rules, no teleport/material/equipment/health overrides. Original reused runner fixture label incorrectly says preseeded resources; actual seed supplies none.",
+  "environment": "One independent headless Chrome, configured1920x1080/DPR1, visible document; production server and SQLite. No concurrent build/tests/profilers/other QA browsers. Runtime method wrappers and bounded QA arrays add overhead; stopped process/GPU queries and forcedGC excluded from walking leg timing.",
+  "checks": {
+    "runtime": true,
+    "renderGateOnly": false,
+    "gate": "Original runner performanceAccepted only means per-leg drawP95≤16.7ms and no draw>50ms. Its success means script/runtime completed, not overall smoothness/memory/world acceptance.",
+    "errors": 0,
+    "hmr": 0,
+    "cache": "Recorded peak60 chunks and12 tile surfaces. Same route stabilizes working set; below64 chunk cap, so no eviction-pressure proof.",
+    "authority": "Endpoint samples include both predicted and authoritative coordinates, HP/satiety/corrections. End-of-leg network position may lag; stopped samples observed separately."
+  },
+  "legs": [
+    {
+      "round": 1,
+      "direction": 1,
+      "seconds": 50.916,
+      "pos": {
+        "x": 193.45039999999457,
+        "y": 7
+      },
+      "serverPos": {
+        "x": 192.64327999999475,
+        "y": 7
+      },
+      "draw": {
+        "count": 3037,
+        "p50": 1.4000000059604645,
+        "p95": 2.5,
+        "p99": 5.9000000059604645,
+        "max": 15.599999994039536,
+        "over50": 0
+      },
+      "raf": {
+        "count": 8182,
+        "p50": 6.099999999998545,
+        "p95": 6.200000000004366,
+        "p99": 12.099999999998545,
+        "max": 30.30000000000291,
+        "over50": 0
+      },
+      "long": {
+        "count": 0,
+        "p50": 0,
+        "p95": 0,
+        "p99": 0,
+        "max": 0,
+        "over50": 0
+      },
+      "boundaries": [
+        {
+          "window": "1,0",
+          "duration": 2.2000000029802322,
+          "x": 32.007399999999706,
+          "y": 7
+        },
+        {
+          "window": "2,0",
+          "duration": 1.5999999940395355,
+          "x": 64.01441999999922,
+          "y": 7
+        },
+        {
+          "window": "3,0",
+          "duration": 1.9000000059604645,
+          "x": 96.0222000000027,
+          "y": 7
+        },
+        {
+          "window": "4,0",
+          "duration": 1.3999999910593033,
+          "x": 128.00680000000614,
+          "y": 7
+        },
+        {
+          "window": "5,0",
+          "duration": 3.2999999970197678,
+          "x": 160.01382000000035,
+          "y": 7
+        },
+        {
+          "window": "6,0",
+          "duration": 1.0999999940395355,
+          "x": 192.02159999999483,
+          "y": 7
+        }
+      ],
+      "corrections": 0,
+      "renderCallsPerSecond": 59.64726215727866,
+      "rafMeaning": "Independent browser RAF callback interval, not actual game presentation. Engine limits draw to60; no actual presentation-interval distribution captured."
+    },
+    {
+      "round": 1,
+      "direction": -1,
+      "seconds": 50.973,
+      "pos": {
+        "x": -0.20595999999961204,
+        "y": 7
+      },
+      "serverPos": {
+        "x": 0.6923600000003659,
+        "y": 7
+      },
+      "draw": {
+        "count": 3020,
+        "p50": 1.5999999940395355,
+        "p95": 3.0999999940395355,
+        "p99": 6.399999991059303,
+        "max": 20.100000008940697,
+        "over50": 0
+      },
+      "raf": {
+        "count": 7896,
+        "p50": 6.099999999991269,
+        "p95": 6.5,
+        "p99": 18,
+        "max": 48.5,
+        "over50": 0
+      },
+      "long": {
+        "count": 0,
+        "p50": 0,
+        "p95": 0,
+        "p99": 0,
+        "max": 0,
+        "over50": 0
+      },
+      "boundaries": [
+        {
+          "window": "5,0",
+          "duration": 0.10000000894069672,
+          "x": 191.99993999999484,
+          "y": 7
+        },
+        {
+          "window": "4,0",
+          "duration": 0.20000000298023224,
+          "x": 159.9925400000003,
+          "y": 7
+        },
+        {
+          "window": "3,0",
+          "duration": 0.3999999910593033,
+          "x": 127.98514000000583,
+          "y": 7
+        },
+        {
+          "window": "2,0",
+          "duration": 0.09999999403953552,
+          "x": 95.95456000000266,
+          "y": 7
+        },
+        {
+          "window": "1,0",
+          "duration": 0.20000000298023224,
+          "x": 63.99313999999981,
+          "y": 7
+        },
+        {
+          "window": "0,0",
+          "duration": 0.10000000894069672,
+          "x": 31.985740000000423,
+          "y": 7
+        },
+        {
+          "window": "-1,0",
+          "duration": 1.2000000029802322,
+          "x": -0.02165999999961207,
+          "y": 7
+        }
+      ],
+      "corrections": 0,
+      "renderCallsPerSecond": 59.24705236105389,
+      "rafMeaning": "Independent browser RAF callback interval, not actual game presentation. Engine limits draw to60; no actual presentation-interval distribution captured."
+    },
+    {
+      "round": 2,
+      "direction": 1,
+      "seconds": 50.9,
+      "pos": {
+        "x": 193.17451999999906,
+        "y": 7
+      },
+      "serverPos": {
+        "x": 192.55207999999908,
+        "y": 7
+      },
+      "draw": {
+        "count": 3038,
+        "p50": 1.4000000059604645,
+        "p95": 2.5999999940395355,
+        "p99": 4.399999991059303,
+        "max": 13.399999991059303,
+        "over50": 0
+      },
+      "raf": {
+        "count": 8129,
+        "p50": 6.099999999976717,
+        "p95": 6.2999999999883585,
+        "p99": 12.10000000000582,
+        "max": 30.5,
+        "over50": 0
+      },
+      "long": {
+        "count": 0,
+        "p50": 0,
+        "p95": 0,
+        "p99": 0,
+        "max": 0,
+        "over50": 0
+      },
+      "boundaries": [
+        {
+          "window": "0,0",
+          "duration": 0.09999999403953552,
+          "x": 0.0015200000004100718,
+          "y": 7
+        },
+        {
+          "window": "1,0",
+          "duration": 0.20000000298023224,
+          "x": 32.00854000000036,
+          "y": 7
+        },
+        {
+          "window": "2,0",
+          "duration": 0.10000000894069672,
+          "x": 64.01669999999969,
+          "y": 7
+        },
+        {
+          "window": "3,0",
+          "duration": 0.20000000298023224,
+          "x": 96.00054000000264,
+          "y": 7
+        },
+        {
+          "window": "4,0",
+          "duration": 0.20000000298023224,
+          "x": 128.00794000000525,
+          "y": 7
+        },
+        {
+          "window": "5,0",
+          "duration": 0.29999999701976776,
+          "x": 160.01572000000195,
+          "y": 7
+        },
+        {
+          "window": "6,0",
+          "duration": 0.3999999910593033,
+          "x": 192.02273999999903,
+          "y": 7
+        }
+      ],
+      "corrections": 0,
+      "renderCallsPerSecond": 59.685658153241654,
+      "rafMeaning": "Independent browser RAF callback interval, not actual game presentation. Engine limits draw to60; no actual presentation-interval distribution captured."
+    },
+    {
+      "round": 2,
+      "direction": -1,
+      "seconds": 50.998,
+      "pos": {
+        "x": -0.5388400000002898,
+        "y": 7
+      },
+      "serverPos": {
+        "x": -0.2397800000002456,
+        "y": 7
+      },
+      "draw": {
+        "count": 3032,
+        "p50": 1.199999988079071,
+        "p95": 2.5,
+        "p99": 3.7999999970197678,
+        "max": 9.200000002980232,
+        "over50": 0
+      },
+      "raf": {
+        "count": 7958,
+        "p50": 6.099999999976717,
+        "p95": 6.2999999999883585,
+        "p99": 18.10000000000582,
+        "max": 115.19999999998254,
+        "over50": 1
+      },
+      "long": {
+        "count": 0,
+        "p50": 0,
+        "p95": 0,
+        "p99": 0,
+        "max": 0,
+        "over50": 0
+      },
+      "boundaries": [
+        {
+          "window": "5,0",
+          "duration": 0.30000001192092896,
+          "x": 191.99993999999933,
+          "y": 7
+        },
+        {
+          "window": "4,0",
+          "duration": 0.29999999701976776,
+          "x": 159.99216000000243,
+          "y": 7
+        },
+        {
+          "window": "3,0",
+          "duration": 0.20000000298023224,
+          "x": 127.99692000000536,
+          "y": 7
+        },
+        {
+          "window": "2,0",
+          "duration": 0,
+          "x": 95.98990000000192,
+          "y": 7
+        },
+        {
+          "window": "1,0",
+          "duration": 0.09999999403953552,
+          "x": 63.982119999999014,
+          "y": 7
+        },
+        {
+          "window": "0,0",
+          "duration": 0.30000001192092896,
+          "x": 31.998279999999475,
+          "y": 7
+        },
+        {
+          "window": "-1,0",
+          "duration": 0.20000000298023224,
+          "x": -0.009120000000311972,
+          "y": 7
+        }
+      ],
+      "corrections": 0,
+      "renderCallsPerSecond": 59.453311894584104,
+      "rafMeaning": "Independent browser RAF callback interval, not actual game presentation. Engine limits draw to60; no actual presentation-interval distribution captured."
+    },
+    {
+      "round": 3,
+      "direction": 1,
+      "seconds": 51.378,
+      "pos": {
+        "x": 193.63583999999608,
+        "y": 7
+      },
+      "serverPos": {
+        "x": 193.33677999999608,
+        "y": 7
+      },
+      "draw": {
+        "count": 3025,
+        "p50": 1.3999999910593033,
+        "p95": 2.8999999910593033,
+        "p99": 5.200000002980232,
+        "max": 58,
+        "over50": 1
+      },
+      "raf": {
+        "count": 7603,
+        "p50": 6.099999999976717,
+        "p95": 12.10000000000582,
+        "p99": 18.20000000001164,
+        "max": 381.70000000001164,
+        "over50": 2
+      },
+      "long": {
+        "count": 1,
+        "p50": 82,
+        "p95": 82,
+        "p99": 82,
+        "max": 82,
+        "over50": 1
+      },
+      "boundaries": [
+        {
+          "window": "0,0",
+          "duration": 0.20000000298023224,
+          "x": 0.014059999999710335,
+          "y": 7
+        },
+        {
+          "window": "1,0",
+          "duration": 0.09999999403953552,
+          "x": 32.021459999999585,
+          "y": 7
+        },
+        {
+          "window": "2,0",
+          "duration": 0.19999998807907104,
+          "x": 64.00643999999897,
+          "y": 7
+        },
+        {
+          "window": "3,0",
+          "duration": 0.09999999403953552,
+          "x": 96.01308000000164,
+          "y": 7
+        },
+        {
+          "window": "4,0",
+          "duration": 0.19999998807907104,
+          "x": 128.0201000000047,
+          "y": 7
+        },
+        {
+          "window": "5,0",
+          "duration": 0.09999999403953552,
+          "x": 160.02902000000032,
+          "y": 7
+        },
+        {
+          "window": "6,0",
+          "duration": 0.20000000298023224,
+          "x": 192.0014599999962,
+          "y": 7
+        }
+      ],
+      "corrections": 0,
+      "renderCallsPerSecond": 58.87734049593211,
+      "rafMeaning": "Independent browser RAF callback interval, not actual game presentation. Engine limits draw to60; no actual presentation-interval distribution captured."
+    },
+    {
+      "round": 3,
+      "direction": -1,
+      "seconds": 50.991,
+      "pos": {
+        "x": -0.11209999999789197,
+        "y": 7
+      },
+      "serverPos": {
+        "x": 0.8785600000021524,
+        "y": 7
+      },
+      "draw": {
+        "count": 3042,
+        "p50": 1.2999999970197678,
+        "p95": 2.2000000029802322,
+        "p99": 3.9000000059604645,
+        "max": 63.5,
+        "over50": 1
+      },
+      "raf": {
+        "count": 7915,
+        "p50": 6.099999999976717,
+        "p95": 6.399999999965075,
+        "p99": 18.099999999976717,
+        "max": 75.5,
+        "over50": 2
+      },
+      "long": {
+        "count": 1,
+        "p50": 69,
+        "p95": 69,
+        "p99": 69,
+        "max": 69,
+        "over50": 1
+      },
+      "boundaries": [
+        {
+          "window": "5,0",
+          "duration": 0.4000000059604645,
+          "x": 191.97827999999657,
+          "y": 7
+        },
+        {
+          "window": "4,0",
+          "duration": 0.09999999403953552,
+          "x": 159.99444000000142,
+          "y": 7
+        },
+        {
+          "window": "3,0",
+          "duration": 0.09999999403953552,
+          "x": 127.98704000000592,
+          "y": 7
+        },
+        {
+          "window": "2,0",
+          "duration": 0.10000000894069672,
+          "x": 95.9796400000032,
+          "y": 7
+        },
+        {
+          "window": "1,0",
+          "duration": 0.09999999403953552,
+          "x": 63.995420000000756,
+          "y": 7
+        },
+        {
+          "window": "0,0",
+          "duration": 0.4000000059604645,
+          "x": 31.987640000001978,
+          "y": 7
+        },
+        {
+          "window": "-1,0",
+          "duration": 0.20000000298023224,
+          "x": -0.020139999997847748,
+          "y": 7
+        }
+      ],
+      "corrections": 0,
+      "renderCallsPerSecond": 59.65758663293522,
+      "rafMeaning": "Independent browser RAF callback interval, not actual game presentation. Engine limits draw to60; no actual presentation-interval distribution captured."
+    }
+  ],
+  "samples": [
+    {
+      "phase": "initial-natural",
+      "map": "world",
+      "pos": {
+        "x": 0,
+        "y": 7
+      },
+      "serverPos": {
+        "x": 0,
+        "y": 7
+      },
+      "hp": 100,
+      "satiety": 98.42424999999999,
+      "hidden": false,
+      "chunks": 25,
+      "window": "0,0",
+      "scenery": 108,
+      "buildings": 388,
+      "interactables": 132,
+      "serverDrops": 0,
+      "artImages": 14,
+      "decodedImageMiB": 43.99354553222656,
+      "tileSurfaces": 8,
+      "tileMiB": 6.5137939453125,
+      "groundMiB": 11.08984375,
+      "heapMiB": 6.115577697753906,
+      "corrections": 0,
+      "errorCount": 0,
+      "diagnosticCount": 0,
+      "processCount": 12,
+      "privateCommittedMiB": 586.84765625,
+      "workingSetSumMiB": 1009.21875,
+      "gpu": {
+        "sharedMiB": 167.140625,
+        "dedicatedMiB": 0,
+        "maxSingleEnginePercent": 46
+      },
+      "gpuError": null
+    },
+    {
+      "phase": "initial-after-forced-gc",
+      "map": "world",
+      "pos": {
+        "x": 0,
+        "y": 7
+      },
+      "serverPos": {
+        "x": 0,
+        "y": 7
+      },
+      "hp": 100,
+      "satiety": 95.53525,
+      "hidden": false,
+      "chunks": 25,
+      "window": "0,0",
+      "scenery": 108,
+      "buildings": 388,
+      "interactables": 132,
+      "serverDrops": 0,
+      "artImages": 14,
+      "decodedImageMiB": 43.99354553222656,
+      "tileSurfaces": 8,
+      "tileMiB": 6.5137939453125,
+      "groundMiB": 11.08984375,
+      "heapMiB": 6.194039344787598,
+      "corrections": 0,
+      "errorCount": 0,
+      "diagnosticCount": 0,
+      "processCount": 10,
+      "privateCommittedMiB": 501.73828125,
+      "workingSetSumMiB": 877.0859375,
+      "gpu": {
+        "sharedMiB": 167.140625,
+        "dedicatedMiB": 0,
+        "maxSingleEnginePercent": 47
+      },
+      "gpuError": null
+    },
+    {
+      "phase": "round-1-east-natural",
+      "map": "world",
+      "pos": {
+        "x": 193.45039999999457,
+        "y": 7
+      },
+      "serverPos": {
+        "x": 193.45039999999457,
+        "y": 7
+      },
+      "hp": 100,
+      "satiety": 81.99300000000002,
+      "hidden": false,
+      "chunks": 55,
+      "window": "6,0",
+      "scenery": 70,
+      "buildings": 432,
+      "interactables": 169,
+      "serverDrops": 0,
+      "artImages": 20,
+      "decodedImageMiB": 57.991539001464844,
+      "tileSurfaces": 12,
+      "tileMiB": 9.77069091796875,
+      "groundMiB": 11.08984375,
+      "heapMiB": 14.107276916503906,
+      "corrections": 0,
+      "errorCount": 0,
+      "diagnosticCount": 0,
+      "processCount": 9,
+      "privateCommittedMiB": 520.6953125,
+      "workingSetSumMiB": 861.7734375,
+      "gpu": {
+        "sharedMiB": 170.58203125,
+        "dedicatedMiB": 0,
+        "maxSingleEnginePercent": 47
+      },
+      "gpuError": null
+    },
+    {
+      "phase": "round-1-home-natural",
+      "map": "world",
+      "pos": {
+        "x": -0.20595999999961204,
+        "y": 7
+      },
+      "serverPos": {
+        "x": -0.20595999999961204,
+        "y": 7
+      },
+      "hp": 100,
+      "satiety": 68.68075000000005,
+      "hidden": false,
+      "chunks": 60,
+      "window": "-1,0",
+      "scenery": 124,
+      "buildings": 370,
+      "interactables": 153,
+      "serverDrops": 0,
+      "artImages": 20,
+      "decodedImageMiB": 57.991539001464844,
+      "tileSurfaces": 12,
+      "tileMiB": 9.77069091796875,
+      "groundMiB": 11.08984375,
+      "heapMiB": 11.146728515625,
+      "corrections": 0,
+      "errorCount": 0,
+      "diagnosticCount": 0,
+      "processCount": 9,
+      "privateCommittedMiB": 542.6640625,
+      "workingSetSumMiB": 817.02734375,
+      "gpu": {
+        "sharedMiB": 171.1171875,
+        "dedicatedMiB": 0,
+        "maxSingleEnginePercent": 30
+      },
+      "gpuError": null
+    },
+    {
+      "phase": "round-1-home-after-forced-gc",
+      "map": "world",
+      "pos": {
+        "x": -0.20595999999961204,
+        "y": 7
+      },
+      "serverPos": {
+        "x": -0.20595999999961204,
+        "y": 7
+      },
+      "hp": 100,
+      "satiety": 67.91550000000004,
+      "hidden": false,
+      "chunks": 60,
+      "window": "-1,0",
+      "scenery": 124,
+      "buildings": 370,
+      "interactables": 153,
+      "serverDrops": 0,
+      "artImages": 20,
+      "decodedImageMiB": 57.991539001464844,
+      "tileSurfaces": 12,
+      "tileMiB": 9.77069091796875,
+      "groundMiB": 11.08984375,
+      "heapMiB": 7.236359596252441,
+      "corrections": 0,
+      "errorCount": 0,
+      "diagnosticCount": 0,
+      "processCount": 9,
+      "privateCommittedMiB": 486.3359375,
+      "workingSetSumMiB": 760.625,
+      "gpu": {
+        "sharedMiB": 170.60546875,
+        "dedicatedMiB": 0,
+        "maxSingleEnginePercent": 31
+      },
+      "gpuError": null
+    },
+    {
+      "phase": "round-2-east-natural",
+      "map": "world",
+      "pos": {
+        "x": 193.17451999999906,
+        "y": 7
+      },
+      "serverPos": {
+        "x": 193.17451999999906,
+        "y": 7
+      },
+      "hp": 100,
+      "satiety": 54.41425000000005,
+      "hidden": false,
+      "chunks": 60,
+      "window": "6,0",
+      "scenery": 70,
+      "buildings": 432,
+      "interactables": 169,
+      "serverDrops": 0,
+      "artImages": 20,
+      "decodedImageMiB": 57.991539001464844,
+      "tileSurfaces": 12,
+      "tileMiB": 9.77069091796875,
+      "groundMiB": 11.08984375,
+      "heapMiB": 12.71823787689209,
+      "corrections": 0,
+      "errorCount": 0,
+      "diagnosticCount": 0,
+      "processCount": 9,
+      "privateCommittedMiB": 759.58984375,
+      "workingSetSumMiB": 1037.33984375,
+      "gpu": {
+        "sharedMiB": 415.6640625,
+        "dedicatedMiB": 0,
+        "maxSingleEnginePercent": 31
+      },
+      "gpuError": null
+    },
+    {
+      "phase": "round-2-home-natural",
+      "map": "world",
+      "pos": {
+        "x": -0.5388400000002898,
+        "y": 7
+      },
+      "serverPos": {
+        "x": -0.5388400000002898,
+        "y": 7
+      },
+      "hp": 100,
+      "satiety": 40.88500000000005,
+      "hidden": false,
+      "chunks": 60,
+      "window": "-1,0",
+      "scenery": 124,
+      "buildings": 370,
+      "interactables": 153,
+      "serverDrops": 0,
+      "artImages": 20,
+      "decodedImageMiB": 57.991539001464844,
+      "tileSurfaces": 12,
+      "tileMiB": 9.77069091796875,
+      "groundMiB": 11.08984375,
+      "heapMiB": 20.482260704040527,
+      "corrections": 0,
+      "errorCount": 0,
+      "diagnosticCount": 0,
+      "processCount": 9,
+      "privateCommittedMiB": 560.78125,
+      "workingSetSumMiB": 843.1171875,
+      "gpu": {
+        "sharedMiB": 183.0390625,
+        "dedicatedMiB": 0,
+        "maxSingleEnginePercent": 39
+      },
+      "gpuError": null
+    },
+    {
+      "phase": "round-2-home-after-forced-gc",
+      "map": "world",
+      "pos": {
+        "x": -0.5388400000002898,
+        "y": 7
+      },
+      "serverPos": {
+        "x": -0.5388400000002898,
+        "y": 7
+      },
+      "hp": 100,
+      "satiety": 40.107500000000044,
+      "hidden": false,
+      "chunks": 60,
+      "window": "-1,0",
+      "scenery": 124,
+      "buildings": 370,
+      "interactables": 153,
+      "serverDrops": 0,
+      "artImages": 20,
+      "decodedImageMiB": 57.991539001464844,
+      "tileSurfaces": 12,
+      "tileMiB": 9.77069091796875,
+      "groundMiB": 11.08984375,
+      "heapMiB": 7.827056884765625,
+      "corrections": 0,
+      "errorCount": 0,
+      "diagnosticCount": 0,
+      "processCount": 9,
+      "privateCommittedMiB": 489.01171875,
+      "workingSetSumMiB": 771.58984375,
+      "gpu": {
+        "sharedMiB": 175.19921875,
+        "dedicatedMiB": 0,
+        "maxSingleEnginePercent": 38
+      },
+      "gpuError": null
+    },
+    {
+      "phase": "round-3-east-natural",
+      "map": "world",
+      "pos": {
+        "x": 193.63583999999608,
+        "y": 7
+      },
+      "serverPos": {
+        "x": 193.63583999999608,
+        "y": 7
+      },
+      "hp": 100,
+      "satiety": 26.31675000000004,
+      "hidden": false,
+      "chunks": 60,
+      "window": "6,0",
+      "scenery": 70,
+      "buildings": 432,
+      "interactables": 169,
+      "serverDrops": 0,
+      "artImages": 20,
+      "decodedImageMiB": 57.991539001464844,
+      "tileSurfaces": 12,
+      "tileMiB": 9.77069091796875,
+      "groundMiB": 11.08984375,
+      "heapMiB": 27.79203701019287,
+      "corrections": 0,
+      "errorCount": 0,
+      "diagnosticCount": 0,
+      "processCount": 9,
+      "privateCommittedMiB": 626.21875,
+      "workingSetSumMiB": 704.84375,
+      "gpu": {
+        "sharedMiB": 262.703125,
+        "dedicatedMiB": 0,
+        "maxSingleEnginePercent": 36
+      },
+      "gpuError": null
+    },
+    {
+      "phase": "round-3-home-natural",
+      "map": "world",
+      "pos": {
+        "x": -0.11209999999789197,
+        "y": 7
+      },
+      "serverPos": {
+        "x": -0.11209999999789197,
+        "y": 7
+      },
+      "hp": 100,
+      "satiety": 12.635750000000032,
+      "hidden": false,
+      "chunks": 60,
+      "window": "-1,0",
+      "scenery": 124,
+      "buildings": 370,
+      "interactables": 153,
+      "serverDrops": 0,
+      "artImages": 20,
+      "decodedImageMiB": 57.991539001464844,
+      "tileSurfaces": 12,
+      "tileMiB": 9.77069091796875,
+      "groundMiB": 11.08984375,
+      "heapMiB": 9.048600196838379,
+      "corrections": 0,
+      "errorCount": 0,
+      "diagnosticCount": 0,
+      "processCount": 9,
+      "privateCommittedMiB": 561.375,
+      "workingSetSumMiB": 586.03125,
+      "gpu": {
+        "sharedMiB": 171.734375,
+        "dedicatedMiB": 0,
+        "maxSingleEnginePercent": 44
+      },
+      "gpuError": null
+    },
+    {
+      "phase": "round-3-home-after-forced-gc",
+      "map": "world",
+      "pos": {
+        "x": -0.11209999999789197,
+        "y": 7
+      },
+      "serverPos": {
+        "x": -0.11209999999789197,
+        "y": 7
+      },
+      "hp": 100,
+      "satiety": 12.120750000000031,
+      "hidden": false,
+      "chunks": 60,
+      "window": "-1,0",
+      "scenery": 124,
+      "buildings": 370,
+      "interactables": 153,
+      "serverDrops": 0,
+      "artImages": 20,
+      "decodedImageMiB": 57.991539001464844,
+      "tileSurfaces": 12,
+      "tileMiB": 9.77069091796875,
+      "groundMiB": 11.08984375,
+      "heapMiB": 7.261754035949707,
+      "corrections": 0,
+      "errorCount": 0,
+      "diagnosticCount": 0,
+      "processCount": 9,
+      "privateCommittedMiB": 504.7890625,
+      "workingSetSumMiB": 530.828125,
+      "gpu": {
+        "sharedMiB": 171.74609375,
+        "dedicatedMiB": 0,
+        "maxSingleEnginePercent": 57
+      },
+      "gpuError": null
+    }
+  ],
+  "interpretation": "Use matched natural endpoint samples separately from forced-GC endpoint samples. Check GPU/private working peaks and return levels rather than inferring a leak from heap/RSS alone. No universal800MB or GPU50% pass/fail threshold; no same-device before-build comparison, no new performance fix claimed.",
+  "limitations": [
+    "decodedImageMiB/tileMiB/groundMiB are RGBA pixel-count estimates (pixels times4), not measured exclusive GPU or process allocations. Browser process count changes from12 to9 and also affects process-tree totals; declines cannot be attributed entirely to game resource collection.",
+    "Three short road repeats cover center chunks-1..6 and two local ground themes, not complete forest/quarry/wetland/rift/world routes.",
+    "60 retained chunks do not exercise64-entry LRU eviction or continued unique exploration.",
+    "Natural and forced-GC retained heap differ; process-tree working-set sum can count shared pages repeatedly. GPU counters are Windows per-process-tree single-time samples/max single engine, not total-device load or attributable game-only memory.",
+    "Browser/platform caches, process heaps and GPU allocations have different lifetimes. Three repeats cannot establish long-session leak freedom.",
+    "Independent RAF tails do not identify root cause or prove game presentation; need correlated trace for a future stall investigation.",
+    "Not combat/siege/concurrency/earned-economy/population-resource acceptance. Prior failed formal input fairness and a7/a12 observations remain retained."
+  ],
+  "review": "Read-only method review found no new P1/P2, confirmed movement projection and bounded QA references; explicitly requested scope/gate/cache/fixture wording corrections now documented. Reviewer ran no loads.",
+  "dataSafety": "Only fresh owned synthetic SQLite. Real data/sdc.sqlite never opened. Browser/server terminated by runner finally; no credentials/cookies/actor IDs exported."
+}
