@@ -1223,7 +1223,7 @@ export default function App() {
     { id: 'wood', title: '收集木材', desc: '先备口粮：出生附近农舍物资柜在 (10,10) 与 (-14,-14)，从南门进入，E/F 搜取后在背包选食物点“使用”；可能已被搜走。捡枯枝、搜农舍，装备斧后按住 E/F 伐木更快。', progressText: `${Math.min(totalWood, 20)}/20`, done: totalWood >= 20 },
     { id: 'stone', title: '收集石料', desc: '捡取碎石或开采石堆，制作镐来提升效率。满包不会扣除未收到的物资。', progressText: `${Math.min(totalStone, 10)}/10`, done: totalStone >= 10 },
     { id: 'pickaxe', title: '制作并装备开山镐', desc: '从制造面板制作开山镐（8木、6石），在背包中装备。完成后更换工具不影响进度。', progressText: pickaxeCrafted ? '1/1' : '0/1', done: pickaxeCrafted },
-    { id: 'claim', title: '在野外建立营地', desc: '收集20木、10石，在道路和地标外选址，打开营地面板插旗；开局没有私人领地。', progressText: claimedPlot ? '1/1' : '0/1', done: claimedPlot },
+    { id: 'claim', title: '在野外建立营地', desc: '建营另需20木、10石，制作工具消耗的材料需补齐。在道路和地标外选址，打开营地面板插旗；开局没有私人领地。', progressText: claimedPlot ? '1/1' : `木${Math.min(playerWood, 20)}/20 石${Math.min(playerStone, 10)}/10`, done: claimedPlot },
     { id: 'workbench', title: '建设与储存', desc: '在自己的营地建造工作台和仓库，并实际存入物资。零件可去维修工棚或拆车获取；取出物资不影响已完成的引导。', progressText: !workbenchBuilt ? '未建工作台' : storageUsed ? '1/1' : '待存入物资', done: workbenchBuilt && storageUsed },
     { id: 'turret', title: '准备离线防御', desc: '架设炮塔并靠近按 E 装入至少10发弹药，可在工作台制造弹药。墙门与地刺辅助阻挡；弹药会消耗，需要继续补充。', progressText: !turretBuilt ? '未建炮塔' : turretLoaded ? '1/1' : '待装10发弹药', done: turretBuilt && turretLoaded },
     { id: 'survive', title: '补给与谨慎撤离', desc: '在营地种植、烹饪和研究，探索更远区域。死亡会掉落携带物资，进出营地不会回血。', progressText: ateFood ? '已补给' : '待补给', done: ateFood },

@@ -492,6 +492,39 @@ describe('authoritative death bags', () => {
 });
 
 describe('server weather synchronization', () => {
+  it.each([false, true])('does not rewind rain simulation when the first animation timestamp predates start (restart=%s)', restart => {
+    const { engine, context } = setup();
+    let clock = 1000;
+    vi.spyOn(performance, 'now').mockImplementation(() => clock);
+    vi.spyOn(Math, 'random').mockReturnValue(0);
+    engine.currentWeather = 'rain'; engine.currentMapId = 'world';
+    engine.monsters = []; engine.interactables = []; engine.buildings = [];
+    (engine as any).rainDrops = [{ x: 10, y: 400, speed: 15, len: 20 }];
+    const update = (engine as any).update.bind(engine);
+    const elapsed: number[] = [];
+    vi.spyOn(engine as any, 'update').mockImplementation((...args: unknown[]) => { const dt = args[0] as number; elapsed.push(dt); update(dt); });
+    const radii: number[] = [];
+    (context as any).ellipse = (_x: number, _y: number, rx: number, ry: number) => {
+      if (rx < 0 || ry < 0) throw new RangeError('Canvas ellipse radius must be nonnegative');
+      radii.push(rx);
+    };
+    vi.spyOn(engine as any, 'render').mockImplementation(() => (engine as any).renderWeather());
+    const status = vi.fn(); (engine as any).callbacks.onRenderStatus = status;
+    if (restart) { engine.start(); engine.stop(); clock = 2000; }
+    const startedAt = clock, gameTime = (engine as any).gameTime;
+    engine.start(); clock += 10;
+    vi.mocked(requestAnimationFrame).mock.calls.at(-1)![0](startedAt - 250);
+    const firstSplashes = (engine as any).groundSplashes.map((sp: any) => ({ ...sp }));
+    clock += 20;
+    vi.mocked(requestAnimationFrame).mock.calls.at(-1)![0](startedAt + 20);
+    expect(firstSplashes).toEqual([expect.objectContaining({ radius: 1, alpha: .5 })]);
+    expect(elapsed).toEqual([0, .1]);
+    expect((engine as any).gameTime).toBeCloseTo(gameTime + .1, 10);
+    expect(radii).toEqual([2.8]);
+    expect(status).not.toHaveBeenCalledWith('画面发生错误，正在重新绘制');
+    engine.stop();
+  });
+
   it('retains the server countdown instead of resetting it to a client-only duration', () => {
     const { engine } = setup();
     engine.setWeather('acid_rain', 37);

@@ -1,0 +1,401 @@
+{
+  "kind": "earned-first-camp-and-negative-weather-delta-verification",
+  "date": "2026-10-24",
+  "baselineRevision": "0462481eb8126c13f29aa2845d4496617b417b17",
+  "status": "bounded-change-verified; full game goal remains active",
+  "productionScope": [
+    "App claim-step current materials/description only; no cost/reward/completion rule change",
+    "IsometricEngine frame dt now has lower bound0 and original upper bound0.1; no render schedule or authoritative world change"
+  ],
+  "builtBundle": "/assets/index-DR7mke5Y.js",
+  "verification": {
+    "engineTests": 135,
+    "fullSuite": {
+      "files": 44,
+      "tests": 653,
+      "passed": true
+    },
+    "typeCheck": true,
+    "build": true,
+    "existingViteWarningsRetained": true,
+    "negativeControl": {
+      "removedOnlyLowerBound": true,
+      "failedBusinessCases": 2,
+      "productionSourceRestoredByteForByte": true,
+      "finalEngineSuitePassed": true
+    }
+  },
+  "observedDrawError": {
+    "oldBundle": "/assets/index-D2IaO3Aa.js",
+    "message": "Failed to execute 'ellipse' on 'CanvasRenderingContext2D': The major-axis radius provided (-1.2932) is negative.",
+    "map": "world",
+    "x": -79,
+    "y": -26,
+    "phase": "render",
+    "function": "renderWeather",
+    "evidence": "data/cua-first-camp-20261024-a1-weather-error.png",
+    "causeEvidence": "First rAF timestamp250ms before performance.now() at start gives dt=-.25; real update generates radius=-3.5 and real renderWeather next frame throws under Canvas nonnegative-radius validation. Startup and stop-start cases both fail before the fix and after its controlled removal.",
+    "nativeAfterFix": "Same saved character/normal reconnect, new material progress visible and no error overlay in clear/camp views. No native rain-start repetition acceptance."
+  },
+  "flow": {
+    "status": "passed",
+    "singleDefaultGuest": true,
+    "originalEmptyInventoryAndZeroResources": true,
+    "noStartingCamp": true,
+    "packets": 9616,
+    "movingPackets": 1757,
+    "stationaryPackets": 7859,
+    "allRecordedMovesAccepted": true,
+    "rejected": 0,
+    "actionErrors": 0,
+    "observedStateCorrections": 8,
+    "eventOverflow": 0,
+    "actions": {
+      "search": 1,
+      "take_loot": 3,
+      "use_item": 3,
+      "gather": 35,
+      "craft": 1,
+      "equip": 1,
+      "create_camp": 1,
+      "enter_camp": 1
+    },
+    "gatherHits": {
+      "tree": 23,
+      "boulder": 12,
+      "bare": 30,
+      "equipped": 5
+    },
+    "gatherGains": {
+      "wood": 29,
+      "stone": 16
+    },
+    "food": {
+      "taken": {
+        "food": 3,
+        "water": 2,
+        "seed_potato": 1
+      },
+      "used": {
+        "food": 3
+      },
+      "firstUse": "actual CUA inventory button",
+      "laterUses": "normal protocol, earned food only"
+    },
+    "tool": {
+      "cost": {
+        "wood": 8,
+        "stone": 6
+      },
+      "reserveBefore": {
+        "wood": 20,
+        "stone": 10
+      },
+      "reserveAfter": {
+        "wood": 12,
+        "stone": 4
+      },
+      "equipped": true
+    },
+    "camp": {
+      "cost": {
+        "wood": 20,
+        "stone": 10
+      },
+      "reserveBefore": {
+        "wood": 21,
+        "stone": 10
+      },
+      "reserveAfter": {
+        "wood": 1,
+        "stone": 0
+      },
+      "x": -60,
+      "y": 20,
+      "size": 64,
+      "level": 1,
+      "onlyDefaultCore": true,
+      "independentMap": true,
+      "entry": {
+        "x": 0,
+        "y": 28
+      }
+    },
+    "final": {
+      "hp": 100,
+      "shield": 8.507499999999999,
+      "satiety": 0,
+      "wood": 1,
+      "stone": 0,
+      "inventory": [
+        {
+          "id": "water",
+          "count": 2
+        },
+        {
+          "id": "seed_potato",
+          "count": 1
+        }
+      ],
+      "tool": "pickaxe_stone"
+    },
+    "materialConservation": true,
+    "uniqueRequestsDurablyHandled": true,
+    "normalResourceRefreshAllowed": true,
+    "touchedNodes": 12,
+    "consistentBackupRestore": true,
+    "backupPath": "data/cua-first-camp-20261024-a1.sqlite.backup-2026-10-23T17-29-38-280Z",
+    "ui": {
+      "oldClaimProgress": "0/1",
+      "newClaimProgress": "木12/20 石4/10",
+      "insufficientMaterialsButtonDisabled": true,
+      "historicalGatherTasksRetained": true,
+      "campCompletionObserved": true
+    },
+    "limits": [
+      "First food search/take/eat and all UI checks were native CUA; gathering/crafting/equipping/claiming/entry used paced normal protocol with static-map knowledge. This is not novice timing/balance or fully native play acceptance.",
+      "Eight cumulative correction flags include reconnect/map baselines; event-level correction timing was not captured. No movement rejections or action errors were observed. The first protocol harness wrongly rejected its normal initial baseline before any move; that failure was retained and the harness fixed, with no DB reset.",
+      "The old actual CUA page threw a rain negative-ellipse error. Controlled real update/renderWeather tests reproduce the negative first-delta cause; post-fix actual pages rendered in clear/camp shelter. A native rain-start recurrence test, all blackscreens, slow-frame/GPU causality, long memory and multiplayer capacity remain unaccepted.",
+      "Final satiety reached zero and shield naturally fell during camp disconnect grace; no manual food/HP reset or starter grants occurred. Resources can refresh normally, so final nodes are not required to remain depleted.",
+      "Exact modeled clock delta tests are not native frame timing distributions; existing 60Hz render scheduling is unchanged."
+    ]
+  },
+  "failuresRetained": [
+    "Initial protocol harness treated the normal initial correction baseline as a movement failure before any move; failure and initial connected-only result retained, harness fixed without a DB reset.",
+    "Initial regression-test spy callback used number instead of unknown parameters and failed type-check; final parameter type fixed and final type-check passed.",
+    "Original native rain draw exception, red regression logs and negative-control failures retained."
+  ],
+  "cleanup": {
+    "ownedServerStopped": true,
+    "ownedPort39129NoListener": true,
+    "temporaryBrowserTabsClosed": true,
+    "realProductionDatabaseOpened": false
+  },
+  "review": {
+    "status": "passed-read-only-independent-review",
+    "blockingP1P2": 0,
+    "overclaimOrPrivacyBlockers": 0,
+    "sourceHashesVerified": 54,
+    "rawEventAndMaterialLedgerRecomputed": true,
+    "nativeScreenshotsReviewed": true,
+    "reviewerOpenedDatabaseOrRanLoad": false
+  },
+  "sources": [
+    {
+      "path": "src/App.tsx",
+      "sha256": "75dccc6165cc2ab5dac4509b9d4385cc42293428953af6dd37ec29ec93659438"
+    },
+    {
+      "path": "src/game/IsometricEngine.ts",
+      "sha256": "55267a8ac25bd9676b1831e5652aaa4ed1fdeaadb2e9af2185d9d614f2d721a3"
+    },
+    {
+      "path": "src/game/IsometricEngine.test.ts",
+      "sha256": "9a3fe168e525b69b5ae87ed6c63d5f13fd3ce3dc33cac5af45a96ade3fb84e50"
+    },
+    {
+      "path": "server.ts",
+      "sha256": "550676757754175a4482ce81da1f581f4ab3b0254478b3fa846d3f9479ca0ff1"
+    },
+    {
+      "path": "server/worldState.ts",
+      "sha256": "def88edd22a2755a2a176c143cd4ca015592d49ce76db89af54558baffaef233"
+    },
+    {
+      "path": "server/db.ts",
+      "sha256": "9cf91e65d64e6372bb897d98b8bdda843a03f42f409240f272abc4ed09d83f0f"
+    },
+    {
+      "path": "src/game/stateSync.ts",
+      "sha256": "cfb25fc761a622ab0f90077849adc9e0375f800f315af9dca0a09560926b28a0"
+    },
+    {
+      "path": "src/game/equipmentRules.ts",
+      "sha256": "3db65447d65e43458a07e339e5e3ea5cc8cbff96f467b9f7fa6907bf176ed9e6"
+    },
+    {
+      "path": "src/game/crafting.ts",
+      "sha256": "eb43bd22c9ee159759a1b23a76d64bbbdaeaf0c3a89cbc22fa7df87c90d34105"
+    },
+    {
+      "path": "src/components/CampPanel.tsx",
+      "sha256": "7c467530fb97ebf15291f041d02cb8361f6643cac58ee1d05063b731c72d4a1b"
+    },
+    {
+      "path": "src/components/QuestPanel.tsx",
+      "sha256": "63fe59f23abe2a717bcbee9faba88b336d7a298128796414150fef8d7770bdff"
+    },
+    {
+      "path": "docs/superpowers/specs/2026-10-24-onboarding-camp-materials-design.md",
+      "sha256": "bc8e04eb4bc571d3c65e502726548ff41cdeaf4e35524d8ed999fa005a07c91a"
+    },
+    {
+      "path": "docs/superpowers/plans/2026-10-24-onboarding-camp-materials.md",
+      "sha256": "94502bb53a3983f760c64ce98f3d071442e7aa3a97d96d6494692868cc924627"
+    },
+    {
+      "path": "data/prepare-cua-first-camp-20261024.cjs",
+      "sha256": "8142026951aad8cd9815afd8a90a612b76629b8b1b8e4e03b1a0e3c1cb3dfc88"
+    },
+    {
+      "path": "data/capture-cua-first-camp-20261024.ts",
+      "sha256": "764fae2a29eacad25abeeaeab5830ac01b2bccfd87c21416013cdaa48f9b4226"
+    },
+    {
+      "path": "data/control-cua-first-camp-20261024.cjs",
+      "sha256": "18fca614419743b430562b0124a379714241942b8e7eb8958c77ee5553afcfcb"
+    },
+    {
+      "path": "data/earn-first-camp-20261024.ts",
+      "sha256": "e4bcf99db9c92ff5d80ec86a303680e20c51ebb002cec9c82abfe78dbdea56f8"
+    },
+    {
+      "path": "data/audit-first-camp-20261024.ts",
+      "sha256": "f63def0d0992185dba242c02e44a9ae38760af4318c0637f0a29db2344338150"
+    },
+    {
+      "path": "data/negative-weather-time-20261024.cjs",
+      "sha256": "dec165428278aa3239a3e91e32537f74e154d5213641acf70d5bb2230d05c673"
+    },
+    {
+      "path": "data/weather-negative-delta-red-20261024.log",
+      "sha256": "2e56b3c67d2fa12f481781358988019317820bbd2d2e90c2ef120268f703272a"
+    },
+    {
+      "path": "data/weather-negative-delta-red-render-20261024.log",
+      "sha256": "f190547511530726c6ef59739492cbfc96acbb509d5b1ae1b67b11eccde85b74"
+    },
+    {
+      "path": "data/weather-negative-delta-negative-control-20261024.log",
+      "sha256": "0cb1ba35f19581643c9558a32f2d2b5cea29b0f3cfdb25b0c43c4aaf00978ee3"
+    },
+    {
+      "path": "data/first-camp-engine-tests-20261024.log",
+      "sha256": "d743b66af48ed85974fb32d583652b8b502672722f62ddfcbb251ae6775f859d"
+    },
+    {
+      "path": "data/first-camp-engine-tests-final-20261024.log",
+      "sha256": "095177b9455757422a202a9db657b8241c280786ed880a91c7978e135a623de3"
+    },
+    {
+      "path": "data/first-camp-types-20261024.log",
+      "sha256": "78ca0e087ed09579b3e03865b7a254066d8af7ba86d4bb7266ff54f3059f7bf7"
+    },
+    {
+      "path": "data/first-camp-types-final-20261024.log",
+      "sha256": "7f3594d7a965c703e6361ae50c0ef50cf9c344c621d801592b074b48554f4235"
+    },
+    {
+      "path": "data/first-camp-types-audit-final-20261024.log",
+      "sha256": "7f3594d7a965c703e6361ae50c0ef50cf9c344c621d801592b074b48554f4235"
+    },
+    {
+      "path": "data/first-camp-build-20261024.log",
+      "sha256": "89a2580447cab26f1d4570594b109e9bacdb83746526ba439f79ca3adb2faf85"
+    },
+    {
+      "path": "data/first-camp-full-tests-20261024.log",
+      "sha256": "74507ba0b78d1705f3d882030e878c81447f8614a67d8953bf87b38053d1ac32"
+    },
+    {
+      "path": "data/first-camp-audit-20261024.log",
+      "sha256": "6a218f37d0142217c54eb4bcadf3dbdaaaff0f5adcd463cc7074795a8536a14c"
+    },
+    {
+      "path": "data/cua-first-camp-20261024-a1-connected-world-private.json",
+      "sha256": "bdfa8bc67215cfefde8c9aa663480e38801f5ba0a7b1c41059fda99394cadba9"
+    },
+    {
+      "path": "data/cua-first-camp-20261024-a1-food-events.json",
+      "sha256": "9eac7a84218df516ba6c296d4aea4c618593f05afe35b57fa789bbfd1de18cfe"
+    },
+    {
+      "path": "data/cua-first-camp-20261024-a1-food-world-private.json",
+      "sha256": "758e93aa1b844fb382b9fbd8700131f6528c1ac169b247461672d6a7d9eed110"
+    },
+    {
+      "path": "data/cua-first-camp-20261024-a1-tool-events.json",
+      "sha256": "5877e7a24a8d05c81a01ffc3295fa9bc504d7e0657e4e3bed59da25b32815b3e"
+    },
+    {
+      "path": "data/cua-first-camp-20261024-a1-tool-world-private.json",
+      "sha256": "ad09ad48b927864a04c49e850dbb2df8b347f7f61760856141d63cb317c01e18"
+    },
+    {
+      "path": "data/cua-first-camp-20261024-a1-before-ui-events.json",
+      "sha256": "8d4755140c9dce07fd5acd14fd348c9f169cee0d1de99c8a1007486f6ed7d300"
+    },
+    {
+      "path": "data/cua-first-camp-20261024-a1-final-events.json",
+      "sha256": "2e5134d35fec2c07a1088209ad6d949834b7cf842d4dd812d49a8850b5e2a20f"
+    },
+    {
+      "path": "data/cua-first-camp-20261024-a1-final-world-private.json",
+      "sha256": "136435b674b9c56f822c92f2ded348747a789d79d26106ed9f743828710cc103"
+    },
+    {
+      "path": "data/cua-first-camp-20261024-a1-food.png",
+      "sha256": "5adcfbc08ded574c0b0213780148ba70e54de4ff6a30183756e74172b605d88f"
+    },
+    {
+      "path": "data/cua-first-camp-20261024-a1-weather-error.png",
+      "sha256": "359f10acb3d0dc7be0f5a2957a9d7ab22d538fbe055bbce11c3102bb098b625e"
+    },
+    {
+      "path": "data/cua-first-camp-20261024-a1-before-ax.txt",
+      "sha256": "3afd2c52c975b866421c8302eb2cffe5066fe46948e51fe9a1a79cbc76a19d91"
+    },
+    {
+      "path": "data/cua-first-camp-20261024-a1-after-ax.txt",
+      "sha256": "945bfa984956357dee5bffe03c9ebccbcf3ca4e5fc9b24bb8012d79b7ca12824"
+    },
+    {
+      "path": "data/cua-first-camp-20261024-a1-panel-private.txt",
+      "sha256": "666e2efc35726a986bbc8f9462025c59d8dee18656afef03f068201b1a234c89"
+    },
+    {
+      "path": "data/cua-first-camp-20261024-a1-materials.png",
+      "sha256": "7755d5cf48786732e552f49facac3b5d2fefadc47321bc743fa54651b76f21dd"
+    },
+    {
+      "path": "data/cua-first-camp-20261024-a1-camp-ax.txt",
+      "sha256": "0f95d4304b44e7c2cb4c98004d93cf9cd19671c42c271da73f7e3dfe01946ebe"
+    },
+    {
+      "path": "data/cua-first-camp-20261024-a1-camp.png",
+      "sha256": "61b489605d83a0d49dffa76b297b0b06341f783cd304ff0ff936efb939e9f2b9"
+    },
+    {
+      "path": "data/cua-first-camp-20261024-a1-tool-bot-results.json",
+      "sha256": "ed83390e170f2779e2eac28feb7b82e5e05d4dfd54428b18e2e29e37cd8c6143"
+    },
+    {
+      "path": "data/cua-first-camp-20261024-a1-camp-bot-results.json",
+      "sha256": "065a7ae4b76183c9612f720cd21a0b753a0cf8830ef062f29598f052e459346b"
+    },
+    {
+      "path": "data/cua-first-camp-20261024-a1-tool-bot-initial-handshake-failure.json",
+      "sha256": "26fcffb664063fbc4a5a110270b690ef2228760a6d4210ead1765112a8da6603"
+    },
+    {
+      "path": "data/cua-first-camp-20261024-a1-tool-bot-initial-handshake-results.json",
+      "sha256": "e1339481bbd44f2411107fe22f754b9d180e4e21638be67883df212ccf72fd72"
+    },
+    {
+      "path": "data/cua-first-camp-20261024-a1-audit.json",
+      "sha256": "0eef0d2a76113b0fd2f0d02a93f237091c853b1e5085a3a4b3c7b0f7787a8e13"
+    },
+    {
+      "path": "dist/index.html",
+      "sha256": "0be4fd57a0050b9a9f21f575d7e7c56754a50f560df7fb917d9a266723ed1448"
+    },
+    {
+      "path": "dist/assets/index-DR7mke5Y.js",
+      "sha256": "59c44a6db5d4109ac751f70fefc05ddfe5874341c0efff04c8e78f670bebc1f6"
+    },
+    {
+      "path": "dist/assets/index-BDKAl1HJ.css",
+      "sha256": "f8fe9c003b87887dedd395b70bac71821e4a57c908de398203b411c535f140af"
+    }
+  ]
+}

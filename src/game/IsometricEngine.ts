@@ -2082,7 +2082,8 @@ export class IsometricEngine {
       const callbackAt = performance.now();
       // Schedule before any game work: a failed frame must not kill the loop.
       this.animFrameId = requestAnimationFrame(loop);
-      const dt = Math.min((time - this.lastTime) / 1000, 0.1);
+      // A queued frame timestamp can predate start(); never rewind the simulation.
+      const dt = Math.max(0, Math.min((time - this.lastTime) / 1000, 0.1));
       this.lastTime = time;
       if (!document.hidden && !this.contextLost && time >= this.renderRetryAt) {
         let phase = 'update';
