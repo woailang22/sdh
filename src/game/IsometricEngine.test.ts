@@ -5,6 +5,7 @@ import * as houseRenderer from './houseRenderer';
 import * as houseGeometry from './house';
 import * as renderDiagnostics from './renderDiagnostics';
 import { isPositionBlocked } from './navigation';
+import { worldThemeAt } from './world';
 import { createMemoryDb } from '../../server/db';
 import { GameWorld, type WorldRules } from '../../server/worldState';
 
@@ -37,6 +38,50 @@ function setup() {
 }
 
 afterEach(() => { vi.restoreAllMocks(); vi.unstubAllGlobals(); });
+
+describe('world road texture alignment', () => {
+  it.each([
+    [255, 0, 'urban'], [256, 0, 'urban'], [257, 0, 'urban'],
+    [256, 128, 'urban'], [448, 20, 'urban'], [640, -45, 'urban'],
+    [256, 2, 'urban'], [256, 3, 'ruins'], [250, -250, 'ruins'],
+  ] as const)('draws the actual world road/shoulder material at(%s,%s):%s', (x, y, expected) => {
+    const { engine, context } = setup(); engine.currentMapId = 'world';
+    const theme = worldThemeAt(x, y); expect(['urban', 'ruins']).toContain(theme);
+    const patch = vi.spyOn(engine as any, 'tilePatch').mockReturnValue(makeCanvas());
+    context.drawImage.mockClear();
+    (engine as any).drawTileTexture(x, y, 320, 180, theme);
+    expect(patch.mock.calls[0][0]).toBe(expected);
+    expect(context.drawImage).toHaveBeenCalledOnce();
+  });
+
+  it.each(['town_gas', 'town_street', 'town_factory', 'town_ruins'] as const)('retains the separate-map road rule in%s', map => {
+    const { engine } = setup(); engine.currentMapId = map;
+    const patch = vi.spyOn(engine as any, 'tilePatch').mockReturnValue(makeCanvas());
+    (engine as any).drawTileTexture(2, -2, 320, 180, 'urban');
+    expect(patch.mock.calls.at(-1)![0]).toBe('urban');
+    (engine as any).drawTileTexture(20, 20, 320, 180, 'urban');
+    expect(patch.mock.calls.at(-1)![0]).toBe('ruins');
+  });
+
+  it('refreshes the visible world roadway when the road texture finishes decoding', () => {
+    const { engine } = setup(); stubImageLoading(); engine.warpToMap('world', 256, 0);
+    (engine as any).renderMapGround(); const cache = (engine as any).groundCache;
+    const size = { width: cache.canvas.width, height: cache.canvas.height };
+    const paint = vi.spyOn(engine as any, 'renderMapGroundUncached');
+    const road = (engine as any).artImage('tile-urban-a.png');
+    road.complete = true; road.dispatchEvent(new Event('load'));
+    (engine as any).renderMapGround();
+    expect(paint).toHaveBeenCalledOnce();
+    const bounds = paint.mock.calls[0][1] as { width: number; height: number };
+    expect(bounds).toBeDefined();
+    // A diagonal roadway can span the whole cached bounding rectangle.
+    expect(bounds.width * bounds.height).toBeGreaterThan(0);
+    expect(bounds.width).toBeLessThanOrEqual(size.width); expect(bounds.height).toBeLessThanOrEqual(size.height);
+    expect((engine as any).groundCache).toBe(cache);
+    expect({ width: cache.canvas.width, height: cache.canvas.height }).toEqual(size);
+    paint.mockClear(); (engine as any).renderMapGround(); expect(paint).not.toHaveBeenCalled();
+  });
+});
 
 describe('fresh client movement geometry window', () => {
   it.each([[.016, false], [.1, false], [.016, true], [.1, true]])('skips distant floor geometry while preserving actual%s-second movement (dash=%s)', (dt, dash) => {

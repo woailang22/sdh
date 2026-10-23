@@ -379,6 +379,7 @@ export class IsometricEngine {
       return 'camp';
     }
     if (theme === 'urban' || theme === 'ruins') {
+      if (this.currentMapId === 'world') return worldIsRoad(wx, wy, 2) ? 'urban' : 'ruins';
       return Math.abs(wx + wy) < 4.8 ? 'urban' : 'ruins';
     }
     if (theme === 'lake') {

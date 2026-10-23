@@ -1,0 +1,675 @@
+{
+  "kind": "world-road-textures-aligned-with-existing-road-network",
+  "date": "2026-10-24",
+  "baselineRevision": "1bfd83d737af4d34476b6346df7f7be7badbd83f",
+  "planningRevision": "ebe18d0",
+  "productionChange": "One world-only tileTextureKey branch uses the existing worldIsRoad(wx,wy,2), matching road base painting and deferred texture cache invalidation. Legacy separate-map rule unchanged.",
+  "unchangedGenerationAndServerSourceHashesBound": true,
+  "tests": {
+    "added": 14,
+    "red": {
+      "failed": 9,
+      "passed": 5
+    },
+    "enginePassed": 149,
+    "negativeControlFailed": 9,
+    "negativeRestoredByteForByte": true,
+    "firstFull": {
+      "failed": 5,
+      "passed": 662,
+      "phase": "Service started-wait timeouts before protocol; root cause unconfirmed. Retained."
+    },
+    "failedFilesFocusedPassed": 20,
+    "defaultFullRepeatedPassed": 667,
+    "files": 44,
+    "finalTypesPassed": true,
+    "buildPassed": true,
+    "modulePath": "/assets/index-Brkz-JAn.js",
+    "existingViteWarningsRetained": true
+  },
+  "results": {
+    "status": "passed-bounded-world-road-material-evidence",
+    "copyFromEarnedQaBackup": true,
+    "restartsPreservePlayerAndAssetState": true,
+    "position": {
+      "map": "world",
+      "x": 365.1516183699167,
+      "y": -0.04787779749378236
+    },
+    "movement": [
+      {
+        "phase": "before-end",
+        "packets": 1255,
+        "movingPackets": 237,
+        "stationaryPackets": 1018,
+        "rejected": 0,
+        "actionErrors": 0,
+        "corrections": 1,
+        "overflow": 0,
+        "acceptedDistance": 49.49651999999096
+      },
+      {
+        "phase": "after-end",
+        "packets": 2292,
+        "movingPackets": 0,
+        "stationaryPackets": 2292,
+        "rejected": 0,
+        "actionErrors": 0,
+        "corrections": 1,
+        "overflow": 0,
+        "acceptedDistance": 0
+      },
+      {
+        "phase": "after-fed-food-recovered",
+        "packets": 450,
+        "movingPackets": 450,
+        "stationaryPackets": 0,
+        "rejected": 0,
+        "actionErrors": 0,
+        "corrections": 1,
+        "overflow": 0,
+        "acceptedDistance": 112.31799631185947
+      },
+      {
+        "phase": "after-fed-clear-end",
+        "packets": 921,
+        "movingPackets": 0,
+        "stationaryPackets": 921,
+        "rejected": 0,
+        "actionErrors": 0,
+        "corrections": 1,
+        "overflow": 0,
+        "acceptedDistance": 0
+      }
+    ],
+    "assets": {
+      "waterUsed": 2,
+      "foodEarned": 2,
+      "foodUsed": 2,
+      "remainingInventory": [
+        {
+          "id": "seed_potato",
+          "count": 1
+        }
+      ],
+      "durableHandledRequestsBefore": 7,
+      "after": 13,
+      "allMaterialsZero": true,
+      "noCamp": true,
+      "equipmentEmpty": true,
+      "sharedAssetsUnchanged": true,
+      "ledger": "Durable unique handled request count plus native UI/protocol receipts and final stock checks; no per-action projection ledger captured."
+    },
+    "foodRecovery": {
+      "method": "Normal paced protocol search/take/use and walking on the same isolated QA actor; real clocks/rules, then natural health regeneration. Screenshots/UI checks use native CUA. No HP, inventory, location or time edits.",
+      "receipts": [
+        {
+          "step": "connected-earned-low-hp",
+          "x": 365.1516183699167,
+          "y": -0.04787779749378236,
+          "hp": 62.089999999999996,
+          "shield": 50,
+          "satiety": 5.184749999999997,
+          "food": 0
+        },
+        {
+          "step": "two-food-earned",
+          "x": 342,
+          "y": 22,
+          "hp": 62.089999999999996,
+          "shield": 39.755,
+          "satiety": 0,
+          "food": 2
+        },
+        {
+          "step": "two-real-food-used",
+          "x": 342,
+          "y": 22,
+          "hp": 62.089999999999996,
+          "shield": 37.150000000000006,
+          "satiety": 69.7385,
+          "food": 0
+        },
+        {
+          "step": "returned-same-road-coordinate",
+          "x": 365.1516183699167,
+          "y": -0.04787779749378236,
+          "hp": 62.089999999999996,
+          "shield": 50,
+          "satiety": 63.800750000000015,
+          "food": 0
+        },
+        {
+          "step": "normal-regeneration-complete",
+          "x": 365.1516183699167,
+          "y": -0.04787779749378236,
+          "hp": 100,
+          "shield": 50,
+          "satiety": 54.50850000000003,
+          "food": 0
+        }
+      ]
+    },
+    "native": {
+      "beforeEnvironment": {
+        "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
+        "viewport": {
+          "width": 1920,
+          "height": 1080
+        },
+        "canvas": {
+          "width": 1920,
+          "height": 1080
+        },
+        "devicePixelRatio": 1.0000000298023224,
+        "modulePath": "/assets/index-DR7mke5Y.js",
+        "jsHeap": {
+          "used": 12882770,
+          "total": 42512010
+        },
+        "graphicsBackend": "unknown"
+      },
+      "afterEnvironment": {
+        "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
+        "viewport": {
+          "width": 1920,
+          "height": 1080
+        },
+        "canvas": {
+          "width": 1920,
+          "height": 1080
+        },
+        "devicePixelRatio": 1.0000000298023224,
+        "modulePath": "/assets/index-Brkz-JAn.js",
+        "jsHeap": {
+          "used": 22468375,
+          "total": 42008647
+        },
+        "graphicsBackend": "unknown"
+      },
+      "sameSettledCoordinateAndClearWeather": true,
+      "initialBornAtZeroUiObservedBeforeNormalStateSync": true,
+      "initialStarvingAfterImagePreserved": true,
+      "emptyErrorHistories": true,
+      "healthyAfterFilename": "data/cua-world-road-texture-20261024-a1-after-fed-clear.png",
+      "slowSamples": [
+        {
+          "atMs": 10295.10000000894,
+          "updateMs": 0.20000000298023224,
+          "drawMs": 65.8999999910593,
+          "rafGapMs": 34.30000001192093,
+          "drawGapMs": 34.400000005960464,
+          "scene": {
+            "map": "world",
+            "x": 365.1516183699167,
+            "y": -0.04787779749378236,
+            "chunks": 50,
+            "buildings": 450,
+            "interactables": 172,
+            "monsters": 2,
+            "players": 0,
+            "inputBlocked": false
+          }
+        },
+        {
+          "atMs": 10384.20000000298,
+          "updateMs": 0.6000000089406967,
+          "drawMs": 20.200000002980232,
+          "rafGapMs": 89.09999999403954,
+          "drawGapMs": 89.5,
+          "scene": {
+            "map": "world",
+            "x": 365.1516183699167,
+            "y": -0.04787779749378236,
+            "chunks": 50,
+            "buildings": 450,
+            "interactables": 172,
+            "monsters": 2,
+            "players": 0,
+            "inputBlocked": false
+          }
+        },
+        {
+          "atMs": 10472.29999999702,
+          "updateMs": 0.3999999910593033,
+          "drawMs": 29.200000002980232,
+          "rafGapMs": 88.09999999403954,
+          "drawGapMs": 87.8999999910593,
+          "scene": {
+            "map": "world",
+            "x": 365.1516183699167,
+            "y": -0.04787779749378236,
+            "chunks": 50,
+            "buildings": 450,
+            "interactables": 172,
+            "monsters": 2,
+            "players": 0,
+            "inputBlocked": false
+          }
+        },
+        {
+          "atMs": 10538.70000000298,
+          "updateMs": 0.29999999701976776,
+          "drawMs": 7.299999997019768,
+          "rafGapMs": 66.40000000596046,
+          "drawGapMs": 66.20000000298023,
+          "scene": {
+            "map": "world",
+            "x": 365.1516183699167,
+            "y": -0.04787779749378236,
+            "chunks": 50,
+            "buildings": 450,
+            "interactables": 172,
+            "monsters": 2,
+            "players": 0,
+            "inputBlocked": false
+          }
+        },
+        {
+          "atMs": 10592,
+          "updateMs": 0.20000000298023224,
+          "drawMs": 1.2999999970197678,
+          "rafGapMs": 53.29999999701977,
+          "drawGapMs": 53.20000000298023,
+          "scene": {
+            "map": "world",
+            "x": 365.1516183699167,
+            "y": -0.04787779749378236,
+            "chunks": 50,
+            "buildings": 450,
+            "interactables": 172,
+            "monsters": 2,
+            "players": 0,
+            "inputBlocked": false
+          }
+        },
+        {
+          "atMs": 21950.40000000596,
+          "updateMs": 0.20000000298023224,
+          "drawMs": 0.8999999910593033,
+          "rafGapMs": 4.5,
+          "drawGapMs": 60.80000001192093,
+          "scene": {
+            "map": "world",
+            "x": 365.1516183699167,
+            "y": -0.04787779749378236,
+            "chunks": 50,
+            "buildings": 450,
+            "interactables": 172,
+            "monsters": 2,
+            "players": 0,
+            "inputBlocked": true
+          }
+        },
+        {
+          "atMs": 22330.60000000894,
+          "updateMs": 0,
+          "drawMs": 0.7999999970197678,
+          "rafGapMs": 51.70000000298023,
+          "drawGapMs": 51.30000001192093,
+          "scene": {
+            "map": "world",
+            "x": 365.1516183699167,
+            "y": -0.04787779749378236,
+            "chunks": 50,
+            "buildings": 450,
+            "interactables": 172,
+            "monsters": 2,
+            "players": 0,
+            "inputBlocked": true
+          }
+        }
+      ],
+      "coldAndPanelGapsRetained": true
+    },
+    "pixels": {
+      "firstInconclusive": {
+        "road": {
+          "pixels": 25560,
+          "changedPixels": 25560,
+          "changedFraction": 1,
+          "meanAbsoluteChannelDelta": 11.823682837767345,
+          "maxChannelDelta": 39
+        },
+        "offroad": {
+          "pixels": 18360,
+          "changedPixels": 18360,
+          "changedFraction": 1,
+          "meanAbsoluteChannelDelta": 11.931118373275236,
+          "maxChannelDelta": 43
+        },
+        "mode": "Read-only same-position screenshot pixel analysis; fixed strips x400..759 around y=.5x+60 (road) and180px above. No image editing, masking artifact, or performance inference."
+      },
+      "healthyRepeat": {
+        "road": {
+          "pixels": 25560,
+          "changedPixels": 24769,
+          "changedFraction": 0.9690532081377152,
+          "meanAbsoluteChannelDelta": 3.3471048513302035,
+          "maxChannelDelta": 21
+        },
+        "offroad": {
+          "pixels": 18360,
+          "changedPixels": 9699,
+          "changedFraction": 0.5282679738562092,
+          "meanAbsoluteChannelDelta": 0.6899963689179376,
+          "maxChannelDelta": 7
+        },
+        "mode": "Read-only strips x400..759; center=floor(.5x+60), road +/-35 inclusive, offroad180px above +/-25 inclusive. No image editing; scene pixels can vary independently of the fix. Not isolated material or performance evidence."
+      },
+      "earlierRepeatBoundaryNote": "The earlier ignored -pixel-analysis-fed.json used a float inclusion boundary, 25380/18180 pixels; final/reproduced scripts explicitly floor centers, restoring the first mask and counts. Neither used to prove only road pixels changed.",
+      "isolatedMaterialDifferenceProven": false
+    },
+    "persistence": {
+      "integrity": true,
+      "consistentBackupRestore": true,
+      "backupPath": "data/cua-world-road-texture-20261024-a1.sqlite.backup-2026-10-23T18-43-32-168Z"
+    },
+    "final": {
+      "hp": 100,
+      "shield": 50,
+      "satiety": 39.48975000000006
+    },
+    "limits": [
+      "One local single-player route and one stationary before/after world scene; not full world or multiplayer acceptance.",
+      "Road/offroad pixels vary; healthy offroad mean channel difference about0.69 versus road3.35, so no isolated-only-road or perceptual-quality metric claim.",
+      "First new screenshot is starving/injured; preserved and excluded from matched healthy comparison. Time, satiety, HUD/selection differ in healthy images.",
+      "Normal server restarts initialize clear weather; no GM, clock or save editing to force matching HP.",
+      "Latest successful slow samples >50ms only, not full frame distribution, P95, GPU, physical presentation or long-term memory acceptance.",
+      "The food detour uses static route knowledge/normal protocol, not an all-native novice balance or route test."
+    ]
+  },
+  "cleanup": {
+    "ownedPort": 39131,
+    "listeners": 0,
+    "ownedServerPids": [
+      45628,
+      39700,
+      29004,
+      40260
+    ],
+    "runningOwnedProcesses": 0,
+    "browserTabs": [],
+    "viewportRestored": true
+  },
+  "review": {
+    "status": "independent-read-only-review-passed-no-P1-P2",
+    "scope": "Production one-line branch, 14 regression cases, 68 source hashes, raw stage counts, saved healthy images, pixel-analysis limits and asset audit assertions. No tests, services, browser or SQLite executed by reviewer.",
+    "minorCorrection": "Saved healthy PNG/AX show satiety49, corrected two documentation references from earlier live observation51; final persisted39.48975 remains distinct."
+  },
+  "goalComplete": false,
+  "sources": [
+    {
+      "path": "src/App.tsx",
+      "sha256": "75dccc6165cc2ab5dac4509b9d4385cc42293428953af6dd37ec29ec93659438"
+    },
+    {
+      "path": "src/game/IsometricEngine.ts",
+      "sha256": "585f55dadb2a1a08624c04e004949e6b3de82c8c49c1d00e297b26b1842f4e52"
+    },
+    {
+      "path": "src/game/IsometricEngine.test.ts",
+      "sha256": "6a7b593b28a4acd155c676c228ca545d547c0d2f41a75f86ae37c13a24d83d41"
+    },
+    {
+      "path": "src/game/world.ts",
+      "sha256": "9ad6447e3e2cce3f9f391856bd3008856a49c2849a35d71aa1368b1893510949"
+    },
+    {
+      "path": "src/game/navigation.ts",
+      "sha256": "defeedf6c1670922f76b115c5da0a1bdce4f64afa8fb5b7eca0ee5c48065b662"
+    },
+    {
+      "path": "server.ts",
+      "sha256": "550676757754175a4482ce81da1f581f4ab3b0254478b3fa846d3f9479ca0ff1"
+    },
+    {
+      "path": "server/worldState.ts",
+      "sha256": "def88edd22a2755a2a176c143cd4ca015592d49ce76db89af54558baffaef233"
+    },
+    {
+      "path": "server/db.ts",
+      "sha256": "9cf91e65d64e6372bb897d98b8bdda843a03f42f409240f272abc4ed09d83f0f"
+    },
+    {
+      "path": "docs/verification/2026-10-24-native-rain-regions-results.json",
+      "sha256": "1477b1bab9526c3315d23c1777635832abc629a412098a1231d5e3c0def2ad15"
+    },
+    {
+      "path": "docs/superpowers/specs/2026-10-24-world-road-textures-design.md",
+      "sha256": "56de043941529cfb86e22407b7eb3d0c625ffb433c1717e78ab314ebe0df431d"
+    },
+    {
+      "path": "data/capture-cua-world-road-texture-20261024.ts",
+      "sha256": "0252c4c20ba18879d93101e4d22333e316775c361d7721cc1f5bceb98295ec8d"
+    },
+    {
+      "path": "data/control-cua-world-road-texture-20261024.cjs",
+      "sha256": "e436c6aab756e8d0b8d23f87a2c765ae7e429cfaa4133c351f45fbfa99341e66"
+    },
+    {
+      "path": "data/control-cua-world-road-texture-fed-20261024.cjs",
+      "sha256": "8abdb8986b3603c30575e14525682455567a6e89b43624cb33080966010909b1"
+    },
+    {
+      "path": "data/control-cua-world-road-texture-fed-clear-20261024.cjs",
+      "sha256": "b5b826fcfb065fe61bc5b748855945e84d76599fdba446f584934a1a3838b97f"
+    },
+    {
+      "path": "data/earn-owned-road-food-20261024.ts",
+      "sha256": "22e6e2501fe148729e9ba9bb17dfa421df8bfc2488fecb55fb68747863634943"
+    },
+    {
+      "path": "data/locate-owned-road-food-20261024.ts",
+      "sha256": "6a7af905033dc52d4bcec54a0e42fdf879e7ae43b95f82ee50c82abebceee64b"
+    },
+    {
+      "path": "data/negative-world-road-texture-20261024.cjs",
+      "sha256": "f0a95aeebb1cfe30e0d958a7189ac0e4018f4029bbd118d9585e5005fd8a0040"
+    },
+    {
+      "path": "data/negative-world-road-texture-20261024-initial.txt",
+      "sha256": "37ca39014a2382165147eda6fd91d20858aecb71d0a9d2e0231f972f20c7a8d4"
+    },
+    {
+      "path": "data/analyze-world-road-pixels-20261024.py",
+      "sha256": "3fa7145826c0ca347b825a5ae4053a379c4a95b2dcdbf0f7d18fa8fe3b618e24"
+    },
+    {
+      "path": "data/audit-world-road-textures-20261024.ts",
+      "sha256": "9384c0477365db7060c99340eceadfd1e4d434ffdebe87b2a36c1a06b6050cd2"
+    },
+    {
+      "path": "data/world-road-textures-cleanup-20261024.json",
+      "sha256": "6b0cd4258e3e23eace2a600800c4772219b9a550bc0604b7c252eaf4ed33f944"
+    },
+    {
+      "path": "data/world-road-textures-red-20261024.log",
+      "sha256": "18d88d2d2e0be1fab219d3a5339bdce18937e169df0ee85a6bee5293b20fb5a7"
+    },
+    {
+      "path": "data/world-road-textures-engine-20261024.log",
+      "sha256": "bff1dadff0dd970148c660f719bf39482c9c99518b13baa357dd6b16abcc76e5"
+    },
+    {
+      "path": "data/world-road-textures-engine-final-20261024.log",
+      "sha256": "9fe0f5809af64ed92df044b9e45df885a00b45d783135463ac335cc5f42c3192"
+    },
+    {
+      "path": "data/world-road-textures-negative-20261024.log",
+      "sha256": "c5ae6093192984028bcdfcf2b80c05650e1c3e9eb8a84fe3396b9eb0bfd1ba4d"
+    },
+    {
+      "path": "data/world-road-textures-full-tests-20261024.log",
+      "sha256": "ccb41d71a9495dd5edbf43f36810352672743222d9da06f59de4ae2cb7c15020"
+    },
+    {
+      "path": "data/world-road-textures-recovery-focus-20261024.log",
+      "sha256": "beeb983ef75c2927701358ea2739910c98acee0fd0bc525e766e0b7bbd9191c9"
+    },
+    {
+      "path": "data/world-road-textures-full-tests-final-20261024.log",
+      "sha256": "171baa2e3e30881e337f6aa9a9077b070cab9c652c0cc9c186e5cae7a8106f2f"
+    },
+    {
+      "path": "data/world-road-textures-build-20261024.log",
+      "sha256": "2ae0cf9f8d5fce506828ef36d88067cf5679aed4c0f2eda7889c582273b67fa7"
+    },
+    {
+      "path": "data/world-road-textures-types-20261024.log",
+      "sha256": "7f3594d7a965c703e6361ae50c0ef50cf9c344c621d801592b074b48554f4235"
+    },
+    {
+      "path": "data/world-road-textures-types-final-20261024.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "data/world-road-textures-audit-20261024.log",
+      "sha256": "a7ba25371122590545bd8acc76632dd7384d25478c2f287ec53565972c78b03d"
+    },
+    {
+      "path": "data/cua-world-road-texture-20261024-a1-provenance.json",
+      "sha256": "811823a2355153d8a4ebda9dbad88c0ed5adc534b3b0936996ea1d28f1929177"
+    },
+    {
+      "path": "data/cua-world-road-texture-20261024-a1-before.png",
+      "sha256": "e4c04c7edb4637c34c55f36cd0f44c5ad2aab9c50bf8c01f0560ec4b2e3110dd"
+    },
+    {
+      "path": "data/cua-world-road-texture-20261024-a1-after.png",
+      "sha256": "99c5edb76d8066d966c8944e570068f82ba32d7c234e73d37b05208ce6555429"
+    },
+    {
+      "path": "data/cua-world-road-texture-20261024-a1-after-fed-clear.png",
+      "sha256": "527dbbaa59e81541eeba96a3eb48d41ae1f75cfa73eb9e2901833e8b4aa34e61"
+    },
+    {
+      "path": "data/cua-world-road-texture-20261024-a1-before-view-ax.txt",
+      "sha256": "d8e4c6999dda1a07bbe21eb79f815f94b1a414b5acee0bdd2e0f15ced8b26ce6"
+    },
+    {
+      "path": "data/cua-world-road-texture-20261024-a1-after-view-ax.txt",
+      "sha256": "11a83d5530919f2990fa0452de4723983c0ab2d83ab775cb4605f3e5ae544858"
+    },
+    {
+      "path": "data/cua-world-road-texture-20261024-a1-after-fed-clear-view-ax.txt",
+      "sha256": "752ec324d84fb9a72c6af0898d5826fcde9920a67ebba71b7f03ff23d138f4d3"
+    },
+    {
+      "path": "data/cua-world-road-texture-20261024-a1-before-frames.json",
+      "sha256": "91017ff983a9216e3bcfb716eac6e1f80547ce893d2317cf7254a40418ab7687"
+    },
+    {
+      "path": "data/cua-world-road-texture-20261024-a1-after-frames.json",
+      "sha256": "502be5c5cb9d984486c5476829c6075797cd54516ac855e9e5e573241ef6b398"
+    },
+    {
+      "path": "data/cua-world-road-texture-20261024-a1-after-fed-clear-frames.json",
+      "sha256": "1ff0a3e220cb0500bd64e056874108451b6d01f1d85feeb47a66a8664f851a4d"
+    },
+    {
+      "path": "data/cua-world-road-texture-20261024-a1-after-errors.json",
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "path": "data/cua-world-road-texture-20261024-a1-after-fed-clear-errors.json",
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "path": "data/cua-world-road-texture-20261024-a1-earned-food-results.json",
+      "sha256": "3b94d360fdcdcb780f65a32c099768375d42f869200af63ce9630d22a376e748"
+    },
+    {
+      "path": "data/cua-world-road-texture-20261024-a1-pixel-analysis.json",
+      "sha256": "b8e4f7fdd74a7347a14ac9caa5bb384ca96aec445847ba809328cf882c5b6e90"
+    },
+    {
+      "path": "data/cua-world-road-texture-20261024-a1-pixel-analysis-fed.json",
+      "sha256": "b4dd075ae738db8e92e3eb9ff50c1d6aefec46e445d19bfc823370edc9a4b212"
+    },
+    {
+      "path": "data/cua-world-road-texture-20261024-a1-pixel-analysis-reproduced.json",
+      "sha256": "b38a838b07db928a1597ab282d477d03d28ba14c77d7e8e72696675e9f5f72f6"
+    },
+    {
+      "path": "data/cua-world-road-texture-20261024-a1-pixel-analysis-fed-final.json",
+      "sha256": "1ac1d2d707ff6022787f3beb6dfc320c2f29287facc360620c6f1a0cf35f76ef"
+    },
+    {
+      "path": "data/cua-world-road-texture-20261024-a1-audit.json",
+      "sha256": "e32ba78746c1548a648c48f992396e2a8aa7f7201da46a273591b1dd422cabd2"
+    },
+    {
+      "path": "data/cua-world-road-texture-20261024-a1-before-connected-world-private.json",
+      "sha256": "85f25f494ead57f6d4934c83e051b08151c4694bb59759653bede254087fd4ad"
+    },
+    {
+      "path": "data/cua-world-road-texture-20261024-a1-before-end-world-private.json",
+      "sha256": "0024a5001007ce48f903de4591968e576ff33b7166adc983de9af06ac9852cd0"
+    },
+    {
+      "path": "data/cua-world-road-texture-20261024-a1-before-end-events.json",
+      "sha256": "5f2b63657301b14b7b416cdd2174f282c612e7dd72da7b1af625f5f2cbd7cacb"
+    },
+    {
+      "path": "data/cua-world-road-texture-20261024-a1-before-server.log",
+      "sha256": "212aea2345573c7ae041aebab6745ea639ab2dcd94f875b7026228002d81e575"
+    },
+    {
+      "path": "data/cua-world-road-texture-20261024-a1-after-connected-world-private.json",
+      "sha256": "553a216183eadf1b86214feabfc3f67c6dffe84332e3b160acc2185c1ac1e62d"
+    },
+    {
+      "path": "data/cua-world-road-texture-20261024-a1-after-end-world-private.json",
+      "sha256": "233c47f1c8caec51912615e5861ab3ef0aac838affce64b0d4243d7554b18029"
+    },
+    {
+      "path": "data/cua-world-road-texture-20261024-a1-after-end-events.json",
+      "sha256": "ee0b4deeb6a048620139b8b0b99b2fe1d232cc9e7253932b87dea3ad30722254"
+    },
+    {
+      "path": "data/cua-world-road-texture-20261024-a1-after-server.log",
+      "sha256": "212aea2345573c7ae041aebab6745ea639ab2dcd94f875b7026228002d81e575"
+    },
+    {
+      "path": "data/cua-world-road-texture-20261024-a1-after-fed-connected-world-private.json",
+      "sha256": "47b645d294af9f107caa44f6050b376135a7408336ad00e9b2b522e5a822add6"
+    },
+    {
+      "path": "data/cua-world-road-texture-20261024-a1-after-fed-food-recovered-world-private.json",
+      "sha256": "a29e46e6d7b3fa672f62a00cdde50a025b6d66914fbefed78f6ec995ba3b3763"
+    },
+    {
+      "path": "data/cua-world-road-texture-20261024-a1-after-fed-food-recovered-events.json",
+      "sha256": "f3d501ed8b3326e9d4fc7902265215da30dc100a92d6e0f8b439c5db92aa638c"
+    },
+    {
+      "path": "data/cua-world-road-texture-20261024-a1-after-fed-server.log",
+      "sha256": "212aea2345573c7ae041aebab6745ea639ab2dcd94f875b7026228002d81e575"
+    },
+    {
+      "path": "data/cua-world-road-texture-20261024-a1-after-fed-clear-connected-world-private.json",
+      "sha256": "9e178a507ad148421ffbd98584d77db647e32cf448d60404c1ad2d4d2fa0ee0a"
+    },
+    {
+      "path": "data/cua-world-road-texture-20261024-a1-after-fed-clear-end-world-private.json",
+      "sha256": "493536754f096e4814d84a8a5c27e3076fcbe54739e3b7497face0786faa698e"
+    },
+    {
+      "path": "data/cua-world-road-texture-20261024-a1-after-fed-clear-end-events.json",
+      "sha256": "55d5028056bb0272ab9c6b7dbf973e4e03ae4df22b5c0af1dd8bc8e070f1dcba"
+    },
+    {
+      "path": "data/cua-world-road-texture-20261024-a1-after-fed-clear-server.log",
+      "sha256": "212aea2345573c7ae041aebab6745ea639ab2dcd94f875b7026228002d81e575"
+    },
+    {
+      "path": "dist/index.html",
+      "sha256": "bad6305dd855cf9535516aa8d8e0ddb56d77ff32abeedbd016f27faaa43932d6"
+    },
+    {
+      "path": "dist/assets/index-Brkz-JAn.js",
+      "sha256": "83e49c807e84023635365d569653c4a90117ae9519bc1daca0b97ac4753f30da"
+    }
+  ]
+}
