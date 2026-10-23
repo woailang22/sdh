@@ -14,6 +14,34 @@ const rules: WorldRules = {
   monstersNear: () => [],
 };
 describe('cached public building definitions', () => {
+  it('uses fresh collision data after door changes and direct building insertion, replacement and deletion', () => {
+    const { game, act, advance } = setup(); const p = game.state.players.owner;
+    p.mapId = 'home_owner'; p.x = 0; p.y = 0;
+    expect(game.snapshot('owner').buildings).toEqual([]);
+    const door = { id: 'fresh-door', type: 'door' as const, name: '门', x: 1, y: 0, mapId: p.mapId, ownerId: p.id, hp: 100, maxHp: 100, level: 1, isOpen: false };
+    game.state.buildings[door.id] = door;
+    advance(400); expect(game.move('owner', { x: 1, y: 0 })).toBe(false);
+    expect(act('owner', 'toggle_door', { targetId: door.id }).error).toBeUndefined();
+    expect(game.move('owner', { x: 1, y: 0 })).toBe(true);
+    p.x = 0; game.state.buildings[door.id] = { ...door, isOpen: false };
+    advance(400); expect(game.move('owner', { x: 1, y: 0 })).toBe(false);
+    game.state.buildings[door.id].hp = 0;
+    expect(game.move('owner', { x: 1, y: 0 })).toBe(true);
+    p.x = 0; game.state.buildings = { [door.id]: { ...door, isOpen: false } };
+    advance(400); expect(game.move('owner', { x: 1, y: 0 })).toBe(false);
+    delete game.state.buildings[door.id]; expect(game.move('owner', { x: 1, y: 0 })).toBe(true);
+  });
+  it('excludes inherited, distant and other-map buildings while retaining current public overrides exactly once', () => {
+    const publicDoor = { id: 'public-door', type: 'door' as const, name: '门', x: 1, y: 0, mapId: 'world' as const, ownerId: 'public', hp: 100, maxHp: 100, level: 1, isOpen: true };
+    const game = new GameWorld(createMemoryDb(), { ...rules, buildingsNear: () => [publicDoor] }); game.connect('owner', '行者');
+    game.state.buildings = Object.assign(Object.create({ inherited: { ...publicDoor, id: 'inherited' } }), {
+      'public-door': { ...publicDoor, isOpen: false }, far: { ...publicDoor, id: 'far', x: 80 }, elsewhere: { ...publicDoor, id: 'elsewhere', mapId: 'home_elsewhere' },
+    });
+    const buildings = game.snapshot('owner').buildings;
+    expect(buildings).toHaveLength(1); expect(buildings[0]).toMatchObject({ id: publicDoor.id, isOpen: false });
+    delete game.state.buildings[publicDoor.id];
+    expect(game.snapshot('owner').buildings).toMatchObject([{ id: publicDoor.id, isOpen: true }]);
+  });
   it('commits a detached private reply without constructing shared entities and rejects shared actions on that path', () => {
     const { game, db } = setup(); const p = game.state.players.owner;
     p.equipment.weapon = makeItem('rifle', 1); p.resources.ammo = 10; p.inventory[0] = makeItem('food', 2); game.persist();

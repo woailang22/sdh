@@ -220,7 +220,11 @@ export class GameWorld {
   persist() { this.db.checkpointWorld(JSON.stringify(this.state)); }
 
   private buildingsFor(p: { mapId: MapZoneId; x: number; y: number }): BuildingEntity[] {
-    const persistent = Object.values(this.state.buildings).filter(b => b.mapId === p.mapId && (p.mapId !== 'world' || distance(p, b) < 80));
+    const persistent: BuildingEntity[] = [];
+    for (const id of Object.keys(this.state.buildings)) {
+      const b = this.state.buildings[id];
+      if (b.mapId === p.mapId && (p.mapId !== 'world' || distance(p, b) < 80)) persistent.push(b);
+    }
     if (p.mapId !== 'world') return persistent;
     const known = new Set(persistent.map(b => b.id));
     return persistent.concat(this.rules.buildingsNear(p.x, p.y).filter(b => !known.has(b.id)));

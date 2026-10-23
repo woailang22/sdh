@@ -1,0 +1,459 @@
+{
+  "date": "2026-10-23",
+  "baselineCommit": "af921701a6f5888d523dd1f9a7ff3bfa19013b68",
+  "result": "Fresh query work reduced; eight-connection acceptance still FAILED and is not claimed fixed.",
+  "change": "Own-key traversal replaces Object.values+filter in GameWorld.buildingsFor; no cross-call cache, changed radius/order/visibility/rate or snapshot cadence.",
+  "verification": {
+    "tests": 476,
+    "testFiles": 32,
+    "typecheck": "passed after fixing an ignored diagnostic wrapper overload type; production typing unchanged",
+    "build": "passed; index-Ci3C41xg.js unchanged",
+    "independentReview": "No P1/P2; own-key order and fresh dictionary/door/public override semantics retained.",
+    "behaviorCoverage": [
+      "Direct insertion/replacement/deletion and complete dictionary replacement",
+      "Door open/destroyed collision, inherited and other-map/distant records excluded, latest public override deduplicated"
+    ],
+    "failFirstPerformance": "Original dense gate ataf92170 failed1/1 refusals; separate30s diagnostic reproduced8/4 before this change. Added behavior checks already passed on old code; no test tied to loop syntax."
+  },
+  "diagnostic": {
+    "environment": "Separate fresh synthetic5675-building copies, two native Chrome1551920x1080DPR1 plus6 response-paced protocol peers;30s walking/held fire; real clocks. In-memory stage/receipt/queue/wire-serialization timing and IPC; no CPU profiler, per-frame disk writes, concurrent tests/builds/extra QA browsers. Overlapping stages must not be summed.",
+    "before": {
+      "variant": 7,
+      "eventLoop": {
+        "p50Ms": 8.212479,
+        "p95Ms": 42.663935,
+        "p99Ms": 91.684863,
+        "maxMs": 155.189247
+      },
+      "stages": {
+        "buildingsFor": {
+          "count": 1994,
+          "totalMs": 5938,
+          "p50": 2.983700000000681,
+          "p95": 4.211699999999837,
+          "max": 6.00449999999546
+        },
+        "move": {
+          "count": 1850,
+          "totalMs": 9350,
+          "p50": 5.013600000005681,
+          "p95": 7.47860000000037,
+          "max": 10.297500000000582
+        },
+        "tick": {
+          "count": 147,
+          "totalMs": 877,
+          "p50": 5.815699999999197,
+          "p95": 7.886300000000119,
+          "max": 12.99500000000262
+        },
+        "snapshotPlayer": {
+          "count": 2370,
+          "totalMs": 165,
+          "p50": 0.06409999999959837,
+          "p95": 0.14660000000003492,
+          "max": 0.4331999999994878
+        },
+        "encodePlayer": {
+          "count": 2370,
+          "totalMs": 1030,
+          "p50": 0.0023999999975785613,
+          "p95": 0.00960000000486616,
+          "max": 34.45309999999881
+        },
+        "wireJson": {
+          "count": 2466,
+          "totalMs": 449,
+          "p50": 0.011200000000826549,
+          "p95": 0.02929999999832944,
+          "max": 12.898300000000745
+        },
+        "snapshot": {
+          "count": 144,
+          "totalMs": 1726,
+          "p50": 12.000899999999092,
+          "p95": 15.421000000002095,
+          "max": 16.72270000000026
+        },
+        "encode": {
+          "count": 144,
+          "totalMs": 1387,
+          "p50": 9.60109999999986,
+          "p95": 12.343000000000757,
+          "max": 17.704200000000128
+        },
+        "persist": {
+          "count": 6,
+          "totalMs": 199,
+          "p50": 34.775399999998626,
+          "p95": 39.34710000000268,
+          "max": 39.34710000000268
+        }
+      },
+      "rejected": [
+        8,
+        4
+      ]
+    },
+    "after": {
+      "variant": 8,
+      "eventLoop": {
+        "p50Ms": 7.561215,
+        "p95Ms": 30.752767,
+        "p99Ms": 68.550655,
+        "maxMs": 208.535551
+      },
+      "stages": {
+        "buildingsFor": {
+          "count": 1982,
+          "totalMs": 3491,
+          "p50": 1.7397000000019034,
+          "p95": 2.753600000000006,
+          "max": 3.999599999999191
+        },
+        "move": {
+          "count": 1838,
+          "totalMs": 6005,
+          "p50": 3.2322000000021944,
+          "p95": 4.916799999999057,
+          "max": 7.417699999998149
+        },
+        "snapshotPlayer": {
+          "count": 2363,
+          "totalMs": 155,
+          "p50": 0.06009999999514548,
+          "p95": 0.14199999999982538,
+          "max": 0.4757000000026892
+        },
+        "encodePlayer": {
+          "count": 2363,
+          "totalMs": 954,
+          "p50": 0.002599999999802094,
+          "p95": 0.009200000000419095,
+          "max": 25.045100000003004
+        },
+        "wireJson": {
+          "count": 2459,
+          "totalMs": 464,
+          "p50": 0.011299999998300336,
+          "p95": 0.029200000000855653,
+          "max": 12.586500000001251
+        },
+        "tick": {
+          "count": 147,
+          "totalMs": 798,
+          "p50": 5.3171000000002095,
+          "p95": 7.54240000000209,
+          "max": 8.721999999994296
+        },
+        "snapshot": {
+          "count": 144,
+          "totalMs": 1556,
+          "p50": 10.826799999998912,
+          "p95": 13.34820000000036,
+          "max": 18.709900000001653
+        },
+        "encode": {
+          "count": 144,
+          "totalMs": 1347,
+          "p50": 9.347399999998743,
+          "p95": 11.849099999999453,
+          "max": 13.403800000000047
+        },
+        "persist": {
+          "count": 6,
+          "totalMs": 202,
+          "p50": 35.44540000000052,
+          "p95": 39.03050000000076,
+          "max": 39.03050000000076
+        }
+      },
+      "rejected": [
+        3,
+        2
+      ]
+    },
+    "interpretation": "buildingsFor total5938→3491ms andmove9350→6005ms;P99loop91.68→68.55ms. Maximum loop delay155.19→208.54ms worsened, so not a general tail-latency fix.",
+    "worstAfterBurst": {
+      "lagMs": 207.9142,
+      "windowMs": 212.9142,
+      "coveredInstrumentedUnionMs": 158.6577,
+      "fullBaselines": 4,
+      "moves": 12,
+      "ticks": 2,
+      "baselineOffsetsMs": [
+        -204,
+        -167,
+        -131,
+        -94
+      ],
+      "meaning": "Four full snapshot/encode/wire fallbacks execute in one delayed-timer window, alongside moves/ticks. This locates a remaining baseline burst; uninstrumented remainder is not attributed to GC or OS."
+    }
+  },
+  "acceptance": {
+    "overallPassed": false,
+    "environment": "Original unmodified acceptance harness:20s idle+60s two-native walking/held fire, then30s with6 protocol peers only after native gate passes. Same5675 structures4000 floors540 defensive rounds; production build, no profiling/concurrent tooling.",
+    "phases": [
+      {
+        "name": "two-native-idle",
+        "seconds": 20.452,
+        "clients": [
+          {
+            "client": 1,
+            "sent": 0,
+            "acknowledged": 0,
+            "pending": 0,
+            "errors": [],
+            "ammo": 2000,
+            "replyP50Ms": 0,
+            "replyP95Ms": 0,
+            "renderP95Ms": 5.600000001490116,
+            "corrections": 0,
+            "diagnostics": 0,
+            "longTasks": 0
+          },
+          {
+            "client": 2,
+            "sent": 0,
+            "acknowledged": 0,
+            "pending": 0,
+            "errors": [],
+            "ammo": 2000,
+            "replyP50Ms": 0,
+            "replyP95Ms": 0,
+            "renderP95Ms": 5.700000002980232,
+            "corrections": 0,
+            "diagnostics": 0,
+            "longTasks": 0
+          }
+        ],
+        "protocolActors": []
+      },
+      {
+        "name": "two-native-walk-and-fire",
+        "seconds": 60.536,
+        "clients": [
+          {
+            "client": 1,
+            "sent": 390,
+            "acknowledged": 390,
+            "pending": 0,
+            "errors": [],
+            "ammo": 1610,
+            "replyP50Ms": 7.600000001490116,
+            "replyP95Ms": 38.899999998509884,
+            "renderP95Ms": 5.699999995529652,
+            "corrections": 0,
+            "diagnostics": 0,
+            "longTasks": 0
+          },
+          {
+            "client": 2,
+            "sent": 390,
+            "acknowledged": 390,
+            "pending": 0,
+            "errors": [],
+            "ammo": 1610,
+            "replyP50Ms": 8.200000002980232,
+            "replyP95Ms": 31.5,
+            "renderP95Ms": 6.299999997019768,
+            "corrections": 0,
+            "diagnostics": 0,
+            "longTasks": 0
+          }
+        ],
+        "protocolActors": []
+      },
+      {
+        "name": "two-native-plus-six-protocol-walk-and-fire",
+        "seconds": 30.573,
+        "clients": [
+          {
+            "client": 1,
+            "sent": 195,
+            "acknowledged": 195,
+            "pending": 0,
+            "errors": [
+              "射击请求过快",
+              "射击请求过快"
+            ],
+            "ammo": 1417,
+            "replyP50Ms": 24.899999998509884,
+            "replyP95Ms": 137.80000000447035,
+            "renderP95Ms": 5.899999998509884,
+            "corrections": 0,
+            "diagnostics": 0,
+            "longTasks": 0
+          },
+          {
+            "client": 2,
+            "sent": 192,
+            "acknowledged": 192,
+            "pending": 0,
+            "errors": [
+              "射击请求过快"
+            ],
+            "ammo": 1419,
+            "replyP50Ms": 12.700000002980232,
+            "replyP95Ms": 130.69999999552965,
+            "renderP95Ms": 6.399999998509884,
+            "corrections": 0,
+            "diagnostics": 0,
+            "longTasks": 0
+          }
+        ],
+        "protocolActors": [
+          {
+            "actor": 3,
+            "sent": 149,
+            "acked": 149,
+            "pending": false,
+            "errors": []
+          },
+          {
+            "actor": 4,
+            "sent": 149,
+            "acked": 149,
+            "pending": false,
+            "errors": []
+          },
+          {
+            "actor": 5,
+            "sent": 149,
+            "acked": 149,
+            "pending": false,
+            "errors": []
+          },
+          {
+            "actor": 6,
+            "sent": 149,
+            "acked": 149,
+            "pending": false,
+            "errors": []
+          },
+          {
+            "actor": 7,
+            "sent": 149,
+            "acked": 149,
+            "pending": false,
+            "errors": []
+          },
+          {
+            "actor": 8,
+            "sent": 149,
+            "acked": 149,
+            "pending": false,
+            "errors": []
+          }
+        ]
+      }
+    ],
+    "browserExceptions": 0,
+    "notes": "Two-native390/390 rounds each passed; third phase2/1 refusals vs1/1 previous, so no acceptance improvement claim. Six protocols each149 successful replies; not eight native clients or PvP load."
+  },
+  "audit": {
+    "integrity": "ok",
+    "version": 3,
+    "pendingCommitRows": 8,
+    "buildings": 5675,
+    "defensiveAmmo": 540,
+    "checks": {
+      "buildings": true,
+      "camps": true,
+      "storage": true,
+      "ammo": true,
+      "production": true,
+      "nodes": true,
+      "drops": true,
+      "monsters": true
+    },
+    "players": [
+      {
+        "actor": 1,
+        "ammo": 1417,
+        "spent": 583,
+        "hp": 100,
+        "satiety": 69.51875000000003
+      },
+      {
+        "actor": 2,
+        "ammo": 1419,
+        "spent": 581,
+        "hp": 100,
+        "satiety": 70.28850000000008
+      },
+      {
+        "actor": 3,
+        "ammo": 1851,
+        "spent": 149,
+        "hp": 100,
+        "satiety": 92.29674999999999
+      },
+      {
+        "actor": 4,
+        "ammo": 1851,
+        "spent": 149,
+        "hp": 100,
+        "satiety": 92.30050000000001
+      },
+      {
+        "actor": 5,
+        "ammo": 1851,
+        "spent": 149,
+        "hp": 100,
+        "satiety": 92.28700000000002
+      },
+      {
+        "actor": 6,
+        "ammo": 1851,
+        "spent": 149,
+        "hp": 100,
+        "satiety": 92.27300000000001
+      },
+      {
+        "actor": 7,
+        "ammo": 1851,
+        "spent": 149,
+        "hp": 100,
+        "satiety": 92.51550000000002
+      },
+      {
+        "actor": 8,
+        "ammo": 1851,
+        "spent": 149,
+        "hp": 100,
+        "satiety": 92.55600000000001
+      }
+    ]
+  },
+  "sharedRestartReplay": {
+    "success": true,
+    "steps": [
+      {
+        "step": "door-shared",
+        "open": false,
+        "owner": true,
+        "buddy": true
+      },
+      {
+        "step": "door-shared",
+        "open": true,
+        "owner": true,
+        "buddy": true
+      },
+      {
+        "step": "restart-and-replay",
+        "client": 1,
+        "ammo": 1417,
+        "duplicateSpent": 0
+      },
+      {
+        "step": "restart-and-replay",
+        "client": 2,
+        "ammo": 1419,
+        "duplicateSpent": 0
+      }
+    ]
+  },
+  "remaining": "Target synchronized complete baselines with an explicitly bounded refresh schedule that preserves the five-second deadline and all immediate shared updates, or reduce their work; keep original input cadence and one-slot/rate bounds. Full goal remains active."
+}
