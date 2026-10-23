@@ -1,0 +1,28 @@
+# Authoritative death-bag reconciliation
+
+**Goal:** A death bag that was emptied, expired or left the server's nearby list must stop rendering and accepting interaction. Surviving bags remain available across world chunk refreshes.
+
+**Evidence:** Native two-browser normal100HP/100shield combat in synthetic camp fixture native-player-duel-20261023-a1: two mouse shots, victim respawn and native movement succeed. Taking all loot grants exactly6 wood/2 food/30 victim ammo (shooter58 after spending2), server drops becomes empty, but the engine still contains and labels the bag. App.tsx only appends drops. World chunk refresh also replaces interactables without retaining server bags. StateDecoder reconstructs complete shared lists before App receives state.
+
+**Design:** Reuse the engine's authoritative setter pattern. Keep only the latest current-map bag entities in a Map; reconcile registered IDs without deleting authored resources/containers, preserve surviving entity references during search, append that bounded Map when refreshing world chunks, clear it on map warp. Removal clears only a matching nearest target and active bag search. App calls the setter instead of appending. Server rewards, persistence, balance and protocol are unchanged. A prefix-only deletion or clearing all boxes would incorrectly affect authored objects; an App-only deletion would still lose bags during chunk changes.
+
+- [x] Add regression cases to src/game/IsometricEngine.test.ts: removal preserves authored boxes, surviving entity/search identity, removal cancels only the removed search, chunk refresh preserves a bag once, map transitions forget old bags and filter foreign-map bags. Run npm test -- src/game/IsometricEngine.test.ts and confirm the missing API fails.
+- [x] Add setAuthoritativeDrops and its current-map entity Map in src/game/IsometricEngine.ts; wire refreshWorld/warpToMap and replace App.tsx append loop. Run focused tests, full tests, type check and production build.
+- [x] Preserve failed nativea1. Prepare fresh synthetic homea2 and worlda3 fixtures; use actual two-browser mouse/keyboard combat, respawn movement and take-all. Assert paid ammo/resources, zero errors and no remaining bag entity after the server removes it. Inspect screenshots, audit synthetic saved state and restart persistence.
+- [x] Independent read-only review and remote-panel correction, native homea8/worlda9 three-browser checks, exact evidence and limitations recorded. Authorized sdh/main commit/push follows staged review. This is an ordinary combat/loot check, not an eight-client FPS/latency capacity claim.
+
+## Review-linked panel correction
+
+Review found that an already open App loot panel can outlive its server bag when another player empties it. Fresh three-browser nativea5 confirms drops=0, hasTakeAll=true and inputBlocked=true after the other browser takes all; this is a real additional red case. a4 did not reach this case because the observer selected the adjacent camp wall instead of the bag, so it is an invalid QA attempt, not proof of the panel issue. a5 first walks the observer to the bag with native mouse input and successfully opens both panels.
+
+Close an existing panel only if its ID belonged to the previous authoritative drops and is absent from the next list, when there is no explicit new loot response. Ordinary resource/storage panels remain outside this rule. Verify with a fresh three-browser fixture, zero observer rewards/errors and restored movement, retaining the failed a5 evidence.
+
+## Verification result and outstanding movement sample
+
+Final three-Chrome homea8/worlda9 both pass ordinary100HP/100shield two mouse shots (first105 damage leaves95HP/0shield), immediate corrected respawn, native right-click movement to near0,5, owner search/take-all, remote open-panel removal and observer walking afterward. Owner ends with58 ammo/6 wood/2 food, victim drops all carried resources/inventory once and retains equipment, observer has0 resources/items. No action errors, render diagnostics, browser exceptions or development HMR in accepted runs. Two-browsera2/a3 also passed. Screenshots were inspected.
+
+Read-only SQLite audits merge latest private rows and pass integrity/shared asset conservation for all four accepted fixtures. All5675 buildings, camps after the declared non-member fixture, storage, nodes, production and540 defensive rounds remain unchanged. Consistent SQLite backup restored through the real GameWorld constructor retains resources, inventory, equipment, HP and saved movement; no consumed bag returns. This is GameWorld restoration, not an extra browser server-restart performance measurement.
+
+Preserveda6 passed panel removal but failed an erroneous QA assertion comparing string-concatenated202 instead of22; fresh scripts fix arithmetic. a7 genuinely timed out in the earlier post-respawn walk before reaching loot; saved victim0,2.93458. That script did not collect live movement/correction state at failure, so root cause is unknown. Failure capture now records every browser's targets/path/keys/blocked/server position/errors and screenshot. Fresha8/9 pass, but cannot erasea7 or claim walking is universally fixed. Trace this intermittent case separately. Existing crowded-native shot refusal and full performance/raid/balance gates remain outstanding.
+
+Final40 files/537 tests, type check and production build pass (index-27reS25U.js). Existing Vite future-loader and chunk-size warnings remain. Independent panel follow-up review finds no new P1/P2. Sanitized evidence: docs/verification/2026-10-23-authoritative-death-bags-results.json. QA used only synthetic fixture copies and cleaned owned processes; production data was not opened.

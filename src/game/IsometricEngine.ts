@@ -94,6 +94,7 @@ export class IsometricEngine {
   private worldChunks = new Map<string, WorldChunk>();
   private worldWindow = '';
   private serverBuildings: BuildingEntity[] = [];
+  private serverDrops = new Map<string, InteractableEntity>();
   private monsterAuthority = false;
   private monsterTargets = new Map<string, { x: number; y: number }>();
   private movePath: { x: number; y: number }[] = [];
@@ -460,6 +461,7 @@ export class IsometricEngine {
 
   // Smooth Teleportation / Walking Boundary Warping across Maps
   public warpToMap(targetMap: MapZoneId, targetX: number = 0, targetY: number = 0, waypointName?: string) {
+    this.setAuthoritativeDrops([]);
     this.warpCooldown = 2.5;
     this.currentMapId = targetMap;
     this.player.x = targetX;
@@ -534,7 +536,7 @@ export class IsometricEngine {
       chunks.push(chunk);
     }
     while (this.worldChunks.size > 64) this.worldChunks.delete(this.worldChunks.keys().next().value!);
-    this.interactables = chunks.flatMap(c => c.interactables);
+    this.interactables = [...chunks.flatMap(c => c.interactables), ...this.serverDrops.values()];
     if (!this.monsterAuthority) this.monsters = chunks.flatMap(c => c.monsters);
     const changes = new Map(this.serverBuildings.map(b => [b.id, b]));
     this.buildings = chunks.flatMap(c => c.buildings).map(b => changes.get(b.id) ?? b);
@@ -553,6 +555,25 @@ export class IsometricEngine {
     for (const b of this.buildings) if (b.type.endsWith('_floor')) {
       this.placedFloors.set(`${b.x},${b.y}`, { x: b.x, y: b.y, type: b.type as 'wood_floor' | 'stone_floor' | 'iron_floor' });
     }
+  }
+
+  public setAuthoritativeDrops(drops: { id: string; name: string; mapId: MapZoneId; x: number; y: number }[]) {
+    const next = new Map<string, InteractableEntity>();
+    for (const drop of drops) if (drop.mapId === this.currentMapId) {
+      const entity = this.serverDrops.get(drop.id) ?? {
+        id: drop.id, name: drop.name, type: 'box', x: drop.x, y: drop.y,
+        radius: 2.8, available: true, prompt: '[E/F 搜索掉落包]', searchDuration: 0.6, stock: 1,
+      };
+      Object.assign(entity, { name: drop.name, x: drop.x, y: drop.y });
+      next.set(drop.id, entity);
+    }
+    if (this.nearestInteractable && this.serverDrops.has(this.nearestInteractable.id) && !next.has(this.nearestInteractable.id)) this.nearestInteractable = null;
+    if (this.lootTarget && this.serverDrops.has(this.lootTarget.id) && !next.has(this.lootTarget.id)) {
+      this.isLooting = false; this.lootTarget = null; this.lootingTimer = 0; this.lootProgress = 0;
+    }
+    this.interactables = this.interactables.filter(it => !this.serverDrops.has(it.id) && !next.has(it.id));
+    this.serverDrops = next;
+    this.interactables.push(...next.values());
   }
 
   public setResourceStates(nodes: { id: string; stock: number; respawnAt: number }[]) {

@@ -549,6 +549,7 @@ export default function App() {
     setRaidDoor(v => v ? state.buildings.find(b => b.id === v.id) ?? null : null);
     setManagedBuilding(v => v ? state.buildings.find(b => b.id === v.id) ?? null : null);
     if (state.loot) setLootPanel(state.loot.items.length ? { ...state.loot, items: state.loot.items.map(it => ({ ...it, taken: false })) } : null);
+    else setLootPanel(panel => panel && prev?.drops.some(drop => drop.id === panel.id) && !state.drops.some(drop => drop.id === panel.id) ? null : panel);
     if (state.error) { pushSystemMsg(state.error); setActionNotice(state.error); }
     const eng = engineRef.current;
     if (!eng) return;
@@ -574,9 +575,7 @@ export default function App() {
     eng.setAuthoritativeBuildings(state.buildings);
     eng.setResourceStates(state.nodes);
     eng.setAuthoritativeMonsters(state.monsters);
-    for (const drop of state.drops) if (!eng.interactables.some(it => it.id === drop.id)) {
-      eng.interactables.push({ id: drop.id, name: drop.name, type: 'box', x: drop.x, y: drop.y, radius: 2.8, available: true, prompt: '[E/F 搜索掉落包]', searchDuration: 0.6, stock: 1 });
-    }
+    eng.setAuthoritativeDrops(state.drops);
   }, [pushSystemMsg]);
 
   // 采集技能经验（星露谷式）：升级提示 + 产量加成同步引擎

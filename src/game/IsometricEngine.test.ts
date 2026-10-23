@@ -132,6 +132,83 @@ describe('authoritative ammunition projection', () => {
   });
 });
 
+describe('authoritative death bags', () => {
+  const bag = { id: 'drop_player', name: '幸存者的掉落背包', mapId: 'home_self', x: 0, y: 0 } as const;
+  function camp() { const result = setup(); result.engine.warpToMap('home_self'); return result.engine; }
+
+  it('removes missing bags while preserving authored boxes and resources', () => {
+    const engine = camp();
+    const authored = { id: 'drop_authored', name: '遗迹箱子', type: 'box', x: 1, y: 0, radius: 2, available: true, prompt: '搜索' } as const;
+    engine.interactables.push(authored);
+    engine.setAuthoritativeDrops([bag]);
+    const target = engine.interactables.find(it => it.id === bag.id)!;
+    expect(target).toMatchObject({ type: 'box', stock: 1, searchDuration: 0.6, x: 0, y: 0 });
+    engine.nearestInteractable = target;
+    engine.setAuthoritativeDrops([]);
+    expect(engine.interactables).toEqual([authored]);
+    expect(engine.nearestInteractable).toBeNull();
+  });
+
+  it('keeps a surviving bag and its active search through repeated snapshots', () => {
+    const engine = camp(); engine.setAuthoritativeDrops([bag]);
+    const target = engine.interactables[0];
+    engine.isLooting = true; engine.lootProgress = 0.5;
+    Object.assign(engine as any, { lootTarget: target, lootingTimer: 0.3 });
+    engine.setAuthoritativeDrops([{ ...bag, name: '更新的名字', x: 1 }]);
+    expect(engine.interactables).toHaveLength(1);
+    expect(engine.interactables[0]).toBe(target);
+    expect(target).toMatchObject({ name: '更新的名字', x: 1 });
+    expect((engine as any).lootTarget).toBe(target);
+    expect(engine.isLooting).toBe(true); expect(engine.lootProgress).toBe(0.5);
+    expect((engine as any).lootingTimer).toBe(0.3);
+  });
+
+  it('cancels a removed bag search before it can send a stale search action', () => {
+    const engine = camp(); engine.setAuthoritativeDrops([bag]);
+    const action = vi.fn(); (engine as any).callbacks.onGameAction = action;
+    engine.isLooting = true; engine.lootProgress = 0.5;
+    Object.assign(engine as any, { lootTarget: engine.interactables[0], lootingTimer: 0.3 });
+    engine.setAuthoritativeDrops([]);
+    expect(engine.isLooting).toBe(false); expect(engine.lootProgress).toBe(0);
+    expect((engine as any).lootTarget).toBeNull(); expect((engine as any).lootingTimer).toBe(0);
+    (engine as any).update(0.4);
+    expect(action).not.toHaveBeenCalled();
+  });
+
+  it('does not interrupt an unrelated resource search when a bag disappears', () => {
+    const engine = camp(); engine.setAuthoritativeDrops([bag]);
+    const resource = { id: 'tree', type: 'tree' };
+    engine.isLooting = true; engine.lootProgress = 0.5;
+    Object.assign(engine as any, { lootTarget: resource, lootingTimer: 0.3 });
+    engine.setAuthoritativeDrops([]);
+    expect(engine.isLooting).toBe(true); expect(engine.lootProgress).toBe(0.5);
+    expect((engine as any).lootTarget).toBe(resource);
+  });
+
+  it('retains a world bag once when the loaded chunk window changes', () => {
+    const { engine } = setup(); engine.setAuthoritativeDrops([{ ...bag, mapId: 'world', x: 32 }]);
+    const target = engine.interactables.find(it => it.id === bag.id)!;
+    engine.player.x = 33; (engine as any).refreshWorld();
+    engine.setAuthoritativeBuildings([]);
+    expect(engine.interactables.filter(it => it.id === bag.id)).toEqual([target]);
+    engine.setAuthoritativeDrops([]); engine.setAuthoritativeBuildings([]);
+    expect(engine.interactables.some(it => it.id === bag.id)).toBe(false);
+  });
+
+  it('forgets old bags on map changes and ignores foreign-map bags', () => {
+    const engine = camp(); engine.setAuthoritativeDrops([bag]);
+    engine.nearestInteractable = engine.interactables[0];
+    engine.warpToMap('world');
+    expect(engine.nearestInteractable).toBeNull();
+    engine.setAuthoritativeDrops([bag]);
+    expect(engine.interactables.some(it => it.id === bag.id)).toBe(false);
+    engine.warpToMap('home_self'); engine.setAuthoritativeDrops([{ ...bag, mapId: 'world' }]);
+    expect(engine.interactables).toEqual([]);
+    engine.warpToMap('world');
+    expect(engine.interactables.some(it => it.id === bag.id)).toBe(false);
+  });
+});
+
 describe('server weather synchronization', () => {
   it('retains the server countdown instead of resetting it to a client-only duration', () => {
     const { engine } = setup();

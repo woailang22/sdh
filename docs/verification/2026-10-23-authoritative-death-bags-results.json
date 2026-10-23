@@ -1,0 +1,518 @@
+{
+  "date": "2026-10-23",
+  "baselineCommit": "44109615e9e19bae39800958218551fda8ea66ef",
+  "scope": "Reconcile server death bags and close stale remote loot panels; ordinary HP native-browser combat and loot correctness only.",
+  "fixture": "Synthetic copy of dense-concurrent-20261023-a1, 5675 buildings/4000 floors/18 towers/540 defensive rounds. Combat HP100/shield100, rifle and normal vest, shooter30 ammo and victim30 ammo/6 wood/2 food are prepared seeds, not earned progression. Original production database never opened.",
+  "execution": "Chrome155, independent profiles, 1920x1080 DPR1 documents visible. Real CDP mouse/key input only for gameplay; QA reads live production objects and observes network/state/damage callbacks. Production server and SQLite, normal clock, no concurrent tests/build/profilers during gameplay. Each run cleans owned server/browser processes.",
+  "negativeEvidence": {
+    "originalBag": {
+      "step": "native-death-loot-taken",
+      "wood": 6,
+      "ammo": 58,
+      "food": 2,
+      "serverDrops": 0,
+      "ghost": true,
+      "targetedShots": 2,
+      "errors": [],
+      "diagnostics": []
+    },
+    "remoteOpenPanel": {
+      "step": "remote-bag-taken-observer",
+      "drops": 0,
+      "hasTakeAll": true,
+      "blocked": true,
+      "errors": []
+    }
+  },
+  "runs": [
+    {
+      "fixture": "native-player-duel-20261023-a2",
+      "success": true,
+      "fixtureDetails": {
+        "synthetic": true,
+        "mode": "home",
+        "normalHp": 100,
+        "shield": 100,
+        "weapon": "rifle",
+        "victimArmor": "vest",
+        "buildings": 5675,
+        "note": "Prepared combat fixture, ordinary HP and real mouse/keys. No earned-economy or sustained-capacity claim."
+      },
+      "steps": [
+        {
+          "step": "normal-pair-ready",
+          "hp": 100,
+          "shield": 100,
+          "map": "camp",
+          "client": {
+            "x": 0,
+            "y": 20
+          },
+          "width": 1920,
+          "height": 1080,
+          "dpr": 1,
+          "hidden": false
+        },
+        {
+          "step": "native-first-hit",
+          "hp": 95,
+          "shield": 0,
+          "visualDamage": [
+            105
+          ],
+          "errors": []
+        },
+        {
+          "step": "native-respawn",
+          "state": {
+            "hp": 100,
+            "shield": 0,
+            "map": "world",
+            "x": 0,
+            "y": 1,
+            "correction": true,
+            "request": false,
+            "at": 4614.899999991059
+          },
+          "client": {
+            "x": 0,
+            "y": 1,
+            "map": "world"
+          },
+          "inventory": 0,
+          "ammo": 0,
+          "errors": [],
+          "diagnostics": []
+        },
+        {
+          "step": "native-post-respawn-walk",
+          "client": {
+            "x": 0,
+            "y": 4.892340000000006
+          },
+          "server": {
+            "x": 0,
+            "y": 4.892340000000006
+          },
+          "errors": []
+        },
+        {
+          "step": "native-death-loot-taken",
+          "wood": 6,
+          "ammo": 58,
+          "food": 2,
+          "serverDrops": 0,
+          "ghost": false,
+          "targetedShots": 2,
+          "errors": [],
+          "diagnostics": []
+        }
+      ],
+      "exceptions": 0,
+      "developmentHmr": 0,
+      "audit": {
+        "fixture": "native-player-duel-20261023-a2",
+        "mode": "home",
+        "browsers": 2,
+        "ordinaryHp": 100,
+        "shieldAtStart": 100,
+        "paidShooterRounds": 2,
+        "ownerAmmo": 58,
+        "ownerWood": 6,
+        "ownerFood": 2,
+        "victimInventoryEmpty": true,
+        "victimRespawnWalkPersisted": true,
+        "noRemainingDrops": true,
+        "buildings": 5675,
+        "defensiveAmmo": 540,
+        "sharedAssetsUnchanged": true,
+        "equipmentPreserved": true,
+        "integrity": "ok",
+        "consistentBackupGameWorldRestore": "passed",
+        "nativeCapacityClaim": false
+      }
+    },
+    {
+      "fixture": "native-player-duel-20261023-a3",
+      "success": true,
+      "fixtureDetails": {
+        "synthetic": true,
+        "mode": "world",
+        "normalHp": 100,
+        "shield": 100,
+        "weapon": "rifle",
+        "victimArmor": "vest",
+        "buildings": 5675,
+        "note": "Prepared combat fixture, ordinary HP and real mouse/keys. No earned-economy or sustained-capacity claim."
+      },
+      "steps": [
+        {
+          "step": "normal-pair-ready",
+          "hp": 100,
+          "shield": 100,
+          "map": "world",
+          "client": {
+            "x": -768,
+            "y": -892
+          },
+          "width": 1920,
+          "height": 1080,
+          "dpr": 1,
+          "hidden": false
+        },
+        {
+          "step": "native-first-hit",
+          "hp": 95,
+          "shield": 0,
+          "visualDamage": [
+            105
+          ],
+          "errors": []
+        },
+        {
+          "step": "native-respawn",
+          "state": {
+            "hp": 100,
+            "shield": 0,
+            "map": "world",
+            "x": 0,
+            "y": 1,
+            "correction": true,
+            "request": false,
+            "at": 3182.1000000089407
+          },
+          "client": {
+            "x": 0,
+            "y": 1,
+            "map": "world"
+          },
+          "inventory": 0,
+          "ammo": 0,
+          "errors": [],
+          "diagnostics": []
+        },
+        {
+          "step": "native-post-respawn-walk",
+          "client": {
+            "x": -0.009506736824770004,
+            "y": 4.890923485713829
+          },
+          "server": {
+            "x": -0.009506736824770004,
+            "y": 4.890923485713829
+          },
+          "errors": []
+        },
+        {
+          "step": "native-death-loot-taken",
+          "wood": 6,
+          "ammo": 58,
+          "food": 2,
+          "serverDrops": 0,
+          "ghost": false,
+          "targetedShots": 2,
+          "errors": [],
+          "diagnostics": []
+        }
+      ],
+      "exceptions": 0,
+      "developmentHmr": 0,
+      "audit": {
+        "fixture": "native-player-duel-20261023-a3",
+        "mode": "world",
+        "browsers": 2,
+        "ordinaryHp": 100,
+        "shieldAtStart": 100,
+        "paidShooterRounds": 2,
+        "ownerAmmo": 58,
+        "ownerWood": 6,
+        "ownerFood": 2,
+        "victimInventoryEmpty": true,
+        "victimRespawnWalkPersisted": true,
+        "noRemainingDrops": true,
+        "buildings": 5675,
+        "defensiveAmmo": 540,
+        "sharedAssetsUnchanged": true,
+        "equipmentPreserved": true,
+        "integrity": "ok",
+        "consistentBackupGameWorldRestore": "passed",
+        "nativeCapacityClaim": false
+      }
+    },
+    {
+      "fixture": "native-player-duel-20261023-a8",
+      "success": true,
+      "fixtureDetails": {
+        "synthetic": true,
+        "mode": "home",
+        "normalHp": 100,
+        "shield": 100,
+        "weapon": "rifle",
+        "victimArmor": "vest",
+        "buildings": 5675,
+        "note": "Prepared combat fixture, ordinary HP and real mouse/keys. No earned-economy or sustained-capacity claim."
+      },
+      "steps": [
+        {
+          "step": "normal-pair-ready",
+          "hp": 100,
+          "shield": 100,
+          "map": "camp",
+          "client": {
+            "x": 0,
+            "y": 20
+          },
+          "width": 1920,
+          "height": 1080,
+          "dpr": 1,
+          "hidden": false
+        },
+        {
+          "step": "native-first-hit",
+          "hp": 95,
+          "shield": 0,
+          "visualDamage": [
+            105
+          ],
+          "errors": []
+        },
+        {
+          "step": "native-respawn",
+          "state": {
+            "hp": 100,
+            "shield": 0,
+            "map": "world",
+            "x": 0,
+            "y": 1,
+            "correction": true,
+            "request": false,
+            "at": 8144.29999999702
+          },
+          "client": {
+            "x": 0,
+            "y": 1,
+            "map": "world"
+          },
+          "inventory": 0,
+          "ammo": 0,
+          "errors": [],
+          "diagnostics": []
+        },
+        {
+          "step": "native-post-respawn-walk",
+          "client": {
+            "x": 0,
+            "y": 4.891200000000003
+          },
+          "server": {
+            "x": 0,
+            "y": 4.891200000000003
+          },
+          "errors": []
+        },
+        {
+          "step": "native-death-loot-taken",
+          "wood": 6,
+          "ammo": 58,
+          "food": 2,
+          "serverDrops": 0,
+          "ghost": false,
+          "targetedShots": 2,
+          "errors": [],
+          "diagnostics": []
+        },
+        {
+          "step": "remote-bag-taken-observer",
+          "drops": 0,
+          "hasTakeAll": false,
+          "blocked": false,
+          "errors": []
+        },
+        {
+          "step": "native-observer-walk-after-remote-loot",
+          "errors": [],
+          "blocked": false,
+          "wood": 0,
+          "ammo": 0,
+          "inventory": 0
+        }
+      ],
+      "exceptions": 0,
+      "developmentHmr": 0,
+      "audit": {
+        "fixture": "native-player-duel-20261023-a8",
+        "mode": "home",
+        "browsers": 3,
+        "ordinaryHp": 100,
+        "shieldAtStart": 100,
+        "paidShooterRounds": 2,
+        "ownerAmmo": 58,
+        "ownerWood": 6,
+        "ownerFood": 2,
+        "victimInventoryEmpty": true,
+        "victimRespawnWalkPersisted": true,
+        "noRemainingDrops": true,
+        "buildings": 5675,
+        "defensiveAmmo": 540,
+        "sharedAssetsUnchanged": true,
+        "equipmentPreserved": true,
+        "integrity": "ok",
+        "consistentBackupGameWorldRestore": "passed",
+        "nativeCapacityClaim": false
+      }
+    },
+    {
+      "fixture": "native-player-duel-20261023-a9",
+      "success": true,
+      "fixtureDetails": {
+        "synthetic": true,
+        "mode": "world",
+        "normalHp": 100,
+        "shield": 100,
+        "weapon": "rifle",
+        "victimArmor": "vest",
+        "buildings": 5675,
+        "note": "Prepared combat fixture, ordinary HP and real mouse/keys. No earned-economy or sustained-capacity claim."
+      },
+      "steps": [
+        {
+          "step": "normal-pair-ready",
+          "hp": 100,
+          "shield": 100,
+          "map": "world",
+          "client": {
+            "x": -768,
+            "y": -892
+          },
+          "width": 1920,
+          "height": 1080,
+          "dpr": 1,
+          "hidden": false
+        },
+        {
+          "step": "native-first-hit",
+          "hp": 95,
+          "shield": 0,
+          "visualDamage": [
+            105
+          ],
+          "errors": []
+        },
+        {
+          "step": "native-respawn",
+          "state": {
+            "hp": 100,
+            "shield": 0,
+            "map": "world",
+            "x": 0,
+            "y": 1,
+            "correction": true,
+            "request": false,
+            "at": 7631.600000008941
+          },
+          "client": {
+            "x": 0,
+            "y": 1,
+            "map": "world"
+          },
+          "inventory": 0,
+          "ammo": 0,
+          "errors": [],
+          "diagnostics": []
+        },
+        {
+          "step": "native-post-respawn-walk",
+          "client": {
+            "x": -0.01033122714275589,
+            "y": 4.913800238370034
+          },
+          "server": {
+            "x": -0.01033122714275589,
+            "y": 4.913800238370034
+          },
+          "errors": []
+        },
+        {
+          "step": "native-death-loot-taken",
+          "wood": 6,
+          "ammo": 58,
+          "food": 2,
+          "serverDrops": 0,
+          "ghost": false,
+          "targetedShots": 2,
+          "errors": [],
+          "diagnostics": []
+        },
+        {
+          "step": "remote-bag-taken-observer",
+          "drops": 0,
+          "hasTakeAll": false,
+          "blocked": false,
+          "errors": []
+        },
+        {
+          "step": "native-observer-walk-after-remote-loot",
+          "errors": [],
+          "blocked": false,
+          "wood": 0,
+          "ammo": 0,
+          "inventory": 0
+        }
+      ],
+      "exceptions": 0,
+      "developmentHmr": 0,
+      "audit": {
+        "fixture": "native-player-duel-20261023-a9",
+        "mode": "world",
+        "browsers": 3,
+        "ordinaryHp": 100,
+        "shieldAtStart": 100,
+        "paidShooterRounds": 2,
+        "ownerAmmo": 58,
+        "ownerWood": 6,
+        "ownerFood": 2,
+        "victimInventoryEmpty": true,
+        "victimRespawnWalkPersisted": true,
+        "noRemainingDrops": true,
+        "buildings": 5675,
+        "defensiveAmmo": 540,
+        "sharedAssetsUnchanged": true,
+        "equipmentPreserved": true,
+        "integrity": "ok",
+        "consistentBackupGameWorldRestore": "passed",
+        "nativeCapacityClaim": false
+      }
+    }
+  ],
+  "invalidOrIncompleteAttempts": [
+    {
+      "fixture": "a4",
+      "status": "Observer interacted with an adjacent camp wall, never opened the loot panel. Not product proof."
+    },
+    {
+      "fixture": "a6",
+      "status": "Panel closes correctly; QA accidentally compared y with string-concatenated202 instead of22. Native destination was22. Assertion corrected; fresha8/9 pass."
+    },
+    {
+      "fixture": "a7",
+      "status": "Unresolved intermittent post-respawn walk timeout before loot. Saved victim position0,2.93458 instead of near0,5; no live failure trace was collected in that version. Fresha8/9 with added failure diagnostics pass. Do not dismiss or counta7 as acceptance."
+    }
+  ],
+  "verification": {
+    "regressions": "Six new engine cases failed before setter existed; focused86 cases pass. Nativea1 proves actual ghost; nativea5 proves actual stale remote panel before its App correction.",
+    "fullTests": {
+      "files": 40,
+      "tests": 537,
+      "result": "passed"
+    },
+    "typeCheck": "npm run lint passed",
+    "productionBuild": "npm run build passed; index-27reS25U.js; existing Vite __dirname future-loader and >500kB chunk warnings remain",
+    "independentReview": "Engine/state decoder review found one P2 open-panel omission; fixed, real native red/green reproduced, follow-up static review finds no P1/P2."
+  },
+  "limits": [
+    "Not an eight-client FPS/memory/latency or raid-capacity gate.",
+    "Earlier crowded-native single legal-shot refusal remains unproven after backend changes.",
+    "a7 walk timeout remains unlocated; trace movement/corrections rather than declaring walking fully fixed.",
+    "No blanket population/resource balance, long-session memory or overall game completion claim."
+  ]
+}
