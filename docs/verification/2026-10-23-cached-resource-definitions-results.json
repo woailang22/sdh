@@ -1,0 +1,36 @@
+{
+  "date": "2026-10-23",
+  "baseCommit": "548b392408d9f37486d628328e8da83c5cf00521",
+  "problem": "Production nodeAt regenerated a whole world chunk per resource ID, including multiple expired resources from the same chunk. Previous renewal sample reached37.643–63.639ms for10000 future plus1000 simultaneous due nodes.",
+  "implementation": "createWorldQueries now shares one chunkAt reader between nearby queries and nodeAt. Same192-entry LRU and32-region nearby working set; no additional cache, scheduler, persistent field or renewal limit. Production rules use cached lookup. Mutable depletion and loot remain in GameWorld.",
+  "tests": {
+    "redGreen": "Three new query tests fail before implementation and pass after: shared single-chunk/nearby warm-up, exact-ID and invalid lookup behavior,192-entry LRU eviction/hot retention, real persisted depletion/replay/restart separate from static initial stock.",
+    "realServer": "Existing production recovery test still executes authored-tree gathering, deadline/camping rejection,48-unit lawful protocol walk, rejected SQLite checkpoint/recovery, return gathering and forced-stop reload. Fixture uses production cached rules.",
+    "productionProbe": "Before original GameWorld.connect, wrap actual rules.nodeAt only to observe repeated original return references; bind original receiver and return the original result. Repeated resource lookups reuse definitions in this small working set across reconnect. Probe Map/IPC overhead means this integration is not a memory/latency benchmark.",
+    "negativeControl": "Restore only server.ts to nodeAt:getWorldInteractable while leaving cache API implemented. Real integration passes stock/wood/handled assertions but fails the reuse assertion. Source restored in finally before final suite.",
+    "differential": { "chunks": 4096, "authoredIds": 32525, "invalidInputs": 6, "mismatches": 0 }
+  },
+  "pairedSyntheticMeasurement": {
+    "method": "Five rounds alternate original/cached ordering with fresh memory DBs and identical node states. Each world performs a cold pass then resets only the due-node inputs and runs a second pass. No concurrent tests/build/browser. Entire tick timed, including original full checkpoint when resources renew. Not production SQLite or native performance.",
+    "fixture": { "futureNodes": 10000, "dueActualResources": 1000, "distinctDueChunks": 137 },
+    "originalColdMs": [56.101, 55.098, 40.220, 36.702, 35.595],
+    "originalSecondMs": [48.052, 38.946, 39.776, 33.782, 36.183],
+    "cachedColdMs": [15.052, 14.902, 10.577, 10.916, 11.189],
+    "cachedSecondMs": [7.035, 6.722, 6.170, 6.107, 6.236],
+    "chunkGenerationCountsPerRound": { "originalCold": 1000, "originalSecond": 1000, "cachedCold": 137, "cachedSecond": 0 },
+    "futureOnly50000CachedColdMs": [14.769, 29.907, 15.031, 15.015, 21.044],
+    "interpretation": "Avoids repeated definition generation. Does not improve the O(node count) future-only scan, and does not make a hard frame/loop-latency promise. Outlier retained. Raw ignored evidence: data/cached-resource-definitions-20261023-results.json."
+  },
+  "verification": {
+    "suite": "Machine-readable final report:38 files passed,520 tests passed,zero failed/pending,success true.",
+    "typecheck": "npm run lint (tsc --noEmit) passed.",
+    "build": "npm run build passed; index-BRl8LPRa.js unchanged. Existing Vite native-loader/chunk-size warnings remain.",
+    "review": "Independent read-only cache review and production-probe follow-up found no P1/P2; reviewer did not run tests/build.",
+    "saveSafety": "Only synthetic OS-temp test databases and in-memory worlds used; real data/sdc.sqlite never opened; no credentials in evidence."
+  },
+  "remaining": [
+    "Existing nearby regions may retain definitions from up to800 chunks in addition to192 chunk-cache entries; this pre-existing bound is unchanged, not a whole-process memory limit.",
+    "Five-second stored-node scanning and synchronous full checkpoints still have scale-dependent cost.",
+    "No new native crowded-combat run; previous single refusal remains unresolved. Overall game capacity, population/economy and long-term exploration acceptance remain incomplete."
+  ]
+}

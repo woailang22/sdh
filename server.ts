@@ -12,7 +12,7 @@ import { StateCheckQueue } from './server/stateCheckQueue.js';
 import { createWorldQueries } from './server/worldQueries.js';
 import { FULL_STATE_REFRESH_MS, StateEncoder } from './src/game/stateSync.js';
 import { sendMessage as send } from './server/transport.js';
-import { getWorldInteractable, migrateWorldPosition, worldIsRoad, worldThemeAt, WORLD_LOCATIONS } from './src/game/world.js';
+import { migrateWorldPosition, worldIsRoad, worldThemeAt, WORLD_LOCATIONS } from './src/game/world.js';
 import { WEATHER_DURATION, WEATHER_SEQUENCE, weatherInfo } from './src/game/weather.js';
 import type { MapZoneId, NetMessage, WeatherState, WeatherType } from './src/types/game.js';
 
@@ -34,7 +34,6 @@ if (!savedWorld || JSON.parse(savedWorld).version !== 3 || db.getMeta('public-ho
 
 const worldQueries = createWorldQueries();
 const rules: WorldRules = {
-  nodeAt: getWorldInteractable,
   ...worldQueries,
   campSiteAllowed: (x, y) => Math.hypot(x, y) >= 48 && !worldIsRoad(x, y, 6) && !['lake', 'rift', 'marsh'].includes(worldThemeAt(x, y)) && WORLD_LOCATIONS.every(l => Math.hypot(l.x - x, l.y - y) >= (l.sourceMapId.startsWith('camp_') ? 48 : 20)),
   migrate: (mapId, x, y) => migrateWorldPosition(mapId as MapZoneId, x, y),

@@ -7,7 +7,7 @@ import { makeItem } from '../src/game/items';
 
 function setup(nodeId: string, dx = 2.5, dy = 0) {
   let time = 10000;
-  const db = createMemoryDb(), rules = { ...createWorldQueries(), nodeAt: getWorldInteractable, campSiteAllowed: () => true, migrate: (_map: string, x: number, y: number) => ({ mapId: 'world' as const, x, y }) };
+  const db = createMemoryDb(), rules = { ...createWorldQueries(), campSiteAllowed: () => true, migrate: (_map: string, x: number, y: number) => ({ mapId: 'world' as const, x, y }) };
   const game = new GameWorld(db, rules, () => time); game.connect('p', '探索者');
   const node = getWorldInteractable(nodeId)!, p = game.state.players.p;
   p.x = node.x + dx; p.y = node.y + dy; p.shield = 50;

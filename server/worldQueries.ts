@@ -8,6 +8,14 @@ export function createWorldQueries(generate = generateWorldChunk) {
   // These references retain definitions from at most 800 chunks in addition to the
   // 192 chunk entries below; mutable stock, health and spawns remain in GameWorld.
   const nearbyCache = new Map<string, Nearby>();
+  function chunkAt(cx: number, cy: number) {
+    const key = cx + ':' + cy;
+    let chunk = chunkCache.get(key);
+    if (!chunk) chunk = generate(cx, cy);
+    chunkCache.delete(key); chunkCache.set(key, chunk);
+    while (chunkCache.size > 192) chunkCache.delete(chunkCache.keys().next().value!);
+    return chunk;
+  }
   function nearby(x: number, y: number): Nearby {
     const center = worldToChunk(x, y), centerKey = center.x + ':' + center.y;
     const cached = nearbyCache.get(centerKey);
@@ -17,13 +25,8 @@ export function createWorldQueries(generate = generateWorldChunk) {
     }
     const result: WorldChunk[] = [];
     for (let cy = center.y - 2; cy <= center.y + 2; cy++) for (let cx = center.x - 2; cx <= center.x + 2; cx++) {
-      const key = cx + ':' + cy;
-      let chunk = chunkCache.get(key);
-      if (!chunk) chunk = generate(cx, cy);
-      chunkCache.delete(key); chunkCache.set(key, chunk);
-      result.push(chunk);
+      result.push(chunkAt(cx, cy));
     }
-    while (chunkCache.size > 192) chunkCache.delete(chunkCache.keys().next().value!);
     const definitions = {
       interactables: result.flatMap(c => c.interactables),
       buildings: result.flatMap(c => c.buildings),
@@ -34,6 +37,11 @@ export function createWorldQueries(generate = generateWorldChunk) {
     return definitions;
   }
   return {
+    nodeAt(id: string) {
+      const match = /^world:(-?\d+):(-?\d+):/.exec(id);
+      if (!match) return undefined;
+      return chunkAt(Number(match[1]), Number(match[2])).interactables.find(node => node.id === id);
+    },
     nodesNear: (x: number, y: number) => nearby(x, y).interactables.filter(n => Math.hypot(n.x - x, n.y - y) <= WORLD_NODE_RADIUS),
     buildingsNear: (x: number, y: number) => nearby(x, y).buildings.filter(b => Math.hypot(b.x - x, b.y - y) <= 55),
     monstersNear: (x: number, y: number) => nearby(x, y).monsters.filter(m => Math.hypot(m.x - x, m.y - y) <= 40),

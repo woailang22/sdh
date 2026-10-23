@@ -12,7 +12,7 @@ import { createDb } from './db';
 import { resolveGuest } from './identity';
 import { GameWorld, type WorldRules } from './worldState';
 import { createWorldQueries } from './worldQueries';
-import { generateWorldChunk, getWorldInteractable } from '../src/game/world';
+import { generateWorldChunk } from '../src/game/world';
 import { hasLineOfSight, isPositionBlocked } from '../src/game/navigation';
 
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
@@ -32,15 +32,19 @@ function resourceRoute() {
 
 it('persists authored depletion, blocks camping, rolls back rejected renewal and allows a real protocol walk back to harvest once', async () => {
   const { node, points } = resourceRoute(), file = join(mkdtempSync(join(tmpdir(), 'sdc-node-renewal-')), 'world.sqlite'), db = createDb(file), guest = resolveGuest(db);
-  const rules: WorldRules = { nodeAt: getWorldInteractable, ...createWorldQueries(), campSiteAllowed: () => false, migrate: (_map, x, y) => ({ mapId: 'world', x, y }) };
+  const rules: WorldRules = { ...createWorldQueries(), campSiteAllowed: () => false, migrate: (_map, x, y) => ({ mapId: 'world', x, y }) };
   const game = new GameWorld(db, rules, () => 10000); game.connect(guest.playerId, '采集者'); Object.assign(game.state.players[guest.playerId], points[0]); game.persist(); db.setMeta('public-house-layout', '2');
   const probe = createServer(); await new Promise<void>(resolve => probe.listen(0, '127.0.0.1', resolve));
   const port = (probe.address() as AddressInfo).port; await new Promise<void>((resolve, reject) => probe.close(error => error ? reject(error) : resolve()));
-  const source = `let clock=10000;Date.now=()=>clock;process.on('message',m=>{clock=m.clock;process.send({clock});});await import(${JSON.stringify(pathToFileURL(resolve('server.ts')).href)});`;
+  // Observe original production lookup results without replacing their behavior.
+  const source = `import { GameWorld } from ${JSON.stringify(pathToFileURL(resolve('server/worldState.ts')).href)};
+    const wrapped=new WeakSet(),connect=GameWorld.prototype.connect;GameWorld.prototype.connect=function(...args){if(!wrapped.has(this.rules)){wrapped.add(this.rules);const lookup=this.rules.nodeAt.bind(this.rules),seen=new Map();this.rules.nodeAt=id=>{const node=lookup(id);if(node){const previous=seen.get(id);if(previous)process.send({resourceLookupReused:previous===node});seen.set(id,node);}return node;};}return connect.apply(this,args);};
+    let clock=10000;Date.now=()=>clock;process.on('message',m=>{clock=m.clock;process.send({clock});});await import(${JSON.stringify(pathToFileURL(resolve('server.ts')).href)});`;
   const child = spawn(process.execPath, ['--import', 'tsx', '--input-type=module', '--eval', source], { cwd: process.cwd(), windowsHide: true, env: { ...process.env, NODE_ENV: 'production', PORT: String(port), DB_PATH: file }, stdio: ['ignore', 'pipe', 'pipe', 'ipc'] });
-  const exited = once(child, 'exit'), control = new Database(file), peers: WebSocket[] = [], clocks: number[] = [];
+  const exited = once(child, 'exit'), control = new Database(file), peers: WebSocket[] = [], clocks: number[] = [], reused: boolean[] = [];
   let started = false, stderr = '', stopped = false, clock = 10000;
-  child.stdout!.on('data', c => { started ||= String(c).includes('[Rift Walker]'); }); child.stderr!.on('data', c => { stderr += String(c); }); child.on('message', (m: any) => clocks.push(m.clock));
+  child.stdout!.on('data', c => { started ||= String(c).includes('[Rift Walker]'); }); child.stderr!.on('data', c => { stderr += String(c); });
+  child.on('message', (m: any) => { if (typeof m.clock === 'number') clocks.push(m.clock); if (typeof m.resourceLookupReused === 'boolean') reused.push(m.resourceLookupReused); });
   const until = async (predicate: () => boolean) => { const end = Date.now() + 6000; while (Date.now() < end) { if (child.exitCode !== null || child.signalCode !== null) throw Error('Production server stopped during resource renewal'); if (predicate()) return; await delay(5); } throw Error('Resource renewal timed out'); };
   const stop = async () => { if (!stopped) { stopped = true; child.kill('SIGKILL'); await exited; } };
   const url = 'http://127.0.0.1:' + port;
@@ -83,6 +87,7 @@ it('persists authored depletion, blocks camping, rolls back rejected renewal and
     await stop(); const restored = new GameWorld(createDb(file), rules, () => clock);
     expect(restored.state.players[guest.playerId].resources.wood).toBe(node.stock! + 1); expect(restored.state.nodes[node.id].stock).toBe(node.maxStock! - 1);
     expect(restored.state.handled[guest.playerId].filter(id => id === 'after-renewal')).toHaveLength(1); expect(restored.state.handled[guest.playerId]).not.toContain('camped-gather');
+    expect(reused.length).toBeGreaterThan(0); expect(reused.every(Boolean)).toBe(true);
     expect(stderr).toContain('[world] simulation tick failed'); expect(control.pragma('integrity_check', { simple: true })).toBe('ok');
   } finally { await stop(); for (const ws of peers) ws.terminate(); control.close(); }
 }, 25000);
