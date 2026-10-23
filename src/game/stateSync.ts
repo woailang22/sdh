@@ -1,6 +1,7 @@
 import type { GameStateSnapshot, PlayerActionSnapshot } from '../../server/worldState';
 
 const LISTS = ['camps', 'buildings', 'nodes', 'drops', 'monsters', 'reports'] as const;
+export const FULL_STATE_REFRESH_MS = 5000;
 type ListKey = typeof LISTS[number];
 type LiveState = Pick<GameStateSnapshot, 'player' | 'correction' | 'requestId' | 'error' | 'loot'>;
 export interface StatePatch {
@@ -14,11 +15,12 @@ export interface StatePatch {
 export class StateEncoder {
   private sequence = 0;
   private mapId = '';
-  private lastFullAt = -Infinity;
+  private nextFullAt = -Infinity;
   private lists = new Map<ListKey, string>();
+  constructor(private readonly fullPhaseMs?: number) {}
 
   encodePlayer(snapshot: PlayerActionSnapshot, fullSnapshot: () => GameStateSnapshot, now = Date.now()): StatePatch {
-    if (!this.sequence || snapshot.player.mapId !== this.mapId || now - this.lastFullAt >= 5000) return this.encode(fullSnapshot(), now);
+    if (!this.sequence || snapshot.player.mapId !== this.mapId || now >= this.nextFullAt) return this.encode(fullSnapshot(), now);
     // Private feedback advances only the stream. Keep shared comparisons and
     // their baseline time intact for the next shared update/full refresh.
     const baseSequence = this.sequence++;
@@ -26,7 +28,7 @@ export class StateEncoder {
   }
 
   encode(snapshot: GameStateSnapshot, now = Date.now()): StatePatch {
-    const full = !this.sequence || snapshot.player.mapId !== this.mapId || now - this.lastFullAt >= 5000;
+    const full = !this.sequence || snapshot.player.mapId !== this.mapId || now >= this.nextFullAt;
     const { player, correction, requestId, error, loot } = snapshot;
     const state: StatePatch['state'] = { player, correction, requestId, error, loot };
     for (const key of LISTS) {
@@ -37,7 +39,11 @@ export class StateEncoder {
     const baseSequence = full ? null : this.sequence;
     this.sequence++;
     this.mapId = player.mapId;
-    if (full) this.lastFullAt = now;
+    if (full) {
+      const wait = this.fullPhaseMs === undefined ? FULL_STATE_REFRESH_MS
+        : (this.fullPhaseMs - now % FULL_STATE_REFRESH_MS + FULL_STATE_REFRESH_MS) % FULL_STATE_REFRESH_MS || FULL_STATE_REFRESH_MS;
+      this.nextFullAt = now + wait;
+    }
     return { version: 1, sequence: this.sequence, baseSequence, state };
   }
 }

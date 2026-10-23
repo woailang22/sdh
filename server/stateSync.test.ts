@@ -35,9 +35,15 @@ it.each(['paused', 'survival'])('keeps shared checks and door broadcasts during 
   game.persist(); db.setMeta('public-house-layout', '2');
   const probe = createServer(); await new Promise<void>(resolve => probe.listen(0, '127.0.0.1', resolve));
   const port = (probe.address() as AddressInfo).port; await new Promise<void>((resolve, reject) => probe.close(error => error ? reject(error) : resolve()));
-  // Isolate the periodic synchronization contract from survival ticks that
-  // normally mark state dirty every second. This is not a performance fixture.
-  const source = `import { GameWorld } from ${JSON.stringify(pathToFileURL(resolve('server/worldState.ts')).href)}; const tick=GameWorld.prototype.tick; GameWorld.prototype.tick=function(){const changed=${mode === 'paused' ? 'false' : 'tick.call(this)'};process.send?.({changed,shared:this.sharedTickChanged});return changed;}; await import(${JSON.stringify(pathToFileURL(resolve('server.ts')).href)});`;
+  // Isolate the2s shared-check contract from survival dirty ticks and earlier
+  // phased full refreshes. Freeze only the encoder clock; server timers and
+  // survival/action time remain real. This is not a performance fixture.
+  const source = `import { GameWorld } from ${JSON.stringify(pathToFileURL(resolve('server/worldState.ts')).href)};
+    import { StateEncoder } from ${JSON.stringify(pathToFileURL(resolve('src/game/stateSync.ts')).href)};
+    const encode=StateEncoder.prototype.encode,privateEncode=StateEncoder.prototype.encodePlayer;
+    StateEncoder.prototype.encode=function(state){return encode.call(this,state,0);};
+    StateEncoder.prototype.encodePlayer=function(state,full){return privateEncode.call(this,state,full,0);};
+    const tick=GameWorld.prototype.tick; GameWorld.prototype.tick=function(){const changed=${mode === 'paused' ? 'false' : 'tick.call(this)'};process.send?.({changed,shared:this.sharedTickChanged});return changed;}; await import(${JSON.stringify(pathToFileURL(resolve('server.ts')).href)});`;
   const child = spawn(process.execPath, ['--import', 'tsx', '--input-type=module', '--eval', source], { cwd: process.cwd(), windowsHide: true, env: { ...process.env, DB_PATH: file, PORT: String(port), NODE_ENV: 'production' }, stdio: ['ignore', 'pipe', 'pipe', 'ipc'] });
   const exited = once(child, 'exit'); let started = false, stderr = '';
   const ticks: { changed: boolean; shared: boolean }[] = [];

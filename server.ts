@@ -9,7 +9,7 @@ import { guestTokenFromCookie, resolveGuest } from './server/identity.js';
 import { GameWorld, isUntargetedFire, type GameAction, type GameStateSnapshot, type PlayerActionSnapshot, type WorldRules } from './server/worldState.js';
 import { FireQueue } from './server/fireQueue.js';
 import { createWorldQueries } from './server/worldQueries.js';
-import { StateEncoder } from './src/game/stateSync.js';
+import { FULL_STATE_REFRESH_MS, StateEncoder } from './src/game/stateSync.js';
 import { sendMessage as send } from './server/transport.js';
 import { getWorldInteractable, migrateWorldPosition, worldIsRoad, worldThemeAt, WORLD_LOCATIONS } from './src/game/world.js';
 import { WEATHER_DURATION, WEATHER_SEQUENCE, weatherInfo } from './src/game/weather.js';
@@ -41,8 +41,18 @@ const rules: WorldRules = {
 };
 const game = new GameWorld(db, rules);
 db.setMeta('public-house-layout', '2');
-interface Client { ws: WebSocket; id: string; isGM: boolean; visible: Set<string>; lastSeen: number; lastCorrection: number; lastMessageAt: number; messageCount: number; lastSnapshot: number; mapId: MapZoneId; stateEncoder?: StateEncoder; fireQueue: FireQueue }
+interface Client { ws: WebSocket; id: string; isGM: boolean; visible: Set<string>; lastSeen: number; lastCorrection: number; lastMessageAt: number; messageCount: number; lastSnapshot: number; mapId: MapZoneId; stateEncoder?: StateEncoder; fireQueue: FireQueue; fullPhaseMs: number }
 const clients = new Map<string, Client>();
+let nextStatePhase = 0;
+function allocateStatePhase() {
+  const occupied = new Set([...clients.values()].map(c => c.fullPhaseMs));
+  // 600ms rotates through25 distinct200ms slots. Prefer a free slot; after
+  // capacity is exhausted, reuse them in rotation without moving live clients.
+  for (let i = 0; i < 25 && occupied.has(nextStatePhase); i++) nextStatePhase = (nextStatePhase + 600) % FULL_STATE_REFRESH_MS;
+  const phase = nextStatePhase;
+  nextStatePhase = (nextStatePhase + 600) % FULL_STATE_REFRESH_MS;
+  return phase;
+}
 const GM_TOKEN = process.env.GM_TOKEN || 'rift-gm';
 let weatherIndex = 0;
 let weatherTimer = WEATHER_DURATION;
@@ -150,7 +160,7 @@ wss.on('connection', (ws, req) => {
   const id = session.playerId;
   const previous = clients.get(id);
   const self = game.connect(id, '废土流浪者 #' + id.slice(-4));
-  const client: Client = { ws, id, isGM: false, visible: new Set(), lastSeen: Date.now(), lastCorrection: 0, lastMessageAt: Date.now(), messageCount: 0, lastSnapshot: 0, mapId: self.mapId, fireQueue: new FireQueue() };
+  const client: Client = { ws, id, isGM: false, visible: new Set(), lastSeen: Date.now(), lastCorrection: 0, lastMessageAt: Date.now(), messageCount: 0, lastSnapshot: 0, mapId: self.mapId, fireQueue: new FireQueue(), fullPhaseMs: previous?.fullPhaseMs ?? allocateStatePhase() };
   clients.set(id, client);
   if (previous) { previous.fireQueue.cancel(); previous.ws.close(4001, 'Guest identity connected elsewhere'); }
   const snapshot = game.snapshot(id);
@@ -170,7 +180,7 @@ wss.on('connection', (ws, req) => {
       switch (msg.type) {
         case 'state_sync': {
           if (payload.version !== 1) break;
-          client.stateEncoder = new StateEncoder(); stateTo(client); break;
+          client.stateEncoder = new StateEncoder(client.fullPhaseMs); stateTo(client); break;
         }
         case 'player_sync': {
           if (!game.move(id, payload) && now - client.lastCorrection >= 150) {

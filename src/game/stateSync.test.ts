@@ -15,6 +15,37 @@ function snapshot(): GameStateSnapshot {
 const copy = <T,>(value: T): T => JSON.parse(JSON.stringify(value));
 
 describe('nearby state transport', () => {
+  it('spreads eight complete-refresh deadlines across the same five-second cycle without losing state or feedback', () => {
+    const state = snapshot(), encoders = Array.from({ length: 8 }, (_, i) => new StateEncoder(i * 600)), decoders = encoders.map(() => new StateDecoder());
+    encoders.forEach((e, i) => expect(decoders[i].decode(copy(e.encode(state, 0)))).toEqual(state));
+    const refreshes = encoders.map(() => [] as number[]), simultaneous: number[] = [];
+    for (let time = 200; time <= 10000; time += 200) {
+      let full = 0;
+      encoders.forEach((e, i) => {
+        const live = { player: copy(state.player), requestId: 'fire-' + time, correction: false, error: undefined, loot: undefined };
+        live.player.resources.ammo = 100 - time / 200;
+        const patch = e.encodePlayer(live, () => ({ ...state, ...live }), time);
+        expect(decoders[i].decode(copy(patch))).toEqual({ ...state, ...live });
+        if (patch.baseSequence === null) { full++; refreshes[i].push(time); }
+      });
+      simultaneous.push(full);
+    }
+    expect(Math.max(...simultaneous)).toBe(1);
+    for (const times of refreshes) { expect(times).toHaveLength(2); expect(times[0]).toBeGreaterThan(0); expect(times[0]).toBeLessThanOrEqual(5000); expect(times[1] - times[0]).toBe(5000); }
+  });
+  it('retains phase deadlines after failed full fallback and still sends changed shared state immediately', () => {
+    const state = snapshot(), encoder = new StateEncoder(1200), decoder = new StateDecoder();
+    decoder.decode(copy(encoder.encode(state, 100)));
+    const live = { player: state.player, requestId: 'committed', correction: false, error: undefined, loot: undefined };
+    expect(() => encoder.encodePlayer(live, () => { throw Error('view failed'); }, 1200)).toThrow('view failed');
+    const retry = encoder.encodePlayer(live, () => ({ ...state, ...live }), 1201);
+    expect(retry.baseSequence).toBeNull(); expect(retry.sequence).toBe(2); expect(decoder.decode(copy(retry))).toEqual({ ...state, ...live });
+    state.buildings[0].isOpen = true;
+    const changed = encoder.encode(state, 1400); expect(changed.baseSequence).not.toBeNull(); expect(decoder.decode(copy(changed))).toEqual(state);
+    expect(encoder.encode(state, 6199).baseSequence).not.toBeNull(); expect(encoder.encode(state, 6200).baseSequence).toBeNull();
+    state.player.mapId = 'home_owner'; expect(encoder.encode(state, 6250).baseSequence).toBeNull();
+    expect(encoder.encode(state, 11199).baseSequence).not.toBeNull(); expect(encoder.encode(state, 11200).baseSequence).toBeNull();
+  });
   it('acknowledges private player changes without inspecting or serializing shared lists', () => {
     const encoder = new StateEncoder(), decoder = new StateDecoder(), state = snapshot();
     decoder.decode(copy(encoder.encode(state, 0)));

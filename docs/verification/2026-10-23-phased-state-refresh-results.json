@@ -1,0 +1,675 @@
+{
+  "date": "2026-10-23",
+  "baselineCommit": "926b4a60a1fb986a809d5a592316a53149c475f0",
+  "result": "Full-refresh phases reduce a measured clustered baseline peak but do NOT pass native-plus-six-protocol zero-refusal acceptance. Both failed runs retained; full game goal active.",
+  "design": "docs/superpowers/plans/2026-10-23-phased-state-refresh.md",
+  "changes": [
+    "Optional server-owned absolute encoder refresh phase; default callers retain relative5000ms behavior. Next target deadline always within5000ms, initial/map/recovery snapshots remain full. First refresh may be earlier; event-loop stalls can still make actual sends late.",
+    "Connections select one of25 phase slots, stepping600ms. Prefer unoccupied slots, preserve phase on identity replacement, rotate reuse after capacity exhausted. No claim of capacity beyond tested connections.",
+    "No deferral of shared changes, authoritative actions or replies.2s shared checks,5s checkpoints, protocol version1, durable version3, server fire cadence and single pending-fire slot unchanged."
+  ],
+  "verification": {
+    "testFiles": 33,
+    "tests": 479,
+    "typecheck": "passed; initial new test fixtures needed explicit undefined error/loot fields to satisfy the existing snapshot type",
+    "build": "passed; client index-Ci3C41xg.js unchanged",
+    "warnings": [
+      "Existing Vite native-config warning",
+      "Existing client chunk>500kB warning"
+    ],
+    "independentReview": "No remaining P1/P2 after phase allocation/replacement follow-up.",
+    "redGreen": [
+      "Eight encoder streams originally refreshed8 at one time; after phases at most1 per200ms, exact decoding/feedback and unchanged default5000ms behavior.",
+      "Full fallback failure retained deadline; immediate changed door list, map full and continued phase deadlines verified.",
+      "Actual server eight-socket controlled-clock test failed8-at-once before wiring, then passed1-at-once.",
+      "18 same-identity replacements originally collided2-at-once; phase reuse/free-slot allocation then passed."
+    ],
+    "twoSecondGuard": "Old periodic check integration had assumed no full refresh in2.8s. It now freezes only encoder clock while server/survival clocks and sockets remain real, isolating2s checks from earlier phased baselines. Mutation restoring unconditional lastSnapshot reset on every private reply FAILED as expected, then original source was restored.",
+    "scope": "Controlled encoder-clock socket test observes real production encoding/transport wiring, not a performance result. Native benchmark uses actual clocks. No real database opened."
+  },
+  "diagnostic": {
+    "environment": "Separate30s same5675-building synthetic eight-connection runs:2 native Chrome1551920x1080DPR1 plus6 response-paced protocol peers, normal held fire/walking. In-memory instrumentation/IPC only; no simultaneous tests/builds/profilers/extra QA browsers. Stages overlap.",
+    "before": {
+      "eventLoop": {
+        "p50Ms": 7.561215,
+        "p95Ms": 30.752767,
+        "p99Ms": 68.550655,
+        "maxMs": 208.535551
+      },
+      "stages": {
+        "buildingsFor": {
+          "count": 1982,
+          "totalMs": 3491,
+          "p50": 1.7397000000019034,
+          "p95": 2.753600000000006,
+          "max": 3.999599999999191
+        },
+        "move": {
+          "count": 1838,
+          "totalMs": 6005,
+          "p50": 3.2322000000021944,
+          "p95": 4.916799999999057,
+          "max": 7.417699999998149
+        },
+        "snapshotPlayer": {
+          "count": 2363,
+          "totalMs": 155,
+          "p50": 0.06009999999514548,
+          "p95": 0.14199999999982538,
+          "max": 0.4757000000026892
+        },
+        "encodePlayer": {
+          "count": 2363,
+          "totalMs": 954,
+          "p50": 0.002599999999802094,
+          "p95": 0.009200000000419095,
+          "max": 25.045100000003004
+        },
+        "wireJson": {
+          "count": 2459,
+          "totalMs": 464,
+          "p50": 0.011299999998300336,
+          "p95": 0.029200000000855653,
+          "max": 12.586500000001251
+        },
+        "tick": {
+          "count": 147,
+          "totalMs": 798,
+          "p50": 5.3171000000002095,
+          "p95": 7.54240000000209,
+          "max": 8.721999999994296
+        },
+        "snapshot": {
+          "count": 144,
+          "totalMs": 1556,
+          "p50": 10.826799999998912,
+          "p95": 13.34820000000036,
+          "max": 18.709900000001653
+        },
+        "encode": {
+          "count": 144,
+          "totalMs": 1347,
+          "p50": 9.347399999998743,
+          "p95": 11.849099999999453,
+          "max": 13.403800000000047
+        },
+        "persist": {
+          "count": 6,
+          "totalMs": 202,
+          "p50": 35.44540000000052,
+          "p95": 39.03050000000076,
+          "max": 39.03050000000076
+        }
+      },
+      "nativeRejections": [
+        3,
+        2
+      ]
+    },
+    "after": {
+      "eventLoop": {
+        "p50Ms": 7.548927,
+        "p95Ms": 30.523391,
+        "p99Ms": 68.878335,
+        "maxMs": 136.839167
+      },
+      "stages": {
+        "buildingsFor": {
+          "count": 1982,
+          "totalMs": 3419,
+          "p50": 1.7008999999998196,
+          "p95": 2.6635999999998603,
+          "max": 4.044499999999971
+        },
+        "move": {
+          "count": 1837,
+          "totalMs": 5919,
+          "p50": 3.1282999999966705,
+          "p95": 4.909599999999045,
+          "max": 7.819400000000314
+        },
+        "snapshotPlayer": {
+          "count": 2373,
+          "totalMs": 160,
+          "p50": 0.06290000000080909,
+          "p95": 0.14160000000265427,
+          "max": 0.36930000000029395
+        },
+        "encodePlayer": {
+          "count": 2373,
+          "totalMs": 907,
+          "p50": 0.0013999999973748345,
+          "p95": 0.006499999999505235,
+          "max": 23.04979999999705
+        },
+        "wireJson": {
+          "count": 2469,
+          "totalMs": 458,
+          "p50": 0.011099999999714782,
+          "p95": 0.028499999998530257,
+          "max": 12.516299999999319
+        },
+        "tick": {
+          "count": 148,
+          "totalMs": 812,
+          "p50": 5.310900000000402,
+          "p95": 7.323699999999008,
+          "max": 14.994200000001001
+        },
+        "snapshot": {
+          "count": 145,
+          "totalMs": 1493,
+          "p50": 10.58009999999922,
+          "p95": 13.55750000000262,
+          "max": 17.79240000000209
+        },
+        "encode": {
+          "count": 145,
+          "totalMs": 1318,
+          "p50": 8.911799999998038,
+          "p95": 11.851699999999255,
+          "max": 13.978800000000774
+        },
+        "persist": {
+          "count": 6,
+          "totalMs": 199,
+          "p50": 33.83129999999801,
+          "p95": 35.72859999999491,
+          "max": 35.72859999999491
+        }
+      },
+      "nativeRejections": [
+        4,
+        2
+      ]
+    },
+    "interpretation": "LoopP99 essentially unchanged68.55→68.88ms; sampled maximum208.54→136.84ms and long4-baseline wave no longer appears in top measured lag windows. This is not proof of a stable maximum or fewer refusals: diagnostic refusals3/2→4/2.",
+    "codeBoundary": "Diagnostic and first formal run preceded only connection-churn allocator hardening. Both use8 fresh connections with identical phases0,600,...4200. Final formal run10 and shared/restart checks use final code."
+  },
+  "acceptance": {
+    "environment": "Original unmodified gate:20s idle+60s two-native held fire/walking, then30s six-protocol stage only after native gate passes. Production server/client,5675 structures4000floors540 defensive rounds, no concurrent profiling/testing/builds. Synthetic reset only before timing.",
+    "runs": [
+      {
+        "variant": 9,
+        "passed": false,
+        "phases": [
+          {
+            "name": "two-native-idle",
+            "seconds": 20.463,
+            "nativeClients": [
+              {
+                "client": 1,
+                "sent": 0,
+                "acknowledged": 0,
+                "pending": 0,
+                "errors": [],
+                "ammo": 2000,
+                "replyP50Ms": 0,
+                "replyP95Ms": 0,
+                "renderP95Ms": 5.699999995529652,
+                "corrections": 0,
+                "diagnostics": 0,
+                "longTasks": 0
+              },
+              {
+                "client": 2,
+                "sent": 0,
+                "acknowledged": 0,
+                "pending": 0,
+                "errors": [],
+                "ammo": 2000,
+                "replyP50Ms": 0,
+                "replyP95Ms": 0,
+                "renderP95Ms": 5.600000001490116,
+                "corrections": 0,
+                "diagnostics": 0,
+                "longTasks": 0
+              }
+            ],
+            "protocolActors": []
+          },
+          {
+            "name": "two-native-walk-and-fire",
+            "seconds": 60.564,
+            "nativeClients": [
+              {
+                "client": 1,
+                "sent": 390,
+                "acknowledged": 390,
+                "pending": 0,
+                "errors": [],
+                "ammo": 1610,
+                "replyP50Ms": 7.700000002980232,
+                "replyP95Ms": 17.100000001490116,
+                "renderP95Ms": 5.899999998509884,
+                "corrections": 0,
+                "diagnostics": 0,
+                "longTasks": 0
+              },
+              {
+                "client": 2,
+                "sent": 390,
+                "acknowledged": 390,
+                "pending": 0,
+                "errors": [],
+                "ammo": 1610,
+                "replyP50Ms": 8.100000001490116,
+                "replyP95Ms": 45.30000000447035,
+                "renderP95Ms": 6.299999997019768,
+                "corrections": 0,
+                "diagnostics": 0,
+                "longTasks": 0
+              }
+            ],
+            "protocolActors": []
+          },
+          {
+            "name": "two-native-plus-six-protocol-walk-and-fire",
+            "seconds": 30.501,
+            "nativeClients": [
+              {
+                "client": 1,
+                "sent": 194,
+                "acknowledged": 194,
+                "pending": 0,
+                "errors": [
+                  "射击请求过快",
+                  "射击请求过快",
+                  "射击请求过快"
+                ],
+                "ammo": 1419,
+                "replyP50Ms": 45.399999998509884,
+                "replyP95Ms": 145.70000000298023,
+                "renderP95Ms": 6.100000001490116,
+                "corrections": 0,
+                "diagnostics": 0,
+                "longTasks": 0
+              },
+              {
+                "client": 2,
+                "sent": 192,
+                "acknowledged": 192,
+                "pending": 0,
+                "errors": [
+                  "射击请求过快",
+                  "射击请求过快"
+                ],
+                "ammo": 1420,
+                "replyP50Ms": 20.19999999552965,
+                "replyP95Ms": 116.80000000447035,
+                "renderP95Ms": 6.399999998509884,
+                "corrections": 0,
+                "diagnostics": 0,
+                "longTasks": 0
+              }
+            ],
+            "protocolActors": [
+              {
+                "actor": 3,
+                "sent": 149,
+                "acked": 149,
+                "pending": false,
+                "errors": []
+              },
+              {
+                "actor": 4,
+                "sent": 149,
+                "acked": 149,
+                "pending": false,
+                "errors": []
+              },
+              {
+                "actor": 5,
+                "sent": 149,
+                "acked": 149,
+                "pending": false,
+                "errors": []
+              },
+              {
+                "actor": 6,
+                "sent": 149,
+                "acked": 149,
+                "pending": false,
+                "errors": []
+              },
+              {
+                "actor": 7,
+                "sent": 149,
+                "acked": 149,
+                "pending": false,
+                "errors": []
+              },
+              {
+                "actor": 8,
+                "sent": 149,
+                "acked": 149,
+                "pending": false,
+                "errors": []
+              }
+            ]
+          }
+        ],
+        "exceptions": 0,
+        "hotReloads": 0
+      },
+      {
+        "variant": 10,
+        "passed": false,
+        "phases": [
+          {
+            "name": "two-native-idle",
+            "seconds": 20.453,
+            "nativeClients": [
+              {
+                "client": 1,
+                "sent": 0,
+                "acknowledged": 0,
+                "pending": 0,
+                "errors": [],
+                "ammo": 2000,
+                "replyP50Ms": 0,
+                "replyP95Ms": 0,
+                "renderP95Ms": 5.5,
+                "corrections": 0,
+                "diagnostics": 0,
+                "longTasks": 0
+              },
+              {
+                "client": 2,
+                "sent": 0,
+                "acknowledged": 0,
+                "pending": 0,
+                "errors": [],
+                "ammo": 2000,
+                "replyP50Ms": 0,
+                "replyP95Ms": 0,
+                "renderP95Ms": 5.600000001490116,
+                "corrections": 0,
+                "diagnostics": 0,
+                "longTasks": 0
+              }
+            ],
+            "protocolActors": []
+          },
+          {
+            "name": "two-native-walk-and-fire",
+            "seconds": 60.588,
+            "nativeClients": [
+              {
+                "client": 1,
+                "sent": 390,
+                "acknowledged": 390,
+                "pending": 0,
+                "errors": [],
+                "ammo": 1610,
+                "replyP50Ms": 7.699999995529652,
+                "replyP95Ms": 30.299999997019768,
+                "renderP95Ms": 5.899999998509884,
+                "corrections": 0,
+                "diagnostics": 0,
+                "longTasks": 0
+              },
+              {
+                "client": 2,
+                "sent": 390,
+                "acknowledged": 390,
+                "pending": 0,
+                "errors": [],
+                "ammo": 1610,
+                "replyP50Ms": 8.199999995529652,
+                "replyP95Ms": 19.80000000447035,
+                "renderP95Ms": 6.200000002980232,
+                "corrections": 0,
+                "diagnostics": 0,
+                "longTasks": 0
+              }
+            ],
+            "protocolActors": []
+          },
+          {
+            "name": "two-native-plus-six-protocol-walk-and-fire",
+            "seconds": 30.555,
+            "nativeClients": [
+              {
+                "client": 1,
+                "sent": 196,
+                "acknowledged": 196,
+                "pending": 0,
+                "errors": [
+                  "射击请求过快",
+                  "射击请求过快"
+                ],
+                "ammo": 1416,
+                "replyP50Ms": 32.70000000298023,
+                "replyP95Ms": 117.79999999701977,
+                "renderP95Ms": 6.100000001490116,
+                "corrections": 0,
+                "diagnostics": 0,
+                "longTasks": 0
+              },
+              {
+                "client": 2,
+                "sent": 192,
+                "acknowledged": 192,
+                "pending": 0,
+                "errors": [
+                  "射击请求过快"
+                ],
+                "ammo": 1419,
+                "replyP50Ms": 18.299999997019768,
+                "replyP95Ms": 129,
+                "renderP95Ms": 6.399999998509884,
+                "corrections": 0,
+                "diagnostics": 0,
+                "longTasks": 0
+              }
+            ],
+            "protocolActors": [
+              {
+                "actor": 3,
+                "sent": 149,
+                "acked": 149,
+                "pending": false,
+                "errors": []
+              },
+              {
+                "actor": 4,
+                "sent": 149,
+                "acked": 149,
+                "pending": false,
+                "errors": []
+              },
+              {
+                "actor": 5,
+                "sent": 149,
+                "acked": 149,
+                "pending": false,
+                "errors": []
+              },
+              {
+                "actor": 6,
+                "sent": 149,
+                "acked": 149,
+                "pending": false,
+                "errors": []
+              },
+              {
+                "actor": 7,
+                "sent": 149,
+                "acked": 149,
+                "pending": false,
+                "errors": []
+              },
+              {
+                "actor": 8,
+                "sent": 149,
+                "acked": 149,
+                "pending": false,
+                "errors": []
+              }
+            ]
+          }
+        ],
+        "exceptions": 0,
+        "hotReloads": 0
+      }
+    ],
+    "interpretation": "Run9 failed3/2 refusals; final run10 failed2/1. Both two-native stages had390 successful rounds per browser and no pending/corrections/diagnostics/long tasks. Six protocol actors are not six native browsers. Repeating after lifecycle hardening did not erase the first failure."
+  },
+  "audit": {
+    "integrity": "ok",
+    "version": 3,
+    "pendingCommitRows": 8,
+    "buildings": 5675,
+    "defensiveAmmo": 540,
+    "checks": {
+      "buildings": true,
+      "camps": true,
+      "storage": true,
+      "ammo": true,
+      "production": true,
+      "nodes": true,
+      "drops": true,
+      "monsters": true
+    },
+    "players": [
+      {
+        "actor": 1,
+        "ammo": 1416,
+        "spent": 584,
+        "hp": 100,
+        "satiety": 69.53675
+      },
+      {
+        "actor": 2,
+        "ammo": 1419,
+        "spent": 581,
+        "hp": 100,
+        "satiety": 70.32700000000007
+      },
+      {
+        "actor": 3,
+        "ammo": 1851,
+        "spent": 149,
+        "hp": 100,
+        "satiety": 92.2805
+      },
+      {
+        "actor": 4,
+        "ammo": 1851,
+        "spent": 149,
+        "hp": 100,
+        "satiety": 92.26675000000002
+      },
+      {
+        "actor": 5,
+        "ammo": 1851,
+        "spent": 149,
+        "hp": 100,
+        "satiety": 92.29675000000002
+      },
+      {
+        "actor": 6,
+        "ammo": 1851,
+        "spent": 149,
+        "hp": 100,
+        "satiety": 92.27775000000001
+      },
+      {
+        "actor": 7,
+        "ammo": 1851,
+        "spent": 149,
+        "hp": 100,
+        "satiety": 92.51125000000003
+      },
+      {
+        "actor": 8,
+        "ammo": 1851,
+        "spent": 149,
+        "hp": 100,
+        "satiety": 92.50625
+      }
+    ]
+  },
+  "sharedRestartReplay": {
+    "success": true,
+    "steps": [
+      {
+        "step": "door-shared",
+        "open": false,
+        "owner": true,
+        "buddy": true
+      },
+      {
+        "step": "door-shared",
+        "open": true,
+        "owner": true,
+        "buddy": true
+      },
+      {
+        "step": "restart-and-replay",
+        "client": 1,
+        "ammo": 1416,
+        "duplicateSpent": 0
+      },
+      {
+        "step": "restart-and-replay",
+        "client": 2,
+        "ammo": 1419,
+        "duplicateSpent": 0
+      }
+    ]
+  },
+  "inputEvidence": {
+    "source": "After-query diagnostic before phasing; paired per-request client sends, raw server receipts, queue admission and actual action execution.",
+    "samples": [
+      {
+        "client": 1,
+        "error": "射击请求过快",
+        "sendGapMs": 123.5,
+        "previousSendGapMs": 125.30000000447035,
+        "receiveGapMs": 112,
+        "pendingPlannedRemainingEstimateMs": 3,
+        "pendingExecutionAfterRejectMs": 4
+      },
+      {
+        "client": 1,
+        "error": "射击请求过快",
+        "sendGapMs": 130.89999999850988,
+        "previousSendGapMs": 129.10000000149012,
+        "receiveGapMs": 104,
+        "pendingPlannedRemainingEstimateMs": 10,
+        "pendingExecutionAfterRejectMs": 17
+      },
+      {
+        "client": 1,
+        "error": "射击请求过快",
+        "sendGapMs": 124.40000000596046,
+        "previousSendGapMs": 121,
+        "receiveGapMs": 105,
+        "pendingPlannedRemainingEstimateMs": 13,
+        "pendingExecutionAfterRejectMs": 15
+      },
+      {
+        "client": 2,
+        "error": "射击请求过快",
+        "sendGapMs": 126,
+        "previousSendGapMs": 129.70000000298023,
+        "receiveGapMs": 110,
+        "pendingPlannedRemainingEstimateMs": 8,
+        "pendingExecutionAfterRejectMs": 21
+      },
+      {
+        "client": 2,
+        "error": "射击请求过快",
+        "sendGapMs": 124.40000000596046,
+        "previousSendGapMs": 133.5,
+        "receiveGapMs": 65,
+        "pendingPlannedRemainingEstimateMs": 49,
+        "pendingExecutionAfterRejectMs": 56
+      }
+    ],
+    "interpretation": "All current/previous native outbound gaps in these five samples were legal121–134ms, but the next input arrived while one earlier input remained queued, with nominal remaining time3–49ms. Remaining estimates combine millisecond wall timestamps with the scheduled delay; actual execution may be later. The one-slot capacity is an implementation choice, not the weapon rate. Lower average CPU or spreading full refreshes alone does not guarantee these legitimate bursts fit."
+  },
+  "remaining": "Independently review a finite FIFO input budget and maximum planned latency derived from actual compressed arrivals, preserving authoritative actual execution intervals (including after loop stalls), fresh hit/context checks, replay, cancellation and commit-before-reply. Do not silently widen grace, hide errors, lower client cadence or call current multiplayer problem solved. Broader game design/play/map/economy/PvP capacity still needs verification."
+}
