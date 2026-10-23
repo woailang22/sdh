@@ -1360,6 +1360,60 @@ describe('authoritative world', () => {
     expect(p.hp).toBe(76); expect(game.state.ammo.t).toBe(0);
     expect(new GameWorld(db, rules).state.ammo.t).toBe(0);
   });
+  it.each(['turret', 'spikes'] as const)('retains %s cooldown through repeated restarts without extra hits or catch-up', type => {
+    const { game, db } = campSetup(); let time = 10000;
+    const p = game.state.players.raider; Object.assign(p, { mapId: 'home_owner', x: 4, y: 0, shield: 0 });
+    const defense = facility(game, type, 3, 0); game.state.ammo[defense.id] = 3;
+    game.disconnect('owner'); game.disconnect('raider'); game.tick();
+    const damage = type === 'turret' ? 12 : 8;
+    const expectHits = (world: GameWorld, hits: number) => {
+      expect(world.state.players.raider.hp).toBe(100 - damage * hits);
+      expect(world.state.ammo[defense.id]).toBe(type === 'turret' ? 3 - hits : 3);
+      expect(world.state.buildings[defense.id].hp).toBe(type === 'spikes' ? 300 - hits * 10 : 300);
+    };
+    expectHits(game, 1);
+    for (let i = 0; i < 3; i++) { const restored = new GameWorld(db, rules, () => time); restored.tick(); expectHits(restored, 1); }
+    time = 10999; let restored = new GameWorld(db, rules, () => time); restored.tick(); expectHits(restored, 1);
+    time = 11000; restored.tick(); expectHits(restored, 2);
+    time = 20000; restored = new GameWorld(db, rules, () => time); restored.tick(); expectHits(restored, 3);
+    restored.tick(); expectHits(restored, 3);
+    restored = new GameWorld(db, rules, () => time); restored.tick(); expectHits(restored, 3);
+  });
+  it.each([2, 3] as const)('loads a version%s save without cooldown metadata and records only actual attacks', version => {
+    const { game, db } = campSetup();
+    const p = game.state.players.raider; Object.assign(p, { mapId: 'home_owner', x: 4, y: 0, shield: 0 });
+    const defense = facility(game, 'turret', 3, 0); game.state.ammo[defense.id] = 2;
+    game.disconnect('owner'); game.disconnect('raider');
+    const legacy = JSON.parse(db.getMeta('authoritative-world-v2')!); legacy.version = version; delete legacy.defenseAt;
+    db.setMeta('authoritative-world-v2', JSON.stringify(legacy));
+    const restored = new GameWorld(db, rules, () => 10000);
+    expect(restored.state.defenseAt).toEqual({}); expect(restored.state.ammo[defense.id]).toBe(2);
+    const wall = facility(restored, 'stone_wall', 3.5, 0); restored.state.buildings[wall.id].facing = 'ns';
+    restored.tick(); expect(restored.state.defenseAt).toEqual({}); expect(restored.state.players.raider.hp).toBe(100);
+    delete restored.state.buildings[wall.id]; restored.tick();
+    expect(restored.state.defenseAt).toEqual({ [defense.id]: 10000 }); expect(restored.state.ammo[defense.id]).toBe(1);
+    expect(restored.snapshot('raider')).not.toHaveProperty('defenseAt');
+    expect(restored.snapshot('raider').buildings.find(b => b.id === defense.id)).not.toHaveProperty('defenseAt');
+  });
+  it('cleans orphan metadata and removes a defense timestamp only after a successful building-removal commit', () => {
+    const { game, db, act, p } = campSetup();
+    const defense = facility(game, 'turret', 3, 0); p.x = 2; p.y = 0;
+    const invalid = facility(game, 'spikes', 7, 7);
+    game.state.defenseAt = { [defense.id]: 9999, ghost: 9999, [Object.keys(game.state.buildings)[0]]: 9999, [invalid.id]: NaN };
+    game.persist();
+    const restored = new GameWorld(db, rules, () => 10000);
+    expect(restored.state.defenseAt).toEqual({ [defense.id]: 9999 });
+    // The live fixture still has extra metadata; action rollback must retain its
+    // original defense entry rather than committing the timestamp deletion.
+    const save = db.checkpointWorld; db.checkpointWorld = () => { throw Error('remove commit failed'); };
+    expect(act('owner', 'remove_building', { targetId: defense.id }).error).toBe('remove commit failed');
+    expect(game.state.defenseAt[defense.id]).toBe(9999); expect(game.state.buildings[defense.id]).toBeDefined();
+    db.checkpointWorld = save;
+    expect(act('owner', 'remove_building', { targetId: defense.id }).error).toBeUndefined();
+    expect(game.state.defenseAt).not.toHaveProperty(defense.id);
+    const afterRemoval = new GameWorld(db, rules, () => 10000);
+    expect(afterRemoval.state.defenseAt).toEqual({}); expect(afterRemoval.state.buildings[defense.id]).toBeUndefined();
+  });
   it('preserves the original disconnected body deadline across restart even without prior combat', () => {
     const { game, db } = setup(); let time = 10000;
     const p = game.state.players.raider; p.mapId = 'home_owner'; p.x = 1; p.y = 0;

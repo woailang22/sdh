@@ -42,6 +42,7 @@ export interface PersistedWorld {
   handled: Record<string, string[]>;
   production: Record<string, ProductionJob>;
   monsters: Record<string, AuthoritativeMonster>;
+  defenseAt: Record<string, number>;
 }
 export interface WorldRules {
   nodeAt(id: string): InteractableEntity | undefined;
@@ -86,7 +87,6 @@ const BUILD = BUILD_RECIPES;
 export class GameWorld {
   state: PersistedWorld;
   private active = new Map<string, number>();
-  private defenseAt = new Map<string, number>();
   private respawns = new Map<string, number>();
   private npcTickAt: number;
   private tickSharedChange = false;
@@ -109,6 +109,7 @@ export class GameWorld {
       this.state.version = 3;
       this.state.production ||= {};
       this.state.monsters ||= {};
+      this.state.defenseAt ||= {};
       for (const p of Object.values(this.state.players)) { p.satiety ??= 100; p.survivalAt = this.now(); p.blueprints ||= []; p.disconnectUntil ??= 0; p.lastDamageAt ??= this.now(); p.xp ??= 0; p.maxXp ||= p.level * 100; p.kills ??= 0; this.deriveArmor(p); }
       for (const p of Object.values(this.state.players)) while (p.inventory.length < inventoryCapacity(p.equipment.pack?.id)) p.inventory.push(null);
       for (const camp of Object.values(this.state.camps)) { camp.members ||= []; camp.level ||= 1; camp.size ||= 64; camp.state = this.core(camp)?.hp === 0 ? 'breached' : 'active'; }
@@ -118,7 +119,7 @@ export class GameWorld {
         if (until > this.now()) this.active.set(p.id, until);
       }
     } else {
-      this.state = { version: 3, players: {}, camps: {}, buildings: {}, nodes: {}, storage: {}, ammo: {}, drops: {}, reports: [], handled: {}, production: {}, monsters: {} };
+      this.state = { version: 3, players: {}, camps: {}, buildings: {}, nodes: {}, storage: {}, ammo: {}, drops: {}, reports: [], handled: {}, production: {}, monsters: {}, defenseAt: {} };
       // Preserve legacy rows separately. Migrate coordinates and ownership, without generating old template loot.
       for (const legacy of db.listPlayers()) {
         const p = this.newPlayer(legacy.id, legacy.name || '废土流浪者');
@@ -178,6 +179,10 @@ export class GameWorld {
         owner.onboarding.storageUsed ||= b.type === 'storage_box' && Object.values(this.state.storage[b.id] || {}).some(count => count > 0);
         owner.onboarding.turretLoaded ||= b.type === 'turret' && (this.state.ammo[b.id] || 0) >= 10;
       }
+    }
+    for (const [id, at] of Object.entries(this.state.defenseAt)) {
+      const b = this.state.buildings[id];
+      if (!finite(at) || !b || b.type !== 'turret' && b.type !== 'spikes') delete this.state.defenseAt[id];
     }
     this.persist();
   }
@@ -572,7 +577,7 @@ export class GameWorld {
       requireRule(this.canUse(p.id, b), '未获得设施使用授权');
       if (a.action === 'remove_building') {
         requireRule(b.ownerId === p.id && b.type !== 'anchor_core' && p.combatUntil <= this.now(), '交战中或无权拆除');
-        delete this.state.buildings[b.id]; delete this.state.production[b.id]; delete this.state.storage[b.id]; delete this.state.ammo[b.id]; return;
+        delete this.state.buildings[b.id]; delete this.state.production[b.id]; delete this.state.storage[b.id]; delete this.state.ammo[b.id]; delete this.state.defenseAt[b.id]; return;
       }
       if (a.action === 'rest') {
         requireRule(b.type === 'bed' && p.combatUntil <= this.now() && !this.hasHostile(b.mapId!), '交战中无法休息');
@@ -861,12 +866,12 @@ export class GameWorld {
     for (const mapId of maps) {
       const buildings = Object.values(this.state.buildings).filter(b => b.mapId === mapId && b.hp > 0);
       for (const defense of buildings.filter(b => b.type === 'turret' || b.type === 'spikes')) {
-        if (time - (this.defenseAt.get(defense.id) ?? -Infinity) < 1000 || defense.type === 'turret' && !(this.state.ammo[defense.id] > 0)) continue;
+        if (time - (this.state.defenseAt[defense.id] ?? -Infinity) < 1000 || defense.type === 'turret' && !(this.state.ammo[defense.id] > 0)) continue;
         const target = activePlayers.find(p => p.mapId === mapId && !this.canUse(p.id, defense) && distance(p, defense) <= (defense.type === 'turret' ? 8 : 1) && hasLineOfSight(defense, p, buildings, defense.id));
         if (!target) continue;
         if (defense.type === 'turret') this.state.ammo[defense.id]--;
         else defense.hp = Math.max(0, defense.hp - 10);
-        this.damage(target, defense.type === 'turret' ? 12 : 8); this.defenseAt.set(defense.id, time); dirty = true;
+        this.damage(target, defense.type === 'turret' ? 12 : 8); this.state.defenseAt[defense.id] = time; dirty = true;
       }
     }
     // NPC movement alone keeps its old cadence (shared sync, no extra disk

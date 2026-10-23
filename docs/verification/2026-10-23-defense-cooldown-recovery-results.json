@@ -1,0 +1,53 @@
+{
+  "date": "2026-10-23",
+  "baselineCommit": "7f0ff5c7fb466d2b9f5f53653bbc2b9736772306",
+  "requirement": "Approved camp design7.3: restart must preserve effective combat state and real ammunition/damage, including the existing defense cooldown.",
+  "rootCause": "GameWorld.defenseAt was a fresh process-local Map. HP, ammunition and spikes durability persisted, but restarting within the1000ms interval allowed another attack immediately.",
+  "changes": [
+    "Server-only defenseAt record in the existing world checkpoint; original tick still commits damage, consumption and timestamp together.",
+    "Legacy version2/3 checkpoints without the additive field default to empty. Past unknown attack times cannot be reconstructed; other saved progression remains intact.",
+    "Load removes orphan/non-defense/non-finite entries. Successful building removal deletes its timestamp; failed full action commit restores it with the building.",
+    "No database table, asynchronous writer, timer, attack rate, damage, inventory cost or client protocol changes. Metadata is omitted from client snapshots."
+  ],
+  "verification": {
+    "testFiles": 34,
+    "tests": 496,
+    "typecheck": "passed after correcting a new test fixture's inferred wall type; production behavior unchanged by this correction",
+    "build": "passed; client index-BRl8LPRa.js unchanged",
+    "existingBuildWarnings": ["Vite native-config __dirname warning", "Client chunk exceeds500kB"],
+    "review": "Independent static review found no P1/P2. Invalid timestamp test was strengthened to use an existing spikes ID so orphan cleanup cannot mask the finite-value branch.",
+    "unitRedGreen": {
+      "sameTimeTurretReloadBefore": { "expectedHp": 88, "actualHp": 76 },
+      "sameTimeSpikesReloadBefore": { "expectedHp": 92, "actualHp": 84 },
+      "after": "Repeated reloads at10000 and10999 preserve one hit;11000 permits the second. Reload at20000 permits only one current hit, never missed-interval catch-up, and another same-time reload adds none. Ammunition and spikes durability match actual attacks."
+    },
+    "otherRegressionScope": [
+      "Both legacy versions without metadata preserve supplies and do not record a cooldown while a closed wall blocks the target.",
+      "World and building snapshots omit server cooldown metadata.",
+      "Orphan ID, actual core ID and non-finite time on an existing spikes ID are separately cleaned.",
+      "A failed remove-building checkpoint preserves the original timestamp/building; successful removal and reload retain neither.",
+      "Existing defense friendship/range/walls/empty ammunition, death/drop/body lifetime, shared synchronization, fire cadence/replay and persistence tests remain passing."
+    ],
+    "productionRecovery": {
+      "method": "Unique OS-temp synthetic SQLite database. Actual production server startup and periodic tick in child processes, with authoritative wall time fixed at10000 only. Parent waits for IPC emitted after original tick returns, then SIGKILLs the process; repeats production startup at the same time. No real database or real player identities used.",
+      "firstCommittedTick": { "targetHp": 80, "turretAmmo": 2, "spikesHp": 290 },
+      "sameTimeProductionRestart": { "targetHp": 80, "turretAmmo": 2, "spikesHp": 290 },
+      "oldCodeMutationActuallyFailed": { "targetHp": 60, "turretAmmo": 1, "spikesHp": 280 },
+      "restoredFixedSource": "passed",
+      "originalWalAndConsistentBackup": {
+        "sameTimeAnd999ms": { "targetHp": 80, "turretAmmo": 2, "spikesHp": 290 },
+        "at1000msOnce": { "targetHp": 60, "turretAmmo": 1, "spikesHp": 280 },
+        "repeatedSameTimeTick": { "targetHp": 60, "turretAmmo": 1, "spikesHp": 280 },
+        "defenseAt": { "turret": 11000, "spikes": 11000 },
+        "pendingPlayerCommits": 0,
+        "sqliteIntegrity": "ok"
+      }
+    }
+  },
+  "limits": [
+    "Controlled-clock recovery semantics are not native gameplay latency/throughput or raid-economy evidence.",
+    "Previous uninstrumented dense eight-connection gate still has one native over-fast refusal; this change does not claim to fix it and no new performance score is substituted.",
+    "Existing shared tick checkpoint failure can leave in-memory effects unrolled back; that broader transaction/error policy is not changed or claimed solved here.",
+    "The complete game goal remains active. No deployment or real data/sdc.sqlite access."
+  ]
+}

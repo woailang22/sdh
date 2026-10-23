@@ -17,6 +17,55 @@ const rules: WorldRules = {
 };
 
 describe('durable world action commits', () => {
+  it('retains both defense cooldowns after production-server force-kill, restart and consistent backup', async () => {
+    const file = join(mkdtempSync(join(tmpdir(), 'sdc-defense-recovery-')), 'world.sqlite');
+    const db = createDb(file), game = new GameWorld(db, rules, () => 10000);
+    game.connect('owner', '营地主人'); game.connect('raider', '攻击者');
+    const mapId = 'home_owner';
+    game.state.camps[mapId] = { id: mapId, ownerId: 'owner', ownerName: '营地主人', mapId: 'world', x: 100, y: 100, size: 64, members: [], level: 1 };
+    game.state.players.owner.campId = mapId;
+    Object.assign(game.state.players.raider, { mapId, x: 4, y: 0, shield: 0 });
+    for (const [id, type, x, y] of [['core', 'anchor_core', 0, 0], ['turret', 'turret', 3, 0], ['spikes', 'spikes', 4.5, 0]] as const) {
+      game.state.buildings[id] = { id, type, x, y, name: id, hp: 300, maxHp: 300, level: 1, ownerId: 'owner', mapId };
+    }
+    game.state.ammo.turret = 3; game.disconnect('owner'); game.disconnect('raider'); db.setMeta('public-house-layout', '2');
+    async function runUntilTick() {
+      const probe = createServer(); await new Promise<void>(resolve => probe.listen(0, '127.0.0.1', resolve));
+      const port = (probe.address() as AddressInfo).port; await new Promise<void>((resolve, reject) => probe.close(error => error ? reject(error) : resolve()));
+      // Real production startup, timers and SQLite; only authoritative wall time
+      // is frozen to make a sub-second restart reproducible on a busy runner.
+      const source = `import { GameWorld } from ${JSON.stringify(pathToFileURL(resolve('server/worldState.ts')).href)};
+        Date.now=()=>10000; const tick=GameWorld.prototype.tick;
+        GameWorld.prototype.tick=function(){const changed=tick.call(this);process.send({hp:this.state.players.raider.hp,ammo:this.state.ammo.turret,spikes:this.state.buildings.spikes.hp});return changed;};
+        await import(${JSON.stringify(pathToFileURL(resolve('server.ts')).href)});`;
+      const child = spawn(process.execPath, ['--import', 'tsx', '--input-type=module', '--eval', source], { cwd: process.cwd(), windowsHide: true, env: { ...process.env, DB_PATH: file, PORT: String(port), NODE_ENV: 'production' }, stdio: ['ignore', 'pipe', 'pipe', 'ipc'] });
+      const exited = once(child, 'exit'); let stderr = '';
+      child.stderr!.on('data', chunk => { stderr += String(chunk); });
+      try {
+        return await new Promise<{ hp: number; ammo: number; spikes: number }>((accept, reject) => {
+          const timer = setTimeout(() => reject(Error('Defense recovery timeout: ' + stderr)), 10000);
+          child.once('message', state => { clearTimeout(timer); accept(state as { hp: number; ammo: number; spikes: number }); });
+          child.once('error', error => { clearTimeout(timer); reject(error); });
+          child.once('exit', () => { clearTimeout(timer); reject(Error('Server exited before defense tick: ' + stderr)); });
+        });
+      } finally { child.kill('SIGKILL'); await exited; expect(stderr).toBe(''); }
+    }
+    expect(await runUntilTick()).toEqual({ hp: 80, ammo: 2, spikes: 290 });
+    expect(await runUntilTick()).toEqual({ hp: 80, ammo: 2, spikes: 290 });
+    const backup = await backupDatabase(file); expect(backup).toBeTruthy();
+    for (const saved of [file, backup!]) {
+      let time = 10000; const restoredDb = createDb(saved), restored = new GameWorld(restoredDb, rules, () => time);
+      const assertState = (hp: number, ammo: number, spikes: number) => {
+        expect(restored.state.players.raider.hp).toBe(hp); expect(restored.state.ammo.turret).toBe(ammo); expect(restored.state.buildings.spikes.hp).toBe(spikes);
+      };
+      restored.tick(); assertState(80, 2, 290); time = 10999; restored.tick(); assertState(80, 2, 290);
+      time = 11000; restored.tick(); assertState(60, 1, 280); restored.tick(); assertState(60, 1, 280);
+      expect(restored.state.defenseAt).toEqual({ turret: 11000, spikes: 11000 });
+      expect(restoredDb.listWorldPlayerCommits()).toEqual([]);
+      const reader = new Database(saved, { readonly: true });
+      try { expect(reader.pragma('integrity_check', { simple: true })).toBe('ok'); } finally { reader.close(); }
+    }
+  }, 20000);
   it.each(['normal', 'backup-failure', 'checkpoint-failure'])('backs up an actual v2/layout2 server startup before migration (%s)', async mode => {
     const dir = mkdtempSync(join(tmpdir(), 'sdc-version3-')), file = join(dir, 'world.sqlite');
     const db = createDb(file), game = new GameWorld(db, rules); game.connect('p', '迁移角色');
