@@ -1,0 +1,433 @@
+{
+  "date": "2026-10-23 to 2026-10-24 Asia/Shanghai",
+  "baselineCommit": "4ae1f1b689980b54e1958892967b42a0bbf699a2",
+  "overallPerformanceAccepted": false,
+  "originalNativeFailureResolved": false,
+  "scope": "Current production-client single actual CUA guest walked a real continuous world out-and-back route. Resulting starvation exposed missing early food guidance. Only HUD/guide changed; all survival/resource/generation/network rules preserved.",
+  "changes": [
+    "Existing HUD at or below20% satiety shows a static warning, distinguishes zero/starvation and opens the existing inventory modal. Dead players have no food action. No auto-use or new timer.",
+    "Wood gathering guide now points to two existing farm cupboards, southern entrances and E/F then inventory Use. It explicitly warns supplies may already be looted.",
+    "Initial390x844 UI had an actual toolbar overlap. Final narrow view puts the food notice at the top and moves quest guidance below it; desktop keeps vitals-adjacent placement. Existing mobile HUD crowding remains."
+  ],
+  "route": {
+    "singleDefaultGuest": true,
+    "roundsFired": 0,
+    "packets": 8020,
+    "movingPackets": 1565,
+    "stationaryPackets": 6455,
+    "accepted": 8020,
+    "rejected": 0,
+    "observedStateCorrections": 1,
+    "observedActionErrors": 0,
+    "overflow": 0,
+    "serverCaptureSeconds": 466.581,
+    "acceptedPathLength": 318.56955691456767,
+    "coordinateBounds": {
+      "minX": 0,
+      "maxX": 147.65971808244487,
+      "minY": -6.586966715804086,
+      "maxY": 26.65900196705487
+    },
+    "final": {
+      "x": 3.4708732502613793,
+      "y": -6.586966715804086,
+      "map": "world",
+      "hp": 28.840000000000032,
+      "shield": 0,
+      "satiety": 0
+    },
+    "assetsUnchanged": true,
+    "noRewardsOrGrants": true,
+    "noCamp": true,
+    "sharedAssetStateUnchanged": true,
+    "starvationObservedOnlyAfterSatietyZero": true,
+    "consistentBackupRestore": true,
+    "foodDefinitions": [
+      {
+        "id": "world:0:0:poi:supplies",
+        "x": 10,
+        "y": 10,
+        "loot": [
+          {
+            "itemId": "food",
+            "count": 3
+          },
+          {
+            "itemId": "water",
+            "count": 2
+          },
+          {
+            "itemId": "seed_potato",
+            "count": 1
+          }
+        ]
+      },
+      {
+        "id": "world:-1:-1:poi:supplies",
+        "x": -14,
+        "y": -14,
+        "loot": [
+          {
+            "itemId": "food",
+            "count": 3
+          },
+          {
+            "itemId": "water",
+            "count": 2
+          },
+          {
+            "itemId": "seed_potato",
+            "count": 1
+          }
+        ]
+      }
+    ],
+    "nativeInputCalls": [
+      {
+        "key": "d+s",
+        "durationMs": 10000
+      },
+      {
+        "key": "d",
+        "durationMs": 5000
+      },
+      {
+        "key": "d+s",
+        "durationMs": 25000
+      },
+      {
+        "key": "a+w",
+        "durationMs": 25000
+      },
+      {
+        "key": "a",
+        "durationMs": 4500
+      },
+      {
+        "key": "a+w",
+        "durationMs": 15000
+      }
+    ],
+    "otherInput": "Two actual context-menu path clicks at screen(960,520); first right click had3000ms held duration, which is not3000ms continuous walking. All state changes used CUA only.",
+    "frames": {
+      "kind": "local-frame-diagnostics",
+      "version": 1,
+      "capturedAt": "2026-10-23T15:53:24.646Z",
+      "timing": "Milliseconds of JavaScript work and callback/draw-start intervals; not GPU time or physical displayed frames. Latest 20 visible successful slow samples (>50ms), including initial loading. Refresh clears records.",
+      "totalSlowFrames": 5,
+      "samples": [
+        {
+          "atMs": 11062.699999988079,
+          "updateMs": 0.30000001192092896,
+          "drawMs": 60.3999999910593,
+          "rafGapMs": 60.5,
+          "drawGapMs": 60.6000000089407,
+          "scene": {
+            "map": "world",
+            "x": 0,
+            "y": 1,
+            "chunks": 25,
+            "buildings": 388,
+            "interactables": 132,
+            "monsters": 0,
+            "players": 0,
+            "inputBlocked": false
+          }
+        },
+        {
+          "atMs": 11151.09999999404,
+          "updateMs": 0.09999999403953552,
+          "drawMs": 45,
+          "rafGapMs": 88.40000000596046,
+          "drawGapMs": 88.19999998807907,
+          "scene": {
+            "map": "world",
+            "x": 0,
+            "y": 1,
+            "chunks": 25,
+            "buildings": 388,
+            "interactables": 132,
+            "monsters": 0,
+            "players": 0,
+            "inputBlocked": false
+          }
+        },
+        {
+          "atMs": 11272,
+          "updateMs": 0.3999999910593033,
+          "drawMs": 14.5,
+          "rafGapMs": 120.90000000596046,
+          "drawGapMs": 121.20000000298023,
+          "scene": {
+            "map": "world",
+            "x": 0,
+            "y": 1,
+            "chunks": 25,
+            "buildings": 388,
+            "interactables": 132,
+            "monsters": 0,
+            "players": 0,
+            "inputBlocked": false
+          }
+        },
+        {
+          "atMs": 59452.59999999404,
+          "updateMs": 0.29999999701976776,
+          "drawMs": 24.299999997019768,
+          "rafGapMs": 46,
+          "drawGapMs": 52.70000000298023,
+          "scene": {
+            "map": "world",
+            "x": 3.7300800000000027,
+            "y": 1,
+            "chunks": 25,
+            "buildings": 388,
+            "interactables": 132,
+            "monsters": 0,
+            "players": 0,
+            "inputBlocked": false
+          }
+        },
+        {
+          "atMs": 430054.89999999106,
+          "updateMs": 0.29999999701976776,
+          "drawMs": 0.9000000059604645,
+          "rafGapMs": 7.899999991059303,
+          "drawGapMs": 53.5,
+          "scene": {
+            "map": "world",
+            "x": 3.4708732502613793,
+            "y": -6.586966715804086,
+            "chunks": 52,
+            "buildings": 376,
+            "interactables": 149,
+            "monsters": 0,
+            "players": 0,
+            "inputBlocked": true
+          }
+        }
+      ],
+      "environment": {
+        "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
+        "viewport": {
+          "width": 1280,
+          "height": 720
+        },
+        "canvas": {
+          "width": 1280,
+          "height": 720
+        },
+        "devicePixelRatio": 1.5,
+        "modulePath": "/assets/index-D-lv6nhw.js",
+        "jsHeap": {
+          "used": 33617527,
+          "total": 70036503
+        },
+        "graphicsBackend": "unknown"
+      }
+    },
+    "visibleRendererErrors": "No error overlay observed; not an exhaustive console/exception listener. Existing frame report records successful frames only.",
+    "terminalCacheSizeObserved": 52,
+    "evictionExercised": false
+  },
+  "ui": {
+    "currentBundle": "/assets/index-DZvLEj37.js",
+    "viewports": [
+      {
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "width": 390,
+        "height": 844
+      }
+    ],
+    "mobileBounds": {
+      "button": {
+        "height": 32,
+        "width": 83.33333587646484,
+        "x": 286,
+        "y": 62.66666793823242
+      },
+      "modulePath": "/assets/index-DZvLEj37.js",
+      "quest": {
+        "height": 32,
+        "width": 254.6666717529297,
+        "x": 12.666666984558104,
+        "y": 160.6666717529297
+      },
+      "warning": {
+        "height": 63.08333587646485,
+        "width": 366,
+        "x": 12,
+        "y": 56
+      }
+    },
+    "finalMobileButtonActuallyOpenedInventory": true,
+    "firstDesktopButtonActuallyOpenedInventory": true,
+    "finalDesktopWarningScreenshot": "data/cua-food-guidance-20261023-a2-desktop.png",
+    "initialNarrowOverlapScreenshot": "data/cua-food-guidance-20261023-a1-mobile.png",
+    "finalNarrowScreenshot": "data/cua-food-guidance-20261023-a2-mobile.png",
+    "finalInventoryScreenshot": "data/cua-food-guidance-20261023-a2-mobile-inventory.png",
+    "correctionToLastDesktopAttempt": "The final I key did not close the inventory: existing shortcut opens only, Escape closes. The subsequent desktop click occurred with inventory still open and is not an independent open-transition proof. The saved desktop-final.png contains the modal, not a closed HUD; use desktop.png for final HUD and first-draft actual desktop click plus final actual mobile transition for behavior evidence.",
+    "sampleScope": "Normal same-cookie guest loaded final state. Owned servers stopped automatically6s/2s after connection to preserve the low-HP empty diagnostic guest. UI captures/clicks may occur after stop: valid modal/layout evidence, not ongoing online action/food consumption acceptance. No UI screenshots assert actual eating.",
+    "hpBeforeUI": 28.840000000000032,
+    "hpAfterFirstUI": 15.72750000000003,
+    "hpAfterFinalUI": 13.12000000000003,
+    "noVitalOrAssetReset": true,
+    "finalAssetsAndSharedStateUnchanged": true,
+    "finalConsistentBackupRestore": true,
+    "viewportReset": true,
+    "ownedTabsClosed": true,
+    "ownedServersTerminal": true
+  },
+  "verification": {
+    "newHUDCases": 9,
+    "redBusinessFailures": 5,
+    "negativeControlBusinessFailures": 5,
+    "focusedGreen": 9,
+    "finalFiles": 44,
+    "finalTests": 643,
+    "types": "passed",
+    "build": "passed",
+    "buildWarnings": "Existing native Vite config warning and >500kB chunk warning retained",
+    "review": "Independent read-only review complete: no P1/P2 or evidence overstatement. Reviewer checked all30 original hashes, raw8020-event counts/path, final desktop/mobile/inventory images, source, audits and privacy; no database/load/browser work."
+  },
+  "limits": [
+    "Single actual IAB Chrome1551280x720/DPR1.5 guest, not prior1920x1080/DPR1 two-native-plus-six-protocol failure or a capacity test.",
+    "8020 packets include6455stationary packets; moving path length is accepted coordinate distances, not466.581s of continuous walking. Idle diagnostic/thinking time consumed normal food.",
+    "One observed cumulative state correction, no captured per-correction event/timing; do not label it absent or proven to be initial spawn correction.",
+    "Five recorded slow frames include three early at spawn, one while walking and one with input blocked. No full frame distribution/GPU/physical presentation or long memory acceptance.",
+    "Only52cached chunks observed, below64: no eviction/re-generation gate exercised in this native route.",
+    "Food cupboard definitions verified; no actual cupboard looting/eating occurred in this empty-player route. UI change does not itself prove novel-player balance or retained resources under multiplayer depletion.",
+    "Survival and body loss/raid/economy rules unchanged; full world/long memory/multicamp multiplayer/earned economy and original walking/GPU stalls remain open.",
+    "Existing mobile toolbar/header crowding is outside this food-notice fix.",
+    "Native browser-act CLI was unavailable; no installation attempted. Browser verification used the already available CUA APIs."
+  ],
+  "sourceHashes": [
+    {
+      "path": "src/App.tsx",
+      "sha256": "1193bb1de576d890c3d50318bd15251252f21628111340f713b03d6dbfcb5d91"
+    },
+    {
+      "path": "src/components/CharacterHUD.tsx",
+      "sha256": "20bade49a668dd318dafa65db727a21b1a282dcdbbd40f527ff766cf90bc5a1c"
+    },
+    {
+      "path": "src/components/CharacterHUD.test.tsx",
+      "sha256": "33b853d920760dce5fed461e5a7165061bf92000690b448008870dd7a45b8646"
+    },
+    {
+      "path": "data/capture-cua-world-walk-20261023.ts",
+      "sha256": "a9ef5f504044e0f92a735ac3904b96e1e37896460595a010661999099ea21a22"
+    },
+    {
+      "path": "data/control-cua-world-walk-20261023.cjs",
+      "sha256": "220d6b49ed9f6bb9f6f84856168c4f42f529be014e7e577dc6bcec255886861b"
+    },
+    {
+      "path": "data/cua-world-walk-20261023-a1-return-events.json",
+      "sha256": "cbd416d731061b6eb5ea3596784a65a50fd0800595bd7a033c680096c85372a2"
+    },
+    {
+      "path": "data/cua-world-walk-20261023-a1-outward-events.json",
+      "sha256": "eb6950be2e5f92c9ae6e961032f8dc8cbd73e8ca6377015d798a5b68eccc5982"
+    },
+    {
+      "path": "data/cua-world-walk-20261023-a1-audit.json",
+      "sha256": "07904a3b28753177ce9c4ec461804341409b177784409c8eb1d6649bd03e0cb9"
+    },
+    {
+      "path": "data/cua-world-walk-20261023-a1-frames.json",
+      "sha256": "ef9eee5587f2bfd0bbf105c921dfa1e562393a226acff2867cb962e918057a0f"
+    },
+    {
+      "path": "data/cua-world-walk-20261023-a1-return.png",
+      "sha256": "0c8b6b5cccd336b3646e2116c5586b0652aace47039cdd45aaeaea75989dc815"
+    },
+    {
+      "path": "data/cua-world-walk-20261023-a1-route-ax.json",
+      "sha256": "80e81ba42bb7db8230148ffb95b64891ee7cfea2115ddedd7bfe0c834d861f7e"
+    },
+    {
+      "path": "data/audit-cua-world-walk-20261023.ts",
+      "sha256": "0fd818e283a9a96ff6b8361bf9039d9e81dc1200815c456cc2833b86142761b2"
+    },
+    {
+      "path": "data/negative-control-early-food-guidance-20261023.cjs",
+      "sha256": "11f43b69261bfa7e2b1e2b8aefe30ba06fe00647c081b3f1abe60f1c7aac67cb"
+    },
+    {
+      "path": "data/resume-cua-food-guidance-20261023.cjs",
+      "sha256": "80fdbce3d68bd446278e2d3a12def819b7a3dd19005047dba0a442cc80405ad7"
+    },
+    {
+      "path": "data/capture-cua-food-guidance-20261023.ts",
+      "sha256": "f3722b82fbb7fd028cdb4b039b385a31606d28d754f5d96a9375e048bbb13875"
+    },
+    {
+      "path": "data/resume-cua-food-guidance-final-20261023.cjs",
+      "sha256": "72a65baf70845194d2ffc191f1828724d3b82cfa9748f7b34388c84a23df1dd2"
+    },
+    {
+      "path": "data/capture-cua-food-guidance-final-20261023.ts",
+      "sha256": "a1e4e301b0f7fbba772e03ab9aea1a48580096a883e39a28cc8c15e8e256acfa"
+    },
+    {
+      "path": "data/cua-food-guidance-20261023-a1-mobile.png",
+      "sha256": "076802fc8a27386edb52c92ed229007fa63c38657db7ca9b7e3355f2619fb1e3"
+    },
+    {
+      "path": "data/cua-food-guidance-20261023-a2-desktop.png",
+      "sha256": "58be93014cd6a96523aaafc1504711a390988a38cbeed86b5e613d97d879435b"
+    },
+    {
+      "path": "data/cua-food-guidance-20261023-a2-mobile.png",
+      "sha256": "f2adfc4bf58c30275d00e3b2678a3d6d53fb5c691f8d319d31c5690ad577e6b9"
+    },
+    {
+      "path": "data/cua-food-guidance-20261023-a2-mobile-bounds.json",
+      "sha256": "d8f32bd412ecbb58cdbc02dfc6661bac020dedb7126e316d07d026e03cb27c98"
+    },
+    {
+      "path": "data/cua-food-guidance-20261023-a2-mobile-inventory-ax.txt",
+      "sha256": "b876abf17b100cd50ea6bb7009e53abac24caabd73c71d092d16acf364cb7739"
+    },
+    {
+      "path": "data/cua-food-guidance-20261023-a2-mobile-inventory.png",
+      "sha256": "ff73e7e33c99d96becf5c866f66a6dec8c743183bae4b2bbf1a9a50dc69e4eea"
+    },
+    {
+      "path": "data/early-food-guidance-red-20261023.log",
+      "sha256": "c4b0d3c51aa99f2c91b56ac232a16aad7cdc941f5b272f7c45c1858aa23c693e"
+    },
+    {
+      "path": "data/early-food-guidance-green-20261023.log",
+      "sha256": "6374abf5c0a7c51994f0711a02d30352338167b07454c3f1b4cf30083cb0a658"
+    },
+    {
+      "path": "data/early-food-guidance-negative-control-20261023.log",
+      "sha256": "1ef7ca9ad50a5a7845e6e60e8b94bdb6b58b67bfdd588074cec3e54dfbb36e32"
+    },
+    {
+      "path": "data/early-food-guidance-final-tests-20261023.log",
+      "sha256": "d2645577d4a7eadab01fb277f8881f5944976a644fa741bb80054c707bbc8152"
+    },
+    {
+      "path": "data/early-food-guidance-final-types-20261023.log",
+      "sha256": "7f3594d7a965c703e6361ae50c0ef50cf9c344c621d801592b074b48554f4235"
+    },
+    {
+      "path": "data/early-food-guidance-final-build-20261023.log",
+      "sha256": "77d0e223ac48349678d961b78c770253290fbff845637d57b9bb72d7378cbc2a"
+    },
+    {
+      "path": "data/finalize-early-food-guidance-20261023.ts",
+      "sha256": "c7613a0fea65fb205e8ca5794bf2c9d7a8b4cfda95b3f9ed28b2a11e33bb7637"
+    },
+    {
+      "path": "data/early-food-guidance-delivery-types-20261023.log",
+      "sha256": "7f3594d7a965c703e6361ae50c0ef50cf9c344c621d801592b074b48554f4235"
+    }
+  ]
+}

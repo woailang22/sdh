@@ -1220,7 +1220,7 @@ export default function App() {
 
   const questSteps: QuestStep[] = [
     { id: 'move', title: '探索公共荒野', desc: 'WASD 或右键移动，沿道路进入林地、矿场和城镇；打开地图标记目的地。', progressText: movedFar ? '1/1' : '0/1', done: movedFar },
-    { id: 'wood', title: '收集木材', desc: '捡取枯枝、搜刮农舍；装备斧后伐木更快。按住 E/F 可连续采集。', progressText: `${Math.min(totalWood, 20)}/20`, done: totalWood >= 20 },
+    { id: 'wood', title: '收集木材', desc: '先备口粮：出生附近农舍物资柜在 (10,10) 与 (-14,-14)，从南门进入，E/F 搜取后在背包选食物点“使用”；可能已被搜走。捡枯枝、搜农舍，装备斧后按住 E/F 伐木更快。', progressText: `${Math.min(totalWood, 20)}/20`, done: totalWood >= 20 },
     { id: 'stone', title: '收集石料', desc: '捡取碎石或开采石堆，制作镐来提升效率。满包不会扣除未收到的物资。', progressText: `${Math.min(totalStone, 10)}/10`, done: totalStone >= 10 },
     { id: 'pickaxe', title: '制作并装备开山镐', desc: '从制造面板制作开山镐（8木、6石），在背包中装备。完成后更换工具不影响进度。', progressText: pickaxeCrafted ? '1/1' : '0/1', done: pickaxeCrafted },
     { id: 'claim', title: '在野外建立营地', desc: '收集20木、10石，在道路和地标外选址，打开营地面板插旗；开局没有私人领地。', progressText: claimedPlot ? '1/1' : '0/1', done: claimedPlot },
@@ -1333,14 +1333,14 @@ export default function App() {
       {/* 单人模式：无NPC小队面板，在线真人见右上战区名单/雷达 */}
 
       {/* Left Side Quest Guide */}
-      <div className="absolute left-3 top-20 z-20">
+      <div className={`absolute left-3 top-20 z-20 ${playerStats.hp > 0 && playerStats.satiety / playerStats.maxSatiety <= 0.2 ? 'max-sm:top-40' : ''}`}>
         <QuestPanel steps={questSteps} />
       </div>
 
       {/* Bottom Left Character Status HUD, Tactical Radio Chat & Direction Controls */}
       <div className="absolute bottom-4 left-4 z-20 flex items-end gap-3 pointer-events-none">
         <div className="flex flex-col gap-2 pointer-events-auto">
-          <CharacterHUD stats={playerStats} />
+          <CharacterHUD stats={playerStats} onOpenInventory={() => { soundManager.playClick(); setActiveModal('inventory'); }} />
           <RadioChat messages={chatMessages} onSendMessage={handleSendMessage} />
         </div>
         <div className="pointer-events-auto mb-1">

@@ -4,9 +4,10 @@ import { Shield, Zap, Heart, Award, Drumstick } from 'lucide-react';
 
 interface CharacterHUDProps {
   stats: PlayerStats;
+  onOpenInventory?: () => void;
 }
 
-export const CharacterHUD: React.FC<CharacterHUDProps> = ({ stats }) => {
+export const CharacterHUD: React.FC<CharacterHUDProps> = ({ stats, onOpenInventory }) => {
   const hpRatio = Math.max(0, Math.min(1, stats.hp / stats.maxHp));
   const shieldRatio = Math.max(0, Math.min(1, stats.shield / stats.maxShield));
   const staminaRatio = Math.max(0, Math.min(1, stats.stamina / stats.maxStamina));
@@ -90,7 +91,15 @@ export const CharacterHUD: React.FC<CharacterHUDProps> = ({ stats }) => {
         </div>
       </div>
 
-      {/* Level & Player Protection Badges */}
+      {stats.hp > 0 && satietyRatio <= 0.2 ? (
+        <div role="status" className="w-64 max-sm:fixed max-sm:top-14 max-sm:left-3 max-sm:z-30 max-sm:w-[calc(100vw-1.5rem)] rounded-lg border border-orange-500/60 bg-slate-950/95 px-2 py-1.5 text-orange-100">
+          <div className="flex items-center justify-between gap-2 text-[11px] font-bold">
+            <span>{stats.satiety <= 0 ? '正在挨饿' : '饱食不足'}</span>
+            {onOpenInventory && <button type="button" onClick={onOpenInventory} className="min-h-8 rounded border border-orange-400/50 bg-orange-950/70 px-2 text-orange-200 hover:bg-orange-900/70">打开背包补给</button>}
+          </div>
+          <p className="mt-1 text-[10px] leading-snug">{stats.satiety <= 0 ? '饥饿会消耗护盾和生命。' : ''}选中食物后点“使用”；缺口粮先搜农舍物资柜。</p>
+        </div>
+      ) : (
       <div className="flex items-center gap-2 pl-1">
         <div className="flex items-center gap-1 px-2 py-0.5 rounded bg-slate-900/90 border border-cyan-500/40 text-[11px] font-medium text-cyan-300">
           <Award className="w-3 h-3 text-cyan-400" />
@@ -102,6 +111,7 @@ export const CharacterHUD: React.FC<CharacterHUDProps> = ({ stats }) => {
           <span>探索求生</span>
         </div>
       </div>
+      )}
     </div>
   );
 };
