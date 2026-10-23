@@ -1,0 +1,696 @@
+{
+  "kind": "render-stage-attribution-verification",
+  "date": "2026-10-24",
+  "baseCommit": "2afb02a411790fc347eb371f9a32a87337b1dfca",
+  "planningCommit": "e8659a8",
+  "goalComplete": false,
+  "scope": "Bounded local diagnostic improvement and native route evidence. No rendering optimization or global performance acceptance.",
+  "changes": [
+    "Five contiguous render wall-time spans: setup, ground, queue including markers/underlays, entities, overlays. Fixed reused objects and six clock boundaries; copy only on existing slow sample with an actual draw.",
+    "Actual current ground path flags: full repaint, pixel scrolling, input texture invalidation, fallback, and terrain region submissions. Regions may overlap and texture dirty does not guarantee an on-screen repaint.",
+    "Update-only slow callback never inherits old stage/cache fields; failed render retains existing failure path and is not a successful slow sample. Snapshot clones nested timings; latest20 limit unchanged."
+  ],
+  "tests": {
+    "added": 5,
+    "strengthenedExisting": 1,
+    "redFailed": 6,
+    "redPassed": 159,
+    "focusPassed": 165,
+    "enginePassed": 160,
+    "frameDiagnosticsPassed": 5,
+    "fullPassed": 698,
+    "testFiles": 45,
+    "typesPassed": true,
+    "buildPassed": true,
+    "modulePath": "/assets/index-DPOSKexH.js",
+    "negativeControls": [
+      {
+        "removed": "stage attachment",
+        "failed": 2,
+        "restoredByteForByte": true
+      },
+      {
+        "removed": "ground state reset",
+        "failed": 1,
+        "restoredByteForByte": true
+      },
+      {
+        "removed": "snapshot stage clone",
+        "failed": 1,
+        "restoredByteForByte": true
+      }
+    ],
+    "initialFullRun": {
+      "failed": 5,
+      "passed": 693,
+      "failureBoundary": "until started: server child startup waiting, before protocol assertions",
+      "files": [
+        "fireAdmission",
+        "sessionRecovery",
+        "stateRefresh",
+        "stateSync",
+        "tickRecovery"
+      ],
+      "focusedRecoveryPassed": 20,
+      "fullRerunPassed": 698,
+      "timeLimitsAndServerSourcesUnchanged": true,
+      "cause": "Unconfirmed; no host-overload root-cause assertion."
+    },
+    "initialTypeFailure": "New render failure test spy returned void; corrected only test to return expected diagnostic record.",
+    "initialAuditFailure": "QA incorrectly asserted each two30s key hold pair spanned continuous60s. Actual server timestamps show4.914s and6.122s gaps. Audit now validates two genuine30s runs per leg, retains gaps and explicitly fails continuous60s acceptance.",
+    "existingViteWarningsRetained": true
+  },
+  "results": {
+    "status": "passed-stage-diagnostics-and-native-route-evidence",
+    "modulePath": "/assets/index-DPOSKexH.js",
+    "newDefaultGuest": true,
+    "normalRulesAndClocks": true,
+    "noManualStateOrCoordinateEdits": true,
+    "movement": {
+      "totalPackets": 8612,
+      "movingPackets": 2478,
+      "stationaryPackets": 6134,
+      "distance": 512.948000201499,
+      "rejected": 0,
+      "errors": 0,
+      "corrections": 1,
+      "overflow": 0,
+      "legs": [
+        {
+          "phase": "walk",
+          "heldKey": "a",
+          "nativeKeyHoldsSeconds": [
+            30,
+            30
+          ],
+          "checkpointPackets": 1445,
+          "movingPackets": 1101,
+          "stationaryPackets": 344,
+          "firstToLastMovingPacketMs": 64957.60759999999,
+          "betweenRunsMs": 4914.154800000018,
+          "runs": [
+            {
+              "packets": 550,
+              "firstAtMs": 236111.9424,
+              "lastAtMs": 266117.5705,
+              "distance": 114.0520600000008
+            },
+            {
+              "packets": 551,
+              "firstAtMs": 271031.7253,
+              "lastAtMs": 301069.55,
+              "distance": 114.02926000000191
+            }
+          ],
+          "continuous60SecondAcceptance": false,
+          "distance": 228.08132000000322,
+          "chunks": 12,
+          "from": {
+            "x": 0.0013981525386608737,
+            "y": 1.182577007775043,
+            "map": "world"
+          },
+          "to": {
+            "x": -161.27644988144206,
+            "y": 162.460425041756,
+            "map": "world"
+          }
+        },
+        {
+          "phase": "return",
+          "heldKey": "d",
+          "nativeKeyHoldsSeconds": [
+            30,
+            30
+          ],
+          "checkpointPackets": 1392,
+          "movingPackets": 1102,
+          "stationaryPackets": 290,
+          "firstToLastMovingPacketMs": 66134.28530000005,
+          "betweenRunsMs": 6121.803399999975,
+          "runs": [
+            {
+              "packets": 551,
+              "firstAtMs": 371710.2458,
+              "lastAtMs": 401721.3889,
+              "distance": 114.00607999999549
+            },
+            {
+              "packets": 551,
+              "firstAtMs": 407843.1923,
+              "lastAtMs": 437844.5311,
+              "distance": 114.07561999999692
+            }
+          ],
+          "continuous60SecondAcceptance": false,
+          "distance": 228.08169999999157,
+          "chunks": 12,
+          "from": {
+            "x": -161.27644988144206,
+            "y": 162.460425041756,
+            "map": "world"
+          },
+          "to": {
+            "x": 0.0016668531083168237,
+            "y": 1.1823083072057634,
+            "map": "world"
+          }
+        }
+      ]
+    },
+    "assets": {
+      "normalFarmSearch": true,
+      "normalTakeActions": 3,
+      "foodEarned": 3,
+      "foodUsed": 2,
+      "satietyPerUse": 35,
+      "finalItems": [
+        [
+          "food",
+          1
+        ],
+        [
+          "water",
+          2
+        ],
+        [
+          "seed_potato",
+          1
+        ]
+      ],
+      "allResourceFieldsZero": true,
+      "emptyEquipment": true,
+      "noCamp": true,
+      "uniqueHandledRequests": 6,
+      "otherSharedAssetsUnchanged": true,
+      "savedStateMatches": true,
+      "backupRestored": true,
+      "backupPath": "data/cua-render-stage-20261024-a1.sqlite.backup-2026-10-23T19-57-04-347Z"
+    },
+    "performance": {
+      "environment": {
+        "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
+        "viewport": {
+          "width": 1920,
+          "height": 1080
+        },
+        "canvas": {
+          "width": 1920,
+          "height": 1080
+        },
+        "devicePixelRatio": 1.0000000298023224,
+        "modulePath": "/assets/index-DPOSKexH.js",
+        "jsHeap": {
+          "used": 21741045,
+          "total": 71883205
+        },
+        "graphicsBackend": "unknown"
+      },
+      "totalSlowFrames": 6,
+      "samples": [
+        {
+          "atMs": 7485,
+          "updateMs": 0.9000000059604645,
+          "drawMs": 4.200000017881393,
+          "rafGapMs": 65.39999997615814,
+          "drawGapMs": 66.09999999403954,
+          "scene": {
+            "map": "world",
+            "x": 0,
+            "y": 1,
+            "chunks": 25,
+            "buildings": 388,
+            "interactables": 132,
+            "monsters": 0,
+            "players": 0,
+            "inputBlocked": false,
+            "groundFullRedraw": false,
+            "groundScrolled": false,
+            "groundTextureDirty": false,
+            "groundFallback": false,
+            "groundTerrainRegions": 0
+          },
+          "renderStagesMs": {
+            "setup": 0,
+            "ground": 0.20000001788139343,
+            "queue": 0.699999988079071,
+            "entities": 3,
+            "overlays": 0.30000001192092896
+          }
+        },
+        {
+          "atMs": 7501,
+          "updateMs": 0.10000002384185791,
+          "drawMs": 78.5,
+          "rafGapMs": 16,
+          "drawGapMs": 15.200000017881393,
+          "scene": {
+            "map": "world",
+            "x": 0,
+            "y": 1,
+            "chunks": 25,
+            "buildings": 388,
+            "interactables": 132,
+            "monsters": 0,
+            "players": 0,
+            "inputBlocked": false,
+            "groundFullRedraw": false,
+            "groundScrolled": false,
+            "groundTextureDirty": true,
+            "groundFallback": false,
+            "groundTerrainRegions": 1
+          },
+          "renderStagesMs": {
+            "setup": 0,
+            "ground": 77,
+            "queue": 0.29999998211860657,
+            "entities": 1.0999999940395355,
+            "overlays": 0.10000002384185791
+          }
+        },
+        {
+          "atMs": 7600.200000017881,
+          "updateMs": 0.29999998211860657,
+          "drawMs": 130.7000000178814,
+          "rafGapMs": 99.2000000178814,
+          "drawGapMs": 99.39999997615814,
+          "scene": {
+            "map": "world",
+            "x": 0,
+            "y": 1,
+            "chunks": 25,
+            "buildings": 388,
+            "interactables": 132,
+            "monsters": 0,
+            "players": 0,
+            "inputBlocked": false,
+            "groundFullRedraw": false,
+            "groundScrolled": false,
+            "groundTextureDirty": true,
+            "groundFallback": false,
+            "groundTerrainRegions": 1
+          },
+          "renderStagesMs": {
+            "setup": 0,
+            "ground": 72.60000002384186,
+            "queue": 0.29999998211860657,
+            "entities": 57.599999994039536,
+            "overlays": 0.20000001788139343
+          }
+        },
+        {
+          "atMs": 7756.4000000059605,
+          "updateMs": 0.4000000059604645,
+          "drawMs": 24.599999994039536,
+          "rafGapMs": 156.19999998807907,
+          "drawGapMs": 156.30000001192093,
+          "scene": {
+            "map": "world",
+            "x": 0,
+            "y": 1,
+            "chunks": 25,
+            "buildings": 388,
+            "interactables": 132,
+            "monsters": 0,
+            "players": 0,
+            "inputBlocked": false,
+            "groundFullRedraw": true,
+            "groundScrolled": false,
+            "groundTextureDirty": true,
+            "groundFallback": false,
+            "groundTerrainRegions": 1
+          },
+          "renderStagesMs": {
+            "setup": 0,
+            "ground": 22.30000001192093,
+            "queue": 0.29999998211860657,
+            "entities": 1.9000000059604645,
+            "overlays": 0.09999999403953552
+          }
+        },
+        {
+          "atMs": 7899.4000000059605,
+          "updateMs": 0.800000011920929,
+          "drawMs": 3,
+          "rafGapMs": 143,
+          "drawGapMs": 143.40000000596046,
+          "scene": {
+            "map": "world",
+            "x": 0.26870057685088805,
+            "y": 1.268700576850888,
+            "chunks": 25,
+            "buildings": 388,
+            "interactables": 132,
+            "monsters": 0,
+            "players": 0,
+            "inputBlocked": false,
+            "groundFullRedraw": false,
+            "groundScrolled": false,
+            "groundTextureDirty": false,
+            "groundFallback": false,
+            "groundTerrainRegions": 0
+          },
+          "renderStagesMs": {
+            "setup": 0.09999999403953552,
+            "ground": 0.19999998807907104,
+            "queue": 0.10000002384185791,
+            "entities": 2,
+            "overlays": 0.5999999940395355
+          }
+        },
+        {
+          "atMs": 8021.700000017881,
+          "updateMs": 0.4000000059604645,
+          "drawMs": 2.2999999821186066,
+          "rafGapMs": 114.2000000178814,
+          "drawGapMs": 121.90000000596046,
+          "scene": {
+            "map": "world",
+            "x": 0.5535231883128293,
+            "y": 1.5535231883128295,
+            "chunks": 25,
+            "buildings": 388,
+            "interactables": 132,
+            "monsters": 0,
+            "players": 0,
+            "inputBlocked": false,
+            "groundFullRedraw": false,
+            "groundScrolled": false,
+            "groundTextureDirty": false,
+            "groundFallback": false,
+            "groundTerrainRegions": 0
+          },
+          "renderStagesMs": {
+            "setup": 0.09999999403953552,
+            "ground": 0,
+            "queue": 0.09999999403953552,
+            "entities": 2,
+            "overlays": 0.09999999403953552
+          }
+        }
+      ],
+      "earlyMovingSlowRecords": 2,
+      "noNewSlowRecordsOnFour30SecondHolds": true,
+      "maxDrawMs": 130.7000000178814,
+      "maxRafGapMs": 156.19999998807907,
+      "acceptancePassed": false
+    },
+    "final": {
+      "x": 0.0016668531083168237,
+      "y": 1.1823083072057634,
+      "map": "world",
+      "hp": 100,
+      "shield": 50,
+      "satiety": 50.52725000000008
+    },
+    "limits": [
+      "Six retained slow records are within the first8.1s of the native page; two overlap the early food-search approach movement. They are not all stationary.",
+      "Each route leg used two30s holds with a4.9s/6.1s gap. Four later30s holds did not add >50ms visible-successful samples. This is not continuous60s acceptance or a full frame distribution/P95, GPU, physical presentation or long-memory measurement.",
+      "77ms and72.6ms ground spans with texture invalidation, and57.6ms entities in one cold frame, are wall-time observations; scheduling/GC/driver/image upload causes are not established.",
+      "No rendering optimization or quality/cache-size change in this delivery; previous62.2ms moving draw remains unresolved.",
+      "Final screenshot/AX precede final server checkpoint; satiety naturally decreased and the image is not an exact final-state record.",
+      "Server observer adds bounded movement logging and per-action copying; this is ordinary gameplay with diagnostic overhead, not an uninstrumented performance baseline."
+    ]
+  },
+  "cleanup": {
+    "browserTabs": 0,
+    "port": 39133,
+    "runningOwnedProcesses": 0,
+    "listeners": 0,
+    "viewportRestored": true,
+    "ownedPid": 32788
+  },
+  "review": {
+    "status": "passed-final-independent-read-only-review-no-P1-P2",
+    "sourceReview": "No P1/P2; early moving slow records and wall-time attribution limitations confirmed.",
+    "evidenceReview": "Independent reviewer recomputed movement runs/counts, checked66hashes, original startup/type/audit failures, action assertions and final logs. No files edited or tests/build/services/browser/SQLite run. Current diagnostic delivery accepted; overall goal remains incomplete."
+  },
+  "next": "Investigate cold texture-ready ground77/72.6ms and entities57.6ms with a causal experiment. Do not change quality/cache size or attribute CPU/GPU from coarse wall spans alone. Preserve earlier moving62.2ms evidence and full-world/P95/GPU/memory/multiplayer/economy requirements.",
+  "evidenceStorage": "Manifest hashes bind retained local evidence. Raw per-player state and action request IDs stay in ignored local data; public report contains sanitized results and paths/hashes only.",
+  "sources": [
+    {
+      "path": "src/game/IsometricEngine.ts",
+      "sha256": "ae2044d79919114d6a7b2db3b680dbf7c574c19b275c87d89735ca11c2fcb93d"
+    },
+    {
+      "path": "src/game/IsometricEngine.test.ts",
+      "sha256": "cb5263fb698f551625694bccc480b44e067151ee7fa43c78e889d0068aac1fad"
+    },
+    {
+      "path": "src/game/frameDiagnostics.ts",
+      "sha256": "ae00db37d16abd4eb2752f2510ddad89684b4e2bddc9973c34443c23cc1b33dc"
+    },
+    {
+      "path": "src/game/frameDiagnostics.test.ts",
+      "sha256": "6fe79d90960e03f66d93dfdc04fc9bf2fcbfcc6c5a4911577e2cded4a268c8ce"
+    },
+    {
+      "path": "src/App.tsx",
+      "sha256": "67a6441c8e8f2bffc02338f806cae77f2fb4c5f4ffd0c50701d506dc5b51367e"
+    },
+    {
+      "path": "src/game/NetworkManager.ts",
+      "sha256": "f0ba5b04ad2dd34bc5c65e37343bf546b1f385d088d0c68a60f55c348c3fd882"
+    },
+    {
+      "path": "server.ts",
+      "sha256": "550676757754175a4482ce81da1f581f4ab3b0254478b3fa846d3f9479ca0ff1"
+    },
+    {
+      "path": "server/worldState.ts",
+      "sha256": "def88edd22a2755a2a176c143cd4ca015592d49ce76db89af54558baffaef233"
+    },
+    {
+      "path": "server/db.ts",
+      "sha256": "9cf91e65d64e6372bb897d98b8bdda843a03f42f409240f272abc4ed09d83f0f"
+    },
+    {
+      "path": "src/game/world.ts",
+      "sha256": "9ad6447e3e2cce3f9f391856bd3008856a49c2849a35d71aa1368b1893510949"
+    },
+    {
+      "path": "src/game/navigation.ts",
+      "sha256": "defeedf6c1670922f76b115c5da0a1bdce4f64afa8fb5b7eca0ee5c48065b662"
+    },
+    {
+      "path": "docs/superpowers/specs/2026-10-24-render-stage-attribution-design.md",
+      "sha256": "dd2fb54fb28e14e6c66be3dd6dd9a5f30159cf53ce99244b8b718a87a81ba771"
+    },
+    {
+      "path": "data/capture-cua-render-stage-20261024.ts",
+      "sha256": "913548d0d4c5905fc43611fb590daeea4665646bc113ae18216b2b0382040823"
+    },
+    {
+      "path": "data/control-cua-render-stage-20261024.cjs",
+      "sha256": "240abe48fc030956091db3cf70a050271721a91fc9a450025f0a7bfdca515f30"
+    },
+    {
+      "path": "data/negative-render-stage-20261024.cjs",
+      "sha256": "15e4e6b0d03523cb95d3272845f807c1e2379f7eaf6c14854d94d0149c12ba47"
+    },
+    {
+      "path": "data/audit-render-stage-20261024.ts",
+      "sha256": "cbe557e5beec5300fcbb02e7bbb0e8302aa165911c0379d23bb34c02ce7ac815"
+    },
+    {
+      "path": "data/publish-render-stage-20261024.cjs",
+      "sha256": "7ad9e0ef6eab6ae66128bc95f499ecb8c4930872cd42793ba3e4813bf28545b0"
+    },
+    {
+      "path": "data/plan-render-stage-route-20261024.ts",
+      "sha256": "3a8b836fd5d4cbc4596c0d70ce95de89b412dbb553647355d5d8363908139e80"
+    },
+    {
+      "path": "data/render-stage-route-options-20261024.json",
+      "sha256": "d8c4153516325cfd9c5dbb5de204e411d985cd71ae098ba67329f777d1c1af13"
+    },
+    {
+      "path": "data/render-stage-cleanup-20261024.json",
+      "sha256": "99a1867ff58e3e6d3e48a0e4df486a7ae1be024cc496b4b03d74201099ea6f32"
+    },
+    {
+      "path": "data/render-stage-red-20261024.log",
+      "sha256": "9420eba441b1811113eed17c430294a846f9b2495a8a2a2b29a42d1f826a942e"
+    },
+    {
+      "path": "data/render-stage-focus-20261024.log",
+      "sha256": "acd8fad60e8519bcc3c7b14ed7b732e243411ec4586c0f1c350d9823106985cb"
+    },
+    {
+      "path": "data/render-stage-focus-final-20261024.log",
+      "sha256": "237abacb01e7d452df503b28896a7ee4534795f7a2ed911721536ebc82403afc"
+    },
+    {
+      "path": "data/render-stage-full-tests-20261024.log",
+      "sha256": "4a7a8463f504dc85e4945b9a7d901ebaccf0591713acac935ec60857767e3f40"
+    },
+    {
+      "path": "data/render-stage-recovery-focus-20261024.log",
+      "sha256": "bea6cdcb19b37a8c8f5bbf45c9690672602b9d3cfab1fe3588481f472fd00c47"
+    },
+    {
+      "path": "data/render-stage-full-tests-final-20261024.log",
+      "sha256": "4a8db7e2af6139718de199875e579400917c92c01f3006973ecadd87d360ba2a"
+    },
+    {
+      "path": "data/render-stage-types-20261024.log",
+      "sha256": "d53c49f4b30e76c5cd0f7b0b2cbcfa46c2f6b6813e1ccd3a4c17f2b393d85b7c"
+    },
+    {
+      "path": "data/render-stage-types-final-20261024.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "data/render-stage-types-complete-20261024.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "data/render-stage-build-20261024.log",
+      "sha256": "b79a9df16485559a1fc518c9d59b72344527b9f110f27244835eff628b27ef98"
+    },
+    {
+      "path": "data/render-stage-audit-20261024.log",
+      "sha256": "a37ddb479788aceaaadbfeca3d62bb92a4f5c9bdc1b3bb43634d208a455c7328"
+    },
+    {
+      "path": "data/render-stage-audit-final-20261024.log",
+      "sha256": "35aa95a0e1bdd7300d57a614fe7e0750c6c602619222335c5806935b2c3e655e"
+    },
+    {
+      "path": "data/render-stage-negative-stages-20261024.log",
+      "sha256": "bf045a519be8c7f6955ed025a081e11d800c2279a0a309869e93a2fb5346072b"
+    },
+    {
+      "path": "data/render-stage-negative-reset-20261024.log",
+      "sha256": "2ce2a4dc860053b0b7d11b43e853cc41b8a4fd69177e5e014d429a987d082488"
+    },
+    {
+      "path": "data/render-stage-negative-clone-20261024.log",
+      "sha256": "15ae2554f7e28254c8f31594c8368a0d0440f4eee550dabf738321b3624b0772"
+    },
+    {
+      "path": "data/cua-render-stage-20261024-a1-food.png",
+      "sha256": "188973d647058526244281b4e96f243116a60791156ac18f8168a32b97befafa"
+    },
+    {
+      "path": "data/cua-render-stage-20261024-a1-walk.png",
+      "sha256": "e121ffb2ad2154406ebfb6e855d2aa9e9f5444087e7f6ea558d2cf3e1ca9d9ce"
+    },
+    {
+      "path": "data/cua-render-stage-20261024-a1-walk-ax.txt",
+      "sha256": "59ffda3e74e6e47501416c4e9fa94569cfd709153064f238f86f48e69a047241"
+    },
+    {
+      "path": "data/cua-render-stage-20261024-a1-return.png",
+      "sha256": "e6b3864e548d4c2d8939ee82e32d8d60b54f34ced920f1fa7da315570fcdc84d"
+    },
+    {
+      "path": "data/cua-render-stage-20261024-a1-return-ax.txt",
+      "sha256": "69980730b72fd1eaa3c3c520449b8c79b45a965902dd28fa4fa5b353157ca656"
+    },
+    {
+      "path": "data/cua-render-stage-20261024-a1-final.png",
+      "sha256": "d74b985510bc27824544fa08bdc2bcb081e2ecb740f42a0f667a36fcc180fb4d"
+    },
+    {
+      "path": "data/cua-render-stage-20261024-a1-final-ax.txt",
+      "sha256": "3c0fe60068c36aa2983e029494aee5e545ba619283aa508427212db4cd408239"
+    },
+    {
+      "path": "data/cua-render-stage-20261024-a1-outbound-frames.json",
+      "sha256": "9ea11b768bb1fd2b927c85b2377cba320990faebec9211520374ee6d9a3a4e4f"
+    },
+    {
+      "path": "data/cua-render-stage-20261024-a1-outbound-errors.json",
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "path": "data/cua-render-stage-20261024-a1-final-frames.json",
+      "sha256": "77edee7f4dadeb5454e94131c4a487dabc1f92671f779d90a2143e674a6ec29b"
+    },
+    {
+      "path": "data/cua-render-stage-20261024-a1-final-errors.json",
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "path": "data/cua-render-stage-20261024-a1-audit.json",
+      "sha256": "66c89b4f4e8811f43a52d44a5602edb4b5e027dc42ae86c76dbf9d9a27469120"
+    },
+    {
+      "path": "data/cua-render-stage-20261024-a1-native-server.log",
+      "sha256": "4a77e018be34d0b41efa7085881b9e74000f59f80736a1beaf486f8a7a657d62"
+    },
+    {
+      "path": "data/cua-render-stage-20261024-a1-native-connected-world-private.json",
+      "sha256": "d59a21e5dd2dcbe2485071da015254e4faf5af4e70d17c6b9bb470a408227512"
+    },
+    {
+      "path": "data/cua-render-stage-20261024-a1-native-food-world-private.json",
+      "sha256": "c7dacd937b1f236f5726aa1fb569456f762e1d2f256e0f7052aaf6e37165aa13"
+    },
+    {
+      "path": "data/cua-render-stage-20261024-a1-native-food-events.json",
+      "sha256": "2a47671d4ee0780fcd1c1430187af2a5d429c81fb0894450d3d90e89528145b1"
+    },
+    {
+      "path": "data/cua-render-stage-20261024-a1-native-route-start-world-private.json",
+      "sha256": "193e6e5d87bf882a435503e77149919aea308895f853137dc8122e7b7a000139"
+    },
+    {
+      "path": "data/cua-render-stage-20261024-a1-native-route-start-events.json",
+      "sha256": "29c32e5cc2829d8e551fc513426f8dc264adda31741d15a634d0e49fcc0aa933"
+    },
+    {
+      "path": "data/cua-render-stage-20261024-a1-native-walk-start-world-private.json",
+      "sha256": "b79a123214b837375400cfc89f39db8411c011a0a53cd25bf96028f819f54783"
+    },
+    {
+      "path": "data/cua-render-stage-20261024-a1-native-walk-start-events.json",
+      "sha256": "0cb1c3920da8935a4f6e67cf0d8d18c6d167b9cfedbc4fc25ba5bfc231f4ae53"
+    },
+    {
+      "path": "data/cua-render-stage-20261024-a1-native-walk-end-world-private.json",
+      "sha256": "595641c19e3efea4525019c5a28acf53642f3f4518c6d0ea41c582067a759ab0"
+    },
+    {
+      "path": "data/cua-render-stage-20261024-a1-native-walk-end-events.json",
+      "sha256": "fb0fd63498f3e3c25fd6fd38cb576ebef8cf952c699a78891a157c16149dcf24"
+    },
+    {
+      "path": "data/cua-render-stage-20261024-a1-native-return-start-world-private.json",
+      "sha256": "64901ad285015e846218ede5b6a2956e45f7cc2678e443fe898e2ff38855a5a1"
+    },
+    {
+      "path": "data/cua-render-stage-20261024-a1-native-return-start-events.json",
+      "sha256": "c24eb83bda4d8a14571b7eb2bfb55ac346f3ae20d6a422814ff5a641da576096"
+    },
+    {
+      "path": "data/cua-render-stage-20261024-a1-native-return-end-world-private.json",
+      "sha256": "f9df0f394d45ab1cc59498edc03d8910d81c53825ea1d6376ab9ee573ef4a849"
+    },
+    {
+      "path": "data/cua-render-stage-20261024-a1-native-return-end-events.json",
+      "sha256": "5cbebf651815c1df64cc16b385e2c6bb2632fe4fa0772d126f14ac46b76d2208"
+    },
+    {
+      "path": "data/cua-render-stage-20261024-a1-native-final-world-private.json",
+      "sha256": "87e068a7143c9c0ba528ee46d69ea98c23c900982251cc8f202f9fda6f27668c"
+    },
+    {
+      "path": "data/cua-render-stage-20261024-a1-native-final-events.json",
+      "sha256": "4c5e25a51c76aba4393ef5228b5b82571209bcf6a0bd1997cd59f6e06a4a5539"
+    },
+    {
+      "path": "dist/index.html",
+      "sha256": "8c42f4586a01ede97fad7d74de6686cacba4e9030a9c35fe632fbbb6bb674f98"
+    },
+    {
+      "path": "dist/assets/index-DPOSKexH.js",
+      "sha256": "7b953c785a69f399e37ea9864a8615b524549843ae276d801ef1c55a3435b50f"
+    },
+    {
+      "path": "data/cua-render-stage-20261024-a1.sqlite.backup-2026-10-23T19-57-04-347Z",
+      "sha256": "64c76fcd4e9daade39207b46444f154e6ce82b748ea85ddfa3eddfbe9c846624"
+    }
+  ]
+}

@@ -262,6 +262,8 @@ export class IsometricEngine {
   private renderStatus: string | null = null;
   private lastRenderTime = 0;
   private frameDiagnostics = new FrameDiagnostics();
+  private renderStagesMs = { setup: 0, ground: 0, queue: 0, entities: 0, overlays: 0 };
+  private groundFrame = { full: false, scroll: false, texture: false, fallback: false, regions: 0 };
   private lastTime: number = 0;
   private nextShotAt = 0;
   private gameTime: number = 0;
@@ -2068,7 +2070,7 @@ export class IsometricEngine {
     try { if (moduleSrc) modulePath = new URL(moduleSrc, 'http://local.invalid').pathname; } catch { /* Unknown build. */ }
     return JSON.stringify({
       kind: 'local-frame-diagnostics', version: 1, capturedAt: new Date().toISOString(),
-      timing: 'Milliseconds of JavaScript work and callback/draw-start intervals; not GPU time or physical displayed frames. Latest 20 visible successful slow samples (>50ms), including initial loading. Refresh clears records.',
+      timing: 'JavaScript-enclosed wall milliseconds, possibly including scheduling/GC/browser-driver waits; not GPU/CPU attribution or physical displayed frames. Render stages are non-overlapping coarse spans: setup, ground, queue (including markers/underlays), entities, overlays. Ground flags describe this draw; texture means pending invalidation, terrain-region count may overlap. Latest20 visible successful slow samples (>50ms), including initial loading. Refresh clears records.',
       ...this.frameDiagnostics.snapshot(),
       environment: {
         userAgent: typeof navigator === 'undefined' ? null : navigator.userAgent,
@@ -2113,12 +2115,22 @@ export class IsometricEngine {
             this.setRenderStatus(null);
           }
           const sample = this.frameDiagnostics.observe(callbackAt, true, updateMs, drawAt, drawMs);
-          if (sample) sample.scene = {
-            map: this.currentMapId.startsWith('home_') ? 'camp' : this.currentMapId,
-            x: this.player.x, y: this.player.y, chunks: this.worldChunks.size,
-            buildings: this.buildings.length, interactables: this.interactables.length,
-            monsters: this.monsters.length, players: this.onlinePlayers.size, inputBlocked: this.inputBlocked,
-          };
+          if (sample) {
+            sample.scene = {
+              map: this.currentMapId.startsWith('home_') ? 'camp' : this.currentMapId,
+              x: this.player.x, y: this.player.y, chunks: this.worldChunks.size,
+              buildings: this.buildings.length, interactables: this.interactables.length,
+              monsters: this.monsters.length, players: this.onlinePlayers.size, inputBlocked: this.inputBlocked,
+            };
+            if (drawAt !== null) {
+              sample.renderStagesMs = { ...this.renderStagesMs };
+              Object.assign(sample.scene, {
+                groundFullRedraw: this.groundFrame.full, groundScrolled: this.groundFrame.scroll,
+                groundTextureDirty: this.groundFrame.texture, groundFallback: this.groundFrame.fallback,
+                groundTerrainRegions: this.groundFrame.regions,
+              });
+            }
+          }
         } catch (error) {
           this.frameDiagnostics.resetContinuity();
           recordRenderFailure(error, {
@@ -3145,6 +3157,7 @@ export class IsometricEngine {
   }
 
   private render() {
+    let stageAt = performance.now();
     this.ctx.clearRect(0, 0, this.width, this.height);
     // 受击震屏（combat）：帧级平移，restore 在方法末尾
     this.ctx.save();
@@ -3152,8 +3165,12 @@ export class IsometricEngine {
       this.ctx.translate((Math.random() - 0.5) * this.shake, (Math.random() - 0.5) * this.shake);
     }
 
+    let nextStageAt = performance.now();
+    this.renderStagesMs.setup = nextStageAt - stageAt; stageAt = nextStageAt;
     // 1. Comprehensive Map-Specific Seamless Isometric Tile Ground!
     this.renderMapGround();
+    nextStageAt = performance.now();
+    this.renderStagesMs.ground = nextStageAt - stageAt; stageAt = nextStageAt;
 
     // 1.5 Click-to-Move Target Waypoint Indicator
     if (this.targetMovePoint) {
@@ -3368,7 +3385,11 @@ export class IsometricEngine {
 
     // Y-sorting
     renderList.sort((a, b) => a.yDepth - b.yDepth);
+    nextStageAt = performance.now();
+    this.renderStagesMs.queue = nextStageAt - stageAt; stageAt = nextStageAt;
     renderList.forEach((item) => item.render());
+    nextStageAt = performance.now();
+    this.renderStagesMs.entities = nextStageAt - stageAt; stageAt = nextStageAt;
 
     if (this.navigationTarget) {
       const target = this.navigationTarget;
@@ -3403,6 +3424,7 @@ export class IsometricEngine {
     // 8. Zone Transition Banner
     this.renderZoneTransitionBanner();
     this.ctx.restore();
+    this.renderStagesMs.overlays = performance.now() - stageAt;
   }
 
   // --- SEAMLESS HIGH-FIDELITY ISOMETRIC GROUND RENDERER BY MAP ZONE ---
@@ -3428,6 +3450,8 @@ export class IsometricEngine {
   }
 
   private renderMapGround() {
+    this.groundFrame.full = false; this.groundFrame.scroll = false; this.groundFrame.fallback = false; this.groundFrame.regions = 0;
+    this.groundFrame.texture = this.groundTileChanges.size > 0;
     const theme = this.getGroundTheme();
     const animated = this.currentMapId !== 'world' && (theme === 'lake' || theme === 'marsh' || theme === 'rift');
     const margin = 128;
@@ -3448,6 +3472,7 @@ export class IsometricEngine {
       const shiftY = Math.round(camera.y - cache.y);
       const scrolling = moving && cache.key === key && Math.abs(shiftX) < cache.canvas.width && Math.abs(shiftY) < cache.canvas.height;
       const partial = cache.key === key && (!moving || scrolling);
+      this.groundFrame.full = !partial; this.groundFrame.scroll = scrolling;
       const regions: GroundRect[] = [];
       if (scrolling) {
         // 整数像素平移旧画面，仅补画露出的边缘；两个区域不重叠，避免透明罩层叠加。
@@ -3459,6 +3484,7 @@ export class IsometricEngine {
       }
       const groundCtx = cache.canvas.getContext('2d');
       if (!groundCtx) {
+        this.groundFrame.full = true; this.groundFrame.scroll = false; this.groundFrame.fallback = true; this.groundFrame.regions = 1;
         this.renderMapGroundUncached();
         this.renderGroundDetails();
         return;
@@ -3471,6 +3497,7 @@ export class IsometricEngine {
           const changed = this.changedGroundTextureBounds();
           if (changed) regions.push(changed);
         }
+        this.groundFrame.regions = partial ? regions.length : 1;
         const paint = (surface: HTMLCanvasElement, context: CanvasRenderingContext2D, terrain: boolean) => {
           this.ctx = context;
           const draw = (region?: GroundRect) => {

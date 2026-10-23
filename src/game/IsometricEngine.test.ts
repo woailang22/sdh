@@ -39,6 +39,49 @@ function setup() {
 
 afterEach(() => { vi.restoreAllMocks(); vi.unstubAllGlobals(); });
 
+describe('current-frame render stage diagnostics', () => {
+  function timedRender() {
+    const result = setup(), { engine, context } = result;
+    engine.currentMapId = 'world'; engine.interactables = []; engine.buildings = []; engine.monsters = [];
+    engine.teammates = []; engine.mapWaypoints = []; (engine as any).worldScenery = [];
+    let clock = 1000; vi.spyOn(performance, 'now').mockImplementation(() => clock);
+    vi.spyOn(engine as any, 'update').mockImplementation(() => { clock += 2; });
+    context.clearRect.mockImplementation(() => { clock += 3; });
+    vi.spyOn(engine as any, 'renderMapGround').mockImplementation(() => {
+      clock += 23; Object.assign((engine as any).groundFrame, { full: false, scroll: true, texture: true, fallback: false, regions: 3 });
+    });
+    vi.spyOn(engine as any, 'currentHouseGroups').mockImplementation(() => { clock += 5; return []; });
+    vi.spyOn(engine as any, 'drawPlayer').mockImplementation(() => { clock += 11; });
+    for (const [name, elapsed] of [['renderParticles', 2], ['renderDynamicLighting', 3], ['renderWeather', 5], ['renderThemeAtmosphere', 7], ['renderInteractionHUD', 3], ['renderZoneTransitionBanner', 1]] as const) vi.spyOn(engine as any, name).mockImplementation(() => { clock += elapsed; });
+    const at = (stamp: number) => vi.mocked(requestAnimationFrame).mock.calls.at(-1)![0](stamp);
+    const report = () => JSON.parse(engine.readFrameDiagnostics());
+    return { ...result, at, report };
+  }
+
+  it('records non-overlapping real render boundaries and never reuses them on an update-only slow callback', () => {
+    const { engine, at, report } = timedRender(); engine.start(); at(1020);
+    const sample = report().samples[0];
+    expect(sample.drawMs).toBe(63); expect(sample.updateMs).toBe(2);
+    expect(sample.renderStagesMs).toEqual({ setup: 3, ground: 23, queue: 5, entities: 11, overlays: 21 });
+    expect(sample.scene).toMatchObject({ groundFullRedraw: false, groundScrolled: true, groundTextureDirty: true, groundFallback: false, groundTerrainRegions: 3 });
+    expect(Object.values(sample.renderStagesMs).reduce((n: number, value) => n + Number(value), 0)).toBe(sample.drawMs);
+    at(1021);
+    const skipped = report().samples.at(-1); expect(skipped.drawMs).toBeNull();
+    expect(skipped.renderStagesMs).toBeUndefined(); expect(skipped.scene.groundScrolled).toBeUndefined(); engine.stop();
+  });
+
+  it('does not attach partial stage timings from a failed render to the next successful frame', () => {
+    const { engine, at, report } = timedRender();
+    vi.spyOn(console, 'error').mockImplementation(() => {}); vi.spyOn(renderDiagnostics, 'recordRenderFailure').mockReturnValue({ at: '2026-10-24T00:00:00Z', message: 'weather failed', stack: undefined });
+    vi.mocked((engine as any).renderWeather).mockImplementationOnce(() => { throw Error('weather failed'); });
+    engine.start(); at(1020); expect(report().samples).toEqual([]);
+    at(1620);
+    expect(report().samples).toHaveLength(1);
+    expect(report().samples[0].renderStagesMs).toEqual({ setup: 3, ground: 23, queue: 5, entities: 11, overlays: 21 });
+    engine.stop();
+  });
+});
+
 describe('world road texture alignment', () => {
   it.each([
     [255, 0, 'urban'], [256, 0, 'urban'], [257, 0, 'urban'],
@@ -1063,6 +1106,24 @@ describe('ground rendering cost', () => {
     }
   });
 
+  it('records actual full, reused, and scrolling ground work without keeping prior refresh flags', () => {
+    const { engine } = setup(); const draw = () => (engine as any).renderMapGround();
+    const state = () => ({ ...(engine as any).groundFrame });
+    draw(); expect(state()).toEqual({ full: true, scroll: false, texture: false, fallback: false, regions: 1 });
+    draw(); expect(state()).toEqual({ full: false, scroll: false, texture: false, fallback: false, regions: 0 });
+    engine.camera.x += 160; engine.camera.y += 140; draw();
+    expect(state()).toEqual({ full: false, scroll: true, texture: false, fallback: false, regions: 2 });
+    draw(); expect(state()).toEqual({ full: false, scroll: false, texture: false, fallback: false, regions: 0 });
+  });
+
+  it('identifies the uncached fallback instead of reporting a reused surface', () => {
+    const { engine } = setup(); (engine as any).renderMapGround();
+    const cache = (engine as any).groundCache;
+    vi.spyOn(cache.canvas, 'getContext').mockReturnValue(null);
+    engine.camera.x += 160; (engine as any).renderMapGround();
+    expect((engine as any).groundFrame).toEqual({ full: true, scroll: false, texture: false, fallback: true, regions: 1 });
+  });
+
   it('fully repaints on a teleport beyond the cached surface instead of copying stale pixels', () => {
     const { engine } = setup();
     (engine as any).renderMapGround();
@@ -1148,6 +1209,9 @@ describe('ground rendering cost', () => {
     expect(paint.mock.calls.length).toBeGreaterThanOrEqual(3);
     expect(paint.mock.calls.every(call => call[1] !== undefined)).toBe(true);
     expect(cache.canvas.getContext('2d').drawImage.mock.calls.find((call: unknown[]) => call[0] === cache.canvas)).toEqual([cache.canvas, -160, 140]);
+    expect((engine as any).groundFrame).toMatchObject({ full: false, scroll: true, texture: true, fallback: false, regions: paint.mock.calls.length });
+    (engine as any).renderMapGround();
+    expect((engine as any).groundFrame).toEqual({ full: false, scroll: false, texture: false, fallback: false, regions: 0 });
   });
 
   it('retains full texture refresh in separate animated maps', () => {

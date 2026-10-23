@@ -4,6 +4,7 @@ export interface SlowFrame {
   drawMs: number | null;
   rafGapMs: number | null;
   drawGapMs: number | null;
+  renderStagesMs?: Record<string, number>;
   scene?: Record<string, string | number | boolean>;
 }
 
@@ -30,6 +31,6 @@ export class FrameDiagnostics {
   resetContinuity() { this.previousRaf = null; this.previousDraw = null; }
 
   snapshot() {
-    return { totalSlowFrames: this.totalSlowFrames, samples: this.samples.map(sample => ({ ...sample, ...(sample.scene ? { scene: { ...sample.scene } } : {}) })) };
+    return { totalSlowFrames: this.totalSlowFrames, samples: this.samples.map(sample => ({ ...sample, ...(sample.scene ? { scene: { ...sample.scene } } : {}), ...(sample.renderStagesMs ? { renderStagesMs: { ...sample.renderStagesMs } } : {}) })) };
   }
 }

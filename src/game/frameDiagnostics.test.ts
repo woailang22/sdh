@@ -30,4 +30,12 @@ describe('bounded local frame diagnostics', () => {
     frames.resetContinuity(); expect(frames.observe(4000, true, 1, 4000, 1)).toBeNull();
     expect(frames.snapshot().samples).toHaveLength(1);
   });
+  it('detaches each slow sample stage record as well as its scene metadata', () => {
+    const frames = new FrameDiagnostics();
+    const sample = frames.observe(0, true, 1, 0, 60)! as any;
+    sample.renderStagesMs = { setup: 2, ground: 50, queue: 2, entities: 4, overlays: 2 };
+    const copy = frames.snapshot() as any;
+    copy.samples[0].renderStagesMs.ground = 999;
+    expect((frames.snapshot() as any).samples[0].renderStagesMs.ground).toBe(50);
+  });
 });
