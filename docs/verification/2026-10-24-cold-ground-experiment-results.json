@@ -1,0 +1,675 @@
+{
+  "kind": "cold-ground-causal-experiment-results",
+  "date": "2026-10-24",
+  "baseCommit": "ffb540b68c93c58f4efc28d08aae4fdefa40c16b",
+  "planningCommit": "0b7ae1e",
+  "goalComplete": false,
+  "scope": "Synthetic real Canvas experiments, no production renderer changes and no claimed gameplay performance improvement.",
+  "method": {
+    "trials": 120,
+    "phases": 4,
+    "eachModeTrials": 12,
+    "alternatingForwardReverseOrder": true,
+    "allTrialsRetained": true,
+    "firstTrialAlwaysBaseline": true,
+    "fixture": "Each fresh Engine loads world spawn0,1 with previously cached untextured ground. Eleven actual requested images decoded before trials; synthetic all-tile-ready invalidation. Timed work uses actual source Engine/Canvas and loaded assets.",
+    "timing": "Canvas API-enclosed wall-clock submit and one forced getImageData readback measured separately, not pure CPU/GPU attribution. Fixture setup, initial fallback draw, asset load/decode, between-trial rAF waits, pixel checksums/byte comparison and disposal excluded. Prewarm is additionally timed and added back to API-submit wall time; asynchronous wait effects remain.",
+    "medianDefinition": "Public derived medians average the two middle observations. Original harness summary uses floor-ranked lower P50 for even12; retained verbatim as originalReportedP50, not relabeled as ordinary median.",
+    "build": "Isolated esbuild source bundle, not the production Vite bundle.21 source inputs match ffb540b. No Engine/network injection into a game page, no server/account/SQLite/GM gameplay changes."
+  },
+  "results": [
+    {
+      "phase": 1,
+      "derived": [
+        {
+          "mode": "baseline",
+          "trials": 12,
+          "medianSubmitMs": 29.799999997019768,
+          "medianDrawAndForcedReadbackMs": 156.6499999910593,
+          "medianPrewarmPlusSubmitMs": 29.799999997019768,
+          "minSubmitMs": 26.299999982118607,
+          "maxSubmitMs": 85.69999998807907,
+          "differentBytes": null
+        },
+        {
+          "mode": "prewarmed",
+          "trials": 12,
+          "medianSubmitMs": 22.200000002980232,
+          "medianDrawAndForcedReadbackMs": 130,
+          "medianPrewarmPlusSubmitMs": 38.95000000298023,
+          "minSubmitMs": 17.099999994039536,
+          "maxSubmitMs": 27.5,
+          "differentBytes": null
+        },
+        {
+          "mode": "without-tiles",
+          "trials": 12,
+          "medianSubmitMs": 8.750000014901161,
+          "medianDrawAndForcedReadbackMs": 59.8500000089407,
+          "medianPrewarmPlusSubmitMs": 8.750000014901161,
+          "minSubmitMs": 6.5,
+          "maxSubmitMs": 13.699999988079071,
+          "differentBytes": null
+        },
+        {
+          "mode": "without-details",
+          "trials": 12,
+          "medianSubmitMs": 32.6000000089407,
+          "medianDrawAndForcedReadbackMs": 157.25000001490116,
+          "medianPrewarmPlusSubmitMs": 32.6000000089407,
+          "minSubmitMs": 28,
+          "maxSubmitMs": 47.30000001192093,
+          "differentBytes": null
+        }
+      ],
+      "originalReportedP50": [
+        {
+          "mode": "baseline",
+          "trials": 12,
+          "submitMedianMs": 29.599999994039536,
+          "drawAndReadbackMedianMs": 155.19999998807907,
+          "prewarmPlusDrawMedianMs": 29.599999994039536,
+          "submitMinMs": 26.299999982118607,
+          "submitMaxMs": 85.69999998807907
+        },
+        {
+          "mode": "prewarmed",
+          "trials": 12,
+          "submitMedianMs": 22.100000023841858,
+          "drawAndReadbackMedianMs": 128.90000000596046,
+          "prewarmPlusDrawMedianMs": 38.79999998211861,
+          "submitMinMs": 17.099999994039536,
+          "submitMaxMs": 27.5
+        },
+        {
+          "mode": "without-tiles",
+          "trials": 12,
+          "submitMedianMs": 8.700000017881393,
+          "drawAndReadbackMedianMs": 59.80000001192093,
+          "prewarmPlusDrawMedianMs": 8.700000017881393,
+          "submitMinMs": 6.5,
+          "submitMaxMs": 13.699999988079071
+        },
+        {
+          "mode": "without-details",
+          "trials": 12,
+          "submitMedianMs": 31.200000017881393,
+          "drawAndReadbackMedianMs": 157.10000002384186,
+          "prewarmPlusDrawMedianMs": 31.200000017881393,
+          "submitMinMs": 28,
+          "submitMaxMs": 47.30000001192093
+        }
+      ],
+      "profile": {
+        "inclusiveWallMs": 38.900000005960464,
+        "methods": {
+          "changedGroundTextureBounds": {
+            "calls": 1,
+            "ms": 5.4000000059604645
+          },
+          "renderMapGroundUncached": {
+            "calls": 1,
+            "ms": 32.79999998211861
+          },
+          "renderGroundDetails": {
+            "calls": 1,
+            "ms": 0.10000002384185791
+          },
+          "tilePatch": {
+            "calls": 3321,
+            "ms": 12.10000017285347
+          }
+        },
+        "extraClockOverhead": true
+      },
+      "validation": {
+        "allRequestedAssetsReady": true,
+        "baselinePixelsRepeatable": true,
+        "prewarmingPixelIdentical": true
+      }
+    },
+    {
+      "phase": 2,
+      "derived": [
+        {
+          "mode": "baseline",
+          "trials": 12,
+          "medianSubmitMs": 37.79999999701977,
+          "medianDrawAndForcedReadbackMs": 160.54999999701977,
+          "medianPrewarmPlusSubmitMs": 37.79999999701977,
+          "minSubmitMs": 29.80000001192093,
+          "maxSubmitMs": 90.09999999403954,
+          "differentBytes": [
+            0
+          ]
+        },
+        {
+          "mode": "direct-atlas",
+          "trials": 12,
+          "medianSubmitMs": 44.3500000089407,
+          "medianDrawAndForcedReadbackMs": 247.79999999701977,
+          "medianPrewarmPlusSubmitMs": 44.3500000089407,
+          "minSubmitMs": 35.20000001788139,
+          "maxSubmitMs": 55.400000005960464,
+          "differentBytes": [
+            337
+          ]
+        }
+      ],
+      "originalReportedP50": [
+        {
+          "mode": "baseline",
+          "trials": 12,
+          "submitMedianMs": 37.099999994039536,
+          "drawAndReadbackMedianMs": 157.7999999821186,
+          "prewarmPlusDrawMedianMs": 37.099999994039536,
+          "submitMinMs": 29.80000001192093,
+          "submitMaxMs": 90.09999999403954
+        },
+        {
+          "mode": "direct-atlas",
+          "trials": 12,
+          "submitMedianMs": 42.900000005960464,
+          "drawAndReadbackMedianMs": 247.69999998807907,
+          "prewarmPlusDrawMedianMs": 42.900000005960464,
+          "submitMinMs": 35.20000001788139,
+          "submitMaxMs": 55.400000005960464
+        }
+      ],
+      "profile": {
+        "inclusiveWallMs": 40,
+        "methods": {
+          "changedGroundTextureBounds": {
+            "calls": 1,
+            "ms": 6.5
+          },
+          "renderMapGroundUncached": {
+            "calls": 1,
+            "ms": 32.5
+          },
+          "renderGroundDetails": {
+            "calls": 1,
+            "ms": 0
+          },
+          "tilePatch": {
+            "calls": 3321,
+            "ms": 9.699999928474426
+          }
+        },
+        "extraClockOverhead": true
+      },
+      "validation": {
+        "allRequestedAssetsReady": true,
+        "baselinePixelsRepeatable": true,
+        "directAtlasByteIdentical": false
+      }
+    },
+    {
+      "phase": 3,
+      "derived": [
+        {
+          "mode": "baseline",
+          "trials": 12,
+          "medianSubmitMs": 32,
+          "medianDrawAndForcedReadbackMs": 154.34999999403954,
+          "medianPrewarmPlusSubmitMs": 32,
+          "minSubmitMs": 27.80000001192093,
+          "maxSubmitMs": 71.5,
+          "differentBytes": [
+            0
+          ]
+        },
+        {
+          "mode": "prefetch-visible",
+          "trials": 12,
+          "medianSubmitMs": 35,
+          "medianDrawAndForcedReadbackMs": 136.45000000298023,
+          "medianPrewarmPlusSubmitMs": 35,
+          "minSubmitMs": 29,
+          "maxSubmitMs": 43.599999994039536,
+          "differentBytes": [
+            0
+          ]
+        }
+      ],
+      "originalReportedP50": [
+        {
+          "mode": "baseline",
+          "trials": 12,
+          "submitMedianMs": 31.599999994039536,
+          "drawAndReadbackMedianMs": 154.19999998807907,
+          "prewarmPlusDrawMedianMs": 31.599999994039536,
+          "submitMinMs": 27.80000001192093,
+          "submitMaxMs": 71.5
+        },
+        {
+          "mode": "prefetch-visible",
+          "trials": 12,
+          "submitMedianMs": 34.5,
+          "drawAndReadbackMedianMs": 134.5,
+          "prewarmPlusDrawMedianMs": 34.5,
+          "submitMinMs": 29,
+          "submitMaxMs": 43.599999994039536
+        }
+      ],
+      "profile": {
+        "inclusiveWallMs": 44.20000001788139,
+        "methods": {
+          "changedGroundTextureBounds": {
+            "calls": 1,
+            "ms": 4
+          },
+          "renderMapGroundUncached": {
+            "calls": 1,
+            "ms": 39.099999994039536
+          },
+          "renderGroundDetails": {
+            "calls": 1,
+            "ms": 0
+          },
+          "tilePatch": {
+            "calls": 3321,
+            "ms": 13.300000011920929
+          }
+        },
+        "extraClockOverhead": true
+      },
+      "validation": {
+        "allRequestedAssetsReady": true,
+        "baselinePixelsRepeatable": true,
+        "candidateByteIdentical": true
+      }
+    },
+    {
+      "phase": 4,
+      "derived": [
+        {
+          "mode": "baseline",
+          "trials": 12,
+          "medianSubmitMs": 34.8999999910593,
+          "medianDrawAndForcedReadbackMs": 164.6499999910593,
+          "medianPrewarmPlusSubmitMs": 34.8999999910593,
+          "minSubmitMs": 28.299999982118607,
+          "maxSubmitMs": 80.5,
+          "differentBytes": [
+            0
+          ]
+        },
+        {
+          "mode": "prime-invalidation",
+          "trials": 12,
+          "medianSubmitMs": 37.5,
+          "medianDrawAndForcedReadbackMs": 140.6000000089407,
+          "medianPrewarmPlusSubmitMs": 37.5,
+          "minSubmitMs": 32.900000005960464,
+          "maxSubmitMs": 48,
+          "differentBytes": [
+            0
+          ]
+        }
+      ],
+      "originalReportedP50": [
+        {
+          "mode": "baseline",
+          "trials": 12,
+          "submitMedianMs": 34.69999998807907,
+          "drawAndReadbackMedianMs": 163.7999999821186,
+          "prewarmPlusDrawMedianMs": 34.69999998807907,
+          "submitMinMs": 28.299999982118607,
+          "submitMaxMs": 80.5
+        },
+        {
+          "mode": "prime-invalidation",
+          "trials": 12,
+          "submitMedianMs": 36.20000001788139,
+          "drawAndReadbackMedianMs": 140.40000000596046,
+          "prewarmPlusDrawMedianMs": 36.20000001788139,
+          "submitMinMs": 32.900000005960464,
+          "submitMaxMs": 48
+        }
+      ],
+      "profile": {
+        "inclusiveWallMs": 35.80000001192093,
+        "methods": {
+          "changedGroundTextureBounds": {
+            "calls": 1,
+            "ms": 3.9000000059604645
+          },
+          "renderMapGroundUncached": {
+            "calls": 1,
+            "ms": 31.299999982118607
+          },
+          "renderGroundDetails": {
+            "calls": 1,
+            "ms": 0.10000002384185791
+          },
+          "tilePatch": {
+            "calls": 3321,
+            "ms": 12.599999964237213
+          }
+        },
+        "extraClockOverhead": true
+      },
+      "validation": {
+        "allRequestedAssetsReady": true,
+        "baselinePixelsRepeatable": true,
+        "candidateByteIdentical": true
+      }
+    }
+  ],
+  "decisions": [
+    {
+      "candidate": "prewarm all49cells per requested theme/variant",
+      "decision": "not adopted",
+      "reason": "Median prewarm+API-submit wall time38.95ms vs baseline29.8ms; render-only22.2ms excludes preparation and does not prove startup or total work improvement. Repeatable FNV checksums only in phase1."
+    },
+    {
+      "candidate": "direct atlas clipping and self edge copies",
+      "decision": "rejected",
+      "reason": "Median submit44.35ms vs37.8ms and forced-readback combined247.8ms vs160.55ms; all12 candidate images differ337channel bytes by1. Not byte-identical."
+    },
+    {
+      "candidate": "extra visible-tile prefetch scan",
+      "decision": "not adopted",
+      "reason": "Byte-identical but median submit35ms vs32ms. Artificial forced-readback combined136.45ms vs154.35ms improves; cannot treat it as physical presentation or actual native render improvement."
+    },
+    {
+      "candidate": "prime patches during original invalidation scan",
+      "decision": "not adopted",
+      "reason": "Byte-identical but median submit37.5ms vs34.9ms. Artificial forced-readback combined140.6ms vs164.65ms improves; native physical/GPU behavior unverified, no production change justified."
+    }
+  ],
+  "interpretation": "Tile-texture removal reduces work in this fixture. Removing only renderGroundDetails does not help: per-tile drawWorldGroundDetail remains inside renderMapGroundUncached, so this does not exclude all decoration costs. Atlas creation is one cost, not a proven sole cause of original77ms cold frame.",
+  "verification": {
+    "experimentTypesPassed": true,
+    "allPhaseBundlesArchived": true,
+    "metadataRebuildByteIdenticalToRun4Bundle": true,
+    "productionSourcesUnchanged": true,
+    "prior698TestsSourceBoundButNotRerun": true,
+    "productionBuildNotRerun": true,
+    "noNewProductionFeatureOrBugfix": true
+  },
+  "limits": [
+    "No complete cold load/decode or actual player route measurements in this delivery. This is a synthetic ablation with unminified source bundle, one spawn fixture, default1280x720 viewport/DPR1.5 and fixed1920x1080 canvas, distinct from earlier native1920/DPR~1.",
+    "Each page starts baseline first. Initial global browser/JIT/GPU warmth is not counterbalanced; retain first outliers but do not compare first baseline against a later candidate as proof of cold-start improvement.",
+    "Preparing the untextured cache, checksums, full-byte comparisons and forced readback alter scheduling/memory/GPU warm state. Only within-phase component conclusions, no physical frames/GPU attribution or absolute native FPS claim.",
+    "Readback improvements in ordering candidates remain a hypothesis for real presentation. Higher submit medians and lack of native benefit are retained, not converted to a passing performance gate.",
+    "Original native ground77/72.6ms, entities57.6ms and previous62.2ms moving draw remain unresolved. Continuous60s/P95/GPU/long-memory/full-world/multiplayer/economy requirements remain incomplete."
+  ],
+  "next": "Keep current production renderer. Shift further performance evidence to representative continuous movement and actual native timing/presentation; do not repeat speculative atlas/cache changes. Continue original resource/region/camp gameplay acceptance in parallel scope, without changing its requirements.",
+  "review": {
+    "status": "passed-independent-read-only-review-no-P1-P2"
+  },
+  "cleanup": {
+    "ownedPid": 38984,
+    "runningOwnedProcesses": 0,
+    "databaseOpened": false,
+    "port": 39134,
+    "listeners": 0,
+    "viewportChanged": false,
+    "gameServerStarted": false,
+    "browserTabs": 0
+  },
+  "sources": [
+    {
+      "path": "src/audio/soundManager.ts",
+      "sha256": "acf148dad84c3ea1f3f64fc796dab445c75c236ee3de2bd989a61c18cfdc1309"
+    },
+    {
+      "path": "src/game/combat.ts",
+      "sha256": "78f73f187b37377a4eee233f5396faad0be7f9f27161e73dad64a931e348a23e"
+    },
+    {
+      "path": "src/game/weather.ts",
+      "sha256": "cb9ca518619740889713bbadaf0dab31a37daff4f35383ed14340a9805dd2dda"
+    },
+    {
+      "path": "src/game/compound.ts",
+      "sha256": "a8a37ecce5383d06671e4fe57b54f8ec0fc7b0ebc14525d51110b2722e122a7f"
+    },
+    {
+      "path": "src/game/equipmentRules.ts",
+      "sha256": "3db65447d65e43458a07e339e5e3ea5cc8cbff96f467b9f7fa6907bf176ed9e6"
+    },
+    {
+      "path": "src/game/items.ts",
+      "sha256": "96337485eff172cbc3936f742af827a4c975275f800d8445b232f050649317f0"
+    },
+    {
+      "path": "src/game/maps.ts",
+      "sha256": "99a68c1d73068e11bd3a52ad1d0542102384822dbbb68310c8d20a7af34897f6"
+    },
+    {
+      "path": "src/game/visualTheme.ts",
+      "sha256": "1107c9e537577995d051804ea36c84581c01a9f5743ae2d2de24f3a771277a48"
+    },
+    {
+      "path": "src/game/house.ts",
+      "sha256": "91508bd33748db9a40295bd44e9ecc2d51b6ede024dc068bced7613b57f3e612"
+    },
+    {
+      "path": "src/game/houseRenderer.ts",
+      "sha256": "6cc8fe7d30219cc837d5abcfd3d3d0fe363f96066b6d8cd87ce2eacf3edec35c"
+    },
+    {
+      "path": "src/game/art.ts",
+      "sha256": "29a93ab2d72633ffd80af4d848c373a3e2e13c7d95df6aab32fcb546190bbf4f"
+    },
+    {
+      "path": "src/game/diplomacy.ts",
+      "sha256": "dc393d34f69628c8f7243310e4415d92eebe1d20fbc39032fe5a388db8f6c247"
+    },
+    {
+      "path": "src/game/worldRoutes.ts",
+      "sha256": "323d9ee26df76450711ea1886253271e3107199a46105b3f0d3b79ad382b1364"
+    },
+    {
+      "path": "src/game/world.ts",
+      "sha256": "9ad6447e3e2cce3f9f391856bd3008856a49c2849a35d71aa1368b1893510949"
+    },
+    {
+      "path": "src/game/navigation.ts",
+      "sha256": "defeedf6c1670922f76b115c5da0a1bdce4f64afa8fb5b7eca0ee5c48065b662"
+    },
+    {
+      "path": "src/game/home.ts",
+      "sha256": "d5e609f91b1c702f8c3605e27137ad2d3d21ebfc14d98a4301dfebdd0f3c6c11"
+    },
+    {
+      "path": "src/game/buildingRecipes.ts",
+      "sha256": "4514d33da6faf0d91fe9c41c095816a6559f8d335894acbcf31ab853d949df13"
+    },
+    {
+      "path": "src/game/renderDiagnostics.ts",
+      "sha256": "39670a730cb08aab1cee523e3ac5695f334552bc0acc1ced79afb7acc40f607b"
+    },
+    {
+      "path": "src/game/frameDiagnostics.ts",
+      "sha256": "ae00db37d16abd4eb2752f2510ddad89684b4e2bddc9973c34443c23cc1b33dc"
+    },
+    {
+      "path": "src/game/worldScenery.ts",
+      "sha256": "b08d785982fce260a911e4e9e0b4c788f00c1a386b0a19c5d2c7297086f44bfa"
+    },
+    {
+      "path": "src/game/IsometricEngine.ts",
+      "sha256": "ae2044d79919114d6a7b2db3b680dbf7c574c19b275c87d89735ca11c2fcb93d"
+    },
+    {
+      "path": "data/cold-ground-direct-atlas-20261024.ts",
+      "sha256": "5e2a622d6d15d3c7fbbadec7fe27079c8346925d1463bfc502feec84c04b1727"
+    },
+    {
+      "path": "data/cold-ground-prefetch-20261024.ts",
+      "sha256": "0c17cb02fa955d153fff6a078c88fd92220ff905d7840f48acf83c1d1ce12c97"
+    },
+    {
+      "path": "data/cold-ground-prime-invalidation-20261024.ts",
+      "sha256": "0671a815e66703839ae6025cfb03c574ae4ad277fce48de0b53fec9abc840777"
+    },
+    {
+      "path": "data/cold-ground-bench-20261024.ts",
+      "sha256": "24d36717e4309c59d9509d37ebfcb1ab9d01f384ab2e2f3fe51a02c50ecc3ea2"
+    },
+    {
+      "path": "data/cold-ground-bench-20261024-a1.ts",
+      "sha256": "1446f3efaa83521c53ee2ec0ae358030383a3e514d3fad0cbd1893281572638d"
+    },
+    {
+      "path": "data/cold-ground-bench-20261024-a1.html",
+      "sha256": "02ed9cbafd31e4c72dcc0899b4591e1a2e99e8f89147cf404d0f72338630e79b"
+    },
+    {
+      "path": "data/cold-ground-bench-20261024-a1.bundle.js",
+      "sha256": "caa239e383fc9abf4b0122f987783b3f46e6dfacad8548746aec8bcb9d4787bd"
+    },
+    {
+      "path": "data/cold-ground-bench-20261024-a1-results.json",
+      "sha256": "bff78f1b480848e3912b40de7917bba69dbfd18b7acfaa54e08b7a33d2cd48c0"
+    },
+    {
+      "path": "data/cold-ground-bench-20261024-a2.ts",
+      "sha256": "b6e0abbc6e0cfcaff725f36bee6d0bbbe2dd9a96ded4fbde12ee4c04acf8d446"
+    },
+    {
+      "path": "data/cold-ground-bench-20261024-a2.html",
+      "sha256": "bdaad781f90bb9e7712ccadece480feb21c843b5466f8ad936c2302ab5eeb380"
+    },
+    {
+      "path": "data/cold-ground-bench-20261024-a2.bundle.js",
+      "sha256": "3ceceb70248a6b8cdd740ec46f001eb2330c5e29774670d7c3700113f2164fb7"
+    },
+    {
+      "path": "data/cold-ground-bench-20261024-a2-results.json",
+      "sha256": "14cbdb89f5590b94976f64467365cea9e02a5655829da67be64c3155bd8e2763"
+    },
+    {
+      "path": "data/cold-ground-bench-20261024-a3.ts",
+      "sha256": "cb0e2f2012c54b89b9aeb8cece66caadfb619de8c4bfdbea1a8558c2ccf31d76"
+    },
+    {
+      "path": "data/cold-ground-bench-20261024-a3.html",
+      "sha256": "bdaad781f90bb9e7712ccadece480feb21c843b5466f8ad936c2302ab5eeb380"
+    },
+    {
+      "path": "data/cold-ground-bench-20261024-a3.bundle.js",
+      "sha256": "09efd781765d0b0dd2f241c4b452fdcf01b414fb661cdef403699dc03f9d9927"
+    },
+    {
+      "path": "data/cold-ground-bench-20261024-a3-results.json",
+      "sha256": "1d3fee9dbb6256cad287160d9e8a7d8d4b1b450feab3b67bdfe4870a24f5cb60"
+    },
+    {
+      "path": "data/cold-ground-bench-20261024-a4.ts",
+      "sha256": "24d36717e4309c59d9509d37ebfcb1ab9d01f384ab2e2f3fe51a02c50ecc3ea2"
+    },
+    {
+      "path": "data/cold-ground-bench-20261024-a4.html",
+      "sha256": "bdaad781f90bb9e7712ccadece480feb21c843b5466f8ad936c2302ab5eeb380"
+    },
+    {
+      "path": "data/cold-ground-bench-20261024-a4.bundle.js",
+      "sha256": "69ca3e52687f7a24f35eb19456f08e9afb0b3515cfe2cae0520fd72da55daf5a"
+    },
+    {
+      "path": "data/cold-ground-bench-20261024-a4-results.json",
+      "sha256": "8d66111e66feec20230c6fb31fdfaccd07a309cc66ab580bff74971013adf7ef"
+    },
+    {
+      "path": "data/cold-ground-bench-20261024.html",
+      "sha256": "bdaad781f90bb9e7712ccadece480feb21c843b5466f8ad936c2302ab5eeb380"
+    },
+    {
+      "path": "data/cold-ground-bench-20261024.bundle.js",
+      "sha256": "69ca3e52687f7a24f35eb19456f08e9afb0b3515cfe2cae0520fd72da55daf5a"
+    },
+    {
+      "path": "data/cold-ground-bench-20261024-a4-meta.json",
+      "sha256": "d000939bd19c1bdbdc9873fae2b9c5b54a7a011c68197da93ef1f3330bb5e15e"
+    },
+    {
+      "path": "data/cold-ground-bench-20261024-a1.png",
+      "sha256": "5d99e9dc540c20a9b1a2d8c54067eac266d2e592b39727ff549ec083748ac845"
+    },
+    {
+      "path": "data/cold-ground-bench-20261024-a4.png",
+      "sha256": "bafb8c5eaff4f0b6c9bf69b74214f53247508dced7bf1225f38aea747cf07e74"
+    },
+    {
+      "path": "data/cold-ground-bench-20261024-a4-ax.txt",
+      "sha256": "fbdd8b43a56125bdc2d2e6c563a9f9bc86c636f870de7517a63d01772ea65309"
+    },
+    {
+      "path": "data/serve-cold-ground-bench-20261024.cjs",
+      "sha256": "c35b668af21bebe35f69fded2bc9a61ece6982b6e8270184a52bf6d51c232c80"
+    },
+    {
+      "path": "data/audit-cold-ground-20261024.cjs",
+      "sha256": "21863998fe88acc9798ff692c792363c7b24228811ca2c77a33f02fd5868a67f"
+    },
+    {
+      "path": "data/cold-ground-cleanup-20261024.json",
+      "sha256": "caa35ca52df9b9daee7b915d29bf92df54cfda9e2f654af22b640fb8508a7788"
+    },
+    {
+      "path": "data/cold-ground-types-20261024.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "data/cold-ground-types-final-20261024.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/superpowers/specs/2026-10-24-cold-ground-experiment-design.md",
+      "sha256": "84bf4b30623e42c1dbdc5b1ce4354a207d51c52094482260a179f4859c2d5fb1"
+    },
+    {
+      "path": "docs/verification/2026-10-24-render-stage-attribution-results.json",
+      "sha256": "1c768fe24a578777590b751007b7a4ecaca7f2552d3934368ba1a7eaa8a8b284"
+    },
+    {
+      "path": "public/art/tile-forest-a.png",
+      "sha256": "7ca5fb1f1b78bd6ece7cb793cba777cc9b2670e5a52b1b95ba82138a49a436df"
+    },
+    {
+      "path": "public/art/tile-field-a.png",
+      "sha256": "7ec3e12f0436b6588ac30b0ec6e0e51ff325e65c52ec0cf539c7a0ebea7dd78d"
+    },
+    {
+      "path": "public/art/tile-field-b.png",
+      "sha256": "36c87c2b15ce5cd0312de066a5c2c2eb67e3b8e4a097eff9e5f1a2aef3be3b57"
+    },
+    {
+      "path": "public/art/tile-forest-b.png",
+      "sha256": "d1d7088228d1718186b74dac8ea482d89cdc3c685744f9f04d8697422e5c5938"
+    },
+    {
+      "path": "public/art/tile-camp-a.png",
+      "sha256": "d5d963bf5e119ae5f842eeb0a17c570731f856ed71807fed419a1ed063eac4e5"
+    },
+    {
+      "path": "public/art/tile-camp-b.png",
+      "sha256": "285d1f5dc206ccb8d85ec83dccdb520f534a012756f451c81cc2aa3769cc8030"
+    },
+    {
+      "path": "public/art/tile-quarry-a.png",
+      "sha256": "86c081203e152e810527aae6cb3f782a48d21b51dde0e1cd30229eefcc2ea00e"
+    },
+    {
+      "path": "public/art/tile-quarry-b.png",
+      "sha256": "e96ff5d72441259269b56342d368eedca5d5512ab335d91c57cb6b881d26e032"
+    },
+    {
+      "path": "public/art/tile-plaza-a.png",
+      "sha256": "56ff90d000e15182af02f7918975fb570a3765d4a9aedc5a4fdc33790ebb372d"
+    },
+    {
+      "path": "public/art/tile-plaza-b.png",
+      "sha256": "ad3a3dc964b88d887804288d7478bdb027952687b720110d5c889b5f89f71f36"
+    },
+    {
+      "path": "public/art/texture-ground.png",
+      "sha256": "2b20a710912ff42470ba6ac32c1c0970018f7d25ae03b2f0ac53794c6269d2be"
+    }
+  ]
+}
