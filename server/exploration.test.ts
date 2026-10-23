@@ -43,15 +43,20 @@ describe('high-risk exploration rewards', () => {
     }
   });
 
-  it('keeps a cleared research cache depleted across restart and restores it only at its own deadline', () => {
+  it('keeps a cleared research cache depleted across restart and renews only after its own deadline outside player observation', () => {
     const { game, db, rules, node, now, setTime } = setup(caches[0].nodeId);
     const searched = game.action('p', { action: 'search', targetId: node.id, requestId: 'open' });
     for (const item of searched.loot!.items) expect(game.action('p', { action: 'take_loot', targetId: node.id, itemId: item.itemId, count: item.count, requestId: 'take-' + item.itemId }).error).toBeUndefined();
     expect(game.state.nodes[node.id].respawnAt).toBe(now() + 1800000);
     setTime(now() + 300001);
     const restored = new GameWorld(db, rules, now);
+    restored.connect('p', '探索者');
     expect(restored.action('p', { action: 'search', targetId: node.id, requestId: 'too-early' }).error).toContain('耗尽');
     setTime(1810000);
+    restored.tick();
+    expect(restored.action('p', { action: 'search', targetId: node.id, requestId: 'camped' }).error).toContain('耗尽');
+    restored.state.players.p.x = node.x + 46; setTime(1815000); restored.tick();
+    restored.state.players.p.x = node.x + 2.5;
     const refreshed = restored.action('p', { action: 'search', targetId: node.id, requestId: 'after-deadline' });
     expect(refreshed.error).toBeUndefined();
     expect(refreshed.loot?.items.find(i => i.itemId === 'dark_core')?.count).toBe(2);
@@ -69,7 +74,9 @@ describe('high-risk exploration rewards', () => {
     expect(gather('first-fish').error).toBeUndefined();
     expect(p.inventory.find(i => i?.id === 'fish_legend')?.count).toBe(1);
     setTime(now() + 3599999); expect(gather('still-empty').error).toContain('耗尽');
-    setTime(now() + 1); expect(gather('hour-later').error).toBeUndefined();
+    setTime(now() + 1); game.tick(); expect(gather('camped-hour').error).toContain('耗尽');
+    p.x = node.x + 46; setTime(now() + 5000); game.tick(); p.x = node.x + 2.5;
+    expect(gather('hour-later').error).toBeUndefined();
     expect(p.inventory.find(i => i?.id === 'fish_legend')?.count).toBe(2);
   });
 

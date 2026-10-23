@@ -11,6 +11,7 @@ import { hasLineOfSight, isPositionBlocked } from '../src/game/navigation';
 import { BASE_INVENTORY_SLOTS, inventoryCapacity, resizeInventory, gatheringEffects } from '../src/game/equipmentRules';
 import type { DbHandle } from './db';
 import { TickUndo } from './tickUndo';
+import { WORLD_NODE_RADIUS } from '../src/game/world';
 
 export type ResourceKey = 'wood' | 'stone' | 'scrap' | 'parts' | 'food' | 'ammo' | 'c4' | 'medical' | 'credits' | 'shard';
 export type Resources = Record<ResourceKey, number>;
@@ -90,10 +91,12 @@ export class GameWorld {
   private active = new Map<string, number>();
   private respawns = new Map<string, number>();
   private npcTickAt: number;
+  private resourceTickAt: number;
   private tickSharedChange = false;
   get sharedTickChanged() { return this.tickSharedChange; }
   constructor(private db: DbHandle, private rules: WorldRules, private now: () => number = Date.now) {
     this.npcTickAt = now();
+    this.resourceTickAt = now();
     const saved = db.getMeta(SAVE_KEY);
     const commits = db.listWorldPlayerCommits();
     requireRule(saved || !commits.length, '缺少角色提交记录对应的世界存档');
@@ -292,7 +295,7 @@ export class GameWorld {
     });
     return { ...clone({ requestId, error, correction, player,
       camps: Object.values(this.state.camps).filter(c => c.ownerId === id || c.members?.includes(id) || c.id === p.mapId || p.mapId === 'world' && distance(c, p) <= 80),
-      nodes: p.mapId === 'world' ? this.rules.nodesNear(p.x, p.y).map(def => { const node = this.state.nodes[def.id] ? this.node(def) : undefined; return { id: def.id, stock: node?.stock ?? def.stock ?? 1, respawnAt: node?.respawnAt || 0 }; }) : [],
+      nodes: p.mapId === 'world' ? this.rules.nodesNear(p.x, p.y).map(def => { const node = this.state.nodes[def.id]; return { id: def.id, stock: node?.stock ?? def.stock ?? 1, respawnAt: node?.respawnAt || 0 }; }) : [],
       drops: Object.values(this.state.drops).filter(drop => drop.mapId === p.mapId && distance(p, drop) <= 40).map(({ items: _, ...drop }) => drop),
       monsters: p.mapId === 'world' ? Object.values(this.state.monsters).filter(monster => distance(p, monster) <= 45) : [],
       reports: this.state.reports.filter(report => report.ownerId === id).slice(-30), loot }), buildings };
@@ -326,10 +329,23 @@ export class GameWorld {
   private node(def: InteractableEntity): NodeState {
     let node = this.state.nodes[def.id];
     if (!node) node = this.state.nodes[def.id] = { stock: Number.isFinite(def.stock) ? def.stock! : 1, respawnAt: 0 };
-    if (node.stock <= 0 && node.respawnAt > 0 && node.respawnAt <= this.now() && !node.items?.some(i => i.count > 0)) {
-      node.stock = Number.isFinite(def.maxStock) ? def.maxStock! : 1; node.respawnAt = 0; delete node.items;
-    }
     return node;
+  }
+
+  private renewResources(time: number, players: Player[], undo: TickUndo) {
+    if (time - this.resourceTickAt < 5000) return false;
+    this.resourceTickAt = time;
+    const observers = players.filter(p => p.mapId === 'world');
+    let changed = false;
+    for (const [id, node] of Object.entries(this.state.nodes)) {
+      if (node.stock > 0 || !(node.respawnAt > 0 && node.respawnAt <= time) || node.items?.some(item => item.count > 0)) continue;
+      const def = this.rules.nodeAt(id);
+      if (!def || observers.some(p => distance(p, def) <= WORLD_NODE_RADIUS)) continue;
+      undo.object(node);
+      node.stock = Number.isFinite(def.maxStock) ? def.maxStock! : 1; node.respawnAt = 0; delete node.items;
+      changed = true;
+    }
+    return changed;
   }
 
   private near(p: Player, target: { x: number; y: number; id?: string; mapId?: MapZoneId }, range = 3) {
@@ -858,7 +874,7 @@ export class GameWorld {
 
   tick() {
     this.tickSharedChange = false;
-    const undo = new TickUndo(), previousNpcTickAt = this.npcTickAt;
+    const undo = new TickUndo(), previousNpcTickAt = this.npcTickAt, previousResourceTickAt = this.resourceTickAt;
     try {
       const time = this.now(); let dirty = false;
       const changedPlayers: Player[] = [];
@@ -866,6 +882,7 @@ export class GameWorld {
       for (const [id, until] of this.active) if (until <= time) { undo.map(this.active, id); this.active.delete(id); }
       for (const [id, drop] of Object.entries(this.state.drops)) if (drop.expiresAt <= time) { undo.entry(this.state.drops, id); delete this.state.drops[id]; dirty = true; }
       const activePlayers = [...this.active.keys()].map(id => this.state.players[id]);
+      dirty = this.renewResources(time, activePlayers, undo) || dirty;
       const npc = this.simulateMonsters(activePlayers, npcDt, time, undo); dirty ||= npc.dirty;
       for (const p of activePlayers) {
         const elapsed = Math.min(5, Math.max(0, (time - p.survivalAt) / 1000));
@@ -898,7 +915,7 @@ export class GameWorld {
       this.tickSharedChange = fullSave || npc.changed;
       return this.tickSharedChange || changedPlayers.length > 0;
     } catch (error) {
-      undo.rollback(); this.npcTickAt = previousNpcTickAt;
+      undo.rollback(); this.npcTickAt = previousNpcTickAt; this.resourceTickAt = previousResourceTickAt;
       throw error;
     }
   }

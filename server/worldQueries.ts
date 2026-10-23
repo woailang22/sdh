@@ -1,4 +1,4 @@
-import { generateWorldChunk, worldToChunk, type WorldChunk } from '../src/game/world.js';
+import { generateWorldChunk, worldToChunk, WORLD_NODE_RADIUS, type WorldChunk } from '../src/game/world.js';
 
 export function createWorldQueries(generate = generateWorldChunk) {
   const chunkCache = new Map<string, WorldChunk>();
@@ -34,7 +34,7 @@ export function createWorldQueries(generate = generateWorldChunk) {
     return definitions;
   }
   return {
-    nodesNear: (x: number, y: number) => nearby(x, y).interactables.filter(n => Math.hypot(n.x - x, n.y - y) <= 45),
+    nodesNear: (x: number, y: number) => nearby(x, y).interactables.filter(n => Math.hypot(n.x - x, n.y - y) <= WORLD_NODE_RADIUS),
     buildingsNear: (x: number, y: number) => nearby(x, y).buildings.filter(b => Math.hypot(b.x - x, b.y - y) <= 55),
     monstersNear: (x: number, y: number) => nearby(x, y).monsters.filter(m => Math.hypot(m.x - x, m.y - y) <= 40),
   };

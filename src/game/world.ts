@@ -8,6 +8,7 @@ import { ROADSIDE_USES, WORLD_ROADSIDE_STOPS } from './worldRoutes';
 export const WORLD_MIN = -1024;
 export const WORLD_MAX = 1024;
 export const CHUNK_SIZE = 32;
+export const WORLD_NODE_RADIUS = 45;
 export interface WorldLocation {
   id: string; name: string; x: number; y: number; theme: GroundTheme;
   region: RegionId; risk: SubMapDef['risk']; sourceMapId: MapZoneId;
