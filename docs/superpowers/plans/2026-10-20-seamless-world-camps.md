@@ -1489,3 +1489,19 @@ a229880后拥挤误拒绝仍存在。本轮定位原五秒timer无条件序列�
 新formal dense-final-a15沿用a14原输入/种子/分辨率与20s静止+60s双浏览器+30s再加6protocol，计时无并行QA负载，实际engine导航API加native长按空枪，非全原生探索/真实伤害。双端374/373全成功，回复P95约30.5/26.9ms，a14约16.0/16.4；八连接174中172、176中173成功，合计5次占slot拒绝，a14为1次，回复P95约147.2/181.1ms对比61.7/99.3，绘制P95约10.5/10.9ms、RAFmax约121/115ms。此样本整体更差，保留失败不重跑刷通过，不能把减少保存成本说成多人流畅门禁通过。六protocol各发149，一人ack149、其余ack148各1在途；关闭后实际4人各耗149、2人各148，不说全部无在途。
 
 原WAL合并私有行审计：native各546实际耗弹/1454余弹，5675建筑/仓库/540防御弹/共享集合/装备库存蓝图及非弹资源守恒。另启动实际server，同存档双浏览器关开门同步；首次shared-a12第一人重放成功，第二人仅等states最后一条时超时，未保留逐请求轨迹，无法确认漏观测还是未收到回复，不隐去。shared-a13仅改等待保留历史中的确切requestId并记录回包，两人各一条无错误、1454不再扣，后置审计通过；不能据此断言a12根因。计划docs/superpowers/plans/2026-10-23-periodic-player-checkpoints.md，去凭据证据docs/verification/2026-10-23-periodic-player-checkpoints-results.json。只碰合成/独立临时/内存存档，真实数据库未打开；完整游戏目标继续进行，拥挤合法枪拒绝、a7重生停步、长期/世界性能、真实攻城及人口资源经济仍待完成。
+
+## 浏览器建筑投影去重与重置边界检查点（2026-10-23）
+
+57c2247后重新检查回包应用：StateDecoder省略共享列表时保留原array，但App仍每次私有弹药/生存回复调用setAuthoritativeBuildings，营地反复filter并重建4000地板，world强制刷新25块。真实双Chrome原before-a16先红：两端各116次同引用重建，约181/171ms；计数含5s准备及12s原寻路/native按枪，不冒称纯12s帧率成绩。本轮只在App用单一ref记录成功应用后的engine/map/source列表/实际投影引用和length，不缓存历史；相同则跳建筑setter，其他玩家/弹药/资源/怪物/掉落/UI回调照常执行。新engine、切图/同图warp、dispose失效；完整init.gameState后不再用重复init.buildings覆盖一次，legacy无gameState fallback保留，Engine显式可变setter语义不变。
+
+独立审查指出editorClearOverride直接initEntitiesForMap未通知切图。初guard版profile-a17虽两端118个同列表回调均零重建，随后editor reset后空营地明确先红。最终保存并比较实际eng.buildings引用及length，O(1)捕捉clear/import/remove新array、place的push和world区块换投影，成功setter后才记ref。profile-a18最终117/116次同列表回调零重建、各4次真正列表更新；编辑器清空、插入本地假行、同图warp、客户端setter故意抛错后同snapshot重试，两人均恢复5675建筑/4000地板并移除假行。没有发放服务端物资或篡改存档。审查复核所有既有编辑器路径，无新P1/P2。
+
+新增真实JSON编解码合同覆盖私有/共享省略同引用、开门新引用、旧列表不被改、5秒完整基线、切图及decoder reset新encoder。首轮全套556通过、1个已有server/stateSync paused启动等待5s超时（line58），原因未确认，未改服务端或放宽测试超时。随后独立全套41文件557测试通过，再类型检查/构建通过；客户端index-CP-IR9Uk.js，原Vite提示仍在。未以静态分析冒称运行。
+
+新formal dense-final-a16沿用a15原5675建筑/4000地板/18塔540弹、双独立Chrome1920×1080DPR1、20s静止+60s原engine寻路/native按枪+30s加6protocol，计时无其它QA/构建/测试/分析器。60s双端建筑setter456/456→12/12，383/378请求全成功，回复P95约31.8/20.8ms（a15为30.5/26.9），绘制P95约7.9/8.5ms，RAFmax约97/121ms。八连接setter332/334→6/6，但185中176、188中175成功，共22次占slot拒绝，原a15为5次；回复P95约270.8/279.5ms对比147.2/181.1，绘制P95约9.8/10.1ms、RAFmax约85/91ms。浏览器确实减少重复工作，但拥堵回包更差，整体流畅/零错误门禁仍失败，不重跑刷通过。实际请求数随帧时序略异，不承诺通用性能/60FPS/GPU。六protocol各发144，2人ack144、4人ack143各1在途；关闭后5人耗144、1人143。
+
+WAL合并私有行守恒：native实际559/553耗弹、余1441/1447；所有5675建筑、540防御弹、共享集合、库存装备蓝图及非弹资源未变。另实际重启同存档shared-a14，双Chrome原E关开门同步、重放各一条正常回包且不再扣弹，后置审计通过。
+
+另三Chrome普通world实战native-duel-a15：实际鼠标先跨chunk往返，再两次射击，105首击剩95血0盾、死亡权威纠正回0,1、真实右键走到0,5、原包拾空/第三人旧面板关闭并继续走，无幽灵/重复物资。射手58弹6木2食，victim背包和资源全掉装备保留，observer无收益；全部共享资产/完整性和一致性备份GameWorld恢复通过。此前world-a14仅新增边界路线QA失败：目标恰在-896边界、0.4到达容差允许停-896.18468，仍负侧chunk，故未变窗口断言失败；保留记录，新a15目标越过边界1整格再回起点，非放宽游戏移动/伤害。普通PvP和短边界走动不替代完整世界/攻城/赚取经济容量。
+
+计划docs/superpowers/plans/2026-10-23-client-building-projections.md，去凭据证据docs/verification/2026-10-23-client-building-projections-results.json。只操作合成/临时/内存数据，真实存档未打开，所属进程关闭。下一轮应直接观测服务器实际待发输入、私有提交与共享快照阻塞，不把另一个小减负当拒绝问题已解；原a7停步、a12重放观测超时尚未定位，长期内存/全世界路线/真实攻城及人口资源经济仍待完成，完整目标保持进行中。

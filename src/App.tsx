@@ -72,6 +72,7 @@ const THEME_SPLASH_IMG: Record<string, string> = {
 export default function App() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const engineRef = useRef<IsometricEngine | null>(null);
+  const appliedBuildingsRef = useRef<{ engine: IsometricEngine; mapId: MapZoneId; buildings: BuildingEntity[]; projection: BuildingEntity[]; count: number } | null>(null);
   const netManagerRef = useRef<NetworkManager | null>(null);
 
   // Active Map Zone
@@ -572,7 +573,14 @@ export default function App() {
     eng.player.shield = p.shield; eng.player.maxShield = p.maxShield;
     eng.player.satiety = p.satiety;
     eng.setAuthoritativeAmmo(p.resources.ammo);
-    eng.setAuthoritativeBuildings(state.buildings);
+    // Omitted delta lists retain their decoded reference; only rebuild the
+    // projection for a new list, lifecycle or local editor/window reset.
+    const applied = appliedBuildingsRef.current;
+    if (applied?.engine !== eng || applied.mapId !== p.mapId || applied.buildings !== state.buildings
+      || applied.projection !== eng.buildings || applied.count !== eng.buildings.length) {
+      eng.setAuthoritativeBuildings(state.buildings);
+      appliedBuildingsRef.current = { engine: eng, mapId: p.mapId, buildings: state.buildings, projection: eng.buildings, count: eng.buildings.length };
+    }
     eng.setResourceStates(state.nodes);
     eng.setAuthoritativeMonsters(state.monsters);
     eng.setAuthoritativeDrops(state.drops);
@@ -806,7 +814,7 @@ export default function App() {
         if (engineRef.current) {
           engineRef.current.localPlayerId = data.selfId;
           engineRef.current.setOnlinePlayers(data.players);
-          if (data.buildings && data.buildings.length > 0) {
+          if (!data.gameState && data.buildings && data.buildings.length > 0) {
             engineRef.current.setAuthoritativeBuildings(data.buildings);
           }
         }
@@ -960,6 +968,7 @@ export default function App() {
       },
       onWeatherChange: setWeatherState,
       onMapZoneChange: mapId => {
+        appliedBuildingsRef.current = null;
         currentMapIdRef.current = mapId;
         setCurrentMapId(mapId);
         setLootPanel(null);
@@ -1066,6 +1075,7 @@ export default function App() {
     return () => {
       clearInterval(syncInterval);
       engine.dispose();
+      if (appliedBuildingsRef.current?.engine === engine) appliedBuildingsRef.current = null;
       if (engineRef.current === engine) engineRef.current = null;
     };
   }, [showBoot]);

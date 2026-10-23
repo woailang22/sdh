@@ -15,6 +15,27 @@ function snapshot(): GameStateSnapshot {
 const copy = <T,>(value: T): T => JSON.parse(JSON.stringify(value));
 
 describe('nearby state transport', () => {
+  it('retains omitted building references but replaces changed and reset/map baselines', () => {
+    const encoder = new StateEncoder(), decoder = new StateDecoder(), state = snapshot();
+    const first = decoder.decode(copy(encoder.encode(state, 0)))!;
+    const live = { player: copy(state.player), correction: false, requestId: 'paid', error: undefined, loot: undefined };
+    live.player.resources.ammo = 7;
+    const privateState = decoder.decode(copy(encoder.encodePlayer(live, () => state, 120)))!;
+    expect(privateState.buildings).toBe(first.buildings); expect(privateState.player.resources.ammo).toBe(7);
+    const sameShared = decoder.decode(copy(encoder.encode({ ...state, player: live.player }, 200)))!;
+    expect(sameShared.buildings).toBe(first.buildings); expect(sameShared.requestId).toBeUndefined();
+    state.buildings[0].isOpen = true;
+    const opened = decoder.decode(copy(encoder.encode(state, 300)))!;
+    expect(opened.buildings).not.toBe(first.buildings); expect(opened.buildings[0].isOpen).toBe(true);
+    expect(first.buildings[0].isOpen).toBe(false);
+    const complete = decoder.decode(copy(encoder.encode(state, 5000)))!;
+    expect(complete.buildings).not.toBe(opened.buildings); expect(complete.buildings).toEqual(opened.buildings);
+    const entered = decoder.decode(copy(encoder.encode({ ...state, player: { ...state.player, mapId: 'home_other' }, buildings: [] }, 5100)))!;
+    expect(entered.buildings).not.toBe(complete.buildings); expect(entered.buildings).toEqual([]);
+    decoder.reset(); const replacement = new StateEncoder();
+    const reconnected = decoder.decode(copy(replacement.encode(state, 5200)))!;
+    expect(reconnected.buildings).not.toBe(complete.buildings); expect(reconnected.buildings).toEqual(complete.buildings);
+  });
   it('serializes an encoded full patch without serializing its shared lists again', () => {
     const encoder = new StateEncoder(), state = snapshot(), name = state.buildings[0].name;
     const readName = vi.fn(() => name);
