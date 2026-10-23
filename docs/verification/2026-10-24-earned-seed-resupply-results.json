@@ -1,0 +1,413 @@
+{
+  "status": "verified-earned-seed-resupply-to-existing-camp-field",
+  "overallGoalComplete": false,
+  "base": "d22c8f327cea4e6c1f8cfaa9b7234dfd911004ea",
+  "productionChanged": false,
+  "noNewArtOrDependencies": true,
+  "verification": {
+    "native": {
+      "passed": true,
+      "sameEarnedCharacter": true,
+      "noStateEdits": true,
+      "productionSourceUnchanged": true,
+      "normalRulesAndClocks": true,
+      "actions": {
+        "new": 17,
+        "sourceHandled": 83,
+        "finalHandled": 100,
+        "unique": true,
+        "errors": 0,
+        "searches": 4,
+        "lootTransfers": 4,
+        "doorToggles": 4,
+        "eats": 2,
+        "enterCamp": 1,
+        "start": 1,
+        "collect": 1
+      },
+      "resupply": {
+        "farm": {
+          "x": -14,
+          "y": -14,
+          "food": 3,
+          "water": 2,
+          "seeds": 1,
+          "emptiedAtCollection": true
+        },
+        "scrap": {
+          "x": -75,
+          "y": 29,
+          "collected": 2
+        },
+        "crop": {
+          "seedSpent": 1,
+          "woodSpent": 2,
+          "scrapSpent": 2,
+          "sourceWood": 5,
+          "remainingWood": 3,
+          "sourcePotatoes": 5,
+          "collected": 4,
+          "finalPotatoes": 9,
+          "readyDelayFromObserverMs": 60001,
+          "collectedAfterReadyMs": 30974
+        },
+        "foodEaten": 2,
+        "satietyPerFood": 35
+      },
+      "movement": {
+        "packets": 1866,
+        "rejected": 1,
+        "corrections": 14,
+        "overflow": 0
+      },
+      "final": {
+        "x": 3.6150975609518476,
+        "y": 26.876294187609563,
+        "hp": 100,
+        "shield": 50,
+        "satiety": 53.906500000000314,
+        "items": [
+          [
+            "food",
+            1
+          ],
+          [
+            "water",
+            6
+          ],
+          [
+            "pickaxe_stone",
+            1
+          ],
+          [
+            "crop_potato",
+            9
+          ]
+        ],
+        "tool": "axe_stone"
+      },
+      "campAssetsUnchanged": true,
+      "publicDoorStateChanges": 2,
+      "persistence": {
+        "integrity": "ok",
+        "savedMatches": true,
+        "backupRestored": true,
+        "stopTickMs": 0,
+        "savedSatiety": 53.906500000000314
+      },
+      "diagnostics": {
+        "scope": "Final collect page only; intermediate closed pages not exported",
+        "errors": [],
+        "slowFrames": 4,
+        "environment": {
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
+          "viewport": {
+            "width": 1280,
+            "height": 720
+          },
+          "canvas": {
+            "width": 1280,
+            "height": 720
+          },
+          "devicePixelRatio": 1.5,
+          "modulePath": "/assets/index-DJiOwxsC.js",
+          "jsHeap": {
+            "used": 11047962,
+            "total": 18549090
+          },
+          "graphicsBackend": "unknown"
+        },
+        "performanceAccepted": false
+      },
+      "overallGoalComplete": false
+    },
+    "typesIncludingOwnedQa": "passed",
+    "priorFullTests": {
+      "files": 46,
+      "tests": 739,
+      "runThisStage": false,
+      "sourceUnchanged": true,
+      "logBound": true
+    },
+    "build": {
+      "bundle": "index-DJiOwxsC.js",
+      "rebuiltThisStage": false,
+      "bytesMatchAcceptedPrior": true
+    },
+    "cleanup": {
+      "ownedServerTerminal": true,
+      "pid": 24028,
+      "port": 39141,
+      "listeners": 0,
+      "tabs": 0,
+      "viewportRestored": true,
+      "productionSaveOpened": false
+    }
+  },
+  "review": {
+    "finalEvidence": "passed-no-P1-P2"
+  },
+  "limits": [
+    "This is existing-rule native verification, not a new seed recipe, loot reset or balancing change. Same earned character consistently backed up; no state, clock or weather edits.",
+    "One farm yielded3food2water1seed, a separate scrap node2scrap; two earned food portions were eaten. Existing5wood supplied the crop cost; no new wood gathering or claim of fully replenishing every input.",
+    "Four door toggles and an unplanned nearby farm search remain in raw actions. No loot was taken from the second farm. Wrong expected panel/button assertions and interrupted/incomplete navigation remain in native stages.",
+    "Source fields already held no seeds. One newly searched nearby farm supported another crop, ending with0seeds. No claim of infinite farming, seed-return, depleted-resource reset prevention across every transition, whole-world renewable supply or multiplayer contention balance.",
+    "Server sets60000ms after its clock call; observer-to-ready difference60001ms includes1ms before the rule. Collection was30974ms afterreadyAt. Normal offline breaks and route knowledge prevent a claim of novice continuous pacing.",
+    "Final collect page errors[] and4slow frames only; earlier closed pages not exported. No all-pages, P95/GPU/browser800MB/long-memory/black-screen acceptance.",
+    "Ordinary push does not deploy external website. Workbench/storage/defenses, interaction usability and full map/economy/performance remain active."
+  ],
+  "sources": [
+    {
+      "path": "data/audit-seed-resupply-20261024.ts",
+      "sha256": "6bb6f1cc8bf4d7ea20f740176edf133eff5970ced9f15d6cefc64ee61d5989fa"
+    },
+    {
+      "path": "data/capture-cua-seed-resupply-20261024.ts",
+      "sha256": "5ddddc5056a741d28771aeb99e7ed6ad34a8cf5cb2e7e76591b435b8310feeb2"
+    },
+    {
+      "path": "data/control-cua-seed-resupply-20261024.cjs",
+      "sha256": "e766d9f60943981bb9e04ca23531616f73141b3afde0679559c2f7244de40ebc"
+    },
+    {
+      "path": "data/cua-seed-resupply-20261024-a1-accepted-errors.json",
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "path": "data/cua-seed-resupply-20261024-a1-accepted-frames-private.json",
+      "sha256": "57925d724c3409ab09b27e3f4c5789d7a4a93c25155b2a9b03163a84108200dd"
+    },
+    {
+      "path": "data/cua-seed-resupply-20261024-a1-audit.json",
+      "sha256": "de3656f6ba1654b8c8aa597bb86a3796c20a7ec21c83f425531a5c45244f1158"
+    },
+    {
+      "path": "data/cua-seed-resupply-20261024-a1-camp-stages-private.json",
+      "sha256": "3651a9cc1fbeaeb85f754aae7329d1c354d7570ec2283eaa192837977a172237"
+    },
+    {
+      "path": "data/cua-seed-resupply-20261024-a1-cleared.png",
+      "sha256": "ff7f322e48fd747b1edb31a60d5217e49d75037c497d557faf62c0a7d57737d9"
+    },
+    {
+      "path": "data/cua-seed-resupply-20261024-a1-collect-stages-private.json",
+      "sha256": "15a6825b5445c600c391de84e8882c068d7abdb944ec9e88307ec0fc9302fcfa"
+    },
+    {
+      "path": "data/cua-seed-resupply-20261024-a1-door-stages-private.json",
+      "sha256": "6673592ca2b0f3b80cac154708655d226707e59ff9c25ef10a1ed967733bc5eb"
+    },
+    {
+      "path": "data/cua-seed-resupply-20261024-a1-exit-stages-private.json",
+      "sha256": "4c015bea9b0dcee4cebeb845e7e36e476c45f89dbdf63a2ae3f21a02f9968eac"
+    },
+    {
+      "path": "data/cua-seed-resupply-20261024-a1-farm-approach.png",
+      "sha256": "6315021c8e4477fa66c87e56042f937e73dbd7341b93dadb59982997c77a9ebd"
+    },
+    {
+      "path": "data/cua-seed-resupply-20261024-a1-farm-stages-private.json",
+      "sha256": "528365b8c27beaa1f2c6878116a7e5eac4c398509d996b3a5b3369103f2cbc1c"
+    },
+    {
+      "path": "data/cua-seed-resupply-20261024-a1-final-hud.png",
+      "sha256": "45517273fc3876446a39dc3736aaf2d0fb2a71c7de5cd7bdd59dba8cf7e5b994"
+    },
+    {
+      "path": "data/cua-seed-resupply-20261024-a1-gate-stages-private.json",
+      "sha256": "a44cbab4abb6ebd57b9cc286b12660b4adb535c580138da56ef7c131999af6a5"
+    },
+    {
+      "path": "data/cua-seed-resupply-20261024-a1-growing.png",
+      "sha256": "f2849ed2bd7af9891490d2f00dd83d36b596c2943d5cbdb92062f07058fbff7f"
+    },
+    {
+      "path": "data/cua-seed-resupply-20261024-a1-inside-search.png",
+      "sha256": "135f7b364d5801cf9bac00f91cb3662b23513ae1f196151717678325053cdcbc"
+    },
+    {
+      "path": "data/cua-seed-resupply-20261024-a1-mature.png",
+      "sha256": "81b5d4fc908d7d282a407272fdfa2a10eebdb37feace8184a2f6fb1ce7f9b52c"
+    },
+    {
+      "path": "data/cua-seed-resupply-20261024-a1-metal-result.png",
+      "sha256": "b117d9e228b53b35901c002d15b0065def0ac0cc521ff89dd1dd6791992396ca"
+    },
+    {
+      "path": "data/cua-seed-resupply-20261024-a1-metal-stages-private.json",
+      "sha256": "1bbe361b31e6baf0db1888e522c1ada8d2757ae90687cab5e866bc962f261182"
+    },
+    {
+      "path": "data/cua-seed-resupply-20261024-a1-native-connected-world-private.json",
+      "sha256": "098d26c9350fc99b004d3b28553b8b325affbfaede974a23a18a5c3c28adfef4"
+    },
+    {
+      "path": "data/cua-seed-resupply-20261024-a1-native-door-geometry-events.json",
+      "sha256": "b2056fb9a066175193032bb07dead1c8a4d5dbc209cfae39a08aea92facf7533"
+    },
+    {
+      "path": "data/cua-seed-resupply-20261024-a1-native-door-geometry-world-private.json",
+      "sha256": "418ee581196bcb1600988478cbaeac8f17dd00f9ddd0c9c660afd6c1bb173315"
+    },
+    {
+      "path": "data/cua-seed-resupply-20261024-a1-native-farm-door-attempt-events.json",
+      "sha256": "5377f9e31db6c06a6da10d64358a5563f3844f65ee63a8c3260c9931fc6ede0d"
+    },
+    {
+      "path": "data/cua-seed-resupply-20261024-a1-native-farm-door-attempt-world-private.json",
+      "sha256": "c1c88a18dfbddbbdde0d856170b9642d04c99fd24638ccde0660aab49766bf24"
+    },
+    {
+      "path": "data/cua-seed-resupply-20261024-a1-native-final-events.json",
+      "sha256": "c47c20fe60785df479bbe8a06bfcf6043615924d7270cf157889d60906000f68"
+    },
+    {
+      "path": "data/cua-seed-resupply-20261024-a1-native-final-world-private.json",
+      "sha256": "15f16131b767adc37539afec6817d924fab5c989489ecb58cc0537bb444cc8fc"
+    },
+    {
+      "path": "data/cua-seed-resupply-20261024-a1-native-seed-collected-events.json",
+      "sha256": "0ff081f5826a78cbcded5b715a0d9ae3fcad6bd303fecb5c44b1ff0d0f588dd2"
+    },
+    {
+      "path": "data/cua-seed-resupply-20261024-a1-native-seed-collected-world-private.json",
+      "sha256": "9e08963f91cac34f161521be6250f344b67b51ecd4db01d988e1f7ef35e2bf65"
+    },
+    {
+      "path": "data/cua-seed-resupply-20261024-a1-native-seed-return-attempt-events.json",
+      "sha256": "159f9f34740c19867c4283f36334129d4042f49d850293ff86e3451fcc63b789"
+    },
+    {
+      "path": "data/cua-seed-resupply-20261024-a1-native-seed-return-attempt-world-private.json",
+      "sha256": "3e2db71d3716b725bfcca0dff2225ba4a9c6a1bb3386b39a96fade046c4fa488"
+    },
+    {
+      "path": "data/cua-seed-resupply-20261024-a1-native-seeded-events.json",
+      "sha256": "71dabb97f45fd21d2d5fa4cfcb904e27c4c3ad4371207b01277451f036c99e3c"
+    },
+    {
+      "path": "data/cua-seed-resupply-20261024-a1-native-seeded-world-private.json",
+      "sha256": "c4d5438a682348552894bdb3b9f3dcffc3037a368f4d7d82eb2efe0e08d61bee"
+    },
+    {
+      "path": "data/cua-seed-resupply-20261024-a1-native-server.log",
+      "sha256": "b97b4b3dd0db3974fdb81d03f34ed4a987119a90bb5cd36cf313b825766034c6"
+    },
+    {
+      "path": "data/cua-seed-resupply-20261024-a1-outside-metal.png",
+      "sha256": "556e5df1d26a3cd8ef95dd0f6d29780095bfdade284ba2c54f3f19e0b56e1183"
+    },
+    {
+      "path": "data/cua-seed-resupply-20261024-a1-plant-stages-private.json",
+      "sha256": "57d0530835231a26400d43984bd3ada1332b899dcf5d14cc7daf210e0444f189"
+    },
+    {
+      "path": "data/cua-seed-resupply-20261024-a1-scrap-search.png",
+      "sha256": "e72d54e1189f971ad238cd3a39823aa32b71d5c35b6b133fdd597af9c37d3475"
+    },
+    {
+      "path": "data/cua-seed-resupply-20261024-a1-scrap-stages-private.json",
+      "sha256": "c99705e8088299a2c50379381435da74b92d5939f89dbf2e035a668049343d1e"
+    },
+    {
+      "path": "data/cua-seed-resupply-20261024-a1-search.png",
+      "sha256": "a0e340a456f67751717dd247efeaf88b8ebc231b9a7b3475e7e4e5e9ac02f4e7"
+    },
+    {
+      "path": "data/cua-seed-resupply-20261024-a1-seed-hud.png",
+      "sha256": "1b8de921a829e03087b0497a71e15163cb70fe792fd47b0d30191b7adc911583"
+    },
+    {
+      "path": "data/cua-seed-resupply-20261024-a1-stages-private.json",
+      "sha256": "890bcc0c44eacedef3a50eb47a3a8b4575378922b1a2582cf9d0f7c441414938"
+    },
+    {
+      "path": "data/cua-seed-resupply-20261024-a1-start-stages-private.json",
+      "sha256": "c788b01422060a7282a37d7d3dd2bffb37c7f7eec73b7b8cac8e6931bea3dae4"
+    },
+    {
+      "path": "data/cua-seed-resupply-20261024-a1-take-stages-private.json",
+      "sha256": "12e75f702438fbdb45133bf05aa0a894176ae2fa60c21463162fd68a795aa11c"
+    },
+    {
+      "path": "data/prepare-seed-resupply-20261024.ts",
+      "sha256": "1d997e6b6bc49c2efc50d4a472de5c2f6e25a36e3c0cfa6740f5232958eadf29"
+    },
+    {
+      "path": "data/publish-seed-resupply-20261024.cjs",
+      "sha256": "918e98cf48ccd934f4b2d18c68abdc9a32232ca1fe4e0ed411c7a3727b5dbd73"
+    },
+    {
+      "path": "data/seed-resupply-audit-20261024.log",
+      "sha256": "9770c1d577aac7ee3a57e439c1ba3955d0366a003efa841e18c7a6f5eab348f0"
+    },
+    {
+      "path": "data/seed-resupply-cleanup-20261024.json",
+      "sha256": "9f88ece6934a26b2e705aba76f1331a2ab1306481e5f9c56f9eeeedea324c8ac"
+    },
+    {
+      "path": "data/seed-resupply-review-20261024.json",
+      "sha256": "1a9fac53fcfa449adb29bf25d9fea0e683648d8214120cdc284a35659e9d0555"
+    },
+    {
+      "path": "data/seed-resupply-source-backup-20261024.json",
+      "sha256": "495c91a581bb7a8c2f713f7a9e439e31a7cb2617605f1f0527d7059297909cb1"
+    },
+    {
+      "path": "data/seed-resupply-types-allqa-20261024.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "data/tool-match-accepted-bundle-DJiOwxsC.js",
+      "sha256": "b4155c4038e9ed1784d6e5e6e9740e6928e7a8ce6446cb4c1d17b1a823473bd2"
+    },
+    {
+      "path": "data/tool-match-accepted-index.html",
+      "sha256": "edcd1b58f151dd1ae38076ddd7a57c0351a9e68b886e9ba635406ba3535e167b"
+    },
+    {
+      "path": "data/tool-match-build-20261024.log",
+      "sha256": "e19e4094db07505c418db9850e61c2a2783c6d96d8bb28ee93396106d215df03"
+    },
+    {
+      "path": "data/tool-match-full-20261024.log",
+      "sha256": "4741ef618dc2e517a4f77e8deacb58ff1fb36608ed77ccacca1975a45ce7c471"
+    },
+    {
+      "path": "dist/assets/index-DJiOwxsC.js",
+      "sha256": "b4155c4038e9ed1784d6e5e6e9740e6928e7a8ce6446cb4c1d17b1a823473bd2"
+    },
+    {
+      "path": "dist/index.html",
+      "sha256": "edcd1b58f151dd1ae38076ddd7a57c0351a9e68b886e9ba635406ba3535e167b"
+    },
+    {
+      "path": "docs/superpowers/plans/2026-10-20-seamless-world-camps.md",
+      "sha256": "66e3a140732ffe6fbf7152f24523604b6b1420152c062467cf1988bdcf3411c5"
+    },
+    {
+      "path": "docs/superpowers/plans/2026-10-24-earned-seed-resupply.md",
+      "sha256": "f17b3d40240f84d337a12014a7333a16a4873077cf43d3ffee02b7120c982a73"
+    },
+    {
+      "path": "docs/verification/2026-10-24-gathering-tool-match-results.json",
+      "sha256": "af6e60edb4a5d7a00111a939adf189a7509ddee93d555d8309fb9b9380eaf8c1"
+    },
+    {
+      "path": "server/worldState.ts",
+      "sha256": "829140066d1e04a3521ba2286e4130b39ccdcdf825a7a4340dc34e416ff6f5f1"
+    },
+    {
+      "path": "src/game/IsometricEngine.ts",
+      "sha256": "6b699cb4996c39b99c876569b41405b95f9b80fd4415445088b2856da6289d99"
+    },
+    {
+      "path": "src/game/equipmentRules.ts",
+      "sha256": "7add9af028a73655c1da136dc90fe21075bef19ef04f3316f507795ee3466f62"
+    },
+    {
+      "path": "src/game/world.ts",
+      "sha256": "9ad6447e3e2cce3f9f391856bd3008856a49c2849a35d71aa1368b1893510949"
+    }
+  ]
+}
