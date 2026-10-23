@@ -1,0 +1,1199 @@
+{
+  "date": "2026-10-23",
+  "baselineCommit": "a2298804ffe33f24c2e775618738abc046db830a",
+  "scope": "Reuse the existing private player journal for the five-second checkpoint when no shared NPC state needs a full checkpoint. Keep combat admission, cadence, SQLite durability and recovery semantics.",
+  "implementation": {
+    "timerMs": 5000,
+    "candidates": "Current active connections/bodies plus pending failed-disconnect IDs; exclude cold accounts.",
+    "privateBatch": "Existing transactional saveWorldPlayerCommits with player and handled ledger; no schema change.",
+    "sharedFlag": "New snapshot/tick NPC creation and successful simulated NPC ticks retain full periodic persistence. Only successful full checkpoint clears shared flag.",
+    "disconnectRetry": "Register original physical deadline before existing immediate full save; failure survives body expiry and repeated periodic failure. Successful full or batch save clears retries.",
+    "unchanged": "Explicit full saves, shared actions/ticks, migration/connect/disconnect/shutdown, journal recovery overlay, original one-slot fire queue/rate/inputs."
+  },
+  "verification": {
+    "fullTests": {
+      "files": 41,
+      "tests": 556,
+      "result": "passed"
+    },
+    "typecheck": "passed",
+    "build": "passed; unchanged index-27reS25U.js; existing Vite future-loader/chunk-size warnings remain",
+    "redGreen": "First seven new periodic cases fail before persistPeriodic exists, then pass; eighth admission rollback case added. Eight focused cases pass. Strengthened real-server sessionRecovery passes with socket/timer/SQLite and forced kill.",
+    "productionRecovery": "Reject full saves and only disconnect-bearing journal rows; keep live private shots durable. Failed admission does not replace live socket. After expiry, allow periodic write, verify raw meta deadline stays0 but journal saves original42000, force-kill and restore original boundary,8 ammo,73 HP and paid replay ledger.",
+    "negativeControls": [
+      "Restore old full timer: production raw meta deadline42000 versus expected0.",
+      "Exclude pending expired disconnect IDs: failed periodic batch test no longer reaches rejection.",
+      "Remove snapshot NPC creation dirty mark: restored edge NPC missing.",
+      "Remove simulated tick dirty mark: expected full checkpoint rejection absent.",
+      "Clear pending/dirty before full commit: retry loses earlier NPC frame."
+    ],
+    "negativeControlSafety": "All mutations restored in finally before final full checks. First script run missed the last mutation due to CRLF matching, then corrected matching and verified it separately; no ignored product failure.",
+    "independentReview": "Read-only review identified snapshot-created NPC gap before final implementation; final full diff review found no P1/P2. Reviewer did not execute performance loads."
+  },
+  "persistenceCost": {
+    "fixture": "periodic-checkpoint-cost-20261023-a1",
+    "synthetic": true,
+    "activePlayers": 8,
+    "buildings": 5675,
+    "rounds": [
+      {
+        "full": {
+          "count": 20,
+          "p50": 16.05989999999997,
+          "p95": 30.203000000000202,
+          "max": 30.203000000000202
+        },
+        "periodic": {
+          "count": 20,
+          "p50": 1.7201000000000022,
+          "p95": 3.523300000000063,
+          "max": 3.523300000000063
+        }
+      },
+      {
+        "periodic": {
+          "count": 20,
+          "p50": 1.7408000000000357,
+          "p95": 1.7952000000000226,
+          "max": 1.7952000000000226
+        },
+        "full": {
+          "count": 20,
+          "p50": 15.186999999999898,
+          "p95": 16.65099999999984,
+          "max": 16.65099999999984
+        }
+      },
+      {
+        "full": {
+          "count": 20,
+          "p50": 14.43060000000014,
+          "p95": 17.002199999999903,
+          "max": 17.002199999999903
+        },
+        "periodic": {
+          "count": 20,
+          "p50": 1.6770999999998821,
+          "p95": 1.8816000000001623,
+          "max": 1.8816000000001623
+        }
+      },
+      {
+        "periodic": {
+          "count": 20,
+          "p50": 1.67029999999977,
+          "p95": 3.1053000000001703,
+          "max": 3.1053000000001703
+        },
+        "full": {
+          "count": 20,
+          "p50": 15.506999999999607,
+          "p95": 21.003299999999854,
+          "max": 21.003299999999854
+        }
+      },
+      {
+        "full": {
+          "count": 20,
+          "p50": 16.21439999999984,
+          "p95": 22.32029999999986,
+          "max": 22.32029999999986
+        },
+        "periodic": {
+          "count": 20,
+          "p50": 1.7708999999999833,
+          "p95": 2.10149999999976,
+          "max": 2.10149999999976
+        }
+      }
+    ],
+    "audits": [
+      {
+        "mode": "full",
+        "integrity": "ok",
+        "playerRows": 0,
+        "playerRowBytes": 0,
+        "fullStateBytes": 2270476,
+        "movementAndAssetsRestored": true
+      },
+      {
+        "mode": "periodic",
+        "integrity": "ok",
+        "playerRows": 8,
+        "playerRowBytes": 22022,
+        "fullStateBytes": 2270476,
+        "movementAndAssetsRestored": true
+      }
+    ],
+    "note": "Paired real SQLite WAL/FULL checkpoint cost only; controlled +5000ms game clock between accepted1-cell moves, real elapsed timing for persistence.20 saves/method/round, alternating method order, no browser/load/tests/build in parallel. Not a native performance or earned-economy gate."
+  },
+  "nativeEnvironment": {
+    "synthetic": true,
+    "buildings": 5675,
+    "floors": 4000,
+    "towers": 18,
+    "defensiveAmmo": 540,
+    "initialAmmoPerActor": 2000,
+    "browsers": 2,
+    "protocolPeersInLastPhase": 6,
+    "browser": "Independent Chrome155 headless profiles,1920x1080 DPR1,document.hidden=false.",
+    "phases": "Original20s idle,60s two browsers navigation/held fire,30s same plus six response-paced protocol peers.",
+    "input": "Actual engine navigation API and native held mouse; friendly empty-space paid shots. Not fully native-input exploration, ordinary damage or earned economy.",
+    "isolation": "No concurrent tests/builds/profilers/other QA browsers during formal timings. Cost benchmark and shared followup separate."
+  },
+  "formalBefore": {
+    "fixture": "dense-concurrent-final-20261023-a14",
+    "success": false,
+    "phases": [
+      {
+        "name": "two-native-idle",
+        "seconds": 20.46,
+        "clients": [
+          {
+            "client": 1,
+            "sent": 0,
+            "pending": 0,
+            "errors": [],
+            "ammo": 2000,
+            "startAmmo": 2000,
+            "draw": {
+              "count": 814,
+              "p50": 4.799999997019768,
+              "p95": 6.700000002980232,
+              "p99": 8.099999994039536,
+              "max": 9.900000005960464,
+              "over50": 0
+            },
+            "rtt": {
+              "count": 0,
+              "p50": 0,
+              "p95": 0,
+              "p99": 0,
+              "max": 0,
+              "over50": 0
+            },
+            "raf": {
+              "count": 821,
+              "p50": 24.299999999999272,
+              "p95": 30.399999999999636,
+              "p99": 30.5,
+              "max": 60.80000000000109,
+              "over50": 4
+            },
+            "longTask": {
+              "count": 0,
+              "p50": 0,
+              "p95": 0,
+              "p99": 0,
+              "max": 0,
+              "over50": 0
+            },
+            "corrections": 0,
+            "diagnostics": 0,
+            "buildings": 5675,
+            "floors": 4000,
+            "width": 1920,
+            "height": 1080,
+            "dpr": 1,
+            "hidden": false
+          },
+          {
+            "client": 2,
+            "sent": 0,
+            "pending": 0,
+            "errors": [],
+            "ammo": 2000,
+            "startAmmo": 2000,
+            "draw": {
+              "count": 789,
+              "p50": 4.899999991059303,
+              "p95": 7.100000008940697,
+              "p99": 8.299999997019768,
+              "max": 9.700000002980232,
+              "over50": 0
+            },
+            "rtt": {
+              "count": 0,
+              "p50": 0,
+              "p95": 0,
+              "p99": 0,
+              "max": 0,
+              "over50": 0
+            },
+            "raf": {
+              "count": 798,
+              "p50": 24.299999999999272,
+              "p95": 30.399999999999636,
+              "p99": 36.399999999999636,
+              "max": 66.79999999999927,
+              "over50": 4
+            },
+            "longTask": {
+              "count": 0,
+              "p50": 0,
+              "p95": 0,
+              "p99": 0,
+              "max": 0,
+              "over50": 0
+            },
+            "corrections": 0,
+            "diagnostics": 0,
+            "buildings": 5675,
+            "floors": 4000,
+            "width": 1920,
+            "height": 1080,
+            "dpr": 1,
+            "hidden": false
+          }
+        ],
+        "protocolPeers": []
+      },
+      {
+        "name": "two-native-walk-and-fire",
+        "seconds": 60.502,
+        "clients": [
+          {
+            "client": 1,
+            "sent": 377,
+            "pending": 0,
+            "errors": [],
+            "ammo": 1623,
+            "startAmmo": 2000,
+            "draw": {
+              "count": 2152,
+              "p50": 4.800000011920929,
+              "p95": 6.9000000059604645,
+              "p99": 8.700000002980232,
+              "max": 28,
+              "over50": 0
+            },
+            "rtt": {
+              "count": 377,
+              "p50": 8.799999997019768,
+              "p95": 16,
+              "p99": 80.70000000298023,
+              "max": 98.79999999701977,
+              "over50": 10
+            },
+            "raf": {
+              "count": 2164,
+              "p50": 30.19999999999709,
+              "p95": 30.60000000000582,
+              "p99": 54.5,
+              "max": 66.69999999999709,
+              "over50": 27
+            },
+            "longTask": {
+              "count": 0,
+              "p50": 0,
+              "p95": 0,
+              "p99": 0,
+              "max": 0,
+              "over50": 0
+            },
+            "corrections": 0,
+            "diagnostics": 0,
+            "buildings": 5675,
+            "floors": 4000,
+            "width": 1920,
+            "height": 1080,
+            "dpr": 1,
+            "hidden": false
+          },
+          {
+            "client": 2,
+            "sent": 382,
+            "pending": 0,
+            "errors": [],
+            "ammo": 1618,
+            "startAmmo": 2000,
+            "draw": {
+              "count": 2010,
+              "p50": 5.200000002980232,
+              "p95": 7.600000008940697,
+              "p99": 9.200000002980232,
+              "max": 27.19999998807907,
+              "over50": 0
+            },
+            "rtt": {
+              "count": 382,
+              "p50": 9.600000008940697,
+              "p95": 16.400000005960464,
+              "p99": 100.09999999403954,
+              "max": 110.6000000089407,
+              "over50": 11
+            },
+            "raf": {
+              "count": 2013,
+              "p50": 30.299999999999272,
+              "p95": 36.40000000000873,
+              "p99": 54.69999999999709,
+              "max": 84.90000000000146,
+              "over50": 36
+            },
+            "longTask": {
+              "count": 0,
+              "p50": 0,
+              "p95": 0,
+              "p99": 0,
+              "max": 0,
+              "over50": 0
+            },
+            "corrections": 0,
+            "diagnostics": 0,
+            "buildings": 5675,
+            "floors": 4000,
+            "width": 1920,
+            "height": 1080,
+            "dpr": 1,
+            "hidden": false
+          }
+        ],
+        "protocolPeers": []
+      },
+      {
+        "name": "two-native-plus-six-protocol-walk-and-fire",
+        "seconds": 30.551,
+        "clients": [
+          {
+            "client": 1,
+            "sent": 189,
+            "pending": 0,
+            "errors": [],
+            "ammo": 1434,
+            "startAmmo": 1623,
+            "draw": {
+              "count": 1037,
+              "p50": 4.9000000059604645,
+              "p95": 6.899999991059303,
+              "p99": 8.299999997019768,
+              "max": 12.400000005960464,
+              "over50": 0
+            },
+            "rtt": {
+              "count": 189,
+              "p50": 10.300000011920929,
+              "p95": 61.70000000298023,
+              "p99": 80.09999999403954,
+              "max": 83,
+              "over50": 18
+            },
+            "raf": {
+              "count": 1038,
+              "p50": 30.29999999998836,
+              "p95": 36.39999999999418,
+              "p99": 54.60000000000582,
+              "max": 72.89999999999418,
+              "over50": 17
+            },
+            "longTask": {
+              "count": 0,
+              "p50": 0,
+              "p95": 0,
+              "p99": 0,
+              "max": 0,
+              "over50": 0
+            },
+            "corrections": 0,
+            "diagnostics": 0,
+            "buildings": 5675,
+            "floors": 4000,
+            "width": 1920,
+            "height": 1080,
+            "dpr": 1,
+            "hidden": false
+          },
+          {
+            "client": 2,
+            "sent": 188,
+            "pending": 0,
+            "errors": [
+              "射击请求过快"
+            ],
+            "ammo": 1431,
+            "startAmmo": 1618,
+            "draw": {
+              "count": 989,
+              "p50": 5.300000011920929,
+              "p95": 7.799999997019768,
+              "p99": 9.400000005960464,
+              "max": 12,
+              "over50": 0
+            },
+            "rtt": {
+              "count": 188,
+              "p50": 12.700000002980232,
+              "p95": 99.29999999701977,
+              "p99": 142.3999999910593,
+              "max": 203.70000000298023,
+              "over50": 30
+            },
+            "raf": {
+              "count": 999,
+              "p50": 30.30000000000291,
+              "p95": 36.5,
+              "p99": 54.69999999999709,
+              "max": 85,
+              "over50": 18
+            },
+            "longTask": {
+              "count": 0,
+              "p50": 0,
+              "p95": 0,
+              "p99": 0,
+              "max": 0,
+              "over50": 0
+            },
+            "corrections": 0,
+            "diagnostics": 0,
+            "buildings": 5675,
+            "floors": 4000,
+            "width": 1920,
+            "height": 1080,
+            "dpr": 1,
+            "hidden": false
+          }
+        ],
+        "protocolPeers": [
+          {
+            "sent": 148,
+            "acked": 148,
+            "pending": false,
+            "rtt": {
+              "count": 148,
+              "p50": 6.964200000002165,
+              "p95": 42.60590000000957,
+              "p99": 49.66229999999632,
+              "max": 55.65439999999944,
+              "over50": 1
+            },
+            "errors": [],
+            "connected": true
+          },
+          {
+            "sent": 148,
+            "acked": 148,
+            "pending": false,
+            "rtt": {
+              "count": 148,
+              "p50": 13.809399999998277,
+              "p95": 47.838199999998324,
+              "p99": 55.580199999996694,
+              "max": 60.45179999999527,
+              "over50": 4
+            },
+            "errors": [],
+            "connected": true
+          },
+          {
+            "sent": 148,
+            "acked": 148,
+            "pending": false,
+            "rtt": {
+              "count": 148,
+              "p50": 19.438399999999092,
+              "p95": 52.689400000002934,
+              "p99": 65.16489999998885,
+              "max": 66.71210000000428,
+              "over50": 10
+            },
+            "errors": [],
+            "connected": true
+          },
+          {
+            "sent": 148,
+            "acked": 148,
+            "pending": false,
+            "rtt": {
+              "count": 148,
+              "p50": 25.118699999991804,
+              "p95": 64.54660000000149,
+              "p99": 70.2213999999949,
+              "max": 71.8289000000077,
+              "over50": 19
+            },
+            "errors": [],
+            "connected": true
+          },
+          {
+            "sent": 148,
+            "acked": 148,
+            "pending": false,
+            "rtt": {
+              "count": 148,
+              "p50": 31.544099999999162,
+              "p95": 71.9259999999922,
+              "p99": 84.56959999998799,
+              "max": 87.34440000000177,
+              "over50": 26
+            },
+            "errors": [],
+            "connected": true
+          },
+          {
+            "sent": 148,
+            "acked": 148,
+            "pending": false,
+            "rtt": {
+              "count": 148,
+              "p50": 37.86889999998675,
+              "p95": 76.48999999999069,
+              "p99": 85.50250000000233,
+              "max": 96.0679999999993,
+              "over50": 37
+            },
+            "errors": [],
+            "connected": true
+          }
+        ]
+      }
+    ],
+    "audit": {
+      "integrity": "ok",
+      "version": 3,
+      "pendingCommitRows": 1,
+      "buildings": 5675,
+      "defensiveAmmo": 540,
+      "checks": {
+        "buildings": true,
+        "camps": true,
+        "storage": true,
+        "ammo": true,
+        "production": true,
+        "nodes": true,
+        "drops": true,
+        "monsters": true
+      },
+      "players": [
+        {
+          "actor": 1,
+          "ammo": 1434,
+          "spent": 566,
+          "hp": 100,
+          "satiety": 66.09475000000008
+        },
+        {
+          "actor": 2,
+          "ammo": 1431,
+          "spent": 569,
+          "hp": 100,
+          "satiety": 67.6925
+        },
+        {
+          "actor": 3,
+          "ammo": 1852,
+          "spent": 148,
+          "hp": 100,
+          "satiety": 92.19225000000002
+        },
+        {
+          "actor": 4,
+          "ammo": 1852,
+          "spent": 148,
+          "hp": 100,
+          "satiety": 92.18175000000002
+        },
+        {
+          "actor": 5,
+          "ammo": 1852,
+          "spent": 148,
+          "hp": 100,
+          "satiety": 92.22400000000002
+        },
+        {
+          "actor": 6,
+          "ammo": 1852,
+          "spent": 148,
+          "hp": 100,
+          "satiety": 92.46999999999998
+        },
+        {
+          "actor": 7,
+          "ammo": 1852,
+          "spent": 148,
+          "hp": 100,
+          "satiety": 92.46024999999995
+        },
+        {
+          "actor": 8,
+          "ammo": 1852,
+          "spent": 148,
+          "hp": 100,
+          "satiety": 92.451
+        }
+      ]
+    }
+  },
+  "formalAfter": {
+    "fixture": "dense-concurrent-final-20261023-a15",
+    "success": false,
+    "phases": [
+      {
+        "name": "two-native-idle",
+        "seconds": 20.464,
+        "clients": [
+          {
+            "client": 1,
+            "sent": 0,
+            "pending": 0,
+            "errors": [],
+            "ammo": 2000,
+            "startAmmo": 2000,
+            "draw": {
+              "count": 716,
+              "p50": 5.700000002980232,
+              "p95": 8.400000005960464,
+              "p99": 12.200000002980232,
+              "max": 28.100000008940697,
+              "over50": 0
+            },
+            "rtt": {
+              "count": 0,
+              "p50": 0,
+              "p95": 0,
+              "p99": 0,
+              "max": 0,
+              "over50": 0
+            },
+            "raf": {
+              "count": 717,
+              "p50": 30.200000000000728,
+              "p95": 36.400000000001455,
+              "p99": 42.29999999999927,
+              "max": 96.80000000000291,
+              "over50": 3
+            },
+            "longTask": {
+              "count": 2,
+              "p50": 56,
+              "p95": 56,
+              "p99": 56,
+              "max": 56,
+              "over50": 1
+            },
+            "corrections": 0,
+            "diagnostics": 0,
+            "buildings": 5675,
+            "floors": 4000,
+            "width": 1920,
+            "height": 1080,
+            "dpr": 1,
+            "hidden": false
+          },
+          {
+            "client": 2,
+            "sent": 0,
+            "pending": 0,
+            "errors": [],
+            "ammo": 2000,
+            "startAmmo": 2000,
+            "draw": {
+              "count": 706,
+              "p50": 5.9000000059604645,
+              "p95": 9.900000005960464,
+              "p99": 14.799999997019768,
+              "max": 35.70000000298023,
+              "over50": 0
+            },
+            "rtt": {
+              "count": 0,
+              "p50": 0,
+              "p95": 0,
+              "p99": 0,
+              "max": 0,
+              "over50": 0
+            },
+            "raf": {
+              "count": 710,
+              "p50": 30.200000000000728,
+              "p95": 36.5,
+              "p99": 42.400000000001455,
+              "max": 78.69999999999891,
+              "over50": 4
+            },
+            "longTask": {
+              "count": 2,
+              "p50": 53,
+              "p95": 53,
+              "p99": 53,
+              "max": 53,
+              "over50": 2
+            },
+            "corrections": 0,
+            "diagnostics": 0,
+            "buildings": 5675,
+            "floors": 4000,
+            "width": 1920,
+            "height": 1080,
+            "dpr": 1,
+            "hidden": false
+          }
+        ],
+        "protocolPeers": []
+      },
+      {
+        "name": "two-native-walk-and-fire",
+        "seconds": 60.616,
+        "clients": [
+          {
+            "client": 1,
+            "sent": 374,
+            "pending": 0,
+            "errors": [],
+            "ammo": 1626,
+            "startAmmo": 2000,
+            "draw": {
+              "count": 1865,
+              "p50": 5.5,
+              "p95": 8.799999997019768,
+              "p99": 12.099999994039536,
+              "max": 32,
+              "over50": 0
+            },
+            "rtt": {
+              "count": 374,
+              "p50": 10.200000002980232,
+              "p95": 30.5,
+              "p99": 104.79999999701977,
+              "max": 124.90000000596046,
+              "over50": 11
+            },
+            "raf": {
+              "count": 1880,
+              "p50": 30.299999999995634,
+              "p95": 60.5,
+              "p99": 90.89999999999418,
+              "max": 151.5,
+              "over50": 134
+            },
+            "longTask": {
+              "count": 2,
+              "p50": 52,
+              "p95": 52,
+              "p99": 52,
+              "max": 52,
+              "over50": 1
+            },
+            "corrections": 0,
+            "diagnostics": 0,
+            "buildings": 5675,
+            "floors": 4000,
+            "width": 1920,
+            "height": 1080,
+            "dpr": 1,
+            "hidden": false
+          },
+          {
+            "client": 2,
+            "sent": 373,
+            "pending": 0,
+            "errors": [],
+            "ammo": 1627,
+            "startAmmo": 2000,
+            "draw": {
+              "count": 1748,
+              "p50": 5.799999997019768,
+              "p95": 9.400000005960464,
+              "p99": 12,
+              "max": 28.900000005960464,
+              "over50": 0
+            },
+            "rtt": {
+              "count": 373,
+              "p50": 11.200000002980232,
+              "p95": 26.899999991059303,
+              "p99": 105.19999998807907,
+              "max": 110.90000000596046,
+              "over50": 12
+            },
+            "raf": {
+              "count": 1752,
+              "p50": 30.30000000000291,
+              "p95": 66.59999999999127,
+              "p99": 90.89999999999418,
+              "max": 115.10000000000582,
+              "over50": 151
+            },
+            "longTask": {
+              "count": 2,
+              "p50": 58,
+              "p95": 58,
+              "p99": 58,
+              "max": 58,
+              "over50": 1
+            },
+            "corrections": 0,
+            "diagnostics": 0,
+            "buildings": 5675,
+            "floors": 4000,
+            "width": 1920,
+            "height": 1080,
+            "dpr": 1,
+            "hidden": false
+          }
+        ],
+        "protocolPeers": []
+      },
+      {
+        "name": "two-native-plus-six-protocol-walk-and-fire",
+        "seconds": 30.584,
+        "clients": [
+          {
+            "client": 1,
+            "sent": 174,
+            "pending": 0,
+            "errors": [
+              "射击请求过快",
+              "射击请求过快"
+            ],
+            "ammo": 1454,
+            "startAmmo": 1626,
+            "draw": {
+              "count": 612,
+              "p50": 6.300000011920929,
+              "p95": 10.5,
+              "p99": 13.100000008940697,
+              "max": 16.200000002980232,
+              "over50": 0
+            },
+            "rtt": {
+              "count": 174,
+              "p50": 35.29999999701977,
+              "p95": 147.20000000298023,
+              "p99": 201,
+              "max": 245.5,
+              "over50": 61
+            },
+            "raf": {
+              "count": 613,
+              "p50": 42.60000000000582,
+              "p95": 84.89999999999418,
+              "p99": 109.09999999999127,
+              "max": 121.30000000000291,
+              "over50": 212
+            },
+            "longTask": {
+              "count": 0,
+              "p50": 0,
+              "p95": 0,
+              "p99": 0,
+              "max": 0,
+              "over50": 0
+            },
+            "corrections": 0,
+            "diagnostics": 0,
+            "buildings": 5675,
+            "floors": 4000,
+            "width": 1920,
+            "height": 1080,
+            "dpr": 1,
+            "hidden": false
+          },
+          {
+            "client": 2,
+            "sent": 176,
+            "pending": 0,
+            "errors": [
+              "射击请求过快",
+              "射击请求过快",
+              "射击请求过快"
+            ],
+            "ammo": 1454,
+            "startAmmo": 1627,
+            "draw": {
+              "count": 612,
+              "p50": 6.699999988079071,
+              "p95": 10.899999991059303,
+              "p99": 12.600000008940697,
+              "max": 14,
+              "over50": 0
+            },
+            "rtt": {
+              "count": 176,
+              "p50": 47.099999994039536,
+              "p95": 181.09999999403954,
+              "p99": 260.09999999403954,
+              "max": 285.70000000298023,
+              "over50": 82
+            },
+            "raf": {
+              "count": 613,
+              "p50": 42.70000000001164,
+              "p95": 79,
+              "p99": 97.10000000000582,
+              "max": 115.19999999999709,
+              "over50": 208
+            },
+            "longTask": {
+              "count": 0,
+              "p50": 0,
+              "p95": 0,
+              "p99": 0,
+              "max": 0,
+              "over50": 0
+            },
+            "corrections": 0,
+            "diagnostics": 0,
+            "buildings": 5675,
+            "floors": 4000,
+            "width": 1920,
+            "height": 1080,
+            "dpr": 1,
+            "hidden": false
+          }
+        ],
+        "protocolPeers": [
+          {
+            "sent": 149,
+            "acked": 149,
+            "pending": false,
+            "rtt": {
+              "count": 149,
+              "p50": 11.994399999995949,
+              "p95": 60.351699999999255,
+              "p99": 75.98430000001099,
+              "max": 80.69120000000112,
+              "over50": 12
+            },
+            "errors": [],
+            "connected": true
+          },
+          {
+            "sent": 149,
+            "acked": 148,
+            "pending": true,
+            "rtt": {
+              "count": 148,
+              "p50": 21.649099999995087,
+              "p95": 70.10940000000119,
+              "p99": 92.22980000000098,
+              "max": 94.13390000000072,
+              "over50": 18
+            },
+            "errors": [],
+            "connected": true
+          },
+          {
+            "sent": 149,
+            "acked": 148,
+            "pending": true,
+            "rtt": {
+              "count": 148,
+              "p50": 30.75590000000375,
+              "p95": 80.05529999999271,
+              "p99": 93.53830000000016,
+              "max": 100.2612999999983,
+              "over50": 29
+            },
+            "errors": [],
+            "connected": true
+          },
+          {
+            "sent": 149,
+            "acked": 148,
+            "pending": true,
+            "rtt": {
+              "count": 148,
+              "p50": 40.97239999999874,
+              "p95": 88.73059999999532,
+              "p99": 111.56360000000859,
+              "max": 124.04309999999532,
+              "over50": 50
+            },
+            "errors": [],
+            "connected": true
+          },
+          {
+            "sent": 149,
+            "acked": 148,
+            "pending": true,
+            "rtt": {
+              "count": 148,
+              "p50": 50.45910000000731,
+              "p95": 97.789300000004,
+              "p99": 118.48510000000533,
+              "max": 124.15879999999015,
+              "over50": 75
+            },
+            "errors": [],
+            "connected": true
+          },
+          {
+            "sent": 149,
+            "acked": 148,
+            "pending": true,
+            "rtt": {
+              "count": 148,
+              "p50": 59.58150000000023,
+              "p95": 118.9204999999929,
+              "p99": 141.85800000000745,
+              "max": 151.9201999999932,
+              "over50": 120
+            },
+            "errors": [],
+            "connected": true
+          }
+        ]
+      }
+    ],
+    "audit": {
+      "integrity": "ok",
+      "version": 3,
+      "pendingCommitRows": 2,
+      "buildings": 5675,
+      "defensiveAmmo": 540,
+      "checks": {
+        "buildings": true,
+        "camps": true,
+        "storage": true,
+        "ammo": true,
+        "production": true,
+        "nodes": true,
+        "drops": true,
+        "monsters": true
+      },
+      "players": [
+        {
+          "actor": 1,
+          "ammo": 1454,
+          "spent": 546,
+          "hp": 100,
+          "satiety": 59.57500000000016
+        },
+        {
+          "actor": 2,
+          "ammo": 1454,
+          "spent": 546,
+          "hp": 100,
+          "satiety": 62.3872500000001
+        },
+        {
+          "actor": 3,
+          "ammo": 1851,
+          "spent": 149,
+          "hp": 100,
+          "satiety": 92.06975000000003
+        },
+        {
+          "actor": 4,
+          "ammo": 1851,
+          "spent": 149,
+          "hp": 100,
+          "satiety": 92.12775000000002
+        },
+        {
+          "actor": 5,
+          "ammo": 1851,
+          "spent": 149,
+          "hp": 100,
+          "satiety": 92.13900000000004
+        },
+        {
+          "actor": 6,
+          "ammo": 1851,
+          "spent": 149,
+          "hp": 100,
+          "satiety": 92.16049999999998
+        },
+        {
+          "actor": 7,
+          "ammo": 1852,
+          "spent": 148,
+          "hp": 100,
+          "satiety": 92.41275
+        },
+        {
+          "actor": 8,
+          "ammo": 1852,
+          "spent": 148,
+          "hp": 100,
+          "satiety": 92.42400000000002
+        }
+      ]
+    }
+  },
+  "formalConclusion": "Crowded zero-error gate STILL FAILS, and this sample is worse: five native refusals versus one in a14; native reply P95 about147/181ms versus62/99ms. Two-browser replies also slower30.5/26.9ms versus16.0/16.4ms. Draw P95 about10.5/10.9ms but RAF max121/115ms. No general latency/FPS improvement is inferred from the persistence-cost reduction; no rerun used to discard this failure.",
+  "protocolCutoff": "Six peers sent149 each; one acknowledged149, five acknowledged148 with one in flight at measurement cutoff. Durable audit proves four spent149 and two spent148 after socket shutdown; pending peers may commit one final shot. No claim that all peers had zero pending input.",
+  "restartFollowup": {
+    "fixture": "dense-shared-state-20261023-a13",
+    "success": true,
+    "steps": [
+      {
+        "step": "door-shared",
+        "open": false,
+        "owner": true,
+        "buddy": true
+      },
+      {
+        "step": "door-shared",
+        "open": true,
+        "owner": true,
+        "buddy": true
+      },
+      {
+        "step": "replay-receipt",
+        "client": 1,
+        "matchingReplies": 1,
+        "errors": [
+          null
+        ],
+        "latestIsReply": true
+      },
+      {
+        "step": "restart-and-replay",
+        "client": 1,
+        "ammo": 1454,
+        "duplicateSpent": 0
+      },
+      {
+        "step": "replay-receipt",
+        "client": 2,
+        "matchingReplies": 1,
+        "errors": [
+          null
+        ],
+        "latestIsReply": true
+      },
+      {
+        "step": "restart-and-replay",
+        "client": 2,
+        "ammo": 1454,
+        "duplicateSpent": 0
+      }
+    ],
+    "earlierAttempt": {
+      "fixture": "dense-shared-state-20261023-a12",
+      "success": false,
+      "completedSteps": [
+        {
+          "step": "door-shared",
+          "open": false,
+          "owner": true,
+          "buddy": true
+        },
+        {
+          "step": "door-shared",
+          "open": true,
+          "owner": true,
+          "buddy": true
+        },
+        {
+          "step": "restart-and-replay",
+          "client": 1,
+          "ammo": 1454,
+          "duplicateSpent": 0
+        }
+      ],
+      "failure": "Second replay wait timed out while checking only states.at(-1).action. No request-level trace was retained in that run, so missed observation versus absent reply remains unknown. No server error and paid balance unchanged after attempt."
+    },
+    "observationChange": "Followup checks retained receipt history for the exact replay request, records receipt count/errors and keeps original ammo assertions. Both receipts observed once without error. This does not prove why the previous wait timed out.",
+    "postAudit": "formalAfter.audit is the post-door/replay audit, including latest private journal rows."
+  },
+  "remaining": [
+    "Assess current crowded result without discarding failed samples or claiming FPS/GPU capacity from a cost microbenchmark.",
+    "Original native-player-duel-a7 post-respawn movement timeout still has no captured failing trace.",
+    "Long-session memory, seamless-world exploration, actual siege capacity and population/resource/economic balance remain unaccepted.",
+    "NPC/shared combat still uses full checkpoints; this optimization benefits private/quiet camp periods, not every workload."
+  ],
+  "dataSafety": "Only synthetic ignored fixtures, unique OS-temp and memory databases; real data/sdc.sqlite never opened. No credentials/cookies exported."
+}

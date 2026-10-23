@@ -281,7 +281,7 @@ setInterval(() => {
     }
   }
 }, 200);
-setInterval(() => { try { game.persist(); } catch (error) { console.error('[db] periodic save failed', error); } }, 5000);
+setInterval(() => { try { game.persistPeriodic(); } catch (error) { console.error('[db] periodic save failed', error); } }, 5000);
 setInterval(() => {
   if (--weatherTimer > 0) return;
   weatherTimer = WEATHER_DURATION; weatherIndex = (weatherIndex + 1) % WEATHER_SEQUENCE.length;

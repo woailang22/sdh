@@ -51,8 +51,12 @@ it('rejects failed admissions without replacing live sockets and retries a real 
   const send = (peer: typeof peers[number], type: string, payload: unknown = {}) => peer.ws.send(JSON.stringify({ type, payload }));
   const stateOf = (m: any) => m.type === 'game_state_patch' ? m.payload.state : m.type === 'game_state' ? m.payload : undefined;
   const shot = async (peer: typeof peers[number], requestId: string) => { send(peer, 'game_action', { action: 'fire', requestId }); await until(() => peer.messages.some(m => stateOf(m)?.requestId === requestId)); return peer.messages.map(stateOf).find(s => s?.requestId === requestId); };
-  const rejectSaves = () => control.exec("CREATE TRIGGER reject_session BEFORE UPDATE ON meta WHEN NEW.k='authoritative-world-v2' BEGIN SELECT RAISE(ABORT, 'qa session save failure'); END");
-  const allowSaves = () => control.exec('DROP TRIGGER reject_session');
+  const rejectSaves = () => control.exec("CREATE TRIGGER reject_session BEFORE UPDATE ON meta WHEN NEW.k='authoritative-world-v2' BEGIN SELECT RAISE(ABORT, 'qa session save failure'); END; CREATE TRIGGER reject_disconnect_insert BEFORE INSERT ON world_player_commits WHEN json_extract(NEW.data,'$.player.disconnectUntil')>0 BEGIN SELECT RAISE(ABORT, 'qa disconnect retry failure'); END; CREATE TRIGGER reject_disconnect_update BEFORE UPDATE ON world_player_commits WHEN json_extract(NEW.data,'$.player.disconnectUntil')>0 BEGIN SELECT RAISE(ABORT, 'qa disconnect retry failure'); END");
+  const allowSaves = () => control.exec('DROP TRIGGER reject_session; DROP TRIGGER reject_disconnect_insert; DROP TRIGGER reject_disconnect_update');
+  const persistedPlayer = (id: string) => {
+    const commit = db.listWorldPlayerCommits().find(row => row.id === id);
+    return commit ? JSON.parse(commit.data).player : JSON.parse(db.getMeta('authoritative-world-v2')!).players[id];
+  };
   try {
     await until(() => started);
     const a = open(owner), b = open(observer); await until(() => [a, b].every(peer => peer.messages.some(m => m.type === 'init')));
@@ -81,7 +85,11 @@ it('rejects failed admissions without replacing live sockets and retries a real 
     send(b, 'ping'); await until(() => b.messages.some(m => m.type === 'pong'));
     expect((await (await fetch(url + '/api/health')).json()).onlineCount).toBe(1);
     expect(JSON.parse(db.getMeta('authoritative-world-v2')!).players[owner.playerId].disconnectUntil).toBe(0);
-    allowSaves(); await until(() => JSON.parse(db.getMeta('authoritative-world-v2')!).players[owner.playerId].disconnectUntil === 42000, 7000);
+    await until(() => stderr.includes('[db] periodic save failed'), 7000);
+    expect(persistedPlayer(owner.playerId).disconnectUntil).toBe(0);
+    child.send({ clock: 43000 }); await until(() => diagnostics.some(d => d.clock === 43000));
+    allowSaves(); await until(() => persistedPlayer(owner.playerId).disconnectUntil === 42000, 7000);
+    expect(JSON.parse(db.getMeta('authoritative-world-v2')!).players[owner.playerId].disconnectUntil).toBe(0);
     expect(diagnostics.filter(d => d.disconnected === owner.playerId)).toHaveLength(1);
     await stop();
     const restored = new GameWorld(createDb(file), rules, () => 41999), expired = new GameWorld(createDb(file), rules, () => 42000);

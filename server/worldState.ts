@@ -93,6 +93,8 @@ export class GameWorld {
   private respawns = new Map<string, number>();
   private npcTickAt: number;
   private resourceTickAt: number;
+  private periodicSharedDirty = false;
+  private pendingDisconnects = new Set<string>();
   private tickSharedChange = false;
   get sharedTickChanged() { return this.tickSharedChange; }
   constructor(private db: DbHandle, private rules: WorldRules, private now: () => number = Date.now) {
@@ -232,10 +234,26 @@ export class GameWorld {
     // Keep this physical disconnect fact on save failure; later checkpoints retry without extending it.
     p.disconnectUntil = p.mapId.startsWith('home_') || p.combatUntil > this.now() ? this.now() + 30_000 : this.now();
     this.active.set(id, p.disconnectUntil);
+    this.pendingDisconnects.add(id);
     this.persist();
   }
 
-  persist() { this.db.checkpointWorld(JSON.stringify(this.state)); }
+  persist() {
+    this.db.checkpointWorld(JSON.stringify(this.state));
+    this.periodicSharedDirty = false;
+    this.pendingDisconnects.clear();
+  }
+
+  persistPeriodic() {
+    if (this.periodicSharedDirty) { this.persist(); return; }
+    const time = this.now();
+    const ids = new Set([...this.active].filter(([, until]) => until > time).map(([id]) => id));
+    for (const id of this.pendingDisconnects) ids.add(id);
+    const rows = [...ids].map(id => ({ id, data: JSON.stringify({ player: this.state.players[id], handled: this.state.handled[id] || [] }) }));
+    if (!rows.length) return;
+    this.db.saveWorldPlayerCommits(rows);
+    this.pendingDisconnects.clear();
+  }
 
   private buildingsFor(p: { mapId: MapZoneId; x: number; y: number }): BuildingEntity[] {
     const persistent: BuildingEntity[] = [];
@@ -379,6 +397,7 @@ export class GameWorld {
       undo?.entry(this.state.monsters, def.id);
       this.state.monsters[def.id] = { id: def.id, name: def.name || '荒野异变兽', x: def.x, y: def.y, hp: def.hp ?? def.maxHp ?? 90, maxHp: def.maxHp ?? def.hp ?? 90,
         speed: def.speed ?? 1.8, damage: def.damage ?? 10, state: 'roam', animTime: 0, attackCooldown: 0, spawnX: def.spawnX ?? def.x, spawnY: def.spawnY ?? def.y, windup: 0 };
+      this.periodicSharedDirty = true;
     }
   }
   private attackMonster(p: Player, id: unknown, ranged: boolean) {
@@ -924,6 +943,7 @@ export class GameWorld {
       const fullSave = dirty || npc.simulated && changedPlayers.length > 0;
       if (fullSave) this.persist();
       else if (changedPlayers.length) this.db.saveWorldPlayerCommits(changedPlayers.map(player => ({ id: player.id, data: JSON.stringify({ player, handled: this.state.handled[player.id] || [] }) })));
+      if (npc.simulated && !fullSave) this.periodicSharedDirty = true;
       this.tickSharedChange = fullSave || npc.changed;
       return this.tickSharedChange || changedPlayers.length > 0;
     } catch (error) {
