@@ -1,0 +1,4818 @@
+{
+  "sourceCommit": "f69fa8d75d43a28803360bb232308dec034b26e6",
+  "runtimeChanged": false,
+  "success": true,
+  "cacheEvictionExercised": true,
+  "drawBudgetMet": false,
+  "noObservedSevereStall": false,
+  "overallPerformanceAccepted": false,
+  "scope": "New default empty/unarmed100HP single account, actual spawn then normal navigation to road; no grants, position, world/NPC/clock/rule edits. Virtual joystick at ordinary speed, not native manual route or earned economy.",
+  "browser": {
+    "protocolVersion": "1.3",
+    "product": "Chrome/155.0.8059.85",
+    "revision": "@0e66b94549a8bd85f03fbdf189b752d6e7b63c32",
+    "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/155.0.0.0 Safari/537.36",
+    "jsVersion": "15.5.35.25"
+  },
+  "page": {
+    "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/155.0.0.0 Safari/537.36",
+    "platform": "Win32",
+    "cores": 16,
+    "deviceMemoryGiB": 16,
+    "dpr": 1,
+    "width": 1920,
+    "height": 1080,
+    "hidden": false,
+    "bundle": [
+      "/assets/index-z_DuULg9.js"
+    ]
+  },
+  "walkingSeconds": 202.81540000000598,
+  "cache": {
+    "stats": {
+      "initial": 25,
+      "newKeys": 60,
+      "regenerated": 21,
+      "evicted": 42,
+      "maxSize": 64,
+      "seenOverflow": false,
+      "eventOverflow": false
+    },
+    "events": [
+      {
+        "start": 25422.79999999702,
+        "duration": 1.5,
+        "window": "1,0",
+        "x": 32.007399999999706,
+        "y": 6.89494000000001,
+        "removed": [],
+        "added": [
+          "world:3:-2",
+          "world:3:-1",
+          "world:3:0",
+          "world:3:1",
+          "world:3:2"
+        ],
+        "regenerated": 0,
+        "size": 30,
+        "measuring": true
+      },
+      {
+        "start": 33845.60000000894,
+        "duration": 1.199999988079071,
+        "window": "2,0",
+        "x": 64.01517999999919,
+        "y": 6.89494000000001,
+        "removed": [],
+        "added": [
+          "world:4:-2",
+          "world:4:-1",
+          "world:4:0",
+          "world:4:1",
+          "world:4:2"
+        ],
+        "regenerated": 0,
+        "size": 35,
+        "measuring": true
+      },
+      {
+        "start": 42268.60000000894,
+        "duration": 1.199999988079071,
+        "window": "3,0",
+        "x": 96.02220000000278,
+        "y": 6.89494000000001,
+        "removed": [],
+        "added": [
+          "world:5:-2",
+          "world:5:-1",
+          "world:5:0",
+          "world:5:1",
+          "world:5:2"
+        ],
+        "regenerated": 0,
+        "size": 40,
+        "measuring": true
+      },
+      {
+        "start": 50692.90000000596,
+        "duration": 1.7999999970197678,
+        "window": "4,0",
+        "x": 128.00680000000574,
+        "y": 6.89494000000001,
+        "removed": [],
+        "added": [
+          "world:6:-2",
+          "world:6:-1",
+          "world:6:0",
+          "world:6:1",
+          "world:6:2"
+        ],
+        "regenerated": 0,
+        "size": 45,
+        "measuring": true
+      },
+      {
+        "start": 62345,
+        "duration": 3.2000000029802322,
+        "window": "5,0",
+        "x": 160.0138200000009,
+        "y": 6.89494000000001,
+        "removed": [],
+        "added": [
+          "world:7:-2",
+          "world:7:-1",
+          "world:7:0",
+          "world:7:1",
+          "world:7:2"
+        ],
+        "regenerated": 0,
+        "size": 50,
+        "measuring": true
+      },
+      {
+        "start": 70783.5,
+        "duration": 2.7000000029802322,
+        "window": "6,0",
+        "x": 192.04477999999713,
+        "y": 6.89494000000001,
+        "removed": [],
+        "added": [
+          "world:8:-2",
+          "world:8:-1",
+          "world:8:0",
+          "world:8:1",
+          "world:8:2"
+        ],
+        "regenerated": 0,
+        "size": 55,
+        "measuring": true
+      },
+      {
+        "start": 79184.70000000298,
+        "duration": 1.7999999970197678,
+        "window": "7,0",
+        "x": 224.00581999999272,
+        "y": 6.89494000000001,
+        "removed": [],
+        "added": [
+          "world:9:-2",
+          "world:9:-1",
+          "world:9:0",
+          "world:9:1",
+          "world:9:2"
+        ],
+        "regenerated": 0,
+        "size": 60,
+        "measuring": true
+      },
+      {
+        "start": 87609.29999999702,
+        "duration": 1.800000011920929,
+        "window": "8,0",
+        "x": 256.01359999998755,
+        "y": 6.89494000000001,
+        "removed": [
+          "world:-2:-2"
+        ],
+        "added": [
+          "world:10:-2",
+          "world:10:-1",
+          "world:10:0",
+          "world:10:1",
+          "world:10:2"
+        ],
+        "regenerated": 0,
+        "size": 64,
+        "measuring": true
+      },
+      {
+        "start": 99219.70000000298,
+        "duration": 0.9000000059604645,
+        "window": "9,0",
+        "x": 288.0202399999936,
+        "y": 6.89494000000001,
+        "removed": [
+          "world:-2:-1",
+          "world:-2:0",
+          "world:-2:1",
+          "world:-2:2",
+          "world:-1:-2"
+        ],
+        "added": [
+          "world:11:-2",
+          "world:11:-1",
+          "world:11:0",
+          "world:11:1",
+          "world:11:2"
+        ],
+        "regenerated": 0,
+        "size": 64,
+        "measuring": true
+      },
+      {
+        "start": 107635.10000000894,
+        "duration": 2.2999999970197678,
+        "window": "10,0",
+        "x": 320.0048400000012,
+        "y": 6.89494000000001,
+        "removed": [
+          "world:-1:-1",
+          "world:-1:0",
+          "world:-1:1",
+          "world:-1:2",
+          "world:0:-2"
+        ],
+        "added": [
+          "world:12:-2",
+          "world:12:-1",
+          "world:12:0",
+          "world:12:1",
+          "world:12:2"
+        ],
+        "regenerated": 0,
+        "size": 64,
+        "measuring": true
+      },
+      {
+        "start": 116060,
+        "duration": 5.100000008940697,
+        "window": "11,0",
+        "x": 352.0122400000088,
+        "y": 6.89494000000001,
+        "removed": [
+          "world:0:-1",
+          "world:0:0",
+          "world:0:1",
+          "world:0:2",
+          "world:1:-2"
+        ],
+        "added": [
+          "world:13:-2",
+          "world:13:-1",
+          "world:13:0",
+          "world:13:1",
+          "world:13:2"
+        ],
+        "regenerated": 0,
+        "size": 64,
+        "measuring": true
+      },
+      {
+        "start": 124481.5,
+        "duration": 3.4000000059604645,
+        "window": "12,0",
+        "x": 384.02002000001545,
+        "y": 6.89494000000001,
+        "removed": [
+          "world:1:-1",
+          "world:1:0",
+          "world:1:1",
+          "world:1:2",
+          "world:2:-2"
+        ],
+        "added": [
+          "world:14:-2",
+          "world:14:-1",
+          "world:14:0",
+          "world:14:1",
+          "world:14:2"
+        ],
+        "regenerated": 0,
+        "size": 64,
+        "measuring": true
+      },
+      {
+        "start": 129092.20000000298,
+        "duration": 0.20000000298023224,
+        "window": "11,0",
+        "x": 383.99646000001536,
+        "y": 6.89494000000001,
+        "removed": [],
+        "added": [],
+        "regenerated": 0,
+        "size": 64,
+        "measuring": true
+      },
+      {
+        "start": 137721.29999999702,
+        "duration": 0.10000000894069672,
+        "window": "10,0",
+        "x": 351.9883000000086,
+        "y": 6.89494000000001,
+        "removed": [],
+        "added": [],
+        "regenerated": 0,
+        "size": 64,
+        "measuring": true
+      },
+      {
+        "start": 146144.29999999702,
+        "duration": 0.20000000298023224,
+        "window": "9,0",
+        "x": 319.9809000000008,
+        "y": 6.89494000000001,
+        "removed": [],
+        "added": [],
+        "regenerated": 0,
+        "size": 64,
+        "measuring": true
+      },
+      {
+        "start": 154574.90000000596,
+        "duration": 0.09999999403953552,
+        "window": "8,0",
+        "x": 287.9966799999927,
+        "y": 6.89494000000001,
+        "removed": [],
+        "added": [],
+        "regenerated": 0,
+        "size": 64,
+        "measuring": true
+      },
+      {
+        "start": 165535.79999999702,
+        "duration": 0.10000000894069672,
+        "window": "7,0",
+        "x": 255.98889999998644,
+        "y": 6.89494000000001,
+        "removed": [],
+        "added": [],
+        "regenerated": 0,
+        "size": 64,
+        "measuring": true
+      },
+      {
+        "start": 173958.20000000298,
+        "duration": 0.20000000298023224,
+        "window": "6,0",
+        "x": 223.98111999999065,
+        "y": 6.89494000000001,
+        "removed": [],
+        "added": [],
+        "regenerated": 0,
+        "size": 64,
+        "measuring": true
+      },
+      {
+        "start": 182375.40000000596,
+        "duration": 0.09999999403953552,
+        "window": "5,0",
+        "x": 191.99651999999426,
+        "y": 6.89494000000001,
+        "removed": [],
+        "added": [],
+        "regenerated": 0,
+        "size": 64,
+        "measuring": true
+      },
+      {
+        "start": 190803.60000000894,
+        "duration": 0.7999999970197678,
+        "window": "4,0",
+        "x": 159.98949999999815,
+        "y": 6.89494000000001,
+        "removed": [
+          "world:14:-2"
+        ],
+        "added": [
+          "world:2:-2"
+        ],
+        "regenerated": 1,
+        "size": 64,
+        "measuring": true
+      },
+      {
+        "start": 202154.70000000298,
+        "duration": 1.2999999970197678,
+        "window": "3,0",
+        "x": 127.9821000000017,
+        "y": 6.89494000000001,
+        "removed": [
+          "world:14:-1",
+          "world:14:0",
+          "world:14:1",
+          "world:14:2",
+          "world:13:-2"
+        ],
+        "added": [
+          "world:1:-2",
+          "world:1:-1",
+          "world:1:0",
+          "world:1:1",
+          "world:1:2"
+        ],
+        "regenerated": 5,
+        "size": 64,
+        "measuring": true
+      },
+      {
+        "start": 210572.10000000894,
+        "duration": 1.5999999940395355,
+        "window": "2,0",
+        "x": 95.99749999999835,
+        "y": 6.89494000000001,
+        "removed": [
+          "world:13:-1",
+          "world:13:0",
+          "world:13:1",
+          "world:13:2",
+          "world:12:-2"
+        ],
+        "added": [
+          "world:0:-2",
+          "world:0:-1",
+          "world:0:0",
+          "world:0:1",
+          "world:0:2"
+        ],
+        "regenerated": 5,
+        "size": 64,
+        "measuring": true
+      },
+      {
+        "start": 218995.10000000894,
+        "duration": 1.3999999910593033,
+        "window": "1,0",
+        "x": 63.990099999995294,
+        "y": 6.89494000000001,
+        "removed": [
+          "world:12:-1",
+          "world:12:0",
+          "world:12:1",
+          "world:12:2",
+          "world:11:-2"
+        ],
+        "added": [
+          "world:-1:-2",
+          "world:-1:-1",
+          "world:-1:0",
+          "world:-1:1",
+          "world:-1:2"
+        ],
+        "regenerated": 5,
+        "size": 64,
+        "measuring": true
+      },
+      {
+        "start": 227420.70000000298,
+        "duration": 1.2999999970197678,
+        "window": "0,0",
+        "x": 31.982699999995866,
+        "y": 6.89494000000001,
+        "removed": [
+          "world:11:-1",
+          "world:11:0",
+          "world:11:1",
+          "world:11:2",
+          "world:10:-2"
+        ],
+        "added": [
+          "world:-2:-2",
+          "world:-2:-1",
+          "world:-2:0",
+          "world:-2:1",
+          "world:-2:2"
+        ],
+        "regenerated": 5,
+        "size": 64,
+        "measuring": true
+      }
+    ],
+    "seen": [
+      "world:-2:-2",
+      "world:-2:-1",
+      "world:-2:0",
+      "world:-2:1",
+      "world:-2:2",
+      "world:-1:-2",
+      "world:-1:-1",
+      "world:-1:0",
+      "world:-1:1",
+      "world:-1:2",
+      "world:0:-2",
+      "world:0:-1",
+      "world:0:0",
+      "world:0:1",
+      "world:0:2",
+      "world:1:-2",
+      "world:1:-1",
+      "world:1:0",
+      "world:1:1",
+      "world:1:2",
+      "world:2:-2",
+      "world:2:-1",
+      "world:2:0",
+      "world:2:1",
+      "world:2:2",
+      "world:3:-2",
+      "world:3:-1",
+      "world:3:0",
+      "world:3:1",
+      "world:3:2",
+      "world:4:-2",
+      "world:4:-1",
+      "world:4:0",
+      "world:4:1",
+      "world:4:2",
+      "world:5:-2",
+      "world:5:-1",
+      "world:5:0",
+      "world:5:1",
+      "world:5:2",
+      "world:6:-2",
+      "world:6:-1",
+      "world:6:0",
+      "world:6:1",
+      "world:6:2",
+      "world:7:-2",
+      "world:7:-1",
+      "world:7:0",
+      "world:7:1",
+      "world:7:2",
+      "world:8:-2",
+      "world:8:-1",
+      "world:8:0",
+      "world:8:1",
+      "world:8:2",
+      "world:9:-2",
+      "world:9:-1",
+      "world:9:0",
+      "world:9:1",
+      "world:9:2",
+      "world:10:-2",
+      "world:10:-1",
+      "world:10:0",
+      "world:10:1",
+      "world:10:2",
+      "world:11:-2",
+      "world:11:-1",
+      "world:11:0",
+      "world:11:1",
+      "world:11:2",
+      "world:12:-2",
+      "world:12:-1",
+      "world:12:0",
+      "world:12:1",
+      "world:12:2",
+      "world:13:-2",
+      "world:13:-1",
+      "world:13:0",
+      "world:13:1",
+      "world:13:2",
+      "world:14:-2",
+      "world:14:-1",
+      "world:14:0",
+      "world:14:1",
+      "world:14:2"
+    ]
+  },
+  "legs": [
+    {
+      "index": 1,
+      "target": 129,
+      "direction": 1,
+      "seconds": 34.07609999999404,
+      "pos": {
+        "x": 129.48044000000553,
+        "y": 6.89494000000001
+      },
+      "serverPos": {
+        "x": 128.88194000000559,
+        "y": 6.89494000000001
+      },
+      "draw": {
+        "count": 2035,
+        "p50": 1.1000000089406967,
+        "p95": 2.5,
+        "p99": 4.9000000059604645,
+        "max": 14.400000005960464,
+        "over50": 0
+      },
+      "gameDrawStart": {
+        "count": 2034,
+        "p50": 18,
+        "p95": 20.099999994039536,
+        "p99": 29.200000002980232,
+        "max": 50.1000000089407,
+        "over50": 1
+      },
+      "update": {
+        "count": 5364,
+        "p50": 0.20000000298023224,
+        "p95": 0.3999999910593033,
+        "p99": 0.5,
+        "max": 2.5999999940395355,
+        "over50": 0
+      },
+      "networkCallback": {
+        "count": 45,
+        "p50": 0.20000000298023224,
+        "p95": 0.7999999970197678,
+        "p99": 1.2000000029802322,
+        "max": 1.2000000029802322,
+        "over50": 0
+      },
+      "independentRaf": {
+        "count": 5363,
+        "p50": 6.099999999998545,
+        "p95": 6.200000000004366,
+        "p99": 12.30000000000291,
+        "max": 42.599999999998545,
+        "over50": 0
+      },
+      "longTask": {
+        "count": 0,
+        "p50": 0,
+        "p95": 0,
+        "p99": 0,
+        "max": 0,
+        "over50": 0
+      },
+      "slowFrames": [
+        {
+          "start": 17722.40000000596,
+          "interval": 50.1000000089407,
+          "x": 2.76411999999999,
+          "y": 6.89494000000001,
+          "weather": "clear",
+          "heap": 7506418,
+          "stages": {
+            "renderMapGround": 0.20000000298023224,
+            "drawHouse": 0.9000000059604645,
+            "renderParticles": 0.19999998807907104,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 2.5
+        },
+        {
+          "start": 18188.40000000596,
+          "interval": 37.20000000298023,
+          "x": 4.5368199999999925,
+          "y": 6.89494000000001,
+          "weather": "clear",
+          "heap": 8812090,
+          "stages": {
+            "renderMapGround": 6.100000008940697,
+            "drawHouse": 0.4000000059604645,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0.10000000894069672,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 7.200000002980232
+        },
+        {
+          "start": 19211.60000000894,
+          "interval": 24.400000005960464,
+          "x": 8.428019999999998,
+          "y": 6.89494000000001,
+          "weather": "clear",
+          "heap": 6650867,
+          "stages": {
+            "renderMapGroundUncached": 9.200000002980232,
+            "renderGroundDetails": 0.10000000894069672,
+            "renderMapGround": 10,
+            "drawHouse": 0.4000000059604645,
+            "renderParticles": 0.10000000894069672,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 11
+        },
+        {
+          "start": 20303.5,
+          "interval": 30.200000002980232,
+          "x": 12.572680000000044,
+          "y": 6.89494000000001,
+          "weather": "clear",
+          "heap": 9177080,
+          "stages": {
+            "renderMapGround": 0,
+            "drawHouse": 0.5999999940395355,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 1.1000000089406967
+        },
+        {
+          "start": 21368.5,
+          "interval": 30.099999994039536,
+          "x": 16.602200000000067,
+          "y": 6.89494000000001,
+          "weather": "clear",
+          "heap": 12130253,
+          "stages": {
+            "renderMapGround": 0,
+            "drawHouse": 0.20000000298023224,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0.09999999403953552,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 1
+        },
+        {
+          "start": 29875.20000000298,
+          "interval": 14.799999997019768,
+          "x": 48.93259999999945,
+          "y": 6.89494000000001,
+          "weather": "clear",
+          "heap": 7528799,
+          "stages": {
+            "renderMapGroundUncached": 5.0999999940395355,
+            "renderGroundDetails": 0.10000000894069672,
+            "renderMapGround": 6.4000000059604645,
+            "drawHouse": 0.6000000238418579,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0.09999999403953552
+          },
+          "duration": 8.299999997019768
+        },
+        {
+          "start": 29929.60000000894,
+          "interval": 37.80000001192093,
+          "x": 49.140079999999436,
+          "y": 6.89494000000001,
+          "weather": "clear",
+          "heap": 9493671,
+          "stages": {
+            "renderMapGround": 0.09999999403953552,
+            "drawHouse": 1.2999999672174454,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0.10000000894069672,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 3.2999999970197678
+        },
+        {
+          "start": 30971.40000000596,
+          "interval": 34.20000000298023,
+          "x": 53.100059999999374,
+          "y": 6.89494000000001,
+          "weather": "clear",
+          "heap": 11824308,
+          "stages": {
+            "renderMapGround": 0.09999999403953552,
+            "drawHouse": 0.7999999970197678,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0.09999999403953552
+          },
+          "duration": 1.7999999970197678
+        },
+        {
+          "start": 32034.20000000298,
+          "interval": 30.5,
+          "x": 57.129579999999315,
+          "y": 6.89494000000001,
+          "weather": "clear",
+          "heap": 8619047,
+          "stages": {
+            "renderMapGround": 0.10000000894069672,
+            "drawHouse": 0.6000000089406967,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 1.5
+        },
+        {
+          "start": 34167.79999999702,
+          "interval": 31.19999998807907,
+          "x": 65.2585399999993,
+          "y": 6.89494000000001,
+          "weather": "clear",
+          "heap": 12874740,
+          "stages": {
+            "renderMapGround": 0,
+            "drawHouse": 0.8999999910593033,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 1.2000000029802322
+        },
+        {
+          "start": 37367.29999999702,
+          "interval": 31.19999998807907,
+          "x": 77.41702000000068,
+          "y": 6.89494000000001,
+          "weather": "clear",
+          "heap": 19643105,
+          "stages": {
+            "renderMapGround": 0.10000000894069672,
+            "drawHouse": 0.4999999850988388,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 1.1000000089406967
+        },
+        {
+          "start": 39507,
+          "interval": 35.5,
+          "x": 85.54522000000159,
+          "y": 6.89494000000001,
+          "weather": "clear",
+          "heap": 7135888,
+          "stages": {
+            "renderMapGround": 0.09999999403953552,
+            "drawHouse": 0.29999999701976776,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 1.4000000059604645
+        },
+        {
+          "start": 43756.20000000298,
+          "interval": 20.200000002980232,
+          "x": 101.68724000000346,
+          "y": 6.89494000000001,
+          "weather": "clear",
+          "heap": 16773169,
+          "stages": {
+            "renderMapGroundUncached": 9,
+            "renderGroundDetails": 0,
+            "renderMapGround": 13.400000005960464,
+            "drawHouse": 0.10000000894069672,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0.10000000894069672
+          },
+          "duration": 14.400000005960464
+        },
+        {
+          "start": 49097.79999999702,
+          "interval": 40.8999999910593,
+          "x": 121.9739200000055,
+          "y": 6.89494000000001,
+          "weather": "clear",
+          "heap": 13256149,
+          "stages": {
+            "renderMapGround": 0.19999998807907104,
+            "drawHouse": 0.7000000029802322,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 2.9000000059604645
+        },
+        {
+          "start": 49339.20000000298,
+          "interval": 15.099999994039536,
+          "x": 122.89504000000557,
+          "y": 6.89494000000001,
+          "weather": "clear",
+          "heap": 20104501,
+          "stages": {
+            "renderMapGround": 0.19999998807907104,
+            "drawHouse": 3.6000000089406967,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0.09999999403953552,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 8.299999997019768
+        },
+        {
+          "start": 49702.20000000298,
+          "interval": 32.79999999701977,
+          "x": 124.27748000000562,
+          "y": 6.89494000000001,
+          "weather": "clear",
+          "heap": 15338385,
+          "stages": {
+            "renderMapGround": 0.20000000298023224,
+            "drawHouse": 4.799999982118607,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0.10000000894069672,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 7.200000002980232
+        },
+        {
+          "start": 49837.90000000596,
+          "interval": 30.299999997019768,
+          "x": 124.78326000000564,
+          "y": 6.89494000000001,
+          "weather": "clear",
+          "heap": 18438797,
+          "stages": {
+            "renderMapGround": 0.10000000894069672,
+            "drawHouse": 3.500000014901161,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0.09999999403953552,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 5.200000002980232
+        },
+        {
+          "start": 50093.79999999702,
+          "interval": 16.099999994039536,
+          "x": 125.77392000000562,
+          "y": 6.89494000000001,
+          "weather": "clear",
+          "heap": 6959428,
+          "stages": {
+            "renderMapGroundUncached": 5.5,
+            "renderGroundDetails": 0.10000000894069672,
+            "renderMapGround": 6,
+            "drawHouse": 0.8999999761581421,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 8.400000005960464
+        },
+        {
+          "start": 50168.70000000298,
+          "interval": 38.5,
+          "x": 126.05018000000562,
+          "y": 6.89494000000001,
+          "weather": "clear",
+          "heap": 8578036,
+          "stages": {
+            "renderMapGround": 0.30000001192092896,
+            "drawHouse": 0.800000011920929,
+            "renderParticles": 0.10000000894069672,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 2.9000000059604645
+        },
+        {
+          "start": 50252.79999999702,
+          "interval": 32.3999999910593,
+          "x": 126.3720400000056,
+          "y": 6.89494000000001,
+          "weather": "clear",
+          "heap": 10861394,
+          "stages": {
+            "renderMapGround": 0,
+            "drawHouse": 0.4999999850988388,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 1.800000011920929
+        }
+      ],
+      "slowUpdates": [],
+      "slowNetwork": [],
+      "corrections": 0
+    },
+    {
+      "index": 2,
+      "target": 257,
+      "direction": 1,
+      "seconds": 33.64670000000298,
+      "pos": {
+        "x": 257.37171999998793,
+        "y": 6.89494000000001
+      },
+      "serverPos": {
+        "x": 256.95751999998777,
+        "y": 6.89494000000001
+      },
+      "draw": {
+        "count": 1989,
+        "p50": 1.7000000029802322,
+        "p95": 3.5,
+        "p99": 7.5999999940395355,
+        "max": 50.900000005960464,
+        "over50": 1
+      },
+      "gameDrawStart": {
+        "count": 1988,
+        "p50": 17.5,
+        "p95": 24,
+        "p99": 35.20000000298023,
+        "max": 67.3999999910593,
+        "over50": 3
+      },
+      "update": {
+        "count": 5087,
+        "p50": 0.20000000298023224,
+        "p95": 0.5,
+        "p99": 0.7999999970197678,
+        "max": 18.799999997019768,
+        "over50": 0
+      },
+      "networkCallback": {
+        "count": 135,
+        "p50": 0.3999999910593033,
+        "p95": 0.8999999910593033,
+        "p99": 1.1000000089406967,
+        "max": 1.4000000059604645,
+        "over50": 0
+      },
+      "independentRaf": {
+        "count": 5086,
+        "p50": 6.099999999991269,
+        "p95": 12.099999999991269,
+        "p99": 18.200000000004366,
+        "max": 67.20000000001164,
+        "over50": 2
+      },
+      "longTask": {
+        "count": 1,
+        "p50": 53,
+        "p95": 53,
+        "p99": 53,
+        "max": 53,
+        "over50": 1
+      },
+      "slowFrames": [
+        {
+          "start": 54814,
+          "interval": 23.599999994039536,
+          "x": 131.39184000000526,
+          "y": 6.89494000000001,
+          "weather": "clear",
+          "heap": 18677249,
+          "stages": {
+            "renderMapGround": 0,
+            "drawHouse": 0.5999999940395355,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0.10000000894069672,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 18.900000005960464
+        },
+        {
+          "start": 54869.60000000894,
+          "interval": 32.1000000089407,
+          "x": 131.62174000000527,
+          "y": 6.89494000000001,
+          "weather": "clear",
+          "heap": 20166101,
+          "stages": {
+            "renderMapGround": 0,
+            "drawHouse": 0.699999988079071,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 1.5999999940395355
+        },
+        {
+          "start": 55462.90000000596,
+          "interval": 23.100000008940697,
+          "x": 133.8789400000049,
+          "y": 6.89494000000001,
+          "weather": "clear",
+          "heap": 13537357,
+          "stages": {
+            "renderMapGroundUncached": 33.79999999701977,
+            "renderGroundDetails": 0.09999999403953552,
+            "renderMapGround": 34.400000005960464,
+            "drawHouse": 0.7999999970197678,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 37.099999994039536
+        },
+        {
+          "start": 55501.29999999702,
+          "interval": 38.3999999910593,
+          "x": 134.01688000000487,
+          "y": 6.89494000000001,
+          "weather": "clear",
+          "heap": 14798281,
+          "stages": {
+            "renderMapGround": 0.10000000894069672,
+            "drawHouse": 0.5,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 1.5
+        },
+        {
+          "start": 55537.90000000596,
+          "interval": 31.799999997019768,
+          "x": 134.15520000000487,
+          "y": 6.89494000000001,
+          "weather": "clear",
+          "heap": 14798281,
+          "stages": {
+            "renderMapGround": 0.20000000298023224,
+            "drawHouse": 0.7999999821186066,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 2.2999999970197678
+        },
+        {
+          "start": 56567.5,
+          "interval": 43.3999999910593,
+          "x": 138.04716000000423,
+          "y": 6.89494000000001,
+          "weather": "clear",
+          "heap": 10969340,
+          "stages": {
+            "renderMapGround": 0,
+            "drawHouse": 0.5000000149011612,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0.09999999403953552
+          },
+          "duration": 1.2999999970197678
+        },
+        {
+          "start": 57486.5,
+          "interval": 9.200000002980232,
+          "x": 141.56938000000366,
+          "y": 6.89494000000001,
+          "weather": "clear",
+          "heap": 10442057,
+          "stages": {
+            "renderMapGround": 0,
+            "drawHouse": 5.9000000059604645,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0.09999999403953552,
+            "renderWeather": 0.30000001192092896,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 11.700000002980232
+        },
+        {
+          "start": 57589.20000000298,
+          "interval": 17.599999994039536,
+          "x": 141.96078000000364,
+          "y": 6.89494000000001,
+          "weather": "clear",
+          "heap": 15689013,
+          "stages": {
+            "renderMapGroundUncached": 6.300000011920929,
+            "renderGroundDetails": 0.19999998807907104,
+            "renderMapGround": 8.900000005960464,
+            "drawHouse": 1.2999999672174454,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 11.099999994039536
+        },
+        {
+          "start": 57644.90000000596,
+          "interval": 37.29999999701977,
+          "x": 142.16826000000367,
+          "y": 6.89494000000001,
+          "weather": "clear",
+          "heap": 17868829,
+          "stages": {
+            "renderMapGround": 0.09999999403953552,
+            "drawHouse": 2.199999988079071,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 4.399999991059303
+        },
+        {
+          "start": 58705.40000000596,
+          "interval": 30.400000005960464,
+          "x": 146.1981600000031,
+          "y": 6.89494000000001,
+          "weather": "clear",
+          "heap": 18853329,
+          "stages": {
+            "renderMapGround": 0.20000000298023224,
+            "drawHouse": 1,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 4.799999997019768
+        },
+        {
+          "start": 59756.5,
+          "interval": 34.5,
+          "x": 150.18208000000243,
+          "y": 6.89494000000001,
+          "weather": "clear",
+          "heap": 12871787,
+          "stages": {
+            "renderMapGround": 0.09999999403953552,
+            "drawHouse": 0.800000011920929,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 2.7000000029802322
+        },
+        {
+          "start": 61883.90000000596,
+          "interval": 30.200000002980232,
+          "x": 158.26392000000118,
+          "y": 6.89494000000001,
+          "weather": "clear",
+          "heap": 17458218,
+          "stages": {
+            "renderMapGround": 0.10000000894069672,
+            "drawHouse": 1.7000000029802322,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 3.2999999970197678
+        },
+        {
+          "start": 62022.10000000894,
+          "interval": 30.200000002980232,
+          "x": 158.74766000000116,
+          "y": 6.89494000000001,
+          "weather": "clear",
+          "heap": 9122346,
+          "stages": {
+            "renderMapGround": 0,
+            "drawHouse": 1.0999999940395355,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 2.2999999970197678
+        },
+        {
+          "start": 62921.5,
+          "interval": 16,
+          "x": 162.22466000000054,
+          "y": 6.89494000000001,
+          "weather": "clear",
+          "heap": 18088555,
+          "stages": {
+            "renderMapGroundUncached": 3.800000011920929,
+            "renderGroundDetails": 0.29999999701976776,
+            "renderMapGround": 6,
+            "drawHouse": 4.900000020861626,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 11.799999997019768
+        },
+        {
+          "start": 63351.20000000298,
+          "interval": 30.299999997019768,
+          "x": 163.8138200000004,
+          "y": 6.89494000000001,
+          "weather": "clear",
+          "heap": 6639502,
+          "stages": {
+            "renderMapGround": 0.20000000298023224,
+            "drawHouse": 1.7000000029802322,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0.09999999403953552
+          },
+          "duration": 3.0999999940395355
+        },
+        {
+          "start": 64105.40000000596,
+          "interval": 30.700000002980232,
+          "x": 166.66914000000006,
+          "y": 6.89494000000001,
+          "weather": "clear",
+          "heap": 20413754,
+          "stages": {
+            "renderMapGround": 0.3999999910593033,
+            "drawHouse": 0.3999999910593033,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 1.8999999910593033
+        },
+        {
+          "start": 64224,
+          "interval": 11.200000002980232,
+          "x": 167.17530000000002,
+          "y": 6.89494000000001,
+          "weather": "clear",
+          "heap": 10292790,
+          "stages": {
+            "renderMapGround": 0.20000000298023224,
+            "drawHouse": 0.5999999940395355,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0.10000000894069672,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 22.400000005960464
+        },
+        {
+          "start": 64770.79999999702,
+          "interval": 9.099999994039536,
+          "x": 169.24781999999985,
+          "y": 6.89494000000001,
+          "weather": "clear",
+          "heap": 15269127,
+          "stages": {
+            "renderMapGround": 0,
+            "drawHouse": 5.700000017881393,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 8.300000011920929
+        },
+        {
+          "start": 65056.5,
+          "interval": 14.099999994039536,
+          "x": 170.3300599999998,
+          "y": 6.89494000000001,
+          "weather": "clear",
+          "heap": 11734597,
+          "stages": {
+            "renderMapGroundUncached": 4.000000014901161,
+            "renderGroundDetails": 0.09999999403953552,
+            "renderMapGround": 5.5,
+            "drawHouse": 0.9999999850988388,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 8.299999997019768
+        },
+        {
+          "start": 65160,
+          "interval": 21.399999991059303,
+          "x": 170.7218399999998,
+          "y": 6.89494000000001,
+          "weather": "clear",
+          "heap": 16329847,
+          "stages": {
+            "renderMapGround": 0.10000000894069672,
+            "drawHouse": 4.599999979138374,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 10.799999997019768
+        },
+        {
+          "start": 65236,
+          "interval": 9.099999994039536,
+          "x": 171.02127999999976,
+          "y": 6.89494000000001,
+          "weather": "clear",
+          "heap": 18411455,
+          "stages": {
+            "renderMapGround": 0.4000000059604645,
+            "drawHouse": 2.500000014901161,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 8.600000008940697
+        },
+        {
+          "start": 66150.70000000298,
+          "interval": 31,
+          "x": 174.47509999999917,
+          "y": 6.89494000000001,
+          "weather": "clear",
+          "heap": 11112278,
+          "stages": {
+            "renderMapGround": 0.10000000894069672,
+            "drawHouse": 0.9000000059604645,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 2.7999999970197678
+        },
+        {
+          "start": 66523.90000000596,
+          "interval": 49.79999999701977,
+          "x": 175.856779999999,
+          "y": 6.89494000000001,
+          "weather": "clear",
+          "heap": 10614414,
+          "stages": {
+            "renderMapGround": 0.09999999403953552,
+            "drawHouse": 0.9000000059604645,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 3.2000000029802322
+        },
+        {
+          "start": 67224,
+          "interval": 37.5,
+          "x": 178.57415999999873,
+          "y": 6.89494000000001,
+          "weather": "clear",
+          "heap": 16462936,
+          "stages": {
+            "renderMapGround": 0.09999999403953552,
+            "drawHouse": 1.0000000149011612,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 2.2000000029802322
+        },
+        {
+          "start": 68542.29999999702,
+          "interval": 38.79999999701977,
+          "x": 183.50199999999793,
+          "y": 6.89494000000001,
+          "weather": "clear",
+          "heap": 22220501,
+          "stages": {
+            "renderMapGround": 0.10000000894069672,
+            "drawHouse": 3.2999999821186066,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 4.9000000059604645
+        },
+        {
+          "start": 69338.29999999702,
+          "interval": 67.3999999910593,
+          "x": 186.61229999999756,
+          "y": 6.89494000000001,
+          "weather": "clear",
+          "heap": 20377868,
+          "stages": {
+            "renderMapGroundUncached": 2.7999999970197678,
+            "renderGroundDetails": 0,
+            "renderMapGround": 3.800000011920929,
+            "drawHouse": 0.4000000059604645,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 4.9000000059604645
+        },
+        {
+          "start": 69383.29999999702,
+          "interval": 45,
+          "x": 186.77151999999754,
+          "y": 6.89494000000001,
+          "weather": "clear",
+          "heap": 20377868,
+          "stages": {
+            "renderMapGround": 0.10000000894069672,
+            "drawHouse": 0.29999999701976776,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 1.5
+        },
+        {
+          "start": 69838.40000000596,
+          "interval": 30.700000002980232,
+          "x": 188.49861999999732,
+          "y": 6.89494000000001,
+          "weather": "clear",
+          "heap": 8991944,
+          "stages": {
+            "renderMapGround": 0.10000000894069672,
+            "drawHouse": 0.9000000059604645,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 20.799999997019768
+        },
+        {
+          "start": 69931.79999999702,
+          "interval": 40.3999999910593,
+          "x": 188.86683999999727,
+          "y": 6.89494000000001,
+          "weather": "clear",
+          "heap": 7253280,
+          "stages": {
+            "renderMapGround": 0.10000000894069672,
+            "drawHouse": 0.7999999970197678,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 1.7000000029802322
+        },
+        {
+          "start": 70281,
+          "interval": 20.5,
+          "x": 190.1797399999971,
+          "y": 6.89494000000001,
+          "weather": "clear",
+          "heap": 19474254,
+          "stages": {
+            "renderMapGround": 0.30000001192092896,
+            "drawHouse": 1.699999988079071,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0.10000000894069672,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 11.600000008940697
+        },
+        {
+          "start": 70335.40000000596,
+          "interval": 31.799999997019768,
+          "x": 190.3868399999971,
+          "y": 6.89494000000001,
+          "weather": "clear",
+          "heap": 21518918,
+          "stages": {
+            "renderMapGround": 0.19999998807907104,
+            "drawHouse": 1.2000000029802322,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 4
+        },
+        {
+          "start": 70413.5,
+          "interval": 16.599999994039536,
+          "x": 190.68665999999712,
+          "y": 6.89494000000001,
+          "weather": "clear",
+          "heap": 23472238,
+          "stages": {
+            "renderMapGroundUncached": 3.5999999940395355,
+            "renderGroundDetails": 0.10000000894069672,
+            "renderMapGround": 48.599999994039536,
+            "drawHouse": 0.9000000059604645,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 50.900000005960464
+        },
+        {
+          "start": 70466.29999999702,
+          "interval": 52.79999999701977,
+          "x": 190.89299999999713,
+          "y": 6.89494000000001,
+          "weather": "clear",
+          "heap": 24693510,
+          "stages": {
+            "renderMapGround": 0.10000000894069672,
+            "drawHouse": 1,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0.09999999403953552,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 4.700000002980232
+        },
+        {
+          "start": 70527.29999999702,
+          "interval": 52.8999999910593,
+          "x": 191.1008599999971,
+          "y": 6.89494000000001,
+          "weather": "clear",
+          "heap": 26176345,
+          "stages": {
+            "renderMapGround": 0.10000000894069672,
+            "drawHouse": 1.5,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 4.9000000059604645
+        },
+        {
+          "start": 70770.70000000298,
+          "interval": 31.599999994039536,
+          "x": 192.04477999999713,
+          "y": 6.89494000000001,
+          "weather": "clear",
+          "heap": 7578639,
+          "stages": {
+            "renderMapGround": 0.09999999403953552,
+            "drawHouse": 0.9000000059604645,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 3
+        },
+        {
+          "start": 71526,
+          "interval": 36.8999999910593,
+          "x": 194.90009999999688,
+          "y": 6.89494000000001,
+          "weather": "clear",
+          "heap": 32059072,
+          "stages": {
+            "renderMapGround": 0,
+            "drawHouse": 0.30000001192092896,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 1.5
+        },
+        {
+          "start": 73083.70000000298,
+          "interval": 30.299999997019768,
+          "x": 200.81783999999604,
+          "y": 6.89494000000001,
+          "weather": "clear",
+          "heap": 23385638,
+          "stages": {
+            "renderMapGround": 0.20000000298023224,
+            "drawHouse": 0.3999999910593033,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 1.9000000059604645
+        },
+        {
+          "start": 73674.70000000298,
+          "interval": 33,
+          "x": 203.0746599999959,
+          "y": 6.89494000000001,
+          "weather": "clear",
+          "heap": 14060538,
+          "stages": {
+            "renderMapGround": 0.10000000894069672,
+            "drawHouse": 1.300000011920929,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 3.9000000059604645
+        },
+        {
+          "start": 75754.90000000596,
+          "interval": 15.900000005960464,
+          "x": 210.9957599999947,
+          "y": 6.89494000000001,
+          "weather": "clear",
+          "heap": 24627939,
+          "stages": {
+            "renderMapGroundUncached": 3,
+            "renderGroundDetails": 0,
+            "renderMapGround": 31.700000002980232,
+            "drawHouse": 0.5,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 33
+        },
+        {
+          "start": 75789.29999999702,
+          "interval": 34.3999999910593,
+          "x": 211.11089999999473,
+          "y": 6.89494000000001,
+          "weather": "clear",
+          "heap": 26562987,
+          "stages": {
+            "renderMapGround": 0,
+            "drawHouse": 0.29999999701976776,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0.10000000894069672,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 1.300000011920929
+        },
+        {
+          "start": 75825.70000000298,
+          "interval": 36.400000005960464,
+          "x": 211.24921999999472,
+          "y": 6.89494000000001,
+          "weather": "clear",
+          "heap": 26562987,
+          "stages": {
+            "renderMapGround": 0.09999999403953552,
+            "drawHouse": 1.1000000089406967,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0.09999999403953552
+          },
+          "duration": 2.5
+        },
+        {
+          "start": 76859.5,
+          "interval": 38.099999994039536,
+          "x": 215.18639999999428,
+          "y": 6.89494000000001,
+          "weather": "clear",
+          "heap": 34300263,
+          "stages": {
+            "renderMapGround": 0.09999999403953552,
+            "drawHouse": 0.800000011920929,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0.10000000894069672,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 2.1000000089406967
+        },
+        {
+          "start": 76903.90000000596,
+          "interval": 33.900000005960464,
+          "x": 215.3478999999943,
+          "y": 6.89494000000001,
+          "weather": "clear",
+          "heap": 9306631,
+          "stages": {
+            "renderMapGround": 0,
+            "drawHouse": 0.3999999910593033,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 1.5999999940395355
+        },
+        {
+          "start": 77923.60000000894,
+          "interval": 35.80000001192093,
+          "x": 219.21629999999362,
+          "y": 6.89494000000001,
+          "weather": "clear",
+          "heap": 15658885,
+          "stages": {
+            "renderMapGround": 0.20000000298023224,
+            "drawHouse": 0.7999999970197678,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0.09999999403953552,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 2.5999999940395355
+        },
+        {
+          "start": 78987.90000000596,
+          "interval": 32.79999999701977,
+          "x": 223.26937999999285,
+          "y": 6.89494000000001,
+          "weather": "clear",
+          "heap": 19171593,
+          "stages": {
+            "renderMapGround": 0,
+            "drawHouse": 0.5999999940395355,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0.10000000894069672
+          },
+          "duration": 1.2000000029802322
+        },
+        {
+          "start": 80059.10000000894,
+          "interval": 38.20000000298023,
+          "x": 227.34487999999214,
+          "y": 6.89494000000001,
+          "weather": "clear",
+          "heap": 32661552,
+          "stages": {
+            "renderMapGround": 0.09999999403953552,
+            "drawHouse": 0.7999999672174454,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 2.699999988079071
+        },
+        {
+          "start": 80687.70000000298,
+          "interval": 18.200000002980232,
+          "x": 229.73963999999174,
+          "y": 6.89494000000001,
+          "weather": "clear",
+          "heap": 20165204,
+          "stages": {
+            "renderMapGround": 0.09999999403953552,
+            "drawHouse": 0.800000011920929,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 16.299999997019768
+        },
+        {
+          "start": 82199.10000000894,
+          "interval": 44.30000001192093,
+          "x": 235.47307999999094,
+          "y": 6.89494000000001,
+          "weather": "clear",
+          "heap": 20680826,
+          "stages": {
+            "renderMapGround": 0.19999998807907104,
+            "drawHouse": 0.9999999850988388,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0.10000000894069672
+          },
+          "duration": 2.5
+        },
+        {
+          "start": 83223.20000000298,
+          "interval": 20.400000005960464,
+          "x": 239.36503999999022,
+          "y": 6.89494000000001,
+          "weather": "clear",
+          "heap": 31989784,
+          "stages": {
+            "renderMapGroundUncached": 3.7999999970197678,
+            "renderGroundDetails": 0.10000000894069672,
+            "renderMapGround": 5.5,
+            "drawHouse": 0.7999999970197678,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 8.099999994039536
+        },
+        {
+          "start": 83274.40000000596,
+          "interval": 35.29999999701977,
+          "x": 239.5493399999902,
+          "y": 6.89494000000001,
+          "weather": "clear",
+          "heap": 7361204,
+          "stages": {
+            "renderMapGround": 0.10000000894069672,
+            "drawHouse": 0.699999988079071,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 1.7999999970197678
+        },
+        {
+          "start": 84319.70000000298,
+          "interval": 32.79999999701977,
+          "x": 243.53287999998955,
+          "y": 6.89494000000001,
+          "weather": "clear",
+          "heap": 11879838,
+          "stages": {
+            "renderMapGround": 0.09999999403953552,
+            "drawHouse": 0.4999999850988388,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 1.5999999940395355
+        },
+        {
+          "start": 85394.70000000298,
+          "interval": 40.5,
+          "x": 247.60875999998896,
+          "y": 6.89494000000001,
+          "weather": "clear",
+          "heap": 9263099,
+          "stages": {
+            "renderMapGround": 0.09999999403953552,
+            "drawHouse": 0.6000000089406967,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 1.7999999970197678
+        },
+        {
+          "start": 87521.60000000894,
+          "interval": 35.20000000298023,
+          "x": 255.69059999998757,
+          "y": 6.89494000000001,
+          "weather": "clear",
+          "heap": 26200666,
+          "stages": {
+            "renderMapGround": 0.09999999403953552,
+            "drawHouse": 1,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 2.3999999910593033
+        }
+      ],
+      "slowUpdates": [
+        {
+          "start": 64204.20000000298,
+          "duration": 4.4000000059604645,
+          "x": 167.08372000000003,
+          "y": 6.89494000000001
+        },
+        {
+          "start": 64725.40000000596,
+          "duration": 4.0999999940395355,
+          "x": 169.06503999999987,
+          "y": 6.89494000000001
+        },
+        {
+          "start": 66512.40000000596,
+          "duration": 11.5,
+          "x": 175.856779999999,
+          "y": 6.89494000000001
+        },
+        {
+          "start": 68523.40000000596,
+          "duration": 18.799999997019768,
+          "x": 183.50199999999793,
+          "y": 6.89494000000001
+        }
+      ],
+      "slowNetwork": [],
+      "corrections": 0
+    },
+    {
+      "index": 3,
+      "target": 385,
+      "direction": 1,
+      "seconds": 33.69960000000894,
+      "pos": {
+        "x": 385.4241200000157,
+        "y": 6.89494000000001
+      },
+      "serverPos": {
+        "x": 385.4241200000157,
+        "y": 6.89494000000001
+      },
+      "draw": {
+        "count": 2009,
+        "p50": 1.2000000029802322,
+        "p95": 2.2999999970197678,
+        "p99": 4.9000000059604645,
+        "max": 32,
+        "over50": 0
+      },
+      "gameDrawStart": {
+        "count": 2008,
+        "p50": 17.899999991059303,
+        "p95": 19.799999997019768,
+        "p99": 29,
+        "max": 49.20000000298023,
+        "over50": 0
+      },
+      "update": {
+        "count": 5396,
+        "p50": 0.20000000298023224,
+        "p95": 0.4000000059604645,
+        "p99": 0.6000000089406967,
+        "max": 10,
+        "over50": 0
+      },
+      "networkCallback": {
+        "count": 98,
+        "p50": 0.30000001192092896,
+        "p95": 0.7000000029802322,
+        "p99": 0.9000000059604645,
+        "max": 0.9000000059604645,
+        "over50": 0
+      },
+      "independentRaf": {
+        "count": 5395,
+        "p50": 6.099999999991269,
+        "p95": 6.19999999999709,
+        "p99": 12.19999999999709,
+        "max": 36.39999999999418,
+        "over50": 0
+      },
+      "longTask": {
+        "count": 0,
+        "p50": 0,
+        "p95": 0,
+        "p99": 0,
+        "max": 0,
+        "over50": 0
+      },
+      "slowFrames": [
+        {
+          "start": 91723.5,
+          "interval": 17.399999991059303,
+          "x": 259.5589999999886,
+          "y": 6.89494000000001,
+          "weather": "clear",
+          "heap": 19940497,
+          "stages": {
+            "renderMapGroundUncached": 3.2000000029802322,
+            "renderGroundDetails": 0,
+            "renderMapGround": 22.799999997019768,
+            "drawHouse": 0.5999999940395355,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0.09999999403953552,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 24.900000005960464
+        },
+        {
+          "start": 93886.90000000596,
+          "interval": 31.799999997019768,
+          "x": 267.77991999999017,
+          "y": 6.89494000000001,
+          "weather": "clear",
+          "heap": 14137586,
+          "stages": {
+            "renderMapGround": 0,
+            "drawHouse": 0.5999999791383743,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 1.2999999970197678
+        },
+        {
+          "start": 94922.5,
+          "interval": 19,
+          "x": 271.7174799999908,
+          "y": 6.89494000000001,
+          "weather": "clear",
+          "heap": 8606510,
+          "stages": {
+            "renderMapGroundUncached": 2,
+            "renderGroundDetails": 0,
+            "renderMapGround": 18.799999997019768,
+            "drawHouse": 0.7000000178813934,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 20.200000002980232
+        },
+        {
+          "start": 96021.20000000298,
+          "interval": 31.5,
+          "x": 275.88531999999157,
+          "y": 6.89494000000001,
+          "weather": "clear",
+          "heap": 18602983,
+          "stages": {
+            "renderMapGround": 0,
+            "drawHouse": 0.4999999850988388,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 1.2000000029802322
+        },
+        {
+          "start": 98153.60000000894,
+          "interval": 32.400000005960464,
+          "x": 283.9907199999928,
+          "y": 6.89494000000001,
+          "weather": "clear",
+          "heap": 20683191,
+          "stages": {
+            "renderMapGround": 0.09999999403953552,
+            "drawHouse": 0.4999999850988388,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 1.199999988079071
+        },
+        {
+          "start": 99218,
+          "interval": 30.099999994039536,
+          "x": 288.0202399999936,
+          "y": 6.89494000000001,
+          "weather": "clear",
+          "heap": 23783949,
+          "stages": {
+            "renderMapGround": 0.09999999403953552,
+            "drawHouse": 0,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 0.9000000059604645
+        },
+        {
+          "start": 100290.5,
+          "interval": 36.20000000298023,
+          "x": 292.0961199999945,
+          "y": 6.89494000000001,
+          "weather": "clear",
+          "heap": 27584957,
+          "stages": {
+            "renderMapGround": 0,
+            "drawHouse": 0.5999999940395355,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 1.4000000059604645
+        },
+        {
+          "start": 103485.20000000298,
+          "interval": 31.5,
+          "x": 304.2549799999972,
+          "y": 6.89494000000001,
+          "weather": "clear",
+          "heap": 10220537,
+          "stages": {
+            "renderMapGround": 0.10000000894069672,
+            "drawHouse": 0.29999999701976776,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 1.7000000029802322
+        },
+        {
+          "start": 110923.20000000298,
+          "interval": 17.599999994039536,
+          "x": 332.5087400000044,
+          "y": 6.89494000000001,
+          "weather": "clear",
+          "heap": 33617026,
+          "stages": {
+            "renderMapGroundUncached": 3.5999999940395355,
+            "renderGroundDetails": 0.09999999403953552,
+            "renderMapGround": 6.100000008940697,
+            "drawHouse": 0.6000000089406967,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0.09999999403953552,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 8.5
+        },
+        {
+          "start": 114146.60000000894,
+          "interval": 37.900000005960464,
+          "x": 344.75880000000717,
+          "y": 6.89494000000001,
+          "weather": "clear",
+          "heap": 28582361,
+          "stages": {
+            "renderMapGround": 0.09999999403953552,
+            "drawHouse": 1,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0.20000000298023224,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 3.199999988079071
+        },
+        {
+          "start": 117324.20000000298,
+          "interval": 36.099999994039536,
+          "x": 356.82456000000974,
+          "y": 6.89494000000001,
+          "weather": "clear",
+          "heap": 13825068,
+          "stages": {
+            "renderMapGround": 0.09999999403953552,
+            "drawHouse": 0.3999999910593033,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 1.4000000059604645
+        },
+        {
+          "start": 118462.60000000894,
+          "interval": 31.700000002980232,
+          "x": 361.15390000001065,
+          "y": 6.89494000000001,
+          "weather": "clear",
+          "heap": 16040104,
+          "stages": {
+            "renderMapGround": 0.09999999403953552,
+            "drawHouse": 0.5999999791383743,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 1.7999999970197678
+        },
+        {
+          "start": 118719.40000000596,
+          "interval": 49.20000000298023,
+          "x": 362.1441800000107,
+          "y": 6.89494000000001,
+          "weather": "clear",
+          "heap": 22541499,
+          "stages": {
+            "renderMapGround": 0.09999999403953552,
+            "drawHouse": 0.5,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 1.3999999910593033
+        },
+        {
+          "start": 119887.60000000894,
+          "interval": 34.6000000089407,
+          "x": 366.56548000001163,
+          "y": 6.89494000000001,
+          "weather": "clear",
+          "heap": 30465102,
+          "stages": {
+            "renderMapGround": 0,
+            "drawHouse": 0.30000001192092896,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 1.5
+        },
+        {
+          "start": 120489.90000000596,
+          "interval": 18.299999997019768,
+          "x": 368.868280000012,
+          "y": 6.89494000000001,
+          "weather": "clear",
+          "heap": 24563509,
+          "stages": {
+            "renderMapGroundUncached": 3.500000014901161,
+            "renderGroundDetails": 0,
+            "renderMapGround": 30.599999994039536,
+            "drawHouse": 0.29999999701976776,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 32
+        },
+        {
+          "start": 120523.20000000298,
+          "interval": 33.29999999701977,
+          "x": 368.983040000012,
+          "y": 6.89494000000001,
+          "weather": "clear",
+          "heap": 24563509,
+          "stages": {
+            "renderMapGround": 0.09999999403953552,
+            "drawHouse": 0.19999998807907104,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0.09999999403953552,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 1.0999999940395355
+        },
+        {
+          "start": 120557.29999999702,
+          "interval": 34.099999994039536,
+          "x": 369.12174000001204,
+          "y": 6.89494000000001,
+          "weather": "clear",
+          "heap": 25475901,
+          "stages": {
+            "renderMapGround": 0,
+            "drawHouse": 0.30000001192092896,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0.09999999403953552,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 1.4000000059604645
+        },
+        {
+          "start": 121598.29999999702,
+          "interval": 43.69999998807907,
+          "x": 373.08210000001304,
+          "y": 6.89494000000001,
+          "weather": "clear",
+          "heap": 28783108,
+          "stages": {
+            "renderMapGround": 0,
+            "drawHouse": 0.6000000089406967,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 1.6000000089406967
+        },
+        {
+          "start": 122659.90000000596,
+          "interval": 38.79999999701977,
+          "x": 377.0888200000142,
+          "y": 6.89494000000001,
+          "weather": "clear",
+          "heap": 32419804,
+          "stages": {
+            "renderMapGround": 0.10000000894069672,
+            "drawHouse": 0.4000000059604645,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 1.7999999970197678
+        },
+        {
+          "start": 123707.10000000894,
+          "interval": 37,
+          "x": 381.0955400000148,
+          "y": 6.89494000000001,
+          "weather": "clear",
+          "heap": 8912031,
+          "stages": {
+            "renderMapGround": 0.09999999403953552,
+            "drawHouse": 0.5,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 2.199999988079071
+        }
+      ],
+      "slowUpdates": [
+        {
+          "start": 116059.79999999702,
+          "duration": 5.5,
+          "x": 352.0350400000088,
+          "y": 6.89494000000001
+        },
+        {
+          "start": 120307,
+          "duration": 10,
+          "x": 368.177060000012,
+          "y": 6.89494000000001
+        }
+      ],
+      "slowNetwork": [],
+      "corrections": 0
+    },
+    {
+      "index": 4,
+      "target": 257,
+      "direction": -1,
+      "seconds": 34.11410000000894,
+      "pos": {
+        "x": 256.5645999999865,
+        "y": 6.89494000000001
+      },
+      "serverPos": {
+        "x": 257.7851599999867,
+        "y": 6.89494000000001
+      },
+      "draw": {
+        "count": 2010,
+        "p50": 1.1000000089406967,
+        "p95": 2,
+        "p99": 4.200000002980232,
+        "max": 59.19999998807907,
+        "over50": 1
+      },
+      "gameDrawStart": {
+        "count": 2009,
+        "p50": 18,
+        "p95": 19.100000008940697,
+        "p99": 28.700000002980232,
+        "max": 291,
+        "over50": 4
+      },
+      "update": {
+        "count": 5432,
+        "p50": 0.20000000298023224,
+        "p95": 0.3999999910593033,
+        "p99": 0.5,
+        "max": 11.200000002980232,
+        "over50": 0
+      },
+      "networkCallback": {
+        "count": 105,
+        "p50": 0.29999999701976776,
+        "p95": 0.7000000029802322,
+        "p99": 1.1000000089406967,
+        "max": 2.4000000059604645,
+        "over50": 0
+      },
+      "independentRaf": {
+        "count": 5431,
+        "p50": 6.099999999976717,
+        "p95": 6.2000000000116415,
+        "p99": 12.10000000000582,
+        "max": 284.70000000001164,
+        "over50": 4
+      },
+      "longTask": {
+        "count": 2,
+        "p50": 88,
+        "p95": 88,
+        "p99": 88,
+        "max": 88,
+        "over50": 2
+      },
+      "slowFrames": [
+        {
+          "start": 129856.10000000894,
+          "interval": 18.400000005960464,
+          "x": 381.07198000001483,
+          "y": 6.89494000000001,
+          "weather": "clear",
+          "heap": 25744559,
+          "stages": {
+            "renderMapGround": 0.09999999403953552,
+            "drawHouse": 0.20000000298023224,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 59.19999998807907
+        },
+        {
+          "start": 129944.90000000596,
+          "interval": 88.79999999701977,
+          "x": 380.7497400000148,
+          "y": 6.89494000000001,
+          "weather": "clear",
+          "heap": 25999179,
+          "stages": {
+            "renderMapGround": 0,
+            "drawHouse": 0.4000000059604645,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 1
+        },
+        {
+          "start": 130202.60000000894,
+          "interval": 12.200000002980232,
+          "x": 379.7594600000145,
+          "y": 6.89494000000001,
+          "weather": "clear",
+          "heap": 32440867,
+          "stages": {
+            "renderMapGroundUncached": 1.7999999970197678,
+            "renderGroundDetails": 0,
+            "renderMapGround": 22.900000005960464,
+            "drawHouse": 0.5,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 24.19999998807907
+        },
+        {
+          "start": 130259.10000000894,
+          "interval": 31,
+          "x": 379.55160000001445,
+          "y": 6.89494000000001,
+          "weather": "clear",
+          "heap": 33762291,
+          "stages": {
+            "renderMapGround": 0,
+            "drawHouse": 0.29999999701976776,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 1.0999999940395355
+        },
+        {
+          "start": 132571.60000000894,
+          "interval": 134.1000000089407,
+          "x": 370.8363000000126,
+          "y": 6.89494000000001,
+          "weather": "clear",
+          "heap": 19536198,
+          "stages": {
+            "renderMapGround": 0,
+            "drawHouse": 0.5,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 1.5999999940395355
+        },
+        {
+          "start": 133460.10000000894,
+          "interval": 38.5,
+          "x": 367.4740600000118,
+          "y": 6.89494000000001,
+          "weather": "clear",
+          "heap": 13090377,
+          "stages": {
+            "renderMapGround": 0.09999999403953552,
+            "drawHouse": 0.30000001192092896,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 1.0999999940395355
+        },
+        {
+          "start": 134517.90000000596,
+          "interval": 32.1000000089407,
+          "x": 363.44416000001144,
+          "y": 6.89494000000001,
+          "weather": "clear",
+          "heap": 16726516,
+          "stages": {
+            "renderMapGround": 0.09999999403953552,
+            "drawHouse": 0.20000000298023224,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 0.8999999910593033
+        },
+        {
+          "start": 135964.29999999702,
+          "interval": 291,
+          "x": 358.6432400000104,
+          "y": 6.89494000000001,
+          "weather": "clear",
+          "heap": 21024703,
+          "stages": {
+            "renderMapGround": 0,
+            "drawHouse": 0.5,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 2.2000000029802322
+        },
+        {
+          "start": 136820.20000000298,
+          "interval": 32,
+          "x": 355.3961400000095,
+          "y": 6.89494000000001,
+          "weather": "clear",
+          "heap": 16545829,
+          "stages": {
+            "renderMapGround": 0.20000000298023224,
+            "drawHouse": 0.5000000149011612,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 2.2000000029802322
+        },
+        {
+          "start": 142158,
+          "interval": 36.79999999701977,
+          "x": 335.10984000000474,
+          "y": 6.89494000000001,
+          "weather": "clear",
+          "heap": 25969603,
+          "stages": {
+            "renderMapGround": 0.20000000298023224,
+            "drawHouse": 0.7999999970197678,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 1.6000000089406967
+        },
+        {
+          "start": 143189.10000000894,
+          "interval": 19.80000001192093,
+          "x": 331.19432000000364,
+          "y": 6.89494000000001,
+          "weather": "clear",
+          "heap": 32091106,
+          "stages": {
+            "renderMapGroundUncached": 3.800000011920929,
+            "renderGroundDetails": 0.20000000298023224,
+            "renderMapGround": 5.9000000059604645,
+            "drawHouse": 0.8999999910593033,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 8.399999991059303
+        },
+        {
+          "start": 143229.70000000298,
+          "interval": 40.599999994039536,
+          "x": 331.05714000000364,
+          "y": 6.89494000000001,
+          "weather": "clear",
+          "heap": 32091106,
+          "stages": {
+            "renderMapGround": 0.10000000894069672,
+            "drawHouse": 0.5000000149011612,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0.09999999403953552,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 2.0999999940395355
+        },
+        {
+          "start": 144287.90000000596,
+          "interval": 33.70000000298023,
+          "x": 327.0272400000025,
+          "y": 6.89494000000001,
+          "weather": "clear",
+          "heap": 24897365,
+          "stages": {
+            "renderMapGround": 0.10000000894069672,
+            "drawHouse": 0.5000000149011612,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0.09999999403953552,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 1.3999999910593033
+        },
+        {
+          "start": 145357.60000000894,
+          "interval": 34.80000001192093,
+          "x": 322.9513600000015,
+          "y": 6.89494000000001,
+          "weather": "clear",
+          "heap": 26480585,
+          "stages": {
+            "renderMapGround": 0,
+            "drawHouse": 0.29999999701976776,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 0.699999988079071
+        },
+        {
+          "start": 146418.10000000894,
+          "interval": 31.200000002980232,
+          "x": 318.9210800000007,
+          "y": 6.89494000000001,
+          "weather": "clear",
+          "heap": 20686114,
+          "stages": {
+            "renderMapGround": 0,
+            "drawHouse": 0.29999999701976776,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0.10000000894069672
+          },
+          "duration": 1.2999999970197678
+        },
+        {
+          "start": 147484.40000000596,
+          "interval": 31,
+          "x": 314.89193999999975,
+          "y": 6.89494000000001,
+          "weather": "clear",
+          "heap": 19035263,
+          "stages": {
+            "renderMapGround": 0,
+            "drawHouse": 0.4999999850988388,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 1.7000000029802322
+        },
+        {
+          "start": 149618.40000000596,
+          "interval": 31.900000005960464,
+          "x": 306.7633599999975,
+          "y": 6.89494000000001,
+          "weather": "clear",
+          "heap": 15153071,
+          "stages": {
+            "renderMapGround": 0.09999999403953552,
+            "drawHouse": 0.19999998807907104,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0.10000000894069672,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 1
+        },
+        {
+          "start": 151750,
+          "interval": 30.599999994039536,
+          "x": 298.65795999999546,
+          "y": 6.89494000000001,
+          "weather": "clear",
+          "heap": 20433236,
+          "stages": {
+            "renderMapGround": 0,
+            "drawHouse": 0.5999999940395355,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 1.4000000059604645
+        },
+        {
+          "start": 152821,
+          "interval": 35.099999994039536,
+          "x": 294.6052599999942,
+          "y": 6.89494000000001,
+          "weather": "clear",
+          "heap": 20378012,
+          "stages": {
+            "renderMapGround": 0.10000000894069672,
+            "drawHouse": 0.20000000298023224,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 1.2999999970197678
+        },
+        {
+          "start": 154532.10000000894,
+          "interval": 60.80000001192093,
+          "x": 288.0886399999926,
+          "y": 6.89494000000001,
+          "weather": "clear",
+          "heap": 13329409,
+          "stages": {
+            "renderMapGround": 0,
+            "drawHouse": 0.5999999940395355,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 1.5
+        },
+        {
+          "start": 154940.20000000298,
+          "interval": 33.29999999701977,
+          "x": 286.5454599999923,
+          "y": 6.89494000000001,
+          "weather": "clear",
+          "heap": 24343178,
+          "stages": {
+            "renderMapGround": 0.10000000894069672,
+            "drawHouse": 0.5999999940395355,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 1.2000000029802322
+        },
+        {
+          "start": 161736,
+          "interval": 17.899999991059303,
+          "x": 260.70963999998736,
+          "y": 6.89494000000001,
+          "weather": "clear",
+          "heap": 19313215,
+          "stages": {
+            "renderMapGround": 0,
+            "drawHouse": 0.30000001192092896,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 9.100000008940697
+        }
+      ],
+      "slowUpdates": [
+        {
+          "start": 154659.79999999702,
+          "duration": 11.200000002980232,
+          "x": 287.6052799999927,
+          "y": 6.89494000000001
+        }
+      ],
+      "slowNetwork": [],
+      "corrections": 0
+    },
+    {
+      "index": 5,
+      "target": 129,
+      "direction": -1,
+      "seconds": 33.66609999999404,
+      "pos": {
+        "x": 128.64976000000155,
+        "y": 6.89494000000001
+      },
+      "serverPos": {
+        "x": 128.64976000000155,
+        "y": 6.89494000000001
+      },
+      "draw": {
+        "count": 2010,
+        "p50": 1.5,
+        "p95": 2.4000000059604645,
+        "p99": 4.700000002980232,
+        "max": 14.900000005960464,
+        "over50": 0
+      },
+      "gameDrawStart": {
+        "count": 2009,
+        "p50": 17.899999991059303,
+        "p95": 20,
+        "p99": 28.700000002980232,
+        "max": 44,
+        "over50": 0
+      },
+      "update": {
+        "count": 5374,
+        "p50": 0.20000000298023224,
+        "p95": 0.30000001192092896,
+        "p99": 0.5,
+        "max": 1,
+        "over50": 0
+      },
+      "networkCallback": {
+        "count": 130,
+        "p50": 0.29999999701976776,
+        "p95": 0.5999999940395355,
+        "p99": 0.7000000029802322,
+        "max": 0.7999999970197678,
+        "over50": 0
+      },
+      "independentRaf": {
+        "count": 5373,
+        "p50": 6.099999999976717,
+        "p95": 6.2000000000116415,
+        "p99": 12.200000000011642,
+        "max": 30.39999999999418,
+        "over50": 0
+      },
+      "longTask": {
+        "count": 0,
+        "p50": 0,
+        "p95": 0,
+        "p99": 0,
+        "max": 0,
+        "over50": 0
+      },
+      "slowFrames": [
+        {
+          "start": 174552.60000000894,
+          "interval": 30.100000008940697,
+          "x": 221.70149999999077,
+          "y": 6.89494000000001,
+          "weather": "clear",
+          "heap": 16718778,
+          "stages": {
+            "renderMapGround": 0,
+            "drawHouse": 0.4999999850988388,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0.10000000894069672,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 1.2999999970197678
+        },
+        {
+          "start": 176699.20000000298,
+          "interval": 44,
+          "x": 213.54973999999177,
+          "y": 6.89494000000001,
+          "weather": "clear",
+          "heap": 31338473,
+          "stages": {
+            "renderMapGround": 0.09999999403953552,
+            "drawHouse": 0.8999999910593033,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0.10000000894069672,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0.09999999403953552
+          },
+          "duration": 3
+        },
+        {
+          "start": 177754.5,
+          "interval": 32.70000000298023,
+          "x": 209.54339999999212,
+          "y": 6.89494000000001,
+          "weather": "clear",
+          "heap": 31983177,
+          "stages": {
+            "renderMapGround": 0.09999999403953552,
+            "drawHouse": 0.5,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 1.6000000089406967
+        },
+        {
+          "start": 178789.70000000298,
+          "interval": 17.400000005960464,
+          "x": 205.6054599999925,
+          "y": 6.89494000000001,
+          "weather": "clear",
+          "heap": 9285241,
+          "stages": {
+            "renderMapGroundUncached": 4.100000008940697,
+            "renderGroundDetails": 0.09999999403953552,
+            "renderMapGround": 5.5,
+            "drawHouse": 1.2999999970197678,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0.09999999403953552
+          },
+          "duration": 9.099999994039536
+        },
+        {
+          "start": 178840.29999999702,
+          "interval": 31.299999997019768,
+          "x": 205.4443399999925,
+          "y": 6.89494000000001,
+          "weather": "clear",
+          "heap": 11018483,
+          "stages": {
+            "renderMapGround": 0.10000000894069672,
+            "drawHouse": 0.5999999940395355,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0.10000000894069672,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 1.800000011920929
+        },
+        {
+          "start": 179889.40000000596,
+          "interval": 34.70000000298023,
+          "x": 201.4379999999931,
+          "y": 6.89494000000001,
+          "weather": "clear",
+          "heap": 17051590,
+          "stages": {
+            "renderMapGround": 0,
+            "drawHouse": 0.4000000059604645,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 1
+        },
+        {
+          "start": 180952.70000000298,
+          "interval": 31.099999994039536,
+          "x": 197.38453999999354,
+          "y": 6.89494000000001,
+          "weather": "acid_rain",
+          "heap": 22227340,
+          "stages": {
+            "renderMapGround": 0,
+            "drawHouse": 0.5000000149011612,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0.19999998807907104,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 1.5999999940395355
+        },
+        {
+          "start": 182021.40000000596,
+          "interval": 33.6000000089407,
+          "x": 193.3318399999941,
+          "y": 6.89494000000001,
+          "weather": "acid_rain",
+          "heap": 8738627,
+          "stages": {
+            "renderMapGround": 0,
+            "drawHouse": 0.40000002086162567,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0.09999999403953552,
+            "renderThemeAtmosphere": 0.10000000894069672
+          },
+          "duration": 1.5
+        },
+        {
+          "start": 184156.10000000894,
+          "interval": 35.30000001192093,
+          "x": 185.22681999999517,
+          "y": 6.89494000000001,
+          "weather": "acid_rain",
+          "heap": 27941086,
+          "stages": {
+            "renderMapGround": 0,
+            "drawHouse": 0.19999998807907104,
+            "renderParticles": 0.09999999403953552,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 1.0999999940395355
+        },
+        {
+          "start": 186288.5,
+          "interval": 34.79999999701977,
+          "x": 177.12141999999608,
+          "y": 6.89494000000001,
+          "weather": "acid_rain",
+          "heap": 17723749,
+          "stages": {
+            "renderMapGround": 0,
+            "drawHouse": 0.20000000298023224,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0.10000000894069672,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 0.9000000059604645
+        },
+        {
+          "start": 186787.20000000298,
+          "interval": 17.599999994039536,
+          "x": 175.21001999999632,
+          "y": 6.89494000000001,
+          "weather": "acid_rain",
+          "heap": 8562332,
+          "stages": {
+            "renderMapGround": 0.09999999403953552,
+            "drawHouse": 1.0999999940395355,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 14.900000005960464
+        },
+        {
+          "start": 188422.70000000298,
+          "interval": 36,
+          "x": 169.01563999999692,
+          "y": 6.89494000000001,
+          "weather": "acid_rain",
+          "heap": 9750231,
+          "stages": {
+            "renderMapGround": 0,
+            "drawHouse": 0.7000000029802322,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 1.5999999940395355
+        },
+        {
+          "start": 189488.29999999702,
+          "interval": 35.29999999701977,
+          "x": 164.96331999999757,
+          "y": 6.89494000000001,
+          "weather": "acid_rain",
+          "heap": 20768482,
+          "stages": {
+            "renderMapGround": 0,
+            "drawHouse": 0.7000000029802322,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 1.4000000059604645
+        },
+        {
+          "start": 190557.60000000894,
+          "interval": 37.70000000298023,
+          "x": 160.88743999999807,
+          "y": 6.89494000000001,
+          "weather": "acid_rain",
+          "heap": 30482837,
+          "stages": {
+            "renderMapGround": 0,
+            "drawHouse": 0.10000000894069672,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0.09999999403953552,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 0.8999999910593033
+        },
+        {
+          "start": 191620.40000000596,
+          "interval": 34.1000000089407,
+          "x": 156.85791999999847,
+          "y": 6.89494000000001,
+          "weather": "acid_rain",
+          "heap": 14400153,
+          "stages": {
+            "renderMapGround": 0,
+            "drawHouse": 0.7000000029802322,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0.09999999403953552,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 1.2999999970197678
+        },
+        {
+          "start": 192702,
+          "interval": 31.099999994039536,
+          "x": 152.7352999999988,
+          "y": 6.89494000000001,
+          "weather": "acid_rain",
+          "heap": 28388161,
+          "stages": {
+            "renderMapGround": 0.09999999403953552,
+            "drawHouse": 0.7000000029802322,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0.09999999403953552,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0.09999999403953552
+          },
+          "duration": 1.7999999970197678
+        },
+        {
+          "start": 193757.90000000596,
+          "interval": 38.400000005960464,
+          "x": 148.7289599999991,
+          "y": 6.89494000000001,
+          "weather": "acid_rain",
+          "heap": 32073162,
+          "stages": {
+            "renderMapGround": 0,
+            "drawHouse": 0.30000001192092896,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0.09999999403953552,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 1.3999999910593033
+        },
+        {
+          "start": 194822.40000000596,
+          "interval": 32.20000000298023,
+          "x": 144.69943999999967,
+          "y": 6.89494000000001,
+          "weather": "acid_rain",
+          "heap": 12701440,
+          "stages": {
+            "renderMapGround": 0.10000000894069672,
+            "drawHouse": 0.6000000089406967,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0.10000000894069672,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 2.0999999940395355
+        },
+        {
+          "start": 196939,
+          "interval": 32.5,
+          "x": 136.64002000000067,
+          "y": 6.89494000000001,
+          "weather": "acid_rain",
+          "heap": 32053205,
+          "stages": {
+            "renderMapGround": 0,
+            "drawHouse": 0.9000000059604645,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0.20000000298023224,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 1.9000000059604645
+        }
+      ],
+      "slowUpdates": [],
+      "slowNetwork": [],
+      "corrections": 0
+    },
+    {
+      "index": 6,
+      "target": 1,
+      "direction": -1,
+      "seconds": 33.61279999999702,
+      "pos": {
+        "x": 0.9192199999960105,
+        "y": 6.89494000000001
+      },
+      "serverPos": {
+        "x": 1.4949199999960103,
+        "y": 6.89494000000001
+      },
+      "draw": {
+        "count": 1991,
+        "p50": 1.5,
+        "p95": 2.5999999940395355,
+        "p99": 4.600000008940697,
+        "max": 10,
+        "over50": 0
+      },
+      "gameDrawStart": {
+        "count": 1990,
+        "p50": 17.5,
+        "p95": 22.799999997019768,
+        "p99": 36.20000000298023,
+        "max": 47,
+        "over50": 0
+      },
+      "update": {
+        "count": 5152,
+        "p50": 0.20000000298023224,
+        "p95": 0.4000000059604645,
+        "p99": 0.5999999940395355,
+        "max": 4.800000011920929,
+        "over50": 0
+      },
+      "networkCallback": {
+        "count": 46,
+        "p50": 0.29999999701976776,
+        "p95": 0.6000000089406967,
+        "p99": 0.7000000029802322,
+        "max": 0.7000000029802322,
+        "over50": 0
+      },
+      "independentRaf": {
+        "count": 5151,
+        "p50": 6.099999999976717,
+        "p95": 12,
+        "p99": 18.199999999982538,
+        "max": 36.60000000000582,
+        "over50": 0
+      },
+      "longTask": {
+        "count": 0,
+        "p50": 0,
+        "p95": 0,
+        "p99": 0,
+        "max": 0,
+        "over50": 0
+      },
+      "slowFrames": [
+        {
+          "start": 204150.79999999702,
+          "interval": 45.19999998807907,
+          "x": 120.38248000000084,
+          "y": 6.89494000000001,
+          "weather": "acid_rain",
+          "heap": 27756093,
+          "stages": {
+            "renderMapGround": 0.10000000894069672,
+            "drawHouse": 0.7000000029802322,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0.20000000298023224,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 2.4000000059604645
+        },
+        {
+          "start": 204237,
+          "interval": 32.70000000298023,
+          "x": 120.06024000000086,
+          "y": 6.89494000000001,
+          "weather": "acid_rain",
+          "heap": 30798451,
+          "stages": {
+            "renderMapGround": 0,
+            "drawHouse": 0.3999999910593033,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0.09999999403953552,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 1.2999999970197678
+        },
+        {
+          "start": 204304.79999999702,
+          "interval": 33.79999999701977,
+          "x": 119.80640000000088,
+          "y": 6.89494000000001,
+          "weather": "acid_rain",
+          "heap": 32631675,
+          "stages": {
+            "renderMapGround": 0,
+            "drawHouse": 0.5999999940395355,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 1.5
+        },
+        {
+          "start": 205208.79999999702,
+          "interval": 36.5,
+          "x": 116.37614000000049,
+          "y": 6.89494000000001,
+          "weather": "acid_rain",
+          "heap": 32558519,
+          "stages": {
+            "renderMapGround": 0.09999999403953552,
+            "drawHouse": 0.29999998211860657,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0.09999999403953552,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 2
+        },
+        {
+          "start": 207326.70000000298,
+          "interval": 36.20000000298023,
+          "x": 108.31671999999968,
+          "y": 6.89494000000001,
+          "weather": "acid_rain",
+          "heap": 12120437,
+          "stages": {
+            "renderMapGround": 0,
+            "drawHouse": 0.3999999910593033,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0.20000000298023224,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 1.4000000059604645
+        },
+        {
+          "start": 208392.29999999702,
+          "interval": 38.79999999701977,
+          "x": 104.26401999999928,
+          "y": 6.89494000000001,
+          "weather": "acid_rain",
+          "heap": 14960244,
+          "stages": {
+            "renderMapGround": 0,
+            "drawHouse": 0.5000000149011612,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 1.1000000089406967
+        },
+        {
+          "start": 209459.70000000298,
+          "interval": 38.400000005960464,
+          "x": 100.21131999999882,
+          "y": 6.89494000000001,
+          "weather": "acid_rain",
+          "heap": 15698972,
+          "stages": {
+            "renderMapGround": 0,
+            "drawHouse": 0.5,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0.09999999403953552,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 1.5999999940395355
+        },
+        {
+          "start": 210535.10000000894,
+          "interval": 47,
+          "x": 96.11263999999832,
+          "y": 6.89494000000001,
+          "weather": "acid_rain",
+          "heap": 19981421,
+          "stages": {
+            "renderMapGround": 0,
+            "drawHouse": 0.5999999940395355,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 1.5
+        },
+        {
+          "start": 211557.5,
+          "interval": 17.200000002980232,
+          "x": 92.2438599999979,
+          "y": 6.89494000000001,
+          "weather": "acid_rain",
+          "heap": 16355141,
+          "stages": {
+            "renderMapGroundUncached": 4,
+            "renderGroundDetails": 0.09999999403953552,
+            "renderMapGround": 6,
+            "drawHouse": 0.9999999850988388,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0.20000000298023224,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 8.200000002980232
+        },
+        {
+          "start": 211614.60000000894,
+          "interval": 42.5,
+          "x": 92.01395999999788,
+          "y": 6.89494000000001,
+          "weather": "acid_rain",
+          "heap": 18633799,
+          "stages": {
+            "renderMapGround": 0.09999999403953552,
+            "drawHouse": 0.7000000029802322,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 1.699999988079071
+        },
+        {
+          "start": 212640.70000000298,
+          "interval": 35.400000005960464,
+          "x": 88.14517999999748,
+          "y": 6.89494000000001,
+          "weather": "acid_rain",
+          "heap": 23151944,
+          "stages": {
+            "renderMapGroundUncached": 3.7000000029802322,
+            "renderGroundDetails": 0,
+            "renderMapGround": 5.299999997019768,
+            "drawHouse": 0.6000000089406967,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0.29999999701976776,
+            "renderThemeAtmosphere": 0.10000000894069672
+          },
+          "duration": 7.700000002980232
+        },
+        {
+          "start": 212694.20000000298,
+          "interval": 37.79999999701977,
+          "x": 87.91489999999756,
+          "y": 6.89494000000001,
+          "weather": "acid_rain",
+          "heap": 24472800,
+          "stages": {
+            "renderMapGround": 0,
+            "drawHouse": 1.399999976158142,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0.09999999403953552
+          },
+          "duration": 3
+        },
+        {
+          "start": 214808.40000000596,
+          "interval": 37.29999999701977,
+          "x": 79.87865999999687,
+          "y": 6.89494000000001,
+          "weather": "acid_rain",
+          "heap": 29190391,
+          "stages": {
+            "renderMapGround": 0,
+            "drawHouse": 0.5,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0.10000000894069672,
+            "renderThemeAtmosphere": 0.09999999403953552
+          },
+          "duration": 1.5999999940395355
+        },
+        {
+          "start": 215878.29999999702,
+          "interval": 38.79999999701977,
+          "x": 75.82595999999651,
+          "y": 6.89494000000001,
+          "weather": "acid_rain",
+          "heap": 27866589,
+          "stages": {
+            "renderMapGround": 0,
+            "drawHouse": 0.6000000089406967,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0.09999999403953552,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 1.7000000029802322
+        },
+        {
+          "start": 216941.40000000596,
+          "interval": 37.29999999701977,
+          "x": 71.77325999999606,
+          "y": 6.89494000000001,
+          "weather": "acid_rain",
+          "heap": 10756734,
+          "stages": {
+            "renderMapGround": 0.09999999403953552,
+            "drawHouse": 0.800000011920929,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0.20000000298023224,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 1.5999999940395355
+        },
+        {
+          "start": 218020.29999999702,
+          "interval": 32,
+          "x": 67.67419999999571,
+          "y": 6.89494000000001,
+          "weather": "acid_rain",
+          "heap": 30705910,
+          "stages": {
+            "renderMapGround": 0.20000000298023224,
+            "drawHouse": 0.7000000029802322,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0.10000000894069672,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 1.6000000089406967
+        },
+        {
+          "start": 219082.60000000894,
+          "interval": 45.70000000298023,
+          "x": 63.644679999995205,
+          "y": 6.89494000000001,
+          "weather": "acid_rain",
+          "heap": 12159105,
+          "stages": {
+            "renderMapGround": 0,
+            "drawHouse": 0.9000000059604645,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0.09999999403953552,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 1.3999999910593033
+        },
+        {
+          "start": 220141.40000000596,
+          "interval": 38,
+          "x": 59.615159999995306,
+          "y": 6.89494000000001,
+          "weather": "acid_rain",
+          "heap": 31584246,
+          "stages": {
+            "renderMapGround": 0.09999999403953552,
+            "drawHouse": 0.5000000149011612,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 1.2000000029802322
+        },
+        {
+          "start": 221205.20000000298,
+          "interval": 34.900000005960464,
+          "x": 55.58525999999538,
+          "y": 6.89494000000001,
+          "weather": "acid_rain",
+          "heap": 10680072,
+          "stages": {
+            "renderMapGround": 0.10000000894069672,
+            "drawHouse": 0.5,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 1.2999999970197678
+        },
+        {
+          "start": 222277.5,
+          "interval": 37.599999994039536,
+          "x": 51.50975999999546,
+          "y": 6.89494000000001,
+          "weather": "acid_rain",
+          "heap": 29801076,
+          "stages": {
+            "renderMapGround": 0.10000000894069672,
+            "drawHouse": 1.3999999910593033,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0.20000000298023224,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 2.9000000059604645
+        },
+        {
+          "start": 223337.79999999702,
+          "interval": 34.79999999701977,
+          "x": 47.47947999999551,
+          "y": 6.89494000000001,
+          "weather": "acid_rain",
+          "heap": 34353399,
+          "stages": {
+            "renderMapGround": 0.09999999403953552,
+            "drawHouse": 0.6000000089406967,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0.09999999403953552,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 1.4000000059604645
+        },
+        {
+          "start": 224408.20000000298,
+          "interval": 38.400000005960464,
+          "x": 43.4035999999957,
+          "y": 6.89494000000001,
+          "weather": "acid_rain",
+          "heap": 9854052,
+          "stages": {
+            "renderMapGround": 0.10000000894069672,
+            "drawHouse": 0.7000000029802322,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 1.2999999970197678
+        },
+        {
+          "start": 225475,
+          "interval": 39.20000000298023,
+          "x": 39.37445999999571,
+          "y": 6.89494000000001,
+          "weather": "acid_rain",
+          "heap": 7153290,
+          "stages": {
+            "renderMapGround": 0,
+            "drawHouse": 1,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 1.9000000059604645
+        },
+        {
+          "start": 226539,
+          "interval": 36,
+          "x": 35.29857999999575,
+          "y": 6.89494000000001,
+          "weather": "acid_rain",
+          "heap": 15573981,
+          "stages": {
+            "renderMapGround": 0.20000000298023224,
+            "drawHouse": 0.5000000149011612,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0.10000000894069672,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 1.1000000089406967
+        },
+        {
+          "start": 229721.90000000596,
+          "interval": 32.1000000089407,
+          "x": 23.208879999995844,
+          "y": 6.89494000000001,
+          "weather": "acid_rain",
+          "heap": 14890405,
+          "stages": {
+            "renderMapGround": 0,
+            "drawHouse": 0.20000000298023224,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 1
+        },
+        {
+          "start": 230805.90000000596,
+          "interval": 37.29999999701977,
+          "x": 19.087399999995952,
+          "y": 6.89494000000001,
+          "weather": "acid_rain",
+          "heap": 14542362,
+          "stages": {
+            "renderMapGround": 0,
+            "drawHouse": 0.6000000089406967,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0.09999999403953552,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 1.5999999940395355
+        },
+        {
+          "start": 231873,
+          "interval": 37.5,
+          "x": 15.03469999999598,
+          "y": 6.89494000000001,
+          "weather": "acid_rain",
+          "heap": 14124914,
+          "stages": {
+            "renderMapGround": 0.09999999403953552,
+            "drawHouse": 0.7999999821186066,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0.10000000894069672,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 2.7000000029802322
+        },
+        {
+          "start": 232874.29999999702,
+          "interval": 36,
+          "x": 11.304239999995977,
+          "y": 6.89494000000001,
+          "weather": "acid_rain",
+          "heap": 17615693,
+          "stages": {
+            "renderMapGround": 0,
+            "drawHouse": 0.4000000059604645,
+            "renderParticles": 0.09999999403953552,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 1.4000000059604645
+        },
+        {
+          "start": 232947.20000000298,
+          "interval": 41.70000000298023,
+          "x": 10.958819999996,
+          "y": 6.89494000000001,
+          "weather": "acid_rain",
+          "heap": 19001633,
+          "stages": {
+            "renderMapGround": 0,
+            "drawHouse": 0.9000000059604645,
+            "renderParticles": 0.29999999701976776,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0.20000000298023224,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 3
+        },
+        {
+          "start": 233959.70000000298,
+          "interval": 21.700000002980232,
+          "x": 7.113219999996025,
+          "y": 6.89494000000001,
+          "weather": "acid_rain",
+          "heap": 10208843,
+          "stages": {
+            "renderMapGroundUncached": 4.4000000059604645,
+            "renderGroundDetails": 0,
+            "renderMapGround": 7,
+            "drawHouse": 1.2999999970197678,
+            "renderParticles": 0.20000000298023224,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0.09999999403953552,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 10
+        },
+        {
+          "start": 234014.20000000298,
+          "interval": 43.20000000298023,
+          "x": 6.906119999996024,
+          "y": 6.89494000000001,
+          "weather": "acid_rain",
+          "heap": 11396922,
+          "stages": {
+            "renderMapGround": 0.09999999403953552,
+            "drawHouse": 0.5,
+            "renderParticles": 0.09999999403953552,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 1.2999999970197678
+        },
+        {
+          "start": 235057.20000000298,
+          "interval": 34.900000005960464,
+          "x": 2.9457599999959685,
+          "y": 6.89494000000001,
+          "weather": "acid_rain",
+          "heap": 8406203,
+          "stages": {
+            "renderMapGround": 0.09999999403953552,
+            "drawHouse": 0.5999999940395355,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0.20000000298023224,
+            "renderThemeAtmosphere": 0
+          },
+          "duration": 1.5
+        }
+      ],
+      "slowUpdates": [
+        {
+          "start": 227216.79999999702,
+          "duration": 4.800000011920929,
+          "x": 32.742319999995836,
+          "y": 6.89494000000001
+        }
+      ],
+      "slowNetwork": [],
+      "corrections": 0
+    }
+  ],
+  "samples": [
+    {
+      "phase": "initial-natural",
+      "map": "world",
+      "pos": {
+        "x": 0,
+        "y": 6.89494000000001
+      },
+      "serverPos": {
+        "x": 0,
+        "y": 6.89494000000001
+      },
+      "hp": 100,
+      "satiety": 97.17024999999998,
+      "hidden": false,
+      "chunks": 25,
+      "window": "0,0",
+      "scenery": 108,
+      "buildings": 388,
+      "interactables": 132,
+      "serverDrops": 0,
+      "artImages": 14,
+      "decodedImagePixels": 11532644,
+      "tileSurfaces": 8,
+      "tilePixels": 1707552,
+      "groundPixels": 2907136,
+      "heapBytes": 6113965,
+      "errors": [],
+      "diagnostics": [],
+      "corrections": 0,
+      "cache": {
+        "initial": 25,
+        "newKeys": 0,
+        "regenerated": 0,
+        "evicted": 0,
+        "maxSize": 25,
+        "seenOverflow": false,
+        "eventOverflow": false,
+        "seen": 25
+      },
+      "heap": {
+        "usedSize": 5679080,
+        "totalSize": 13107200,
+        "embedderHeapUsedSize": 2763888,
+        "backingStorageSize": 660305
+      },
+      "processes": {
+        "at": "2026-10-23T10:28:09.6818398Z",
+        "processCount": 12,
+        "workingSetMB": 998.33984375,
+        "privateCommittedMB": 582.625,
+        "cpuSeconds": 25.34375,
+        "gpu": {
+          "dedicatedMB": 0,
+          "sharedMB": 172.75,
+          "maxSingleEnginePercent": 36
+        },
+        "gpuError": null
+      },
+      "estimatedPixelsMiB": {
+        "decodedImages": 43.99354553222656,
+        "tileSurfaces": 6.5137939453125,
+        "ground": 11.08984375
+      }
+    },
+    {
+      "phase": "initial-forced-gc",
+      "map": "world",
+      "pos": {
+        "x": 0,
+        "y": 6.89494000000001
+      },
+      "serverPos": {
+        "x": 0,
+        "y": 6.89494000000001
+      },
+      "hp": 100,
+      "satiety": 94.57099999999998,
+      "hidden": false,
+      "chunks": 25,
+      "window": "0,0",
+      "scenery": 108,
+      "buildings": 388,
+      "interactables": 132,
+      "serverDrops": 0,
+      "artImages": 14,
+      "decodedImagePixels": 11532644,
+      "tileSurfaces": 8,
+      "tilePixels": 1707552,
+      "groundPixels": 2907136,
+      "heapBytes": 7284537,
+      "errors": [],
+      "diagnostics": [],
+      "corrections": 0,
+      "cache": {
+        "initial": 25,
+        "newKeys": 0,
+        "regenerated": 0,
+        "evicted": 0,
+        "maxSize": 25,
+        "seenOverflow": false,
+        "eventOverflow": false,
+        "seen": 25
+      },
+      "heap": {
+        "usedSize": 6626388,
+        "totalSize": 10485760,
+        "embedderHeapUsedSize": 5823328,
+        "backingStorageSize": 660349
+      },
+      "processes": {
+        "at": "2026-10-23T10:28:12.0171647Z",
+        "processCount": 11,
+        "workingSetMB": 924.26953125,
+        "privateCommittedMB": 525.97265625,
+        "cpuSeconds": 28.921875,
+        "gpu": {
+          "dedicatedMB": 0,
+          "sharedMB": 177.09375,
+          "maxSingleEnginePercent": 29
+        },
+        "gpuError": null
+      },
+      "estimatedPixelsMiB": {
+        "decodedImages": 43.99354553222656,
+        "tileSurfaces": 6.5137939453125,
+        "ground": 11.08984375
+      }
+    },
+    {
+      "phase": "stop-1-natural",
+      "map": "world",
+      "pos": {
+        "x": 129.48044000000553,
+        "y": 6.89494000000001
+      },
+      "serverPos": {
+        "x": 129.48044000000553,
+        "y": 6.89494000000001
+      },
+      "hp": 100,
+      "satiety": 85.2395,
+      "hidden": false,
+      "chunks": 45,
+      "window": "4,0",
+      "scenery": 74,
+      "buildings": 386,
+      "interactables": 153,
+      "serverDrops": 0,
+      "artImages": 19,
+      "decodedImagePixels": 13629796,
+      "tileSurfaces": 12,
+      "tilePixels": 2561328,
+      "groundPixels": 2907136,
+      "heapBytes": 13296819,
+      "errors": [],
+      "diagnostics": [],
+      "corrections": 0,
+      "cache": {
+        "initial": 25,
+        "newKeys": 20,
+        "regenerated": 0,
+        "evicted": 0,
+        "maxSize": 45,
+        "seenOverflow": false,
+        "eventOverflow": false,
+        "seen": 45
+      },
+      "heap": {
+        "usedSize": 12554072,
+        "totalSize": 36438016,
+        "embedderHeapUsedSize": 3448680,
+        "backingStorageSize": 704039
+      },
+      "processes": {
+        "at": "2026-10-23T10:28:49.1701721Z",
+        "processCount": 9,
+        "workingSetMB": 876.98046875,
+        "privateCommittedMB": 518.15625,
+        "cpuSeconds": 77.796875,
+        "gpu": {
+          "dedicatedMB": 0,
+          "sharedMB": 177.578125,
+          "maxSingleEnginePercent": 42
+        },
+        "gpuError": null
+      },
+      "estimatedPixelsMiB": {
+        "decodedImages": 51.99354553222656,
+        "tileSurfaces": 9.77069091796875,
+        "ground": 11.08984375
+      }
+    },
+    {
+      "phase": "stop-2-natural",
+      "map": "world",
+      "pos": {
+        "x": 257.37171999998793,
+        "y": 6.89494000000001
+      },
+      "serverPos": {
+        "x": 257.37171999998793,
+        "y": 6.89494000000001
+      },
+      "hp": 100,
+      "satiety": 76.16850000000005,
+      "hidden": false,
+      "chunks": 64,
+      "window": "8,0",
+      "scenery": 74,
+      "buildings": 386,
+      "interactables": 174,
+      "serverDrops": 0,
+      "artImages": 21,
+      "decodedImagePixels": 16250710,
+      "tileSurfaces": 12,
+      "tilePixels": 2561328,
+      "groundPixels": 2907136,
+      "heapBytes": 22418449,
+      "errors": [],
+      "diagnostics": [],
+      "corrections": 0,
+      "cache": {
+        "initial": 25,
+        "newKeys": 40,
+        "regenerated": 0,
+        "evicted": 1,
+        "maxSize": 64,
+        "seenOverflow": false,
+        "eventOverflow": false,
+        "seen": 65
+      },
+      "heap": {
+        "usedSize": 21676136,
+        "totalSize": 63438848,
+        "embedderHeapUsedSize": 8057448,
+        "backingStorageSize": 752205
+      },
+      "processes": {
+        "at": "2026-10-23T10:29:26.1500392Z",
+        "processCount": 9,
+        "workingSetMB": 780.75,
+        "privateCommittedMB": 537.7421875,
+        "cpuSeconds": 139.765625,
+        "gpu": {
+          "dedicatedMB": 0,
+          "sharedMB": 191.37109375,
+          "maxSingleEnginePercent": 49
+        },
+        "gpuError": null
+      },
+      "estimatedPixelsMiB": {
+        "decodedImages": 61.991539001464844,
+        "tileSurfaces": 9.77069091796875,
+        "ground": 11.08984375
+      }
+    },
+    {
+      "phase": "stop-3-natural",
+      "map": "world",
+      "pos": {
+        "x": 385.4241200000157,
+        "y": 6.89494000000001
+      },
+      "serverPos": {
+        "x": 385.4241200000157,
+        "y": 6.89494000000001
+      },
+      "hp": 100,
+      "satiety": 66.86850000000007,
+      "hidden": false,
+      "chunks": 64,
+      "window": "12,0",
+      "scenery": 72,
+      "buildings": 462,
+      "interactables": 171,
+      "serverDrops": 0,
+      "artImages": 21,
+      "decodedImagePixels": 16250710,
+      "tileSurfaces": 12,
+      "tilePixels": 2561328,
+      "groundPixels": 2907136,
+      "heapBytes": 33248235,
+      "errors": [],
+      "diagnostics": [],
+      "corrections": 0,
+      "cache": {
+        "initial": 25,
+        "newKeys": 60,
+        "regenerated": 0,
+        "evicted": 21,
+        "maxSize": 64,
+        "seenOverflow": false,
+        "eventOverflow": false,
+        "seen": 85
+      },
+      "heap": {
+        "usedSize": 32532736,
+        "totalSize": 63963136,
+        "embedderHeapUsedSize": 7028256,
+        "backingStorageSize": 717479
+      },
+      "processes": {
+        "at": "2026-10-23T10:30:02.7354968Z",
+        "processCount": 9,
+        "workingSetMB": 504.0234375,
+        "privateCommittedMB": 538.18359375,
+        "cpuSeconds": 192.109375,
+        "gpu": {
+          "dedicatedMB": 0,
+          "sharedMB": 183.34765625,
+          "maxSingleEnginePercent": 37
+        },
+        "gpuError": null
+      },
+      "estimatedPixelsMiB": {
+        "decodedImages": 61.991539001464844,
+        "tileSurfaces": 9.77069091796875,
+        "ground": 11.08984375
+      }
+    },
+    {
+      "phase": "stop-4-natural",
+      "map": "world",
+      "pos": {
+        "x": 256.5645999999865,
+        "y": 6.89494000000001
+      },
+      "serverPos": {
+        "x": 256.5645999999865,
+        "y": 6.89494000000001
+      },
+      "hp": 100,
+      "satiety": 57.51175000000008,
+      "hidden": false,
+      "chunks": 64,
+      "window": "8,0",
+      "scenery": 74,
+      "buildings": 386,
+      "interactables": 174,
+      "serverDrops": 0,
+      "artImages": 21,
+      "decodedImagePixels": 16250710,
+      "tileSurfaces": 12,
+      "tilePixels": 2561328,
+      "groundPixels": 2907136,
+      "heapBytes": 8041763,
+      "errors": [],
+      "diagnostics": [],
+      "corrections": 0,
+      "cache": {
+        "initial": 25,
+        "newKeys": 60,
+        "regenerated": 0,
+        "evicted": 21,
+        "maxSize": 64,
+        "seenOverflow": false,
+        "eventOverflow": false,
+        "seen": 85
+      },
+      "heap": {
+        "usedSize": 7375648,
+        "totalSize": 63963136,
+        "embedderHeapUsedSize": 6522552,
+        "backingStorageSize": 668095
+      },
+      "processes": {
+        "at": "2026-10-23T10:30:40.3936557Z",
+        "processCount": 9,
+        "workingSetMB": 523.28515625,
+        "privateCommittedMB": 545.0234375,
+        "cpuSeconds": 242.828125,
+        "gpu": {
+          "dedicatedMB": 0,
+          "sharedMB": 197.26953125,
+          "maxSingleEnginePercent": 49
+        },
+        "gpuError": null
+      },
+      "estimatedPixelsMiB": {
+        "decodedImages": 61.991539001464844,
+        "tileSurfaces": 9.77069091796875,
+        "ground": 11.08984375
+      }
+    },
+    {
+      "phase": "stop-5-natural",
+      "map": "world",
+      "pos": {
+        "x": 128.64976000000155,
+        "y": 6.89494000000001
+      },
+      "serverPos": {
+        "x": 128.64976000000155,
+        "y": 6.89494000000001
+      },
+      "hp": 100,
+      "satiety": 48.20750000000008,
+      "hidden": false,
+      "chunks": 64,
+      "window": "4,0",
+      "scenery": 74,
+      "buildings": 386,
+      "interactables": 153,
+      "serverDrops": 0,
+      "artImages": 21,
+      "decodedImagePixels": 16250710,
+      "tileSurfaces": 12,
+      "tilePixels": 2561328,
+      "groundPixels": 2907136,
+      "heapBytes": 18673248,
+      "errors": [],
+      "diagnostics": [],
+      "corrections": 0,
+      "cache": {
+        "initial": 25,
+        "newKeys": 60,
+        "regenerated": 1,
+        "evicted": 22,
+        "maxSize": 64,
+        "seenOverflow": false,
+        "eventOverflow": false,
+        "seen": 85
+      },
+      "heap": {
+        "usedSize": 17959884,
+        "totalSize": 64487424,
+        "embedderHeapUsedSize": 4285632,
+        "backingStorageSize": 715344
+      },
+      "processes": {
+        "at": "2026-10-23T10:31:17.0265021Z",
+        "processCount": 9,
+        "workingSetMB": 503.23828125,
+        "privateCommittedMB": 552.69921875,
+        "cpuSeconds": 296.0625,
+        "gpu": {
+          "dedicatedMB": 0,
+          "sharedMB": 198.93359375,
+          "maxSingleEnginePercent": 48
+        },
+        "gpuError": null
+      },
+      "estimatedPixelsMiB": {
+        "decodedImages": 61.991539001464844,
+        "tileSurfaces": 9.77069091796875,
+        "ground": 11.08984375
+      }
+    },
+    {
+      "phase": "stop-6-natural",
+      "map": "world",
+      "pos": {
+        "x": 0.9192199999960105,
+        "y": 6.89494000000001
+      },
+      "serverPos": {
+        "x": 0.9192199999960105,
+        "y": 6.89494000000001
+      },
+      "hp": 100,
+      "satiety": 39.11525000000008,
+      "hidden": false,
+      "chunks": 64,
+      "window": "0,0",
+      "scenery": 108,
+      "buildings": 388,
+      "interactables": 132,
+      "serverDrops": 0,
+      "artImages": 21,
+      "decodedImagePixels": 16250710,
+      "tileSurfaces": 12,
+      "tilePixels": 2561328,
+      "groundPixels": 2907136,
+      "heapBytes": 15691332,
+      "errors": [],
+      "diagnostics": [],
+      "corrections": 0,
+      "cache": {
+        "initial": 25,
+        "newKeys": 60,
+        "regenerated": 21,
+        "evicted": 42,
+        "maxSize": 64,
+        "seenOverflow": false,
+        "eventOverflow": false,
+        "seen": 85
+      },
+      "heap": {
+        "usedSize": 15022060,
+        "totalSize": 64487424,
+        "embedderHeapUsedSize": 5360928,
+        "backingStorageSize": 671252
+      },
+      "processes": {
+        "at": "2026-10-23T10:31:53.2197025Z",
+        "processCount": 9,
+        "workingSetMB": 520.890625,
+        "privateCommittedMB": 568.1484375,
+        "cpuSeconds": 352.1875,
+        "gpu": {
+          "dedicatedMB": 0,
+          "sharedMB": 205.59765625,
+          "maxSingleEnginePercent": 50
+        },
+        "gpuError": null
+      },
+      "estimatedPixelsMiB": {
+        "decodedImages": 61.991539001464844,
+        "tileSurfaces": 9.77069091796875,
+        "ground": 11.08984375
+      }
+    },
+    {
+      "phase": "home-forced-gc",
+      "map": "world",
+      "pos": {
+        "x": 0.9192199999960105,
+        "y": 6.89494000000001
+      },
+      "serverPos": {
+        "x": 0.9192199999960105,
+        "y": 6.89494000000001
+      },
+      "hp": 100,
+      "satiety": 38.602750000000086,
+      "hidden": false,
+      "chunks": 64,
+      "window": "0,0",
+      "scenery": 108,
+      "buildings": 388,
+      "interactables": 132,
+      "serverDrops": 0,
+      "artImages": 21,
+      "decodedImagePixels": 16250710,
+      "tileSurfaces": 12,
+      "tilePixels": 2561328,
+      "groundPixels": 2907136,
+      "heapBytes": 7745931,
+      "errors": [],
+      "diagnostics": [],
+      "corrections": 0,
+      "cache": {
+        "initial": 25,
+        "newKeys": 60,
+        "regenerated": 21,
+        "evicted": 42,
+        "maxSize": 64,
+        "seenOverflow": false,
+        "eventOverflow": false,
+        "seen": 85
+      },
+      "heap": {
+        "usedSize": 7077740,
+        "totalSize": 12582912,
+        "embedderHeapUsedSize": 6451728,
+        "backingStorageSize": 670171
+      },
+      "processes": {
+        "at": "2026-10-23T10:31:55.7913171Z",
+        "processCount": 9,
+        "workingSetMB": 471.12109375,
+        "privateCommittedMB": 516.6484375,
+        "cpuSeconds": 356.4375,
+        "gpu": {
+          "dedicatedMB": 0,
+          "sharedMB": 196.91015625,
+          "maxSingleEnginePercent": 47
+        },
+        "gpuError": null
+      },
+      "estimatedPixelsMiB": {
+        "decodedImages": 61.991539001464844,
+        "tileSurfaces": 9.77069091796875,
+        "ground": 11.08984375
+      }
+    }
+  ],
+  "slowWindows": [
+    {
+      "leg": 1,
+      "start": 17722.40000000596,
+      "interval": 50.1000000089407,
+      "x": 2.76411999999999,
+      "y": 6.89494000000001,
+      "weather": "clear",
+      "heap": 7506418,
+      "stages": {
+        "renderMapGround": 0.20000000298023224,
+        "drawHouse": 0.9000000059604645,
+        "renderParticles": 0.19999998807907104,
+        "renderDynamicLighting": 0,
+        "renderWeather": 0,
+        "renderThemeAtmosphere": 0
+      },
+      "duration": 2.5,
+      "intervalCacheEvents": [],
+      "renderCacheEvents": [],
+      "nearestRecordedRefreshMs": 7700.399999991059
+    },
+    {
+      "leg": 2,
+      "start": 69338.29999999702,
+      "interval": 67.3999999910593,
+      "x": 186.61229999999756,
+      "y": 6.89494000000001,
+      "weather": "clear",
+      "heap": 20377868,
+      "stages": {
+        "renderMapGroundUncached": 2.7999999970197678,
+        "renderGroundDetails": 0,
+        "renderMapGround": 3.800000011920929,
+        "drawHouse": 0.4000000059604645,
+        "renderParticles": 0,
+        "renderDynamicLighting": 0,
+        "renderWeather": 0,
+        "renderThemeAtmosphere": 0
+      },
+      "duration": 4.9000000059604645,
+      "intervalCacheEvents": [],
+      "renderCacheEvents": [],
+      "nearestRecordedRefreshMs": 1445.2000000029802
+    },
+    {
+      "leg": 2,
+      "start": 70413.5,
+      "interval": 16.599999994039536,
+      "x": 190.68665999999712,
+      "y": 6.89494000000001,
+      "weather": "clear",
+      "heap": 23472238,
+      "stages": {
+        "renderMapGroundUncached": 3.5999999940395355,
+        "renderGroundDetails": 0.10000000894069672,
+        "renderMapGround": 48.599999994039536,
+        "drawHouse": 0.9000000059604645,
+        "renderParticles": 0,
+        "renderDynamicLighting": 0,
+        "renderWeather": 0,
+        "renderThemeAtmosphere": 0
+      },
+      "duration": 50.900000005960464,
+      "intervalCacheEvents": [],
+      "renderCacheEvents": [],
+      "nearestRecordedRefreshMs": 370
+    },
+    {
+      "leg": 2,
+      "start": 70466.29999999702,
+      "interval": 52.79999999701977,
+      "x": 190.89299999999713,
+      "y": 6.89494000000001,
+      "weather": "clear",
+      "heap": 24693510,
+      "stages": {
+        "renderMapGround": 0.10000000894069672,
+        "drawHouse": 1,
+        "renderParticles": 0,
+        "renderDynamicLighting": 0.09999999403953552,
+        "renderWeather": 0,
+        "renderThemeAtmosphere": 0
+      },
+      "duration": 4.700000002980232,
+      "intervalCacheEvents": [],
+      "renderCacheEvents": [],
+      "nearestRecordedRefreshMs": 317.20000000298023
+    },
+    {
+      "leg": 2,
+      "start": 70527.29999999702,
+      "interval": 52.8999999910593,
+      "x": 191.1008599999971,
+      "y": 6.89494000000001,
+      "weather": "clear",
+      "heap": 26176345,
+      "stages": {
+        "renderMapGround": 0.10000000894069672,
+        "drawHouse": 1.5,
+        "renderParticles": 0,
+        "renderDynamicLighting": 0,
+        "renderWeather": 0,
+        "renderThemeAtmosphere": 0
+      },
+      "duration": 4.9000000059604645,
+      "intervalCacheEvents": [],
+      "renderCacheEvents": [],
+      "nearestRecordedRefreshMs": 256.20000000298023
+    },
+    {
+      "leg": 4,
+      "start": 129856.10000000894,
+      "interval": 18.400000005960464,
+      "x": 381.07198000001483,
+      "y": 6.89494000000001,
+      "weather": "clear",
+      "heap": 25744559,
+      "stages": {
+        "renderMapGround": 0.09999999403953552,
+        "drawHouse": 0.20000000298023224,
+        "renderParticles": 0,
+        "renderDynamicLighting": 0,
+        "renderWeather": 0,
+        "renderThemeAtmosphere": 0
+      },
+      "duration": 59.19999998807907,
+      "intervalCacheEvents": [],
+      "renderCacheEvents": [],
+      "nearestRecordedRefreshMs": 763.9000000059605
+    },
+    {
+      "leg": 4,
+      "start": 129944.90000000596,
+      "interval": 88.79999999701977,
+      "x": 380.7497400000148,
+      "y": 6.89494000000001,
+      "weather": "clear",
+      "heap": 25999179,
+      "stages": {
+        "renderMapGround": 0,
+        "drawHouse": 0.4000000059604645,
+        "renderParticles": 0,
+        "renderDynamicLighting": 0,
+        "renderWeather": 0,
+        "renderThemeAtmosphere": 0
+      },
+      "duration": 1,
+      "intervalCacheEvents": [],
+      "renderCacheEvents": [],
+      "nearestRecordedRefreshMs": 852.7000000029802
+    },
+    {
+      "leg": 4,
+      "start": 132571.60000000894,
+      "interval": 134.1000000089407,
+      "x": 370.8363000000126,
+      "y": 6.89494000000001,
+      "weather": "clear",
+      "heap": 19536198,
+      "stages": {
+        "renderMapGround": 0,
+        "drawHouse": 0.5,
+        "renderParticles": 0,
+        "renderDynamicLighting": 0,
+        "renderWeather": 0,
+        "renderThemeAtmosphere": 0
+      },
+      "duration": 1.5999999940395355,
+      "intervalCacheEvents": [],
+      "renderCacheEvents": [],
+      "nearestRecordedRefreshMs": 3479.4000000059605
+    },
+    {
+      "leg": 4,
+      "start": 135964.29999999702,
+      "interval": 291,
+      "x": 358.6432400000104,
+      "y": 6.89494000000001,
+      "weather": "clear",
+      "heap": 21024703,
+      "stages": {
+        "renderMapGround": 0,
+        "drawHouse": 0.5,
+        "renderParticles": 0,
+        "renderDynamicLighting": 0,
+        "renderWeather": 0,
+        "renderThemeAtmosphere": 0
+      },
+      "duration": 2.2000000029802322,
+      "intervalCacheEvents": [],
+      "renderCacheEvents": [],
+      "nearestRecordedRefreshMs": 1757
+    },
+    {
+      "leg": 4,
+      "start": 154532.10000000894,
+      "interval": 60.80000001192093,
+      "x": 288.0886399999926,
+      "y": 6.89494000000001,
+      "weather": "clear",
+      "heap": 13329409,
+      "stages": {
+        "renderMapGround": 0,
+        "drawHouse": 0.5999999940395355,
+        "renderParticles": 0,
+        "renderDynamicLighting": 0,
+        "renderWeather": 0,
+        "renderThemeAtmosphere": 0
+      },
+      "duration": 1.5,
+      "intervalCacheEvents": [],
+      "renderCacheEvents": [],
+      "nearestRecordedRefreshMs": 42.79999999701977
+    }
+  ],
+  "initialFailure": {
+    "success": false,
+    "measuredLegs": 0,
+    "memorySamples": 0,
+    "kind": "Observer page resource regexp escaping caused SyntaxError before timing; ordinary spawn-to-road navigation had occurred. Continued the same DB after fixing observer strings; raw failed record retained."
+  },
+  "audit": {
+    "integrity": "ok",
+    "consistentBackupRestore": true,
+    "players": 1,
+    "hp": 100,
+    "inventoryEmpty": true,
+    "resourcesAllZero": true,
+    "equipmentLevelXpKillsBlueprintsUnchanged": true,
+    "noCamp": true,
+    "sharedAssetStateUnchanged": true,
+    "initialSpawn": {
+      "x": 0,
+      "y": 1
+    },
+    "finalPosition": {
+      "x": 0.9192199999960105,
+      "y": 6.89494000000001
+    },
+    "finalSatiety": 38.08100000000009,
+    "stoppedEndpointAuthorityAgreed": true
+  },
+  "limits": [
+    "Refresh-return cache size, not transient trim or total server/browser memory bound",
+    "Nine stopped point samples; process set changes12/11/9 and working-set sums can double-count shared pages",
+    "ForcedGC is intervention, endpoints only approximately same location with25 versus64 cached chunks; no long-term leak proof",
+    "Pixel estimates are decoded RGBA theory, not allocated GPU or physical RAM",
+    "GPU percent is maximum one browser-process engine counter, not whole-device utilization",
+    "JavaScript render-start/RAF timings are not physical game presentation",
+    "Callback excludes decode/parse and RTT; corrections are cumulative observations, not every-packet acceptance",
+    "Refresh duration includes observing key-set differences; selected stage timings can nest and must not be summed",
+    "Slow-event lists retain latest128, numeric lists20000; no numeric cap hit; complete frame-by-frame context not retained",
+    "No observed overlap with recorded cache refreshes excludes only direct recorded overlap, not delayed GC/GPU/OS effects",
+    "One unarmed synthetic road route, not earned play balance, all-native input, full world, siege or population/long-session acceptance"
+  ],
+  "review": "Independent read-only final review matched all six legs, nine samples, LRU accounting, ten slow contexts, separate game/blank GPU observations and eight source hashes. No P1/P2, credential leak or evidence mismatch; performance remains unaccepted. Reviewer ran no tests, services or browsers and opened no database.",
+  "sourceHashes": [
+    {
+      "path": "data/world-frontier-20261023-a1-results.json",
+      "sha256": "fadac0a117b51def213c868136b6e427ef88bd9ff4e25d21a5c7aa3d2e5d6bee"
+    },
+    {
+      "path": "data/world-frontier-20261023-a2-results.json",
+      "sha256": "89c6bdebb74c06e33cf2feefd796efcf72435bb9e7bdacaa597c567344bc4c03"
+    },
+    {
+      "path": "data/validate-world-frontier-20261023-a2.cjs",
+      "sha256": "28dcee46c71f5959a2ad038ffd3045f7bd35a7148879fd3c7d48e48c825982be"
+    },
+    {
+      "path": "data/seed-world-frontier-20261023-a1.ts",
+      "sha256": "946c381c3f6dacaec4bd642f582ffabf00da7f93a464cf3fed995d2fa81b6534"
+    },
+    {
+      "path": "data/sample-browser-processes.ps1",
+      "sha256": "de0ce3170f9002ffbde31977172d46400857e2db1f0bb8c78b509190ff48d591"
+    },
+    {
+      "path": "data/world-frontier-gpu-20261023-a3-results.json",
+      "sha256": "d271107103cf59c0da643d38441d1ff7975cc6e7e4da07694449e0eebedbcdba"
+    },
+    {
+      "path": "data/owned-browser-gpu-20261023-results.json",
+      "sha256": "1d97bb291e63c514993338dd9f626afecfacbe185ef2932c088ffbb67cd0bfca"
+    },
+    {
+      "path": "data/world-frontier-final-types-20261023.log",
+      "sha256": "7f3594d7a965c703e6361ae50c0ef50cf9c344c621d801592b074b48554f4235"
+    }
+  ],
+  "gpuObservation": {
+    "scope": "Actual loaded production game in a separate exact SQLite backup of the completed route; same browser flags/resolution/profile isolation, no position/assets/rules edits. Observation only, not a new walking benchmark or proof of previous process adapter.",
+    "actualPageBundle": [
+      "/assets/index-z_DuULg9.js"
+    ],
+    "glRenderer": "ANGLE (Intel, Intel(R) UHD Graphics (0x00009A60) Direct3D11 vs_5_0 ps_5_0, D3D11-31.0.101.1999)",
+    "featureStatus": {
+      "2d_canvas": "enabled",
+      "direct_rendering_display_compositor": "disabled_off_ok",
+      "gpu_compositing": "enabled",
+      "multiple_raster_threads": "enabled_on",
+      "opengl": "enabled_on",
+      "rasterization": "enabled",
+      "raw_draw": "disabled_off_ok",
+      "skia_graphite": "disabled_off",
+      "trees_in_viz": "disabled_off",
+      "video_decode": "enabled",
+      "video_encode": "enabled",
+      "webgl": "enabled",
+      "webgpu": "enabled",
+      "webnn": "disabled_off"
+    },
+    "devices": [
+      {
+        "name": "Intel(R) UHD Graphics",
+        "vendor": "Intel",
+        "driverVersion": "31.0.101.1999"
+      },
+      {
+        "name": "NVIDIA GeForce RTX 3070 Laptop GPU",
+        "vendor": "",
+        "driverVersion": "30.0.15.1289"
+      },
+      {
+        "name": "Intel(R) UHD Graphics",
+        "vendor": "",
+        "driverVersion": "31.0.101.1999"
+      },
+      {
+        "name": "Intel(R) UHD Graphics",
+        "vendor": "",
+        "driverVersion": "31.0.101.1999"
+      },
+      {
+        "name": "Microsoft Basic Render Driver",
+        "vendor": "",
+        "driverVersion": "10.0.26100.9711"
+      }
+    ],
+    "unchangedSavedAssets": true,
+    "blankSameFlagsRenderer": "ANGLE (Intel, Intel(R) UHD Graphics (0x00009A60) Direct3D11 vs_5_0 ps_5_0, D3D11-31.0.101.1999)",
+    "limit": "Separate subsequently launched game/blank browsers, not proof of the earlier closed benchmark process adapter, not a causal stall test or comparison; no OS/browser graphics preferences changed"
+  },
+  "verification": {
+    "typeCheck": "passed",
+    "productionCodeChanged": false,
+    "productionTests": "No new production edit; last delivered607-test suite underf69fa8d, not rerun for evidence-only work"
+  }
+}

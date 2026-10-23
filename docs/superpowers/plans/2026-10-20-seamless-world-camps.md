@@ -1615,3 +1615,19 @@ IsometricEngine缓存当前buildings数组ref/length对应分组，authority换�
 earned-room-roof-a1沿同真实采集的60建筑DB，正常时钟/导航、原生4次E门切换及仓库读取，无赠物/改坐标/造夹具房。只读有界绘制探针+已查看截图：初始屋内/关门屋内/屋外开门/屋外关门/再次入内/查看仓库/重启，实际屋顶序列false,false,true,true,false,false,false，屋内前墙alpha.18，每次24围合件25地板。实际阶段共13.492秒含截图/探针/重启，不作FPS/盲玩耗时结论。重启同DB/browser正常，画面无异常/诊断/HMR。
 
 审计对比上一轮09:42:30.188Z一致性备份，合并private commits后完整60建筑、库存7木/稀有装备、30防御弹、营地/公共节点/生产/drops不变，角色物理资源/物品实例/装备/HP120/等级XP击杀蓝图不变；正常位置/时间/饱食等记账变化。新SQLite一致性backup经GameWorld恢复上述资产与最终位置/生命一致。公共证据docs/verification/2026-10-23-placed-room-roofs-results.json，设计/计划同名placed-room-roofs；原始owned截图/log/DB留ignored data，真实data/sdc.sqlite未打开，所属进程关闭。原卡顿/长期内存/连续新chunk/全世界实走与多人攻城、经济仍未验收，完整目标继续进行中。
+
+## 连续新区域的真实缓存淘汰与停顿检查点（2026-10-23）
+
+上一轮屋顶runtime97957e2及交付记录f69fa8d已推送，是实际进展。本轮生产不改，补此前0↔193只用60缓存从未触发64上限的缺口。world-frontier-a1仅单个默认100HP空角色，默认spawn后正常走到(0,7)，无赠物/坐标注入/营地/NPC或时钟覆盖；观察脚本页面资源regexp转义丢失导致SyntaxError，在计时腿/内存样本前exit1。保留原失败，a2修观察表达式并静态编译13字符串，沿同DB继续，未重置角色或饱食刷过。
+
+生产headless Chrome155、1920×1080/DPR1、实际bundle index-z_DuULg9.js，正常virtualJoystick普通速度六段x0→129.48→257.37→385.42→256.56→128.65→.919/y6.895，计时步行202.8154秒。不是全原生输入/盲玩或赚取经济。9次采样在停步时，计时不并行测试/构建/其它QA。HP100全程、最终存盘饱食38.081；累计纠正0/无异常诊断HMR，停步样本客户端和server位置一致，立即leg端点有约1.22格自然滞后，因此不宣称每包接受。两端实机截图已查看，正常显示，最终酸雨与初始晴天也阻止据此作严格前后性能改善对比。
+
+LRU以实际refresh前后key集合差区分delete+set重排，探针不留chunk对象。初25+首次新60+旧区重生21−真实淘汰42=终64，共85distinct键；24换窗口事件，返回大小最大64、seen512/event128未满。此处不是生成/trim过程中瞬时chunk内存上限。缓存45→64后保持64且返回重新生成确实发生，补齐短路线淘汰证据，不能推成全世界/长时间无泄漏。refresh含探针key差开销，最大5.1ms。
+
+12044实际draw/12038 draw-start间隔，六段drawP952.5/3.5/2.3/2/2.4/2.6ms，但50.9ms(x190.69)和59.2ms(x381.07)两次绘制超50，局部drawBudgetMet=false。8个game draw-start间隔>50ms、最坏291ms(x358.64，随后绘制仅2.2ms)，独立RAFmax284.7ms，观测3长task。update最大18.8ms，onGameState/apply回调最大2.4ms（不含decode/parse/RTT），数值数组最多5432低于20000，slow列表最多53低于128。十条大绘制/长间隔上下文与记录的refresh均无直接时间交叠，不能据此排除延迟GC/GPU/OS影响或认定单根因。50.9ms帧外层ground48.6ms而嵌套uncached3.6ms，59.2ms帧所测子层均短，仍有未拆分图形操作/主线程调度；嵌套时间不能直接相加。整体性能仍不通过，未猜一个优化或冒称稳定60fps/真实物理呈现通过。
+
+9个停步点自然JS heap初5.416→外出31.026→下一停7.034→最终14.326MiB，forcedGC初6.319/末6.750；两端约同位置但缓存25/64且图像14/21不同。浏览器private自然582.625→568.148MiB、GC后525.973→516.648，进程数12→11→9影响对比；工作集合计998.340→520.891/末GC471.121可重复计算共享页。GPU shared自然172.75→205.598、GC177.094→196.910，max单engine不是整机GPU%。图像RGBA估算43.994→61.992MiB、tile8→12/6.514→9.771MiB、ground11.090MiB稳定。数据不能证明800MB问题已解决或无长期泄漏。
+
+硬件清单同时有Intel UHD、RTX3070 Laptop及两个虚拟显示适配器；后续独立同flags空白浏览器与实际加载游戏的独立浏览器均报告Intel ANGLE/D3D11、2D canvas/GPU compositing enabled。游戏探针使用完成路线DB的一致性副本，无坐标/资产修改，实际加载同bundle，资产审计不变；原路线DB不受该探针影响。原行走浏览器已关闭而未录adapter，不能反推其一定用Intel，更不能把Intel认定唯一卡顿原因。本轮没有改OS/驱动/显卡偏好，没有GPU切换A/B。
+
+原路线SQLite integrity、合并private commits后的空角色/零物资/装备等级XP击杀蓝图/HP100、无营地及共享建筑/库存/弹药/drop/生产不变，再作一致性backup经GameWorld恢复资产与最终位置/生命通过。新QA脚本type-check通过，生产没改，沿用上次607业务测试记录未为文档工作重复全套。计划docs/superpowers/plans/2026-10-23-frontier-cache-stalls.md，去凭据证据docs/verification/2026-10-23-frontier-cache-stalls-results.json；原失败/raw脚本/截图/ownedDB留ignored data，真实data/sdc.sqlite未打开，所属进程关闭。下一步同时间轴观察实际game GPU、main clearRect/ground自复制和最终blit等长canvas调用与GC/GPU/OS调度，不用缩缓存/关NPC/减美术层来替代根因。完整世界/长期内存/呈现流畅性、多方攻城和经济目标继续进行中。
