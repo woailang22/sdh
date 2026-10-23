@@ -460,6 +460,77 @@ describe('authoritative acid rain', () => {
 });
 
 describe('private survival commits', () => {
+  it('rolls back failed defense death, expired drops and life context without losing an earlier private shot', () => {
+    const { game, db, p, advance } = campSetup();
+    for (let i = 0; i < 600; i++) game.state.buildings['untouched_floor_' + i] = { id: 'untouched_floor_' + i, type: 'wood_floor', x: 20 + i % 10, y: 20 + Math.floor(i / 10), hp: 200, maxHp: 200, level: 1, name: '地板', ownerId: p.id, mapId: p.mapId };
+    const floor = game.state.buildings.untouched_floor_0;
+    const raider = game.state.players.raider; Object.assign(raider, { mapId: 'home_owner', x: 4, y: 0, hp: 10, shield: 0 });
+    raider.resources.wood = 12; raider.inventory[0] = makeItem('food', 2);
+    const turret = facility(game, 'turret', 3, 0); game.state.ammo[turret.id] = 3;
+    game.state.drops.expired = { id: 'expired', name: '旧包', mapId: 'world', x: 0, y: 0, items: [], expiresAt: 10100 };
+    p.equipment.weapon = makeItem('rifle', 1); p.resources.ammo = 2; game.persist();
+    expect(game.actionPlayer('owner', { action: 'fire', requestId: 'already-paid' }).error).toBeUndefined();
+    const before = structuredClone(game.state), context = game.fireContext('raider'), commits = db.listWorldPlayerCommits();
+    const save = db.checkpointWorld; db.checkpointWorld = () => { throw Error('shared checkpoint failed'); }; advance(200);
+    const stringify = JSON.stringify; let worldCopies = 0;
+    const serialization = vi.spyOn(JSON, 'stringify').mockImplementation((...args: Parameters<typeof JSON.stringify>) => { if (args[0]?.buildings?.untouched_floor_0) worldCopies++; return stringify(...args); });
+    try { expect(() => game.tick()).toThrow('shared checkpoint failed'); } finally { serialization.mockRestore(); }
+    expect(worldCopies).toBe(1); // The attempted durable checkpoint, no rollback copy.
+    expect(game.state.buildings.untouched_floor_0).toBe(floor);
+    expect(game.state).toEqual(before); expect(game.state.players.raider).toBe(raider);
+    expect(game.fireContext('raider')).toBe(context); expect(game.sharedTickChanged).toBe(false);
+    expect(db.listWorldPlayerCommits()).toEqual(commits);
+    db.checkpointWorld = save; expect(game.tick()).toBe(true);
+    expect(game.state.ammo[turret.id]).toBe(2); expect(game.state.drops).not.toHaveProperty('expired');
+    const drops = Object.values(game.state.drops); expect(drops).toHaveLength(1);
+    expect(drops[0].items.find(i => i.itemId === 'wood')?.count).toBe(12);
+    expect(drops[0].items.find(i => i.itemId === 'food')?.count).toBe(2);
+    expect(raider.mapId).toBe('world'); expect(game.fireContext('raider')).not.toBe(context);
+    const restored = new GameWorld(db, rules, () => 10200);
+    expect(restored.state.players.owner.resources.ammo).toBe(1); expect(restored.state.handled.owner).toEqual(before.handled.owner);
+    expect(restored.state.ammo[turret.id]).toBe(2); expect(db.listWorldPlayerCommits()).toEqual([]);
+  });
+  it('restores NPC simulation and newly discovered monsters after failed shared persistence before retrying the same frame', () => {
+    let time = 10000; const db = createMemoryDb();
+    const npcRules = { ...rules, monstersNear: (x: number) => x > 100 ? [{ id: 'new', x: 152, y: 0, hp: 100 }] : [] };
+    const game = new GameWorld(db, npcRules, () => time); game.connect('p', '行者');
+    Object.assign(game.state.players.p, { x: 150, y: 0, shield: 0 });
+    game.state.monsters.hit = { id: 'hit', name: '怪物', x: 151, y: 0, spawnX: 151, spawnY: 0, hp: 100, maxHp: 100, speed: 1.8, damage: 10, state: 'attack', animTime: 0, attackCooldown: 0, windup: .1, targetId: 'p' };
+    game.persist(); const before = structuredClone(game.state), save = db.checkpointWorld;
+    time = 11200; db.checkpointWorld = () => { throw Error('NPC checkpoint failed'); };
+    expect(() => game.tick()).toThrow('NPC checkpoint failed'); expect(game.state).toEqual(before);
+    db.checkpointWorld = save; game.tick();
+    expect(game.state.players.p.hp).toBe(90); expect(game.state.monsters.hit.windup).toBe(0);
+    expect(game.state.monsters).toHaveProperty('new');
+    game.tick(); expect(game.state.players.p.hp).toBe(90);
+  });
+  it('retains an accepted unsaved NPC frame when the next frame fails and removes only its newly introduced fields', () => {
+    let time = 10000; const db = createMemoryDb();
+    const npcRules = { ...rules, monstersNear: () => [{ id: 'roam', x: 20, y: 0, speed: 1.8 }] };
+    const game = new GameWorld(db, npcRules, () => time); game.connect('p', '行者');
+    const saved = db.getMeta('authoritative-world-v2'); time = 10200; expect(game.tick()).toBe(true);
+    expect(game.sharedTickChanged).toBe(true); expect(db.getMeta('authoritative-world-v2')).toBe(saved);
+    expect(game.state.monsters.roam.animTime).toBe(.2);
+    game.state.players.p.x = 19;
+    game.state.drops.expired = { id: 'expired', name: '', mapId: 'world', x: 0, y: 0, items: [], expiresAt: 10400 };
+    const before = structuredClone(game.state), persist = db.checkpointWorld; time = 10400;
+    db.checkpointWorld = () => { throw Error('second frame failed'); };
+    expect(() => game.tick()).toThrow('second frame failed'); expect(game.state).toEqual(before);
+    expect(game.state.monsters.roam).not.toHaveProperty('targetId');
+    db.checkpointWorld = persist; game.tick();
+    expect(game.state.monsters.roam.animTime).toBe(.4); expect(game.state.monsters.roam.targetId).toBe('p');
+    expect(game.state.drops).not.toHaveProperty('expired');
+  });
+  it('retries failed starvation death without duplicating dropped items or consuming the survival interval', () => {
+    const { game, db, p, advance } = campSetup(); Object.assign(p, { hp: 1, shield: 0, satiety: 0 });
+    p.resources.wood = 7; p.inventory[0] = makeItem('food', 2); game.persist();
+    const before = structuredClone(game.state), context = game.fireContext('owner'), persist = db.checkpointWorld;
+    advance(1000); db.checkpointWorld = () => { throw Error('starvation commit failed'); };
+    expect(() => game.tick()).toThrow('starvation commit failed'); expect(game.state).toEqual(before);
+    expect(game.fireContext('owner')).toBe(context);
+    db.checkpointWorld = persist; game.tick(); expect(p.mapId).toBe('world'); expect(Object.values(game.state.drops)).toHaveLength(1);
+    expect(Object.values(game.state.drops)[0].items.find(i => i.itemId === 'wood')?.count).toBe(7);
+  });
   it('saves multiple survival updates without serializing the full camp and restores status with existing shot replay', () => {
     const { game, db, p, advance } = campSetup(); const other = game.state.players.raider;
     for (let i = 0; i < 600; i++) game.state.buildings['status_floor_' + i] = { id: 'status_floor_' + i, type: 'wood_floor', name: '地板', x: i % 30, y: Math.floor(i / 30), hp: 200, maxHp: 200, level: 1, ownerId: p.id, mapId: p.mapId };

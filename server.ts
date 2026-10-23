@@ -228,7 +228,9 @@ wss.on('connection', (ws, req) => {
 
 setInterval(() => {
   const now = Date.now();
-  const dirty = game.tick();
+  let dirty: boolean;
+  try { dirty = game.tick(); }
+  catch (error) { console.error('[world] simulation tick failed', error); return; }
   for (const client of clients.values()) {
     if (now - client.lastSeen > 60000) { client.ws.terminate(); continue; }
     cancelChangedFire(client);

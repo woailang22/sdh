@@ -1,0 +1,59 @@
+{
+  "date": "2026-10-23",
+  "baselineCommit": "c7f54d72cd28177e0964e922bcc40061563b46ea",
+  "scope": "Roll back rejected simulation updates and contain their error at the production200ms loop; preserve valid private commits and retry semantics. No real database access or deployment.",
+  "rootCause": "Full tick checkpoints were atomic in SQLite, but GameWorld had already changed live HP/resources/drops/NPC/defense state and did not undo it on failure. The production timer also allowed the exception to escape.",
+  "changes": [
+    "Per-tick TickUndo records first entity preimages and affected dictionary/Map entries only. Reverse rollback deletes newly introduced fields, preserves root entity references and restores prior NPC clock and life generations.",
+    "New monster/drop entries, expired drops/active entries, survival, NPC simulation/damage, defense ammunition/timestamp and spikes HP participate. Successful NPC-movement-only/private-player/full-checkpoint behavior remains on existing paths.",
+    "The production loop catches a tick error and returns before its visibility/state broadcast, allowing later ticks to retry. No new database writer, table, protocol, attack cost or timing grace."
+  ],
+  "verification": {
+    "testFiles": 35,
+    "tests": 501,
+    "typecheck": "passed",
+    "productionBuild": "passed; client index-BRl8LPRa.js unchanged",
+    "existingBuildWarnings": ["Vite native-config __dirname", "Client chunk>500kB"],
+    "independentReview": "Design and final implementation reviewed independently; no P1/P2 found. Review-requested previous accepted NPC-frame and latest private-shot cases included.",
+    "redGreen": [
+      "Rejected defense-death checkpoint originally left turret3→2, target respawned with an inventory drop and removed the expired drop. Fixed version restores exact pre-tick gameplay state/life context and retries one real death.",
+      "Rejected NPC checkpoint originally retained target damage, advanced windup/cooldown and a newly discovered monster. Fixed version removes the new entity, restores optional fields/NPC clock, then retries the same frame once.",
+      "Removing only the production tick catch causes actual socket recovery test to fail because the server stops. Exact source restored and recovery passes."
+    ],
+    "regressions": [
+      "Already committed private ammunition/replay ledger survives failed shared death and is consolidated on successful retry.",
+      "One accepted unsaved NPC movement frame is retained when the following frame fails; only the rejected frame's new targetId and state changes are removed.",
+      "Failed starvation death restores survival interval, inventory, drop absence and life generation; retry creates only one real drop.",
+      "Existing pure-survival rollback, shared defense recovery, body expiry, map/weapon context, visibility and fire replay/rate tests remain passing."
+    ],
+    "copyScope": {
+      "syntheticUntouchedFloors": 600,
+      "failedSharedTickFullWorldSerializations": 1,
+      "explanation": "The one serialization is the attempted original durable checkpoint, not an undo copy. Untouched floor reference remains identical. Existing pure-survival600-floor test still sees zero world serializations.",
+      "limit": "This verifies work scope, not throughput or native frame/latency performance."
+    },
+    "actualProductionFaultRecovery": {
+      "method": "Unique OS-temp SQLite, actual production server/timers/WebSocket with controlled authoritative clock. A trigger rejects only shared-world UPDATE after startup and negotiation; private player rows remain writable. No runtime grants/reset used.",
+      "failedTick": {"targetHp": 100, "carriedAmmo": 10, "turretAmmo": 3, "spikesHp": 300, "cooldowns": {}},
+      "healthAndSocket": "HTTP health and WebSocket ping remain live",
+      "privateShotDuringFailure": {"requestId": "paid-during-failure", "targetHp": 100, "carriedAmmo": 9, "acknowledged": true},
+      "subsequentRejectedTick": {"targetHp": 100, "carriedAmmo": 9, "turretAmmo": 3, "spikesHp": 300, "cooldowns": {}},
+      "uncommittedDefenseBroadcasts": 0,
+      "checkpointWhileRejected": "Expired drop still present and private shot row/handled persist",
+      "afterRemovingTrigger": {"targetHp": 80, "turretAmmo": 2, "spikesHp": 290},
+      "nextLegalIntervalAndForceKillRecovery": {"targetHp": 60, "carriedAmmo": 9, "turretAmmo": 1, "spikesHp": 280, "defenseAt": {"turret": 11000, "spikes": 11000}, "expiredDrops": 0},
+      "handled": ["paid-during-failure"],
+      "replayAdditionalAmmo": 0,
+      "sqliteIntegrity": "ok"
+    },
+    "testHarnessCorrections": [
+      "Initial new assertion forgot camp creation/entry were already in handled; corrected to compare the captured full pre-tick ledger rather than erasing valid history.",
+      "First guard mutation did not match CRLF and stopped without modification; normalized matching subsequently produced the expected server-stopped failure, then restored the source."
+    ]
+  },
+  "remaining": [
+    "Previous dense eight-connection native gate still has one over-fast refusal; no new performance acceptance score is claimed.",
+    "This recovery claim covers simulation ticks. Connect/disconnect and other lifecycle save-failure policies are a separate remaining audit.",
+    "Real siege capacity, all growth/economy calibration and long-term scale remain broader-goal work. Goal active."
+  ]
+}

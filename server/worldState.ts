@@ -10,6 +10,7 @@ import { campExitPosition } from '../src/game/home';
 import { hasLineOfSight, isPositionBlocked } from '../src/game/navigation';
 import { BASE_INVENTORY_SLOTS, inventoryCapacity, resizeInventory, gatheringEffects } from '../src/game/equipmentRules';
 import type { DbHandle } from './db';
+import { TickUndo } from './tickUndo';
 
 export type ResourceKey = 'wood' | 'stone' | 'scrap' | 'parts' | 'food' | 'ammo' | 'c4' | 'medical' | 'credits' | 'shard';
 export type Resources = Record<ResourceKey, number>;
@@ -346,10 +347,11 @@ export class GameWorld {
     p.maxShield = 50 + (p.level - 1) * 5 + (id ? ITEM_DEFS[id]?.shield ?? ARMOR_BONUS_TABLE[id] ?? 0 : 0);
     p.shield = Math.max(0, Math.min(p.shield, p.maxShield));
   }
-  private ensureMonsters(p: Player) {
+  private ensureMonsters(p: Player, undo?: TickUndo) {
     if (p.mapId !== 'world') return;
     for (const def of this.rules.monstersNear?.(p.x, p.y) || []) {
       if (distance(p, def) > 40 || Object.hasOwn(this.state.monsters, def.id)) continue;
+      undo?.entry(this.state.monsters, def.id);
       this.state.monsters[def.id] = { id: def.id, name: def.name || '荒野异变兽', x: def.x, y: def.y, hp: def.hp ?? def.maxHp ?? 90, maxHp: def.maxHp ?? def.hp ?? 90,
         speed: def.speed ?? 1.8, damage: def.damage ?? 10, state: 'roam', animTime: 0, attackCooldown: 0, spawnX: def.spawnX ?? def.x, spawnY: def.spawnY ?? def.y, windup: 0 };
     }
@@ -774,19 +776,21 @@ export class GameWorld {
   private storageLoot(b: BuildingEntity) {
     return { id: b.id, name: b.name, items: Object.entries(this.state.storage[b.id] || {}).filter(([, count]) => count > 0).map(([itemId, count]) => ({ itemId, name: ITEM_DEFS[itemId]?.name || itemId, count })) };
   }
-  private damage(p: Player, amount: number) {
+  private damage(p: Player, amount: number, undo?: TickUndo) {
+    undo?.object(p);
     const reduction = p.equipment.armor ? ARMOR_REDUCTION[p.equipment.armor.id] || 0 : 0;
     if (reduction > 0) amount = Math.max(1, Math.floor(amount * (1 - reduction)));
     p.lastDamageAt = this.now();
     const shield = Math.min(p.shield, amount); p.shield -= shield; p.hp -= amount - shield; p.combatUntil = this.now() + 30_000;
     if (p.hp > 0) return;
-    this.respawns.set(p.id, (this.respawns.get(p.id) || 0) + 1);
+    undo?.map(this.respawns, p.id); this.respawns.set(p.id, (this.respawns.get(p.id) || 0) + 1);
     const items: LootItem[] = p.inventory.filter((item): item is Item => !!item).map(item => ({ itemId: item.id, name: item.name, count: item.count }));
     for (const key of resourceKeys) if (p.resources[key] > 0 && !['food', 'medical'].includes(key)) {
       const itemId = resourceItemId(key); items.push({ itemId, name: ITEM_DEFS[itemId]?.name || itemId, count: p.resources[key] }); p.resources[key] = 0;
     }
     if (items.length) {
-      const id = 'drop_' + randomUUID(); this.state.drops[id] = { id, name: p.name + '的掉落背包', x: p.x, y: p.y, mapId: p.mapId, items, expiresAt: this.now() + 30 * 60_000 };
+      const id = 'drop_' + randomUUID(); undo?.entry(this.state.drops, id);
+      this.state.drops[id] = { id, name: p.name + '的掉落背包', x: p.x, y: p.y, mapId: p.mapId, items, expiresAt: this.now() + 30 * 60_000 };
     }
     const home = p.campId ? this.state.camps[p.campId] : undefined;
     const bed = home && home.state !== 'breached' && !this.hasHostile(home.id as MapZoneId) ? Object.values(this.state.buildings).find(b => b.mapId === home.id && b.ownerId === p.id && b.type === 'bed' && b.hp > 0) : undefined;
@@ -794,15 +798,17 @@ export class GameWorld {
     this.clearSpawn(p);
   }
 
-  private simulateMonsters(players: Player[], dt: number, time: number) {
+  private simulateMonsters(players: Player[], dt: number, time: number, undo: TickUndo) {
     const publicPlayers = players.filter(p => p.mapId === 'world');
-    for (const p of publicPlayers) this.ensureMonsters(p);
+    for (const p of publicPlayers) this.ensureMonsters(p, undo);
     let changed = false, dirty = false, simulated = false;
     for (const monster of Object.values(this.state.monsters)) {
       if (!publicPlayers.some(p => distance(p, monster) <= 40)) continue;
       simulated = true;
-      if (monster.hp <= 0 || monster.state === 'dead') {
-        if (!monster.respawnAt || monster.respawnAt > time) continue;
+      const dead = monster.hp <= 0 || monster.state === 'dead';
+      if (dead && (!monster.respawnAt || monster.respawnAt > time)) continue;
+      undo.object(monster);
+      if (dead) {
         monster.x = monster.spawnX ?? monster.x; monster.y = monster.spawnY ?? monster.y; monster.hp = monster.maxHp; monster.state = 'roam';
         monster.windup = 0; monster.attackCooldown = 0; delete monster.respawnAt; delete monster.targetId; changed = dirty = true;
       }
@@ -816,7 +822,7 @@ export class GameWorld {
         monster.windup = Math.max(0, monster.windup! - dt); monster.state = 'attack'; changed ||= dt > 0;
         if (monster.windup <= 1e-6) {
           monster.windup = 0; monster.attackCooldown = 1.2;
-          if (target && distance(target, monster) <= 1.8 && reachable(target)) { this.damage(target, monster.damage); dirty = true; }
+          if (target && distance(target, monster) <= 1.8 && reachable(target)) { this.damage(target, monster.damage, undo); dirty = true; }
         }
         continue;
       }
@@ -844,50 +850,49 @@ export class GameWorld {
 
   tick() {
     this.tickSharedChange = false;
-    const time = this.now(); let dirty = false;
-    const changedPlayers: { player: Player; before: Player }[] = [];
-    const npcDt = Math.min(0.25, Math.max(0, (time - this.npcTickAt) / 1000)); this.npcTickAt = time;
-    for (const [id, until] of this.active) if (until <= time) this.active.delete(id);
-    for (const [id, drop] of Object.entries(this.state.drops)) if (drop.expiresAt <= time) { delete this.state.drops[id]; dirty = true; }
-    const activePlayers = [...this.active.keys()].map(id => this.state.players[id]);
-    const npc = this.simulateMonsters(activePlayers, npcDt, time); dirty ||= npc.dirty;
-    for (const p of activePlayers) {
-      const elapsed = Math.min(5, Math.max(0, (time - p.survivalAt) / 1000));
-      if (elapsed < 1) continue;
-      changedPlayers.push({ player: p, before: clone(p) });
-      const shieldRegenTime = Math.min(elapsed, Math.max(0, (time - Math.max(p.survivalAt, p.lastDamageAt + 5000)) / 1000));
-      p.satiety = Math.max(0, p.satiety - elapsed * 0.25); p.survivalAt = time;
-      if (p.satiety <= 0) { this.damage(p, elapsed * 2.5); dirty = true; }
-      else if (p.satiety > 50 && p.combatUntil < time) p.hp = Math.min(p.maxHp, p.hp + elapsed * 1.2);
-      if (p.mapId === 'world' && this.rules.weather?.() === 'acid_rain') p.shield = Math.max(0, p.shield - elapsed * ACID_SHIELD_DRAIN);
-      else if (p.satiety > 0 && shieldRegenTime > 0) p.shield = Math.min(p.maxShield, p.shield + shieldRegenTime * 8);
-    }
-    const maps = new Set(activePlayers.filter(p => p.mapId.startsWith('home_')).map(p => p.mapId));
-    for (const mapId of maps) {
-      const buildings = Object.values(this.state.buildings).filter(b => b.mapId === mapId && b.hp > 0);
-      for (const defense of buildings.filter(b => b.type === 'turret' || b.type === 'spikes')) {
-        if (time - (this.state.defenseAt[defense.id] ?? -Infinity) < 1000 || defense.type === 'turret' && !(this.state.ammo[defense.id] > 0)) continue;
-        const target = activePlayers.find(p => p.mapId === mapId && !this.canUse(p.id, defense) && distance(p, defense) <= (defense.type === 'turret' ? 8 : 1) && hasLineOfSight(defense, p, buildings, defense.id));
-        if (!target) continue;
-        if (defense.type === 'turret') this.state.ammo[defense.id]--;
-        else defense.hp = Math.max(0, defense.hp - 10);
-        this.damage(target, defense.type === 'turret' ? 12 : 8); this.state.defenseAt[defense.id] = time; dirty = true;
+    const undo = new TickUndo(), previousNpcTickAt = this.npcTickAt;
+    try {
+      const time = this.now(); let dirty = false;
+      const changedPlayers: Player[] = [];
+      const npcDt = Math.min(0.25, Math.max(0, (time - this.npcTickAt) / 1000)); this.npcTickAt = time;
+      for (const [id, until] of this.active) if (until <= time) { undo.map(this.active, id); this.active.delete(id); }
+      for (const [id, drop] of Object.entries(this.state.drops)) if (drop.expiresAt <= time) { undo.entry(this.state.drops, id); delete this.state.drops[id]; dirty = true; }
+      const activePlayers = [...this.active.keys()].map(id => this.state.players[id]);
+      const npc = this.simulateMonsters(activePlayers, npcDt, time, undo); dirty ||= npc.dirty;
+      for (const p of activePlayers) {
+        const elapsed = Math.min(5, Math.max(0, (time - p.survivalAt) / 1000));
+        if (elapsed < 1) continue;
+        undo.object(p); changedPlayers.push(p);
+        const shieldRegenTime = Math.min(elapsed, Math.max(0, (time - Math.max(p.survivalAt, p.lastDamageAt + 5000)) / 1000));
+        p.satiety = Math.max(0, p.satiety - elapsed * 0.25); p.survivalAt = time;
+        if (p.satiety <= 0) { this.damage(p, elapsed * 2.5, undo); dirty = true; }
+        else if (p.satiety > 50 && p.combatUntil < time) p.hp = Math.min(p.maxHp, p.hp + elapsed * 1.2);
+        if (p.mapId === 'world' && this.rules.weather?.() === 'acid_rain') p.shield = Math.max(0, p.shield - elapsed * ACID_SHIELD_DRAIN);
+        else if (p.satiety > 0 && shieldRegenTime > 0) p.shield = Math.min(p.maxShield, p.shield + shieldRegenTime * 8);
       }
-    }
-    // NPC movement alone keeps its old cadence (shared sync, no extra disk
-    // commit). Survival previously captured its cooldown/animation as well.
-    const fullSave = dirty || npc.simulated && changedPlayers.length > 0;
-    if (fullSave) this.persist();
-    else if (changedPlayers.length) {
-      try {
-        this.db.saveWorldPlayerCommits(changedPlayers.map(({ player }) => ({ id: player.id, data: JSON.stringify({ player, handled: this.state.handled[player.id] || [] }) })));
-      } catch (error) {
-        for (const { player, before } of changedPlayers) Object.assign(player, before);
-        throw error;
+      const maps = new Set(activePlayers.filter(p => p.mapId.startsWith('home_')).map(p => p.mapId));
+      for (const mapId of maps) {
+        const buildings = Object.values(this.state.buildings).filter(b => b.mapId === mapId && b.hp > 0);
+        for (const defense of buildings.filter(b => b.type === 'turret' || b.type === 'spikes')) {
+          if (time - (this.state.defenseAt[defense.id] ?? -Infinity) < 1000 || defense.type === 'turret' && !(this.state.ammo[defense.id] > 0)) continue;
+          const target = activePlayers.find(p => p.mapId === mapId && !this.canUse(p.id, defense) && distance(p, defense) <= (defense.type === 'turret' ? 8 : 1) && hasLineOfSight(defense, p, buildings, defense.id));
+          if (!target) continue;
+          if (defense.type === 'turret') { undo.entry(this.state.ammo, defense.id); this.state.ammo[defense.id]--; }
+          else { undo.entry(defense, 'hp'); defense.hp = Math.max(0, defense.hp - 10); }
+          this.damage(target, defense.type === 'turret' ? 12 : 8, undo);
+          undo.entry(this.state.defenseAt, defense.id); this.state.defenseAt[defense.id] = time; dirty = true;
+        }
       }
+      // NPC movement alone retains its existing sync-without-save cadence.
+      const fullSave = dirty || npc.simulated && changedPlayers.length > 0;
+      if (fullSave) this.persist();
+      else if (changedPlayers.length) this.db.saveWorldPlayerCommits(changedPlayers.map(player => ({ id: player.id, data: JSON.stringify({ player, handled: this.state.handled[player.id] || [] }) })));
+      this.tickSharedChange = fullSave || npc.changed;
+      return this.tickSharedChange || changedPlayers.length > 0;
+    } catch (error) {
+      undo.rollback(); this.npcTickAt = previousNpcTickAt;
+      throw error;
     }
-    this.tickSharedChange = fullSave || npc.changed;
-    return this.tickSharedChange || changedPlayers.length > 0;
   }
 }
 
