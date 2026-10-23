@@ -1,0 +1,398 @@
+{
+  "kind": "native-rain-starts-and-east-region-walking",
+  "date": "2026-10-24",
+  "baselineRevision": "3402f988740a8886090888bb432962db30934c68",
+  "productionCodeChanges": false,
+  "priorProductionSourceAndBundleHashesMatched": true,
+  "inheritedPriorTests": {
+    "fullSuite": 653,
+    "engineSuite": 135,
+    "build": "/assets/index-DR7mke5Y.js",
+    "newRunThisTurn": false,
+    "reason": "No production changes; binding against prior committed verification is checked, not an invented rerun."
+  },
+  "thisTurnTypeCheck": true,
+  "results": {
+    "status": "passed-bounded-native-evidence",
+    "singleDefaultGuest": true,
+    "unmodifiedProductionBundle": "/assets/index-DR7mke5Y.js",
+    "packets": 12046,
+    "movingPackets": 2025,
+    "stationaryPackets": 10021,
+    "allMovesAccepted": true,
+    "rejected": 0,
+    "actionErrors": 0,
+    "observedCorrections": 8,
+    "overflow": 0,
+    "initialAttempt": {
+      "heldKeys": "two native30s D holds",
+      "heldSeconds": 60,
+      "actualMovingSeconds": 43.4306422,
+      "actualDistance": 164.1338956961498,
+      "movingPackets": 797,
+      "reasonNotContinuous60": "Stopped by real north/east walls of an entered farm near115.65,-114.66; readonly geometry reproduced the obstruction. It is retained as an incomplete movement attempt."
+    },
+    "eastAttempt": {
+      "heldKeys": "two back-to-back native30s D+S holds",
+      "heldSeconds": 60,
+      "movingWindowSeconds": 60.03820750000002,
+      "acceptedDistance": 228.09405356057445,
+      "movingPackets": 1101,
+      "maxMovingPacketGapMs": 64.45199999993201,
+      "worldChunksVisited": 10,
+      "chunks": [
+        "3,-4",
+        "4,-4",
+        "4,-3",
+        "5,-3",
+        "6,-3",
+        "7,-3",
+        "7,-2",
+        "8,-2",
+        "9,-2",
+        "10,-2"
+      ],
+      "from": {
+        "x": 113.75815101790904,
+        "y": -107.15708749345106,
+        "landmark": "camp_workshop"
+      },
+      "to": {
+        "x": 330.1522934327947,
+        "y": -35.04720273463009,
+        "landmark": "town_gas"
+      },
+      "allPacketsRemainWorld": true,
+      "normalNpcRules": true
+    },
+    "rain": {
+      "successfulNativeStarts": 3,
+      "controlledWeatherSetCalls": 3,
+      "method": "Normal authenticated weather_set on an isolated owned QA server; same actor, no game_action, asset/time/HP edits, or clock acceleration. Browser reconnects as ordinary non-GM; fixture weather authorization ends on control socket close.",
+      "emptyErrorHistory": true,
+      "searchTakeAndEatNative": true,
+      "noRepeatNegativeEllipseObserved": true
+    },
+    "performance": {
+      "firstEnvironment": {
+        "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
+        "viewport": {
+          "width": 1920,
+          "height": 1080
+        },
+        "canvas": {
+          "width": 1920,
+          "height": 1080
+        },
+        "devicePixelRatio": 1.5,
+        "modulePath": "/assets/index-DR7mke5Y.js",
+        "jsHeap": {
+          "used": 11899740,
+          "total": 70062988
+        },
+        "graphicsBackend": "unknown"
+      },
+      "mainEnvironment": {
+        "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
+        "viewport": {
+          "width": 1920,
+          "height": 1080
+        },
+        "canvas": {
+          "width": 1920,
+          "height": 1080
+        },
+        "devicePixelRatio": 1.0000000298023224,
+        "modulePath": "/assets/index-DR7mke5Y.js",
+        "jsHeap": {
+          "used": 24821930,
+          "total": 69799826
+        },
+        "graphicsBackend": "unknown"
+      },
+      "latestSlowRecordTotal": 4,
+      "slowRecordsDuringColdStart": 3,
+      "slowRecordsDuringPanel": 1,
+      "slowRecordsDuringMovement": 0,
+      "allSlowRecordsRetained": true,
+      "cacheAtLastSample": 64,
+      "renderP95Measured": false,
+      "gpuMeasured": false,
+      "physicalPresentationMeasured": false,
+      "completePerformanceGatePassed": false
+    },
+    "assets": {
+      "obtainedFromOneFarm": {
+        "food": 3,
+        "water": 2,
+        "seed_potato": 1
+      },
+      "foodUsed": 3,
+      "foodUses": "All native: first inventory Use; later two actual hotbar clicks",
+      "remainingInventory": [
+        {
+          "id": "water",
+          "count": 2
+        },
+        {
+          "id": "seed_potato",
+          "count": 1
+        }
+      ],
+      "allMaterialResourcesRemainZero": true,
+      "equipmentEmpty": true,
+      "noCamp": true,
+      "persistedUniqueActionRequests": 7,
+      "actionLedger": "7 durable handled requests, native UI transitions and final asset/node assertions; this passive observer does not record per-action payload/projection events.",
+      "consistentBackupRestore": true,
+      "backupPath": "data/cua-regions-rain-20261024-a2.sqlite.backup-2026-10-23T18-02-57-415Z"
+    },
+    "final": {
+      "hp": 100,
+      "shield": 50,
+      "satiety": 25.426749999999995,
+      "x": 330.1522934327947,
+      "y": -35.04720273463009,
+      "map": "world"
+    },
+    "limits": [
+      "A single ordinary player and one eastbound route; no all-world/4direction/diagonal/multiplayer/NPC-combat gate or long memory acceptance.",
+      "No complete frame distribution, P95 or GPU/physical presentation data; no >50ms successful slow record while moving is narrower than proving smoothness. No before/after native speed/performance comparison.",
+      "First native rain starts use default1280x720 views. Third startup/east route explicitly1920x1080, captured DPR1.0000000298; first failed sustained walk1920x1080 hadDPR1.5. Environments are not merged.",
+      "Route was selected with readonly static geometry after the first wall obstruction; this is not novice wayfinding/balance. Max packet gap is server receive timing, not rendered frame interval.",
+      "The first empty setup exited normally on stdin closure before any actor; a1 preserved, a2 launched only after terminal exit. A requested60s keyhold was rejected before input by the documented runtime30s maximum, then both attempts used two30s holds.",
+      "The third weather setter initially rejected legitimate derived resources.food after real food/water loot, before authentication or weather mutation. Replaced the wrong zero-food projection precondition; same owned actor/DB retained.",
+      "UI arrival observation still showed rain21s; the later saved end screenshot/AX naturally shows clear weather after the storm expired. No claim that that screenshot depicts rain.",
+      "Cold-start callback gaps remain. Native rain repeated three times without this error does not establish that every blackscreen is resolved."
+    ]
+  },
+  "cleanup": {
+    "ownedPort": 39130,
+    "listener": false,
+    "controllerExited": true,
+    "browserTabsClosed": true,
+    "temporaryViewportReset": true,
+    "realDatabaseOpened": false
+  },
+  "nextMapInvestigation": "Verify world urban/ruins texture selection using legacy abs(wx+wy) against actual worldIsRoad; add business regressions and native comparison before changing. Full P95/GPU/memory/multiplayer and broader world validation remain open.",
+  "review": {
+    "status": "passed-independent-read-only-review",
+    "blockingP1P2": 0,
+    "sourceHashesVerified": 51,
+    "priorProductionBindingsVerified": 5,
+    "routeAndPacketCountsRecomputed": true,
+    "nativeScreenshotsReviewed": true,
+    "reviewerOpenedDatabaseOrRanLoad": false,
+    "captureChronologyClarified": true
+  },
+  "sources": [
+    {
+      "path": "src/App.tsx",
+      "sha256": "75dccc6165cc2ab5dac4509b9d4385cc42293428953af6dd37ec29ec93659438"
+    },
+    {
+      "path": "src/game/IsometricEngine.ts",
+      "sha256": "55267a8ac25bd9676b1831e5652aaa4ed1fdeaadb2e9af2185d9d614f2d721a3"
+    },
+    {
+      "path": "src/game/IsometricEngine.test.ts",
+      "sha256": "9a3fe168e525b69b5ae87ed6c63d5f13fd3ce3dc33cac5af45a96ade3fb84e50"
+    },
+    {
+      "path": "src/game/frameDiagnostics.ts",
+      "sha256": "dafe43396dd12d8e62e6bfa65de8fa34acf713d69e22063202f1f7ec1632ffae"
+    },
+    {
+      "path": "src/game/world.ts",
+      "sha256": "9ad6447e3e2cce3f9f391856bd3008856a49c2849a35d71aa1368b1893510949"
+    },
+    {
+      "path": "src/game/navigation.ts",
+      "sha256": "defeedf6c1670922f76b115c5da0a1bdce4f64afa8fb5b7eca0ee5c48065b662"
+    },
+    {
+      "path": "src/components/SettingsModal.tsx",
+      "sha256": "de1be262a56843c63e2dc1b455ffb8b68f5ef72f505309deb760cf0e9ab06ae5"
+    },
+    {
+      "path": "server.ts",
+      "sha256": "550676757754175a4482ce81da1f581f4ab3b0254478b3fa846d3f9479ca0ff1"
+    },
+    {
+      "path": "server/worldState.ts",
+      "sha256": "def88edd22a2755a2a176c143cd4ca015592d49ce76db89af54558baffaef233"
+    },
+    {
+      "path": "server/db.ts",
+      "sha256": "9cf91e65d64e6372bb897d98b8bdda843a03f42f409240f272abc4ed09d83f0f"
+    },
+    {
+      "path": "docs/verification/2026-10-24-first-camp-results.json",
+      "sha256": "abab7acfe5bd85cd0c73270a808567d1269b61e85f71b7e6ffdd2553044c59e1"
+    },
+    {
+      "path": "docs/superpowers/plans/2026-10-24-native-rain-regions.md",
+      "sha256": "8fa2b8c9ef17f60b6e2c6fe059e9332b83e526eec770a6030aa9d0930982bb53"
+    },
+    {
+      "path": "data/prepare-cua-regions-rain-20261024.cjs",
+      "sha256": "68980f6966321d2457965527d2dc3629ca2709cd76001a47ecd7023572b1f1ab"
+    },
+    {
+      "path": "data/capture-cua-regions-rain-20261024-a2.ts",
+      "sha256": "88db79172e323a237fcf03a86aa5ec521c97e913d82937ddfc21df175071b66a"
+    },
+    {
+      "path": "data/control-cua-regions-rain-20261024-a2.cjs",
+      "sha256": "5cc58a25508399a2b621be6bbbbbeb7fff1f1ec66212a82fdcbefb9e5f6f7946"
+    },
+    {
+      "path": "data/set-owned-rain-20261024.ts",
+      "sha256": "a3725498fba08f4bd4944528554c3465d4bf225c061f5153e359869a4f1b9185"
+    },
+    {
+      "path": "data/check-native-route-20261024.ts",
+      "sha256": "82055edb29715c80b4a8c796f5489b7c82699abacb3524a29b918074c7b3b112"
+    },
+    {
+      "path": "data/plan-native-region-route-20261024.ts",
+      "sha256": "f2456baa3ea5bb0183c6e4568c984ed0b3cb3c7685ad927e8e0527657df64e29"
+    },
+    {
+      "path": "data/native-region-route-options-20261024.json",
+      "sha256": "0ab7cc17218a544913fabef3c89caeda7831aeed503740b2d9f2191c23927061"
+    },
+    {
+      "path": "data/audit-native-regions-rain-20261024.ts",
+      "sha256": "c65d7f704caa1b31ab0177d10de9a5ad4b1d93234cdb2787db18797a36003705"
+    },
+    {
+      "path": "data/native-regions-rain-audit-20261024.log",
+      "sha256": "1c9e3697f3e46a63cf4202d981ea626f7e09d680dbfe78ce9b4051aeba3b1636"
+    },
+    {
+      "path": "data/native-regions-rain-types-20261024.log",
+      "sha256": "7f3594d7a965c703e6361ae50c0ef50cf9c344c621d801592b074b48554f4235"
+    },
+    {
+      "path": "data/native-regions-rain-cleanup-20261024.json",
+      "sha256": "8b3f01f142950e7184618da9dc56689b17b6c3cdd47780b187604746f3b069c5"
+    },
+    {
+      "path": "data/cua-regions-rain-20261024-a2-connected-world-private.json",
+      "sha256": "eefe01a12afa76d52e1b285916afbdbef192fa224ef698823168e96632a61768"
+    },
+    {
+      "path": "data/cua-regions-rain-20261024-a2-walk-events.json",
+      "sha256": "d38109dccbffc4392a5a80c004e4ea4809493587ca19a318a05edab5e6e3a75e"
+    },
+    {
+      "path": "data/cua-regions-rain-20261024-a2-rain-food-world-private.json",
+      "sha256": "1d97dbe249770a038e74e8acb14ab603f430b395ccc6ee8d9d1cc16af4abe044"
+    },
+    {
+      "path": "data/cua-regions-rain-20261024-a2-start-east-events.json",
+      "sha256": "157f937ea21ec23dc56f97c57c7d1fa0aa9aa1df4c68529188527fc5d2dc00d2"
+    },
+    {
+      "path": "data/cua-regions-rain-20261024-a2-final-events.json",
+      "sha256": "0d03333e911f55fef3e97e3e9809fc7851bced4928b73ceaadd328008a16ce6e"
+    },
+    {
+      "path": "data/cua-regions-rain-20261024-a2-final-world-private.json",
+      "sha256": "fc439b2f12a1ef4a934a6aa1fac2d1da709d99d9b77589a85f7d2d60e08cbc84"
+    },
+    {
+      "path": "data/cua-regions-rain-20261024-a2-walk-frames.json",
+      "sha256": "a8c7558fc8a62554cc4aa265ec8de76006ad68b630430a1f9069e089f8b15ffd"
+    },
+    {
+      "path": "data/cua-regions-rain-20261024-a2-east-frames.json",
+      "sha256": "907186667c7d162fcf5cb9385f5977811945110cefaef9e12ea7b57d032e3775"
+    },
+    {
+      "path": "data/cua-regions-rain-20261024-a2-errors.json",
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "path": "data/cua-regions-rain-20261024-a2-rain-setup1.json",
+      "sha256": "67a4f6f84185ca1dff6dfbf3b19391965ff1116706f4566140718d7d04b12af2"
+    },
+    {
+      "path": "data/cua-regions-rain-20261024-a2-rain-setup2.json",
+      "sha256": "76fb9b47edb83582accc39cd52e90e7d2c6401bd6512d0eec68d4d65ca07c104"
+    },
+    {
+      "path": "data/cua-regions-rain-20261024-a2-rain-setup.json",
+      "sha256": "045a75e944bf43d323829fe36cc52437a9a177afc2d61d9a851b69a84f94b0ac"
+    },
+    {
+      "path": "data/cua-regions-rain-20261024-a2-rain-start1-ax.txt",
+      "sha256": "0fb906337c6dadaeeeaccb0405b381624394a80b23bda511a176e82c12596b3e"
+    },
+    {
+      "path": "data/cua-regions-rain-20261024-a2-rain-start2-ax.txt",
+      "sha256": "06ea35e378ffaeb12d77d09c70d9151e794fe35b48d66a1aeba64039b08452de"
+    },
+    {
+      "path": "data/cua-regions-rain-20261024-a2-rain-start3-ax.txt",
+      "sha256": "f03ec60590f529e039b9d733a83f4a21e82f87fcdb8505dcf4fdcad5429a3730"
+    },
+    {
+      "path": "data/cua-regions-rain-20261024-a2-rain-food-ax.txt",
+      "sha256": "5f4597044407d5c3db928736aebcafdede17f2fa2a74190c0b7f0e361b3eae4a"
+    },
+    {
+      "path": "data/cua-regions-rain-20261024-a2-east-end-ax.txt",
+      "sha256": "2aadd82c11de8d08c14111281a5a40f50bdcf914d4f694b63dd66de194a58d3c"
+    },
+    {
+      "path": "data/cua-regions-rain-20261024-a2-birth.png",
+      "sha256": "b91da984176575f38148d38edde757155e7926cb13c0d7a77786611f6aaa6a71"
+    },
+    {
+      "path": "data/cua-regions-rain-20261024-a2-walk.png",
+      "sha256": "33734c077adb4da82a41064297ca095ffd11270c4a0636e24cf1309539d30bdc"
+    },
+    {
+      "path": "data/cua-regions-rain-20261024-a2-rain-start1.png",
+      "sha256": "8afc25df9fb40b18d5a99d5d69dce4a90c74c85f1fde8abd765e67aea01ce875"
+    },
+    {
+      "path": "data/cua-regions-rain-20261024-a2-rain-start2.png",
+      "sha256": "a2ba64bda23218c152320d7e8c004a256cf6e651a2d670ac9326df336352f225"
+    },
+    {
+      "path": "data/cua-regions-rain-20261024-a2-rain-start3.png",
+      "sha256": "c1e00cf9811d513dd183fb248445c60f00a14ba93cdc5dbc97b66760fa46d51a"
+    },
+    {
+      "path": "data/cua-regions-rain-20261024-a2-rain-search.png",
+      "sha256": "0e9f02afd906f554aad662dd70b616f4d227c44d384c68fc8df5537b40569fd6"
+    },
+    {
+      "path": "data/cua-regions-rain-20261024-a2-rain-food.png",
+      "sha256": "648ce4b2976182b0223bdbb3c3270f35a17e9ab1f03c699640c5e5715c794012"
+    },
+    {
+      "path": "data/cua-regions-rain-20261024-a2-east-end.png",
+      "sha256": "3f4538d39bca258377aee8f5af71f6754a9d38f5fb96ea3832bc3b4f7121fe00"
+    },
+    {
+      "path": "data/cua-regions-rain-20261024-a2-audit.json",
+      "sha256": "4f63a40c7333922e727142c5df1cc63fe88c92c1540dccdf01e9c265caa72fe0"
+    },
+    {
+      "path": "dist/index.html",
+      "sha256": "0be4fd57a0050b9a9f21f575d7e7c56754a50f560df7fb917d9a266723ed1448"
+    },
+    {
+      "path": "dist/assets/index-DR7mke5Y.js",
+      "sha256": "59c44a6db5d4109ac751f70fefc05ddfe5874341c0efff04c8e78f670bebc1f6"
+    }
+  ],
+  "captureChronology": {
+    "eastEndScreenshot": "Naturally clear after rain ended; before last food use. It still shows1food and about17satiety, whereas the later saved final audit has0food and25.42675satiety.",
+    "errorHistory": "Read after all three rain startups and east walk, before final food use. Empty at that capture. After the final meal the frame diagnostic view showed no error overlay, but error history was not read again."
+  }
+}
