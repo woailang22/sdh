@@ -1,0 +1,163 @@
+{
+  "baseCommit": "97160df7b8c687427e647b894660c510bc880bc9",
+  "overallPerformanceAccepted": false,
+  "change": "Local bounded timing support, not a fix for intermittent stalls. No server, asset, combat, economy or world rule change.",
+  "verification": {
+    "fullSuite": {
+      "files": 43,
+      "tests": 615,
+      "passed": true
+    },
+    "focused": {
+      "files": 3,
+      "tests": 125,
+      "passed": true
+    },
+    "typeCheck": "passed",
+    "build": "passed",
+    "bundle": "/assets/index-YmyAV4oR.js",
+    "buildWarning": "Existing bundle exceeds500kB warning retained"
+  },
+  "failFirst": [
+    "Initial missing-module collection error retained separately; minimal recorder stub then four business assertion failures before implementation",
+    "Engine export/clipboard additions first failed for missing behavior",
+    "Review callback entry mismatch: rAF timestamps1020→1036 while actual entry1020→1100; old report16ms, fixed80ms at1100, original game scheduling unchanged"
+  ],
+  "ui": {
+    "fixture": "Separate owned client-stall-ui SQLite, normal guest/boot, no real save",
+    "browser": "IAB Chrome155,1280×720,DPR1.5",
+    "steps": [
+      "Settings→查看卡顿记录 shows latest3 actual startup/ordinary samples",
+      "复制卡顿记录 shows已复制记录 and panel remains open",
+      "继续游戏 closes panel",
+      "Settings→查看最近画面错误 shows[] and error label, not old performance snapshot"
+    ],
+    "report": {
+      "kind": "local-frame-diagnostics",
+      "version": 1,
+      "capturedAt": "2026-10-23T12:44:10.170Z",
+      "timing": "Milliseconds of JavaScript work and callback/draw-start intervals; not GPU time or physical displayed frames. Latest 20 visible successful slow samples (>50ms), including initial loading. Refresh clears records.",
+      "totalSlowFrames": 3,
+      "samples": [
+        {
+          "atMs": 18082,
+          "updateMs": 0.4000000059604645,
+          "drawMs": 76.5,
+          "rafGapMs": 352.8999999910593,
+          "drawGapMs": 353.1000000089407,
+          "scene": {
+            "map": "world",
+            "x": 0,
+            "y": 1,
+            "chunks": 25,
+            "buildings": 388,
+            "interactables": 132,
+            "monsters": 0,
+            "players": 0,
+            "inputBlocked": false
+          }
+        },
+        {
+          "atMs": 18304.10000000894,
+          "updateMs": 0.19999998807907104,
+          "drawMs": 1.800000011920929,
+          "rafGapMs": 222.1000000089407,
+          "drawGapMs": 221.8999999910593,
+          "scene": {
+            "map": "world",
+            "x": 0,
+            "y": 1,
+            "chunks": 25,
+            "buildings": 388,
+            "interactables": 132,
+            "monsters": 0,
+            "players": 0,
+            "inputBlocked": false
+          }
+        },
+        {
+          "atMs": 18442.10000000894,
+          "updateMs": 0.3999999910593033,
+          "drawMs": 1.4000000059604645,
+          "rafGapMs": 130.1000000089407,
+          "drawGapMs": 138.20000000298023,
+          "scene": {
+            "map": "world",
+            "x": 0,
+            "y": 1,
+            "chunks": 25,
+            "buildings": 388,
+            "interactables": 132,
+            "monsters": 0,
+            "players": 0,
+            "inputBlocked": false
+          }
+        }
+      ],
+      "environment": {
+        "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
+        "viewport": {
+          "width": 1280,
+          "height": 720
+        },
+        "canvas": {
+          "width": 1280,
+          "height": 720
+        },
+        "devicePixelRatio": 1.5,
+        "modulePath": "/assets/index-YmyAV4oR.js",
+        "jsHeap": {
+          "used": 17745748,
+          "total": 42633644
+        },
+        "graphicsBackend": "unknown"
+      }
+    },
+    "screenshot": "data/client-stall-ui-report-20261023.png",
+    "limits": [
+      "These UI samples include initial loading and browser control. They do not isolate a stall cause, measure steady FPS or identify this Canvas2D backend.",
+      "Insecure/missing/denied clipboard fallback is unit tested; actual local UI copy succeeded.",
+      "Actual fatal-error transition precedence was reviewed in source; existing engine recovery regression tests pass. No new forced runtime failure in UI."
+    ]
+  },
+  "privacy": "Memory-only latest20, no automatic transmission/storage, anonymous map kind/game position and counts; report generated only on request. Fast frames update scalar timing only.",
+  "review": "Independent read-only review, one P2 actual callback timestamp fixed with fail-first real-loop test; no remaining P1/P2.",
+  "sourceHashes": [
+    {
+      "path": "data/client-stall-report-red-business-20261023.log",
+      "sha256": "9ee9b8888b2cb28e72971a9d752166918fafb55ccfa70941a74a22acb5da4aeb"
+    },
+    {
+      "path": "data/client-stall-report-integration-red-20261023.log",
+      "sha256": "ed13f99dea6c2394a652d6e59b36490651ae0f80ebe1a661cf9114afefee1c08"
+    },
+    {
+      "path": "data/client-stall-report-callback-red-20261023.log",
+      "sha256": "5c96140af8369e6060cf8af154152091575114cfd83caf7e5d562c3863bf157b"
+    },
+    {
+      "path": "data/client-stall-report-focused-final-20261023.log",
+      "sha256": "5e940ee92b78eae572348a5ae3c01c77ed828b2727a81d9eab420ec0ebc652bf"
+    },
+    {
+      "path": "data/client-stall-report-full-final-20261023.log",
+      "sha256": "41f3ee1cb268ae45fc64672614a2adc1253c7b795f5c80259c939f8a4070de43"
+    },
+    {
+      "path": "data/client-stall-report-types-20261023.log",
+      "sha256": "7f3594d7a965c703e6361ae50c0ef50cf9c344c621d801592b074b48554f4235"
+    },
+    {
+      "path": "data/client-stall-report-build-20261023.log",
+      "sha256": "2eb8e91cf21c0733f4249f64b31167fb9b8df0ae1e57f714aad3a591067df586"
+    },
+    {
+      "path": "data/client-stall-ui-report-20261023.json",
+      "sha256": "674dd2cf52a6ad322a3d012e89d54e526796a47149187c1f4cd3af9cc0a88b89"
+    },
+    {
+      "path": "data/client-stall-ui-report-20261023.png",
+      "sha256": "c011b16943159cee20c0fae97e6eb0571e4253c830cc9763e8451747423c035e"
+    }
+  ]
+}

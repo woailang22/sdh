@@ -1,0 +1,4718 @@
+{
+  "sourceCommit": "97160df7b8c687427e647b894660c510bc880bc9",
+  "runtimeChanged": false,
+  "overallPerformanceAccepted": false,
+  "runs": [
+    {
+      "run": "a1",
+      "success": true,
+      "scope": "Independent default empty100HP single account, normal spawn-to-road then joystick walking; call observers preserve actual Canvas APIs and game/server rules. Same walking browser GPU captured. Not a performance improvement or earned-economy acceptance.",
+      "gpu": {
+        "renderer": "ANGLE (Intel, Intel(R) UHD Graphics (0x00009A60) Direct3D11 vs_5_0 ps_5_0, D3D11-31.0.101.1999)",
+        "featureStatus": {
+          "2d_canvas": "enabled",
+          "direct_rendering_display_compositor": "disabled_off_ok",
+          "gpu_compositing": "enabled",
+          "multiple_raster_threads": "enabled_on",
+          "opengl": "enabled_on",
+          "rasterization": "enabled",
+          "raw_draw": "disabled_off_ok",
+          "skia_graphite": "disabled_off",
+          "trees_in_viz": "disabled_off",
+          "video_decode": "enabled",
+          "video_encode": "enabled",
+          "webgl": "enabled",
+          "webgpu": "enabled",
+          "webnn": "disabled_off"
+        },
+        "devices": [
+          {
+            "name": "Intel(R) UHD Graphics",
+            "driver": "31.0.101.1999"
+          },
+          {
+            "name": "NVIDIA GeForce RTX 3070 Laptop GPU",
+            "driver": "30.0.15.1289"
+          },
+          {
+            "name": "Intel(R) UHD Graphics",
+            "driver": "31.0.101.1999"
+          },
+          {
+            "name": "Intel(R) UHD Graphics",
+            "driver": "31.0.101.1999"
+          },
+          {
+            "name": "Microsoft Basic Render Driver",
+            "driver": "10.0.26100.9711"
+          }
+        ],
+        "page": {
+          "bundle": [
+            "/assets/index-z_DuULg9.js"
+          ],
+          "width": 1920,
+          "height": 1080,
+          "dpr": 1,
+          "hidden": false,
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/155.0.0.0 Safari/537.36"
+        }
+      },
+      "walkingSeconds": 168.93020000000297,
+      "apiCalls": 678184,
+      "slowApiCalls": [
+        {
+          "start": 33517.39999999106,
+          "duration": 4.5,
+          "frameStart": 33512.79999999702,
+          "key": "other:image",
+          "x": 102.00910000000374,
+          "y": 6.917740000000012,
+          "targetSize": {
+            "width": 462,
+            "height": 462
+          },
+          "sourceSize": {
+            "width": 64,
+            "height": 64
+          }
+        },
+        {
+          "start": 33534.09999999404,
+          "duration": 4,
+          "frameStart": 33529.39999999106,
+          "key": "other:image",
+          "x": 102.07826000000374,
+          "y": 6.917740000000012,
+          "targetSize": {
+            "width": 462,
+            "height": 462
+          },
+          "sourceSize": {
+            "width": 64,
+            "height": 64
+          }
+        },
+        {
+          "start": 50467.29999999702,
+          "duration": 8.899999991059303,
+          "frameStart": 50466,
+          "key": "main:fillRect",
+          "x": 166.4384800000003,
+          "y": 6.917740000000012,
+          "targetSize": {
+            "width": 1920,
+            "height": 1080
+          }
+        }
+      ],
+      "legs": [
+        {
+          "index": 1,
+          "target": 193,
+          "direction": 1,
+          "start": 6671.5,
+          "end": 57513.09999999404,
+          "seconds": 50.84159999999404,
+          "position": {
+            "x": 193.1957999999956,
+            "y": 6.917740000000012
+          },
+          "hp": 100,
+          "satiety": 85.74125000000001,
+          "draw": {
+            "count": 3037,
+            "p50": 1.2000000029802322,
+            "p95": 1.9000000059604645,
+            "p99": 4.800000011920929,
+            "max": 15.900000005960464,
+            "over50": 0
+          },
+          "drawStart": {
+            "count": 3036,
+            "p50": 18,
+            "p95": 18.899999991059303,
+            "p99": 27.700000002980232,
+            "max": 69.20000000298023,
+            "over50": 1
+          },
+          "update": {
+            "count": 8281,
+            "p50": 0.19999998807907104,
+            "p95": 0.29999999701976776,
+            "p99": 0.4000000059604645,
+            "max": 2.7000000029802322,
+            "over50": 0
+          },
+          "networkApply": {
+            "count": 98,
+            "p50": 0.20000000298023224,
+            "p95": 0.5,
+            "p99": 0.7000000029802322,
+            "max": 0.7000000029802322,
+            "over50": 0
+          },
+          "totalApiCalls": 191322,
+          "totalSlowApiCalls": 3,
+          "totalSlowFrames": 26,
+          "slowCalls": [
+            {
+              "start": 33517.39999999106,
+              "duration": 4.5,
+              "frameStart": 33512.79999999702,
+              "key": "other:image",
+              "x": 102.00910000000374,
+              "y": 6.917740000000012,
+              "targetSize": {
+                "width": 462,
+                "height": 462
+              },
+              "sourceSize": {
+                "width": 64,
+                "height": 64
+              }
+            },
+            {
+              "start": 33534.09999999404,
+              "duration": 4,
+              "frameStart": 33529.39999999106,
+              "key": "other:image",
+              "x": 102.07826000000374,
+              "y": 6.917740000000012,
+              "targetSize": {
+                "width": 462,
+                "height": 462
+              },
+              "sourceSize": {
+                "width": 64,
+                "height": 64
+              }
+            },
+            {
+              "start": 50467.29999999702,
+              "duration": 8.899999991059303,
+              "frameStart": 50466,
+              "key": "main:fillRect",
+              "x": 166.4384800000003,
+              "y": 6.917740000000012,
+              "targetSize": {
+                "width": 1920,
+                "height": 1080
+              }
+            }
+          ],
+          "slowFrames": [
+            {
+              "start": 7896.5,
+              "interval": 17.30000001192093,
+              "x": 4.674000000000004,
+              "y": 6.917740000000012,
+              "heap": 12570699,
+              "weather": "clear",
+              "stages": {
+                "renderMapGroundUncached": 5.200000002980232,
+                "renderGroundDetails": 0.09999999403953552,
+                "renderMapGround": 6.5999999940395355,
+                "drawWorldScenery": 0,
+                "drawInteractable": 0.3999999910593033,
+                "drawHouse": 1.100000023841858,
+                "drawBuilding": 0.09999999403953552,
+                "drawPlayer": 0.4000000059604645,
+                "renderParticles": 0.20000000298023224,
+                "renderDynamicLighting": 0,
+                "renderWeather": 0,
+                "renderThemeAtmosphere": 0,
+                "renderInteractionHUD": 0,
+                "renderZoneTransitionBanner": 0
+              },
+              "apiMs": {
+                "main:clearRect": 0,
+                "ground:self-copy": 0,
+                "ground:clearRect": 0,
+                "ground:fillRect": 0.09999999403953552,
+                "ground:image": 1.399999976158142,
+                "main:ground-blit": 1,
+                "main:image": 0.09999999403953552,
+                "main:fillRect": 0
+              },
+              "apiCount": {
+                "main:clearRect": 1,
+                "ground:self-copy": 1,
+                "ground:clearRect": 2,
+                "ground:fillRect": 2,
+                "ground:image": 780,
+                "main:ground-blit": 1,
+                "main:image": 24,
+                "main:fillRect": 28
+              },
+              "duration": 9.299999997019768
+            },
+            {
+              "start": 7935.79999999702,
+              "interval": 39.29999999701977,
+              "x": 4.812700000000004,
+              "y": 6.917740000000012,
+              "heap": 8401911,
+              "weather": "clear",
+              "stages": {
+                "renderMapGround": 0,
+                "drawWorldScenery": 0.09999999403953552,
+                "drawInteractable": 0.20000000298023224,
+                "drawHouse": 0.5999999940395355,
+                "drawBuilding": 0,
+                "drawPlayer": 0.29999999701976776,
+                "renderParticles": 0,
+                "renderDynamicLighting": 0.10000000894069672,
+                "renderWeather": 0,
+                "renderThemeAtmosphere": 0,
+                "renderInteractionHUD": 0,
+                "renderZoneTransitionBanner": 0
+              },
+              "apiMs": {
+                "main:clearRect": 0,
+                "main:ground-blit": 0,
+                "main:image": 0.10000000894069672,
+                "main:fillRect": 0
+              },
+              "apiCount": {
+                "main:clearRect": 1,
+                "main:ground-blit": 1,
+                "main:image": 24,
+                "main:fillRect": 28
+              },
+              "duration": 1.5
+            },
+            {
+              "start": 8998.29999999702,
+              "interval": 35.20000000298023,
+              "x": 8.842220000000037,
+              "y": 6.917740000000012,
+              "heap": 11757704,
+              "weather": "clear",
+              "stages": {
+                "renderMapGround": 0,
+                "drawHouse": 0.5999999940395355,
+                "drawInteractable": 0.4000000059604645,
+                "drawWorldScenery": 0.20000000298023224,
+                "drawBuilding": 0,
+                "drawPlayer": 0.20000000298023224,
+                "renderParticles": 0,
+                "renderDynamicLighting": 0,
+                "renderWeather": 0,
+                "renderThemeAtmosphere": 0,
+                "renderInteractionHUD": 0,
+                "renderZoneTransitionBanner": 0
+              },
+              "apiMs": {
+                "main:clearRect": 0,
+                "main:ground-blit": 0,
+                "main:image": 0.19999998807907104,
+                "main:fillRect": 0.10000000894069672
+              },
+              "apiCount": {
+                "main:clearRect": 1,
+                "main:ground-blit": 1,
+                "main:image": 21,
+                "main:fillRect": 26
+              },
+              "duration": 1.5
+            },
+            {
+              "start": 10029.59999999404,
+              "interval": 18.099999994039536,
+              "x": 12.779780000000084,
+              "y": 6.917740000000012,
+              "heap": 6474369,
+              "weather": "clear",
+              "stages": {
+                "renderMapGroundUncached": 5.800000011920929,
+                "renderGroundDetails": 0,
+                "renderMapGround": 6.600000008940697,
+                "drawHouse": 0.7000000029802322,
+                "drawWorldScenery": 0.20000000298023224,
+                "drawInteractable": 0.09999999403953552,
+                "drawBuilding": 0.20000000298023224,
+                "drawPlayer": 0.09999999403953552,
+                "renderParticles": 0.09999999403953552,
+                "renderDynamicLighting": 0,
+                "renderWeather": 0,
+                "renderThemeAtmosphere": 0.10000000894069672,
+                "renderInteractionHUD": 0,
+                "renderZoneTransitionBanner": 0
+              },
+              "apiMs": {
+                "main:clearRect": 0.09999999403953552,
+                "ground:self-copy": 0,
+                "ground:clearRect": 0,
+                "ground:fillRect": 0,
+                "ground:image": 2.100000023841858,
+                "other:clearRect": 0,
+                "other:image": 0.7999999970197678,
+                "main:ground-blit": 0.7999999970197678,
+                "main:image": 0,
+                "main:fillRect": 0.10000000894069672
+              },
+              "apiCount": {
+                "main:clearRect": 1,
+                "ground:self-copy": 1,
+                "ground:clearRect": 2,
+                "ground:fillRect": 2,
+                "ground:image": 784,
+                "other:clearRect": 23,
+                "other:image": 138,
+                "main:ground-blit": 1,
+                "main:image": 20,
+                "main:fillRect": 26
+              },
+              "duration": 8.400000005960464
+            },
+            {
+              "start": 10061.59999999404,
+              "interval": 32,
+              "x": 12.89492000000008,
+              "y": 6.917740000000012,
+              "heap": 8685405,
+              "weather": "clear",
+              "stages": {
+                "renderMapGround": 0.10000000894069672,
+                "drawHouse": 0.29999998211860657,
+                "drawWorldScenery": 0.30000001192092896,
+                "drawInteractable": 0.09999999403953552,
+                "drawBuilding": 0.10000000894069672,
+                "drawPlayer": 0.20000000298023224,
+                "renderParticles": 0.10000000894069672,
+                "renderDynamicLighting": 0,
+                "renderWeather": 0,
+                "renderThemeAtmosphere": 0,
+                "renderInteractionHUD": 0,
+                "renderZoneTransitionBanner": 0
+              },
+              "apiMs": {
+                "main:clearRect": 0.09999999403953552,
+                "main:ground-blit": 0.10000000894069672,
+                "main:image": 0,
+                "main:fillRect": 0
+              },
+              "apiCount": {
+                "main:clearRect": 1,
+                "main:ground-blit": 1,
+                "main:image": 20,
+                "main:fillRect": 26
+              },
+              "duration": 1.4000000059604645
+            },
+            {
+              "start": 11127.79999999702,
+              "interval": 31.799999997019768,
+              "x": 16.947620000000096,
+              "y": 6.917740000000012,
+              "heap": 8587082,
+              "weather": "clear",
+              "stages": {
+                "renderMapGround": 0,
+                "drawHouse": 0.29999998211860657,
+                "drawWorldScenery": 0.10000000894069672,
+                "drawInteractable": 0.3999999910593033,
+                "drawBuilding": 0,
+                "drawPlayer": 0.10000000894069672,
+                "renderParticles": 0,
+                "renderDynamicLighting": 0,
+                "renderWeather": 0,
+                "renderThemeAtmosphere": 0,
+                "renderInteractionHUD": 0,
+                "renderZoneTransitionBanner": 0
+              },
+              "apiMs": {
+                "main:clearRect": 0,
+                "main:ground-blit": 0,
+                "main:fillRect": 0,
+                "main:image": 0
+              },
+              "apiCount": {
+                "main:clearRect": 1,
+                "main:ground-blit": 1,
+                "main:fillRect": 24,
+                "main:image": 20
+              },
+              "duration": 1.0999999940395355
+            },
+            {
+              "start": 12964.89999999106,
+              "interval": 69.20000000298023,
+              "x": 23.924799999999937,
+              "y": 6.917740000000012,
+              "heap": 12297150,
+              "weather": "clear",
+              "stages": {
+                "renderMapGround": 0,
+                "drawWorldScenery": 0.29999998211860657,
+                "drawInteractable": 0.20000000298023224,
+                "drawBuilding": 0,
+                "drawHouse": 0.40000002086162567,
+                "drawPlayer": 0.29999999701976776,
+                "renderParticles": 0,
+                "renderDynamicLighting": 0,
+                "renderWeather": 0,
+                "renderThemeAtmosphere": 0,
+                "renderInteractionHUD": 0,
+                "renderZoneTransitionBanner": 0
+              },
+              "apiMs": {
+                "main:clearRect": 0,
+                "main:ground-blit": 0,
+                "main:image": 0,
+                "main:fillRect": 0
+              },
+              "apiCount": {
+                "main:clearRect": 1,
+                "main:ground-blit": 1,
+                "main:image": 20,
+                "main:fillRect": 22
+              },
+              "duration": 1.5
+            },
+            {
+              "start": 13265.59999999404,
+              "interval": 36.5,
+              "x": 25.07619999999991,
+              "y": 6.917740000000012,
+              "heap": 12009578,
+              "weather": "clear",
+              "stages": {
+                "renderMapGround": 0.10000000894069672,
+                "drawWorldScenery": 0.10000000894069672,
+                "drawInteractable": 0.09999999403953552,
+                "drawBuilding": 0.09999999403953552,
+                "drawHouse": 0.6000000089406967,
+                "drawPlayer": 0,
+                "renderParticles": 0,
+                "renderDynamicLighting": 0,
+                "renderWeather": 0,
+                "renderThemeAtmosphere": 0,
+                "renderInteractionHUD": 0,
+                "renderZoneTransitionBanner": 0
+              },
+              "apiMs": {
+                "main:clearRect": 0.09999999403953552,
+                "main:ground-blit": 0.10000000894069672,
+                "main:image": 0.20000000298023224,
+                "main:fillRect": 0
+              },
+              "apiCount": {
+                "main:clearRect": 1,
+                "main:ground-blit": 1,
+                "main:image": 18,
+                "main:fillRect": 22
+              },
+              "duration": 1.4000000059604645
+            },
+            {
+              "start": 14331.09999999404,
+              "interval": 35.400000005960464,
+              "x": 29.10571999999981,
+              "y": 6.917740000000012,
+              "heap": 12175685,
+              "weather": "clear",
+              "stages": {
+                "renderMapGround": 0.09999999403953552,
+                "drawWorldScenery": 0,
+                "drawInteractable": 0.29999999701976776,
+                "drawBuilding": 0.10000000894069672,
+                "drawHouse": 0.4999999850988388,
+                "drawPlayer": 0.10000000894069672,
+                "renderParticles": 0,
+                "renderDynamicLighting": 0,
+                "renderWeather": 0,
+                "renderThemeAtmosphere": 0,
+                "renderInteractionHUD": 0,
+                "renderZoneTransitionBanner": 0
+              },
+              "apiMs": {
+                "main:clearRect": 0,
+                "main:ground-blit": 0.09999999403953552,
+                "main:image": 0,
+                "main:fillRect": 0
+              },
+              "apiCount": {
+                "main:clearRect": 1,
+                "main:ground-blit": 1,
+                "main:image": 21,
+                "main:fillRect": 22
+              },
+              "duration": 1.2000000029802322
+            },
+            {
+              "start": 14713.699999988079,
+              "interval": 18.099999994039536,
+              "x": 30.57935999999977,
+              "y": 6.917740000000012,
+              "heap": 7047194,
+              "weather": "clear",
+              "stages": {
+                "renderMapGround": 0.09999999403953552,
+                "drawWorldScenery": 0.20000000298023224,
+                "drawInteractable": 0,
+                "drawBuilding": 0,
+                "drawHouse": 10.200000002980232,
+                "drawPlayer": 0.09999999403953552,
+                "renderParticles": 0,
+                "renderDynamicLighting": 0,
+                "renderWeather": 0,
+                "renderThemeAtmosphere": 0,
+                "renderInteractionHUD": 0.09999999403953552,
+                "renderZoneTransitionBanner": 0
+              },
+              "apiMs": {
+                "main:clearRect": 0,
+                "main:ground-blit": 0.09999999403953552,
+                "main:image": 0.10000000894069672,
+                "main:fillRect": 0
+              },
+              "apiCount": {
+                "main:clearRect": 1,
+                "main:ground-blit": 1,
+                "main:image": 19,
+                "main:fillRect": 26
+              },
+              "duration": 10.900000005960464
+            },
+            {
+              "start": 15349.89999999106,
+              "interval": 18.200000002980232,
+              "x": 32.99767999999972,
+              "y": 6.917740000000012,
+              "heap": 6859841,
+              "weather": "clear",
+              "stages": {
+                "renderMapGroundUncached": 14.400000005960464,
+                "renderGroundDetails": 0.20000000298023224,
+                "renderMapGround": 15.200000002980232,
+                "drawWorldScenery": 0.10000000894069672,
+                "drawInteractable": 0.09999999403953552,
+                "drawBuilding": 0,
+                "drawHouse": 0.4000000059604645,
+                "drawPlayer": 0,
+                "renderParticles": 0,
+                "renderDynamicLighting": 0,
+                "renderWeather": 0,
+                "renderThemeAtmosphere": 0,
+                "renderInteractionHUD": 0,
+                "renderZoneTransitionBanner": 0
+              },
+              "apiMs": {
+                "main:clearRect": 0,
+                "ground:self-copy": 0,
+                "ground:clearRect": 0,
+                "ground:fillRect": 0.10000000894069672,
+                "ground:image": 1.2000000178813934,
+                "main:ground-blit": 0.5,
+                "main:image": 0,
+                "main:fillRect": 0
+              },
+              "apiCount": {
+                "main:clearRect": 1,
+                "ground:self-copy": 1,
+                "ground:clearRect": 2,
+                "ground:fillRect": 2,
+                "ground:image": 794,
+                "main:ground-blit": 1,
+                "main:image": 21,
+                "main:fillRect": 26
+              },
+              "duration": 15.900000005960464
+            },
+            {
+              "start": 16448.09999999404,
+              "interval": 31.5,
+              "x": 37.14233999999967,
+              "y": 6.917740000000012,
+              "heap": 9873974,
+              "weather": "clear",
+              "stages": {
+                "renderMapGround": 0.09999999403953552,
+                "drawInteractable": 0.29999998211860657,
+                "drawBuilding": 0.10000000894069672,
+                "drawWorldScenery": 0,
+                "drawHouse": 0.29999999701976776,
+                "drawPlayer": 0.20000000298023224,
+                "renderParticles": 0,
+                "renderDynamicLighting": 0,
+                "renderWeather": 0,
+                "renderThemeAtmosphere": 0,
+                "renderInteractionHUD": 0,
+                "renderZoneTransitionBanner": 0
+              },
+              "apiMs": {
+                "main:clearRect": 0,
+                "main:ground-blit": 0.09999999403953552,
+                "main:fillRect": 0,
+                "main:image": 0
+              },
+              "apiCount": {
+                "main:clearRect": 1,
+                "main:ground-blit": 1,
+                "main:fillRect": 28,
+                "main:image": 25
+              },
+              "duration": 1.0999999940395355
+            },
+            {
+              "start": 27114,
+              "interval": 32.30000001192093,
+              "x": 77.69290000000093,
+              "y": 6.917740000000012,
+              "heap": 16940487,
+              "weather": "clear",
+              "stages": {
+                "renderMapGround": 0.09999999403953552,
+                "drawWorldScenery": 0.20000000298023224,
+                "drawHouse": 0.7999999821186066,
+                "drawBuilding": 0,
+                "drawInteractable": 0.20000000298023224,
+                "drawPlayer": 0,
+                "renderParticles": 0,
+                "renderDynamicLighting": 0,
+                "renderWeather": 0,
+                "renderThemeAtmosphere": 0,
+                "renderInteractionHUD": 0,
+                "renderZoneTransitionBanner": 0
+              },
+              "apiMs": {
+                "main:clearRect": 0,
+                "main:ground-blit": 0.09999999403953552,
+                "main:image": 0.10000000894069672,
+                "main:fillRect": 0
+              },
+              "apiCount": {
+                "main:clearRect": 1,
+                "main:ground-blit": 1,
+                "main:image": 21,
+                "main:fillRect": 24
+              },
+              "duration": 1.699999988079071
+            },
+            {
+              "start": 29249,
+              "interval": 34.400000005960464,
+              "x": 85.79830000000187,
+              "y": 6.917740000000012,
+              "heap": 15642195,
+              "weather": "clear",
+              "stages": {
+                "renderMapGround": 0.09999999403953552,
+                "drawHouse": 0.5000000149011612,
+                "drawBuilding": 0,
+                "drawInteractable": 0.09999999403953552,
+                "drawWorldScenery": 0.20000000298023224,
+                "drawPlayer": 0.09999999403953552,
+                "renderParticles": 0,
+                "renderDynamicLighting": 0,
+                "renderWeather": 0,
+                "renderThemeAtmosphere": 0.09999999403953552,
+                "renderInteractionHUD": 0,
+                "renderZoneTransitionBanner": 0
+              },
+              "apiMs": {
+                "main:clearRect": 0,
+                "main:ground-blit": 0.09999999403953552,
+                "main:image": 0,
+                "main:fillRect": 0
+              },
+              "apiCount": {
+                "main:clearRect": 1,
+                "main:ground-blit": 1,
+                "main:image": 20,
+                "main:fillRect": 22
+              },
+              "duration": 1.3999999910593033
+            },
+            {
+              "start": 30313.09999999404,
+              "interval": 31.700000002980232,
+              "x": 89.85100000000236,
+              "y": 6.917740000000012,
+              "heap": 11790148,
+              "weather": "clear",
+              "stages": {
+                "renderMapGround": 0,
+                "drawHouse": 0.3999999761581421,
+                "drawInteractable": 0.10000000894069672,
+                "drawBuilding": 0.10000000894069672,
+                "drawWorldScenery": 0,
+                "drawPlayer": 0.10000000894069672,
+                "renderParticles": 0,
+                "renderDynamicLighting": 0,
+                "renderWeather": 0.09999999403953552,
+                "renderThemeAtmosphere": 0,
+                "renderInteractionHUD": 0,
+                "renderZoneTransitionBanner": 0
+              },
+              "apiMs": {
+                "main:clearRect": 0,
+                "main:ground-blit": 0,
+                "main:fillRect": 0,
+                "main:image": 0
+              },
+              "apiCount": {
+                "main:clearRect": 1,
+                "main:ground-blit": 1,
+                "main:fillRect": 26,
+                "main:image": 20
+              },
+              "duration": 1
+            },
+            {
+              "start": 31384.69999998808,
+              "interval": 36.8999999910593,
+              "x": 93.92650000000283,
+              "y": 6.917740000000012,
+              "heap": 19036653,
+              "weather": "clear",
+              "stages": {
+                "renderMapGround": 0,
+                "drawHouse": 0.800000011920929,
+                "drawBuilding": 0.09999999403953552,
+                "drawInteractable": 0.09999999403953552,
+                "drawWorldScenery": 0.20000000298023224,
+                "drawPlayer": 0.09999999403953552,
+                "renderParticles": 0,
+                "renderDynamicLighting": 0,
+                "renderWeather": 0,
+                "renderThemeAtmosphere": 0,
+                "renderInteractionHUD": 0,
+                "renderZoneTransitionBanner": 0
+              },
+              "apiMs": {
+                "main:clearRect": 0.10000000894069672,
+                "main:ground-blit": 0,
+                "main:image": 0,
+                "main:fillRect": 0
+              },
+              "apiCount": {
+                "main:clearRect": 1,
+                "main:ground-blit": 1,
+                "main:image": 23,
+                "main:fillRect": 24
+              },
+              "duration": 1.6000000089406967
+            },
+            {
+              "start": 32445.89999999106,
+              "interval": 31.599999994039536,
+              "x": 97.9560200000033,
+              "y": 6.917740000000012,
+              "heap": 19250640,
+              "weather": "clear",
+              "stages": {
+                "renderMapGround": 0,
+                "drawHouse": 0.4000000059604645,
+                "drawInteractable": 0.19999998807907104,
+                "drawWorldScenery": 0.10000000894069672,
+                "drawPlayer": 0.29999999701976776,
+                "renderParticles": 0,
+                "renderDynamicLighting": 0,
+                "renderWeather": 0,
+                "renderThemeAtmosphere": 0,
+                "renderInteractionHUD": 0,
+                "renderZoneTransitionBanner": 0
+              },
+              "apiMs": {
+                "main:clearRect": 0,
+                "main:ground-blit": 0,
+                "main:image": 0.10000000894069672,
+                "main:fillRect": 0
+              },
+              "apiCount": {
+                "main:clearRect": 1,
+                "main:ground-blit": 1,
+                "main:image": 18,
+                "main:fillRect": 22
+              },
+              "duration": 1.2999999970197678
+            },
+            {
+              "start": 33512.79999999702,
+              "interval": 30.799999997019768,
+              "x": 102.00910000000374,
+              "y": 6.917740000000012,
+              "heap": 12031792,
+              "weather": "clear",
+              "stages": {
+                "renderMapGroundUncached": 5.5,
+                "renderGroundDetails": 0,
+                "renderMapGround": 9.5,
+                "drawHouse": 0.3999999910593033,
+                "drawInteractable": 0.30000001192092896,
+                "drawWorldScenery": 0,
+                "drawPlayer": 0,
+                "renderParticles": 0,
+                "renderDynamicLighting": 0.09999999403953552,
+                "renderWeather": 0,
+                "renderThemeAtmosphere": 0,
+                "renderInteractionHUD": 0,
+                "renderZoneTransitionBanner": 0
+              },
+              "apiMs": {
+                "main:clearRect": 0,
+                "ground:clearRect": 0,
+                "ground:fillRect": 0,
+                "ground:image": 0.20000000298023224,
+                "other:clearRect": 0,
+                "other:image": 4.5999999940395355,
+                "main:ground-blit": 0,
+                "main:image": 0,
+                "main:fillRect": 0.09999999403953552
+              },
+              "apiCount": {
+                "main:clearRect": 1,
+                "ground:clearRect": 1,
+                "ground:fillRect": 1,
+                "ground:image": 96,
+                "other:clearRect": 2,
+                "other:image": 12,
+                "main:ground-blit": 1,
+                "main:image": 19,
+                "main:fillRect": 26
+              },
+              "duration": 10.799999997019768
+            },
+            {
+              "start": 33529.39999999106,
+              "interval": 16.599999994039536,
+              "x": 102.07826000000374,
+              "y": 6.917740000000012,
+              "heap": 12031792,
+              "weather": "clear",
+              "stages": {
+                "renderMapGroundUncached": 4.800000011920929,
+                "renderGroundDetails": 0,
+                "renderMapGround": 9.200000002980232,
+                "drawHouse": 0.8999999910593033,
+                "drawInteractable": 0.30000001192092896,
+                "drawWorldScenery": 0.09999999403953552,
+                "drawPlayer": 0,
+                "renderParticles": 0,
+                "renderDynamicLighting": 0,
+                "renderWeather": 0,
+                "renderThemeAtmosphere": 0,
+                "renderInteractionHUD": 0,
+                "renderZoneTransitionBanner": 0
+              },
+              "apiMs": {
+                "main:clearRect": 0,
+                "ground:clearRect": 0,
+                "ground:fillRect": 0,
+                "ground:image": 0.20000001788139343,
+                "other:clearRect": 0,
+                "other:image": 4,
+                "main:ground-blit": 0.09999999403953552,
+                "main:image": 0.09999999403953552,
+                "main:fillRect": 0
+              },
+              "apiCount": {
+                "main:clearRect": 1,
+                "ground:clearRect": 1,
+                "ground:fillRect": 1,
+                "ground:image": 99,
+                "other:clearRect": 1,
+                "other:image": 6,
+                "main:ground-blit": 1,
+                "main:image": 19,
+                "main:fillRect": 26
+              },
+              "duration": 10.700000002980232
+            },
+            {
+              "start": 38844.09999999404,
+              "interval": 30.5,
+              "x": 122.27336000000614,
+              "y": 6.917740000000012,
+              "heap": 10550736,
+              "weather": "clear",
+              "stages": {
+                "renderMapGround": 0,
+                "drawWorldScenery": 0.09999999403953552,
+                "drawHouse": 0.29999999701976776,
+                "drawInteractable": 0.29999999701976776,
+                "drawPlayer": 0.30000001192092896,
+                "renderParticles": 0,
+                "renderDynamicLighting": 0,
+                "renderWeather": 0,
+                "renderThemeAtmosphere": 0,
+                "renderInteractionHUD": 0,
+                "renderZoneTransitionBanner": 0
+              },
+              "apiMs": {
+                "main:clearRect": 0,
+                "main:ground-blit": 0,
+                "main:image": 0.09999999403953552,
+                "main:fillRect": 0
+              },
+              "apiCount": {
+                "main:clearRect": 1,
+                "main:ground-blit": 1,
+                "main:image": 18,
+                "main:fillRect": 26
+              },
+              "duration": 1.2000000029802322
+            },
+            {
+              "start": 39914.09999999404,
+              "interval": 34,
+              "x": 126.32530000000662,
+              "y": 6.917740000000012,
+              "heap": 7878309,
+              "weather": "clear",
+              "stages": {
+                "renderMapGround": 0,
+                "drawInteractable": 0.10000000894069672,
+                "drawHouse": 0.29999998211860657,
+                "drawWorldScenery": 0.10000000894069672,
+                "drawPlayer": 0.29999999701976776,
+                "renderParticles": 0,
+                "renderDynamicLighting": 0,
+                "renderWeather": 0,
+                "renderThemeAtmosphere": 0.10000000894069672,
+                "renderInteractionHUD": 0,
+                "renderZoneTransitionBanner": 0
+              },
+              "apiMs": {
+                "main:clearRect": 0,
+                "main:ground-blit": 0,
+                "main:image": 0.30000001192092896,
+                "main:fillRect": 0
+              },
+              "apiCount": {
+                "main:clearRect": 1,
+                "main:ground-blit": 1,
+                "main:image": 21,
+                "main:fillRect": 26
+              },
+              "duration": 1.2000000029802322
+            },
+            {
+              "start": 43110.19999998808,
+              "interval": 30.099999994039536,
+              "x": 138.48378000000517,
+              "y": 6.917740000000012,
+              "heap": 15489598,
+              "weather": "clear",
+              "stages": {
+                "renderMapGround": 0,
+                "drawHouse": 0.699999988079071,
+                "drawInteractable": 0.4000000059604645,
+                "drawWorldScenery": 0,
+                "drawPlayer": 0.09999999403953552,
+                "renderParticles": 0,
+                "renderDynamicLighting": 0,
+                "renderWeather": 0,
+                "renderThemeAtmosphere": 0,
+                "renderInteractionHUD": 0,
+                "renderZoneTransitionBanner": 0
+              },
+              "apiMs": {
+                "main:clearRect": 0,
+                "main:ground-blit": 0,
+                "main:fillRect": 0,
+                "main:image": 0
+              },
+              "apiCount": {
+                "main:clearRect": 1,
+                "main:ground-blit": 1,
+                "main:fillRect": 32,
+                "main:image": 20
+              },
+              "duration": 1.7000000029802322
+            },
+            {
+              "start": 44176.29999999702,
+              "interval": 30.299999997019768,
+              "x": 142.51330000000442,
+              "y": 6.917740000000012,
+              "heap": 7873453,
+              "weather": "clear",
+              "stages": {
+                "renderMapGround": 0,
+                "drawHouse": 0.6000000089406967,
+                "drawInteractable": 0.29999999701976776,
+                "drawWorldScenery": 0.09999999403953552,
+                "drawPlayer": 0,
+                "renderParticles": 0,
+                "renderDynamicLighting": 0,
+                "renderWeather": 0.09999999403953552,
+                "renderThemeAtmosphere": 0,
+                "renderInteractionHUD": 0,
+                "renderZoneTransitionBanner": 0
+              },
+              "apiMs": {
+                "main:clearRect": 0,
+                "main:ground-blit": 0,
+                "main:fillRect": 0.09999999403953552,
+                "main:image": 0.09999999403953552
+              },
+              "apiCount": {
+                "main:clearRect": 1,
+                "main:ground-blit": 1,
+                "main:fillRect": 32,
+                "main:image": 24
+              },
+              "duration": 1.3999999910593033
+            },
+            {
+              "start": 47363.39999999106,
+              "interval": 30.200000002980232,
+              "x": 154.6254200000023,
+              "y": 6.917740000000012,
+              "heap": 11872773,
+              "weather": "clear",
+              "stages": {
+                "renderMapGround": 0,
+                "drawInteractable": 0.5000000149011612,
+                "drawWorldScenery": 0.09999999403953552,
+                "drawHouse": 0.4999999850988388,
+                "drawPlayer": 0,
+                "drawMonster": 0,
+                "renderParticles": 0,
+                "renderDynamicLighting": 0,
+                "renderWeather": 0,
+                "renderThemeAtmosphere": 0,
+                "renderInteractionHUD": 0,
+                "renderZoneTransitionBanner": 0
+              },
+              "apiMs": {
+                "main:clearRect": 0,
+                "main:ground-blit": 0,
+                "main:image": 0,
+                "main:fillRect": 0
+              },
+              "apiCount": {
+                "main:clearRect": 1,
+                "main:ground-blit": 1,
+                "main:image": 34,
+                "main:fillRect": 26
+              },
+              "duration": 1.5
+            },
+            {
+              "start": 50466,
+              "interval": 18.100000008940697,
+              "x": 166.4384800000003,
+              "y": 6.917740000000012,
+              "heap": 19196319,
+              "weather": "clear",
+              "stages": {
+                "renderMapGround": 0,
+                "drawHouse": 0.5999999940395355,
+                "drawInteractable": 0.29999999701976776,
+                "drawWorldScenery": 0,
+                "drawPlayer": 0.10000000894069672,
+                "drawMonster": 9.099999994039536,
+                "renderParticles": 0,
+                "renderDynamicLighting": 0,
+                "renderWeather": 0.09999999403953552,
+                "renderThemeAtmosphere": 0,
+                "renderInteractionHUD": 0,
+                "renderZoneTransitionBanner": 0
+              },
+              "apiMs": {
+                "main:clearRect": 0,
+                "main:ground-blit": 0,
+                "main:image": 0,
+                "main:fillRect": 9
+              },
+              "apiCount": {
+                "main:clearRect": 1,
+                "main:ground-blit": 1,
+                "main:image": 33,
+                "main:fillRect": 24
+              },
+              "duration": 10.599999994039536
+            },
+            {
+              "start": 52697.39999999106,
+              "interval": 31.799999997019768,
+              "x": 174.91247999999894,
+              "y": 6.917740000000012,
+              "heap": 12059237,
+              "weather": "clear",
+              "stages": {
+                "renderMapGround": 0,
+                "drawHouse": 0.3999999910593033,
+                "drawInteractable": 0.10000000894069672,
+                "drawWorldScenery": 0,
+                "drawPlayer": 0,
+                "drawMonster": 0.10000000894069672,
+                "renderParticles": 0,
+                "renderDynamicLighting": 0,
+                "renderWeather": 0,
+                "renderThemeAtmosphere": 0,
+                "renderInteractionHUD": 0,
+                "renderZoneTransitionBanner": 0
+              },
+              "apiMs": {
+                "main:clearRect": 0,
+                "main:ground-blit": 0,
+                "main:image": 0,
+                "main:fillRect": 0.10000000894069672
+              },
+              "apiCount": {
+                "main:clearRect": 1,
+                "main:ground-blit": 1,
+                "main:image": 35,
+                "main:fillRect": 22
+              },
+              "duration": 1
+            }
+          ],
+          "errors": [],
+          "diagnostics": [],
+          "corrections": 0
+        },
+        {
+          "index": 2,
+          "target": 385,
+          "direction": 1,
+          "start": 58508.19999998808,
+          "end": 109055.09999999404,
+          "seconds": 50.54690000000596,
+          "position": {
+            "x": 385.26338000001635,
+            "y": 6.917740000000012
+          },
+          "hp": 100,
+          "satiety": 72.98950000000005,
+          "draw": {
+            "count": 3030,
+            "p50": 1.1000000089406967,
+            "p95": 1.9000000059604645,
+            "p99": 4.0999999940395355,
+            "max": 12.200000002980232,
+            "over50": 0
+          },
+          "drawStart": {
+            "count": 3029,
+            "p50": 18,
+            "p95": 18.899999991059303,
+            "p99": 25.099999994039536,
+            "max": 44.8999999910593,
+            "over50": 0
+          },
+          "update": {
+            "count": 8251,
+            "p50": 0.19999998807907104,
+            "p95": 0.29999999701976776,
+            "p99": 0.4000000059604645,
+            "max": 2.2000000029802322,
+            "over50": 0
+          },
+          "networkApply": {
+            "count": 173,
+            "p50": 0.20000000298023224,
+            "p95": 0.4000000059604645,
+            "p99": 0.5,
+            "max": 0.5999999940395355,
+            "over50": 0
+          },
+          "totalApiCalls": 208178,
+          "totalSlowApiCalls": 0,
+          "totalSlowFrames": 5,
+          "slowCalls": [],
+          "slowFrames": [
+            {
+              "start": 62428.59999999404,
+              "interval": 12.700000002980232,
+              "x": 208.09445999999298,
+              "y": 6.917740000000012,
+              "heap": 29473638,
+              "weather": "clear",
+              "stages": {
+                "renderMapGround": 0.09999999403953552,
+                "drawInteractable": 0.09999999403953552,
+                "drawWorldScenery": 0,
+                "drawHouse": 0.4999999850988388,
+                "drawMonster": 10.900000020861626,
+                "drawPlayer": 0.29999999701976776,
+                "renderParticles": 0,
+                "renderDynamicLighting": 0,
+                "renderWeather": 0,
+                "renderThemeAtmosphere": 0,
+                "renderInteractionHUD": 0,
+                "renderZoneTransitionBanner": 0
+              },
+              "apiMs": {
+                "main:clearRect": 0,
+                "main:ground-blit": 0.09999999403953552,
+                "main:image": 0,
+                "main:fillRect": 0.09999999403953552
+              },
+              "apiCount": {
+                "main:clearRect": 1,
+                "main:ground-blit": 1,
+                "main:image": 28,
+                "main:fillRect": 24
+              },
+              "duration": 12.200000002980232
+            },
+            {
+              "start": 65424.19999998808,
+              "interval": 44.8999999910593,
+              "x": 219.469759999991,
+              "y": 6.917740000000012,
+              "heap": 20409095,
+              "weather": "clear",
+              "stages": {
+                "renderMapGround": 0,
+                "drawInteractable": 0.5,
+                "drawHouse": 0.4000000059604645,
+                "drawWorldScenery": 0,
+                "drawMonster": 0,
+                "drawPlayer": 0.09999999403953552,
+                "renderParticles": 0,
+                "renderDynamicLighting": 0,
+                "renderWeather": 0,
+                "renderThemeAtmosphere": 0,
+                "renderInteractionHUD": 0,
+                "renderZoneTransitionBanner": 0
+              },
+              "apiMs": {
+                "main:clearRect": 0,
+                "main:ground-blit": 0,
+                "main:image": 0,
+                "main:fillRect": 0
+              },
+              "apiCount": {
+                "main:clearRect": 1,
+                "main:ground-blit": 1,
+                "main:image": 26,
+                "main:fillRect": 26
+              },
+              "duration": 1.5
+            },
+            {
+              "start": 68130.19999998808,
+              "interval": 17.799999997019768,
+              "x": 229.76243999998934,
+              "y": 6.917740000000012,
+              "heap": 32608595,
+              "weather": "clear",
+              "stages": {
+                "renderMapGround": 0.10000000894069672,
+                "drawHouse": 0.5999999791383743,
+                "drawWorldScenery": 6.600000008940697,
+                "drawInteractable": 0.4000000059604645,
+                "drawMonster": 0.09999999403953552,
+                "drawPlayer": 0,
+                "renderParticles": 0,
+                "renderDynamicLighting": 0,
+                "renderWeather": 0,
+                "renderThemeAtmosphere": 0,
+                "renderInteractionHUD": 0.10000000894069672,
+                "renderZoneTransitionBanner": 0
+              },
+              "apiMs": {
+                "main:clearRect": 0,
+                "main:ground-blit": 0.10000000894069672,
+                "main:image": 0.10000000894069672,
+                "main:fillRect": 0
+              },
+              "apiCount": {
+                "main:clearRect": 1,
+                "main:ground-blit": 1,
+                "main:image": 29,
+                "main:fillRect": 26
+              },
+              "duration": 8.100000008940697
+            },
+            {
+              "start": 69663.5,
+              "interval": 30.700000002980232,
+              "x": 235.58821999998827,
+              "y": 6.917740000000012,
+              "heap": 32591291,
+              "weather": "clear",
+              "stages": {
+                "renderMapGround": 0.09999999403953552,
+                "drawHouse": 0.7999999970197678,
+                "drawInteractable": 0.19999998807907104,
+                "drawWorldScenery": 0.20000000298023224,
+                "drawMonster": 0.10000000894069672,
+                "drawPlayer": 0.10000000894069672,
+                "renderParticles": 0,
+                "renderDynamicLighting": 0,
+                "renderWeather": 0,
+                "renderThemeAtmosphere": 0,
+                "renderInteractionHUD": 0,
+                "renderZoneTransitionBanner": 0
+              },
+              "apiMs": {
+                "main:clearRect": 0,
+                "main:ground-blit": 0.09999999403953552,
+                "main:image": 0.09999999403953552,
+                "main:fillRect": 0.10000000894069672
+              },
+              "apiCount": {
+                "main:clearRect": 1,
+                "main:ground-blit": 1,
+                "main:image": 28,
+                "main:fillRect": 26
+              },
+              "duration": 1.8999999910593033
+            },
+            {
+              "start": 77128.89999999106,
+              "interval": 30.5,
+              "x": 263.9574999999868,
+              "y": 6.917740000000012,
+              "heap": 13273456,
+              "weather": "clear",
+              "stages": {
+                "renderMapGround": 0,
+                "drawHouse": 0.3999999910593033,
+                "drawMonster": 0.20000000298023224,
+                "drawInteractable": 0.20000000298023224,
+                "drawWorldScenery": 0.09999999403953552,
+                "drawPlayer": 0.20000000298023224,
+                "renderParticles": 0,
+                "renderDynamicLighting": 0,
+                "renderWeather": 0,
+                "renderThemeAtmosphere": 0,
+                "renderInteractionHUD": 0,
+                "renderZoneTransitionBanner": 0
+              },
+              "apiMs": {
+                "main:clearRect": 0.09999999403953552,
+                "main:ground-blit": 0,
+                "main:image": 0,
+                "main:fillRect": 0.09999999403953552
+              },
+              "apiCount": {
+                "main:clearRect": 1,
+                "main:ground-blit": 1,
+                "main:image": 34,
+                "main:fillRect": 29
+              },
+              "duration": 1.5
+            }
+          ],
+          "errors": [],
+          "diagnostics": [],
+          "corrections": 0
+        },
+        {
+          "index": 3,
+          "target": 257,
+          "direction": -1,
+          "start": 110754.59999999404,
+          "end": 144599.89999999106,
+          "seconds": 33.84529999999702,
+          "position": {
+            "x": 256.65769999998565,
+            "y": 6.917740000000012
+          },
+          "hp": 100,
+          "satiety": 63.89275000000006,
+          "draw": {
+            "count": 2030,
+            "p50": 1,
+            "p95": 1.7000000029802322,
+            "p99": 3.7999999970197678,
+            "max": 8.399999991059303,
+            "over50": 0
+          },
+          "drawStart": {
+            "count": 2029,
+            "p50": 18,
+            "p95": 18.80000001192093,
+            "p99": 24.69999998807907,
+            "max": 31.200000002980232,
+            "over50": 0
+          },
+          "update": {
+            "count": 5534,
+            "p50": 0.19999998807907104,
+            "p95": 0.29999999701976776,
+            "p99": 0.3999999910593033,
+            "max": 0.7999999970197678,
+            "over50": 0
+          },
+          "networkApply": {
+            "count": 97,
+            "p50": 0.20000000298023224,
+            "p95": 0.4000000059604645,
+            "p99": 0.5,
+            "max": 0.5,
+            "over50": 0
+          },
+          "totalApiCalls": 139358,
+          "totalSlowApiCalls": 0,
+          "totalSlowFrames": 3,
+          "slowCalls": [],
+          "slowFrames": [
+            {
+              "start": 122796.29999999702,
+              "interval": 30.799999997019768,
+              "x": 339.5087200000066,
+              "y": 6.917740000000012,
+              "heap": 23257611,
+              "weather": "clear",
+              "stages": {
+                "renderMapGround": 0.09999999403953552,
+                "drawInteractable": 0.19999998807907104,
+                "drawWorldScenery": 0,
+                "drawPlayer": 0.20000000298023224,
+                "drawHouse": 0.20000000298023224,
+                "drawMonster": 0,
+                "renderParticles": 0,
+                "renderDynamicLighting": 0,
+                "renderWeather": 0,
+                "renderThemeAtmosphere": 0,
+                "renderInteractionHUD": 0,
+                "renderZoneTransitionBanner": 0
+              },
+              "apiMs": {
+                "main:clearRect": 0,
+                "main:ground-blit": 0,
+                "main:image": 0,
+                "main:fillRect": 0
+              },
+              "apiCount": {
+                "main:clearRect": 1,
+                "main:ground-blit": 1,
+                "main:image": 33,
+                "main:fillRect": 18
+              },
+              "duration": 0.7999999970197678
+            },
+            {
+              "start": 128128.59999999404,
+              "interval": 31.200000002980232,
+              "x": 319.2452200000016,
+              "y": 6.917740000000012,
+              "heap": 25216375,
+              "weather": "clear",
+              "stages": {
+                "renderMapGround": 0,
+                "drawInteractable": 0.20000000298023224,
+                "drawWorldScenery": 0,
+                "drawHouse": 0.3999999910593033,
+                "drawPlayer": 0.20000000298023224,
+                "renderParticles": 0,
+                "renderDynamicLighting": 0,
+                "renderWeather": 0,
+                "renderThemeAtmosphere": 0,
+                "renderInteractionHUD": 0,
+                "renderZoneTransitionBanner": 0
+              },
+              "apiMs": {
+                "main:clearRect": 0.09999999403953552,
+                "main:ground-blit": 0,
+                "main:image": 0.09999999403953552,
+                "main:fillRect": 0
+              },
+              "apiCount": {
+                "main:clearRect": 1,
+                "main:ground-blit": 1,
+                "main:image": 29,
+                "main:fillRect": 19
+              },
+              "duration": 1.0999999940395355
+            },
+            {
+              "start": 143531.5,
+              "interval": 18.5,
+              "x": 260.71039999998663,
+              "y": 6.917740000000012,
+              "heap": 26263447,
+              "weather": "clear",
+              "stages": {
+                "renderMapGround": 0,
+                "drawHouse": 7.4000000059604645,
+                "drawMonster": 0.20000000298023224,
+                "drawWorldScenery": 0.09999999403953552,
+                "drawInteractable": 0.10000000894069672,
+                "drawPlayer": 0.19999998807907104,
+                "renderParticles": 0,
+                "renderDynamicLighting": 0,
+                "renderWeather": 0,
+                "renderThemeAtmosphere": 0,
+                "renderInteractionHUD": 0,
+                "renderZoneTransitionBanner": 0
+              },
+              "apiMs": {
+                "main:clearRect": 0.09999999403953552,
+                "main:ground-blit": 0,
+                "main:image": 0.30000001192092896,
+                "main:fillRect": 0
+              },
+              "apiCount": {
+                "main:clearRect": 1,
+                "main:ground-blit": 1,
+                "main:image": 36,
+                "main:fillRect": 29
+              },
+              "duration": 8.399999991059303
+            }
+          ],
+          "errors": [],
+          "diagnostics": [],
+          "corrections": 0
+        },
+        {
+          "index": 4,
+          "target": 129,
+          "direction": -1,
+          "start": 152018.69999998808,
+          "end": 185715.09999999404,
+          "seconds": 33.69640000000596,
+          "position": {
+            "x": 128.60530000000261,
+            "y": 6.917740000000012
+          },
+          "hp": 100,
+          "satiety": 53.716500000000046,
+          "draw": {
+            "count": 2014,
+            "p50": 1.2000000029802322,
+            "p95": 1.9000000059604645,
+            "p99": 4.0999999940395355,
+            "max": 12.799999997019768,
+            "over50": 0
+          },
+          "drawStart": {
+            "count": 2013,
+            "p50": 18,
+            "p95": 18.799999997019768,
+            "p99": 27.099999994039536,
+            "max": 37.8999999910593,
+            "over50": 0
+          },
+          "update": {
+            "count": 5496,
+            "p50": 0.19999998807907104,
+            "p95": 0.29999999701976776,
+            "p99": 0.4000000059604645,
+            "max": 2,
+            "over50": 0
+          },
+          "networkApply": {
+            "count": 131,
+            "p50": 0.29999999701976776,
+            "p95": 0.4000000059604645,
+            "p99": 0.5,
+            "max": 0.5,
+            "over50": 0
+          },
+          "totalApiCalls": 139326,
+          "totalSlowApiCalls": 0,
+          "totalSlowFrames": 9,
+          "slowCalls": [],
+          "slowFrames": [
+            {
+              "start": 153646,
+              "interval": 31.100000008940697,
+              "x": 250.46369999998632,
+              "y": 6.917740000000012,
+              "heap": 11577195,
+              "weather": "clear",
+              "stages": {
+                "renderMapGround": 0.09999999403953552,
+                "drawHouse": 0.5,
+                "drawInteractable": 0.19999998807907104,
+                "drawWorldScenery": 0,
+                "drawMonster": 0.10000000894069672,
+                "drawPlayer": 0,
+                "renderParticles": 0,
+                "renderDynamicLighting": 0,
+                "renderWeather": 0,
+                "renderThemeAtmosphere": 0.09999999403953552,
+                "renderInteractionHUD": 0,
+                "renderZoneTransitionBanner": 0
+              },
+              "apiMs": {
+                "main:clearRect": 0,
+                "main:ground-blit": 0.09999999403953552,
+                "main:image": 0.09999999403953552,
+                "main:fillRect": 0
+              },
+              "apiCount": {
+                "main:clearRect": 1,
+                "main:ground-blit": 1,
+                "main:image": 31,
+                "main:fillRect": 22
+              },
+              "duration": 1.3999999910593033
+            },
+            {
+              "start": 173448,
+              "interval": 18.100000008940697,
+              "x": 175.2119199999966,
+              "y": 6.917740000000012,
+              "heap": 14609988,
+              "weather": "clear",
+              "stages": {
+                "renderMapGround": 0,
+                "drawHouse": 0.5000000149011612,
+                "drawWorldScenery": 0,
+                "drawInteractable": 11.799999982118607,
+                "drawPlayer": 0.10000000894069672,
+                "drawMonster": 0.09999999403953552,
+                "renderParticles": 0,
+                "renderDynamicLighting": 0,
+                "renderWeather": 0,
+                "renderThemeAtmosphere": 0,
+                "renderInteractionHUD": 0,
+                "renderZoneTransitionBanner": 0
+              },
+              "apiMs": {
+                "main:clearRect": 0,
+                "main:ground-blit": 0,
+                "main:image": 0,
+                "main:fillRect": 0.09999999403953552
+              },
+              "apiCount": {
+                "main:clearRect": 1,
+                "main:ground-blit": 1,
+                "main:image": 36,
+                "main:fillRect": 22
+              },
+              "duration": 12.799999997019768
+            },
+            {
+              "start": 179231.89999999106,
+              "interval": 32.3999999910593,
+              "x": 153.24411999999933,
+              "y": 6.917740000000012,
+              "heap": 27246010,
+              "weather": "clear",
+              "stages": {
+                "renderMapGround": 0,
+                "drawInteractable": 0.5999999940395355,
+                "drawWorldScenery": 0,
+                "drawHouse": 0.29999999701976776,
+                "drawPlayer": 0.10000000894069672,
+                "drawMonster": 0,
+                "renderParticles": 0,
+                "renderDynamicLighting": 0,
+                "renderWeather": 0,
+                "renderThemeAtmosphere": 0,
+                "renderInteractionHUD": 0,
+                "renderZoneTransitionBanner": 0
+              },
+              "apiMs": {
+                "main:clearRect": 0,
+                "main:ground-blit": 0,
+                "main:image": 0,
+                "main:fillRect": 0.10000000894069672
+              },
+              "apiCount": {
+                "main:clearRect": 1,
+                "main:ground-blit": 1,
+                "main:image": 31,
+                "main:fillRect": 26
+              },
+              "duration": 1.2000000029802322
+            },
+            {
+              "start": 180296.89999999106,
+              "interval": 31.599999994039536,
+              "x": 149.19141999999977,
+              "y": 6.917740000000012,
+              "heap": 7244482,
+              "weather": "clear",
+              "stages": {
+                "renderMapGround": 0.09999999403953552,
+                "drawInteractable": 0.20000000298023224,
+                "drawWorldScenery": 0,
+                "drawHouse": 0.20000000298023224,
+                "drawPlayer": 0.29999999701976776,
+                "drawMonster": 0,
+                "renderParticles": 0,
+                "renderDynamicLighting": 0,
+                "renderWeather": 0,
+                "renderThemeAtmosphere": 0,
+                "renderInteractionHUD": 0,
+                "renderZoneTransitionBanner": 0
+              },
+              "apiMs": {
+                "main:clearRect": 0,
+                "main:ground-blit": 0,
+                "main:image": 0.09999999403953552,
+                "main:fillRect": 0
+              },
+              "apiCount": {
+                "main:clearRect": 1,
+                "main:ground-blit": 1,
+                "main:image": 29,
+                "main:fillRect": 26
+              },
+              "duration": 1
+            },
+            {
+              "start": 181364.39999999106,
+              "interval": 32.3999999910593,
+              "x": 145.1387200000004,
+              "y": 6.917740000000012,
+              "heap": 17663198,
+              "weather": "acid_rain",
+              "stages": {
+                "renderMapGround": 0,
+                "drawHouse": 0.6000000089406967,
+                "drawInteractable": 0.19999998807907104,
+                "drawWorldScenery": 0.10000000894069672,
+                "drawPlayer": 0.20000000298023224,
+                "drawMonster": 0,
+                "renderParticles": 0,
+                "renderDynamicLighting": 0,
+                "renderWeather": 0,
+                "renderThemeAtmosphere": 0.09999999403953552,
+                "renderInteractionHUD": 0,
+                "renderZoneTransitionBanner": 0
+              },
+              "apiMs": {
+                "main:clearRect": 0,
+                "main:ground-blit": 0,
+                "main:fillRect": 0.09999999403953552,
+                "main:image": 0.10000000894069672
+              },
+              "apiCount": {
+                "main:clearRect": 1,
+                "main:ground-blit": 1,
+                "main:fillRect": 29,
+                "main:image": 26
+              },
+              "duration": 1.5
+            },
+            {
+              "start": 182438.39999999106,
+              "interval": 37.8999999910593,
+              "x": 141.0628400000008,
+              "y": 6.917740000000012,
+              "heap": 27471031,
+              "weather": "acid_rain",
+              "stages": {
+                "renderMapGround": 0.10000000894069672,
+                "drawHouse": 0.699999988079071,
+                "drawInteractable": 0.5000000149011612,
+                "drawWorldScenery": 0,
+                "drawPlayer": 0.10000000894069672,
+                "renderParticles": 0,
+                "renderDynamicLighting": 0,
+                "renderWeather": 0.09999999403953552,
+                "renderThemeAtmosphere": 0,
+                "renderInteractionHUD": 0,
+                "renderZoneTransitionBanner": 0
+              },
+              "apiMs": {
+                "main:clearRect": 0,
+                "main:ground-blit": 0.10000000894069672,
+                "main:fillRect": 0,
+                "main:image": 0
+              },
+              "apiCount": {
+                "main:clearRect": 1,
+                "main:ground-blit": 1,
+                "main:fillRect": 31,
+                "main:image": 24
+              },
+              "duration": 1.7000000029802322
+            },
+            {
+              "start": 183498.39999999106,
+              "interval": 33.5,
+              "x": 137.03256000000133,
+              "y": 6.917740000000012,
+              "heap": 12633812,
+              "weather": "acid_rain",
+              "stages": {
+                "renderMapGround": 0.10000000894069672,
+                "drawHouse": 0.5000000149011612,
+                "drawInteractable": 0.09999999403953552,
+                "drawWorldScenery": 0.09999999403953552,
+                "drawPlayer": 0.09999999403953552,
+                "renderParticles": 0,
+                "renderDynamicLighting": 0,
+                "renderWeather": 0.10000000894069672,
+                "renderThemeAtmosphere": 0,
+                "renderInteractionHUD": 0,
+                "renderZoneTransitionBanner": 0
+              },
+              "apiMs": {
+                "main:clearRect": 0,
+                "main:ground-blit": 0.10000000894069672,
+                "main:fillRect": 0,
+                "main:image": 0.09999999403953552
+              },
+              "apiCount": {
+                "main:clearRect": 1,
+                "main:ground-blit": 1,
+                "main:fillRect": 31,
+                "main:image": 20
+              },
+              "duration": 1.1000000089406967
+            },
+            {
+              "start": 184566.29999999702,
+              "interval": 35.1000000089407,
+              "x": 132.98024000000194,
+              "y": 6.917740000000012,
+              "heap": 17030192,
+              "weather": "acid_rain",
+              "stages": {
+                "renderMapGround": 0,
+                "drawHouse": 0.8999999910593033,
+                "drawInteractable": 0.09999999403953552,
+                "drawWorldScenery": 0.10000000894069672,
+                "drawPlayer": 0.19999998807907104,
+                "renderParticles": 0,
+                "renderDynamicLighting": 0,
+                "renderWeather": 0,
+                "renderThemeAtmosphere": 0,
+                "renderInteractionHUD": 0,
+                "renderZoneTransitionBanner": 0
+              },
+              "apiMs": {
+                "main:clearRect": 0,
+                "main:ground-blit": 0,
+                "main:image": 0,
+                "main:fillRect": 0
+              },
+              "apiCount": {
+                "main:clearRect": 1,
+                "main:ground-blit": 1,
+                "main:image": 25,
+                "main:fillRect": 29
+              },
+              "duration": 1.5999999940395355
+            },
+            {
+              "start": 185628.39999999106,
+              "interval": 30.599999994039536,
+              "x": 128.92754000000255,
+              "y": 6.917740000000012,
+              "heap": 20462047,
+              "weather": "acid_rain",
+              "stages": {
+                "renderMapGround": 0.10000000894069672,
+                "drawInteractable": 0.20000000298023224,
+                "drawHouse": 0.4000000059604645,
+                "drawWorldScenery": 0.19999998807907104,
+                "drawPlayer": 0.10000000894069672,
+                "renderParticles": 0,
+                "renderDynamicLighting": 0,
+                "renderWeather": 0,
+                "renderThemeAtmosphere": 0,
+                "renderInteractionHUD": 0,
+                "renderZoneTransitionBanner": 0
+              },
+              "apiMs": {
+                "main:clearRect": 0,
+                "main:ground-blit": 0,
+                "main:image": 0,
+                "main:fillRect": 0
+              },
+              "apiCount": {
+                "main:clearRect": 1,
+                "main:ground-blit": 1,
+                "main:image": 21,
+                "main:fillRect": 27
+              },
+              "duration": 1.1000000089406967
+            }
+          ],
+          "errors": [],
+          "diagnostics": [],
+          "corrections": 0
+        }
+      ],
+      "traceCompletion": {
+        "waitMs": 4559,
+        "dataLossOccurred": false,
+        "bytes": 86104806
+      },
+      "trigger": null,
+      "final": {
+        "position": {
+          "x": 128.60530000000261,
+          "y": 6.917740000000012
+        },
+        "serverPosition": {
+          "x": 128.60530000000261,
+          "y": 6.917740000000012
+        },
+        "hp": 100,
+        "satiety": 53.186500000000045,
+        "resources": {
+          "wood": 0,
+          "stone": 0,
+          "scrap": 0,
+          "parts": 0,
+          "food": 0,
+          "ammo": 0,
+          "c4": 0,
+          "medical": 0,
+          "credits": 0,
+          "shard": 0
+        },
+        "inventoryEmpty": true,
+        "chunks": 64,
+        "errors": [],
+        "diagnostics": [],
+        "corrections": 0
+      }
+    },
+    {
+      "run": "a2",
+      "success": false,
+      "error": "Trace data loss",
+      "scope": "Exact consistent backup continuation of prior default character at earned walking endpoint, no asset/position/health/clock changes. Triggered32MiB continuous trace with extended Canvas call observers, not a formal performance or rate comparison.",
+      "gpu": {
+        "renderer": "ANGLE (Intel, Intel(R) UHD Graphics (0x00009A60) Direct3D11 vs_5_0 ps_5_0, D3D11-31.0.101.1999)",
+        "featureStatus": {
+          "2d_canvas": "enabled",
+          "direct_rendering_display_compositor": "disabled_off_ok",
+          "gpu_compositing": "enabled",
+          "multiple_raster_threads": "enabled_on",
+          "opengl": "enabled_on",
+          "rasterization": "enabled",
+          "raw_draw": "disabled_off_ok",
+          "skia_graphite": "disabled_off",
+          "trees_in_viz": "disabled_off",
+          "video_decode": "enabled",
+          "video_encode": "enabled",
+          "webgl": "enabled",
+          "webgpu": "enabled",
+          "webnn": "disabled_off"
+        },
+        "devices": [
+          {
+            "name": "Intel(R) UHD Graphics",
+            "driver": "31.0.101.1999"
+          },
+          {
+            "name": "NVIDIA GeForce RTX 3070 Laptop GPU",
+            "driver": "30.0.15.1289"
+          },
+          {
+            "name": "Intel(R) UHD Graphics",
+            "driver": "31.0.101.1999"
+          },
+          {
+            "name": "Intel(R) UHD Graphics",
+            "driver": "31.0.101.1999"
+          },
+          {
+            "name": "Microsoft Basic Render Driver",
+            "driver": "10.0.26100.9711"
+          }
+        ],
+        "page": {
+          "bundle": [
+            "/assets/index-z_DuULg9.js"
+          ],
+          "width": 1920,
+          "height": 1080,
+          "dpr": 1,
+          "hidden": false,
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/155.0.0.0 Safari/537.36"
+        }
+      },
+      "start": {
+        "position": {
+          "x": 128.60530000000261,
+          "y": 6.917740000000012
+        },
+        "hp": 100,
+        "satiety": 52.40850000000005,
+        "inventoryEmpty": true
+      },
+      "walkingSeconds": 134.97709999999404,
+      "apiCalls": 3958521,
+      "slowApiCalls": [
+        {
+          "start": 5672.5,
+          "duration": 3.5999999940395355,
+          "frameStart": 5671.29999999702,
+          "key": "main:fillText",
+          "x": 137.10210000000092,
+          "y": 6.917740000000012,
+          "targetSize": {
+            "width": 1920,
+            "height": 1080
+          }
+        },
+        {
+          "start": 6793.5,
+          "duration": 2.3999999910593033,
+          "frameStart": 6792.29999999702,
+          "key": "main:strokeText",
+          "x": 141.36228,
+          "y": 6.917740000000012,
+          "targetSize": {
+            "width": 1920,
+            "height": 1080
+          }
+        },
+        {
+          "start": 9341.39999999106,
+          "duration": 10.200000002980232,
+          "frameStart": 9339.20000000298,
+          "key": "main:fillText",
+          "x": 151.0336599999983,
+          "y": 6.917740000000012,
+          "targetSize": {
+            "width": 1920,
+            "height": 1080
+          }
+        },
+        {
+          "start": 13944.20000000298,
+          "duration": 11.599999994039536,
+          "frameStart": 13942.70000000298,
+          "key": "main:fillRect",
+          "x": 168.53417999999473,
+          "y": 6.917740000000012,
+          "targetSize": {
+            "width": 1920,
+            "height": 1080
+          }
+        },
+        {
+          "start": 19857.79999999702,
+          "duration": 11.900000005960464,
+          "frameStart": 19856.59999999404,
+          "key": "main:fillText",
+          "x": 191.00851999998955,
+          "y": 6.917740000000012,
+          "targetSize": {
+            "width": 1920,
+            "height": 1080
+          }
+        },
+        {
+          "start": 23324.79999999702,
+          "duration": 10.900000005960464,
+          "frameStart": 23323.59999999404,
+          "key": "main:fillText",
+          "x": 204.17969999998618,
+          "y": 6.917740000000012,
+          "targetSize": {
+            "width": 1920,
+            "height": 1080
+          }
+        },
+        {
+          "start": 48005.09999999404,
+          "duration": 10.400000005960464,
+          "frameStart": 48004.39999999106,
+          "key": "main:strokeText",
+          "x": 297.96863999996935,
+          "y": 6.917740000000012,
+          "targetSize": {
+            "width": 1920,
+            "height": 1080
+          }
+        },
+        {
+          "start": 104657.5,
+          "duration": 7,
+          "frameStart": 104656.5,
+          "key": "main:fillRect",
+          "x": 260.71077999993594,
+          "y": 6.917740000000012,
+          "targetSize": {
+            "width": 1920,
+            "height": 1080
+          }
+        },
+        {
+          "start": 116542.5,
+          "duration": 2.8999999910593033,
+          "frameStart": 116539.70000000298,
+          "key": "main:ground-blit",
+          "x": 215.5549999999421,
+          "y": 6.917740000000012,
+          "targetSize": {
+            "width": 1920,
+            "height": 1080
+          },
+          "sourceSize": {
+            "width": 2176,
+            "height": 1336
+          }
+        }
+      ],
+      "legs": [
+        {
+          "index": 1,
+          "target": 385,
+          "direction": 1,
+          "start": 3469.2000000029802,
+          "end": 70937.39999999106,
+          "seconds": 67.46819999998807,
+          "position": {
+            "x": 385.1022599999661,
+            "y": 6.917740000000012
+          },
+          "hp": 100,
+          "satiety": 35.527000000000044,
+          "draw": {
+            "count": 4046,
+            "p50": 1.3999999910593033,
+            "p95": 2.4000000059604645,
+            "p99": 5,
+            "max": 13.5,
+            "over50": 0
+          },
+          "drawStart": {
+            "count": 4045,
+            "p50": 18,
+            "p95": 19,
+            "p99": 25.80000001192093,
+            "max": 36.1000000089407,
+            "over50": 0
+          },
+          "update": {
+            "count": 11024,
+            "p50": 0.10000000894069672,
+            "p95": 0.29999999701976776,
+            "p99": 0.3999999910593033,
+            "max": 2.4000000059604645,
+            "over50": 0
+          },
+          "networkApply": {
+            "count": 230,
+            "p50": 0.29999999701976776,
+            "p95": 0.5,
+            "p99": 0.5999999940395355,
+            "max": 0.6000000089406967,
+            "over50": 0
+          },
+          "totalApiCalls": 1981079,
+          "totalSlowApiCalls": 7,
+          "totalSlowFrames": 15,
+          "slowCalls": [
+            {
+              "start": 5672.5,
+              "duration": 3.5999999940395355,
+              "frameStart": 5671.29999999702,
+              "key": "main:fillText",
+              "x": 137.10210000000092,
+              "y": 6.917740000000012,
+              "targetSize": {
+                "width": 1920,
+                "height": 1080
+              }
+            },
+            {
+              "start": 6793.5,
+              "duration": 2.3999999910593033,
+              "frameStart": 6792.29999999702,
+              "key": "main:strokeText",
+              "x": 141.36228,
+              "y": 6.917740000000012,
+              "targetSize": {
+                "width": 1920,
+                "height": 1080
+              }
+            },
+            {
+              "start": 9341.39999999106,
+              "duration": 10.200000002980232,
+              "frameStart": 9339.20000000298,
+              "key": "main:fillText",
+              "x": 151.0336599999983,
+              "y": 6.917740000000012,
+              "targetSize": {
+                "width": 1920,
+                "height": 1080
+              }
+            },
+            {
+              "start": 13944.20000000298,
+              "duration": 11.599999994039536,
+              "frameStart": 13942.70000000298,
+              "key": "main:fillRect",
+              "x": 168.53417999999473,
+              "y": 6.917740000000012,
+              "targetSize": {
+                "width": 1920,
+                "height": 1080
+              }
+            },
+            {
+              "start": 19857.79999999702,
+              "duration": 11.900000005960464,
+              "frameStart": 19856.59999999404,
+              "key": "main:fillText",
+              "x": 191.00851999998955,
+              "y": 6.917740000000012,
+              "targetSize": {
+                "width": 1920,
+                "height": 1080
+              }
+            },
+            {
+              "start": 23324.79999999702,
+              "duration": 10.900000005960464,
+              "frameStart": 23323.59999999404,
+              "key": "main:fillText",
+              "x": 204.17969999998618,
+              "y": 6.917740000000012,
+              "targetSize": {
+                "width": 1920,
+                "height": 1080
+              }
+            },
+            {
+              "start": 48005.09999999404,
+              "duration": 10.400000005960464,
+              "frameStart": 48004.39999999106,
+              "key": "main:strokeText",
+              "x": 297.96863999996935,
+              "y": 6.917740000000012,
+              "targetSize": {
+                "width": 1920,
+                "height": 1080
+              }
+            }
+          ],
+          "slowFrames": [
+            {
+              "start": 4240.79999999702,
+              "interval": 17.700000002980232,
+              "x": 131.66772000000205,
+              "y": 6.917740000000012,
+              "heap": 8217832,
+              "weather": "clear",
+              "stages": {
+                "renderMapGroundUncached": 9.299999997019768,
+                "renderGroundDetails": 0.09999999403953552,
+                "renderMapGround": 9.800000011920929,
+                "drawInteractable": 0.4000000059604645,
+                "drawHouse": 1.800000011920929,
+                "drawWorldScenery": 0.19999998807907104,
+                "drawPlayer": 0.10000000894069672,
+                "renderParticles": 0,
+                "renderDynamicLighting": 0,
+                "renderWeather": 0,
+                "renderThemeAtmosphere": 0,
+                "renderInteractionHUD": 0,
+                "renderZoneTransitionBanner": 0
+              },
+              "apiMs": {
+                "main:clearRect": 0.09999999403953552,
+                "ground:self-copy": 0.09999999403953552,
+                "ground:clearRect": 0,
+                "ground:fillRect": 0,
+                "ground:fill": 0.5000000298023224,
+                "ground:image": 3.2000000178813934,
+                "ground:stroke": 0.4000000059604645,
+                "other:clearRect": 0,
+                "other:image": 0.4999999850988388,
+                "main:ground-blit": 0.10000000894069672,
+                "main:fill": 0,
+                "main:stroke": 0.9000000208616257,
+                "main:image": 0,
+                "main:fillRect": 0,
+                "main:fillText": 0
+              },
+              "apiCount": {
+                "main:clearRect": 1,
+                "ground:self-copy": 1,
+                "ground:clearRect": 2,
+                "ground:fillRect": 2,
+                "ground:fill": 772,
+                "ground:image": 784,
+                "ground:stroke": 179,
+                "other:clearRect": 10,
+                "other:image": 60,
+                "main:ground-blit": 1,
+                "main:fill": 135,
+                "main:stroke": 520,
+                "main:image": 23,
+                "main:fillRect": 30,
+                "main:fillText": 11
+              },
+              "duration": 12.799999997019768
+            },
+            {
+              "start": 5307.70000000298,
+              "interval": 18.400000005960464,
+              "x": 135.72080000000116,
+              "y": 6.917740000000012,
+              "heap": 8480315,
+              "weather": "clear",
+              "stages": {
+                "renderMapGroundUncached": 6.0999999940395355,
+                "renderGroundDetails": 0,
+                "renderMapGround": 6.299999997019768,
+                "drawHouse": 1.2999999970197678,
+                "drawInteractable": 0.5999999940395355,
+                "drawWorldScenery": 0,
+                "drawPlayer": 0.10000000894069672,
+                "renderParticles": 0,
+                "renderDynamicLighting": 0,
+                "renderWeather": 0,
+                "renderThemeAtmosphere": 0,
+                "renderInteractionHUD": 0,
+                "renderZoneTransitionBanner": 0
+              },
+              "apiMs": {
+                "main:clearRect": 0,
+                "ground:self-copy": 0,
+                "ground:clearRect": 0,
+                "ground:fillRect": 0,
+                "ground:fill": 0.40000002086162567,
+                "ground:image": 1.7999999523162842,
+                "ground:stroke": 0,
+                "other:clearRect": 0,
+                "other:image": 0.30000002682209015,
+                "main:ground-blit": 0.10000000894069672,
+                "main:fill": 0.20000000298023224,
+                "main:stroke": 0.30000001192092896,
+                "main:image": 0,
+                "main:fillRect": 0.09999999403953552,
+                "main:fillText": 0
+              },
+              "apiCount": {
+                "main:clearRect": 1,
+                "ground:self-copy": 1,
+                "ground:clearRect": 2,
+                "ground:fillRect": 2,
+                "ground:fill": 772,
+                "ground:image": 784,
+                "ground:stroke": 154,
+                "other:clearRect": 5,
+                "other:image": 30,
+                "main:ground-blit": 1,
+                "main:fill": 141,
+                "main:stroke": 523,
+                "main:image": 25,
+                "main:fillRect": 32,
+                "main:fillText": 11
+              },
+              "duration": 8.5
+            },
+            {
+              "start": 5671.29999999702,
+              "interval": 12.599999994039536,
+              "x": 137.10210000000092,
+              "y": 6.917740000000012,
+              "heap": 8979439,
+              "weather": "clear",
+              "stages": {
+                "renderMapGround": 0,
+                "drawHouse": 1.5,
+                "drawInteractable": 6.5999999940395355,
+                "drawWorldScenery": 0,
+                "drawPlayer": 0,
+                "renderParticles": 0,
+                "renderDynamicLighting": 0,
+                "renderWeather": 0,
+                "renderThemeAtmosphere": 0,
+                "renderInteractionHUD": 0,
+                "renderZoneTransitionBanner": 0
+              },
+              "apiMs": {
+                "main:clearRect": 0,
+                "main:ground-blit": 0,
+                "main:fill": 0.30000001192092896,
+                "main:stroke": 0.4000000059604645,
+                "main:image": 0.10000000894069672,
+                "main:fillRect": 0,
+                "main:fillText": 3.699999988079071
+              },
+              "apiCount": {
+                "main:clearRect": 1,
+                "main:ground-blit": 1,
+                "main:fill": 142,
+                "main:stroke": 524,
+                "main:image": 24,
+                "main:fillRect": 32,
+                "main:fillText": 12
+              },
+              "duration": 8.299999997019768
+            },
+            {
+              "start": 7440.5999999940395,
+              "interval": 17.700000002980232,
+              "x": 143.8258199999996,
+              "y": 6.917740000000012,
+              "heap": 7735647,
+              "weather": "clear",
+              "stages": {
+                "renderMapGroundUncached": 6.399999991059303,
+                "renderGroundDetails": 0,
+                "renderMapGround": 7.199999988079071,
+                "drawHouse": 1.100000023841858,
+                "drawInteractable": 0.5999999791383743,
+                "drawWorldScenery": 0.09999999403953552,
+                "drawPlayer": 0.09999999403953552,
+                "renderParticles": 0,
+                "renderDynamicLighting": 0,
+                "renderWeather": 0.10000000894069672,
+                "renderThemeAtmosphere": 0,
+                "renderInteractionHUD": 0,
+                "renderZoneTransitionBanner": 0
+              },
+              "apiMs": {
+                "main:clearRect": 0,
+                "ground:self-copy": 0,
+                "ground:clearRect": 0,
+                "ground:fillRect": 0.09999999403953552,
+                "ground:fill": 1.2000000327825546,
+                "ground:image": 1.3000000268220901,
+                "ground:stroke": 0.3999999761581421,
+                "main:ground-blit": 0.7999999970197678,
+                "main:fill": 0.10000000894069672,
+                "main:stroke": 0.30000001192092896,
+                "main:fillRect": 0,
+                "main:fillText": 0.20000000298023224,
+                "main:image": 0.09999999403953552,
+                "main:strokeText": 0
+              },
+              "apiCount": {
+                "main:clearRect": 1,
+                "ground:self-copy": 1,
+                "ground:clearRect": 2,
+                "ground:fillRect": 2,
+                "ground:fill": 772,
+                "ground:image": 784,
+                "ground:stroke": 102,
+                "main:ground-blit": 1,
+                "main:fill": 137,
+                "main:stroke": 517,
+                "main:fillRect": 30,
+                "main:fillText": 15,
+                "main:image": 26,
+                "main:strokeText": 1
+              },
+              "duration": 9.400000005960464
+            },
+            {
+              "start": 7476.70000000298,
+              "interval": 36.1000000089407,
+              "x": 143.9413399999996,
+              "y": 6.917740000000012,
+              "heap": 11683655,
+              "weather": "clear",
+              "stages": {
+                "renderMapGround": 0.09999999403953552,
+                "drawHouse": 1.4000000059604645,
+                "drawInteractable": 0.5999999940395355,
+                "drawWorldScenery": 0.09999999403953552,
+                "drawPlayer": 0.10000000894069672,
+                "renderParticles": 0,
+                "renderDynamicLighting": 0,
+                "renderWeather": 0,
+                "renderThemeAtmosphere": 0,
+                "renderInteractionHUD": 0.10000000894069672,
+                "renderZoneTransitionBanner": 0
+              },
+              "apiMs": {
+                "main:clearRect": 0,
+                "main:ground-blit": 0.09999999403953552,
+                "main:fill": 0.20000000298023224,
+                "main:stroke": 0.10000000894069672,
+                "main:fillRect": 0,
+                "main:fillText": 0.09999999403953552,
+                "main:image": 0,
+                "main:strokeText": 0
+              },
+              "apiCount": {
+                "main:clearRect": 1,
+                "main:ground-blit": 1,
+                "main:fill": 130,
+                "main:stroke": 511,
+                "main:fillRect": 28,
+                "main:fillText": 15,
+                "main:image": 26,
+                "main:strokeText": 1
+              },
+              "duration": 3.0999999940395355
+            },
+            {
+              "start": 8538.70000000298,
+              "interval": 31.600000008940697,
+              "x": 147.99441999999877,
+              "y": 6.917740000000012,
+              "heap": 6951287,
+              "weather": "clear",
+              "stages": {
+                "renderMapGround": 0,
+                "drawHouse": 1.0000000298023224,
+                "drawInteractable": 0.09999999403953552,
+                "drawWorldScenery": 0.09999999403953552,
+                "drawPlayer": 0.29999999701976776,
+                "renderParticles": 0,
+                "renderDynamicLighting": 0,
+                "renderWeather": 0,
+                "renderThemeAtmosphere": 0,
+                "renderInteractionHUD": 0,
+                "renderZoneTransitionBanner": 0
+              },
+              "apiMs": {
+                "main:clearRect": 0,
+                "main:ground-blit": 0,
+                "main:fill": 0.19999998807907104,
+                "main:stroke": 0.20000000298023224,
+                "main:fillRect": 0,
+                "main:fillText": 0.09999999403953552,
+                "main:image": 0
+              },
+              "apiCount": {
+                "main:clearRect": 1,
+                "main:ground-blit": 1,
+                "main:fill": 113,
+                "main:stroke": 411,
+                "main:fillRect": 26,
+                "main:fillText": 11,
+                "main:image": 26
+              },
+              "duration": 2
+            },
+            {
+              "start": 9339.20000000298,
+              "interval": 13.900000005960464,
+              "x": 151.0336599999983,
+              "y": 6.917740000000012,
+              "heap": 11330898,
+              "weather": "clear",
+              "stages": {
+                "renderMapGround": 0.09999999403953552,
+                "drawInteractable": 0.3999999761581421,
+                "drawWorldScenery": 0,
+                "drawHouse": 0.5000000149011612,
+                "drawPlayer": 0.20000000298023224,
+                "drawMonster": 10.800000011920929,
+                "renderParticles": 0,
+                "renderDynamicLighting": 0,
+                "renderWeather": 0,
+                "renderThemeAtmosphere": 0.09999999403953552,
+                "renderInteractionHUD": 0,
+                "renderZoneTransitionBanner": 0
+              },
+              "apiMs": {
+                "main:clearRect": 0,
+                "main:ground-blit": 0,
+                "main:fill": 0,
+                "main:image": 0.09999999403953552,
+                "main:stroke": 0.19999998807907104,
+                "main:fillRect": 0,
+                "main:fillText": 10.200000002980232
+              },
+              "apiCount": {
+                "main:clearRect": 1,
+                "main:ground-blit": 1,
+                "main:fill": 97,
+                "main:image": 28,
+                "main:stroke": 320,
+                "main:fillRect": 26,
+                "main:fillText": 9
+              },
+              "duration": 12.599999994039536
+            },
+            {
+              "start": 12807.29999999702,
+              "interval": 34.099999994039536,
+              "x": 164.20521999999565,
+              "y": 6.917740000000012,
+              "heap": 9460984,
+              "weather": "clear",
+              "stages": {
+                "renderMapGround": 0.09999999403953552,
+                "drawHouse": 1,
+                "drawInteractable": 0.29999999701976776,
+                "drawWorldScenery": 0,
+                "drawPlayer": 0.09999999403953552,
+                "drawMonster": 0,
+                "renderParticles": 0,
+                "renderDynamicLighting": 0,
+                "renderWeather": 0,
+                "renderThemeAtmosphere": 0,
+                "renderInteractionHUD": 0,
+                "renderZoneTransitionBanner": 0
+              },
+              "apiMs": {
+                "main:clearRect": 0,
+                "main:ground-blit": 0.09999999403953552,
+                "main:fill": 0.30000001192092896,
+                "main:stroke": 0.09999999403953552,
+                "main:image": 0,
+                "main:fillRect": 0,
+                "main:fillText": 0.09999999403953552
+              },
+              "apiCount": {
+                "main:clearRect": 1,
+                "main:ground-blit": 1,
+                "main:fill": 103,
+                "main:stroke": 390,
+                "main:image": 33,
+                "main:fillRect": 24,
+                "main:fillText": 10
+              },
+              "duration": 1.5999999940395355
+            },
+            {
+              "start": 13942.70000000298,
+              "interval": 18,
+              "x": 168.53417999999473,
+              "y": 6.917740000000012,
+              "heap": 8204314,
+              "weather": "clear",
+              "stages": {
+                "renderMapGround": 0.09999999403953552,
+                "drawHouse": 0.7000000029802322,
+                "drawInteractable": 0.6000000089406967,
+                "drawWorldScenery": 0,
+                "drawPlayer": 0.09999999403953552,
+                "drawMonster": 11.799999997019768,
+                "renderParticles": 0,
+                "renderDynamicLighting": 0,
+                "renderWeather": 0,
+                "renderThemeAtmosphere": 0,
+                "renderInteractionHUD": 0,
+                "renderZoneTransitionBanner": 0
+              },
+              "apiMs": {
+                "main:clearRect": 0,
+                "main:ground-blit": 0.09999999403953552,
+                "main:fill": 0,
+                "main:stroke": 0,
+                "main:image": 0.10000000894069672,
+                "main:fillRect": 11.599999994039536,
+                "main:fillText": 0.09999999403953552
+              },
+              "apiCount": {
+                "main:clearRect": 1,
+                "main:ground-blit": 1,
+                "main:fill": 97,
+                "main:stroke": 384,
+                "main:image": 33,
+                "main:fillRect": 22,
+                "main:fillText": 10
+              },
+              "duration": 13.5
+            },
+            {
+              "start": 19856.59999999404,
+              "interval": 18,
+              "x": 191.00851999998955,
+              "y": 6.917740000000012,
+              "heap": 7685522,
+              "weather": "clear",
+              "stages": {
+                "renderMapGround": 0,
+                "drawHouse": 0.699999988079071,
+                "drawWorldScenery": 0,
+                "drawInteractable": 0.10000000894069672,
+                "drawPlayer": 0.20000000298023224,
+                "drawMonster": 12.099999994039536,
+                "renderParticles": 0,
+                "renderDynamicLighting": 0,
+                "renderWeather": 0,
+                "renderThemeAtmosphere": 0,
+                "renderInteractionHUD": 0,
+                "renderZoneTransitionBanner": 0
+              },
+              "apiMs": {
+                "main:clearRect": 0,
+                "main:ground-blit": 0,
+                "main:fill": 0.09999999403953552,
+                "main:stroke": 0.09999999403953552,
+                "main:fillRect": 0,
+                "main:fillText": 11.900000005960464,
+                "main:image": 0.10000000894069672
+              },
+              "apiCount": {
+                "main:clearRect": 1,
+                "main:ground-blit": 1,
+                "main:fill": 113,
+                "main:stroke": 454,
+                "main:fillRect": 26,
+                "main:fillText": 14,
+                "main:image": 31
+              },
+              "duration": 13.5
+            },
+            {
+              "start": 23323.59999999404,
+              "interval": 17.599999994039536,
+              "x": 204.17969999998618,
+              "y": 6.917740000000012,
+              "heap": 13548711,
+              "weather": "clear",
+              "stages": {
+                "renderMapGround": 0,
+                "drawInteractable": 0.20000000298023224,
+                "drawWorldScenery": 0,
+                "drawHouse": 0.5,
+                "drawPlayer": 0.19999998807907104,
+                "drawMonster": 11,
+                "renderParticles": 0,
+                "renderDynamicLighting": 0.10000000894069672,
+                "renderWeather": 0,
+                "renderThemeAtmosphere": 0,
+                "renderInteractionHUD": 0,
+                "renderZoneTransitionBanner": 0
+              },
+              "apiMs": {
+                "main:clearRect": 0.09999999403953552,
+                "main:ground-blit": 0,
+                "main:fill": 0.10000000894069672,
+                "main:image": 0,
+                "main:stroke": 0.09999999403953552,
+                "main:fillRect": 0,
+                "main:fillText": 10.900000005960464
+              },
+              "apiCount": {
+                "main:clearRect": 1,
+                "main:ground-blit": 1,
+                "main:fill": 78,
+                "main:image": 27,
+                "main:stroke": 273,
+                "main:fillRect": 24,
+                "main:fillText": 11
+              },
+              "duration": 12.400000005960464
+            },
+            {
+              "start": 25559.29999999702,
+              "interval": 18.5,
+              "x": 212.676499999984,
+              "y": 6.917740000000012,
+              "heap": 7476670,
+              "weather": "clear",
+              "stages": {
+                "renderMapGroundUncached": 6.5999999940395355,
+                "renderGroundDetails": 0,
+                "renderMapGround": 8.599999994039536,
+                "drawInteractable": 0.19999998807907104,
+                "drawHouse": 1.4000000208616257,
+                "drawWorldScenery": 0,
+                "drawMonster": 0.3999999761581421,
+                "drawPlayer": 0.30000001192092896,
+                "renderParticles": 0,
+                "renderDynamicLighting": 0.10000000894069672,
+                "renderWeather": 0,
+                "renderThemeAtmosphere": 0,
+                "renderInteractionHUD": 0,
+                "renderZoneTransitionBanner": 0
+              },
+              "apiMs": {
+                "main:clearRect": 0,
+                "ground:self-copy": 0,
+                "ground:clearRect": 0,
+                "ground:fillRect": 0,
+                "ground:fill": 0.8999999761581421,
+                "ground:image": 1.6000000089406967,
+                "ground:stroke": 0,
+                "main:ground-blit": 1.7999999970197678,
+                "main:fill": 0.09999999403953552,
+                "main:image": 0,
+                "main:stroke": 0.29999999701976776,
+                "main:fillRect": 0,
+                "main:fillText": 0.10000000894069672
+              },
+              "apiCount": {
+                "main:clearRect": 1,
+                "ground:self-copy": 1,
+                "ground:clearRect": 2,
+                "ground:fillRect": 2,
+                "ground:fill": 772,
+                "ground:image": 784,
+                "ground:stroke": 40,
+                "main:ground-blit": 1,
+                "main:fill": 95,
+                "main:image": 26,
+                "main:stroke": 362,
+                "main:fillRect": 26,
+                "main:fillText": 13
+              },
+              "duration": 11.400000005960464
+            },
+            {
+              "start": 39454,
+              "interval": 30.100000008940697,
+              "x": 265.45431999997317,
+              "y": 6.917740000000012,
+              "heap": 8178178,
+              "weather": "clear",
+              "stages": {
+                "renderMapGround": 0.09999999403953552,
+                "drawHouse": 1.4999999701976776,
+                "drawMonster": 0.20000000298023224,
+                "drawInteractable": 0.20000000298023224,
+                "drawWorldScenery": 0.40000002086162567,
+                "drawPlayer": 0,
+                "renderParticles": 0.10000000894069672,
+                "renderDynamicLighting": 0,
+                "renderWeather": 0,
+                "renderThemeAtmosphere": 0,
+                "renderInteractionHUD": 0,
+                "renderZoneTransitionBanner": 0
+              },
+              "apiMs": {
+                "main:clearRect": 0,
+                "main:ground-blit": 0.09999999403953552,
+                "main:fill": 0.09999999403953552,
+                "main:stroke": 0.3999999910593033,
+                "main:image": 0.20000001788139343,
+                "main:fillRect": 0,
+                "main:fillText": 0.29999999701976776
+              },
+              "apiCount": {
+                "main:clearRect": 1,
+                "main:ground-blit": 1,
+                "main:fill": 113,
+                "main:stroke": 450,
+                "main:image": 34,
+                "main:fillRect": 29,
+                "main:fillText": 13
+              },
+              "duration": 2.7000000029802322
+            },
+            {
+              "start": 45856.59999999404,
+              "interval": 33.79999999701977,
+              "x": 289.7936999999703,
+              "y": 6.917740000000012,
+              "heap": 32686073,
+              "weather": "clear",
+              "stages": {
+                "renderMapGround": 0,
+                "drawHouse": 0.5000000149011612,
+                "drawInteractable": 0.29999999701976776,
+                "drawWorldScenery": 0,
+                "drawPlayer": 0.09999999403953552,
+                "renderParticles": 0,
+                "renderDynamicLighting": 0,
+                "renderWeather": 0,
+                "renderThemeAtmosphere": 0,
+                "renderInteractionHUD": 0,
+                "renderZoneTransitionBanner": 0
+              },
+              "apiMs": {
+                "main:clearRect": 0,
+                "main:ground-blit": 0,
+                "main:fill": 0.09999999403953552,
+                "main:stroke": 0.10000000894069672,
+                "main:image": 0.10000000894069672,
+                "main:fillRect": 0,
+                "main:fillText": 0
+              },
+              "apiCount": {
+                "main:clearRect": 1,
+                "main:ground-blit": 1,
+                "main:fill": 84,
+                "main:stroke": 273,
+                "main:image": 36,
+                "main:fillRect": 21,
+                "main:fillText": 8
+              },
+              "duration": 1.1000000089406967
+            },
+            {
+              "start": 48004.39999999106,
+              "interval": 12,
+              "x": 297.96863999996935,
+              "y": 6.917740000000012,
+              "heap": 18549254,
+              "weather": "clear",
+              "stages": {
+                "renderMapGround": 0,
+                "drawHouse": 0.5,
+                "drawWorldScenery": 0.09999999403953552,
+                "drawInteractable": 10.600000008940697,
+                "drawPlayer": 0.09999999403953552,
+                "renderParticles": 0,
+                "renderDynamicLighting": 0,
+                "renderWeather": 0,
+                "renderThemeAtmosphere": 0,
+                "renderInteractionHUD": 0.20000000298023224,
+                "renderZoneTransitionBanner": 0
+              },
+              "apiMs": {
+                "main:clearRect": 0,
+                "main:ground-blit": 0,
+                "main:fill": 0,
+                "main:stroke": 0.19999998807907104,
+                "main:image": 0.10000000894069672,
+                "main:fillRect": 0,
+                "main:fillText": 0.30000001192092896,
+                "main:strokeText": 10.400000005960464
+              },
+              "apiCount": {
+                "main:clearRect": 1,
+                "main:ground-blit": 1,
+                "main:fill": 82,
+                "main:stroke": 276,
+                "main:image": 33,
+                "main:fillRect": 21,
+                "main:fillText": 12,
+                "main:strokeText": 1
+              },
+              "duration": 11.700000002980232
+            }
+          ],
+          "errors": [],
+          "diagnostics": [],
+          "corrections": 0
+        },
+        {
+          "index": 2,
+          "target": 129,
+          "direction": -1,
+          "start": 71923.39999999106,
+          "end": 139432.29999999702,
+          "seconds": 67.50890000000597,
+          "position": {
+            "x": 128.58211999995726,
+            "y": 6.917740000000012
+          },
+          "hp": 100,
+          "satiety": 18.361250000000027,
+          "draw": {
+            "count": 4045,
+            "p50": 1.3999999910593033,
+            "p95": 2.2999999970197678,
+            "p99": 4.700000002980232,
+            "max": 14.799999997019768,
+            "over50": 0
+          },
+          "drawStart": {
+            "count": 4044,
+            "p50": 18,
+            "p95": 18.799999997019768,
+            "p99": 26,
+            "max": 32.3999999910593,
+            "over50": 0
+          },
+          "update": {
+            "count": 11045,
+            "p50": 0.10000000894069672,
+            "p95": 0.29999999701976776,
+            "p99": 0.30000001192092896,
+            "max": 0.8999999910593033,
+            "over50": 0
+          },
+          "networkApply": {
+            "count": 221,
+            "p50": 0.20000000298023224,
+            "p95": 0.4000000059604645,
+            "p99": 0.5,
+            "max": 0.6000000089406967,
+            "over50": 0
+          },
+          "totalApiCalls": 1977442,
+          "totalSlowApiCalls": 2,
+          "totalSlowFrames": 14,
+          "slowCalls": [
+            {
+              "start": 104657.5,
+              "duration": 7,
+              "frameStart": 104656.5,
+              "key": "main:fillRect",
+              "x": 260.71077999993594,
+              "y": 6.917740000000012,
+              "targetSize": {
+                "width": 1920,
+                "height": 1080
+              }
+            },
+            {
+              "start": 116542.5,
+              "duration": 2.8999999910593033,
+              "frameStart": 116539.70000000298,
+              "key": "main:ground-blit",
+              "x": 215.5549999999421,
+              "y": 6.917740000000012,
+              "targetSize": {
+                "width": 1920,
+                "height": 1080
+              },
+              "sourceSize": {
+                "width": 2176,
+                "height": 1336
+              }
+            }
+          ],
+          "slowFrames": [
+            {
+              "start": 84588.20000000298,
+              "interval": 31.80000001192093,
+              "x": 336.97601999995385,
+              "y": 6.917740000000012,
+              "heap": 28958001,
+              "weather": "clear",
+              "stages": {
+                "renderMapGround": 0.19999998807907104,
+                "drawInteractable": 0.19999998807907104,
+                "drawWorldScenery": 0,
+                "drawPlayer": 0.20000000298023224,
+                "drawHouse": 0.30000001192092896,
+                "drawMonster": 0,
+                "renderParticles": 0,
+                "renderDynamicLighting": 0,
+                "renderWeather": 0,
+                "renderThemeAtmosphere": 0,
+                "renderInteractionHUD": 0.09999999403953552,
+                "renderZoneTransitionBanner": 0
+              },
+              "apiMs": {
+                "main:clearRect": 0,
+                "main:ground-blit": 0,
+                "main:fill": 0.09999999403953552,
+                "main:image": 0,
+                "main:fillRect": 0,
+                "main:stroke": 0.30000001192092896,
+                "main:fillText": 0.09999999403953552,
+                "main:strokeText": 0
+              },
+              "apiCount": {
+                "main:clearRect": 1,
+                "main:ground-blit": 1,
+                "main:fill": 62,
+                "main:image": 30,
+                "main:fillRect": 18,
+                "main:stroke": 186,
+                "main:fillText": 10,
+                "main:strokeText": 1
+              },
+              "duration": 1.0999999940395355
+            },
+            {
+              "start": 85654.39999999106,
+              "interval": 31.299999997019768,
+              "x": 332.92293999995275,
+              "y": 6.917740000000012,
+              "heap": 11104973,
+              "weather": "clear",
+              "stages": {
+                "renderMapGround": 0.09999999403953552,
+                "drawInteractable": 0.30000001192092896,
+                "drawHouse": 1.199999988079071,
+                "drawWorldScenery": 0,
+                "drawPlayer": 0.19999998807907104,
+                "renderParticles": 0,
+                "renderDynamicLighting": 0,
+                "renderWeather": 0,
+                "renderThemeAtmosphere": 0,
+                "renderInteractionHUD": 0,
+                "renderZoneTransitionBanner": 0
+              },
+              "apiMs": {
+                "main:clearRect": 0,
+                "main:ground-blit": 0.09999999403953552,
+                "main:fill": 0,
+                "main:image": 0,
+                "main:stroke": 0.20000000298023224,
+                "main:fillRect": 0,
+                "main:fillText": 0
+              },
+              "apiCount": {
+                "main:clearRect": 1,
+                "main:ground-blit": 1,
+                "main:fill": 94,
+                "main:image": 27,
+                "main:stroke": 362,
+                "main:fillRect": 26,
+                "main:fillText": 10
+              },
+              "duration": 2
+            },
+            {
+              "start": 104656.5,
+              "interval": 18.100000008940697,
+              "x": 260.71077999993594,
+              "y": 6.917740000000012,
+              "heap": 11010951,
+              "weather": "clear",
+              "stages": {
+                "renderMapGround": 0.09999999403953552,
+                "drawHouse": 0.8999999910593033,
+                "drawWorldScenery": 0,
+                "drawMonster": 7.300000011920929,
+                "drawInteractable": 0.20000000298023224,
+                "drawPlayer": 0.09999999403953552,
+                "renderParticles": 0,
+                "renderDynamicLighting": 0,
+                "renderWeather": 0,
+                "renderThemeAtmosphere": 0,
+                "renderInteractionHUD": 0,
+                "renderZoneTransitionBanner": 0
+              },
+              "apiMs": {
+                "main:clearRect": 0,
+                "main:ground-blit": 0.09999999403953552,
+                "main:fill": 0.09999999403953552,
+                "main:stroke": 0,
+                "main:image": 0.10000000894069672,
+                "main:fillRect": 7,
+                "main:fillText": 0
+              },
+              "apiCount": {
+                "main:clearRect": 1,
+                "main:ground-blit": 1,
+                "main:fill": 115,
+                "main:stroke": 451,
+                "main:image": 36,
+                "main:fillRect": 29,
+                "main:fillText": 14
+              },
+              "duration": 9
+            },
+            {
+              "start": 110171.59999999404,
+              "interval": 31.099999994039536,
+              "x": 239.77961999993778,
+              "y": 6.917740000000012,
+              "heap": 8941959,
+              "weather": "clear",
+              "stages": {
+                "renderMapGround": 0.10000000894069672,
+                "drawWorldScenery": 0.09999999403953552,
+                "drawHouse": 0.6000000089406967,
+                "drawInteractable": 0.29999998211860657,
+                "drawMonster": 0.10000000894069672,
+                "drawPlayer": 0.10000000894069672,
+                "renderParticles": 0,
+                "renderDynamicLighting": 0,
+                "renderWeather": 0,
+                "renderThemeAtmosphere": 0,
+                "renderInteractionHUD": 0,
+                "renderZoneTransitionBanner": 0
+              },
+              "apiMs": {
+                "main:clearRect": 0,
+                "main:ground-blit": 0.10000000894069672,
+                "main:image": 0,
+                "main:fill": 0,
+                "main:stroke": 0,
+                "main:fillRect": 0,
+                "main:fillText": 0.10000000894069672
+              },
+              "apiCount": {
+                "main:clearRect": 1,
+                "main:ground-blit": 1,
+                "main:image": 32,
+                "main:fill": 94,
+                "main:stroke": 361,
+                "main:fillRect": 24,
+                "main:fillText": 11
+              },
+              "duration": 1.5
+            },
+            {
+              "start": 115503.79999999702,
+              "interval": 30.799999997019768,
+              "x": 219.49293999994137,
+              "y": 6.917740000000012,
+              "heap": 22681390,
+              "weather": "clear",
+              "stages": {
+                "renderMapGround": 0,
+                "drawInteractable": 0.40000002086162567,
+                "drawHouse": 0.5999999642372131,
+                "drawWorldScenery": 0.20000001788139343,
+                "drawMonster": 0,
+                "drawPlayer": 0,
+                "renderParticles": 0,
+                "renderDynamicLighting": 0,
+                "renderWeather": 0,
+                "renderThemeAtmosphere": 0,
+                "renderInteractionHUD": 0,
+                "renderZoneTransitionBanner": 0
+              },
+              "apiMs": {
+                "main:clearRect": 0,
+                "main:ground-blit": 0,
+                "main:fill": 0.09999999403953552,
+                "main:image": 0.10000000894069672,
+                "main:stroke": 0,
+                "main:fillRect": 0,
+                "main:fillText": 0.09999999403953552
+              },
+              "apiCount": {
+                "main:clearRect": 1,
+                "main:ground-blit": 1,
+                "main:fill": 94,
+                "main:image": 30,
+                "main:stroke": 361,
+                "main:fillRect": 26,
+                "main:fillText": 12
+              },
+              "duration": 1.5
+            },
+            {
+              "start": 116569.89999999106,
+              "interval": 30.19999998807907,
+              "x": 215.46303999994214,
+              "y": 6.917740000000012,
+              "heap": 31823018,
+              "weather": "clear",
+              "stages": {
+                "renderMapGround": 0.09999999403953552,
+                "drawInteractable": 0.5,
+                "drawHouse": 0.9000000059604645,
+                "drawWorldScenery": 0,
+                "drawMonster": 0,
+                "drawPlayer": 0.09999999403953552,
+                "renderParticles": 0,
+                "renderDynamicLighting": 0.09999999403953552,
+                "renderWeather": 0,
+                "renderThemeAtmosphere": 0,
+                "renderInteractionHUD": 0,
+                "renderZoneTransitionBanner": 0
+              },
+              "apiMs": {
+                "main:clearRect": 0,
+                "main:ground-blit": 0.09999999403953552,
+                "main:fill": 0,
+                "main:image": 0,
+                "main:stroke": 0.29999998211860657,
+                "main:fillRect": 0.10000000894069672,
+                "main:fillText": 0
+              },
+              "apiCount": {
+                "main:clearRect": 1,
+                "main:ground-blit": 1,
+                "main:fill": 96,
+                "main:image": 27,
+                "main:stroke": 362,
+                "main:fillRect": 26,
+                "main:fillText": 13
+              },
+              "duration": 1.9000000059604645
+            },
+            {
+              "start": 122908.70000000298,
+              "interval": 16.200000002980232,
+              "x": 191.35355999994653,
+              "y": 6.917740000000012,
+              "heap": 18867381,
+              "weather": "clear",
+              "stages": {
+                "renderMapGroundUncached": 10,
+                "renderGroundDetails": 0.20000000298023224,
+                "renderMapGround": 12.400000005960464,
+                "drawWorldScenery": 0.10000000894069672,
+                "drawInteractable": 0.29999999701976776,
+                "drawHouse": 0.9999999850988388,
+                "drawPlayer": 0.29999999701976776,
+                "drawMonster": 0,
+                "renderParticles": 0,
+                "renderDynamicLighting": 0,
+                "renderWeather": 0.10000000894069672,
+                "renderThemeAtmosphere": 0,
+                "renderInteractionHUD": 0,
+                "renderZoneTransitionBanner": 0
+              },
+              "apiMs": {
+                "main:clearRect": 0,
+                "ground:self-copy": 0,
+                "ground:clearRect": 0,
+                "ground:fillRect": 0,
+                "ground:fill": 1.4999999552965164,
+                "ground:image": 3.300000011920929,
+                "ground:stroke": 0,
+                "main:ground-blit": 2,
+                "main:image": 0.09999999403953552,
+                "main:fill": 0.09999999403953552,
+                "main:stroke": 0.20000000298023224,
+                "main:fillRect": 0,
+                "main:fillText": 0
+              },
+              "apiCount": {
+                "main:clearRect": 1,
+                "ground:self-copy": 1,
+                "ground:clearRect": 2,
+                "ground:fillRect": 2,
+                "ground:fill": 772,
+                "ground:image": 784,
+                "ground:stroke": 74,
+                "main:ground-blit": 1,
+                "main:image": 30,
+                "main:fill": 96,
+                "main:stroke": 365,
+                "main:fillRect": 24,
+                "main:fillText": 12
+              },
+              "duration": 14.799999997019768
+            },
+            {
+              "start": 126140.59999999404,
+              "interval": 32.3999999910593,
+              "x": 179.08031999994864,
+              "y": 6.917740000000012,
+              "heap": 17988707,
+              "weather": "clear",
+              "stages": {
+                "renderMapGround": 0.10000000894069672,
+                "drawHouse": 0.4999999850988388,
+                "drawInteractable": 0.20000000298023224,
+                "drawWorldScenery": 0,
+                "drawPlayer": 0.10000000894069672,
+                "drawMonster": 0,
+                "renderParticles": 0,
+                "renderDynamicLighting": 0,
+                "renderWeather": 0,
+                "renderThemeAtmosphere": 0,
+                "renderInteractionHUD": 0,
+                "renderZoneTransitionBanner": 0
+              },
+              "apiMs": {
+                "main:clearRect": 0,
+                "main:ground-blit": 0,
+                "main:fill": 0.09999999403953552,
+                "main:stroke": 0,
+                "main:image": 0,
+                "main:fillRect": 0,
+                "main:fillText": 0
+              },
+              "apiCount": {
+                "main:clearRect": 1,
+                "main:ground-blit": 1,
+                "main:fill": 81,
+                "main:stroke": 286,
+                "main:image": 34,
+                "main:fillRect": 20,
+                "main:fillText": 9
+              },
+              "duration": 1
+            },
+            {
+              "start": 127156.29999999702,
+              "interval": 18,
+              "x": 175.2119199999494,
+              "y": 6.917740000000012,
+              "heap": 22051712,
+              "weather": "clear",
+              "stages": {
+                "renderMapGround": 0.09999999403953552,
+                "drawHouse": 0.7999999970197678,
+                "drawWorldScenery": 0.09999999403953552,
+                "drawInteractable": 10.799999997019768,
+                "drawPlayer": 0.10000000894069672,
+                "drawMonster": 0.20000000298023224,
+                "renderParticles": 0,
+                "renderDynamicLighting": 0,
+                "renderWeather": 0,
+                "renderThemeAtmosphere": 0,
+                "renderInteractionHUD": 0,
+                "renderZoneTransitionBanner": 0
+              },
+              "apiMs": {
+                "main:clearRect": 0,
+                "main:ground-blit": 0,
+                "main:fill": 0.10000000894069672,
+                "main:stroke": 0.10000000894069672,
+                "main:image": 0.19999998807907104,
+                "main:fillRect": 0.20000000298023224,
+                "main:fillText": 0
+              },
+              "apiCount": {
+                "main:clearRect": 1,
+                "main:ground-blit": 1,
+                "main:fill": 98,
+                "main:stroke": 384,
+                "main:image": 36,
+                "main:fillRect": 22,
+                "main:fillText": 10
+              },
+              "duration": 12.200000002980232
+            },
+            {
+              "start": 129338.79999999702,
+              "interval": 31.400000005960464,
+              "x": 166.92221999995104,
+              "y": 6.917740000000012,
+              "heap": 18839119,
+              "weather": "clear",
+              "stages": {
+                "renderMapGround": 0.09999999403953552,
+                "drawHouse": 0.699999988079071,
+                "drawInteractable": 0.30000001192092896,
+                "drawWorldScenery": 0,
+                "drawPlayer": 0,
+                "drawMonster": 0,
+                "renderParticles": 0,
+                "renderDynamicLighting": 0,
+                "renderWeather": 0,
+                "renderThemeAtmosphere": 0,
+                "renderInteractionHUD": 0,
+                "renderZoneTransitionBanner": 0
+              },
+              "apiMs": {
+                "main:clearRect": 0,
+                "main:ground-blit": 0.09999999403953552,
+                "main:fill": 0,
+                "main:stroke": 0.20000000298023224,
+                "main:image": 0,
+                "main:fillRect": 0,
+                "main:fillText": 0.09999999403953552
+              },
+              "apiCount": {
+                "main:clearRect": 1,
+                "main:ground-blit": 1,
+                "main:fill": 104,
+                "main:stroke": 390,
+                "main:image": 33,
+                "main:fillRect": 24,
+                "main:fillText": 10
+              },
+              "duration": 1.2999999970197678
+            },
+            {
+              "start": 130405.29999999702,
+              "interval": 31.200000002980232,
+              "x": 162.86913999995187,
+              "y": 6.917740000000012,
+              "heap": 28316244,
+              "weather": "clear",
+              "stages": {
+                "renderMapGround": 0.10000000894069672,
+                "drawHouse": 1.4000000059604645,
+                "drawInteractable": 0,
+                "drawWorldScenery": 0.09999999403953552,
+                "drawPlayer": 0.10000000894069672,
+                "drawMonster": 0.09999999403953552,
+                "renderParticles": 0,
+                "renderDynamicLighting": 0,
+                "renderWeather": 0,
+                "renderThemeAtmosphere": 0,
+                "renderInteractionHUD": 0,
+                "renderZoneTransitionBanner": 0
+              },
+              "apiMs": {
+                "main:clearRect": 0,
+                "main:ground-blit": 0.10000000894069672,
+                "main:fill": 0.10000000894069672,
+                "main:stroke": 0.29999999701976776,
+                "main:image": 0.09999999403953552,
+                "main:fillRect": 0.20000000298023224,
+                "main:fillText": 0.09999999403953552
+              },
+              "apiCount": {
+                "main:clearRect": 1,
+                "main:ground-blit": 1,
+                "main:fill": 103,
+                "main:stroke": 390,
+                "main:image": 33,
+                "main:fillRect": 24,
+                "main:fillText": 10
+              },
+              "duration": 2
+            },
+            {
+              "start": 131470.59999999404,
+              "interval": 30.5,
+              "x": 158.83961999995265,
+              "y": 6.917740000000012,
+              "heap": 13001358,
+              "weather": "clear",
+              "stages": {
+                "renderMapGround": 0,
+                "drawInteractable": 0.29999998211860657,
+                "drawHouse": 0.6000000238418579,
+                "drawWorldScenery": 0,
+                "drawPlayer": 0.20000000298023224,
+                "drawMonster": 0,
+                "renderParticles": 0,
+                "renderDynamicLighting": 0,
+                "renderWeather": 0,
+                "renderThemeAtmosphere": 0,
+                "renderInteractionHUD": 0,
+                "renderZoneTransitionBanner": 0
+              },
+              "apiMs": {
+                "main:clearRect": 0,
+                "main:ground-blit": 0,
+                "main:fill": 0.09999999403953552,
+                "main:image": 0,
+                "main:stroke": 0,
+                "main:fillRect": 0,
+                "main:fillText": 0
+              },
+              "apiCount": {
+                "main:clearRect": 1,
+                "main:ground-blit": 1,
+                "main:fill": 104,
+                "main:image": 33,
+                "main:stroke": 391,
+                "main:fillRect": 24,
+                "main:fillText": 11
+              },
+              "duration": 1.4000000059604645
+            },
+            {
+              "start": 132538.59999999404,
+              "interval": 31.599999994039536,
+              "x": 154.76373999995337,
+              "y": 6.917740000000012,
+              "heap": 28229636,
+              "weather": "clear",
+              "stages": {
+                "renderMapGround": 0,
+                "drawHouse": 0.7000000029802322,
+                "drawWorldScenery": 0,
+                "drawInteractable": 0.29999999701976776,
+                "drawPlayer": 0.09999999403953552,
+                "drawMonster": 0,
+                "renderParticles": 0,
+                "renderDynamicLighting": 0,
+                "renderWeather": 0,
+                "renderThemeAtmosphere": 0,
+                "renderInteractionHUD": 0,
+                "renderZoneTransitionBanner": 0
+              },
+              "apiMs": {
+                "main:clearRect": 0,
+                "main:ground-blit": 0,
+                "main:fill": 0,
+                "main:stroke": 0.20000000298023224,
+                "main:image": 0,
+                "main:fillRect": 0.19999998807907104,
+                "main:fillText": 0.09999999403953552,
+                "main:strokeText": 0
+              },
+              "apiCount": {
+                "main:clearRect": 1,
+                "main:ground-blit": 1,
+                "main:fill": 117,
+                "main:stroke": 412,
+                "main:image": 33,
+                "main:fillRect": 28,
+                "main:fillText": 14,
+                "main:strokeText": 1
+              },
+              "duration": 1.4000000059604645
+            },
+            {
+              "start": 134671.20000000298,
+              "interval": 31.200000002980232,
+              "x": 146.65833999995465,
+              "y": 6.917740000000012,
+              "heap": 12548104,
+              "weather": "clear",
+              "stages": {
+                "renderMapGround": 0.09999999403953552,
+                "drawHouse": 0.8999999910593033,
+                "drawInteractable": 0.3999999910593033,
+                "drawWorldScenery": 0.10000000894069672,
+                "drawPlayer": 0.30000001192092896,
+                "drawMonster": 0,
+                "renderParticles": 0,
+                "renderDynamicLighting": 0.09999999403953552,
+                "renderWeather": 0,
+                "renderThemeAtmosphere": 0,
+                "renderInteractionHUD": 0,
+                "renderZoneTransitionBanner": 0
+              },
+              "apiMs": {
+                "main:clearRect": 0,
+                "main:ground-blit": 0.09999999403953552,
+                "main:fill": 0.09999999403953552,
+                "main:stroke": 0.29999998211860657,
+                "main:fillRect": 0,
+                "main:fillText": 0.09999999403953552,
+                "main:image": 0
+              },
+              "apiCount": {
+                "main:clearRect": 1,
+                "main:ground-blit": 1,
+                "main:fill": 113,
+                "main:stroke": 410,
+                "main:fillRect": 28,
+                "main:fillText": 11,
+                "main:image": 27
+              },
+              "duration": 2.0999999940395355
+            }
+          ],
+          "errors": [],
+          "diagnostics": [],
+          "corrections": 0
+        }
+      ],
+      "traceCompletion": {
+        "waitMs": 6441,
+        "dataLossOccurred": true,
+        "bytes": 113974712
+      },
+      "trigger": null
+    }
+  ],
+  "traceAnalysis": {
+    "traceBytes": 86104806,
+    "events": 489713,
+    "dataLossOccurred": false,
+    "clock": {
+      "method": "Marker is emitted after render duration measurement; match start/duration label, subtract(start+duration)*1000. Median anchor offset, not start-label or timeOrigin subtraction.",
+      "anchors": [
+        {
+          "start": 122796.29999999702,
+          "duration": 0.7999999970197678,
+          "offsetUs": 106113700674
+        },
+        {
+          "start": 128128.59999999404,
+          "duration": 1.0999999940395355,
+          "offsetUs": 106113699932.00002
+        },
+        {
+          "start": 143531.5,
+          "duration": 8.399999991059303,
+          "offsetUs": 106113699872.00002
+        }
+      ],
+      "medianOffsetUs": 106113699932.00002,
+      "offsetSpreadUs": 801.9999847412109,
+      "uncertainty": "Three anchors only; includes marker bookkeeping/scheduling overhead and performance.now quantization. Minimum overlap across recorded offsets is reported, not a guarantee beyond those anchors."
+    },
+    "frames": [
+      {
+        "frame": {
+          "start": 122796.29999999702,
+          "interval": 30.799999997019768,
+          "x": 339.5087200000066,
+          "y": 6.917740000000012,
+          "heap": 23257611,
+          "weather": "clear",
+          "stages": {
+            "renderMapGround": 0.09999999403953552,
+            "drawInteractable": 0.19999998807907104,
+            "drawWorldScenery": 0,
+            "drawPlayer": 0.20000000298023224,
+            "drawHouse": 0.20000000298023224,
+            "drawMonster": 0,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0,
+            "renderInteractionHUD": 0,
+            "renderZoneTransitionBanner": 0
+          },
+          "apiMs": {
+            "main:clearRect": 0,
+            "main:ground-blit": 0,
+            "main:image": 0,
+            "main:fillRect": 0
+          },
+          "apiCount": {
+            "main:clearRect": 1,
+            "main:ground-blit": 1,
+            "main:image": 33,
+            "main:fillRect": 18
+          },
+          "duration": 0.7999999970197678
+        },
+        "render": {
+          "startMs": 122796.29999999702,
+          "endMs": 122797.09999999404,
+          "main": [
+            {
+              "name": "FireAnimationFrame",
+              "threadRole": "renderer-main",
+              "durationMs": 1.905,
+              "overlapMs": 0.8,
+              "relativeStartMs": -0.22600001525878907,
+              "minimumOverlapAcrossAnchorsMs": 0.8
+            },
+            {
+              "name": "FunctionCall",
+              "threadRole": "renderer-main",
+              "durationMs": 1.889,
+              "overlapMs": 0.8,
+              "relativeStartMs": -0.21800001525878906,
+              "minimumOverlapAcrossAnchorsMs": 0.8
+            },
+            {
+              "name": "RasterImplementation::RasterCHROMIUM",
+              "threadRole": "renderer-main",
+              "durationMs": 0.088,
+              "overlapMs": 0.088,
+              "relativeStartMs": 0.3549999847412109,
+              "minimumOverlapAcrossAnchorsMs": 0
+            },
+            {
+              "name": "CommandBufferProxyImpl::OrderingBarrier",
+              "threadRole": "renderer-main",
+              "durationMs": 0.002,
+              "overlapMs": 0.002,
+              "relativeStartMs": 0.44499998474121094,
+              "minimumOverlapAcrossAnchorsMs": 0
+            },
+            {
+              "name": "CommandBuffer::OrderingBarrier",
+              "threadRole": "renderer-main",
+              "durationMs": 0.001,
+              "overlapMs": 0.001,
+              "relativeStartMs": 0.44599998474121094,
+              "minimumOverlapAcrossAnchorsMs": 0
+            }
+          ],
+          "mainGC": [],
+          "gpu": [
+            {
+              "name": "Scheduler::RunTask",
+              "threadRole": "other",
+              "durationMs": 0.427,
+              "overlapMs": 0.27999998474121096,
+              "relativeStartMs": -0.14700001525878906,
+              "minimumOverlapAcrossAnchorsMs": 0
+            },
+            {
+              "name": "DXGISwapChainImageBacking::Present",
+              "threadRole": "other",
+              "durationMs": 0.101,
+              "overlapMs": 0.101,
+              "relativeStartMs": 0.13899998474121095,
+              "minimumOverlapAcrossAnchorsMs": 0
+            },
+            {
+              "name": "RasterImplementation::RasterCHROMIUM",
+              "threadRole": "renderer-main",
+              "durationMs": 0.088,
+              "overlapMs": 0.088,
+              "relativeStartMs": 0.3549999847412109,
+              "minimumOverlapAcrossAnchorsMs": 0
+            },
+            {
+              "name": "DCompPresenter::Present",
+              "threadRole": "other",
+              "durationMs": 0.013,
+              "overlapMs": 0.013,
+              "relativeStartMs": 0.24399998474121093,
+              "minimumOverlapAcrossAnchorsMs": 0
+            },
+            {
+              "name": "Scheduler::RunTask",
+              "threadRole": "other",
+              "durationMs": 0.009,
+              "overlapMs": 0.009,
+              "relativeStartMs": 0.2849999847412109,
+              "minimumOverlapAcrossAnchorsMs": 0
+            },
+            {
+              "name": "DCLayerTree::CommitAndClearPendingOverlays",
+              "threadRole": "other",
+              "durationMs": 0.007,
+              "overlapMs": 0.007,
+              "relativeStartMs": 0.24499998474121093,
+              "minimumOverlapAcrossAnchorsMs": 0
+            },
+            {
+              "name": "CommandBufferProxyImpl::OrderingBarrier",
+              "threadRole": "renderer-main",
+              "durationMs": 0.002,
+              "overlapMs": 0.002,
+              "relativeStartMs": 0.44499998474121094,
+              "minimumOverlapAcrossAnchorsMs": 0
+            },
+            {
+              "name": "Scheduler::FinishTask",
+              "threadRole": "other",
+              "durationMs": 0.001,
+              "overlapMs": 0.001,
+              "relativeStartMs": 0.27899998474121096,
+              "minimumOverlapAcrossAnchorsMs": 0
+            }
+          ]
+        },
+        "drawStartInterval": {
+          "startMs": 122765.5,
+          "endMs": 122796.29999999702,
+          "main": [
+            {
+              "name": "FireAnimationFrame",
+              "threadRole": "renderer-main",
+              "durationMs": 3.471,
+              "overlapMs": 3.277999984741211,
+              "relativeStartMs": -0.19300001525878907,
+              "minimumOverlapAcrossAnchorsMs": 2.536
+            },
+            {
+              "name": "FunctionCall",
+              "threadRole": "renderer-main",
+              "durationMs": 3.46,
+              "overlapMs": 3.273999984741211,
+              "relativeStartMs": -0.18600001525878906,
+              "minimumOverlapAcrossAnchorsMs": 2.532
+            },
+            {
+              "name": "FunctionCall",
+              "threadRole": "renderer-main",
+              "durationMs": 0.708,
+              "overlapMs": 0.708,
+              "relativeStartMs": 10.29699998474121,
+              "minimumOverlapAcrossAnchorsMs": 0.708
+            },
+            {
+              "name": "RasterImplementation::RasterCHROMIUM",
+              "threadRole": "renderer-main",
+              "durationMs": 0.431,
+              "overlapMs": 0.431,
+              "relativeStartMs": 2.189999984741211,
+              "minimumOverlapAcrossAnchorsMs": 0.431
+            },
+            {
+              "name": "UpdateLayoutTree",
+              "threadRole": "renderer-main",
+              "durationMs": 0.367,
+              "overlapMs": 0.367,
+              "relativeStartMs": 29.758999984741212,
+              "minimumOverlapAcrossAnchorsMs": 0.367
+            },
+            {
+              "name": "FireAnimationFrame",
+              "threadRole": "renderer-main",
+              "durationMs": 1.905,
+              "overlapMs": 0.22600001525878907,
+              "relativeStartMs": 30.57399998474121,
+              "minimumOverlapAcrossAnchorsMs": 0.16600001525878907
+            },
+            {
+              "name": "FunctionCall",
+              "threadRole": "renderer-main",
+              "durationMs": 1.889,
+              "overlapMs": 0.21800001525878906,
+              "relativeStartMs": 30.58199998474121,
+              "minimumOverlapAcrossAnchorsMs": 0.15800001525878907
+            },
+            {
+              "name": "FireAnimationFrame",
+              "threadRole": "renderer-main",
+              "durationMs": 0.193,
+              "overlapMs": 0.193,
+              "relativeStartMs": 5.873999984741211,
+              "minimumOverlapAcrossAnchorsMs": 0.193
+            },
+            {
+              "name": "FunctionCall",
+              "threadRole": "renderer-main",
+              "durationMs": 0.18,
+              "overlapMs": 0.18,
+              "relativeStartMs": 5.8839999847412106,
+              "minimumOverlapAcrossAnchorsMs": 0.18
+            },
+            {
+              "name": "FireAnimationFrame",
+              "threadRole": "renderer-main",
+              "durationMs": 0.161,
+              "overlapMs": 0.161,
+              "relativeStartMs": 6.066999984741211,
+              "minimumOverlapAcrossAnchorsMs": 0.161
+            },
+            {
+              "name": "FunctionCall",
+              "threadRole": "renderer-main",
+              "durationMs": 0.149,
+              "overlapMs": 0.149,
+              "relativeStartMs": 10.04799998474121,
+              "minimumOverlapAcrossAnchorsMs": 0.149
+            },
+            {
+              "name": "FunctionCall",
+              "threadRole": "renderer-main",
+              "durationMs": 0.143,
+              "overlapMs": 0.143,
+              "relativeStartMs": 6.0699999847412105,
+              "minimumOverlapAcrossAnchorsMs": 0.143
+            }
+          ],
+          "mainGC": [],
+          "gpu": [
+            {
+              "name": "Scheduler::RunTask",
+              "threadRole": "other",
+              "durationMs": 15.171,
+              "overlapMs": 15.171,
+              "relativeStartMs": 3.680999984741211,
+              "minimumOverlapAcrossAnchorsMs": 15.171
+            },
+            {
+              "name": "GpuChannel::ExecuteDeferredRequest",
+              "threadRole": "other",
+              "durationMs": 15.167,
+              "overlapMs": 15.167,
+              "relativeStartMs": 3.682999984741211,
+              "minimumOverlapAcrossAnchorsMs": 15.167
+            },
+            {
+              "name": "RendererMainThread",
+              "threadRole": "other",
+              "durationMs": 15.151,
+              "overlapMs": 15.151,
+              "relativeStartMs": 3.695999984741211,
+              "minimumOverlapAcrossAnchorsMs": 15.151
+            },
+            {
+              "name": "CommandBuffer::Flush",
+              "threadRole": "other",
+              "durationMs": 15.149,
+              "overlapMs": 15.149,
+              "relativeStartMs": 3.697999984741211,
+              "minimumOverlapAcrossAnchorsMs": 15.149
+            },
+            {
+              "name": "CommandBufferStub::OnAsyncFlush",
+              "threadRole": "other",
+              "durationMs": 15.148,
+              "overlapMs": 15.148,
+              "relativeStartMs": 3.698999984741211,
+              "minimumOverlapAcrossAnchorsMs": 15.148
+            },
+            {
+              "name": "CommandBufferService:PutChanged",
+              "threadRole": "other",
+              "durationMs": 15.143,
+              "overlapMs": 15.143,
+              "relativeStartMs": 3.702999984741211,
+              "minimumOverlapAcrossAnchorsMs": 15.143
+            },
+            {
+              "name": "RasterDecoderImpl::DoEndRasterCHROMIUM",
+              "threadRole": "other",
+              "durationMs": 13.163,
+              "overlapMs": 13.163,
+              "relativeStartMs": 5.667999984741211,
+              "minimumOverlapAcrossAnchorsMs": 13.163
+            },
+            {
+              "name": "RasterDecoderImpl::DoEndRasterCHROMIUM::Flush",
+              "threadRole": "other",
+              "durationMs": 13.13,
+              "overlapMs": 13.13,
+              "relativeStartMs": 5.668999984741211,
+              "minimumOverlapAcrossAnchorsMs": 13.13
+            }
+          ]
+        }
+      },
+      {
+        "frame": {
+          "start": 128128.59999999404,
+          "interval": 31.200000002980232,
+          "x": 319.2452200000016,
+          "y": 6.917740000000012,
+          "heap": 25216375,
+          "weather": "clear",
+          "stages": {
+            "renderMapGround": 0,
+            "drawInteractable": 0.20000000298023224,
+            "drawWorldScenery": 0,
+            "drawHouse": 0.3999999910593033,
+            "drawPlayer": 0.20000000298023224,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0,
+            "renderInteractionHUD": 0,
+            "renderZoneTransitionBanner": 0
+          },
+          "apiMs": {
+            "main:clearRect": 0.09999999403953552,
+            "main:ground-blit": 0,
+            "main:image": 0.09999999403953552,
+            "main:fillRect": 0
+          },
+          "apiCount": {
+            "main:clearRect": 1,
+            "main:ground-blit": 1,
+            "main:image": 29,
+            "main:fillRect": 19
+          },
+          "duration": 1.0999999940395355
+        },
+        "render": {
+          "startMs": 128128.59999999404,
+          "endMs": 128129.69999998808,
+          "main": [
+            {
+              "name": "FireAnimationFrame",
+              "threadRole": "renderer-main",
+              "durationMs": 1.41,
+              "overlapMs": 1.099999984741211,
+              "relativeStartMs": -0.29300001525878905,
+              "minimumOverlapAcrossAnchorsMs": 0.375
+            },
+            {
+              "name": "FunctionCall",
+              "threadRole": "renderer-main",
+              "durationMs": 1.387,
+              "overlapMs": 1.099999984741211,
+              "relativeStartMs": -0.2760000152587891,
+              "minimumOverlapAcrossAnchorsMs": 0.369
+            },
+            {
+              "name": "RasterImplementation::RasterCHROMIUM",
+              "threadRole": "renderer-main",
+              "durationMs": 0.078,
+              "overlapMs": 0.078,
+              "relativeStartMs": 0.49399998474121093,
+              "minimumOverlapAcrossAnchorsMs": 0
+            },
+            {
+              "name": "CommandBufferProxyImpl::OrderingBarrier",
+              "threadRole": "renderer-main",
+              "durationMs": 0.003,
+              "overlapMs": 0.003,
+              "relativeStartMs": 0.574999984741211,
+              "minimumOverlapAcrossAnchorsMs": 0
+            },
+            {
+              "name": "CommandBuffer::OrderingBarrier",
+              "threadRole": "renderer-main",
+              "durationMs": 0.001,
+              "overlapMs": 0.001,
+              "relativeStartMs": 0.576999984741211,
+              "minimumOverlapAcrossAnchorsMs": 0
+            }
+          ],
+          "mainGC": [],
+          "gpu": [
+            {
+              "name": "Scheduler::RunTask",
+              "threadRole": "other",
+              "durationMs": 1.128,
+              "overlapMs": 0.542,
+              "relativeStartMs": 0.5579999847412109,
+              "minimumOverlapAcrossAnchorsMs": 0.482
+            },
+            {
+              "name": "GpuChannel::ExecuteDeferredRequest",
+              "threadRole": "other",
+              "durationMs": 1.126,
+              "overlapMs": 0.541,
+              "relativeStartMs": 0.5589999847412109,
+              "minimumOverlapAcrossAnchorsMs": 0.481
+            },
+            {
+              "name": "RendererRasterWorker",
+              "threadRole": "other",
+              "durationMs": 1.12,
+              "overlapMs": 0.538,
+              "relativeStartMs": 0.5619999847412109,
+              "minimumOverlapAcrossAnchorsMs": 0.478
+            },
+            {
+              "name": "CommandBuffer::Flush",
+              "threadRole": "other",
+              "durationMs": 1.118,
+              "overlapMs": 0.537,
+              "relativeStartMs": 0.5629999847412109,
+              "minimumOverlapAcrossAnchorsMs": 0.477
+            },
+            {
+              "name": "CommandBufferStub::OnAsyncFlush",
+              "threadRole": "other",
+              "durationMs": 1.117,
+              "overlapMs": 0.536,
+              "relativeStartMs": 0.5639999847412109,
+              "minimumOverlapAcrossAnchorsMs": 0.476
+            },
+            {
+              "name": "CommandBufferService:PutChanged",
+              "threadRole": "other",
+              "durationMs": 1.114,
+              "overlapMs": 0.534,
+              "relativeStartMs": 0.5659999847412109,
+              "minimumOverlapAcrossAnchorsMs": 0.474
+            },
+            {
+              "name": "Scheduler::RunTask",
+              "threadRole": "other",
+              "durationMs": 0.958,
+              "overlapMs": 0.37099998474121093,
+              "relativeStartMs": -0.5870000152587891,
+              "minimumOverlapAcrossAnchorsMs": 0
+            },
+            {
+              "name": "GpuChannel::ExecuteDeferredRequest",
+              "threadRole": "other",
+              "durationMs": 0.953,
+              "overlapMs": 0.36799998474121093,
+              "relativeStartMs": -0.5850000152587891,
+              "minimumOverlapAcrossAnchorsMs": 0
+            }
+          ]
+        },
+        "drawStartInterval": {
+          "startMs": 128097.39999999106,
+          "endMs": 128128.59999999404,
+          "main": [
+            {
+              "name": "FireAnimationFrame",
+              "threadRole": "renderer-main",
+              "durationMs": 5.041,
+              "overlapMs": 4.662,
+              "relativeStartMs": -0.379,
+              "minimumOverlapAcrossAnchorsMs": 3.9200000152587893
+            },
+            {
+              "name": "FunctionCall",
+              "threadRole": "renderer-main",
+              "durationMs": 5,
+              "overlapMs": 4.654,
+              "relativeStartMs": -0.346,
+              "minimumOverlapAcrossAnchorsMs": 3.9120000152587893
+            },
+            {
+              "name": "RasterImplementation::RasterCHROMIUM",
+              "threadRole": "renderer-main",
+              "durationMs": 0.734,
+              "overlapMs": 0.734,
+              "relativeStartMs": 3.286,
+              "minimumOverlapAcrossAnchorsMs": 0.734
+            },
+            {
+              "name": "FireAnimationFrame",
+              "threadRole": "renderer-main",
+              "durationMs": 1.41,
+              "overlapMs": 0.29300001525878905,
+              "relativeStartMs": 30.907,
+              "minimumOverlapAcrossAnchorsMs": 0.23300001525878905
+            },
+            {
+              "name": "FunctionCall",
+              "threadRole": "renderer-main",
+              "durationMs": 1.387,
+              "overlapMs": 0.2760000152587891,
+              "relativeStartMs": 30.924,
+              "minimumOverlapAcrossAnchorsMs": 0.21600001525878906
+            },
+            {
+              "name": "FireAnimationFrame",
+              "threadRole": "renderer-main",
+              "durationMs": 0.231,
+              "overlapMs": 0.231,
+              "relativeStartMs": 5.741,
+              "minimumOverlapAcrossAnchorsMs": 0.231
+            },
+            {
+              "name": "FunctionCall",
+              "threadRole": "renderer-main",
+              "durationMs": 0.219,
+              "overlapMs": 0.219,
+              "relativeStartMs": 5.75,
+              "minimumOverlapAcrossAnchorsMs": 0.219
+            },
+            {
+              "name": "FireAnimationFrame",
+              "threadRole": "renderer-main",
+              "durationMs": 0.197,
+              "overlapMs": 0.197,
+              "relativeStartMs": 11.685,
+              "minimumOverlapAcrossAnchorsMs": 0.197
+            },
+            {
+              "name": "Paint",
+              "threadRole": "renderer-main",
+              "durationMs": 0.193,
+              "overlapMs": 0.193,
+              "relativeStartMs": 6.415,
+              "minimumOverlapAcrossAnchorsMs": 0.193
+            },
+            {
+              "name": "Layout",
+              "threadRole": "renderer-main",
+              "durationMs": 0.184,
+              "overlapMs": 0.184,
+              "relativeStartMs": 11.996,
+              "minimumOverlapAcrossAnchorsMs": 0.184
+            },
+            {
+              "name": "FunctionCall",
+              "threadRole": "renderer-main",
+              "durationMs": 0.176,
+              "overlapMs": 0.176,
+              "relativeStartMs": 11.701,
+              "minimumOverlapAcrossAnchorsMs": 0.176
+            },
+            {
+              "name": "Layout",
+              "threadRole": "renderer-main",
+              "durationMs": 0.167,
+              "overlapMs": 0.167,
+              "relativeStartMs": 4.753,
+              "minimumOverlapAcrossAnchorsMs": 0.167
+            }
+          ],
+          "mainGC": [],
+          "gpu": [
+            {
+              "name": "Scheduler::RunTask",
+              "threadRole": "other",
+              "durationMs": 17.831,
+              "overlapMs": 17.831,
+              "relativeStartMs": 5.536,
+              "minimumOverlapAcrossAnchorsMs": 17.831
+            },
+            {
+              "name": "GpuChannel::ExecuteDeferredRequest",
+              "threadRole": "other",
+              "durationMs": 17.81,
+              "overlapMs": 17.81,
+              "relativeStartMs": 5.54,
+              "minimumOverlapAcrossAnchorsMs": 17.81
+            },
+            {
+              "name": "RendererMainThread",
+              "threadRole": "other",
+              "durationMs": 17.782,
+              "overlapMs": 17.782,
+              "relativeStartMs": 5.562,
+              "minimumOverlapAcrossAnchorsMs": 17.782
+            },
+            {
+              "name": "CommandBuffer::Flush",
+              "threadRole": "other",
+              "durationMs": 17.78,
+              "overlapMs": 17.78,
+              "relativeStartMs": 5.563,
+              "minimumOverlapAcrossAnchorsMs": 17.78
+            },
+            {
+              "name": "CommandBufferStub::OnAsyncFlush",
+              "threadRole": "other",
+              "durationMs": 17.779,
+              "overlapMs": 17.779,
+              "relativeStartMs": 5.564,
+              "minimumOverlapAcrossAnchorsMs": 17.779
+            },
+            {
+              "name": "CommandBufferService:PutChanged",
+              "threadRole": "other",
+              "durationMs": 17.772,
+              "overlapMs": 17.772,
+              "relativeStartMs": 5.569,
+              "minimumOverlapAcrossAnchorsMs": 17.772
+            },
+            {
+              "name": "RasterDecoderImpl::DoEndRasterCHROMIUM",
+              "threadRole": "other",
+              "durationMs": 15.115,
+              "overlapMs": 15.115,
+              "relativeStartMs": 8.205,
+              "minimumOverlapAcrossAnchorsMs": 15.115
+            },
+            {
+              "name": "RasterDecoderImpl::DoEndRasterCHROMIUM::Flush",
+              "threadRole": "other",
+              "durationMs": 15.075,
+              "overlapMs": 15.075,
+              "relativeStartMs": 8.206,
+              "minimumOverlapAcrossAnchorsMs": 15.075
+            }
+          ]
+        }
+      },
+      {
+        "frame": {
+          "start": 143531.5,
+          "interval": 18.5,
+          "x": 260.71039999998663,
+          "y": 6.917740000000012,
+          "heap": 26263447,
+          "weather": "clear",
+          "stages": {
+            "renderMapGround": 0,
+            "drawHouse": 7.4000000059604645,
+            "drawMonster": 0.20000000298023224,
+            "drawWorldScenery": 0.09999999403953552,
+            "drawInteractable": 0.10000000894069672,
+            "drawPlayer": 0.19999998807907104,
+            "renderParticles": 0,
+            "renderDynamicLighting": 0,
+            "renderWeather": 0,
+            "renderThemeAtmosphere": 0,
+            "renderInteractionHUD": 0,
+            "renderZoneTransitionBanner": 0
+          },
+          "apiMs": {
+            "main:clearRect": 0.09999999403953552,
+            "main:ground-blit": 0,
+            "main:image": 0.30000001192092896,
+            "main:fillRect": 0
+          },
+          "apiCount": {
+            "main:clearRect": 1,
+            "main:ground-blit": 1,
+            "main:image": 36,
+            "main:fillRect": 29
+          },
+          "duration": 8.399999991059303
+        },
+        "render": {
+          "startMs": 143531.5,
+          "endMs": 143539.89999999106,
+          "main": [
+            {
+              "name": "FireAnimationFrame",
+              "threadRole": "renderer-main",
+              "durationMs": 8.603,
+              "overlapMs": 8.36499998474121,
+              "relativeStartMs": -0.23800001525878905,
+              "minimumOverlapAcrossAnchorsMs": 7.623
+            },
+            {
+              "name": "FunctionCall",
+              "threadRole": "renderer-main",
+              "durationMs": 8.579,
+              "overlapMs": 8.35499998474121,
+              "relativeStartMs": -0.22400001525878907,
+              "minimumOverlapAcrossAnchorsMs": 7.613
+            },
+            {
+              "name": "RasterImplementation::RasterCHROMIUM",
+              "threadRole": "renderer-main",
+              "durationMs": 6.902,
+              "overlapMs": 6.902,
+              "relativeStartMs": 0.8049999847412109,
+              "minimumOverlapAcrossAnchorsMs": 6.902
+            },
+            {
+              "name": "FireAnimationFrame",
+              "threadRole": "renderer-main",
+              "durationMs": 0.028,
+              "overlapMs": 0.028,
+              "relativeStartMs": 8.365999984741212,
+              "minimumOverlapAcrossAnchorsMs": 0
+            },
+            {
+              "name": "FunctionCall",
+              "threadRole": "renderer-main",
+              "durationMs": 0.019,
+              "overlapMs": 0.019,
+              "relativeStartMs": 8.37399998474121,
+              "minimumOverlapAcrossAnchorsMs": 0
+            },
+            {
+              "name": "CommandBufferProxyImpl::OrderingBarrier",
+              "threadRole": "renderer-main",
+              "durationMs": 0.004,
+              "overlapMs": 0.004,
+              "relativeStartMs": 7.711999984741211,
+              "minimumOverlapAcrossAnchorsMs": 0.004
+            },
+            {
+              "name": "CommandBuffer::OrderingBarrier",
+              "threadRole": "renderer-main",
+              "durationMs": 0.001,
+              "overlapMs": 0.001,
+              "relativeStartMs": 7.713999984741211,
+              "minimumOverlapAcrossAnchorsMs": 0.001
+            }
+          ],
+          "mainGC": [],
+          "gpu": [
+            {
+              "name": "RasterImplementation::RasterCHROMIUM",
+              "threadRole": "renderer-main",
+              "durationMs": 6.902,
+              "overlapMs": 6.902,
+              "relativeStartMs": 0.8049999847412109,
+              "minimumOverlapAcrossAnchorsMs": 6.902
+            },
+            {
+              "name": "WinVSyncProvider::GetVSyncIntervalIfAvailable",
+              "threadRole": "other",
+              "durationMs": 0.027,
+              "overlapMs": 0.027,
+              "relativeStartMs": 5.215999984741211,
+              "minimumOverlapAcrossAnchorsMs": 0.027
+            },
+            {
+              "name": "CommandBufferProxyImpl::OrderingBarrier",
+              "threadRole": "renderer-main",
+              "durationMs": 0.004,
+              "overlapMs": 0.004,
+              "relativeStartMs": 7.711999984741211,
+              "minimumOverlapAcrossAnchorsMs": 0.004
+            },
+            {
+              "name": "CommandBuffer::OrderingBarrier",
+              "threadRole": "renderer-main",
+              "durationMs": 0.001,
+              "overlapMs": 0.001,
+              "relativeStartMs": 7.713999984741211,
+              "minimumOverlapAcrossAnchorsMs": 0.001
+            }
+          ]
+        },
+        "drawStartInterval": {
+          "startMs": 143513,
+          "endMs": 143531.5,
+          "main": [
+            {
+              "name": "FireAnimationFrame",
+              "threadRole": "renderer-main",
+              "durationMs": 1.317,
+              "overlapMs": 1.158999984741211,
+              "relativeStartMs": -0.15800001525878907,
+              "minimumOverlapAcrossAnchorsMs": 0.417
+            },
+            {
+              "name": "FunctionCall",
+              "threadRole": "renderer-main",
+              "durationMs": 1.302,
+              "overlapMs": 1.153999984741211,
+              "relativeStartMs": -0.14800001525878906,
+              "minimumOverlapAcrossAnchorsMs": 0.412
+            },
+            {
+              "name": "FunctionCall",
+              "threadRole": "renderer-main",
+              "durationMs": 0.912,
+              "overlapMs": 0.912,
+              "relativeStartMs": 4.8199999847412105,
+              "minimumOverlapAcrossAnchorsMs": 0.912
+            },
+            {
+              "name": "Layout",
+              "threadRole": "renderer-main",
+              "durationMs": 0.604,
+              "overlapMs": 0.604,
+              "relativeStartMs": 6.068999984741211,
+              "minimumOverlapAcrossAnchorsMs": 0.604
+            },
+            {
+              "name": "UpdateLayoutTree",
+              "threadRole": "renderer-main",
+              "durationMs": 0.279,
+              "overlapMs": 0.279,
+              "relativeStartMs": 5.783999984741211,
+              "minimumOverlapAcrossAnchorsMs": 0.279
+            },
+            {
+              "name": "FireAnimationFrame",
+              "threadRole": "renderer-main",
+              "durationMs": 0.247,
+              "overlapMs": 0.247,
+              "relativeStartMs": 12.179999984741212,
+              "minimumOverlapAcrossAnchorsMs": 0.247
+            },
+            {
+              "name": "PrePaint",
+              "threadRole": "renderer-main",
+              "durationMs": 0.244,
+              "overlapMs": 0.244,
+              "relativeStartMs": 6.821999984741211,
+              "minimumOverlapAcrossAnchorsMs": 0.244
+            },
+            {
+              "name": "FireAnimationFrame",
+              "threadRole": "renderer-main",
+              "durationMs": 8.603,
+              "overlapMs": 0.23800001525878905,
+              "relativeStartMs": 18.261999984741212,
+              "minimumOverlapAcrossAnchorsMs": 0.17800001525878906
+            },
+            {
+              "name": "FunctionCall",
+              "threadRole": "renderer-main",
+              "durationMs": 8.579,
+              "overlapMs": 0.22400001525878907,
+              "relativeStartMs": 18.275999984741212,
+              "minimumOverlapAcrossAnchorsMs": 0.16400001525878907
+            },
+            {
+              "name": "Paint",
+              "threadRole": "renderer-main",
+              "durationMs": 0.222,
+              "overlapMs": 0.222,
+              "relativeStartMs": 7.682999984741211,
+              "minimumOverlapAcrossAnchorsMs": 0.222
+            },
+            {
+              "name": "FunctionCall",
+              "threadRole": "renderer-main",
+              "durationMs": 0.219,
+              "overlapMs": 0.219,
+              "relativeStartMs": 12.20099998474121,
+              "minimumOverlapAcrossAnchorsMs": 0.219
+            },
+            {
+              "name": "FireAnimationFrame",
+              "threadRole": "renderer-main",
+              "durationMs": 0.205,
+              "overlapMs": 0.205,
+              "relativeStartMs": 7.428999984741211,
+              "minimumOverlapAcrossAnchorsMs": 0.205
+            }
+          ],
+          "mainGC": [],
+          "gpu": [
+            {
+              "name": "Scheduler::RunTask",
+              "threadRole": "other",
+              "durationMs": 4.04,
+              "overlapMs": 4.04,
+              "relativeStartMs": 5.628999984741211,
+              "minimumOverlapAcrossAnchorsMs": 4.04
+            },
+            {
+              "name": "Scheduler::RunTask",
+              "threadRole": "other",
+              "durationMs": 3.178,
+              "overlapMs": 3.178,
+              "relativeStartMs": 12.259999984741212,
+              "minimumOverlapAcrossAnchorsMs": 3.178
+            },
+            {
+              "name": "Scheduler::RunTask",
+              "threadRole": "other",
+              "durationMs": 2.268,
+              "overlapMs": 2.268,
+              "relativeStartMs": 3.356999984741211,
+              "minimumOverlapAcrossAnchorsMs": 2.268
+            },
+            {
+              "name": "GpuChannel::ExecuteDeferredRequest",
+              "threadRole": "other",
+              "durationMs": 2.264,
+              "overlapMs": 2.264,
+              "relativeStartMs": 3.356999984741211,
+              "minimumOverlapAcrossAnchorsMs": 2.264
+            },
+            {
+              "name": "RendererMainThread",
+              "threadRole": "other",
+              "durationMs": 2.259,
+              "overlapMs": 2.259,
+              "relativeStartMs": 3.360999984741211,
+              "minimumOverlapAcrossAnchorsMs": 2.259
+            },
+            {
+              "name": "CommandBuffer::Flush",
+              "threadRole": "other",
+              "durationMs": 2.258,
+              "overlapMs": 2.258,
+              "relativeStartMs": 3.3619999847412108,
+              "minimumOverlapAcrossAnchorsMs": 2.258
+            },
+            {
+              "name": "CommandBufferStub::OnAsyncFlush",
+              "threadRole": "other",
+              "durationMs": 2.245,
+              "overlapMs": 2.245,
+              "relativeStartMs": 3.374999984741211,
+              "minimumOverlapAcrossAnchorsMs": 2.245
+            },
+            {
+              "name": "CommandBufferService:PutChanged",
+              "threadRole": "other",
+              "durationMs": 2.241,
+              "overlapMs": 2.241,
+              "relativeStartMs": 3.376999984741211,
+              "minimumOverlapAcrossAnchorsMs": 2.241
+            }
+          ]
+        }
+      }
+    ],
+    "limits": [
+      "Only third return leg traced; three slow frame markers, zero>2ms API calls in that traced leg",
+      "Actual69.2ms gap and three slow API calls occurred on the first untraced leg; cannot retrospectively assign its GC/GPU cause",
+      "Only complete X main-thread GC events selected; not all phases or concurrent worker time",
+      "Nested event/stage/API times overlap; cannot add to total CPU or establish dependency from coincidence",
+      "API wall time can include browser scheduling/GC/driver stalls; no causal CPU attribution",
+      "Prior50.9/59.2ms draws and291ms gap remain unresolved; this independent instrumented run is not a fix or formal performance acceptance"
+    ]
+  },
+  "audits": [
+    {
+      "run": "a1",
+      "integrity": "ok",
+      "consistentBackupRestore": true,
+      "defaultAssetsUnchanged": true,
+      "inventoryEmpty": true,
+      "resourcesAllZero": true,
+      "noCamp": true,
+      "hp": 100,
+      "position": {
+        "x": 128.60530000000261,
+        "y": 6.917740000000012
+      },
+      "satiety": 53.186500000000045
+    },
+    {
+      "run": "a2",
+      "integrity": "ok",
+      "consistentBackupRestore": true,
+      "defaultAssetsUnchanged": true,
+      "inventoryEmpty": true,
+      "resourcesAllZero": true,
+      "noCamp": true,
+      "hp": 100,
+      "position": {
+        "x": 128.58211999995726,
+        "y": 6.917740000000012
+      },
+      "satiety": 15.752250000000029
+    }
+  ],
+  "interactiveBrowser": {
+    "tool": "CUA read-only inventory; browser-act CLI unavailable, no installation",
+    "availableGameTabFound": false,
+    "limit": "No matching game tab in enabled browser inventory; unrelated tabs untouched and not exported. This does not inventory every unmanaged browser or establish the user reproduction environment."
+  },
+  "limits": [
+    "a1 only traced third leg, while its actual69.2ms gap and all three>2ms Canvas calls occurred on the untraced first leg",
+    "a2 added stroke/fill/text wrappers and32MiB binary continuous tracing;134.9771s had no>50ms trigger, raw tracing validation failed and remains false",
+    "Continuous buffer may overwrite old data; explicit dataLossOccurred=true prevents treating a2 as a complete trace; no a2 trace attribution is exported",
+    "Instrumentation, context argument wrappers and traces add allocations/latency; neither sample is a rate/improvement comparison",
+    "Only selected Canvas API wall time recorded; main:image can include overlay blit, source dimensions are layout sizes not GPU allocations",
+    "a1 invalid drawImage sources could cause its slow-call diagnostic dimension read to mask an original exception; no API/runtime exception occurred",
+    "Three frame end-markers calibrate a1 with~802us spread; overlap only, not an exact physical-clock/CPU/GPU dependency proof",
+    "RasterImplementation is a renderer-main event with GPU category; it is not a measurement of hardware GPU execution time",
+    "Render/RAF starts are not physical presentation; prior50.9/59.2ms draws and291ms gap remain unproven fixed",
+    "No captured causal production defect justified a runtime change, no OS/GPU preferences or visual/gameplay rules changed",
+    "Default empty synthetic characters and normal speed; no earned balance/siege/population/full-world/long-memory acceptance"
+  ],
+  "verification": {
+    "typeCheck": "passed",
+    "productionTests": "No production edit; last delivered607-test suite retained, not rerun for diagnosis-only work"
+  },
+  "review": "Independent read-only review: no remaining P1/P2; run values/raw hashes and explicit a2 data loss preserved. No concurrent reviewer workload.",
+  "sourceHashes": [
+    {
+      "path": "data/world-canvas-stall-20261023-a1-results.json",
+      "sha256": "2c549b739d717f40caf726228b567476971f276aebfbcc7a52f655da2c887e1f"
+    },
+    {
+      "path": "data/world-canvas-stall-20261023-a1-trace.json",
+      "sha256": "2ee2e1d0b4333509ced6c3a58048fef83ab043aa0bad19ff334a090e3f3ec110"
+    },
+    {
+      "path": "data/world-canvas-stall-20261023-a1-analysis.json",
+      "sha256": "63193c8168bac7e5fbfd1db924f4b30d9c8e4ea8ad51a83307071aaa234d471b"
+    },
+    {
+      "path": "data/world-canvas-stall-20261023-a2-results.json",
+      "sha256": "8863ffbcd9481cfa89476bef8883568a884f7d8bc2cd5d97604094cbd664036f"
+    },
+    {
+      "path": "data/world-canvas-stall-20261023-a2-trace.json",
+      "sha256": "aaa7b4ba7954dee7da5be2981960b293b4018cc40cc3bf6122dd6a096f1d411e"
+    },
+    {
+      "path": "data/validate-world-canvas-stall-20261023-a1.cjs",
+      "sha256": "0d683f42b93ac4fd10c31ff30fe3d6ed54663851540f89f9d53e8fac3f846760"
+    },
+    {
+      "path": "data/validate-world-canvas-stall-20261023-a2.cjs",
+      "sha256": "6bdd19da5724d610115aa71f6a22489f3139d610da60fa87921a92bd10ac4408"
+    },
+    {
+      "path": "data/owned-canvas-protocol-20261023.json",
+      "sha256": "5e0d473bec8135cc01da2ecbffbbdb10938a12a71b4484b4f8757149d83d8c67"
+    },
+    {
+      "path": "data/canvas-stall-final-types-20261023.log",
+      "sha256": "7f3594d7a965c703e6361ae50c0ef50cf9c344c621d801592b074b48554f4235"
+    }
+  ],
+  "followup": "Diagnostic runs used unchanged 97160df runtime. Separately added local client report; see 2026-10-23-client-stall-report-results.json. No performance fix accepted."
+}

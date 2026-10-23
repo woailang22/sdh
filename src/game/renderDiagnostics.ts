@@ -15,5 +15,9 @@ export function readRenderDiagnostics(): string {
 }
 
 export async function copyRenderDiagnostics() {
-  try { await navigator.clipboard.writeText(readRenderDiagnostics()); return true; } catch { return false; }
+  return copyDiagnosticText(readRenderDiagnostics());
+}
+
+export async function copyDiagnosticText(text: string) {
+  try { await navigator.clipboard.writeText(text); return true; } catch { return false; }
 }

@@ -957,6 +957,41 @@ describe('ground rendering cost', () => {
 });
 
 describe('engine lifetime', () => {
+  it('uses actual callback entry times when rAF frame timestamps lag behind blocked work', () => {
+    const { engine } = setup(); let clock = 1000;
+    vi.spyOn(performance, 'now').mockImplementation(() => clock);
+    vi.spyOn(engine as any, 'update').mockImplementation(() => { clock += 1; });
+    vi.spyOn(engine as any, 'render').mockImplementation(() => { clock += 1; });
+    engine.start();
+    clock = 1020; vi.mocked(requestAnimationFrame).mock.calls.at(-1)![0](1020);
+    clock = 1100; vi.mocked(requestAnimationFrame).mock.calls.at(-1)![0](1036);
+    const samples = JSON.parse((engine as any).readFrameDiagnostics()).samples;
+    expect(samples).toHaveLength(1); expect(samples[0]).toMatchObject({ atMs: 1100, rafGapMs: 80 });
+  });
+
+  it('captures slow stages locally, anonymizes exports and resets visibility/context continuity', () => {
+    const { engine, doc, canvas } = setup();
+    let clock = 1000, work = 60;
+    vi.spyOn(performance, 'now').mockImplementation(() => clock);
+    vi.spyOn(engine as any, 'update').mockImplementation(() => { clock += work; });
+    vi.spyOn(engine as any, 'render').mockImplementation(() => { clock += 2; });
+    const storage = { getItem: vi.fn(), setItem: vi.fn() }; vi.stubGlobal('localStorage', storage);
+    engine.warpToMap('home_private-player-id', 1, 2);
+    engine.start();
+    const tick = (at: number) => { clock = at; vi.mocked(requestAnimationFrame).mock.calls.at(-1)![0](at); };
+    tick(1020); work = 1; tick(1040);
+    const report = () => JSON.parse((engine as any).readFrameDiagnostics());
+    expect(report().samples).toHaveLength(1);
+    expect(report().samples[0]).toMatchObject({ updateMs: 60, drawMs: 2, scene: { map: 'camp', x: 1, y: 2 } });
+    expect(JSON.stringify(report())).not.toContain('private-player-id');
+    doc.hidden = true; doc.dispatchEvent(new Event('visibilitychange'));
+    doc.hidden = false; doc.dispatchEvent(new Event('visibilitychange')); tick(10000);
+    canvas.dispatchEvent(new Event('contextrestored')); tick(20000);
+    engine.stop(); engine.start(); tick(30000);
+    expect(report().samples).toHaveLength(1);
+    expect(storage.setItem).not.toHaveBeenCalled(); expect(storage.getItem).not.toHaveBeenCalled();
+  });
+
   it('recovers after a failed draw instead of permanently losing the animation loop', () => {
     const { engine } = setup();
     const status = vi.fn(); (engine as any).callbacks.onRenderStatus = status;

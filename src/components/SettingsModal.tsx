@@ -10,9 +10,10 @@ interface SettingsModalProps {
   onGMLogin: (token: string) => void;
   onGMLogout: () => void;
   onOpenRenderDiagnostics: () => void;
+  onOpenFrameDiagnostics: () => void;
 }
 
-export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose, onResetGame, isGM, onGMLogin, onGMLogout, onOpenRenderDiagnostics }) => {
+export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose, onResetGame, isGM, onGMLogin, onGMLogout, onOpenRenderDiagnostics, onOpenFrameDiagnostics }) => {
   const [vol, setVol] = useState(soundManager.getVolume() * 100);
   const [gmToken, setGmToken] = useState('');
 
@@ -49,7 +50,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose, o
         </div>
 
         {/* Content */}
-        <div className="p-6 space-y-5">
+        <div className="p-6 space-y-5 overflow-y-auto max-h-[75vh]">
           {/* Audio volume */}
           <div className="p-4 rounded-xl bg-slate-950/60 border border-slate-800 space-y-2">
             <div className="flex items-center justify-between text-xs font-bold text-slate-200">
@@ -105,6 +106,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose, o
 
           {/* Reset button */}
           <button onClick={onOpenRenderDiagnostics} className="w-full rounded-xl border border-slate-700 bg-slate-800 py-2.5 text-xs text-slate-300">查看最近画面错误</button>
+          <button onClick={onOpenFrameDiagnostics} className="w-full rounded-xl border border-slate-700 bg-slate-800 py-2.5 text-xs text-slate-300">查看卡顿记录</button>
           <button
             onClick={() => {
               soundManager.playClick();

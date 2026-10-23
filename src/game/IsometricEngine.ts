@@ -13,6 +13,7 @@ import { findPath, isPositionBlocked, hasLineOfSight } from './navigation';
 import { campExitPosition } from './home';
 import { BUILD_RECIPES } from './buildingRecipes';
 import { recordRenderFailure } from './renderDiagnostics';
+import { FrameDiagnostics } from './frameDiagnostics';
 import { generateWorldScenery, type WorldScenery } from './worldScenery';
 import { ROADSIDE_USES, WORLD_ROADSIDE_STOPS, type RoadsideStop } from './worldRoutes';
 import {
@@ -255,6 +256,7 @@ export class IsometricEngine {
   private renderRetryAt = 0;
   private renderStatus: string | null = null;
   private lastRenderTime = 0;
+  private frameDiagnostics = new FrameDiagnostics();
   private lastTime: number = 0;
   private nextShotAt = 0;
   private gameTime: number = 0;
@@ -271,14 +273,17 @@ export class IsometricEngine {
     this.initWeather();
     this.setupListeners();
     this.resize();
+    document.addEventListener('visibilitychange', () => this.frameDiagnostics.resetContinuity(), { signal: this.listenerController.signal });
     canvas.addEventListener('contextlost', () => {
       this.contextLost = true;
+      this.frameDiagnostics.resetContinuity();
       recordRenderFailure('Canvas context lost', { mapId: this.currentMapId, x: this.player.x, y: this.player.y });
       this.setRenderStatus('画面资源暂不可用，正在等待恢复');
       // The default Canvas 2D behavior restores the context. Do not cancel it.
     }, { signal: this.listenerController.signal });
     canvas.addEventListener('contextrestored', () => {
       this.contextLost = false;
+      this.frameDiagnostics.resetContinuity();
       this.resetGraphics();
     }, { signal: this.listenerController.signal });
     // 仅加载实际绘制到的素材，不预加载未访问地图。
@@ -2045,14 +2050,36 @@ export class IsometricEngine {
     this.ctx = this.canvas.getContext('2d')!;
   }
 
+  public readFrameDiagnostics(): string {
+    const memory = (performance as Performance & { memory?: { usedJSHeapSize: number; totalJSHeapSize: number } }).memory;
+    const moduleSrc = document.querySelector?.('script[type="module"][src]')?.getAttribute('src');
+    let modulePath: string | null = null;
+    try { if (moduleSrc) modulePath = new URL(moduleSrc, 'http://local.invalid').pathname; } catch { /* Unknown build. */ }
+    return JSON.stringify({
+      kind: 'local-frame-diagnostics', version: 1, capturedAt: new Date().toISOString(),
+      timing: 'Milliseconds of JavaScript work and callback/draw-start intervals; not GPU time or physical displayed frames. Latest 20 visible successful slow samples (>50ms), including initial loading. Refresh clears records.',
+      ...this.frameDiagnostics.snapshot(),
+      environment: {
+        userAgent: typeof navigator === 'undefined' ? null : navigator.userAgent,
+        viewport: { width: window.innerWidth, height: window.innerHeight },
+        canvas: { width: this.canvas.width, height: this.canvas.height },
+        devicePixelRatio: window.devicePixelRatio ?? null, modulePath,
+        jsHeap: memory ? { used: memory.usedJSHeapSize, total: memory.totalJSHeapSize } : null,
+        graphicsBackend: 'unknown',
+      },
+    }, null, 2);
+  }
+
   public start() {
     if (this.running || this.disposed) return;
     this.running = true;
+    this.frameDiagnostics.resetContinuity();
     this.lastTime = performance.now();
     this.lastRenderTime = this.lastTime;
     const frameInterval = 1000 / 60;
     const loop = (time: number) => {
       if (!this.running) return;
+      const callbackAt = performance.now();
       // Schedule before any game work: a failed frame must not kill the loop.
       this.animFrameId = requestAnimationFrame(loop);
       const dt = Math.min((time - this.lastTime) / 1000, 0.1);
@@ -2060,15 +2087,28 @@ export class IsometricEngine {
       if (!document.hidden && !this.contextLost && time >= this.renderRetryAt) {
         let phase = 'update';
         try {
+          const updateAt = performance.now();
           this.update(dt);
+          const updateMs = performance.now() - updateAt;
+          let drawAt: number | null = null, drawMs: number | null = null;
           const elapsed = time - this.lastRenderTime;
           if (elapsed >= frameInterval) {
             phase = 'render';
             this.lastRenderTime = time - (elapsed % frameInterval);
+            drawAt = performance.now();
             this.render();
+            drawMs = performance.now() - drawAt;
             this.setRenderStatus(null);
           }
+          const sample = this.frameDiagnostics.observe(callbackAt, true, updateMs, drawAt, drawMs);
+          if (sample) sample.scene = {
+            map: this.currentMapId.startsWith('home_') ? 'camp' : this.currentMapId,
+            x: this.player.x, y: this.player.y, chunks: this.worldChunks.size,
+            buildings: this.buildings.length, interactables: this.interactables.length,
+            monsters: this.monsters.length, players: this.onlinePlayers.size, inputBlocked: this.inputBlocked,
+          };
         } catch (error) {
+          this.frameDiagnostics.resetContinuity();
           recordRenderFailure(error, {
             source: 'frame', phase, mapId: this.currentMapId, x: this.player.x, y: this.player.y,
             interaction: this.lootTarget ? { id: this.lootTarget.id, type: this.lootTarget.type, stock: this.lootTarget.stock, progress: this.lootProgress } : null,
@@ -2079,6 +2119,7 @@ export class IsometricEngine {
           this.resetGraphics();
         }
       } else {
+        this.frameDiagnostics.resetContinuity();
         this.lastRenderTime = time;
       }
     };
@@ -2087,6 +2128,7 @@ export class IsometricEngine {
 
   public stop() {
     this.running = false;
+    this.frameDiagnostics.resetContinuity();
     if (this.animFrameId) {
       cancelAnimationFrame(this.animFrameId);
       this.animFrameId = 0;

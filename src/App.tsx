@@ -18,7 +18,7 @@ import { AnchorModal } from './components/AnchorModal';
 import { ProfileModal } from './components/ProfileModal';
 import { SettingsModal } from './components/SettingsModal';
 import { WorldMapModal } from './components/WorldMapModal';
-import { copyRenderDiagnostics, readRenderDiagnostics } from './game/renderDiagnostics';
+import { copyDiagnosticText, readRenderDiagnostics } from './game/renderDiagnostics';
 import { BASE_INVENTORY_SLOTS, inventoryCapacity } from './game/equipmentRules';
 import { BuildingBar } from './components/BuildingBar';
 import { WeatherWidget } from './components/WeatherWidget';
@@ -84,6 +84,7 @@ export default function App() {
   const [actionNotice, setActionNotice] = useState('');
   const [renderIssue, setRenderIssue] = useState<string | null>(null);
   const [renderDetailsOpen, setRenderDetailsOpen] = useState(false);
+  const [frameDetailsText, setFrameDetailsText] = useState<string | null>(null);
   const [renderCopyResult, setRenderCopyResult] = useState('');
 
   // Boot splash（keyart 开屏，点进入废土关闭）
@@ -935,6 +936,7 @@ export default function App() {
       onRenderStatus: message => {
         setRenderIssue(message);
         if (message) {
+          setFrameDetailsText(null);
           setRenderDetailsOpen(true);
           setRenderCopyResult('');
         }
@@ -1248,14 +1250,14 @@ export default function App() {
       <canvas ref={canvasRef} className="absolute inset-0 w-full h-full cursor-crosshair" />
       {renderDetailsOpen && <div role="alert" className="absolute inset-0 z-[90] flex items-center justify-center bg-slate-950/90 p-4 text-slate-100">
         <div className="w-full max-w-xl space-y-4 rounded-xl border border-amber-700/50 bg-slate-900 p-6 text-center">
-          <p>{renderIssue ?? (readRenderDiagnostics() === '[]' ? '暂无画面错误记录' : '画面已恢复，错误信息已保留')}</p>
+          <p>{renderIssue ?? (frameDetailsText !== null ? '卡顿记录（仅保留在本地，刷新后清空）' : readRenderDiagnostics() === '[]' ? '暂无画面错误记录' : '画面已恢复，错误信息已保留')}</p>
           <div className="flex flex-wrap justify-center gap-3">
             {!renderIssue && <button className="rounded bg-emerald-700 px-4 py-2" onClick={() => setRenderDetailsOpen(false)}>继续游戏</button>}
             <button className="rounded bg-amber-600 px-4 py-2" onClick={() => window.location.reload()}>重新载入</button>
-            <button className="rounded bg-slate-700 px-4 py-2" onClick={async () => setRenderCopyResult(await copyRenderDiagnostics() ? '已复制错误信息' : '复制未成功，请在下方长按或选中文字复制')}>复制错误信息</button>
+            <button className="rounded bg-slate-700 px-4 py-2" onClick={async () => setRenderCopyResult(await copyDiagnosticText(frameDetailsText ?? readRenderDiagnostics()) ? '已复制记录' : '复制未成功，请在下方长按或选中文字复制')}>{frameDetailsText !== null ? '复制卡顿记录' : '复制错误信息'}</button>
           </div>
           {renderCopyResult && <p role="status" className="text-sm text-amber-200">{renderCopyResult}</p>}
-          <textarea aria-label="错误信息" readOnly value={readRenderDiagnostics()} className="h-40 w-full select-text rounded bg-slate-950 p-3 text-left font-mono text-xs text-slate-300" onFocus={event => event.currentTarget.select()} />
+          <textarea aria-label={frameDetailsText !== null ? '卡顿记录' : '错误信息'} readOnly value={frameDetailsText ?? readRenderDiagnostics()} className="h-40 w-full select-text rounded bg-slate-950 p-3 text-left font-mono text-xs text-slate-300" onFocus={event => event.currentTarget.select()} />
         </div>
       </div>}
 
@@ -1579,7 +1581,8 @@ export default function App() {
         isGM={isGM}
         onGMLogin={handleGMLogin}
         onGMLogout={handleGMLogout}
-        onOpenRenderDiagnostics={() => { setActiveModal(null); setRenderCopyResult(''); setRenderDetailsOpen(true); }}
+        onOpenRenderDiagnostics={() => { setFrameDetailsText(null); setActiveModal(null); setRenderCopyResult(''); setRenderDetailsOpen(true); }}
+        onOpenFrameDiagnostics={() => { setFrameDetailsText(engineRef.current?.readFrameDiagnostics() ?? '{"status":"引擎尚未启动"}'); setActiveModal(null); setRenderCopyResult(''); setRenderDetailsOpen(true); }}
       />
 
       <InventoryModal

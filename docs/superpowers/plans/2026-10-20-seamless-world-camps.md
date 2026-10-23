@@ -1631,3 +1631,11 @@ LRU以实际refresh前后key集合差区分delete+set重排，探针不留chunk�
 硬件清单同时有Intel UHD、RTX3070 Laptop及两个虚拟显示适配器；后续独立同flags空白浏览器与实际加载游戏的独立浏览器均报告Intel ANGLE/D3D11、2D canvas/GPU compositing enabled。游戏探针使用完成路线DB的一致性副本，无坐标/资产修改，实际加载同bundle，资产审计不变；原路线DB不受该探针影响。原行走浏览器已关闭而未录adapter，不能反推其一定用Intel，更不能把Intel认定唯一卡顿原因。本轮没有改OS/驱动/显卡偏好，没有GPU切换A/B。
 
 原路线SQLite integrity、合并private commits后的空角色/零物资/装备等级XP击杀蓝图/HP100、无营地及共享建筑/库存/弹药/drop/生产不变，再作一致性backup经GameWorld恢复资产与最终位置/生命通过。新QA脚本type-check通过，生产没改，沿用上次607业务测试记录未为文档工作重复全套。计划docs/superpowers/plans/2026-10-23-frontier-cache-stalls.md，去凭据证据docs/verification/2026-10-23-frontier-cache-stalls-results.json；原失败/raw脚本/截图/ownedDB留ignored data，真实data/sdc.sqlite未打开，所属进程关闭。下一步同时间轴观察实际game GPU、main clearRect/ground自复制和最终blit等长canvas调用与GC/GPU/OS调度，不用缩缓存/关NPC/减美术层来替代根因。完整世界/长期内存/呈现流畅性、多方攻城和经济目标继续进行中。
+
+## Canvas调用证据与实际客户端卡顿记录（2026-10-23）
+
+沿97160df继续。独立默认空角色正常步行a1四段168.9302秒，实际同浏览器录Intel UHD ANGLE/D3D11；10111draw、678184API calls，未复现此前>50ms绘制，但第一未trace腿出现69.2ms draw-start gap及3个>2ms调用。第三腿86MB trace显式无loss，3个frame-end anchors约802us误差；8.4ms绘制与main-thread RasterImplementation6.902ms重叠，不能当硬件GPU耗时或因果证明。a2保留a1备份角色继续两段134.9771秒、8091draw，新增API/32MiB连续trace无>50ms trigger；114MB trace显式dataLossOccurred=true，校验失败/exit1/success=false原样保留，不导出其归因、不反复盲跑。两份owned存档资产/完整性/backup恢复通过，真实存档未打开。详见canvas-call-stalls计划/公开证据。
+
+无可检查的用户游戏标签页，无头测试不能替代真实复现。因此增加设置→查看卡顿记录，复用现有弹框/复制/可选文本框；仅内存最新20条>50ms成功可见帧，保留更新/绘制/实际回调和draw-start间隔、匿名地图类型与游戏位置/实体数、按需浏览器/viewport/构建路径信息。常规帧只更新标量，无JSON/存储/日志/React通知；后台/恢复/context/stop-start/异常重试重置连续性但保留证据。不自动上传，不提供虚构2D显卡信息，不改游戏规则/服务器/素材。
+
+先红4条recorder、engine/clipboard行为，再绿；独立复核P2指出rAF time不是实际callback entry，新增真实loop时间偏移用例先断言16/1036失败，改为入口performance.now记录80/1100通过，原移动/绘制节流仍沿原time。最终125焦点、43文件615全测试、type/build通过，assetindex-YmyAV4oR.js，既有Vite体积提示保留。IAB1280×720/DPR1.5实际设置/查看/复制成功且面板保持/返回/旧错误报告切换通过；截图留ignored data，匿名报告与验证在client-stall-report公开证据。原卡顿根因、长期内存/全世界呈现、多方攻城/经济仍未验收，整体目标保持进行中。
