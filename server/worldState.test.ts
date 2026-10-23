@@ -13,6 +13,71 @@ const rules: WorldRules = {
   migrate: (_mapId, x, y) => ({ mapId: 'world' as const, x: x + 100, y }),
   monstersNear: () => [],
 };
+describe('stationary player synchronization', () => {
+  it('accepts unchanged aim/action state inside a newly closed door without permitting displacement through it', () => {
+    const { game, advance } = setup(); const p = game.state.players.owner;
+    Object.assign(p, { mapId: 'home_owner', x: 0, y: 0 });
+    const door = { id: 'closing-door', type: 'door' as const, name: '门', x: 0, y: 0, mapId: p.mapId, hp: 100, maxHp: 100, level: 1, isOpen: false };
+    game.state.buildings[door.id] = door; advance(500);
+    expect(game.move('owner', { x: 0, y: 0, angle: 1.25, isFiring: true })).toBe(true);
+    expect(p).toMatchObject({ x: 0, y: 0, angle: 1.25, isFiring: true });
+    expect(game.move('owner', { x: .1, y: 0 })).toBe(false);
+    expect(p).toMatchObject({ x: 0, y: 0 });
+    door.isOpen = true;
+    expect(game.move('owner', { x: .1, y: 0 })).toBe(true);
+  });
+
+  it.each([
+    { x: NaN, y: 0 }, { x: Infinity, y: 0 }, { x: 0, y: -Infinity },
+    { x: 0, y: 0, mapId: 'home_elsewhere' }, { x: 32, y: 0 },
+  ])('still rejects invalid or cross-space stationary-looking input: %j', packet => {
+    const { game, advance } = setup(); const p = game.state.players.owner;
+    Object.assign(p, { mapId: 'home_owner', x: 0, y: 0, angle: .5, isFiring: false }); advance(500);
+    expect(game.move('owner', { ...packet, angle: 1.25, isFiring: true })).toBe(false);
+    expect(p).toMatchObject({ x: 0, y: 0, mapId: 'home_owner', angle: .5, isFiring: false });
+  });
+
+  it('caps accumulated idle movement budget and spends it normally on actual displacement', () => {
+    const { game, advance } = setup(); const p = game.state.players.owner;
+    Object.assign(p, { mapId: 'home_owner', x: 0, y: 0 });
+    for (let i = 0; i < 100; i++) { advance(100); expect(game.move('owner', { x: 0, y: 0 })).toBe(true); }
+    expect(game.move('owner', { x: 2, y: 0 })).toBe(false);
+    expect(game.move('owner', { x: 1.9, y: 0 })).toBe(true);
+    expect(game.move('owner', { x: 2, y: 0 })).toBe(false);
+    expect(p.x).toBe(1.9);
+  });
+
+  it.each([NaN, undefined, null])('does not mistake an invalid saved coordinate (%s) for an unchanged position', x => {
+    const { game, advance } = setup(); const p = game.state.players.owner;
+    Object.assign(p, { mapId: 'home_owner', x, y: 0 }); advance(500);
+    expect(game.move('owner', { x: 0, y: 0, angle: 1.25, isFiring: true })).toBe(false);
+    expect(p.x).toBe(x);
+    expect(p.isFiring).toBe(false);
+  });
+
+  it('checks even tiny nonzero displacement against current closed geometry', () => {
+    const { game, advance } = setup(); const p = game.state.players.owner;
+    Object.assign(p, { mapId: 'home_owner', x: 0, y: 0 });
+    game.state.buildings.wall = { id: 'wall', type: 'wood_wall', name: '墙', x: 0, y: 0, mapId: p.mapId, hp: 350, maxHp: 350, level: 1 };
+    advance(500); expect(game.move('owner', { x: 0, y: 0 })).toBe(true);
+    expect(game.move('owner', { x: 1e-10, y: 0 })).toBe(false);
+    expect(p.x).toBe(0);
+  });
+
+  it('avoids dense geometry reads only for exact unchanged coordinates', () => {
+    const { game, advance } = setup(); const p = game.state.players.owner;
+    Object.assign(p, { mapId: 'home_owner', x: 0, y: 0 });
+    const read = vi.fn();
+    for (let i = 0; i < 1000; i++) Object.defineProperty(game.state.buildings, 'far_' + i, {
+      enumerable: true, get: () => { read(); return { id: 'far_' + i, type: 'wood_floor', mapId: p.mapId, x: 20, y: 20, hp: 300 }; },
+    });
+    advance(500); expect(game.move('owner', { x: 0, y: 0, angle: 1 })).toBe(true);
+    expect(read).not.toHaveBeenCalled();
+    expect(game.move('owner', { x: .1, y: 0 })).toBe(true);
+    expect(read).toHaveBeenCalledTimes(1000);
+  });
+});
+
 describe('cached public building definitions', () => {
   it('keeps distant camp geometry out of exact movement checks without filtering its full snapshot', () => {
     const { game, advance } = setup(); const p = game.state.players.owner; Object.assign(p, { mapId: 'home_owner', x: 0, y: 0 });

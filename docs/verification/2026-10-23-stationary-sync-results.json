@@ -1,0 +1,3557 @@
+{
+  "sourceBaseCommit": "e296463170d9da087e592204251f073ef1148e22",
+  "designCommit": "6d84d98",
+  "change": "Final direct strict X/Y comparison: only exact unchanged-coordinate packets skip geometry in GameWorld.move; all nonzero displacement keeps previous speed/endpoint/LOS validation. Aim/action/budget updates remain.",
+  "originalNativeFailureResolved": false,
+  "overallPerformanceAccepted": false,
+  "baselineBinding": {
+    "sourceCommit": "e296463170d9da087e592204251f073ef1148e22",
+    "originalSha256": "339b396dd24026d6c1db9ec430e9e844da411e37869e98db9c6dc9497aa9c816",
+    "adjustedSha256": "69f30915e270f212ffff0a3aefe67aa2b96972978ca430408db14fb2c398b1ba",
+    "onlyTransformation": "Relative from './ server imports changed to from '../server/ for baseline under data/"
+  },
+  "initialDraftMicrobenchmark": {
+    "scope": "Isolated in-memory GameWorld.move method comparison; same prepared synthetic5675-building/4000-floor camp and8roles. Copied exact prior move method with only server import paths adjusted; deterministic100ms model clock, no WebSockets/browser/SQLite timing or gameplay-time acceptance.30 warm batches then100 measured batches,5 rotating before/after orders. All state equality assertions passed on selected clear corridors. Observer query-count wrapper adds overhead.",
+    "trials": [
+      {
+        "round": 0,
+        "mode": "before",
+        "scenario": "stationary",
+        "moves": 800,
+        "accepted": 800,
+        "queries": 800,
+        "wallMs": 550.3068000000001
+      },
+      {
+        "round": 0,
+        "mode": "after",
+        "scenario": "stationary",
+        "moves": 800,
+        "accepted": 800,
+        "queries": 0,
+        "wallMs": 0.429300000000012
+      },
+      {
+        "round": 0,
+        "mode": "before",
+        "scenario": "mixed",
+        "moves": 800,
+        "accepted": 800,
+        "queries": 800,
+        "wallMs": 655.8465000000001
+      },
+      {
+        "round": 0,
+        "mode": "after",
+        "scenario": "mixed",
+        "moves": 800,
+        "accepted": 800,
+        "queries": 600,
+        "wallMs": 465.58550000000014
+      },
+      {
+        "round": 0,
+        "mode": "before",
+        "scenario": "moving",
+        "moves": 800,
+        "accepted": 800,
+        "queries": 800,
+        "wallMs": 670.0014000000001
+      },
+      {
+        "round": 0,
+        "mode": "after",
+        "scenario": "moving",
+        "moves": 800,
+        "accepted": 800,
+        "queries": 800,
+        "wallMs": 784.8865000000001
+      },
+      {
+        "round": 1,
+        "mode": "after",
+        "scenario": "stationary",
+        "moves": 800,
+        "accepted": 800,
+        "queries": 0,
+        "wallMs": 0.09329999999954453
+      },
+      {
+        "round": 1,
+        "mode": "before",
+        "scenario": "stationary",
+        "moves": 800,
+        "accepted": 800,
+        "queries": 800,
+        "wallMs": 778.2151000000003
+      },
+      {
+        "round": 1,
+        "mode": "after",
+        "scenario": "mixed",
+        "moves": 800,
+        "accepted": 800,
+        "queries": 600,
+        "wallMs": 619.3073000000004
+      },
+      {
+        "round": 1,
+        "mode": "before",
+        "scenario": "mixed",
+        "moves": 800,
+        "accepted": 800,
+        "queries": 800,
+        "wallMs": 754.0066000000006
+      },
+      {
+        "round": 1,
+        "mode": "after",
+        "scenario": "moving",
+        "moves": 800,
+        "accepted": 800,
+        "queries": 800,
+        "wallMs": 753.3440999999993
+      },
+      {
+        "round": 1,
+        "mode": "before",
+        "scenario": "moving",
+        "moves": 800,
+        "accepted": 800,
+        "queries": 800,
+        "wallMs": 821.1756000000005
+      },
+      {
+        "round": 2,
+        "mode": "before",
+        "scenario": "stationary",
+        "moves": 800,
+        "accepted": 800,
+        "queries": 800,
+        "wallMs": 744.7425999999996
+      },
+      {
+        "round": 2,
+        "mode": "after",
+        "scenario": "stationary",
+        "moves": 800,
+        "accepted": 800,
+        "queries": 0,
+        "wallMs": 0.24899999999979627
+      },
+      {
+        "round": 2,
+        "mode": "before",
+        "scenario": "mixed",
+        "moves": 800,
+        "accepted": 800,
+        "queries": 800,
+        "wallMs": 748.5379999999986
+      },
+      {
+        "round": 2,
+        "mode": "after",
+        "scenario": "mixed",
+        "moves": 800,
+        "accepted": 800,
+        "queries": 600,
+        "wallMs": 638.7541000000001
+      },
+      {
+        "round": 2,
+        "mode": "before",
+        "scenario": "moving",
+        "moves": 800,
+        "accepted": 800,
+        "queries": 800,
+        "wallMs": 757.0497000000014
+      },
+      {
+        "round": 2,
+        "mode": "after",
+        "scenario": "moving",
+        "moves": 800,
+        "accepted": 800,
+        "queries": 800,
+        "wallMs": 792.505000000001
+      },
+      {
+        "round": 3,
+        "mode": "after",
+        "scenario": "stationary",
+        "moves": 800,
+        "accepted": 800,
+        "queries": 0,
+        "wallMs": 0.2673999999988155
+      },
+      {
+        "round": 3,
+        "mode": "before",
+        "scenario": "stationary",
+        "moves": 800,
+        "accepted": 800,
+        "queries": 800,
+        "wallMs": 811.1980000000003
+      },
+      {
+        "round": 3,
+        "mode": "after",
+        "scenario": "mixed",
+        "moves": 800,
+        "accepted": 800,
+        "queries": 600,
+        "wallMs": 574.6154999999999
+      },
+      {
+        "round": 3,
+        "mode": "before",
+        "scenario": "mixed",
+        "moves": 800,
+        "accepted": 800,
+        "queries": 800,
+        "wallMs": 792.7894000000015
+      },
+      {
+        "round": 3,
+        "mode": "after",
+        "scenario": "moving",
+        "moves": 800,
+        "accepted": 800,
+        "queries": 800,
+        "wallMs": 813.8533000000025
+      },
+      {
+        "round": 3,
+        "mode": "before",
+        "scenario": "moving",
+        "moves": 800,
+        "accepted": 800,
+        "queries": 800,
+        "wallMs": 763.8928000000014
+      },
+      {
+        "round": 4,
+        "mode": "before",
+        "scenario": "stationary",
+        "moves": 800,
+        "accepted": 800,
+        "queries": 800,
+        "wallMs": 780.0607999999993
+      },
+      {
+        "round": 4,
+        "mode": "after",
+        "scenario": "stationary",
+        "moves": 800,
+        "accepted": 800,
+        "queries": 0,
+        "wallMs": 0.10879999999815482
+      },
+      {
+        "round": 4,
+        "mode": "before",
+        "scenario": "mixed",
+        "moves": 800,
+        "accepted": 800,
+        "queries": 800,
+        "wallMs": 782.6163000000015
+      },
+      {
+        "round": 4,
+        "mode": "after",
+        "scenario": "mixed",
+        "moves": 800,
+        "accepted": 800,
+        "queries": 600,
+        "wallMs": 578.9655000000021
+      },
+      {
+        "round": 4,
+        "mode": "before",
+        "scenario": "moving",
+        "moves": 800,
+        "accepted": 800,
+        "queries": 800,
+        "wallMs": 743.3675000000003
+      },
+      {
+        "round": 4,
+        "mode": "after",
+        "scenario": "moving",
+        "moves": 800,
+        "accepted": 800,
+        "queries": 800,
+        "wallMs": 778.1234000000004
+      }
+    ],
+    "pairedFinalStateEqual": true,
+    "productionBaselineFile": "data/worldState-stationary-before-20261023.ts"
+  },
+  "initialExactMicrobenchmark": {
+    "scope": "Isolated in-memory GameWorld.move method comparison; same prepared synthetic5675-building/4000-floor camp and8roles. Copied exact prior move method with only server import paths adjusted; deterministic100ms model clock, no WebSockets/browser/SQLite timing or gameplay-time acceptance.30 warm batches then100 measured batches,5 rotating before/after orders. All state equality assertions passed on selected clear corridors. Observer query-count wrapper adds overhead.",
+    "trials": [
+      {
+        "round": 0,
+        "mode": "before",
+        "scenario": "stationary",
+        "moves": 800,
+        "accepted": 800,
+        "queries": 800,
+        "wallMs": 568.8148
+      },
+      {
+        "round": 0,
+        "mode": "after",
+        "scenario": "stationary",
+        "moves": 800,
+        "accepted": 800,
+        "queries": 0,
+        "wallMs": 0.47139999999990323
+      },
+      {
+        "round": 0,
+        "mode": "before",
+        "scenario": "mixed",
+        "moves": 800,
+        "accepted": 800,
+        "queries": 800,
+        "wallMs": 683.2125000000001
+      },
+      {
+        "round": 0,
+        "mode": "after",
+        "scenario": "mixed",
+        "moves": 800,
+        "accepted": 800,
+        "queries": 600,
+        "wallMs": 521.4884999999999
+      },
+      {
+        "round": 0,
+        "mode": "before",
+        "scenario": "moving",
+        "moves": 800,
+        "accepted": 800,
+        "queries": 800,
+        "wallMs": 798.8658999999998
+      },
+      {
+        "round": 0,
+        "mode": "after",
+        "scenario": "moving",
+        "moves": 800,
+        "accepted": 800,
+        "queries": 800,
+        "wallMs": 842.1809999999996
+      },
+      {
+        "round": 1,
+        "mode": "after",
+        "scenario": "stationary",
+        "moves": 800,
+        "accepted": 800,
+        "queries": 0,
+        "wallMs": 0.1908000000003085
+      },
+      {
+        "round": 1,
+        "mode": "before",
+        "scenario": "stationary",
+        "moves": 800,
+        "accepted": 800,
+        "queries": 800,
+        "wallMs": 879.4949999999999
+      },
+      {
+        "round": 1,
+        "mode": "after",
+        "scenario": "mixed",
+        "moves": 800,
+        "accepted": 800,
+        "queries": 600,
+        "wallMs": 628.8589000000002
+      },
+      {
+        "round": 1,
+        "mode": "before",
+        "scenario": "mixed",
+        "moves": 800,
+        "accepted": 800,
+        "queries": 800,
+        "wallMs": 895.9054999999998
+      },
+      {
+        "round": 1,
+        "mode": "after",
+        "scenario": "moving",
+        "moves": 800,
+        "accepted": 800,
+        "queries": 800,
+        "wallMs": 959.0725999999995
+      },
+      {
+        "round": 1,
+        "mode": "before",
+        "scenario": "moving",
+        "moves": 800,
+        "accepted": 800,
+        "queries": 800,
+        "wallMs": 864.497800000001
+      },
+      {
+        "round": 2,
+        "mode": "before",
+        "scenario": "stationary",
+        "moves": 800,
+        "accepted": 800,
+        "queries": 800,
+        "wallMs": 808.1131000000005
+      },
+      {
+        "round": 2,
+        "mode": "after",
+        "scenario": "stationary",
+        "moves": 800,
+        "accepted": 800,
+        "queries": 0,
+        "wallMs": 0.15720000000146683
+      },
+      {
+        "round": 2,
+        "mode": "before",
+        "scenario": "mixed",
+        "moves": 800,
+        "accepted": 800,
+        "queries": 800,
+        "wallMs": 875.883600000001
+      },
+      {
+        "round": 2,
+        "mode": "after",
+        "scenario": "mixed",
+        "moves": 800,
+        "accepted": 800,
+        "queries": 600,
+        "wallMs": 616.6434000000008
+      },
+      {
+        "round": 2,
+        "mode": "before",
+        "scenario": "moving",
+        "moves": 800,
+        "accepted": 800,
+        "queries": 800,
+        "wallMs": 808.1423999999988
+      },
+      {
+        "round": 2,
+        "mode": "after",
+        "scenario": "moving",
+        "moves": 800,
+        "accepted": 800,
+        "queries": 800,
+        "wallMs": 909.3269
+      },
+      {
+        "round": 3,
+        "mode": "after",
+        "scenario": "stationary",
+        "moves": 800,
+        "accepted": 800,
+        "queries": 0,
+        "wallMs": 0.15500000000065484
+      },
+      {
+        "round": 3,
+        "mode": "before",
+        "scenario": "stationary",
+        "moves": 800,
+        "accepted": 800,
+        "queries": 800,
+        "wallMs": 840.7942000000021
+      },
+      {
+        "round": 3,
+        "mode": "after",
+        "scenario": "mixed",
+        "moves": 800,
+        "accepted": 800,
+        "queries": 600,
+        "wallMs": 586.7430000000022
+      },
+      {
+        "round": 3,
+        "mode": "before",
+        "scenario": "mixed",
+        "moves": 800,
+        "accepted": 800,
+        "queries": 800,
+        "wallMs": 888.9228999999978
+      },
+      {
+        "round": 3,
+        "mode": "after",
+        "scenario": "moving",
+        "moves": 800,
+        "accepted": 800,
+        "queries": 800,
+        "wallMs": 881.8966
+      },
+      {
+        "round": 3,
+        "mode": "before",
+        "scenario": "moving",
+        "moves": 800,
+        "accepted": 800,
+        "queries": 800,
+        "wallMs": 823.6919000000016
+      },
+      {
+        "round": 4,
+        "mode": "before",
+        "scenario": "stationary",
+        "moves": 800,
+        "accepted": 800,
+        "queries": 800,
+        "wallMs": 832.0282000000007
+      },
+      {
+        "round": 4,
+        "mode": "after",
+        "scenario": "stationary",
+        "moves": 800,
+        "accepted": 800,
+        "queries": 0,
+        "wallMs": 0.09909999999945285
+      },
+      {
+        "round": 4,
+        "mode": "before",
+        "scenario": "mixed",
+        "moves": 800,
+        "accepted": 800,
+        "queries": 800,
+        "wallMs": 819.9655000000021
+      },
+      {
+        "round": 4,
+        "mode": "after",
+        "scenario": "mixed",
+        "moves": 800,
+        "accepted": 800,
+        "queries": 600,
+        "wallMs": 639.6663000000008
+      },
+      {
+        "round": 4,
+        "mode": "before",
+        "scenario": "moving",
+        "moves": 800,
+        "accepted": 800,
+        "queries": 800,
+        "wallMs": 871.913199999999
+      },
+      {
+        "round": 4,
+        "mode": "after",
+        "scenario": "moving",
+        "moves": 800,
+        "accepted": 800,
+        "queries": 800,
+        "wallMs": 817.3377
+      }
+    ],
+    "pairedFinalStateEqual": true,
+    "productionBaselineFile": "data/worldState-stationary-before-20261023.ts"
+  },
+  "balancedExactMicrobenchmark": {
+    "scope": "Isolated in-memory GameWorld.move method comparison; same prepared synthetic5675-building/4000-floor camp and8roles. Copied exact prior move method with only server import paths adjusted; deterministic100ms model clock, no WebSockets/browser/SQLite timing or gameplay-time acceptance.30 warm batches then100 measured batches,5 rotating before/after orders. All state equality assertions passed on selected clear corridors. Both variants assign move as an own instance property before measurement to match call/object shape; function implementations still originate in different modules. Observer query-count wrapper adds overhead.",
+    "trials": [
+      {
+        "round": 0,
+        "mode": "before",
+        "scenario": "stationary",
+        "moves": 800,
+        "accepted": 800,
+        "queries": 800,
+        "wallMs": 605.8814
+      },
+      {
+        "round": 0,
+        "mode": "after",
+        "scenario": "stationary",
+        "moves": 800,
+        "accepted": 800,
+        "queries": 0,
+        "wallMs": 0.45240000000012515
+      },
+      {
+        "round": 0,
+        "mode": "before",
+        "scenario": "mixed",
+        "moves": 800,
+        "accepted": 800,
+        "queries": 800,
+        "wallMs": 615.2266999999999
+      },
+      {
+        "round": 0,
+        "mode": "after",
+        "scenario": "mixed",
+        "moves": 800,
+        "accepted": 800,
+        "queries": 600,
+        "wallMs": 464.2992999999999
+      },
+      {
+        "round": 0,
+        "mode": "before",
+        "scenario": "moving",
+        "moves": 800,
+        "accepted": 800,
+        "queries": 800,
+        "wallMs": 715.2862
+      },
+      {
+        "round": 0,
+        "mode": "after",
+        "scenario": "moving",
+        "moves": 800,
+        "accepted": 800,
+        "queries": 800,
+        "wallMs": 846.7296000000001
+      },
+      {
+        "round": 1,
+        "mode": "after",
+        "scenario": "stationary",
+        "moves": 800,
+        "accepted": 800,
+        "queries": 0,
+        "wallMs": 0.09870000000046275
+      },
+      {
+        "round": 1,
+        "mode": "before",
+        "scenario": "stationary",
+        "moves": 800,
+        "accepted": 800,
+        "queries": 800,
+        "wallMs": 791.8202000000001
+      },
+      {
+        "round": 1,
+        "mode": "after",
+        "scenario": "mixed",
+        "moves": 800,
+        "accepted": 800,
+        "queries": 600,
+        "wallMs": 578.9247000000005
+      },
+      {
+        "round": 1,
+        "mode": "before",
+        "scenario": "mixed",
+        "moves": 800,
+        "accepted": 800,
+        "queries": 800,
+        "wallMs": 782.7514999999994
+      },
+      {
+        "round": 1,
+        "mode": "after",
+        "scenario": "moving",
+        "moves": 800,
+        "accepted": 800,
+        "queries": 800,
+        "wallMs": 817.8748999999998
+      },
+      {
+        "round": 1,
+        "mode": "before",
+        "scenario": "moving",
+        "moves": 800,
+        "accepted": 800,
+        "queries": 800,
+        "wallMs": 772.0671000000002
+      },
+      {
+        "round": 2,
+        "mode": "before",
+        "scenario": "stationary",
+        "moves": 800,
+        "accepted": 800,
+        "queries": 800,
+        "wallMs": 706.4724999999999
+      },
+      {
+        "round": 2,
+        "mode": "after",
+        "scenario": "stationary",
+        "moves": 800,
+        "accepted": 800,
+        "queries": 0,
+        "wallMs": 0.19809999999961292
+      },
+      {
+        "round": 2,
+        "mode": "before",
+        "scenario": "mixed",
+        "moves": 800,
+        "accepted": 800,
+        "queries": 800,
+        "wallMs": 804.7090000000007
+      },
+      {
+        "round": 2,
+        "mode": "after",
+        "scenario": "mixed",
+        "moves": 800,
+        "accepted": 800,
+        "queries": 600,
+        "wallMs": 595.3450000000012
+      },
+      {
+        "round": 2,
+        "mode": "before",
+        "scenario": "moving",
+        "moves": 800,
+        "accepted": 800,
+        "queries": 800,
+        "wallMs": 789.8341
+      },
+      {
+        "round": 2,
+        "mode": "after",
+        "scenario": "moving",
+        "moves": 800,
+        "accepted": 800,
+        "queries": 800,
+        "wallMs": 831.6437999999998
+      },
+      {
+        "round": 3,
+        "mode": "after",
+        "scenario": "stationary",
+        "moves": 800,
+        "accepted": 800,
+        "queries": 0,
+        "wallMs": 0.23769999999967695
+      },
+      {
+        "round": 3,
+        "mode": "before",
+        "scenario": "stationary",
+        "moves": 800,
+        "accepted": 800,
+        "queries": 800,
+        "wallMs": 763.3314000000009
+      },
+      {
+        "round": 3,
+        "mode": "after",
+        "scenario": "mixed",
+        "moves": 800,
+        "accepted": 800,
+        "queries": 600,
+        "wallMs": 562.9075000000012
+      },
+      {
+        "round": 3,
+        "mode": "before",
+        "scenario": "mixed",
+        "moves": 800,
+        "accepted": 800,
+        "queries": 800,
+        "wallMs": 816.9431000000004
+      },
+      {
+        "round": 3,
+        "mode": "after",
+        "scenario": "moving",
+        "moves": 800,
+        "accepted": 800,
+        "queries": 800,
+        "wallMs": 753.5949
+      },
+      {
+        "round": 3,
+        "mode": "before",
+        "scenario": "moving",
+        "moves": 800,
+        "accepted": 800,
+        "queries": 800,
+        "wallMs": 792.4876000000004
+      },
+      {
+        "round": 4,
+        "mode": "before",
+        "scenario": "stationary",
+        "moves": 800,
+        "accepted": 800,
+        "queries": 800,
+        "wallMs": 907.8101999999999
+      },
+      {
+        "round": 4,
+        "mode": "after",
+        "scenario": "stationary",
+        "moves": 800,
+        "accepted": 800,
+        "queries": 0,
+        "wallMs": 0.11150000000270666
+      },
+      {
+        "round": 4,
+        "mode": "before",
+        "scenario": "mixed",
+        "moves": 800,
+        "accepted": 800,
+        "queries": 800,
+        "wallMs": 789.9514000000017
+      },
+      {
+        "round": 4,
+        "mode": "after",
+        "scenario": "mixed",
+        "moves": 800,
+        "accepted": 800,
+        "queries": 600,
+        "wallMs": 565.5490000000027
+      },
+      {
+        "round": 4,
+        "mode": "before",
+        "scenario": "moving",
+        "moves": 800,
+        "accepted": 800,
+        "queries": 800,
+        "wallMs": 757.7073000000019
+      },
+      {
+        "round": 4,
+        "mode": "after",
+        "scenario": "moving",
+        "moves": 800,
+        "accepted": 800,
+        "queries": 800,
+        "wallMs": 813.6759999999995
+      }
+    ],
+    "pairedFinalStateEqual": true,
+    "productionBaselineFile": "data/worldState-stationary-before-20261023.ts"
+  },
+  "runs": [
+    {
+      "mode": "before",
+      "implementation": "Prior e296463 move method",
+      "fixture": {
+        "scope": "Explicit synthetic camp/roles,2000ammo/100satiety/normal existing rifle/vest. No browser/native/earned damage/capacity acceptance. Real rules,clock,SQLite,finite ammunition and ordinary small corridor movements.",
+        "buildings": 5675,
+        "floors": 4000,
+        "defensiveAmmo": 540,
+        "baselineActors": [
+          {
+            "index": 0,
+            "ammo": 2000,
+            "hp": 100,
+            "satiety": 100
+          },
+          {
+            "index": 1,
+            "ammo": 2000,
+            "hp": 100,
+            "satiety": 100
+          },
+          {
+            "index": 2,
+            "ammo": 2000,
+            "hp": 100,
+            "satiety": 100
+          },
+          {
+            "index": 3,
+            "ammo": 2000,
+            "hp": 100,
+            "satiety": 100
+          },
+          {
+            "index": 4,
+            "ammo": 2000,
+            "hp": 100,
+            "satiety": 100
+          },
+          {
+            "index": 5,
+            "ammo": 2000,
+            "hp": 100,
+            "satiety": 100
+          },
+          {
+            "index": 6,
+            "ammo": 2000,
+            "hp": 100,
+            "satiety": 100
+          },
+          {
+            "index": 7,
+            "ammo": 2000,
+            "hp": 100,
+            "satiety": 100
+          }
+        ],
+        "cadence": {
+          "mainMotion": "stationary first two phases, sinusoid all-moving control third",
+          "mainsUnpacedMs": 150,
+          "mainsMoveMs": 100,
+          "botsResponsePacedMs": 200
+        }
+      },
+      "phases": [
+        {
+          "name": "two-stationary-empty-fire",
+          "wallMs": 20017,
+          "events": 1769,
+          "cap": 20000,
+          "overflow": 0,
+          "paidRounds": 256,
+          "actors": [
+            {
+              "index": 0,
+              "sent": 128,
+              "acknowledged": 128,
+              "errors": [],
+              "corrections": 0,
+              "pending": 0,
+              "rttP95Ms": 6.213599999999133
+            },
+            {
+              "index": 1,
+              "sent": 128,
+              "acknowledged": 128,
+              "errors": [],
+              "corrections": 0,
+              "pending": 0,
+              "rttP95Ms": 32.46379999999954
+            }
+          ],
+          "moves": {
+            "n": 378,
+            "totalMs": 589.6742999999994,
+            "p50Ms": 1.4088000000010652,
+            "p95Ms": 2.8720000000002983,
+            "maxMs": 4.916999999999462
+          },
+          "stationary": {
+            "n": 378,
+            "totalMs": 589.6742999999994,
+            "p50Ms": 1.4088000000010652,
+            "p95Ms": 2.8720000000002983,
+            "maxMs": 4.916999999999462
+          },
+          "moving": {
+            "n": 0,
+            "totalMs": 0,
+            "p50Ms": 0,
+            "p95Ms": 0,
+            "maxMs": 0
+          },
+          "queries": {
+            "n": 402,
+            "totalMs": 609.581199999991,
+            "p50Ms": 1.365099999999984,
+            "p95Ms": 2.701199999999517,
+            "maxMs": 4.826199999999517
+          },
+          "fullSnapshots": 24,
+          "stageCountsAndTotals": {
+            "buildingsFor": {
+              "n": 402,
+              "p50": 1.365099999999984,
+              "p95": 2.701199999999517,
+              "max": 4.826199999999517,
+              "total": 609.581199999991
+            },
+            "move": {
+              "n": 378,
+              "p50": 1.4088000000010652,
+              "p95": 2.8720000000002983,
+              "max": 4.916999999999462,
+              "total": 589.6742999999994
+            },
+            "snapshotPlayer": {
+              "n": 294,
+              "p50": 0.0639999999984866,
+              "p95": 0.13550000000032014,
+              "max": 0.22550000000046566,
+              "total": 21.468600000008564
+            },
+            "actionPlayer": {
+              "n": 256,
+              "p50": 2.1381000000001222,
+              "p95": 3.0817000000006374,
+              "max": 12.267400000000634,
+              "total": 588.8254999999863
+            },
+            "encodePlayer": {
+              "n": 294,
+              "p50": 0.004100000000107684,
+              "p95": 0.015499999997700797,
+              "max": 15.75669999999991,
+              "total": 111.48590000000877
+            },
+            "tick": {
+              "n": 97,
+              "p50": 2.7175999999999476,
+              "p95": 5.979600000000573,
+              "max": 6.405799999998635,
+              "total": 313.3659999999984
+            },
+            "snapshot": {
+              "n": 24,
+              "p50": 7.254800000000614,
+              "p95": 8.761700000000928,
+              "max": 12.98849999999993,
+              "total": 175.0305999999996
+            },
+            "encode": {
+              "n": 24,
+              "p50": 7.113899999999376,
+              "p95": 9.696700000000419,
+              "max": 10.25590000000011,
+              "total": 176.07380000000148
+            }
+          },
+          "loop": {
+            "p95": 15.884287,
+            "p99": 19.529727,
+            "max": 40.271871
+          }
+        },
+        {
+          "name": "eight-mixed-empty-fire",
+          "wallMs": 30012,
+          "events": 9082,
+          "cap": 20000,
+          "overflow": 0,
+          "paidRounds": 1256,
+          "actors": [
+            {
+              "index": 0,
+              "sent": 193,
+              "acknowledged": 193,
+              "errors": [],
+              "corrections": 0,
+              "pending": 0,
+              "rttP95Ms": 29.035200000002078
+            },
+            {
+              "index": 1,
+              "sent": 193,
+              "acknowledged": 193,
+              "errors": [],
+              "corrections": 0,
+              "pending": 0,
+              "rttP95Ms": 38.201600000000326
+            },
+            {
+              "index": 2,
+              "sent": 145,
+              "acknowledged": 145,
+              "errors": [],
+              "corrections": 0,
+              "pending": 0,
+              "rttP95Ms": 13.451700000001438
+            },
+            {
+              "index": 3,
+              "sent": 145,
+              "acknowledged": 145,
+              "errors": [],
+              "corrections": 0,
+              "pending": 0,
+              "rttP95Ms": 18.115200000000186
+            },
+            {
+              "index": 4,
+              "sent": 145,
+              "acknowledged": 145,
+              "errors": [],
+              "corrections": 0,
+              "pending": 0,
+              "rttP95Ms": 35.891499999997905
+            },
+            {
+              "index": 5,
+              "sent": 145,
+              "acknowledged": 145,
+              "errors": [],
+              "corrections": 0,
+              "pending": 0,
+              "rttP95Ms": 42.23440000000119
+            },
+            {
+              "index": 6,
+              "sent": 145,
+              "acknowledged": 145,
+              "errors": [],
+              "corrections": 0,
+              "pending": 0,
+              "rttP95Ms": 47.046000000002095
+            },
+            {
+              "index": 7,
+              "sent": 145,
+              "acknowledged": 145,
+              "errors": [],
+              "corrections": 0,
+              "pending": 0,
+              "rttP95Ms": 48.786400000004505
+            }
+          ],
+          "moves": {
+            "n": 1440,
+            "totalMs": 2183.211699999909,
+            "p50Ms": 1.4061000000001513,
+            "p95Ms": 2.5201000000015483,
+            "maxMs": 4.498599999998987
+          },
+          "stationary": {
+            "n": 570,
+            "totalMs": 857.3201999999619,
+            "p50Ms": 1.4292999999997846,
+            "p95Ms": 2.493800000000192,
+            "maxMs": 3.3502000000007683
+          },
+          "moving": {
+            "n": 870,
+            "totalMs": 1325.891499999947,
+            "p50Ms": 1.399199999999837,
+            "p95Ms": 2.52730000000156,
+            "maxMs": 4.498599999998987
+          },
+          "queries": {
+            "n": 1584,
+            "totalMs": 2350.2770000001656,
+            "p50Ms": 1.3747000000003027,
+            "p95Ms": 2.4481999999989057,
+            "maxMs": 4.4025000000001455
+          },
+          "fullSnapshots": 144,
+          "stageCountsAndTotals": {
+            "buildingsFor": {
+              "n": 1584,
+              "p50": 1.3747000000003027,
+              "p95": 2.4481999999989057,
+              "max": 4.4025000000001455,
+              "total": 2350.2770000001656
+            },
+            "move": {
+              "n": 1440,
+              "p50": 1.4061000000001513,
+              "p95": 2.5201000000015483,
+              "max": 4.498599999998987,
+              "total": 2183.211699999909
+            },
+            "snapshotPlayer": {
+              "n": 2184,
+              "p50": 0.04940000000351574,
+              "p95": 0.11260000000038417,
+              "max": 0.3022999999993772,
+              "total": 119.43840000011915
+            },
+            "actionPlayer": {
+              "n": 1256,
+              "p50": 1.867999999994936,
+              "p95": 3.4078000000008615,
+              "max": 6.633199999996577,
+              "total": 2616.510400000043
+            },
+            "encodePlayer": {
+              "n": 2184,
+              "p50": 0.003099999998084968,
+              "p95": 0.012000000002444722,
+              "max": 21.95130000000063,
+              "total": 784.0695999999916
+            },
+            "tick": {
+              "n": 146,
+              "p50": 4.572899999999208,
+              "p95": 6.6512000000002445,
+              "max": 12.013700000003155,
+              "total": 674.1100999999871
+            },
+            "snapshot": {
+              "n": 144,
+              "p50": 8.368600000001607,
+              "p95": 12.180599999999686,
+              "max": 14.478700000006938,
+              "total": 1235.8726999999963
+            },
+            "encode": {
+              "n": 144,
+              "p50": 7.284200000001874,
+              "p95": 10.665899999999965,
+              "max": 11.875400000000809,
+              "total": 1104.6229999999778
+            }
+          },
+          "loop": {
+            "p95": 20.512767,
+            "p99": 36.405247,
+            "max": 62.717951
+          }
+        },
+        {
+          "name": "eight-moving-control-empty-fire",
+          "wallMs": 20033,
+          "events": 6092,
+          "cap": 20000,
+          "overflow": 0,
+          "paidRounds": 838,
+          "actors": [
+            {
+              "index": 0,
+              "sent": 128,
+              "acknowledged": 128,
+              "errors": [],
+              "corrections": 0,
+              "pending": 0,
+              "rttP95Ms": 21.590200000006007
+            },
+            {
+              "index": 1,
+              "sent": 128,
+              "acknowledged": 128,
+              "errors": [],
+              "corrections": 0,
+              "pending": 0,
+              "rttP95Ms": 28.126900000002934
+            },
+            {
+              "index": 2,
+              "sent": 97,
+              "acknowledged": 97,
+              "errors": [],
+              "corrections": 0,
+              "pending": 0,
+              "rttP95Ms": 12.930399999997462
+            },
+            {
+              "index": 3,
+              "sent": 97,
+              "acknowledged": 97,
+              "errors": [],
+              "corrections": 0,
+              "pending": 0,
+              "rttP95Ms": 28.56629999999859
+            },
+            {
+              "index": 4,
+              "sent": 97,
+              "acknowledged": 97,
+              "errors": [],
+              "corrections": 0,
+              "pending": 0,
+              "rttP95Ms": 34.69759999999951
+            },
+            {
+              "index": 5,
+              "sent": 97,
+              "acknowledged": 97,
+              "errors": [],
+              "corrections": 0,
+              "pending": 0,
+              "rttP95Ms": 41.67720000000554
+            },
+            {
+              "index": 6,
+              "sent": 97,
+              "acknowledged": 97,
+              "errors": [],
+              "corrections": 0,
+              "pending": 0,
+              "rttP95Ms": 44.71819999998843
+            },
+            {
+              "index": 7,
+              "sent": 97,
+              "acknowledged": 97,
+              "errors": [],
+              "corrections": 0,
+              "pending": 0,
+              "rttP95Ms": 49.0906999999861
+            }
+          ],
+          "moves": {
+            "n": 964,
+            "totalMs": 1293.3565999998245,
+            "p50Ms": 1.1998999999996158,
+            "p95Ms": 2.4241000000038184,
+            "maxMs": 3.8220000000001164
+          },
+          "stationary": {
+            "n": 0,
+            "totalMs": 0,
+            "p50Ms": 0,
+            "p95Ms": 0,
+            "maxMs": 0
+          },
+          "moving": {
+            "n": 964,
+            "totalMs": 1293.3565999998245,
+            "p50Ms": 1.1998999999996158,
+            "p95Ms": 2.4241000000038184,
+            "maxMs": 3.8220000000001164
+          },
+          "queries": {
+            "n": 1060,
+            "totalMs": 1396.7761999999711,
+            "p50Ms": 1.1660999999949127,
+            "p95Ms": 2.384699999995064,
+            "maxMs": 3.794400000006135
+          },
+          "fullSnapshots": 96,
+          "stageCountsAndTotals": {
+            "buildingsFor": {
+              "n": 1060,
+              "p50": 1.1660999999949127,
+              "p95": 2.384699999995064,
+              "max": 3.794400000006135,
+              "total": 1396.7761999999711
+            },
+            "move": {
+              "n": 964,
+              "p50": 1.1998999999996158,
+              "p95": 2.4241000000038184,
+              "max": 3.8220000000001164,
+              "total": 1293.3565999998245
+            },
+            "tick": {
+              "n": 98,
+              "p50": 4.4275999999954365,
+              "p95": 6.4363999999986845,
+              "max": 9.696100000001024,
+              "total": 428.05120000001625
+            },
+            "snapshotPlayer": {
+              "n": 1470,
+              "p50": 0.043099999995320104,
+              "p95": 0.10789999999542488,
+              "max": 0.25509999999485444,
+              "total": 71.3696999996173
+            },
+            "encodePlayer": {
+              "n": 1470,
+              "p50": 0.002700000004551839,
+              "p95": 0.010000000002037268,
+              "max": 26.99659999999858,
+              "total": 489.7843999999168
+            },
+            "actionPlayer": {
+              "n": 838,
+              "p50": 1.8672999999980675,
+              "p95": 2.75800000000163,
+              "max": 6.186099999998987,
+              "total": 1677.5027000003465
+            },
+            "snapshot": {
+              "n": 96,
+              "p50": 7.284799999993993,
+              "p95": 12.27209999999468,
+              "max": 13.337099999997008,
+              "total": 743.6964999999836
+            },
+            "encode": {
+              "n": 96,
+              "p50": 6.609199999991688,
+              "p95": 9.81689999999071,
+              "max": 14.967300000003888,
+              "total": 679.3214999999764
+            }
+          },
+          "loop": {
+            "p95": 18.644991,
+            "p99": 31.178751,
+            "max": 57.475071
+          }
+        }
+      ],
+      "audit": {
+        "integrity": "ok",
+        "paidRounds": 2350,
+        "players": [
+          {
+            "index": 0,
+            "paidRounds": 449,
+            "ammoBefore": 2000,
+            "ammoAfter": 1551,
+            "hp": 100,
+            "satiety": 81.96775000000005,
+            "otherAssetsUnchanged": true
+          },
+          {
+            "index": 1,
+            "paidRounds": 449,
+            "ammoBefore": 2000,
+            "ammoAfter": 1551,
+            "hp": 100,
+            "satiety": 81.99275000000004,
+            "otherAssetsUnchanged": true
+          },
+          {
+            "index": 2,
+            "paidRounds": 242,
+            "ammoBefore": 2000,
+            "ammoAfter": 1758,
+            "hp": 100,
+            "satiety": 87.17025000000002,
+            "otherAssetsUnchanged": true
+          },
+          {
+            "index": 3,
+            "paidRounds": 242,
+            "ammoBefore": 2000,
+            "ammoAfter": 1758,
+            "hp": 100,
+            "satiety": 87.14650000000006,
+            "otherAssetsUnchanged": true
+          },
+          {
+            "index": 4,
+            "paidRounds": 242,
+            "ammoBefore": 2000,
+            "ammoAfter": 1758,
+            "hp": 100,
+            "satiety": 87.17775000000006,
+            "otherAssetsUnchanged": true
+          },
+          {
+            "index": 5,
+            "paidRounds": 242,
+            "ammoBefore": 2000,
+            "ammoAfter": 1758,
+            "hp": 100,
+            "satiety": 87.1540000000001,
+            "otherAssetsUnchanged": true
+          },
+          {
+            "index": 6,
+            "paidRounds": 242,
+            "ammoBefore": 2000,
+            "ammoAfter": 1758,
+            "hp": 100,
+            "satiety": 87.1822500000001,
+            "otherAssetsUnchanged": true
+          },
+          {
+            "index": 7,
+            "paidRounds": 242,
+            "ammoBefore": 2000,
+            "ammoAfter": 1758,
+            "hp": 100,
+            "satiety": 87.41400000000002,
+            "otherAssetsUnchanged": true
+          }
+        ],
+        "buildingsUnchanged": 5675,
+        "floorsUnchanged": 4000,
+        "defenseAmmoUnchanged": 540,
+        "otherSharedAssetsUnchanged": true,
+        "consistentBackupRestore": true,
+        "lastCommittedCoreReplays": 8
+      }
+    },
+    {
+      "mode": "after",
+      "implementation": "Initial travelled>0 draft, not final",
+      "fixture": {
+        "scope": "Explicit synthetic camp/roles,2000ammo/100satiety/normal existing rifle/vest. No browser/native/earned damage/capacity acceptance. Real rules,clock,SQLite,finite ammunition and ordinary small corridor movements.",
+        "buildings": 5675,
+        "floors": 4000,
+        "defensiveAmmo": 540,
+        "baselineActors": [
+          {
+            "index": 0,
+            "ammo": 2000,
+            "hp": 100,
+            "satiety": 100
+          },
+          {
+            "index": 1,
+            "ammo": 2000,
+            "hp": 100,
+            "satiety": 100
+          },
+          {
+            "index": 2,
+            "ammo": 2000,
+            "hp": 100,
+            "satiety": 100
+          },
+          {
+            "index": 3,
+            "ammo": 2000,
+            "hp": 100,
+            "satiety": 100
+          },
+          {
+            "index": 4,
+            "ammo": 2000,
+            "hp": 100,
+            "satiety": 100
+          },
+          {
+            "index": 5,
+            "ammo": 2000,
+            "hp": 100,
+            "satiety": 100
+          },
+          {
+            "index": 6,
+            "ammo": 2000,
+            "hp": 100,
+            "satiety": 100
+          },
+          {
+            "index": 7,
+            "ammo": 2000,
+            "hp": 100,
+            "satiety": 100
+          }
+        ],
+        "cadence": {
+          "mainMotion": "stationary first two phases, sinusoid all-moving control third",
+          "mainsUnpacedMs": 150,
+          "mainsMoveMs": 100,
+          "botsResponsePacedMs": 200
+        }
+      },
+      "phases": [
+        {
+          "name": "two-stationary-empty-fire",
+          "wallMs": 20009,
+          "events": 1396,
+          "cap": 20000,
+          "overflow": 0,
+          "paidRounds": 256,
+          "actors": [
+            {
+              "index": 0,
+              "sent": 128,
+              "acknowledged": 128,
+              "errors": [],
+              "corrections": 0,
+              "pending": 0,
+              "rttP95Ms": 9.444500000001426
+            },
+            {
+              "index": 1,
+              "sent": 128,
+              "acknowledged": 128,
+              "errors": [],
+              "corrections": 0,
+              "pending": 0,
+              "rttP95Ms": 30.615699999999833
+            }
+          ],
+          "moves": {
+            "n": 378,
+            "totalMs": 4.305899999990743,
+            "p50Ms": 0.009299999999711872,
+            "p95Ms": 0.03149999999914144,
+            "maxMs": 0.18970000000012988
+          },
+          "stationary": {
+            "n": 378,
+            "totalMs": 4.305899999990743,
+            "p50Ms": 0.009299999999711872,
+            "p95Ms": 0.03149999999914144,
+            "maxMs": 0.18970000000012988
+          },
+          "moving": {
+            "n": 0,
+            "totalMs": 0,
+            "p50Ms": 0,
+            "p95Ms": 0,
+            "maxMs": 0
+          },
+          "queries": {
+            "n": 24,
+            "totalMs": 35.58809999999721,
+            "p50Ms": 1.5345999999990454,
+            "p95Ms": 1.8896000000004278,
+            "maxMs": 2.511399999999412
+          },
+          "fullSnapshots": 24,
+          "stageCountsAndTotals": {
+            "tick": {
+              "n": 98,
+              "p50": 2.7748999999967054,
+              "p95": 5.822000000000116,
+              "max": 13.541899999999941,
+              "total": 330.0087999999748
+            },
+            "snapshotPlayer": {
+              "n": 296,
+              "p50": 0.06340000000000146,
+              "p95": 0.13940000000002328,
+              "max": 0.31890000000021246,
+              "total": 20.675100000002658
+            },
+            "encodePlayer": {
+              "n": 296,
+              "p50": 0.003899999999703141,
+              "p95": 0.013499999997293344,
+              "max": 16.20809999999983,
+              "total": 114.09959999995885
+            },
+            "move": {
+              "n": 378,
+              "p50": 0.009299999999711872,
+              "p95": 0.03149999999914144,
+              "max": 0.18970000000012988,
+              "total": 4.305899999990743
+            },
+            "actionPlayer": {
+              "n": 256,
+              "p50": 2.0891000000010536,
+              "p95": 3.1162999999996828,
+              "max": 9.366000000001804,
+              "total": 582.2782000000132
+            },
+            "buildingsFor": {
+              "n": 24,
+              "p50": 1.5345999999990454,
+              "p95": 1.8896000000004278,
+              "max": 2.511399999999412,
+              "total": 35.58809999999721
+            },
+            "snapshot": {
+              "n": 24,
+              "p50": 7.283900000002177,
+              "p95": 10.269100000001345,
+              "max": 11.475999999998749,
+              "total": 187.27009999999973
+            },
+            "encode": {
+              "n": 24,
+              "p50": 7.204600000000937,
+              "p95": 9.962100000000646,
+              "max": 10.012400000001435,
+              "total": 176.89490000000706
+            }
+          },
+          "loop": {
+            "p95": 16.031743,
+            "p99": 20.348927,
+            "max": 28.327935
+          }
+        },
+        {
+          "name": "eight-mixed-empty-fire",
+          "wallMs": 30011,
+          "events": 8998,
+          "cap": 20000,
+          "overflow": 0,
+          "paidRounds": 1258,
+          "actors": [
+            {
+              "index": 0,
+              "sent": 194,
+              "acknowledged": 194,
+              "errors": [],
+              "corrections": 0,
+              "pending": 0,
+              "rttP95Ms": 37.47830000000249
+            },
+            {
+              "index": 1,
+              "sent": 194,
+              "acknowledged": 194,
+              "errors": [],
+              "corrections": 0,
+              "pending": 0,
+              "rttP95Ms": 40.73539999999775
+            },
+            {
+              "index": 2,
+              "sent": 145,
+              "acknowledged": 145,
+              "errors": [],
+              "corrections": 0,
+              "pending": 0,
+              "rttP95Ms": 10.00249999999869
+            },
+            {
+              "index": 3,
+              "sent": 145,
+              "acknowledged": 145,
+              "errors": [],
+              "corrections": 0,
+              "pending": 0,
+              "rttP95Ms": 36.19920000000275
+            },
+            {
+              "index": 4,
+              "sent": 145,
+              "acknowledged": 145,
+              "errors": [],
+              "corrections": 0,
+              "pending": 0,
+              "rttP95Ms": 41.59030000000348
+            },
+            {
+              "index": 5,
+              "sent": 145,
+              "acknowledged": 145,
+              "errors": [],
+              "corrections": 0,
+              "pending": 0,
+              "rttP95Ms": 46.16219999999885
+            },
+            {
+              "index": 6,
+              "sent": 145,
+              "acknowledged": 145,
+              "errors": [],
+              "corrections": 0,
+              "pending": 0,
+              "rttP95Ms": 51.341499999994994
+            },
+            {
+              "index": 7,
+              "sent": 145,
+              "acknowledged": 145,
+              "errors": [],
+              "corrections": 0,
+              "pending": 0,
+              "rttP95Ms": 54.508700000005774
+            }
+          ],
+          "moves": {
+            "n": 1440,
+            "totalMs": 1380.4500999999727,
+            "p50Ms": 1.07220000000234,
+            "p95Ms": 2.4421000000002095,
+            "maxMs": 4.5855999999985215
+          },
+          "stationary": {
+            "n": 570,
+            "totalMs": 4.439199999978882,
+            "p50Ms": 0.004899999999906868,
+            "p95Ms": 0.026699999998527346,
+            "maxMs": 0.07920000000012806
+          },
+          "moving": {
+            "n": 870,
+            "totalMs": 1376.0108999999939,
+            "p50Ms": 1.459500000004482,
+            "p95Ms": 2.7850999999973283,
+            "maxMs": 4.5855999999985215
+          },
+          "queries": {
+            "n": 1014,
+            "totalMs": 1573.2318000000487,
+            "p50Ms": 1.4213999999992666,
+            "p95Ms": 2.7210999999988417,
+            "maxMs": 4.51600000000326
+          },
+          "fullSnapshots": 144,
+          "stageCountsAndTotals": {
+            "tick": {
+              "n": 146,
+              "p50": 4.90860000000248,
+              "p95": 10.035400000000664,
+              "max": 12.243800000000192,
+              "total": 786.6894999999604
+            },
+            "snapshotPlayer": {
+              "n": 2426,
+              "p50": 0.044200000003911555,
+              "p95": 0.10900000000037835,
+              "max": 0.30120000000169966,
+              "total": 122.7431000001161
+            },
+            "encodePlayer": {
+              "n": 2426,
+              "p50": 0.002599999999802094,
+              "p95": 0.010799999996379483,
+              "max": 28.727899999998044,
+              "total": 794.6239999998652
+            },
+            "buildingsFor": {
+              "n": 1014,
+              "p50": 1.4213999999992666,
+              "p95": 2.7210999999988417,
+              "max": 4.51600000000326,
+              "total": 1573.2318000000487
+            },
+            "snapshot": {
+              "n": 144,
+              "p50": 8.54739999999947,
+              "p95": 13.060899999996764,
+              "max": 17.345399999998335,
+              "total": 1274.5895999999993
+            },
+            "encode": {
+              "n": 144,
+              "p50": 6.903500000000349,
+              "p95": 11.160500000005413,
+              "max": 14.190999999998894,
+              "total": 1073.1261999999915
+            },
+            "move": {
+              "n": 1440,
+              "p50": 1.07220000000234,
+              "p95": 2.4421000000002095,
+              "max": 4.5855999999985215,
+              "total": 1380.4500999999727
+            },
+            "actionPlayer": {
+              "n": 1258,
+              "p50": 1.8427000000010594,
+              "p95": 3.5785000000032596,
+              "max": 8.618600000001607,
+              "total": 2657.9949000000015
+            }
+          },
+          "loop": {
+            "p95": 20.627455,
+            "p99": 39.813119,
+            "max": 64.421887
+          }
+        },
+        {
+          "name": "eight-moving-control-empty-fire",
+          "wallMs": 20047,
+          "events": 6382,
+          "cap": 20000,
+          "overflow": 0,
+          "paidRounds": 838,
+          "actors": [
+            {
+              "index": 0,
+              "sent": 128,
+              "acknowledged": 128,
+              "errors": [],
+              "corrections": 0,
+              "pending": 0,
+              "rttP95Ms": 33.005799999999
+            },
+            {
+              "index": 1,
+              "sent": 128,
+              "acknowledged": 128,
+              "errors": [],
+              "corrections": 0,
+              "pending": 0,
+              "rttP95Ms": 36.413000000000466
+            },
+            {
+              "index": 2,
+              "sent": 97,
+              "acknowledged": 97,
+              "errors": [],
+              "corrections": 0,
+              "pending": 0,
+              "rttP95Ms": 8.724600000001374
+            },
+            {
+              "index": 3,
+              "sent": 97,
+              "acknowledged": 97,
+              "errors": [],
+              "corrections": 0,
+              "pending": 0,
+              "rttP95Ms": 13.550500000012107
+            },
+            {
+              "index": 4,
+              "sent": 97,
+              "acknowledged": 97,
+              "errors": [],
+              "corrections": 0,
+              "pending": 0,
+              "rttP95Ms": 42.00909999999567
+            },
+            {
+              "index": 5,
+              "sent": 97,
+              "acknowledged": 97,
+              "errors": [],
+              "corrections": 0,
+              "pending": 0,
+              "rttP95Ms": 44.02139999999781
+            },
+            {
+              "index": 6,
+              "sent": 97,
+              "acknowledged": 97,
+              "errors": [],
+              "corrections": 0,
+              "pending": 0,
+              "rttP95Ms": 50.87949999999546
+            },
+            {
+              "index": 7,
+              "sent": 97,
+              "acknowledged": 97,
+              "errors": [],
+              "corrections": 0,
+              "pending": 0,
+              "rttP95Ms": 55.15769999999611
+            }
+          ],
+          "moves": {
+            "n": 964,
+            "totalMs": 1610.299700000236,
+            "p50Ms": 1.552400000000489,
+            "p95Ms": 2.6922000000049593,
+            "maxMs": 5.102700000003097
+          },
+          "stationary": {
+            "n": 0,
+            "totalMs": 0,
+            "p50Ms": 0,
+            "p95Ms": 0,
+            "maxMs": 0
+          },
+          "moving": {
+            "n": 964,
+            "totalMs": 1610.299700000236,
+            "p50Ms": 1.552400000000489,
+            "p95Ms": 2.6922000000049593,
+            "maxMs": 5.102700000003097
+          },
+          "queries": {
+            "n": 1061,
+            "totalMs": 1745.448199999977,
+            "p50Ms": 1.5252999999938766,
+            "p95Ms": 2.6620999999940977,
+            "maxMs": 5.063300000001618
+          },
+          "fullSnapshots": 97,
+          "stageCountsAndTotals": {
+            "tick": {
+              "n": 97,
+              "p50": 4.931299999996554,
+              "p95": 6.450700000001234,
+              "max": 7.224799999996321,
+              "total": 495.2729999999865
+            },
+            "snapshotPlayer": {
+              "n": 1614,
+              "p50": 0.0452000000004773,
+              "p95": 0.09329999999317806,
+              "max": 0.503100000001723,
+              "total": 78.65950000012526
+            },
+            "encodePlayer": {
+              "n": 1614,
+              "p50": 0.0028000000020256266,
+              "p95": 0.011700000002747402,
+              "max": 28.972600000000966,
+              "total": 569.8918000002304
+            },
+            "buildingsFor": {
+              "n": 1061,
+              "p50": 1.5252999999938766,
+              "p95": 2.6620999999940977,
+              "max": 5.063300000001618,
+              "total": 1745.448199999977
+            },
+            "snapshot": {
+              "n": 97,
+              "p50": 8.679199999998673,
+              "p95": 13.305400000004738,
+              "max": 21.035000000003492,
+              "total": 885.8582999999999
+            },
+            "encode": {
+              "n": 97,
+              "p50": 7.660700000000361,
+              "p95": 10.645700000000943,
+              "max": 13.031100000000151,
+              "total": 768.2321000000229
+            },
+            "move": {
+              "n": 964,
+              "p50": 1.552400000000489,
+              "p95": 2.6922000000049593,
+              "max": 5.102700000003097,
+              "total": 1610.299700000236
+            },
+            "actionPlayer": {
+              "n": 838,
+              "p50": 1.8817000000126427,
+              "p95": 2.3413999999975204,
+              "max": 5.723400000002584,
+              "total": 1653.6343999998935
+            }
+          },
+          "loop": {
+            "p95": 22.249471,
+            "p99": 40.271871,
+            "max": 64.290815
+          }
+        }
+      ],
+      "audit": {
+        "integrity": "ok",
+        "paidRounds": 2352,
+        "players": [
+          {
+            "index": 0,
+            "paidRounds": 450,
+            "ammoBefore": 2000,
+            "ammoAfter": 1550,
+            "hp": 100,
+            "satiety": 81.9385000000001,
+            "otherAssetsUnchanged": true
+          },
+          {
+            "index": 1,
+            "paidRounds": 450,
+            "ammoBefore": 2000,
+            "ammoAfter": 1550,
+            "hp": 100,
+            "satiety": 81.96350000000011,
+            "otherAssetsUnchanged": true
+          },
+          {
+            "index": 2,
+            "paidRounds": 242,
+            "ammoBefore": 2000,
+            "ammoAfter": 1758,
+            "hp": 100,
+            "satiety": 87.13449999999999,
+            "otherAssetsUnchanged": true
+          },
+          {
+            "index": 3,
+            "paidRounds": 242,
+            "ammoBefore": 2000,
+            "ammoAfter": 1758,
+            "hp": 100,
+            "satiety": 87.11524999999999,
+            "otherAssetsUnchanged": true
+          },
+          {
+            "index": 4,
+            "paidRounds": 242,
+            "ammoBefore": 2000,
+            "ammoAfter": 1758,
+            "hp": 100,
+            "satiety": 87.35199999999999,
+            "otherAssetsUnchanged": true
+          },
+          {
+            "index": 5,
+            "paidRounds": 242,
+            "ammoBefore": 2000,
+            "ammoAfter": 1758,
+            "hp": 100,
+            "satiety": 87.38649999999998,
+            "otherAssetsUnchanged": true
+          },
+          {
+            "index": 6,
+            "paidRounds": 242,
+            "ammoBefore": 2000,
+            "ammoAfter": 1758,
+            "hp": 100,
+            "satiety": 87.36500000000005,
+            "otherAssetsUnchanged": true
+          },
+          {
+            "index": 7,
+            "paidRounds": 242,
+            "ammoBefore": 2000,
+            "ammoAfter": 1758,
+            "hp": 100,
+            "satiety": 87.35825000000008,
+            "otherAssetsUnchanged": true
+          }
+        ],
+        "buildingsUnchanged": 5675,
+        "floorsUnchanged": 4000,
+        "defenseAmmoUnchanged": 540,
+        "otherSharedAssetsUnchanged": true,
+        "consistentBackupRestore": true,
+        "lastCommittedCoreReplays": 8
+      }
+    },
+    {
+      "mode": "before-return",
+      "implementation": "Prior e296463 move method",
+      "fixture": {
+        "scope": "Explicit synthetic camp/roles,2000ammo/100satiety/normal existing rifle/vest. No browser/native/earned damage/capacity acceptance. Real rules,clock,SQLite,finite ammunition and ordinary small corridor movements.",
+        "buildings": 5675,
+        "floors": 4000,
+        "defensiveAmmo": 540,
+        "baselineActors": [
+          {
+            "index": 0,
+            "ammo": 2000,
+            "hp": 100,
+            "satiety": 100
+          },
+          {
+            "index": 1,
+            "ammo": 2000,
+            "hp": 100,
+            "satiety": 100
+          },
+          {
+            "index": 2,
+            "ammo": 2000,
+            "hp": 100,
+            "satiety": 100
+          },
+          {
+            "index": 3,
+            "ammo": 2000,
+            "hp": 100,
+            "satiety": 100
+          },
+          {
+            "index": 4,
+            "ammo": 2000,
+            "hp": 100,
+            "satiety": 100
+          },
+          {
+            "index": 5,
+            "ammo": 2000,
+            "hp": 100,
+            "satiety": 100
+          },
+          {
+            "index": 6,
+            "ammo": 2000,
+            "hp": 100,
+            "satiety": 100
+          },
+          {
+            "index": 7,
+            "ammo": 2000,
+            "hp": 100,
+            "satiety": 100
+          }
+        ],
+        "cadence": {
+          "mainMotion": "stationary first two phases, sinusoid all-moving control third",
+          "mainsUnpacedMs": 150,
+          "mainsMoveMs": 100,
+          "botsResponsePacedMs": 200
+        }
+      },
+      "phases": [
+        {
+          "name": "two-stationary-empty-fire",
+          "wallMs": 20005,
+          "events": 1835,
+          "cap": 20000,
+          "overflow": 0,
+          "paidRounds": 254,
+          "actors": [
+            {
+              "index": 0,
+              "sent": 127,
+              "acknowledged": 127,
+              "errors": [],
+              "corrections": 0,
+              "pending": 0,
+              "rttP95Ms": 15.239100000002509
+            },
+            {
+              "index": 1,
+              "sent": 127,
+              "acknowledged": 127,
+              "errors": [],
+              "corrections": 0,
+              "pending": 0,
+              "rttP95Ms": 21.23619999999937
+            }
+          ],
+          "moves": {
+            "n": 376,
+            "totalMs": 604.364700000021,
+            "p50Ms": 1.530800000000454,
+            "p95Ms": 2.6080000000001746,
+            "maxMs": 3.4181000000003223
+          },
+          "stationary": {
+            "n": 376,
+            "totalMs": 604.364700000021,
+            "p50Ms": 1.530800000000454,
+            "p95Ms": 2.6080000000001746,
+            "maxMs": 3.4181000000003223
+          },
+          "moving": {
+            "n": 0,
+            "totalMs": 0,
+            "p50Ms": 0,
+            "p95Ms": 0,
+            "maxMs": 0
+          },
+          "queries": {
+            "n": 400,
+            "totalMs": 624.8325000000241,
+            "p50Ms": 1.4873000000006869,
+            "p95Ms": 2.5578999999997905,
+            "maxMs": 3.3868999999999687
+          },
+          "fullSnapshots": 24,
+          "stageCountsAndTotals": {
+            "buildingsFor": {
+              "n": 400,
+              "p50": 1.4873000000006869,
+              "p95": 2.5578999999997905,
+              "max": 3.3868999999999687,
+              "total": 624.8325000000241
+            },
+            "move": {
+              "n": 376,
+              "p50": 1.530800000000454,
+              "p95": 2.6080000000001746,
+              "max": 3.4181000000003223,
+              "total": 604.364700000021
+            },
+            "snapshotPlayer": {
+              "n": 330,
+              "p50": 0.06270000000040454,
+              "p95": 0.1386000000002241,
+              "max": 0.48660000000018044,
+              "total": 23.44720000000507
+            },
+            "actionPlayer": {
+              "n": 254,
+              "p50": 2.249500000001717,
+              "p95": 5.921200000000226,
+              "max": 13.18250000000262,
+              "total": 723.4157000000064
+            },
+            "encodePlayer": {
+              "n": 330,
+              "p50": 0.0039999999999054126,
+              "p95": 0.015199999999822467,
+              "max": 16.927599999999074,
+              "total": 119.09910000000059
+            },
+            "tick": {
+              "n": 97,
+              "p50": 2.991600000001199,
+              "p95": 8.83179999999993,
+              "max": 11.329499999999825,
+              "total": 383.9097000000213
+            },
+            "snapshot": {
+              "n": 24,
+              "p50": 7.548399999999674,
+              "p95": 9.922500000000582,
+              "max": 12.050699999999779,
+              "total": 182.65869999999632
+            },
+            "encode": {
+              "n": 24,
+              "p50": 7.194999999999709,
+              "p95": 10.078299999999217,
+              "max": 12.048299999999472,
+              "total": 184.28299999999354
+            }
+          },
+          "loop": {
+            "p95": 15.826943,
+            "p99": 20.594687,
+            "max": 50.462719
+          }
+        },
+        {
+          "name": "eight-mixed-empty-fire",
+          "wallMs": 30028,
+          "events": 9088,
+          "cap": 20000,
+          "overflow": 0,
+          "paidRounds": 1254,
+          "actors": [
+            {
+              "index": 0,
+              "sent": 192,
+              "acknowledged": 192,
+              "errors": [],
+              "corrections": 0,
+              "pending": 0,
+              "rttP95Ms": 44.876600000003236
+            },
+            {
+              "index": 1,
+              "sent": 192,
+              "acknowledged": 192,
+              "errors": [],
+              "corrections": 0,
+              "pending": 0,
+              "rttP95Ms": 52.56559999999445
+            },
+            {
+              "index": 2,
+              "sent": 145,
+              "acknowledged": 145,
+              "errors": [],
+              "corrections": 0,
+              "pending": 0,
+              "rttP95Ms": 48.5315000000046
+            },
+            {
+              "index": 3,
+              "sent": 145,
+              "acknowledged": 145,
+              "errors": [],
+              "corrections": 0,
+              "pending": 0,
+              "rttP95Ms": 51.23159999999916
+            },
+            {
+              "index": 4,
+              "sent": 145,
+              "acknowledged": 145,
+              "errors": [],
+              "corrections": 0,
+              "pending": 0,
+              "rttP95Ms": 53.42480000000069
+            },
+            {
+              "index": 5,
+              "sent": 145,
+              "acknowledged": 145,
+              "errors": [],
+              "corrections": 0,
+              "pending": 0,
+              "rttP95Ms": 57.11200000000099
+            },
+            {
+              "index": 6,
+              "sent": 145,
+              "acknowledged": 145,
+              "errors": [],
+              "corrections": 0,
+              "pending": 0,
+              "rttP95Ms": 60.81970000000001
+            },
+            {
+              "index": 7,
+              "sent": 145,
+              "acknowledged": 145,
+              "errors": [],
+              "corrections": 0,
+              "pending": 0,
+              "rttP95Ms": 66.42170000000624
+            }
+          ],
+          "moves": {
+            "n": 1438,
+            "totalMs": 2415.376999999986,
+            "p50Ms": 1.587599999998929,
+            "p95Ms": 2.7797000000064145,
+            "maxMs": 4.748200000001816
+          },
+          "stationary": {
+            "n": 568,
+            "totalMs": 955.589799999987,
+            "p50Ms": 1.590700000000652,
+            "p95Ms": 2.6777000000001863,
+            "maxMs": 4.748200000001816
+          },
+          "moving": {
+            "n": 870,
+            "totalMs": 1459.7871999999988,
+            "p50Ms": 1.5874000000039814,
+            "p95Ms": 2.7894000000014785,
+            "maxMs": 4.119599999998172
+          },
+          "queries": {
+            "n": 1582,
+            "totalMs": 2598.3857000000644,
+            "p50Ms": 1.5556999999971595,
+            "p95Ms": 2.7291000000041095,
+            "maxMs": 4.7141000000046915
+          },
+          "fullSnapshots": 144,
+          "stageCountsAndTotals": {
+            "tick": {
+              "n": 146,
+              "p50": 5.201200000003155,
+              "p95": 7.755799999998999,
+              "max": 11.05290000000241,
+              "total": 752.7292000000016
+            },
+            "snapshotPlayer": {
+              "n": 2190,
+              "p50": 0.049099999996542465,
+              "p95": 0.10820000000239816,
+              "max": 0.48940000000220607,
+              "total": 118.02699999975812
+            },
+            "encodePlayer": {
+              "n": 2190,
+              "p50": 0.0031999999991967343,
+              "p95": 0.011899999997694977,
+              "max": 29.04080000000249,
+              "total": 843.8193000000356
+            },
+            "buildingsFor": {
+              "n": 1582,
+              "p50": 1.5556999999971595,
+              "p95": 2.7291000000041095,
+              "max": 4.7141000000046915,
+              "total": 2598.3857000000644
+            },
+            "move": {
+              "n": 1438,
+              "p50": 1.587599999998929,
+              "p95": 2.7797000000064145,
+              "max": 4.748200000001816,
+              "total": 2415.376999999986
+            },
+            "actionPlayer": {
+              "n": 1254,
+              "p50": 1.83889999999883,
+              "p95": 2.9299000000028173,
+              "max": 8.938800000003539,
+              "total": 2568.4951000000074
+            },
+            "snapshot": {
+              "n": 144,
+              "p50": 8.735899999999674,
+              "p95": 13.534099999997125,
+              "max": 17.04780000000028,
+              "total": 1316.1817999999876
+            },
+            "encode": {
+              "n": 144,
+              "p50": 7.769700000004377,
+              "p95": 12.0596000000005,
+              "max": 16.60280000000057,
+              "total": 1179.3136000000159
+            }
+          },
+          "loop": {
+            "p95": 29.949951,
+            "p99": 58.097663,
+            "max": 116.326399
+          }
+        },
+        {
+          "name": "eight-moving-control-empty-fire",
+          "wallMs": 20031,
+          "events": 6059,
+          "cap": 20000,
+          "overflow": 0,
+          "paidRounds": 838,
+          "actors": [
+            {
+              "index": 0,
+              "sent": 128,
+              "acknowledged": 128,
+              "errors": [],
+              "corrections": 0,
+              "pending": 0,
+              "rttP95Ms": 42.425200000005134
+            },
+            {
+              "index": 1,
+              "sent": 128,
+              "acknowledged": 128,
+              "errors": [],
+              "corrections": 0,
+              "pending": 0,
+              "rttP95Ms": 46.00830000000133
+            },
+            {
+              "index": 2,
+              "sent": 97,
+              "acknowledged": 97,
+              "errors": [],
+              "corrections": 0,
+              "pending": 0,
+              "rttP95Ms": 37.88330000000133
+            },
+            {
+              "index": 3,
+              "sent": 97,
+              "acknowledged": 97,
+              "errors": [],
+              "corrections": 0,
+              "pending": 0,
+              "rttP95Ms": 45.03779999999824
+            },
+            {
+              "index": 4,
+              "sent": 97,
+              "acknowledged": 97,
+              "errors": [],
+              "corrections": 0,
+              "pending": 0,
+              "rttP95Ms": 47.94569999999658
+            },
+            {
+              "index": 5,
+              "sent": 97,
+              "acknowledged": 97,
+              "errors": [],
+              "corrections": 0,
+              "pending": 0,
+              "rttP95Ms": 52.0454000000027
+            },
+            {
+              "index": 6,
+              "sent": 97,
+              "acknowledged": 97,
+              "errors": [],
+              "corrections": 0,
+              "pending": 0,
+              "rttP95Ms": 58.97140000000218
+            },
+            {
+              "index": 7,
+              "sent": 97,
+              "acknowledged": 97,
+              "errors": [],
+              "corrections": 0,
+              "pending": 0,
+              "rttP95Ms": 66.41270000000077
+            }
+          ],
+          "moves": {
+            "n": 964,
+            "totalMs": 1603.4961999999578,
+            "p50Ms": 1.5841999999975087,
+            "p95Ms": 2.625400000004447,
+            "maxMs": 4.848899999997229
+          },
+          "stationary": {
+            "n": 0,
+            "totalMs": 0,
+            "p50Ms": 0,
+            "p95Ms": 0,
+            "maxMs": 0
+          },
+          "moving": {
+            "n": 964,
+            "totalMs": 1603.4961999999578,
+            "p50Ms": 1.5841999999975087,
+            "p95Ms": 2.625400000004447,
+            "maxMs": 4.848899999997229
+          },
+          "queries": {
+            "n": 1060,
+            "totalMs": 1728.5229999999065,
+            "p50Ms": 1.5562000000063563,
+            "p95Ms": 2.605600000002596,
+            "maxMs": 4.805899999999383
+          },
+          "fullSnapshots": 96,
+          "stageCountsAndTotals": {
+            "tick": {
+              "n": 97,
+              "p50": 4.77560000000085,
+              "p95": 8.60570000000007,
+              "max": 10.42450000000099,
+              "total": 473.8315000000075
+            },
+            "buildingsFor": {
+              "n": 1060,
+              "p50": 1.5562000000063563,
+              "p95": 2.605600000002596,
+              "max": 4.805899999999383,
+              "total": 1728.5229999999065
+            },
+            "move": {
+              "n": 964,
+              "p50": 1.5841999999975087,
+              "p95": 2.625400000004447,
+              "max": 4.848899999997229,
+              "total": 1603.4961999999578
+            },
+            "snapshotPlayer": {
+              "n": 1454,
+              "p50": 0.04579999999987194,
+              "p95": 0.0989999999947031,
+              "max": 0.46300000000337604,
+              "total": 71.13229999994655
+            },
+            "actionPlayer": {
+              "n": 838,
+              "p50": 1.8801999999996042,
+              "p95": 5.1340000000054715,
+              "max": 9.026299999997718,
+              "total": 1921.315100000058
+            },
+            "encodePlayer": {
+              "n": 1454,
+              "p50": 0.003200000006472692,
+              "p95": 0.011800000000221189,
+              "max": 23.652500000003783,
+              "total": 514.342800000064
+            },
+            "snapshot": {
+              "n": 96,
+              "p50": 8.343800000002375,
+              "p95": 12.593999999997322,
+              "max": 15.429900000002817,
+              "total": 844.6669000000184
+            },
+            "encode": {
+              "n": 96,
+              "p50": 7.227599999998347,
+              "p95": 10.676899999998568,
+              "max": 11.752599999999802,
+              "total": 734.1429999999746
+            }
+          },
+          "loop": {
+            "p95": 22.609919,
+            "p99": 44.957695,
+            "max": 64.356351
+          }
+        }
+      ],
+      "audit": {
+        "integrity": "ok",
+        "paidRounds": 2346,
+        "players": [
+          {
+            "index": 0,
+            "paidRounds": 447,
+            "ammoBefore": 2000,
+            "ammoAfter": 1553,
+            "hp": 100,
+            "satiety": 81.96075000000003,
+            "otherAssetsUnchanged": true
+          },
+          {
+            "index": 1,
+            "paidRounds": 447,
+            "ammoBefore": 2000,
+            "ammoAfter": 1553,
+            "hp": 100,
+            "satiety": 81.93625000000006,
+            "otherAssetsUnchanged": true
+          },
+          {
+            "index": 2,
+            "paidRounds": 242,
+            "ammoBefore": 2000,
+            "ammoAfter": 1758,
+            "hp": 100,
+            "satiety": 87.11350000000002,
+            "otherAssetsUnchanged": true
+          },
+          {
+            "index": 3,
+            "paidRounds": 242,
+            "ammoBefore": 2000,
+            "ammoAfter": 1758,
+            "hp": 100,
+            "satiety": 87.34674999999997,
+            "otherAssetsUnchanged": true
+          },
+          {
+            "index": 4,
+            "paidRounds": 242,
+            "ammoBefore": 2000,
+            "ammoAfter": 1758,
+            "hp": 100,
+            "satiety": 87.37424999999998,
+            "otherAssetsUnchanged": true
+          },
+          {
+            "index": 5,
+            "paidRounds": 242,
+            "ammoBefore": 2000,
+            "ammoAfter": 1758,
+            "hp": 100,
+            "satiety": 87.35325000000002,
+            "otherAssetsUnchanged": true
+          },
+          {
+            "index": 6,
+            "paidRounds": 242,
+            "ammoBefore": 2000,
+            "ammoAfter": 1758,
+            "hp": 100,
+            "satiety": 87.33550000000007,
+            "otherAssetsUnchanged": true
+          },
+          {
+            "index": 7,
+            "paidRounds": 242,
+            "ammoBefore": 2000,
+            "ammoAfter": 1758,
+            "hp": 100,
+            "satiety": 87.36200000000007,
+            "otherAssetsUnchanged": true
+          }
+        ],
+        "buildingsUnchanged": 5675,
+        "floorsUnchanged": 4000,
+        "defenseAmmoUnchanged": 540,
+        "otherSharedAssetsUnchanged": true,
+        "consistentBackupRestore": true,
+        "lastCommittedCoreReplays": 8
+      }
+    },
+    {
+      "mode": "after-exact",
+      "implementation": "Final strict X/Y comparison",
+      "fixture": {
+        "scope": "Explicit synthetic camp/roles,2000ammo/100satiety/normal existing rifle/vest. No browser/native/earned damage/capacity acceptance. Real rules,clock,SQLite,finite ammunition and ordinary small corridor movements.",
+        "buildings": 5675,
+        "floors": 4000,
+        "defensiveAmmo": 540,
+        "baselineActors": [
+          {
+            "index": 0,
+            "ammo": 2000,
+            "hp": 100,
+            "satiety": 100
+          },
+          {
+            "index": 1,
+            "ammo": 2000,
+            "hp": 100,
+            "satiety": 100
+          },
+          {
+            "index": 2,
+            "ammo": 2000,
+            "hp": 100,
+            "satiety": 100
+          },
+          {
+            "index": 3,
+            "ammo": 2000,
+            "hp": 100,
+            "satiety": 100
+          },
+          {
+            "index": 4,
+            "ammo": 2000,
+            "hp": 100,
+            "satiety": 100
+          },
+          {
+            "index": 5,
+            "ammo": 2000,
+            "hp": 100,
+            "satiety": 100
+          },
+          {
+            "index": 6,
+            "ammo": 2000,
+            "hp": 100,
+            "satiety": 100
+          },
+          {
+            "index": 7,
+            "ammo": 2000,
+            "hp": 100,
+            "satiety": 100
+          }
+        ],
+        "cadence": {
+          "mainMotion": "stationary first two phases, sinusoid all-moving control third",
+          "mainsUnpacedMs": 150,
+          "mainsMoveMs": 100,
+          "botsResponsePacedMs": 200
+        }
+      },
+      "phases": [
+        {
+          "name": "two-stationary-empty-fire",
+          "wallMs": 20014,
+          "events": 1391,
+          "cap": 20000,
+          "overflow": 0,
+          "paidRounds": 256,
+          "actors": [
+            {
+              "index": 0,
+              "sent": 128,
+              "acknowledged": 128,
+              "errors": [],
+              "corrections": 0,
+              "pending": 0,
+              "rttP95Ms": 7.2620999999999185
+            },
+            {
+              "index": 1,
+              "sent": 128,
+              "acknowledged": 128,
+              "errors": [],
+              "corrections": 0,
+              "pending": 0,
+              "rttP95Ms": 34.18109999999979
+            }
+          ],
+          "moves": {
+            "n": 378,
+            "totalMs": 4.584700000002158,
+            "p50Ms": 0.009300000001530861,
+            "p95Ms": 0.03099999999994907,
+            "maxMs": 0.22949999999991633
+          },
+          "stationary": {
+            "n": 378,
+            "totalMs": 4.584700000002158,
+            "p50Ms": 0.009300000001530861,
+            "p95Ms": 0.03099999999994907,
+            "maxMs": 0.22949999999991633
+          },
+          "moving": {
+            "n": 0,
+            "totalMs": 0,
+            "p50Ms": 0,
+            "p95Ms": 0,
+            "maxMs": 0
+          },
+          "queries": {
+            "n": 24,
+            "totalMs": 41.853599999999915,
+            "p50Ms": 1.8191999999999098,
+            "p95Ms": 2.3104000000002998,
+            "maxMs": 2.4825000000000728
+          },
+          "fullSnapshots": 24,
+          "stageCountsAndTotals": {
+            "move": {
+              "n": 378,
+              "p50": 0.009300000001530861,
+              "p95": 0.03099999999994907,
+              "max": 0.22949999999991633,
+              "total": 4.584700000002158
+            },
+            "tick": {
+              "n": 97,
+              "p50": 3.0428000000010798,
+              "p95": 5.891399999999521,
+              "max": 7.755200000000059,
+              "total": 334.05430000000024
+            },
+            "snapshotPlayer": {
+              "n": 294,
+              "p50": 0.06819999999788706,
+              "p95": 0.13829999999961728,
+              "max": 0.22650000000021464,
+              "total": 21.94569999997816
+            },
+            "actionPlayer": {
+              "n": 256,
+              "p50": 2.1096999999999753,
+              "p95": 2.9773000000004686,
+              "max": 10.577800000002753,
+              "total": 576.706999999999
+            },
+            "encodePlayer": {
+              "n": 294,
+              "p50": 0.004300000000512227,
+              "p95": 0.014699999999720603,
+              "max": 19.941400000001522,
+              "total": 135.00070000003575
+            },
+            "buildingsFor": {
+              "n": 24,
+              "p50": 1.8191999999999098,
+              "p95": 2.3104000000002998,
+              "max": 2.4825000000000728,
+              "total": 41.853599999999915
+            },
+            "snapshot": {
+              "n": 24,
+              "p50": 9.080900000000838,
+              "p95": 12.600800000000163,
+              "max": 13.513699999999517,
+              "total": 225.66330000000016
+            },
+            "encode": {
+              "n": 24,
+              "p50": 7.347600000000057,
+              "p95": 11.858799999999974,
+              "max": 12.620099999998274,
+              "total": 185.3763999999951
+            }
+          },
+          "loop": {
+            "p95": 15.998975,
+            "p99": 20.840447,
+            "max": 50.298879
+          }
+        },
+        {
+          "name": "eight-mixed-empty-fire",
+          "wallMs": 30011,
+          "events": 8034,
+          "cap": 20000,
+          "overflow": 0,
+          "paidRounds": 1252,
+          "actors": [
+            {
+              "index": 0,
+              "sent": 191,
+              "acknowledged": 191,
+              "errors": [],
+              "corrections": 0,
+              "pending": 0,
+              "rttP95Ms": 30.965399999997317
+            },
+            {
+              "index": 1,
+              "sent": 191,
+              "acknowledged": 191,
+              "errors": [],
+              "corrections": 0,
+              "pending": 0,
+              "rttP95Ms": 31.94970000000467
+            },
+            {
+              "index": 2,
+              "sent": 145,
+              "acknowledged": 145,
+              "errors": [],
+              "corrections": 0,
+              "pending": 0,
+              "rttP95Ms": 11.671599999997852
+            },
+            {
+              "index": 3,
+              "sent": 145,
+              "acknowledged": 145,
+              "errors": [],
+              "corrections": 0,
+              "pending": 0,
+              "rttP95Ms": 39.50409999999829
+            },
+            {
+              "index": 4,
+              "sent": 145,
+              "acknowledged": 145,
+              "errors": [],
+              "corrections": 0,
+              "pending": 0,
+              "rttP95Ms": 42.28179999999702
+            },
+            {
+              "index": 5,
+              "sent": 145,
+              "acknowledged": 145,
+              "errors": [],
+              "corrections": 0,
+              "pending": 0,
+              "rttP95Ms": 45.136599999998
+            },
+            {
+              "index": 6,
+              "sent": 145,
+              "acknowledged": 145,
+              "errors": [],
+              "corrections": 0,
+              "pending": 0,
+              "rttP95Ms": 47.21279999999388
+            },
+            {
+              "index": 7,
+              "sent": 145,
+              "acknowledged": 145,
+              "errors": [],
+              "corrections": 0,
+              "pending": 0,
+              "rttP95Ms": 52.61769999999524
+            }
+          ],
+          "moves": {
+            "n": 1438,
+            "totalMs": 1309.941900000067,
+            "p50Ms": 1.0447999999996682,
+            "p95Ms": 2.2695999999996275,
+            "maxMs": 4.250800000001618
+          },
+          "stationary": {
+            "n": 568,
+            "totalMs": 4.088999999992666,
+            "p50Ms": 0.004600000000209548,
+            "p95Ms": 0.02470000000175787,
+            "maxMs": 0.05529999999998836
+          },
+          "moving": {
+            "n": 870,
+            "totalMs": 1305.8529000000744,
+            "p50Ms": 1.4002000000036787,
+            "p95Ms": 2.4380999999993946,
+            "maxMs": 4.250800000001618
+          },
+          "queries": {
+            "n": 1014,
+            "totalMs": 1484.5549000000647,
+            "p50Ms": 1.353900000001886,
+            "p95Ms": 2.4038000000000466,
+            "maxMs": 4.195300000006682
+          },
+          "fullSnapshots": 144,
+          "stageCountsAndTotals": {
+            "move": {
+              "n": 1438,
+              "p50": 1.0447999999996682,
+              "p95": 2.2695999999996275,
+              "max": 4.250800000001618,
+              "total": 1309.941900000067
+            },
+            "tick": {
+              "n": 146,
+              "p50": 4.286100000004808,
+              "p95": 7.132499999999709,
+              "max": 11.326200000003155,
+              "total": 620.1630000000296
+            },
+            "snapshotPlayer": {
+              "n": 1948,
+              "p50": 0.04760000000169384,
+              "p95": 0.11270000000513392,
+              "max": 0.3382000000019616,
+              "total": 104.39660000001459
+            },
+            "actionPlayer": {
+              "n": 1252,
+              "p50": 1.8692000000010012,
+              "p95": 3.9078000000008615,
+              "max": 11.260600000001432,
+              "total": 2704.389799999881
+            },
+            "encodePlayer": {
+              "n": 1948,
+              "p50": 0.002899999999499414,
+              "p95": 0.010800000003655441,
+              "max": 29.094600000003993,
+              "total": 739.7480000000178
+            },
+            "buildingsFor": {
+              "n": 1014,
+              "p50": 1.353900000001886,
+              "p95": 2.4038000000000466,
+              "max": 4.195300000006682,
+              "total": 1484.5549000000647
+            },
+            "snapshot": {
+              "n": 144,
+              "p50": 7.742799999999988,
+              "p95": 12.875,
+              "max": 16.241000000001804,
+              "total": 1207.442999999981
+            },
+            "encode": {
+              "n": 144,
+              "p50": 6.510900000001129,
+              "p95": 9.915699999997742,
+              "max": 12.843199999995704,
+              "total": 1003.8213000000032
+            }
+          },
+          "loop": {
+            "p95": 19.890175,
+            "p99": 37.060607,
+            "max": 60.227583
+          }
+        },
+        {
+          "name": "eight-moving-control-empty-fire",
+          "wallMs": 20010,
+          "events": 5745,
+          "cap": 20000,
+          "overflow": 0,
+          "paidRounds": 836,
+          "actors": [
+            {
+              "index": 0,
+              "sent": 127,
+              "acknowledged": 127,
+              "errors": [],
+              "corrections": 0,
+              "pending": 0,
+              "rttP95Ms": 37.56989999999496
+            },
+            {
+              "index": 1,
+              "sent": 127,
+              "acknowledged": 127,
+              "errors": [],
+              "corrections": 0,
+              "pending": 0,
+              "rttP95Ms": 37.862700000005134
+            },
+            {
+              "index": 2,
+              "sent": 97,
+              "acknowledged": 97,
+              "errors": [],
+              "corrections": 0,
+              "pending": 0,
+              "rttP95Ms": 40.384600000004866
+            },
+            {
+              "index": 3,
+              "sent": 97,
+              "acknowledged": 97,
+              "errors": [],
+              "corrections": 0,
+              "pending": 0,
+              "rttP95Ms": 43.491299999994226
+            },
+            {
+              "index": 4,
+              "sent": 97,
+              "acknowledged": 97,
+              "errors": [],
+              "corrections": 0,
+              "pending": 0,
+              "rttP95Ms": 43.59540000000561
+            },
+            {
+              "index": 5,
+              "sent": 97,
+              "acknowledged": 97,
+              "errors": [],
+              "corrections": 0,
+              "pending": 0,
+              "rttP95Ms": 47.83389999999781
+            },
+            {
+              "index": 6,
+              "sent": 97,
+              "acknowledged": 97,
+              "errors": [],
+              "corrections": 0,
+              "pending": 0,
+              "rttP95Ms": 51.047300000005635
+            },
+            {
+              "index": 7,
+              "sent": 97,
+              "acknowledged": 97,
+              "errors": [],
+              "corrections": 0,
+              "pending": 0,
+              "rttP95Ms": 58.693599999998696
+            }
+          ],
+          "moves": {
+            "n": 962,
+            "totalMs": 1366.7238000000434,
+            "p50Ms": 1.3171000000002095,
+            "p95Ms": 2.3972000000067055,
+            "maxMs": 5.016400000000431
+          },
+          "stationary": {
+            "n": 0,
+            "totalMs": 0,
+            "p50Ms": 0,
+            "p95Ms": 0,
+            "maxMs": 0
+          },
+          "moving": {
+            "n": 962,
+            "totalMs": 1366.7238000000434,
+            "p50Ms": 1.3171000000002095,
+            "p95Ms": 2.3972000000067055,
+            "maxMs": 5.016400000000431
+          },
+          "queries": {
+            "n": 1058,
+            "totalMs": 1477.1261000000159,
+            "p50Ms": 1.2955000000001746,
+            "p95Ms": 2.328800000002957,
+            "maxMs": 4.97110000000248
+          },
+          "fullSnapshots": 96,
+          "stageCountsAndTotals": {
+            "buildingsFor": {
+              "n": 1058,
+              "p50": 1.2955000000001746,
+              "p95": 2.328800000002957,
+              "max": 4.97110000000248,
+              "total": 1477.1261000000159
+            },
+            "move": {
+              "n": 962,
+              "p50": 1.3171000000002095,
+              "p95": 2.3972000000067055,
+              "max": 5.016400000000431,
+              "total": 1366.7238000000434
+            },
+            "tick": {
+              "n": 97,
+              "p50": 4.622799999997369,
+              "p95": 6.593300000000454,
+              "max": 8.142900000006193,
+              "total": 423.2231000000538
+            },
+            "snapshot": {
+              "n": 96,
+              "p50": 7.85570000000007,
+              "p95": 12.882599999997183,
+              "max": 17.907399999996414,
+              "total": 809.3860999999888
+            },
+            "encode": {
+              "n": 96,
+              "p50": 6.6952000000019325,
+              "p95": 10.314600000005157,
+              "max": 12.856399999996938,
+              "total": 680.4557999999597
+            },
+            "snapshotPlayer": {
+              "n": 1300,
+              "p50": 0.046699999998963904,
+              "p95": 0.09509999999136198,
+              "max": 0.2393999999985681,
+              "total": 64.27679999997781
+            },
+            "actionPlayer": {
+              "n": 836,
+              "p50": 1.8484000000025844,
+              "p95": 2.7122999999992317,
+              "max": 10.170500000000175,
+              "total": 1659.8099000001093
+            },
+            "encodePlayer": {
+              "n": 1300,
+              "p50": 0.002899999999499414,
+              "p95": 0.009700000002339948,
+              "max": 22.83980000000156,
+              "total": 500.78690000026836
+            }
+          },
+          "loop": {
+            "p95": 21.463039,
+            "p99": 46.923775,
+            "max": 95.354879
+          }
+        }
+      ],
+      "audit": {
+        "integrity": "ok",
+        "paidRounds": 2344,
+        "players": [
+          {
+            "index": 0,
+            "paidRounds": 446,
+            "ammoBefore": 2000,
+            "ammoAfter": 1554,
+            "hp": 100,
+            "satiety": 81.97300000000001,
+            "otherAssetsUnchanged": true
+          },
+          {
+            "index": 1,
+            "paidRounds": 446,
+            "ammoBefore": 2000,
+            "ammoAfter": 1554,
+            "hp": 100,
+            "satiety": 81.99900000000001,
+            "otherAssetsUnchanged": true
+          },
+          {
+            "index": 2,
+            "paidRounds": 242,
+            "ammoBefore": 2000,
+            "ammoAfter": 1758,
+            "hp": 100,
+            "satiety": 87.1225,
+            "otherAssetsUnchanged": true
+          },
+          {
+            "index": 3,
+            "paidRounds": 242,
+            "ammoBefore": 2000,
+            "ammoAfter": 1758,
+            "hp": 100,
+            "satiety": 87.147,
+            "otherAssetsUnchanged": true
+          },
+          {
+            "index": 4,
+            "paidRounds": 242,
+            "ammoBefore": 2000,
+            "ammoAfter": 1758,
+            "hp": 100,
+            "satiety": 87.38049999999994,
+            "otherAssetsUnchanged": true
+          },
+          {
+            "index": 5,
+            "paidRounds": 242,
+            "ammoBefore": 2000,
+            "ammoAfter": 1758,
+            "hp": 100,
+            "satiety": 87.40674999999995,
+            "otherAssetsUnchanged": true
+          },
+          {
+            "index": 6,
+            "paidRounds": 242,
+            "ammoBefore": 2000,
+            "ammoAfter": 1758,
+            "hp": 100,
+            "satiety": 87.377,
+            "otherAssetsUnchanged": true
+          },
+          {
+            "index": 7,
+            "paidRounds": 242,
+            "ammoBefore": 2000,
+            "ammoAfter": 1758,
+            "hp": 100,
+            "satiety": 87.404,
+            "otherAssetsUnchanged": true
+          }
+        ],
+        "buildingsUnchanged": 5675,
+        "floorsUnchanged": 4000,
+        "defenseAmmoUnchanged": 540,
+        "otherSharedAssetsUnchanged": true,
+        "consistentBackupRestore": true,
+        "lastCommittedCoreReplays": 8
+      }
+    }
+  ],
+  "interpretation": [
+    "Current actual-client raw predecessor showed2522 native position packets,2520 consecutive same coordinates in a75s mixed capture. This is an opportunity count, not proof all those packets were accepted or the cause of original stalls.",
+    "Real protocol runs order is before / draft-after / before-return / final-after-exact, each with20s two stationary roles,30s two stationary plus6moving response-paced roles,20s all moving. Only old/new move implementation changes; three new owned copies have explicit pre-start2000ammo/100satiety/normal rifle-vest, no asset reset during measurement. No browser/native/render load.",
+    "Nominal main150ms timers are response-independent, not exact constant offered load; six bots are response-paced200ms and reduce load when replies slow. Actual per-role counts differ slightly. All observed errors/corrections/pending zero, all recorded moves accepted; explicit later audit asserts these conditions.",
+    "After skips exactly the stationary-count building queries: queries equal moving plus full snapshots; before variants equal all moves plus snapshots. Compare recorded counts and conditional method costs, not claimed whole-game speedup. Synchronous method wall durations include nested work, probe/GC/scheduling/SQL effects and must not be summed as exclusive CPU.",
+    "In mixed sample, same570 stationary packets cost857.3202ms before vs4.4392ms after. Query calls1584 to1014, total move2183.2117ms to1380.4501ms; moving subset1325.8915ms to1376.0109ms shows no moving-path improvement.",
+    "All-moving control964packets: initial before1293.3566ms, after1610.2997ms, return-before1603.4962ms. Returning old code also slowed, so the first one-way difference cannot be assigned solely to the change. This nonrandomized short ABA cannot prove no moving regression or full capacity; loop/RTT remain variable. Both initial asymmetric-call-shape draft and exact micro all-moving after are slower in4of5 rounds, retained rather than hidden. Reviewer found before assigned own-instance move while after used prototype, so balancedExactMicrobenchmark assigns both as own methods. Even balanced exact all-moving after is slower in4of5 rounds (about18.4%,5.9%,5.3%,-4.9%,7.4%); do not erase that risk signal. Different implementation modules, shared JIT/GC, fixed scenario order and short warming remain limitations.",
+    "Final after-exact mixed1438 accepted moves contains568 stationary calls, skips568 geometry queries (1014 total including144full snapshots). Final all-moving962 accepted packets take1366.7238ms, P952.3972ms, loop max95.354879ms; within variable old-run range for cost, but this does not exclude a5–18% moving-path regression. Retain risk, accept only demonstrated idle-work elimination, not whole performance.",
+    "Microbenchmark is deterministic in-memory method work, not real-clock SQLite/network/native acceptance. Its initial comparison failed because constructor used wall clock while movement used model clock; corrected QA by injecting the same model clock from construction, preserving initial failure/log/script. Paired full player state then matches on chosen clear corridors only.",
+    "First full suite with concurrent build timed out at tickRecovery server-start wait before WebSocket/movement. Isolated test passed and independent full suite43/631 passed; do not assert the exact startup cause or modify thresholds. Original failed log retained. Existing Vite warnings remain.",
+    "Initial travelled>0 draft additionally accepted invalid saved p.x NaN/undefined/null by treating nonpositive/NaN distance as stationary. Three new fail-first cases exposed it; final condition compares to.x/y directly against p.x/y, preserving previous finite-source LOS rejection. Current direct-coordinate version is sampled separately after-exact, not timed using the draft.",
+    "Unchanged-position acceptance inside newly closed geometry is intentional: it updates only existing coordinates/aim/actions, rather than sending a correction to identical coordinates. Subsequent even tiny movement and other actions still validate current geometry; no spatial cache, input queue, shooting cadence, resource, collision-size or client-send changes.",
+    "Original a12 native refusal, walking/GPU/long-memory/full-world/multicamp siege/economy acceptance remain open. No physical presentation/FPS/GPU or visual improvement claim. Only owned diagnostic/backup/memory data; realdata/sdc.sqlite never opened."
+  ],
+  "verification": {
+    "newBusinessCases": 12,
+    "initialRedFailures": 3,
+    "invalidSavedCoordinateRedFailures": 3,
+    "focusedPassing": 151,
+    "negativeControlBusinessFailures": 3,
+    "sourceRestoredAfterControl": true,
+    "fullTestFiles": 43,
+    "fullTests": 634,
+    "typeCheck": "passed after final audit update, data/stationary-sync-delivery-types-20261023.log",
+    "build": "passed, unchanged client assetindex-D-lv6nhw.js"
+  },
+  "auditTypeNote": "First audit-inclusive type check required explicit nonempty prepared-path narrowing; fixed only ignored QA assert, failure log retained.",
+  "auditDriverNote": "Initial audit assumed all8 actors in the first2-role phase and stopped before any backup/replay. QA now validates phase actor counts/indexes and permits absent six bots only in that first phase. Initial failure log retained; no game or fixture changes.",
+  "review": "Independent final read-only review complete:50 hashes, unique runtime guard diff against baseline,12 raw phases,9392 paid rounds,4 backup restores/core replay audits and public privacy verified. No confirmed P1/P2 blocking local idle-work elimination. Reviewer did not run loads or open databases. Moving-path regression risk and95.35ms loop maximum remain unresolved; overall performance and original native failure are not accepted.",
+  "sourceHashes": [
+    {
+      "path": "server/worldState.ts",
+      "sha256": "def88edd22a2755a2a176c143cd4ca015592d49ce76db89af54558baffaef233"
+    },
+    {
+      "path": "server/worldState.test.ts",
+      "sha256": "e96317c22b1788f9ca8fc53bc9c07bf9e8c5e7e2e0661cde619af100b49c8ed5"
+    },
+    {
+      "path": "data/worldState-stationary-before-20261023.ts",
+      "sha256": "69f30915e270f212ffff0a3aefe67aa2b96972978ca430408db14fb2c398b1ba"
+    },
+    {
+      "path": "data/worldState-stationary-before-20261023-binding.json",
+      "sha256": "f2ba190e43e1b399485a69aed7b992a58407276fa88db6d46cff4d4691c0b2c0"
+    },
+    {
+      "path": "data/profile-stationary-sync-20261023.cjs",
+      "sha256": "de7a0803b8e38bb1cfa22c180de69386a190885f54a59f90621b5c731003a6cc"
+    },
+    {
+      "path": "data/profile-stationary-sync-return-20261023.cjs",
+      "sha256": "d3de0401ad894cba8e5c8fa7234765582d221e68dc467881112cc5c997e83df7"
+    },
+    {
+      "path": "data/capture-stationary-sync-20261023.ts",
+      "sha256": "c590f5e78b5e53b50a102af5775f816eabb9e8a6b6290a329af0ca1f202b4987"
+    },
+    {
+      "path": "data/benchmark-stationary-sync-20261023.ts",
+      "sha256": "385b0fa0055a35ae2975c8247e04a0663a1be405193795046424904104c01106"
+    },
+    {
+      "path": "data/stationary-sync-microbenchmark-20261023-results.json",
+      "sha256": "673e0aef64b7e3419fa8c7d4cf7c10c586c7b5aebe1e2d6a7f9e059d7a656a23"
+    },
+    {
+      "path": "data/stationary-sync-red-20261023.log",
+      "sha256": "e3fcdda5ec458cc98b722701df7634ac926001e6f955b39519e961f0cb5a46fe"
+    },
+    {
+      "path": "data/stationary-sync-green-20261023.log",
+      "sha256": "3044c1055f182313a4801863ce7d39a53328dafd602d45f8a4a8af8df555c529"
+    },
+    {
+      "path": "data/stationary-sync-negative-control-20261023.log",
+      "sha256": "933bd63dd63c5aaff0131e4174516ebd9f8a7359f9a0c839375779f6dad31958"
+    },
+    {
+      "path": "data/stationary-sync-full-tests-20261023.log",
+      "sha256": "273285994dfda920a693b643520fa1ec69b3b09f618c408eb4efcdd61caa9fda"
+    },
+    {
+      "path": "data/stationary-sync-tick-recovery-isolated-20261023.log",
+      "sha256": "e1ffb0ea92b2b9382c185f3a7cecb8d6241561bf5b47945a5b32e556c8a57732"
+    },
+    {
+      "path": "data/stationary-sync-full-tests-isolated-20261023.log",
+      "sha256": "3a03f533d35a8a7fdbbd6f328adf065db94d06a1d5388e5dbbdf75604d002c55"
+    },
+    {
+      "path": "data/stationary-sync-build-20261023.log",
+      "sha256": "f7c6a80f280c9ef426085319612241984b76223587b0863db27f74973b36d088"
+    },
+    {
+      "path": "data/stationary-sync-initial-types-20261023.log",
+      "sha256": "7f3594d7a965c703e6361ae50c0ef50cf9c344c621d801592b074b48554f4235"
+    },
+    {
+      "path": "data/audit-stationary-sync-20261023.ts",
+      "sha256": "cc2b4b175ac25fb3fec9e050c548781a449ed78815e23c4e4ebe9588c5c41acd"
+    },
+    {
+      "path": "data/stationary-sync-20261023-a1-before-two-stationary-empty-fire-stages.json",
+      "sha256": "ba1fe5b47bbe6c3956806415611a2e45b09269dc5b4eef369dd8085e2d3333bf"
+    },
+    {
+      "path": "data/stationary-sync-20261023-a1-before-eight-mixed-empty-fire-stages.json",
+      "sha256": "75bd9b4764601ff9bb5344eb2eedbec7b2b4e24447cf9d141c55e04d1134d86b"
+    },
+    {
+      "path": "data/stationary-sync-20261023-a1-before-eight-moving-control-empty-fire-stages.json",
+      "sha256": "eb92195bde5a04d6d050cae3508043a4e17149accf8b5b5f9d964f1361debd73"
+    },
+    {
+      "path": "data/stationary-sync-20261023-a1-before-results.json",
+      "sha256": "db1572c3ffcf40bc9cefce77ee1d6c5852d79ad8aaa6d91f65332f56d664d18e"
+    },
+    {
+      "path": "data/stationary-sync-20261023-a1-after-two-stationary-empty-fire-stages.json",
+      "sha256": "b24ef8e9da8a57fd5f5ef4dc8a756b5f103dbe55e27d920248f6f81096b3ba01"
+    },
+    {
+      "path": "data/stationary-sync-20261023-a1-after-eight-mixed-empty-fire-stages.json",
+      "sha256": "41c18bf98a7ee71468f51f26c6163e7434f25b36ac5c3d0e75fc9c30e70711ec"
+    },
+    {
+      "path": "data/stationary-sync-20261023-a1-after-eight-moving-control-empty-fire-stages.json",
+      "sha256": "b539f331dd0c5719a6a965fd3569a2acdf1735facba55e0d30af4c69dba3ac18"
+    },
+    {
+      "path": "data/stationary-sync-20261023-a1-after-results.json",
+      "sha256": "20c0f099e66c69ff80d2b1d74d1214e0f6059f05020615fdf35b3bb9c9cb9ca1"
+    },
+    {
+      "path": "data/stationary-sync-20261023-a1-before-return-two-stationary-empty-fire-stages.json",
+      "sha256": "4cefb9505dead2a128f851395278f80a0cccebbba5ae1bac4851bc24d2b05ae3"
+    },
+    {
+      "path": "data/stationary-sync-20261023-a1-before-return-eight-mixed-empty-fire-stages.json",
+      "sha256": "7312c04f4ef74ed43467298d896418bb5427f4940c9fa0fc689284820a8b56a1"
+    },
+    {
+      "path": "data/stationary-sync-20261023-a1-before-return-eight-moving-control-empty-fire-stages.json",
+      "sha256": "46ff49c5c15d8ef900c69788e289242058ddf939eb5ba1497ec475f1fa7871ba"
+    },
+    {
+      "path": "data/stationary-sync-20261023-a1-before-return-results.json",
+      "sha256": "048a0556a01f7f464893f8bab3ad2f0b7505acf394dce115e6ae2e8c8d60089d"
+    },
+    {
+      "path": "data/stationary-sync-20261023-a1-after-exact-two-stationary-empty-fire-stages.json",
+      "sha256": "18c8c2d39845637bcef24791104214bc257a6b07aac3b1d56fec80924f4747ed"
+    },
+    {
+      "path": "data/stationary-sync-20261023-a1-after-exact-eight-mixed-empty-fire-stages.json",
+      "sha256": "03893e116d7313be3281e37e3e60a194333bc5303ad326f29394a545db12d436"
+    },
+    {
+      "path": "data/stationary-sync-20261023-a1-after-exact-eight-moving-control-empty-fire-stages.json",
+      "sha256": "d54b6719be745a1999e20fe553b8949857c23420228f60ae8abbf0ce4d2ae462"
+    },
+    {
+      "path": "data/stationary-sync-20261023-a1-after-exact-results.json",
+      "sha256": "8d8743def3a530e9009b54ec46e984877862265fa46cdb779bd5a3a2d2662656"
+    },
+    {
+      "path": "data/worldState-stationary-draft-after-20261023.txt",
+      "sha256": "50db96796221c121f2f5a5dee29681e5e7c7d61d3fdb3969fd0cf107d96aa17e"
+    },
+    {
+      "path": "data/profile-stationary-sync-exact-20261023.cjs",
+      "sha256": "983a3406882e5608bc0bc6bcea0d3f848eb4078882816255bff4c699f0b66200"
+    },
+    {
+      "path": "data/benchmark-stationary-sync-exact-20261023.ts",
+      "sha256": "eb42ed7c6016fc449a842ac42baed81c98ba5ed09230b3b7339c5ca139185d3a"
+    },
+    {
+      "path": "data/stationary-sync-exact-microbenchmark-20261023-results.json",
+      "sha256": "bc4d28b956c63ca7bf7898c47bcfe2df6ba69ab7f8173041e01d1624250bcd6e"
+    },
+    {
+      "path": "data/benchmark-stationary-sync-balanced-20261023.ts",
+      "sha256": "04d4e42bd907054822e1e215725ca95352998b63f395bd25de586cfb1dec6e68"
+    },
+    {
+      "path": "data/stationary-sync-balanced-microbenchmark-20261023-results.json",
+      "sha256": "7387636603f042d0e416798d2c737bffb6864fffa73064142a7bd355f34e3435"
+    },
+    {
+      "path": "data/stationary-sync-exact-coordinates-red-20261023.log",
+      "sha256": "528742f56293df45e86631388a3a303630ec42fd7f6d2f8de86bf343045aba6a"
+    },
+    {
+      "path": "data/stationary-sync-exact-coordinates-green-20261023.log",
+      "sha256": "c09041ec42e838312b3c5a3735fd0d429be7fda57f1a28c53d00b996e1c5981f"
+    },
+    {
+      "path": "data/stationary-sync-exact-negative-control-20261023.log",
+      "sha256": "8186ca7c17ebb1e683741373658cef658b6ef8913812033b9abd796da7babc43"
+    },
+    {
+      "path": "data/stationary-sync-exact-full-tests-20261023.log",
+      "sha256": "f590744a229476c75b5788236524a4a58a006662ec118deb9c74dbbbae92df8c"
+    },
+    {
+      "path": "data/stationary-sync-exact-types-20261023.log",
+      "sha256": "7f3594d7a965c703e6361ae50c0ef50cf9c344c621d801592b074b48554f4235"
+    },
+    {
+      "path": "data/stationary-sync-exact-build-20261023.log",
+      "sha256": "e8836af325d7f6713a6d7523c64c30c7e571fe05b2bd3f7918907315ceacf130"
+    },
+    {
+      "path": "data/stationary-sync-microbenchmark-20261023.log",
+      "sha256": "5e78f461e416bb040bc2f1a445e24c136ac3b5b046dd1eabae9aca07fd33299d"
+    },
+    {
+      "path": "data/benchmark-stationary-sync-initial-20261023.ts",
+      "sha256": "d1836a2ecff266a36455222ec85790072ad7c9b01e0587a562e1f73d219f82f0"
+    },
+    {
+      "path": "data/stationary-sync-delivery-types-20261023.log",
+      "sha256": "7f3594d7a965c703e6361ae50c0ef50cf9c344c621d801592b074b48554f4235"
+    },
+    {
+      "path": "data/stationary-sync-exact-audit-20261023.log",
+      "sha256": "51ccf2e9f648fe2174424c13fb178dea6f99d01a42ae6517131f2faad1334f5d"
+    }
+  ]
+}

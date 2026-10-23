@@ -344,8 +344,11 @@ export class GameWorld {
     const travelled = distance(p, { x: packet.x, y: packet.y });
     if (travelled > p.moveBudget + 1e-6) return false;
     const to = { x: packet.x, y: packet.y };
-    const buildings = this.buildingsFor(p, to);
-    if (isPositionBlocked(to.x, to.y, buildings) || !hasLineOfSight(p, to, buildings)) return false;
+    // Unchanged coordinates carry aim/action updates, without traversing geometry.
+    if (to.x !== p.x || to.y !== p.y) {
+      const buildings = this.buildingsFor(p, to);
+      if (isPositionBlocked(to.x, to.y, buildings) || !hasLineOfSight(p, to, buildings)) return false;
+    }
     p.x = to.x; p.y = to.y; p.moveBudget = Math.max(0, p.moveBudget - travelled);
     p.onboarding.explored ||= p.mapId === 'world' && Math.hypot(p.x, p.y) > 2.5;
     if (finite(packet.angle)) p.angle = packet.angle;
