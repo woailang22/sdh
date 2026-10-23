@@ -57,6 +57,7 @@ export interface WorldRules {
 }
 export interface GameAction { requestId: string; action: string; [key: string]: unknown }
 export const isUntargetedFire = (packet: Record<string, unknown>) => packet.action === 'fire' && packet.monsterId === undefined && packet.targetId === undefined;
+export const isPlayerTargetedFire = (packet: Record<string, unknown>) => packet.action === 'fire' && packet.monsterId === undefined && typeof packet.targetId === 'string';
 const fireInterval = (weaponId: string) => (WEAPONS[weaponId]?.fireRate ?? 0.12) * 1000;
 
 const SAVE_KEY = 'authoritative-world-v2';
@@ -441,9 +442,11 @@ export class GameWorld {
     for (let i = 0; i < p.inventory.length && count > 0; i++) if (!p.inventory[i]) { const n = Math.min(count, ITEM_DEFS[itemId].maxCount); p.inventory[i] = makeItem(itemId, n); count -= n; }
   }
 
+  respawnVersion(id: string) { return this.respawns.get(id) || 0; }
+
   fireContext(id: string) {
     const p = this.state.players[id];
-    return JSON.stringify([p?.mapId, p?.equipment.weapon, this.respawns.get(id) || 0]);
+    return JSON.stringify([p?.mapId, p?.equipment.weapon, this.respawnVersion(id)]);
   }
 
   fireWindow(id: string, packet: GameAction) {
@@ -463,6 +466,15 @@ export class GameWorld {
   actionPlayer(id: string, packet: GameAction) {
     requireRule(isUntargetedFire(packet), '仅无目标射击可使用角色状态回复');
     return this.runAction(id, packet, (...args) => this.snapshotPlayer(...args));
+  }
+
+  actionCombat(id: string, packet: GameAction) {
+    requireRule(isPlayerTargetedFire(packet), '仅玩家目标射击可使用战斗回复');
+    const targetId = String(packet.targetId), life = this.respawnVersion(targetId);
+    const replayed = this.state.handled[id]?.includes(packet.requestId) || false;
+    const state = this.runAction(id, packet, (...args) => this.snapshotPlayer(...args));
+    // Replays resynchronize shared state too, including a death whose first reply failed.
+    return { state, targetId, requiresFullSync: !state.error && (replayed || life !== this.respawnVersion(targetId)) };
   }
 
   private runAction<T>(id: string, packet: GameAction, reply: (...args: Parameters<GameWorld['snapshot']>) => T): T {

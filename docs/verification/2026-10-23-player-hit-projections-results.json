@@ -1,0 +1,72 @@
+{
+  "date": "2026-10-23",
+  "baseCommit": "9fbc464b8dd9d5609b358bd4c22a96141a463205",
+  "problem": "Nonlethal PvP fire changed only shooter and victim but rebuilt/encoded full camp lists for every same-space client. Actual damage was much more expensive than the previously measured empty-shot path.",
+  "change": "Modern string-player-targeted fire uses an internal actionCombat receipt and detached player projection. Existing full rollback, SQLite full checkpoint, real ammo/cooldown/PvP/line-of-sight checks and replay ledger remain. Nonlethal success replies to shooter/victim only; public HP still uses200ms visibility updates. Death/replay falls back to full shared snapshots. Existing respawn generation now forces position correction even after same-map death; connection marker updates only after send returns. Legacy shooters keep full replies; an unsent victim death is included even outside source map/radius.",
+  "reviewedReplayBoundary": "Extra out-of-range target sync requires a genuine server respawn generation not yet sent to that connection. Unconditional payload-target inclusion was rejected after review found handled-ID replay/unrelated-action could force unrelated camp snapshots. Fifth-connection regression reproduced1 snapshot instead of0 before the guard and now passes for modern/legacy paths.",
+  "regression": {
+    "unit": "Five fail-first cases: nonlethal result excludes shared lists while checkpoint stores both sides; death/replay one payment/drop/life generation; rejected lethal checkpoint restores both sides/life/private prior commit; committed reply failure survives restart/replay; target/monster/malformed guard.",
+    "productionCases": "Six actual server.ts/SQLite/WS cases: same-map and cross-map, modern/legacy victim, legacy shooter without pending-fire recovery masking missing notification, failed victim death snapshot and replay. Actual timers/socket remain; authority time controlled, simulation tick disabled to isolate transport/transactions.",
+    "snapshotWork": "At nonlethal hit, four source connections plus one remote connection use [0,0,0,0,0] complete snapshots with modern endpoints; legacy victim needs [0,1,0,0,0]; legacy shooter retains [1,1,1,1,0]. Original modern path failed with one complete snapshot per source connection.",
+    "stateCorrectness": "Victim gets own HP95/shield0 without shooter requestId; observer receives normal public HP; old-life queued crude-gun shot cancels; fatal hit produces one drop carrying9 victim rounds and6 wood; shooter pays10->9 private->8 hit->7 lethal; retry and forced restart retain these values and integrity ok.",
+    "negativeControls": [
+      "Remove respawn-generation correction: same-map death case fails correction false versus true.",
+      "Remove explicit legacy victim death notification with no pending victim shot: real test times out awaiting victim update.",
+      "Unconditional remote target notification: forged handled-ID replay regression fails remote snapshot1 versus0."
+    ],
+    "qaCorrection": "Adding an unrelated item-use test after the private shot legitimately consolidated its private row; reordered item use before private shot so the rejection test still measures a pending private commit. No product change was used to mask it."
+  },
+  "diagnostic": {
+    "fixtures": "Fresh synthetic copies of dense-concurrent source, each5675 buildings/4000 floors/18 turrets/540 defense rounds, eight existing guest identities; target removed from camp membership, actors placed in clear hallway, ammo5000 each, target HP/maxHP100000 solely to sustain measurement. Other armor/cadence/damage and real SQLite unchanged. No live save, browser or earned-resource balance claim.",
+    "input": "Three10-second protocol phases: two connections empty fire; two connections player hits; eight connections with one fixed nominal130ms target shooter, idle victim and six response-paced background empty shooters. Parent timers and completion counts vary with load; not identical completed work or eight native players.",
+    "before": {
+      "emptyShooter": { "success": 72, "p95Ms": 8.906 },
+      "twoConnectionHits": { "success": 72, "p95Ms": 77.495 },
+      "eightConnectionHits": { "success": 73, "p95Ms": 1912.468, "maxMs": 2082.802 },
+      "backgroundSuccessEach": 2,
+      "backgroundLateRepliesMs": "8624.8–8635.9",
+      "eightPhaseWallMsIncludingDrain": 12087,
+      "completeSnapshotCount": 585,
+      "completeEncodeCount": 585,
+      "completeSnapshotTotalMs": 4549.892,
+      "completeEncodeTotalMs": 4289.614,
+      "loopP99Ms": 5985.272,
+      "persistP95Ms": 26.817
+    },
+    "after": {
+      "emptyShooter": { "success": 73, "p95Ms": 5.750 },
+      "twoConnectionHits": { "success": 71, "p95Ms": 58.172 },
+      "eightConnectionHits": { "success": 72, "p95Ms": 83.093, "maxMs": 117.178 },
+      "backgroundSuccessEach": 72,
+      "backgroundP95Ms": "96.6–112.4",
+      "eightPhaseWallMsIncludingDrain": 10009,
+      "completeSnapshotCount": 47,
+      "completeEncodeCount": 47,
+      "completeSnapshotTotalMs": 426.628,
+      "completeEncodeTotalMs": 363.355,
+      "loopP99Ms": 94.896,
+      "persistP95Ms": 39.601
+    },
+    "qualification": "All sent inputs in both diagnostics succeeded and drained, but zero errors alone did not make the original latency acceptable. Profiling stages overlap and cannot be summed. After completes far more background writes and has worse persistP95; whole-world rollback and saves remain. a2 measured before only the final death/replay-target guard, outside its nonlethal input path; final suite covers that guard. Not native FPS/ordinary-health/raid-capacity acceptance.",
+    "rawIgnoredEvidence": ["data/targeted-combat-profile-20261023-a1-results.json", "data/targeted-combat-profile-20261023-a2-results.json", "data/targeted-combat-profile-20261023-a1-audit.json", "data/targeted-combat-profile-20261023-a2-audit.json"]
+  },
+  "durabilityAudit": {
+    "paidAmmoBefore": [217, 0, 2, 2, 2, 2, 2, 2],
+    "paidAmmoAfter": [216, 0, 72, 72, 72, 72, 72, 72],
+    "targetHitsBeforeAfter": [145, 143],
+    "actualDamageAfterArmor": 105,
+    "targetHpBeforeAfter": [84875, 85085],
+    "initialAbsorbedShield": 100,
+    "defensiveAmmo": 540,
+    "sharedAssetsInventoryEquipmentBlueprintsNonAmmo": "Unchanged against prepared fixture; target membership/HP/ammo seeds declared. Zero world nodes renewed in either diagnostic.",
+    "integrity": "ok",
+    "consistentBackupRestartAndCommittedReplay": "Passed for both fixtures without another shot or target damage. Original raw WAL and latest private rows merged read-only before recovery on a consistent backup."
+  },
+  "verification": {
+    "fullSuite": "40 files/531 tests passed; zero failed/pending, machine-readable success true.",
+    "typecheck": "npm run lint (tsc --noEmit) passed.",
+    "build": "npm run build passed, index-BRl8LPRa.js unchanged. Existing Vite native-loader/chunk-size warnings remain.",
+    "review": "Independent design review caught same-map correction; implementation review caught and verified the remote replay fix. Final read-only review reports no P1/P2; reviewer did not run tests/build."
+  },
+  "remaining": "No new native multiplayer benchmark or normal-health PvP/raid capacity acceptance. Previous native crowded-fire single refusal, full rollback/saves, monster/raid broadcasts, large-scale scans, long-term memory and gameplay/population/economy gates remain incomplete. Overall game objective stays active."
+}

@@ -6,7 +6,7 @@ import fs from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { createDb, backupDatabase } from './server/db.js';
 import { guestTokenFromCookie, resolveGuest } from './server/identity.js';
-import { GameWorld, isUntargetedFire, type GameAction, type GameStateSnapshot, type PlayerActionSnapshot, type WorldRules } from './server/worldState.js';
+import { GameWorld, isPlayerTargetedFire, isUntargetedFire, type GameAction, type GameStateSnapshot, type PlayerActionSnapshot, type WorldRules } from './server/worldState.js';
 import { FireQueue } from './server/fireQueue.js';
 import { StateCheckQueue } from './server/stateCheckQueue.js';
 import { createWorldQueries } from './server/worldQueries.js';
@@ -41,7 +41,7 @@ const rules: WorldRules = {
 };
 const game = new GameWorld(db, rules);
 db.setMeta('public-house-layout', '2');
-interface Client { ws: WebSocket; id: string; isGM: boolean; visible: Set<string>; lastSeen: number; lastCorrection: number; lastMessageAt: number; messageCount: number; lastSnapshot: number; mapId: MapZoneId; stateEncoder?: StateEncoder; fireQueue: FireQueue; fullPhaseMs: number }
+interface Client { ws: WebSocket; id: string; isGM: boolean; visible: Set<string>; lastSeen: number; lastCorrection: number; lastMessageAt: number; messageCount: number; lastSnapshot: number; mapId: MapZoneId; respawnVersion: number; stateEncoder?: StateEncoder; fireQueue: FireQueue; fullPhaseMs: number }
 const clients = new Map<string, Client>();
 const stateChecks = new StateCheckQueue<Client>(client => {
   if (clients.get(client.id) !== client || client.ws.readyState !== WebSocket.OPEN || Date.now() - client.lastSnapshot < 2000) return;
@@ -67,20 +67,24 @@ function broadcast(type: string, payload: unknown) { for (const c of clients.val
 function stateTo(client: Client, snapshot?: GameStateSnapshot, correction = false) {
   if (client.ws.readyState !== WebSocket.OPEN) return;
   const state = snapshot || game.snapshot(client.id);
-  state.correction ||= correction || client.mapId !== state.player.mapId;
+  const life = game.respawnVersion(client.id);
+  state.correction ||= correction || client.mapId !== state.player.mapId || client.respawnVersion !== life;
   client.mapId = state.player.mapId; client.lastSnapshot = Date.now();
   if (client.stateEncoder) send(client.ws, 'game_state_patch', client.stateEncoder.encode(state));
   else send(client.ws, 'game_state', state);
+  client.respawnVersion = life;
 }
 function playerStateTo(client: Client, state: PlayerActionSnapshot) {
   if (client.ws.readyState !== WebSocket.OPEN || !client.stateEncoder) return;
-  state.correction ||= client.mapId !== state.player.mapId;
+  const life = game.respawnVersion(client.id);
+  state.correction ||= client.mapId !== state.player.mapId || client.respawnVersion !== life;
   const patch = client.stateEncoder.encodePlayer(state, () => game.snapshot(client.id, state.requestId, state.error, state.loot, state.correction));
   client.mapId = state.player.mapId;
   // Only shared snapshots refresh this clock; private fire must not postpone
   // the periodic shared check when no simulation entity is dirty.
   if (patch.baseSequence === null) client.lastSnapshot = Date.now();
   send(client.ws, 'game_state_patch', patch);
+  client.respawnVersion = life;
 }
 function refreshVisibility(client: Client) {
   const players = game.visiblePlayers(client.id);
@@ -106,6 +110,27 @@ function cancelChangedFire(client: Client) {
 function executeGameAction(client: Client, payload: GameAction) {
   try {
     if (client.stateEncoder && isUntargetedFire(payload)) playerStateTo(client, game.actionPlayer(client.id, payload));
+    else if (client.stateEncoder && isPlayerTargetedFire(payload)) {
+      const { state, targetId, requiresFullSync } = game.actionCombat(client.id, payload);
+      if (requiresFullSync) {
+        stateTo(client, game.snapshot(client.id, state.requestId, state.error, state.loot, state.correction));
+        for (const other of clients.values()) {
+          if (other.id === client.id) continue;
+          const p = game.state.players[other.id];
+          // Replays may carry a different target: only an unsent server death
+          // generation justifies sending beyond the source visibility range.
+          const targetNeedsSync = other.id === targetId && other.respawnVersion !== game.respawnVersion(other.id);
+          if (targetNeedsSync || p.mapId === state.player.mapId && (p.mapId !== 'world' || Math.hypot(p.x - state.player.x, p.y - state.player.y) <= 80)) stateTo(other);
+        }
+      } else {
+        playerStateTo(client, state);
+        const target = clients.get(targetId);
+        if (!state.error && target && target !== client) {
+          if (target.stateEncoder) playerStateTo(target, game.snapshotPlayer(targetId));
+          else stateTo(target);
+        }
+      }
+    }
     else {
       const state = game.action(client.id, payload);
       stateTo(client, state);
@@ -115,7 +140,8 @@ function executeGameAction(client: Client, payload: GameAction) {
         for (const c of clients.values()) {
           if (c.id === client.id) continue;
           const p = game.state.players[c.id];
-          if (p.mapId === state.player.mapId && (p.mapId !== 'world' || Math.hypot(p.x - state.player.x, p.y - state.player.y) <= 80) || payload.action === 'create_camp') stateTo(c);
+          const targetNeedsSync = c.id === payload.targetId && c.respawnVersion !== game.respawnVersion(c.id);
+          if (targetNeedsSync || p.mapId === state.player.mapId && (p.mapId !== 'world' || Math.hypot(p.x - state.player.x, p.y - state.player.y) <= 80) || payload.action === 'create_camp') stateTo(c);
         }
       }
     }
@@ -168,7 +194,7 @@ wss.on('connection', (ws, req) => {
     self = game.connect(id, '废土流浪者 #' + id.slice(-4));
   } catch (error) { console.error('[ws] session admission failed', error); ws.close(1011, 'Could not restore player state'); return; }
   const previous = clients.get(id);
-  const client: Client = { ws, id, isGM: false, visible: new Set(), lastSeen: Date.now(), lastCorrection: 0, lastMessageAt: Date.now(), messageCount: 0, lastSnapshot: 0, mapId: self.mapId, fireQueue: new FireQueue(), fullPhaseMs: previous?.fullPhaseMs ?? allocateStatePhase() };
+  const client: Client = { ws, id, isGM: false, visible: new Set(), lastSeen: Date.now(), lastCorrection: 0, lastMessageAt: Date.now(), messageCount: 0, lastSnapshot: 0, mapId: self.mapId, respawnVersion: game.respawnVersion(id), fireQueue: new FireQueue(), fullPhaseMs: previous?.fullPhaseMs ?? allocateStatePhase() };
   clients.set(id, client);
   if (previous) { stateChecks.cancel(previous); previous.fireQueue.cancel(); previous.ws.close(4001, 'Guest identity connected elsewhere'); }
   const snapshot = game.snapshot(id);
