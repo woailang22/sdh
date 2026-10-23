@@ -1,0 +1,661 @@
+{
+  "sourceCommit": "93a30da6f3566ab8ab5c7f8614ba2eaac250613e",
+  "productionChanged": false,
+  "overallPerformanceAccepted": false,
+  "fixture": {
+    "scope": "Explicit synthetic camp/roles,2000ammo/100satiety/normal existing rifle/vest. No browser/native/earned damage/capacity acceptance. Real rules,clock,SQLite,finite ammunition and ordinary small corridor movements.",
+    "buildings": 5675,
+    "floors": 4000,
+    "defensiveAmmo": 540,
+    "baselineActors": [
+      {
+        "index": 0,
+        "ammo": 2000,
+        "hp": 100,
+        "satiety": 100
+      },
+      {
+        "index": 1,
+        "ammo": 2000,
+        "hp": 100,
+        "satiety": 100
+      },
+      {
+        "index": 2,
+        "ammo": 2000,
+        "hp": 100,
+        "satiety": 100
+      },
+      {
+        "index": 3,
+        "ammo": 2000,
+        "hp": 100,
+        "satiety": 100
+      },
+      {
+        "index": 4,
+        "ammo": 2000,
+        "hp": 100,
+        "satiety": 100
+      },
+      {
+        "index": 5,
+        "ammo": 2000,
+        "hp": 100,
+        "satiety": 100
+      },
+      {
+        "index": 6,
+        "ammo": 2000,
+        "hp": 100,
+        "satiety": 100
+      },
+      {
+        "index": 7,
+        "ammo": 2000,
+        "hp": 100,
+        "satiety": 100
+      }
+    ],
+    "cadence": {
+      "mainsUnpacedMs": 150,
+      "mainsMoveMs": 100,
+      "botsResponsePacedMs": 200
+    }
+  },
+  "synthetic": true,
+  "native": false,
+  "phases": [
+    {
+      "name": "two-protocol-moving-empty-fire",
+      "wallMs": 20012,
+      "connections": 2,
+      "actors": [
+        {
+          "index": 0,
+          "sent": 128,
+          "success": 128,
+          "pending": 0,
+          "errors": [],
+          "corrections": 0,
+          "rtt": {
+            "n": 128,
+            "p50": 3.318199999999706,
+            "p95": 8.671700000000783,
+            "max": 39.61000000000058,
+            "total": 600.3757999999907
+          },
+          "ammo": 1872,
+          "hp": 100,
+          "shield": 100,
+          "satiety": 94.89225000000005
+        },
+        {
+          "index": 1,
+          "sent": 128,
+          "success": 128,
+          "pending": 0,
+          "errors": [],
+          "corrections": 0,
+          "rtt": {
+            "n": 128,
+            "p50": 5.292300000000978,
+            "p95": 34.00219999999899,
+            "max": 51.79650000000038,
+            "total": 998.4906999999939
+          },
+          "ammo": 1872,
+          "hp": 100,
+          "shield": 100,
+          "satiety": 94.87050000000002
+        }
+      ],
+      "eventCap": 20000,
+      "observations": 1842,
+      "overflow": 0,
+      "stages": {
+        "buildingsFor": {
+          "n": 401,
+          "p50": 1.4923999999991793,
+          "p95": 2.625,
+          "max": 3.9731000000001586,
+          "total": 650.656900000009
+        },
+        "move": {
+          "n": 378,
+          "p50": 1.530800000000454,
+          "p95": 2.691399999999703,
+          "max": 4.385199999999713,
+          "total": 627.8484000000299
+        },
+        "snapshotPlayer": {
+          "n": 332,
+          "p50": 0.06069999999999709,
+          "p95": 0.13810000000012224,
+          "max": 0.22960000000057335,
+          "total": 22.737800000008974
+        },
+        "actionPlayer": {
+          "n": 256,
+          "p50": 2.081999999999425,
+          "p95": 2.9056999999993423,
+          "max": 9.575400000001537,
+          "total": 569.505499999992
+        },
+        "encodePlayer": {
+          "n": 332,
+          "p50": 0.0030000000006111804,
+          "p95": 0.011500000000523869,
+          "max": 17.42529999999897,
+          "total": 125.89950000002591
+        },
+        "tick": {
+          "n": 97,
+          "p50": 3.259699999998702,
+          "p95": 6.703000000001339,
+          "max": 7.84059999999954,
+          "total": 368.55620000001363
+        },
+        "snapshot": {
+          "n": 23,
+          "p50": 7.900700000000143,
+          "p95": 10.336299999999028,
+          "max": 11.621100000000297,
+          "total": 188.78400000000147
+        },
+        "encode": {
+          "n": 23,
+          "p50": 7.072899999999208,
+          "p95": 7.972399999998743,
+          "max": 8.085100000000239,
+          "total": 159.21769999999924
+        }
+      },
+      "loop": {
+        "p95": 15.859711,
+        "p99": 20.496383,
+        "max": 34.144255
+      }
+    },
+    {
+      "name": "eight-protocol-moving-empty-fire",
+      "wallMs": 30012,
+      "connections": 8,
+      "actors": [
+        {
+          "index": 0,
+          "sent": 193,
+          "success": 193,
+          "pending": 0,
+          "errors": [],
+          "corrections": 0,
+          "rtt": {
+            "n": 193,
+            "p50": 3.485399999997753,
+            "p95": 24.60020000000077,
+            "max": 49.151200000000244,
+            "total": 1550.0710999999683
+          },
+          "ammo": 1679,
+          "hp": 100,
+          "shield": 100,
+          "satiety": 86.88375000000003
+        },
+        {
+          "index": 1,
+          "sent": 193,
+          "success": 193,
+          "pending": 0,
+          "errors": [],
+          "corrections": 0,
+          "rtt": {
+            "n": 193,
+            "p50": 6.580500000003667,
+            "p95": 33.578300000001036,
+            "max": 54.32690000000002,
+            "total": 2230.294699999973
+          },
+          "ammo": 1679,
+          "hp": 100,
+          "shield": 100,
+          "satiety": 86.86150000000006
+        },
+        {
+          "index": 2,
+          "sent": 145,
+          "success": 145,
+          "pending": 0,
+          "errors": [],
+          "corrections": 0,
+          "rtt": {
+            "n": 145,
+            "p50": 4.860599999999977,
+            "p95": 9.308900000003632,
+            "max": 46.79750000000058,
+            "total": 892.8118999999424
+          },
+          "ammo": 1855,
+          "hp": 100,
+          "shield": 100,
+          "satiety": 92.245
+        },
+        {
+          "index": 3,
+          "sent": 145,
+          "success": 145,
+          "pending": 0,
+          "errors": [],
+          "corrections": 0,
+          "rtt": {
+            "n": 145,
+            "p50": 8.767399999996996,
+            "p95": 34.573800000005576,
+            "max": 48.08360000000539,
+            "total": 1569.276400000028
+          },
+          "ammo": 1855,
+          "hp": 100,
+          "shield": 100,
+          "satiety": 92.27325
+        },
+        {
+          "index": 4,
+          "sent": 145,
+          "success": 145,
+          "pending": 0,
+          "errors": [],
+          "corrections": 0,
+          "rtt": {
+            "n": 145,
+            "p50": 12.708299999998417,
+            "p95": 40.661800000001676,
+            "max": 57.396200000002864,
+            "total": 2288.062300000016
+          },
+          "ammo": 1855,
+          "hp": 100,
+          "shield": 100,
+          "satiety": 92.24899999999998
+        },
+        {
+          "index": 5,
+          "sent": 145,
+          "success": 145,
+          "pending": 0,
+          "errors": [],
+          "corrections": 0,
+          "rtt": {
+            "n": 145,
+            "p50": 16.477700000003097,
+            "p95": 50.30110000000059,
+            "max": 65.0541000000012,
+            "total": 3023.331900000012
+          },
+          "ammo": 1855,
+          "hp": 100,
+          "shield": 100,
+          "satiety": 92.27849999999998
+        },
+        {
+          "index": 6,
+          "sent": 145,
+          "success": 145,
+          "pending": 0,
+          "errors": [],
+          "corrections": 0,
+          "rtt": {
+            "n": 145,
+            "p50": 20.321799999997893,
+            "p95": 55.709600000001956,
+            "max": 65.15469999999914,
+            "total": 3673.1075999999703
+          },
+          "ammo": 1855,
+          "hp": 100,
+          "shield": 100,
+          "satiety": 92.25200000000004
+        },
+        {
+          "index": 7,
+          "sent": 145,
+          "success": 145,
+          "pending": 0,
+          "errors": [],
+          "corrections": 0,
+          "rtt": {
+            "n": 145,
+            "p50": 23.931100000001607,
+            "p95": 57.68959999999788,
+            "max": 66.07519999999931,
+            "total": 4232.501700000026
+          },
+          "ammo": 1855,
+          "hp": 100,
+          "shield": 100,
+          "satiety": 92.27975000000004
+        }
+      ],
+      "eventCap": 20000,
+      "observations": 8623,
+      "overflow": 0,
+      "stages": {
+        "buildingsFor": {
+          "n": 1587,
+          "p50": 1.5036000000000058,
+          "p95": 2.7258999999976368,
+          "max": 4.398600000000442,
+          "total": 2553.1122000001487
+        },
+        "move": {
+          "n": 1444,
+          "p50": 1.5472000000008848,
+          "p95": 2.764900000001944,
+          "max": 4.454700000002049,
+          "total": 2380.4340999998567
+        },
+        "tick": {
+          "n": 146,
+          "p50": 4.547500000000582,
+          "p95": 6.669399999998859,
+          "max": 11.34759999999369,
+          "total": 638.2045000000435
+        },
+        "snapshotPlayer": {
+          "n": 1952,
+          "p50": 0.04950000000098953,
+          "p95": 0.11050000000250293,
+          "max": 0.26759999999922,
+          "total": 106.91909999997733
+        },
+        "actionPlayer": {
+          "n": 1256,
+          "p50": 1.8833000000013271,
+          "p95": 3.2475000000049477,
+          "max": 10.20010000000184,
+          "total": 2664.1763000000574
+        },
+        "encodePlayer": {
+          "n": 1952,
+          "p50": 0.0028000000020256266,
+          "p95": 0.009700000002339948,
+          "max": 30.157200000001467,
+          "total": 794.7393999999767
+        },
+        "snapshot": {
+          "n": 143,
+          "p50": 8.058100000002014,
+          "p95": 12.34979999999996,
+          "max": 17.305999999996857,
+          "total": 1223.1241999999875
+        },
+        "encode": {
+          "n": 143,
+          "p50": 6.945700000003853,
+          "p95": 12.235099999998056,
+          "max": 14.397200000006706,
+          "total": 1102.058599999982
+        }
+      },
+      "loop": {
+        "p95": 21.053439,
+        "p99": 36.863999,
+        "max": 65.732607
+      }
+    }
+  ],
+  "interpretation": [
+    "Current eight-protocol empty-fire sample has no refusals; it does not replace original two-native/six-protocol a12 one-refusal failure or establish capacity.",
+    "Recorded buildingsFor work2553.1122ms/1587calls, movement2380.4341ms/1444calls, snapshots1223.1242ms/143calls, encodes1102.0586ms/143calls in30.012s. These are hooked synchronous wall durations including nested work, scheduling/GC/SQLite/probe effects, not exclusive CPU; do not sum them. No event timestamps permit attribution of the65.732607ms loop maximum to a particular method.",
+    "No persist/whole-world rollback/checkpoint JSON events recorded during these phases; private commits and actual SQLite work still occur. Prior full-save bottleneck cannot simply be assumed unchanged in this friendly empty-fire fixture.",
+    "Two mains use nominal150ms timers independent of acknowledgement, but actual counts128/20.012s and193/30.012s are about6.4 shots/s rather than constant6.667/s offered load. Six bots are200ms response-paced and reduce work when replies slow. Small corridor motion and absent native render/input load differ from the original gate.",
+    "Raw runner success means completion. The later audit separately asserts zero errors/corrections/pending, sent equals acknowledged success, observation caps, ammo conservation, backup restore and replay behavior for this observed run.",
+    "Method hooks, JSON wrappers and event-loop monitoring add overhead. No causal attribution of original error, steady FPS, physical presentation or GPU conclusion is supported.",
+    "Current production data is publicly mutable internally (including direct fixture edits); a retained spatial cache would need correct mutation/rollback invalidation, not an unchecked shortcut. No speculative cache implemented."
+  ],
+  "rejectedLoopChange": {
+    "scope": "Only persistent building-selection loop, same actual5675-building dictionary and predicates. Read-only owned SQLite; no production/game changes. Not end-to-end latency/FPS evidence or spatial indexing.",
+    "equivalence": {
+      "ordinaryCases": 96,
+      "inheritedOwnKeyCase": true,
+      "passed": true
+    },
+    "trials": [
+      {
+        "round": 0,
+        "name": "keys",
+        "calls": 400,
+        "totalMs": 269.31550000000004
+      },
+      {
+        "round": 0,
+        "name": "values",
+        "calls": 400,
+        "totalMs": 496.9464999999999
+      },
+      {
+        "round": 0,
+        "name": "ownForIn",
+        "calls": 400,
+        "totalMs": 300.12829999999985
+      },
+      {
+        "round": 1,
+        "name": "values",
+        "calls": 400,
+        "totalMs": 488.2176999999997
+      },
+      {
+        "round": 1,
+        "name": "ownForIn",
+        "calls": 400,
+        "totalMs": 305.6725000000001
+      },
+      {
+        "round": 1,
+        "name": "keys",
+        "calls": 400,
+        "totalMs": 280.93679999999995
+      },
+      {
+        "round": 2,
+        "name": "ownForIn",
+        "calls": 400,
+        "totalMs": 346.51850000000013
+      },
+      {
+        "round": 2,
+        "name": "keys",
+        "calls": 400,
+        "totalMs": 333.0776000000001
+      },
+      {
+        "round": 2,
+        "name": "values",
+        "calls": 400,
+        "totalMs": 664.4674999999997
+      },
+      {
+        "round": 3,
+        "name": "keys",
+        "calls": 400,
+        "totalMs": 343.41979999999967
+      },
+      {
+        "round": 3,
+        "name": "values",
+        "calls": 400,
+        "totalMs": 702.5546999999997
+      },
+      {
+        "round": 3,
+        "name": "ownForIn",
+        "calls": 400,
+        "totalMs": 398.3057000000008
+      },
+      {
+        "round": 4,
+        "name": "values",
+        "calls": 400,
+        "totalMs": 639.6497999999992
+      },
+      {
+        "round": 4,
+        "name": "ownForIn",
+        "calls": 400,
+        "totalMs": 384.78269999999975
+      },
+      {
+        "round": 4,
+        "name": "keys",
+        "calls": 400,
+        "totalMs": 370.6983999999993
+      }
+    ],
+    "decision": "Both Object.values and own-key for-in were slower than current Object.keys in every rotated round of this fixture; keep production loop. Five drifting short rounds do not establish a universal engine result or global optimum. Equivalence covers96corridor scenarios plusone inherited-key case, not all possible objects/getters/mutations/world queries."
+  },
+  "audit": {
+    "integrity": "ok",
+    "consistentBackupRestore": true,
+    "buildingsUnchanged": 5675,
+    "floorsUnchanged": 4000,
+    "defenseAmmoUnchanged": 540,
+    "sharedInventoryAndWorldUnchanged": true,
+    "players": [
+      {
+        "index": 0,
+        "paidRounds": 321,
+        "ammoBefore": 2000,
+        "ammoAfter": 1679,
+        "hp": 100,
+        "satiety": 86.88375000000003,
+        "otherAssetsUnchanged": true,
+        "replayLedgerSize": 128
+      },
+      {
+        "index": 1,
+        "paidRounds": 321,
+        "ammoBefore": 2000,
+        "ammoAfter": 1679,
+        "hp": 100,
+        "satiety": 86.86150000000006,
+        "otherAssetsUnchanged": true,
+        "replayLedgerSize": 128
+      },
+      {
+        "index": 2,
+        "paidRounds": 145,
+        "ammoBefore": 2000,
+        "ammoAfter": 1855,
+        "hp": 100,
+        "satiety": 92.245,
+        "otherAssetsUnchanged": true,
+        "replayLedgerSize": 128
+      },
+      {
+        "index": 3,
+        "paidRounds": 145,
+        "ammoBefore": 2000,
+        "ammoAfter": 1855,
+        "hp": 100,
+        "satiety": 92.27325,
+        "otherAssetsUnchanged": true,
+        "replayLedgerSize": 128
+      },
+      {
+        "index": 4,
+        "paidRounds": 145,
+        "ammoBefore": 2000,
+        "ammoAfter": 1855,
+        "hp": 100,
+        "satiety": 92.24899999999998,
+        "otherAssetsUnchanged": true,
+        "replayLedgerSize": 128
+      },
+      {
+        "index": 5,
+        "paidRounds": 145,
+        "ammoBefore": 2000,
+        "ammoAfter": 1855,
+        "hp": 100,
+        "satiety": 92.27849999999998,
+        "otherAssetsUnchanged": true,
+        "replayLedgerSize": 128
+      },
+      {
+        "index": 6,
+        "paidRounds": 145,
+        "ammoBefore": 2000,
+        "ammoAfter": 1855,
+        "hp": 100,
+        "satiety": 92.25200000000004,
+        "otherAssetsUnchanged": true,
+        "replayLedgerSize": 128
+      },
+      {
+        "index": 7,
+        "paidRounds": 145,
+        "ammoBefore": 2000,
+        "ammoAfter": 1855,
+        "hp": 100,
+        "satiety": 92.27975000000004,
+        "otherAssetsUnchanged": true,
+        "replayLedgerSize": 128
+      }
+    ],
+    "paidRounds": 1512,
+    "postRestoreLastCommittedReplayChecks": 8,
+    "normalSurvival": "No healing/starvation/reset during measurement; synthetic initial100satiety set only before startup.",
+    "sourceScope": "Only named owned prepared/diagnostic databases; original synthetic source opened read-only for consistent copy. Prepared pre-start backup is raw read-only; normalization uses memory DB. Restore test mutates only a newly created owned backup. Realdata/sdc.sqlite not opened."
+  },
+  "verification": {
+    "qaTypeCheck": "passed again after adding the final audit script; data/dense-server-work-final-types-20261023.log",
+    "productionTests": "No production change; preceding43files616tests retained, not rerun for diagnostic-only work"
+  },
+  "review": "Independent read-only review completed: no confirmed P1/P2; all11 hashes, counts, audit scope and privacy checked. Reviewer did not open databases or run loads. Conclusions limited to this synthetic sample and8 GameWorld core replays; native refusal/performance acceptance remain unresolved.",
+  "sourceHashes": [
+    {
+      "path": "data/dense-server-work-20261023-a1-results.json",
+      "sha256": "dc6c9b2ecc9df42a32133f97fa88ff0142caace0156ca6fc2c7991a25e47c172"
+    },
+    {
+      "path": "data/dense-server-work-20261023-a1-two-protocol-moving-empty-fire-stages.json",
+      "sha256": "16a66edceac52ad890aa232c4b6fb348e930fa52cccf7ad597146a164b7c9ee4"
+    },
+    {
+      "path": "data/dense-server-work-20261023-a1-eight-protocol-moving-empty-fire-stages.json",
+      "sha256": "b5fa3a8e18e010d05c414bf40a22f9a093d7bb28f4dc7871fc5fb5d2eb6ddfa9"
+    },
+    {
+      "path": "data/dense-building-selection-20261023-results.json",
+      "sha256": "f941aef583777803dc01a5cd72083338895c6f0f5563a5d8775882c5aaefa55c"
+    },
+    {
+      "path": "data/profile-dense-server-work-20261023-a1.cjs",
+      "sha256": "1cb5ae460282bf9009d84f8ea2e1757f6dd31bb34a034a217acc1ca06668c2ce"
+    },
+    {
+      "path": "data/capture-dense-server-work-20261023.ts",
+      "sha256": "3a41132f0fa8b61bc94870cf61e90c006cbc92d10ef9fd4c0324aab43bed5df0"
+    },
+    {
+      "path": "data/benchmark-dense-building-selection-20261023.cjs",
+      "sha256": "37eaf979cd5d8cbb11ed2baab0253e057d66ed90be1c56ffb88b4f87b73db1ed"
+    },
+    {
+      "path": "data/dense-server-work-types-20261023.log",
+      "sha256": "7f3594d7a965c703e6361ae50c0ef50cf9c344c621d801592b074b48554f4235"
+    },
+    {
+      "path": "data/audit-dense-server-work-20261023.ts",
+      "sha256": "f20e9174534d3af5fb2a65997d30460d34f04ea2a6260b5e645af97af190e00f"
+    },
+    {
+      "path": "data/dense-server-work-audit-20261023.log",
+      "sha256": "b58d7af3dd2e355761630bb13fd8131664d35de585f455a8328b8295213b33e0"
+    },
+    {
+      "path": "data/dense-server-work-final-types-20261023.log",
+      "sha256": "7f3594d7a965c703e6361ae50c0ef50cf9c344c621d801592b074b48554f4235"
+    }
+  ]
+}
