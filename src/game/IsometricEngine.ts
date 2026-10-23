@@ -4,7 +4,7 @@ import { ACID_SHIELD_DRAIN, WEATHER_DURATION, weatherInfo } from './weather';
 import { SUBMAPS, displayName, regionOf, lootResourceOf } from './maps';
 import { groundBaseColor, hash2 as hash2Pure, withAlpha, themeAccent, drawSoftShadow, healthBarColor, weatherTint, themeHaze } from './visualTheme';
 import type { GroundTheme } from './visualTheme';
-import { groupBuildingsIntoHouses, houseCorners, HOUSE_WALL_H } from './house';
+import { groupBuildingsIntoHouses, houseCorners, HOUSE_WALL_H, type HouseGroup } from './house';
 import { drawHouseLayer, drawWaterHousePlatform, waterHousePlatformBounds } from './houseRenderer';
 import { frameContent, angleToSurvivorFrame, interactableSprite, buildingSprite } from './art';
 import { isHostile, canOperateDoor } from './diplomacy';
@@ -207,6 +207,9 @@ export class IsometricEngine {
   public monsters: MonsterEntity[] = [];
   public interactables: InteractableEntity[] = [];
   public buildings: BuildingEntity[] = [];
+  private houseGroupSource: BuildingEntity[] | null = null;
+  private houseGroupLength = -1;
+  private houseGroups: HouseGroup[] = [];
   public particles: Particle[] = [];
   public activeSlot: number = 1; // 1-6
 
@@ -556,6 +559,15 @@ export class IsometricEngine {
     for (const b of this.buildings) if (b.type.endsWith('_floor')) {
       this.placedFloors.set(`${b.x},${b.y}`, { x: b.x, y: b.y, type: b.type as 'wood_floor' | 'stone_floor' | 'iron_floor' });
     }
+  }
+
+  private currentHouseGroups() {
+    if (this.houseGroupSource !== this.buildings || this.houseGroupLength !== this.buildings.length) {
+      this.houseGroups = groupBuildingsIntoHouses(this.buildings);
+      this.houseGroupSource = this.buildings;
+      this.houseGroupLength = this.buildings.length;
+    }
+    return this.houseGroups;
   }
 
   public setAuthoritativeDrops(drops: { id: string; name: string; mapId: MapZoneId; x: number; y: number }[]) {
@@ -3163,7 +3175,7 @@ export class IsometricEngine {
 
     // Buildings（闭合院与屋内箱子一次画完，箱子压在上层保证可见）
     // Floors are already painted in the ground cache, not as shadow-casting entities.
-    const allHouseGroups = groupBuildingsIntoHouses(this.buildings.filter(b => !b.type.endsWith('_floor')));
+    const allHouseGroups = this.currentHouseGroups();
     if (this.currentMapId === 'world') for (const g of allHouseGroups) {
       if (g.members.length < 8 || !g.door?.id.startsWith('world:') || worldThemeAt(g.cx, g.cy) !== 'lake') continue;
       const b = waterHousePlatformBounds(g.members, g.door);
@@ -3175,7 +3187,7 @@ export class IsometricEngine {
     });
     const interiorIds = new Set<string>();
     houseGroups.forEach((g) => {
-      if (g.members.length >= 8) {
+      if (g.members.length >= 8 && !g.roofFloors) {
         const { x0, x1, y0, y1 } = houseCorners(g.members);
         this.buildings.forEach((b) => {
           if ((b.type === 'storage_box' || b.type === 'workbench') && b.x > x0 && b.x < x1 && b.y > y0 && b.y < y1) {
@@ -3191,11 +3203,11 @@ export class IsometricEngine {
         const depths = g.members.map((m) => m.x + m.y);
         const { x0, x1, y0, y1 } = houseCorners(g.members);
         const inside = this.buildings.filter((b) => interiorIds.has(b.id) && b.x > x0 && b.x < x1 && b.y > y0 && b.y < y1);
-        renderList.push({ yDepth: Math.min(...depths) - 0.1, render: () => this.drawHouse(g.members, g.door, 'back') });
+        renderList.push({ yDepth: Math.min(...depths) - 0.1, render: () => this.drawHouse(g.members, g.door, 'back', g.roofFloors) });
         renderList.push({
           yDepth: Math.max(...depths),
           render: () => {
-            this.drawHouse(g.members, g.door, 'front');
+            this.drawHouse(g.members, g.door, 'front', g.roofFloors);
             inside.forEach((b) => this.drawBuilding(b));
           },
         });
@@ -4522,13 +4534,13 @@ export class IsometricEngine {
     this.ctx.restore();
   }
 
-  private drawHouse(members: BuildingEntity[], door: BuildingEntity | null, layer: 'back' | 'front' = 'front') {
-    drawHouseLayer(this.ctx, members, door, this.player, (x, y) => this.toScreen(x, y), layer);
+  private drawHouse(members: BuildingEntity[], door: BuildingEntity | null, layer: 'back' | 'front' = 'front', roofFloors?: BuildingEntity[]) {
+    drawHouseLayer(this.ctx, members, door, this.player, (x, y) => this.toScreen(x, y), layer, roofFloors);
     if (layer === 'front' && !door?.id.startsWith('world:')) {
       const bounds = houseCorners(members);
       const point = this.toScreen((bounds.x0 + bounds.x1) / 2, bounds.y1);
       const ref = door ?? members[0];
-      this.drawBuildingHp(point.x, point.y - HOUSE_WALL_H - 12, ref.hp, ref.maxHp);
+      this.drawBuildingHp(point.x, point.y - (roofFloors ? 84 : HOUSE_WALL_H) - 12, ref.hp, ref.maxHp);
     }
   }
 

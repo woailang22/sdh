@@ -2,6 +2,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { IsometricEngine, type GameCallbacks } from './IsometricEngine';
 import { buildCompoundWalls } from './compound';
 import * as houseRenderer from './houseRenderer';
+import * as houseGeometry from './house';
 import * as renderDiagnostics from './renderDiagnostics';
 import { isPositionBlocked } from './navigation';
 import { createMemoryDb } from '../../server/db';
@@ -593,6 +594,45 @@ describe('ground rendering cost', () => {
     expect((engine as any).drawWorldScenery).toHaveBeenCalledTimes(1);
     expect((engine as any).drawWorldScenery.mock.calls[0][0].id).toBe('fern');
     expect(engine.interactables).toHaveLength(2); // Culling affects drawing, not simulation or cache contents.
+  });
+
+  it('caches only the current paid-room geometry while retaining live damage and open-state references', () => {
+    const { engine } = setup(); engine.warpToMap('home_self', 0, 0); engine.camera = { x: 0, y: 0 };
+    const render = (engine as any).render;
+    for (const name of Object.getOwnPropertyNames(IsometricEngine.prototype)) if (name !== 'render' && name !== 'drawHouse' && /^(render|draw)/.test(name)) vi.spyOn(engine as any, name).mockImplementation(() => {});
+    const parts = buildCompoundWalls({ idPrefix: 'test', cx: 0, cy: 0, w: 4, h: 4, wallType: 'wood_wall', wallName: '墙', ownerName: '测试', doorSide: 'S', doorType: 'door', doorName: '门' });
+    for (let y = -1; y <= 1; y++) for (let x = -1; x <= 1; x++) parts.push({ ...parts[0], type: 'wood_floor', x, y });
+    const buildings = parts.map((b, i) => ({ ...b, id: `build_${i}`, mapId: 'home_self' as const, ownerId: 'self' }));
+    const grouping = vi.spyOn(houseGeometry, 'groupBuildingsIntoHouses'); const drawing = vi.spyOn(houseRenderer, 'drawHouseLayer').mockImplementation(() => {});
+    engine.setAuthoritativeBuildings(buildings); render.call(engine); render.call(engine);
+    expect(grouping).toHaveBeenCalledTimes(1); expect(drawing).toHaveBeenCalledTimes(4);
+    expect(drawing.mock.calls[0][6]).toHaveLength(9);
+    const door = buildings.find(b => b.type === 'door')!; door.hp = 0; door.isOpen = true; render.call(engine);
+    expect(grouping).toHaveBeenCalledTimes(1); expect(drawing.mock.calls.at(-1)?.[2]).toBe(door);
+    engine.setAuthoritativeBuildings(buildings.map(b => ({ ...b }))); render.call(engine); expect(grouping).toHaveBeenCalledTimes(2);
+    engine.setAuthoritativeBuildings([]); drawing.mockClear(); render.call(engine); expect(drawing).not.toHaveBeenCalled();
+    expect(grouping).toHaveBeenCalledTimes(3);
+  });
+
+  it('keeps storage beneath the outside roof and sorts it correctly against actors inside or after damage', () => {
+    const { engine } = setup(); engine.warpToMap('home_self', 0, 4); engine.camera = { x: 0, y: 0 };
+    const render = (engine as any).render, events: string[] = [];
+    for (const name of Object.getOwnPropertyNames(IsometricEngine.prototype)) if (name !== 'render' && name !== 'drawHouse' && /^(render|draw)/.test(name)) vi.spyOn(engine as any, name).mockImplementation(() => {});
+    const walls = buildCompoundWalls({ idPrefix: 'room', cx: 0, cy: 0, w: 4, h: 4, wallType: 'wood_wall', wallName: '墙', ownerName: '测试', doorSide: 'S', doorType: 'door', doorName: '门' });
+    for (let y = -1; y <= 1; y++) for (let x = -1; x <= 1; x++) walls.push({ ...walls[0], type: 'wood_floor', x, y });
+    const buildings = walls.map((b, i) => ({ ...b, id: `build_${i}`, ownerId: 'self', mapId: 'home_self' as const }));
+    const storage = { ...buildings[0], id: 'build_storage', type: 'storage_box' as const, x: 0, y: 0 };
+    engine.setAuthoritativeBuildings([...buildings, storage]);
+    vi.spyOn(houseRenderer, 'drawHouseLayer').mockImplementation((...args) => { events.push(args[5]); });
+    (engine as any).drawBuilding.mockImplementation((b: any) => events.push(b.id));
+    (engine as any).drawPlayer.mockImplementation(() => events.push('player'));
+    render.call(engine); expect(events).toContain(storage.id); expect(events.indexOf(storage.id)).toBeLessThan(events.indexOf('front'));
+    buildings[0].hp = 0; events.length = 0; render.call(engine); expect(events).toContain(storage.id);
+    buildings[0].hp = 350;
+    engine.player.x = 0; engine.player.y = .5; events.length = 0; render.call(engine);
+    expect(events.indexOf(storage.id)).toBeLessThan(events.indexOf('player'));
+    engine.player.y = -.5; events.length = 0; render.call(engine);
+    expect(events.indexOf(storage.id)).toBeGreaterThan(events.indexOf('player'));
   });
 
   it('keeps three floor materials in the ground layout without casting separate building shadows over them', () => {

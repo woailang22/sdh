@@ -3,9 +3,70 @@ import { groupBuildingsIntoHouses, houseCorners, HOUSE_WALL_H, houseWallRuns, ho
 import { buildCompoundWalls } from './compound';
 import { isPositionBlocked } from './navigation';
 import type { BuildingEntity } from '../types/game';
+import { drawHouseLayer } from './houseRenderer';
 
 const wall = (id: string, x: number, y: number): BuildingEntity => ({
   id, type: 'iron_wall', name: '墙', x, y, hp: 850, maxHp: 850, level: 1, ownerName: '遗迹', facing: 'ew',
+});
+
+function paidRoom(cx = -14, cy = 16): BuildingEntity[] {
+  const parts = buildCompoundWalls({ idPrefix: 'test', cx, cy, w: 6, h: 6, wallType: 'wood_wall', wallName: '墙', ownerName: '测试', doorSide: 'S', doorType: 'door', doorName: '自动防卫电控门' });
+  for (let y = cy - 2; y <= cy + 2; y++) for (let x = cx - 2; x <= cx + 2; x++) parts.push({ ...wall('', x, y), type: 'wood_floor' });
+  return parts.map((b, i) => ({ ...b, id: `build_${cx}_${cy}_${i}`, isOpen: false, ownerId: 'self', mapId: 'home_self' }));
+}
+
+describe('paid room recognition and cutaway', () => {
+  const rooms = (parts: BuildingEntity[]) => groupBuildingsIntoHouses(parts).filter(g => (g as any).roofFloors);
+  it('recognizes the earned25-floor/24-boundary room without adding/removing authority entities', () => {
+    const parts = paidRoom(), original = JSON.stringify(parts), groups = groupBuildingsIntoHouses(parts), room = rooms(parts)[0] as any;
+    expect(room).toBeDefined(); expect(room.members).toHaveLength(24); expect(room.roofFloors).toHaveLength(25);
+    expect(room.door).toBe(parts.find(b => b.type === 'door')); expect(room.cx).toBe(-14); expect(room.cy).toBe(16);
+    expect(groups.flatMap(g => g.members).map(b => b.id).sort()).toEqual(parts.filter(b => !b.type.endsWith('_floor')).map(b => b.id).sort());
+    expect(JSON.stringify(parts)).toBe(original);
+  });
+  it.each(['missing-floor', 'missing-wall', 'wrong-facing', 'foreign-owner', 'foreign-map', 'no-door', 'corner-door'] as const)('does not give an incomplete or incompatible shell a roof: %s', fault => {
+    let parts = paidRoom(); const north = parts.find(b => b.x === -14 && b.y === 13)!;
+    if (fault === 'missing-floor') parts = parts.filter(b => !(b.type === 'wood_floor' && b.x === -14 && b.y === 16));
+    if (fault === 'missing-wall') parts = parts.filter(b => b !== north);
+    if (fault === 'wrong-facing') north.facing = 'ns';
+    if (fault === 'foreign-owner') north.ownerId = 'other';
+    if (fault === 'foreign-map') north.mapId = 'home_other';
+    if (fault === 'no-door') parts.find(b => b.type === 'door')!.type = 'wood_wall';
+    if (fault === 'corner-door') { parts.find(b => b.type === 'door')!.type = 'wood_wall'; parts.find(b => b.x === -17 && b.y === 19)!.type = 'door'; }
+    expect(rooms(parts)).toHaveLength(0);
+  });
+  it('accepts floors under walls and keeps two rooms sharing a wall separate', () => {
+    const a = paidRoom(0, 0), b = paidRoom(6, 0).filter(b => !(b.x === 3 && b.type !== 'wood_floor'));
+    for (const part of a.filter(b => !b.type.endsWith('_floor'))) a.push({ ...part, id: part.id + '_floor', type: 'wood_floor' });
+    const recognized = rooms([...a, ...b]) as any[];
+    expect(recognized).toHaveLength(2); expect(recognized.map(r => r.cx).sort()).toEqual([0, 6]);
+    expect(recognized.every(r => r.roofFloors.length === 25)).toBe(true);
+  });
+  it.each(['wood_wall', 'door'] as const)('uses a paid replacement %s instead of its retained destroyed original', type => {
+    const parts = paidRoom(), old = parts.find(b => b.type === type)!; old.hp = 0;
+    const replacement = { ...old, id: old.id + '_rebuilt', hp: old.maxHp };
+    parts.push(replacement); const room = rooms(parts)[0];
+    expect(room).toBeDefined(); expect(room.members).toContain(replacement); expect(room.members).not.toContain(old);
+    expect(room.members).toHaveLength(24);
+  });
+  it('shows a real roof outside, hides it inside, keeps it for an open door and removes it for destroyed structure', () => {
+    const parts = paidRoom(), room = rooms(parts)[0] as any; expect(room).toBeDefined();
+    const fills: { color: string; alpha: number }[] = [], labels: string[] = [];
+    const ctx: any = { globalAlpha: 1, fillStyle: '', fill: () => fills.push({ color: ctx.fillStyle, alpha: ctx.globalAlpha }), fillText: (text: string) => labels.push(text) };
+    const context = new Proxy(ctx, { get: (target, key) => key in target ? target[key] : () => {} });
+    const project = (x: number, y: number) => ({ x: (x - y) * 32, y: (x + y) * 16 });
+    const draw = (player: { x: number; y: number }) => { fills.length = labels.length = 0; drawHouseLayer(context, room.members, room.door, player, project, 'front', room.roofFloors); return fills.some(f => ['#a0745c', '#809184', '#909077'].includes(f.color)); };
+    expect(draw({ x: -14, y: 22 })).toBe(true); expect(labels).toContain('营地房屋'); expect(labels).toContain('入口 · E 开门');
+    expect(draw({ x: -14, y: 17 })).toBe(false); expect(fills.some(f => f.alpha === .18)).toBe(true);
+    room.door.isOpen = true; expect(draw({ x: -14, y: 22 })).toBe(true); expect(labels).toContain('入口 · 可通行');
+    for (const part of [room.members.find((b: BuildingEntity) => b.type === 'wood_wall'), room.door, room.roofFloors[0]]) {
+      const hp = part.hp; part.hp = 0; expect(draw({ x: -14, y: 22 })).toBe(false); part.hp = hp;
+    }
+    const secondDoor = room.members.find((b: BuildingEntity) => b.x === -11 && b.y === 16)!;
+    secondDoor.type = 'door'; secondDoor.isOpen = false;
+    room.door.isOpen = false; draw({ x: -14, y: 22 });
+    expect(fills.filter(f => f.color === '#536566')).toHaveLength(2);
+  });
 });
 
 describe('complete house geometry', () => {
@@ -26,6 +87,15 @@ describe('complete house geometry', () => {
     const buildings = room();
     buildings.find(b => b.y === -3 && b.x === 0)!.hp = 0;
     expect(houseWallRuns(buildings).filter(r => r.side === 'N').every(r => r.end.x <= -0.5 || r.start.x >= 0.5)).toBe(true);
+  });
+  it('retains the existing public roof, doorway caption and inside cutaway', () => {
+    const members = room().map(b => ({ ...b, id: 'world:0:0:poi:' + b.id })), door = members.find(b => b.type === 'door')!;
+    door.name = '林边民居入口'; door.isOpen = false;
+    const colors: string[] = [], labels: string[] = [], target: any = { fillStyle: '', globalAlpha: 1, fill: () => colors.push(target.fillStyle), fillText: (label: string) => labels.push(label) };
+    const ctx = new Proxy(target, { get: (object, key) => key in object ? object[key] : () => {} });
+    const draw = (y: number) => { colors.length = labels.length = 0; drawHouseLayer(ctx, members, door, { x: 0, y }, (x, y) => ({ x, y }), 'front'); return colors.some(c => ['#a0745c', '#809184', '#909077'].includes(c)); };
+    expect(draw(6)).toBe(true); expect(labels).toContain('林边民居'); expect(labels).toContain('入口 · E 开门');
+    expect(draw(0)).toBe(false); expect(labels).not.toContain('营地房屋');
   });
 });
 

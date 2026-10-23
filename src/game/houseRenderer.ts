@@ -1,5 +1,5 @@
 import type { BuildingEntity } from '../types/game';
-import { houseCorners, houseEntrance, houseWallRuns, HOUSE_WALL_H, type HouseWallRun } from './house';
+import { houseCorners, houseEntrance, houseWallRuns, houseRoofVisible, HOUSE_WALL_H, type HouseWallRun } from './house';
 
 type Point = { x: number; y: number };
 type Project = (x: number, y: number) => Point;
@@ -34,16 +34,17 @@ export function drawWaterHousePlatform(ctx: CanvasRenderingContext2D, members: B
 }
 
 /** Four actual wall sides, split into back/front layers around actors and loot. */
-export function drawHouseLayer(ctx: CanvasRenderingContext2D, members: BuildingEntity[], door: BuildingEntity | null, player: Point, project: Project, layer: 'back' | 'front') {
+export function drawHouseLayer(ctx: CanvasRenderingContext2D, members: BuildingEntity[], door: BuildingEntity | null, player: Point, project: Project, layer: 'back' | 'front', roofFloors?: BuildingEntity[]) {
   const { x0, x1, y0, y1 } = houseCorners(members);
   const publicHouse = !!door && door.type === 'door' && door.id.startsWith('world:');
+  const finishedHouse = publicHouse || !!roofFloors;
   const wood = members.some(b => b.type === 'wood_wall');
   const clinic = door?.name.includes('诊所');
   const workshop = door?.name.includes('工棚');
   const warehouse = door?.name.includes('仓库');
   const variant = [...(door?.id ?? '')].reduce((value, char) => value + char.charCodeAt(0), 0) % 3;
   const inside = player.x > x0 - 0.8 && player.x < x1 + 0.8 && player.y > y0 - 0.8 && player.y < y1 + 0.8;
-  const wallHeight = publicHouse ? 84 : HOUSE_WALL_H;
+  const wallHeight = finishedHouse ? 84 : HOUSE_WALL_H;
   const trim = clinic ? '#d4d7c6' : workshop || warehouse ? '#939e9b' : wood ? '#c4a47a' : '#a3aba9';
   const runs = houseWallRuns(members);
   const up = (point: Point, height: number): Point => ({ x: point.x, y: point.y - height });
@@ -70,7 +71,7 @@ export function drawHouseLayer(ctx: CanvasRenderingContext2D, members: BuildingE
     line(a, up(a, wallHeight), trim, 3);
     line(b, up(b, wallHeight), trim, 3);
     const length = Math.hypot(run.end.x - run.start.x, run.end.y - run.start.y);
-    if (!publicHouse || length < 2.4) return;
+    if (!finishedHouse || length < 2.4) return;
     const pointAt = (fraction: number) => project(run.start.x + (run.end.x - run.start.x) * fraction, run.start.y + (run.end.y - run.start.y) * fraction);
     const inset = Math.min(0.24, 0.65 / length);
     const wa = pointAt(0.5 - inset), wb = pointAt(0.5 + inset);
@@ -90,12 +91,13 @@ export function drawHouseLayer(ctx: CanvasRenderingContext2D, members: BuildingE
     ctx.globalAlpha = 1;
   }
 
-  if (door) {
+  const doors = roofFloors ? members.filter(b => b.type === 'door' || b.type === 'safe_door') : door ? [door] : [];
+  for (const door of doors) {
     const opening = houseEntrance(members, door);
     const frontDoor = opening.side === 'S' || opening.side === 'E';
     if ((layer === 'front') === frontDoor) {
       const a = project(opening.start.x, opening.start.y), b = project(opening.end.x, opening.end.y);
-      const openingHeight = publicHouse ? 74 : wallHeight * 0.86;
+      const openingHeight = finishedHouse ? 74 : wallHeight * 0.86;
       ctx.globalAlpha = inside && frontDoor ? 0.35 : 1;
       polygon([up(a, wallHeight), up(b, wallHeight), up(b, openingHeight), up(a, openingHeight)], trim);
       line(a, up(a, openingHeight), trim, 5); line(b, up(b, openingHeight), trim, 5);
@@ -109,8 +111,8 @@ export function drawHouseLayer(ctx: CanvasRenderingContext2D, members: BuildingE
     }
   }
 
-  if (layer === 'front' && publicHouse) {
-    const roofVisible = !inside && members.every(b => !b.type.endsWith('_wall') || b.hp > 0);
+  if (layer === 'front' && finishedHouse) {
+    const roofVisible = houseRoofVisible(members, player, roofFloors);
     if (roofVisible) {
       const eave = wallHeight + 5;
       const southWest = up(project(x0 - 0.25, y1 + 0.25), eave), southEast = up(project(x1 + 0.25, y1 + 0.25), eave);
@@ -161,7 +163,7 @@ export function drawHouseLayer(ctx: CanvasRenderingContext2D, members: BuildingE
       ctx.fillStyle = '#365b4b'; ctx.fillRect(sign.x - 14, sign.y - 24, 28, 24);
       ctx.fillStyle = '#e1e5cb'; ctx.fillRect(sign.x - 3, sign.y - 21, 6, 18); ctx.fillRect(sign.x - 9, sign.y - 15, 18, 6);
     }
-    const name = door!.name.replace(/入口$/, '');
+    const name = roofFloors ? '营地房屋' : door!.name.replace(/入口$/, '');
     const labelWidth = Math.max(94, name.length * 13 + 16);
     ctx.fillStyle = '#22332f'; ctx.fillRect(label.x - labelWidth / 2, label.y - 16, labelWidth, 24);
     ctx.fillStyle = '#ece4cc'; ctx.fillText(name, label.x, label.y);

@@ -1,0 +1,440 @@
+{
+  "integrity": "ok",
+  "consistentBackupRestore": true,
+  "nativeAccepted": true,
+  "productionAsset": "index-z_DuULg9.js",
+  "assetSource": "production build log/dist; bundle was not captured inside the native run",
+  "elapsedSec": 13.492,
+  "unchanged": {
+    "buildings": 60,
+    "roomWallsAndDoors": 24,
+    "interiorFloors": 25,
+    "physicalCounters": {
+      "wood": 1,
+      "stone": 32,
+      "scrap": 21,
+      "parts": 0,
+      "food": 0,
+      "ammo": 47,
+      "c4": 0,
+      "medical": 0,
+      "credits": 552,
+      "shard": 9
+    },
+    "inventoryAndEquipment": true,
+    "storageAndRareEquipment": true,
+    "storedWood": 7,
+    "defenseAmmo": 30,
+    "totalAmmo": 77,
+    "campAndPublicState": true
+  },
+  "roofObservations": [
+    {
+      "stage": "inside-initial",
+      "floorCount": 25,
+      "wallCount": 24,
+      "roof": false,
+      "frontFade": true,
+      "labels": [
+        "入口 · 可通行",
+        "营地房屋"
+      ],
+      "position": {
+        "x": -15.901254524644566,
+        "y": 16.000469406755688
+      }
+    },
+    {
+      "stage": "inside-door-closed",
+      "floorCount": 25,
+      "wallCount": 24,
+      "roof": false,
+      "frontFade": true,
+      "labels": [
+        "入口 · E 开门",
+        "营地房屋"
+      ],
+      "position": {
+        "x": -14.002776438909617,
+        "y": 17.899506070308128
+      }
+    },
+    {
+      "stage": "outside-roof-open-door",
+      "floorCount": 25,
+      "wallCount": 24,
+      "roof": true,
+      "frontFade": false,
+      "labels": [
+        "入口 · 可通行",
+        "营地房屋"
+      ],
+      "position": {
+        "x": -14.000000004039254,
+        "y": 22.89650121507622
+      }
+    },
+    {
+      "stage": "outside-roof-closed-door",
+      "floorCount": 25,
+      "wallCount": 24,
+      "roof": true,
+      "frontFade": false,
+      "labels": [
+        "入口 · E 开门",
+        "营地房屋"
+      ],
+      "position": {
+        "x": -14.00000000000696,
+        "y": 20.617261215076272
+      }
+    },
+    {
+      "stage": "inside-entered",
+      "floorCount": 25,
+      "wallCount": 24,
+      "roof": false,
+      "frontFade": true,
+      "labels": [
+        "入口 · 可通行",
+        "营地房屋"
+      ],
+      "position": {
+        "x": -14.000000000000004,
+        "y": 17.11632121507636
+      }
+    },
+    {
+      "stage": "inside-storage-used",
+      "floorCount": 25,
+      "wallCount": 24,
+      "roof": false,
+      "frontFade": true,
+      "labels": [
+        "入口 · 可通行",
+        "营地房屋"
+      ],
+      "position": {
+        "x": -14.000000000000004,
+        "y": 16.102861215076384
+      }
+    },
+    {
+      "stage": "inside-after-restart",
+      "floorCount": 25,
+      "wallCount": 24,
+      "roof": false,
+      "frontFade": true,
+      "labels": [
+        "入口 · 可通行",
+        "营地房屋"
+      ],
+      "position": {
+        "x": -14.000000000000004,
+        "y": 16.102861215076384
+      }
+    }
+  ],
+  "stages": [
+    {
+      "stage": "earned-room-start",
+      "elapsedSec": 0.005,
+      "position": {
+        "x": -15.901254524644566,
+        "y": 16.000469406755688,
+        "map": "own-camp"
+      },
+      "hp": 120,
+      "satiety": 59.65425000000124,
+      "resources": {
+        "wood": 1,
+        "stone": 32,
+        "scrap": 21,
+        "parts": 0,
+        "food": 1,
+        "ammo": 47,
+        "c4": 0,
+        "medical": 7,
+        "credits": 552,
+        "shard": 9
+      },
+      "buildings": 60,
+      "errors": [],
+      "diagnostics": []
+    },
+    {
+      "stage": "inside-initial",
+      "elapsedSec": 0.651,
+      "position": {
+        "x": -15.901254524644566,
+        "y": 16.000469406755688,
+        "map": "own-camp"
+      },
+      "hp": 120,
+      "satiety": 59.39775000000124,
+      "resources": {
+        "wood": 1,
+        "stone": 32,
+        "scrap": 21,
+        "parts": 0,
+        "food": 1,
+        "ammo": 47,
+        "c4": 0,
+        "medical": 7,
+        "credits": 552,
+        "shard": 9
+      },
+      "buildings": 60,
+      "errors": [],
+      "diagnostics": []
+    },
+    {
+      "stage": "inside-door-closed",
+      "elapsedSec": 2.516,
+      "position": {
+        "x": -14.002776438909617,
+        "y": 17.899506070308128,
+        "map": "own-camp"
+      },
+      "hp": 120,
+      "satiety": 58.88175000000123,
+      "resources": {
+        "wood": 1,
+        "stone": 32,
+        "scrap": 21,
+        "parts": 0,
+        "food": 1,
+        "ammo": 47,
+        "c4": 0,
+        "medical": 7,
+        "credits": 552,
+        "shard": 9
+      },
+      "buildings": 60,
+      "errors": [],
+      "diagnostics": []
+    },
+    {
+      "stage": "outside-roof-open-door",
+      "elapsedSec": 4.826,
+      "position": {
+        "x": -14.000000004039254,
+        "y": 22.89650121507622,
+        "map": "own-camp"
+      },
+      "hp": 120,
+      "satiety": 58.369000000001236,
+      "resources": {
+        "wood": 1,
+        "stone": 32,
+        "scrap": 21,
+        "parts": 0,
+        "food": 1,
+        "ammo": 47,
+        "c4": 0,
+        "medical": 7,
+        "credits": 552,
+        "shard": 9
+      },
+      "buildings": 60,
+      "errors": [],
+      "diagnostics": []
+    },
+    {
+      "stage": "outside-roof-closed-door",
+      "elapsedSec": 6.428,
+      "position": {
+        "x": -14.00000000000696,
+        "y": 20.617261215076272,
+        "map": "own-camp"
+      },
+      "hp": 120,
+      "satiety": 58.11100000000123,
+      "resources": {
+        "wood": 1,
+        "stone": 32,
+        "scrap": 21,
+        "parts": 0,
+        "food": 1,
+        "ammo": 47,
+        "c4": 0,
+        "medical": 7,
+        "credits": 552,
+        "shard": 9
+      },
+      "buildings": 60,
+      "errors": [],
+      "diagnostics": []
+    },
+    {
+      "stage": "inside-entered",
+      "elapsedSec": 8.267,
+      "position": {
+        "x": -14.000000000000007,
+        "y": 17.37054121507635,
+        "map": "own-camp"
+      },
+      "hp": 120,
+      "satiety": 57.602500000001235,
+      "resources": {
+        "wood": 1,
+        "stone": 32,
+        "scrap": 21,
+        "parts": 0,
+        "food": 1,
+        "ammo": 47,
+        "c4": 0,
+        "medical": 7,
+        "credits": 552,
+        "shard": 9
+      },
+      "buildings": 60,
+      "errors": [],
+      "diagnostics": []
+    },
+    {
+      "stage": "inside-storage-used",
+      "elapsedSec": 9.856,
+      "position": {
+        "x": -14.000000000000004,
+        "y": 16.102861215076384,
+        "map": "own-camp"
+      },
+      "hp": 120,
+      "satiety": 57.08800000000124,
+      "resources": {
+        "wood": 1,
+        "stone": 32,
+        "scrap": 21,
+        "parts": 0,
+        "food": 1,
+        "ammo": 47,
+        "c4": 0,
+        "medical": 7,
+        "credits": 552,
+        "shard": 9
+      },
+      "buildings": 60,
+      "errors": [],
+      "diagnostics": []
+    },
+    {
+      "stage": "before-restart",
+      "elapsedSec": 9.86,
+      "position": {
+        "x": -14.000000000000004,
+        "y": 16.102861215076384,
+        "map": "own-camp"
+      },
+      "hp": 120,
+      "satiety": 57.08800000000124,
+      "resources": {
+        "wood": 1,
+        "stone": 32,
+        "scrap": 21,
+        "parts": 0,
+        "food": 1,
+        "ammo": 47,
+        "c4": 0,
+        "medical": 7,
+        "credits": 552,
+        "shard": 9
+      },
+      "buildings": 60,
+      "errors": [],
+      "diagnostics": []
+    },
+    {
+      "stage": "inside-after-restart",
+      "elapsedSec": 13.485,
+      "position": {
+        "x": -14.000000000000004,
+        "y": 16.102861215076384,
+        "map": "own-camp"
+      },
+      "hp": 120,
+      "satiety": 56.57925000000124,
+      "resources": {
+        "wood": 1,
+        "stone": 32,
+        "scrap": 21,
+        "parts": 0,
+        "food": 1,
+        "ammo": 47,
+        "c4": 0,
+        "medical": 7,
+        "credits": 552,
+        "shard": 9
+      },
+      "buildings": 60,
+      "errors": [],
+      "diagnostics": []
+    },
+    {
+      "stage": "restart-verified",
+      "elapsedSec": 13.49,
+      "position": {
+        "x": -14.000000000000004,
+        "y": 16.102861215076384,
+        "map": "own-camp"
+      },
+      "hp": 120,
+      "satiety": 56.57925000000124,
+      "resources": {
+        "wood": 1,
+        "stone": 32,
+        "scrap": 21,
+        "parts": 0,
+        "food": 1,
+        "ammo": 47,
+        "c4": 0,
+        "medical": 7,
+        "credits": 552,
+        "shard": 9
+      },
+      "buildings": 60,
+      "errors": [],
+      "diagnostics": []
+    }
+  ],
+  "nativeDoorToggles": 4,
+  "verification": {
+    "files": 41,
+    "tests": 607,
+    "fullSuite": "passed",
+    "typeCheck": "passed",
+    "build": "passed with existing Vite loader/bundle warnings",
+    "effectiveNegatives": [
+      "incomplete boundary accepted",
+      "missing floor accepted",
+      "roof remains inside",
+      "grouping recomputed every render"
+    ]
+  },
+  "review": "Independent read-only final review matched all seven native observations, stages, four toggles, four source hashes, effective negative controls and607-test results; no P1/P2 after actor-depth and paid-replacement fixes. Asset source explicitly identifies build evidence rather than an uncaptured browser bundle. Reviewer ran no tests, services or browsers and opened no database.",
+  "limitations": [
+    "Rectangular paid floor rooms; arbitrary L-shaped roofs are not recognized",
+    "Derived visual roof has no saved cost, collision, weather or defense benefit",
+    "No new grants, damage, combat, gathering or balance measurement in this run",
+    "Experienced automation using normal navigation API and native UI, not blind human play",
+    "Read-only bounded paint probes; no FPS/GPU/memory/population-capacity acceptance"
+  ],
+  "sourceHashes": [
+    {
+      "path": "data/earned-room-roof-20261023-a1-results.json",
+      "sha256": "1c4155aa82755188a7e69c35f83bca975948ffdfb6c4aa6358029392a54c45db"
+    },
+    {
+      "path": "data/placed-roof-full-20261023.log",
+      "sha256": "419bc3ffbdff2e3ae879921189aac25a2944bd19f64453e612fda691c91d6132"
+    },
+    {
+      "path": "data/placed-roof-final-types-20261023.log",
+      "sha256": "7f3594d7a965c703e6361ae50c0ef50cf9c344c621d801592b074b48554f4235"
+    },
+    {
+      "path": "data/placed-roof-build-20261023.log",
+      "sha256": "c4afd9efd6011ca0cd596b51fabff362f77397ce27860d9b4d126ea6e0e219de"
+    }
+  ]
+}
