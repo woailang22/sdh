@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { buildCompoundWalls } from './compound';
 import { buildingBounds, findPath, hasLineOfSight, isPositionBlocked } from './navigation';
 import React from 'react';
@@ -50,6 +50,29 @@ describe('shared collision and navigation', () => {
       previous = point;
     }
     expect(findPath(from, to, buildings.map(b => ({ ...b, isOpen: false })), 12)).toEqual([]);
+  });
+
+  it('skips center-distance work for nonblocking structures and bounds far from the sight segment', () => {
+    const hypot = vi.spyOn(Math, 'hypot');
+    try {
+      const buildings = Array.from({ length: 4000 }, (_, i) => ({ ...wall, id: String(i), type: 'wood_floor', x: i % 64, y: Math.floor(i / 64) }));
+      buildings.push({ ...wall, id: 'far', type: 'stone_wall', x: 30, y: 30 });
+      expect(hasLineOfSight({ x: 0, y: -2 }, { x: 0, y: 2 }, buildings)).toBe(true);
+      expect(hypot.mock.calls.length).toBe(0);
+    } finally { hypot.mockRestore(); }
+  });
+
+  it.each([
+    [{ x: -.5, y: -2 }, { x: -.5, y: 2 }, true],
+    [{ x: -.499, y: -2 }, { x: -.499, y: 2 }, false],
+    [{ x: 0, y: -.12 }, { x: 0, y: -2 }, true],
+    [{ x: 0, y: -.119 }, { x: 0, y: -2 }, false],
+    [{ x: 0, y: 0 }, { x: 0, y: 2 }, true],
+    [{ x: 0, y: 1e-7 }, { x: 0, y: 2 }, true],
+    [{ x: 0, y: 1e-5 }, { x: 0, y: 2 }, false],
+  ] as const)('retains strict edges and center exceptions for %j to %j', (from, to, clear) => {
+    expect(hasLineOfSight(from, to, [wall])).toBe(clear);
+    expect(hasLineOfSight(to, from, [wall])).toBe(clear);
   });
 
   it('uses a reachable nearby point for an occupied destination and bounds unreachable requests', () => {

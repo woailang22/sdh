@@ -43,12 +43,14 @@ function intersects(from: Point, to: Point, bounds: Bounds, radius = 0): boolean
 
 export function hasLineOfSight(from: Point, to: Point, buildings: readonly NavigationBuilding[], ignoreId?: string): boolean {
   if (![from.x, from.y, to.x, to.y].every(Number.isFinite)) return false;
+  const minX = Math.min(from.x, to.x), maxX = Math.max(from.x, to.x), minY = Math.min(from.y, to.y), maxY = Math.max(from.y, to.y);
   return !buildings.some(building => {
     if (ignoreId !== undefined && building.id === ignoreId) return false;
+    const bounds = buildingBounds(building);
+    if (!bounds || bounds.maxX < minX || bounds.minX > maxX || bounds.maxY < minY || bounds.minY > maxY) return false;
     // An entity may attack from its own center or attack a structure itself.
     if (Math.hypot(from.x - building.x, from.y - building.y) < 1e-6 || Math.hypot(to.x - building.x, to.y - building.y) < 1e-6) return false;
-    const bounds = buildingBounds(building);
-    return bounds !== null && intersects(from, to, bounds);
+    return intersects(from, to, bounds);
   });
 }
 

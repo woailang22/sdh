@@ -8,6 +8,7 @@ import { createDb, backupDatabase } from './server/db.js';
 import { guestTokenFromCookie, resolveGuest } from './server/identity.js';
 import { GameWorld, isUntargetedFire, type GameAction, type GameStateSnapshot, type PlayerActionSnapshot, type WorldRules } from './server/worldState.js';
 import { FireQueue } from './server/fireQueue.js';
+import { StateCheckQueue } from './server/stateCheckQueue.js';
 import { createWorldQueries } from './server/worldQueries.js';
 import { FULL_STATE_REFRESH_MS, StateEncoder } from './src/game/stateSync.js';
 import { sendMessage as send } from './server/transport.js';
@@ -43,6 +44,10 @@ const game = new GameWorld(db, rules);
 db.setMeta('public-house-layout', '2');
 interface Client { ws: WebSocket; id: string; isGM: boolean; visible: Set<string>; lastSeen: number; lastCorrection: number; lastMessageAt: number; messageCount: number; lastSnapshot: number; mapId: MapZoneId; stateEncoder?: StateEncoder; fireQueue: FireQueue; fullPhaseMs: number }
 const clients = new Map<string, Client>();
+const stateChecks = new StateCheckQueue<Client>(client => {
+  if (clients.get(client.id) !== client || client.ws.readyState !== WebSocket.OPEN || Date.now() - client.lastSnapshot < 2000) return;
+  try { stateTo(client); } catch (error) { console.error('[ws] state check failed', error); }
+});
 let nextStatePhase = 0;
 function allocateStatePhase() {
   const occupied = new Set([...clients.values()].map(c => c.fullPhaseMs));
@@ -162,7 +167,7 @@ wss.on('connection', (ws, req) => {
   const self = game.connect(id, '废土流浪者 #' + id.slice(-4));
   const client: Client = { ws, id, isGM: false, visible: new Set(), lastSeen: Date.now(), lastCorrection: 0, lastMessageAt: Date.now(), messageCount: 0, lastSnapshot: 0, mapId: self.mapId, fireQueue: new FireQueue(), fullPhaseMs: previous?.fullPhaseMs ?? allocateStatePhase() };
   clients.set(id, client);
-  if (previous) { previous.fireQueue.cancel(); previous.ws.close(4001, 'Guest identity connected elsewhere'); }
+  if (previous) { stateChecks.cancel(previous); previous.fireQueue.cancel(); previous.ws.close(4001, 'Guest identity connected elsewhere'); }
   const snapshot = game.snapshot(id);
   const players = game.visiblePlayers(id);
   client.visible = new Set(players.map(p => p.id));
@@ -211,6 +216,7 @@ wss.on('connection', (ws, req) => {
     } catch (error) { console.error('[ws] message rejected', error); }
   });
   ws.on('close', () => {
+    stateChecks.cancel(client);
     client.fireQueue.cancel();
     // A replaced connection cannot disconnect or persist over the new socket's player.
     if (clients.get(id)?.ws !== ws) return;
@@ -227,10 +233,13 @@ setInterval(() => {
     if (now - client.lastSeen > 60000) { client.ws.terminate(); continue; }
     cancelChangedFire(client);
     refreshVisibility(client);
-    if (dirty && game.sharedTickChanged || now - client.lastSnapshot >= 2000) stateTo(client);
-    else if (dirty) {
-      if (client.stateEncoder) playerStateTo(client, game.snapshotPlayer(client.id));
-      else stateTo(client);
+    if (dirty && game.sharedTickChanged) stateTo(client);
+    else {
+      if (now - client.lastSnapshot >= 2000) stateChecks.enqueue(client);
+      if (dirty) {
+        if (client.stateEncoder) playerStateTo(client, game.snapshotPlayer(client.id));
+        else stateTo(client);
+      }
     }
   }
 }, 200);

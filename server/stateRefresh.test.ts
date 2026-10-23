@@ -30,13 +30,16 @@ it('spreads complete refreshes of eight actual server connections without delayi
   // connection allocation, periodic loop, snapshots and transport remain real.
   const source = `import { GameWorld } from ${JSON.stringify(pathToFileURL(resolve('server/worldState.ts')).href)};
     import { StateEncoder } from ${JSON.stringify(pathToFileURL(resolve('src/game/stateSync.ts')).href)};
-    let clock=0;process.on('message',m=>{clock=m.clock;});GameWorld.prototype.tick=()=>true;
+    let clock=0,turn=0,probing=false;const immediate=globalThis.setImmediate;
+    function pulse(){turn++;if(probing)immediate(pulse);}
+    process.on('message',m=>{if(typeof m.clock==='number')clock=m.clock;if(m.probe!==undefined){const start=m.probe&&!probing;probing=m.probe;if(start)immediate(pulse);}});GameWorld.prototype.tick=()=>true;
+    const snapshot=GameWorld.prototype.snapshot;GameWorld.prototype.snapshot=function(id,...rest){if(probing&&clock===0)process.send({kind:'periodic',at:clock,id,turn});return snapshot.call(this,id,...rest);};
     const encode=StateEncoder.prototype.encode,privateEncode=StateEncoder.prototype.encodePlayer;
     StateEncoder.prototype.encode=function(state){const patch=encode.call(this,state,clock);if(patch.baseSequence===null)process.send({kind:'full',at:clock,id:state.player.id});process.send({kind:'seen',at:clock,id:state.player.id});return patch;};
     StateEncoder.prototype.encodePlayer=function(state,full){const patch=privateEncode.call(this,state,full,clock);process.send({kind:'seen',at:clock,id:state.player.id});return patch;};
     await import(${JSON.stringify(pathToFileURL(resolve('server.ts')).href)});`;
   const child = spawn(process.execPath, ['--import', 'tsx', '--input-type=module', '--eval', source], { cwd: process.cwd(), windowsHide: true, env: { ...process.env, DB_PATH: file, PORT: String(port), NODE_ENV: 'production' }, stdio: ['ignore', 'pipe', 'pipe', 'ipc'] });
-  const exited = once(child, 'exit'), events: { kind: string; at: number; id: string }[] = [], sockets: WebSocket[] = [];
+  const exited = once(child, 'exit'), events: { kind: string; at: number; id: string; turn?: number }[] = [], sockets: WebSocket[] = [];
   let started = false, stderr = '';
   child.stdout!.on('data', chunk => { started ||= String(chunk).includes('[Rift Walker]'); }); child.stderr!.on('data', chunk => { stderr += String(chunk); });
   child.on('message', m => events.push(m as typeof events[number]));
@@ -53,6 +56,12 @@ it('spreads complete refreshes of eight actual server connections without delayi
     // Connection churn must not make this identity collide with an active
     // connection after the phase counter has rotated through occupied slots.
     for (let reconnect = 0; reconnect < 18; reconnect++) await connect(actors[7]);
+    child.send({ probe: true });
+    await until(() => new Set(events.filter(e => e.kind === 'periodic').map(e => e.id)).size === 8);
+    const periodic = events.filter(e => e.kind === 'periodic'), turns = new Map<number, number>();
+    for (const e of periodic) turns.set(e.turn!, (turns.get(e.turn!) || 0) + 1);
+    expect(Math.max(...turns.values())).toBe(1);
+    child.send({ probe: false });
     for (let clock = 200; clock <= 5000; clock += 200) {
       child.send({ clock });
       await until(() => new Set(events.filter(e => e.kind === 'seen' && e.at === clock).map(e => e.id)).size === 8);
