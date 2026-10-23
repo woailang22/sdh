@@ -6,6 +6,7 @@ import { groundBaseColor, hash2 as hash2Pure, withAlpha, themeAccent, drawSoftSh
 import type { GroundTheme } from './visualTheme';
 import { groupBuildingsIntoHouses, houseCorners, HOUSE_WALL_H, type HouseGroup } from './house';
 import { drawHouseLayer, drawWaterHousePlatform, waterHousePlatformBounds } from './houseRenderer';
+import { drawFarmPlot, farmPlotStatus } from './farmRenderer';
 import { frameContent, angleToSurvivorFrame, interactableSprite, buildingSprite } from './art';
 import { isHostile, canOperateDoor } from './diplomacy';
 import { CHUNK_SIZE, WORLD_MIN, WORLD_MAX, generateWorldChunk, worldToChunk, worldThemeAt, worldLocationAt, worldIsRoad, type WorldChunk } from './world';
@@ -4991,17 +4992,16 @@ export class IsometricEngine {
     } else if (b.type === 'campfire') {
       this.drawCampfire(b.x, b.y);
     } else if (['bed', 'farm_plot', 'furnace', 'research_table'].includes(b.type)) {
-      this.ctx.fillStyle = b.type === 'farm_plot' ? '#5c4330' : b.type === 'furnace' ? '#69717a' : '#755b43';
+      if (b.type === 'farm_plot') {
+        drawFarmPlot(this.ctx, b, s, Date.now());
+      } else {
+      this.ctx.fillStyle = b.type === 'furnace' ? '#69717a' : '#755b43';
       this.ctx.fillRect(s.x - 23, s.y - 21, 46, 25);
       this.ctx.strokeStyle = '#1f2937'; this.ctx.lineWidth = 2;
       this.ctx.strokeRect(s.x - 23, s.y - 21, 46, 25);
       if (b.type === 'bed') {
         this.ctx.fillStyle = '#adbdab'; this.ctx.fillRect(s.x - 19, s.y - 18, 38, 15);
         this.ctx.fillStyle = '#e0ddcf'; this.ctx.fillRect(s.x - 18, s.y - 17, 11, 13);
-      } else if (b.type === 'farm_plot') {
-        this.ctx.strokeStyle = '#2c2019'; this.ctx.lineWidth = 2;
-        for (let row = -14; row < 0; row += 7) { this.ctx.beginPath(); this.ctx.moveTo(s.x - 20, s.y + row); this.ctx.lineTo(s.x + 20, s.y + row); this.ctx.stroke(); }
-        if (b.production) { this.ctx.fillStyle = '#89b65d'; for (let x = -15; x <= 15; x += 10) this.ctx.fillRect(s.x + x, s.y - 13, 4, 10); }
       } else if (b.type === 'furnace') {
         this.ctx.fillStyle = '#252b30'; this.ctx.fillRect(s.x - 17, s.y - 45, 34, 31);
         this.ctx.fillStyle = b.production ? '#e89a43' : '#51443a'; this.ctx.fillRect(s.x - 10, s.y - 30, 20, 13);
@@ -5009,7 +5009,10 @@ export class IsometricEngine {
         this.ctx.fillStyle = '#b6c4ba'; this.ctx.fillRect(s.x - 12, s.y - 24, 23, 12);
         this.ctx.fillStyle = '#7aa7b8'; this.ctx.fillRect(s.x - 7, s.y - 23, 13, 10);
       }
-      this.ctx.font = 'bold 10px sans-serif'; this.ctx.textAlign = 'center'; this.ctx.fillStyle = '#ece5cf'; this.ctx.fillText(b.name, s.x, s.y - 52);
+      }
+      if (b.type !== 'farm_plot' || this.nearestBuilding?.id !== b.id) {
+        this.ctx.font = 'bold 10px sans-serif'; this.ctx.textAlign = 'center'; this.ctx.fillStyle = '#ece5cf'; this.ctx.fillText(b.name, s.x, s.y - 52);
+      }
       if (b.hp < b.maxHp) this.drawBuildingHp(s.x, s.y - 62, b.hp, b.maxHp);
     } else if (b.type === 'anchor_core') {
       if (!this.tryBuildingSprite('anchor_core', b.x, b.y)) {
@@ -6865,15 +6868,17 @@ export class IsometricEngine {
     if (this.callbacks.onGameAction && this.callbacks.onCampInteract && this.campInteractionIsNearest()) return;
     if (this.nearestBuilding) {
       const s = this.toScreen(this.nearestBuilding.x, this.nearestBuilding.y);
+      const farmStatus = this.nearestBuilding.type === 'farm_plot' && Math.hypot(this.nearestBuilding.x - this.player.x, this.nearestBuilding.y - this.player.y) <= 4
+        && (this.nearestBuilding.ownerId === this.localPlayerId || !!this.nearestBuilding.production) ? farmPlotStatus(this.nearestBuilding, Date.now()) : null;
       this.ctx.save();
-      const badgeW = 96;
-      const badgeH = 44;
+      const badgeW = farmStatus ? 180 : 96;
+      const badgeH = farmStatus ? 60 : 44;
       const badgeX = s.x - badgeW / 2;
-      const badgeY = s.y - 68;
+      const badgeY = s.y - (farmStatus ? 84 : 68);
 
       const isRaidTarget = this.isRaidTarget(this.nearestBuilding);
 
-      this.ctx.fillStyle = 'rgba(15, 23, 42, 0.92)';
+      this.ctx.fillStyle = farmStatus ? '#0f172a' : 'rgba(15, 23, 42, 0.92)';
       this.ctx.strokeStyle = isRaidTarget ? '#ef4444' : '#10b981';
       this.ctx.lineWidth = 1.8;
       this.ctx.beginPath();
@@ -6907,6 +6912,10 @@ export class IsometricEngine {
         promptText = '🔥 烈焰聚能防御';
       }
       this.ctx.fillText(promptText, s.x, badgeY + 32);
+      if (farmStatus) {
+        this.ctx.font = 'bold 10px sans-serif'; this.ctx.fillStyle = this.nearestBuilding.hp <= 0 ? '#d5ab88' : '#d8df83';
+        this.ctx.fillText(farmStatus, s.x, badgeY + 48);
+      }
       this.ctx.restore();
       return;
     }

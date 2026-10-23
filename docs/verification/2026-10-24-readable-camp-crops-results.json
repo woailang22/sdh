@@ -1,0 +1,538 @@
+{
+  "status": "implemented-readable-camp-crop-states",
+  "overallGoalComplete": false,
+  "base": "bdb8f8f265ed3bd75232f7cfd2b3c53af8941e40",
+  "production": {
+    "files": [
+      "src/game/farmRenderer.ts",
+      "src/game/IsometricEngine.ts"
+    ],
+    "behavior": "Isometric empty/growing/ready/broken plots and authorized nearest-field status in the last-drawn existing interaction badge",
+    "serverAndEconomyChanged": false,
+    "noNewImagesTimersCachesOrRequests": true,
+    "scope": "Geometry in existing building depth order; status in existing HUD after players/weather; farm badge180x60 opaque, other badges unchanged96x44"
+  },
+  "verification": {
+    "newTests": 10,
+    "focused": 182,
+    "full": {
+      "files": 45,
+      "tests": 732
+    },
+    "typesIncludingOwnedQa": "passed",
+    "build": {
+      "exitCode": 0,
+      "bundle": "index-CDVz-sSl.js",
+      "existingWarning": "chunk over500kB"
+    },
+    "red": {
+      "initial": 5,
+      "labels": 2,
+      "firstBadgeOcclusion": 1,
+      "playerLayerAndBadge": 2
+    },
+    "negative": {
+      "failed": 8,
+      "passed": 174,
+      "engineOriginalBytesRestored": true
+    }
+  },
+  "native": {
+    "passed": true,
+    "sameEarnedCharacter": true,
+    "noStateEdits": true,
+    "normalRulesAndClocks": true,
+    "actions": {
+      "new": 9,
+      "sourceHandled": 67,
+      "finalHandled": 76,
+      "unique": true,
+      "errors": 0,
+      "productionDurationMs": 60000,
+      "collectedAfterReadyMs": 208769
+    },
+    "movement": {
+      "packets": 3410,
+      "rejected": 0,
+      "corrections": 7,
+      "overflow": 0
+    },
+    "resources": {
+      "earnedWood": 3,
+      "spentWood": 2,
+      "earnedScrap": 2,
+      "spentScrap": 2,
+      "remainingWood": 1,
+      "otherResourcesZero": true,
+      "knownPickWoodBonusMismatch": "Actual pickaxe_stone earned3wood due unanchored axe_stone substring matching; observed source rule defect, not changed by this crop display patch; requires separate fix"
+    },
+    "crops": {
+      "sourcePotatoes": 3,
+      "carriedPotatoesEaten": 2,
+      "satietyPerPotato": 25,
+      "seedSpent": 1,
+      "seedsRemaining": 0,
+      "collected": 4,
+      "finalPotatoes": 5,
+      "productionCleared": true,
+      "repeatCollectUiAbsent": true,
+      "duplicateRequestNotSent": true
+    },
+    "final": {
+      "x": 5.177591415339759,
+      "y": 27.120005610813298,
+      "hp": 100,
+      "shield": 50,
+      "satiety": 35.723000000000205,
+      "items": [
+        [
+          "food",
+          1
+        ],
+        [
+          "water",
+          4
+        ],
+        [
+          "axe_stone",
+          1
+        ],
+        [
+          "crop_potato",
+          5
+        ]
+      ],
+      "tool": "pickaxe_stone"
+    },
+    "campGeometryUnchanged": true,
+    "entryExitDoNotHealOrGrantItems": true,
+    "persistence": {
+      "integrity": "ok",
+      "savedMatches": true,
+      "backupRestored": true,
+      "stopTickMs": 0,
+      "savedSatiety": 35.723000000000205
+    },
+    "diagnostics": {
+      "scope": "Final accepted mature/collect/empty page only; previous closed candidate/growth pages not exported",
+      "errors": [],
+      "slowFrames": 6,
+      "maxDrawMs": 48.80000001192093,
+      "maxRafGapMs": 81,
+      "environment": {
+        "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
+        "viewport": {
+          "width": 1280,
+          "height": 720
+        },
+        "canvas": {
+          "width": 1280,
+          "height": 720
+        },
+        "devicePixelRatio": 1.5,
+        "modulePath": "/assets/index-CDVz-sSl.js",
+        "jsHeap": {
+          "used": 16512985,
+          "total": 28656757
+        },
+        "graphicsBackend": "unknown"
+      },
+      "performanceAccepted": false
+    },
+    "overallGoalComplete": false
+  },
+  "visualEvidence": {
+    "initialCandidate": "ub8M4Fvf: empty field, status obscured by interaction badge",
+    "intermediate": "O91Mfj2Y: actual southeast player obscured status placed below field",
+    "growthAndFirstReady": "sRvRlhzj: actual empty/growing60s/mature field, status moved to HUD",
+    "accepted": "CDVz-sSl: only farm badge opacity changed; actual southeast mature/collection/empty reverified",
+    "growingOnAcceptedBuildNotReplanted": true,
+    "acceptedFirstNorthCapture": "Uniform dark background before later normal frames; cause not independently established, retained rather than discarded",
+    "brokenOtherCropsAndMemberNativeCoverage": false
+  },
+  "cleanup": {
+    "ownedServerTerminal": true,
+    "pid": 45696,
+    "port": 39139,
+    "listeners": 0,
+    "tabs": 0,
+    "viewportRestored": true,
+    "productionSaveOpened": false
+  },
+  "review": {
+    "source": "Independent read-only source review: no remaining P1/P2, southeast entity-layer P2 corrected",
+    "finalEvidence": "passed-no-P1-P2"
+  },
+  "limits": [
+    "This is crop readability work within the approved camp growth design, not a whole-map, combat, economic or performance acceptance.",
+    "The same earned character used ordinary native CUA movement, gathering, searching, eating and production. Source save was consistently backed up without identity, HP, coordinates, inventory or clock edits; offline breaks and model delays remain.",
+    "Exactly60000ms separates observed start and readyAt. Collection happened208769ms after readyAt. This verifies normal maturation, not collection exactly at60s or novice pacing.",
+    "Native growth and first maturity used sRvRlhzj, then one farm-badge opacity-only polish produced acceptedCDVz-sSl. Accepted actual mature/collect/empty and southeast readability were reverified; no claim of a fresh growing crop on that final polish build.",
+    "Renderer/HUD tests cover destroyed fields, member job visibility, hidden jobs, exact readyAt, distant/current-target labels and no mutation/request. Only potatoes and intact owner field were natively played; geometry remains ordinary depth-sorted and can be partially hidden by people.",
+    "The first accepted-build north capture was dark. Subsequent native southeast and collection/empty frames worked. Immediate-capture timing is a possible explanation, not a proven diagnosis, and the original user black-screen/freeze issue is not declared fixed.",
+    "Final accepted page exported errors[] and all6 slow frames, maxdraw48.8ms/maxRAF81ms. Closed earlier candidate and growth pages were not exported; no all-pages error-free, fullP95, GPU, physical presentation, browser800MB or long-memory improvement claim.",
+    "An unrelated existing resource defect was discovered: unanchored axe_stone matching includes pickaxe_stone. Actual equipped pick gathered3wood despite its no-wood-bonus description. This display commit preserves historical paid assets and does not fix that rule; a separate gathering correction remains required.",
+    "All last seed and2wood2scrap were spent; final seed0 and1wood require renewed exploration before another crop. No seed-return/self-sufficiency or long-run balance claim. Only core plus paid farm exist, no defensive readiness.",
+    "QA-only errors from incomplete Canvas mock, optional-property and Map fixture types, wrong negative runner shell path, and a close-button selector after auto-closing camp entry remain in logs/stages; they are not counted as product rendering exceptions.",
+    "Mobile globalHUD crowding, full crop sprite variety, seed routes/workbench/storage/defense, cold-ground stalls, strict continuous60seconds and multiplayer/full-world goals remain active.",
+    "Ordinary push is not deployment. Owned service/tabs were cleaned up; actual production data/sdc.sqlite was never opened."
+  ],
+  "sources": [
+    {
+      "path": "data/audit-readable-crops-20261024.ts",
+      "sha256": "0bd7cae3204fb9ff1a495a66e9e20b83f9dc398a0b65be232e71c0701ceba960"
+    },
+    {
+      "path": "data/capture-cua-readable-crops-20261024.ts",
+      "sha256": "24261d8287ab1e7e04ef6401bf73d8aab3c5b9460195eb5e83a7378eebc933d8"
+    },
+    {
+      "path": "data/control-cua-readable-crops-20261024.cjs",
+      "sha256": "81d8be2ee73e5e16483c10214bd8d151bb6268033fd9f574508d75c7c90b931a"
+    },
+    {
+      "path": "data/cua-readable-crops-20261024-a1-accepted-cleared-southeast.png",
+      "sha256": "ae0867c960197f70aa4ad5c80129518dd8c0b1e45323074348448591af7c6f91"
+    },
+    {
+      "path": "data/cua-readable-crops-20261024-a1-accepted-errors.json",
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "path": "data/cua-readable-crops-20261024-a1-accepted-frames-private.json",
+      "sha256": "4b99465fe0d07d7a52f67f7fa8a1aea8829d5a5e03aa3310b62d1a0832a3ddbd"
+    },
+    {
+      "path": "data/cua-readable-crops-20261024-a1-accepted-hud-crop.png",
+      "sha256": "a76b3c6feb469ec1bf30fac7e0955977a968449cc131ee7ac965bf198a2777bb"
+    },
+    {
+      "path": "data/cua-readable-crops-20261024-a1-accepted-ready-north.png",
+      "sha256": "e48c3642d5ffa4294660a62eb083562a7fd55f9a8ac38adccf444e60d406d7c3"
+    },
+    {
+      "path": "data/cua-readable-crops-20261024-a1-accepted-ready-southeast.png",
+      "sha256": "b721ce88e53159f76ee0c3af76484c918676af0a3783217df395d79b0d272997"
+    },
+    {
+      "path": "data/cua-readable-crops-20261024-a1-accepted-stages-private.json",
+      "sha256": "0cc96d317361d2ebbcec47ee4c6eb9bd06a22084ac5e463537a09b8fd5030977"
+    },
+    {
+      "path": "data/cua-readable-crops-20261024-a1-audit.json",
+      "sha256": "9e79d84d609d2db822095e66edfbd8e5c4a6f456684371fb5199e4d2fd21729d"
+    },
+    {
+      "path": "data/cua-readable-crops-20261024-a1-delivery-empty.png",
+      "sha256": "0f806dea4bae441a9bf4b5434839672563213b91815374baf237defbdeff4368"
+    },
+    {
+      "path": "data/cua-readable-crops-20261024-a1-delivery-growing.png",
+      "sha256": "5d8b775e36857fca593c6e2867eb11b6695e23b22d6d4e0d83d43d5e6cea6e30"
+    },
+    {
+      "path": "data/cua-readable-crops-20261024-a1-delivery-stages-private.json",
+      "sha256": "19b55040982575fdb0b1c846552a61ce69b02463b92205020d54a86941fd2aac"
+    },
+    {
+      "path": "data/cua-readable-crops-20261024-a1-empty-crop.png",
+      "sha256": "a50a8d472ebef6989534674eb7a9821782236765790931bd1c1f868a6a82e659"
+    },
+    {
+      "path": "data/cua-readable-crops-20261024-a1-material-route-stages-private.json",
+      "sha256": "0e53c398a2b2d38c6351389a19bfcff42e7b4f7803542051af205dd1c7167b78"
+    },
+    {
+      "path": "data/cua-readable-crops-20261024-a1-mature-before-opacity.png",
+      "sha256": "b3a2f088a6ee5fecd4e6c88bcb494088b6646fb6531de2c4f81a9423027fa72f"
+    },
+    {
+      "path": "data/cua-readable-crops-20261024-a1-native-connected-world-private.json",
+      "sha256": "5d2ca3661107ea3b00ded32e4be70060fd07e5f2b610cda9cabc61d2eceb5ecd"
+    },
+    {
+      "path": "data/cua-readable-crops-20261024-a1-native-final-events.json",
+      "sha256": "88031c3e58c222e729921ef22c7baa52b717863180e20b09da79d11b77af6662"
+    },
+    {
+      "path": "data/cua-readable-crops-20261024-a1-native-final-world-private.json",
+      "sha256": "1b33327b6e53d396968b78eeb993285501b1582c4dca32891c09edc3ed507ebf"
+    },
+    {
+      "path": "data/cua-readable-crops-20261024-a1-native-growing-events.json",
+      "sha256": "0e09ce89edc42db84345feedf34fc78b3346a614604ec6fb56f9fcadeac14642"
+    },
+    {
+      "path": "data/cua-readable-crops-20261024-a1-native-growing-world-private.json",
+      "sha256": "17dcee315b6336b34c6566db5fd9f240925aba2f6598fa24f6485471e6c5aecc"
+    },
+    {
+      "path": "data/cua-readable-crops-20261024-a1-native-materials-events.json",
+      "sha256": "a8ccce5384d3cd8b9a748c321f11e2840a67fa93bd48c697dad87c00d3fc933b"
+    },
+    {
+      "path": "data/cua-readable-crops-20261024-a1-native-materials-world-private.json",
+      "sha256": "ceb19372ee0ea10d51c00679d9bc6db693ff23ffc0e9390532819db34dabf4b6"
+    },
+    {
+      "path": "data/cua-readable-crops-20261024-a1-native-server.log",
+      "sha256": "1ed7dc364590774eb8237cab9bdaaaab4abbfee00a42c2d7747a2a894f7b84e3"
+    },
+    {
+      "path": "data/cua-readable-crops-20261024-a1-player-occlusion-crop.png",
+      "sha256": "988fff38b7afa872802bd89ac07438f158eded1cb432d689f7bf09d58db936ec"
+    },
+    {
+      "path": "data/cua-readable-crops-20261024-a1-player-occlusion-stages-private.json",
+      "sha256": "90632cbe94cbeb3db27b311beadf5ca755fd90f0ed585f902950ed5e594168ce"
+    },
+    {
+      "path": "data/cua-readable-crops-20261024-a1-return-attempt-stages-private.json",
+      "sha256": "a6e3173bc76e5f33cac0fa6a8fcca04032ac61ad69e9b56fa05de229f80c2fc1"
+    },
+    {
+      "path": "data/negative-readable-crops-20261024.cjs",
+      "sha256": "0ebb6b935b71b15e7a53207d98e2ca789de1ede2d5f182bb0cb41d2a32d05cef"
+    },
+    {
+      "path": "data/prepare-readable-crops-20261024.ts",
+      "sha256": "064dae0cb144cfe8751d9ac449505c50f176c5de1db8157be1cb6d7135c4f4a5"
+    },
+    {
+      "path": "data/publish-readable-crops-20261024.cjs",
+      "sha256": "20e234cf4d00ad78508b6e2e4f5a141d7e28a31712ac14810518f72a4e6f2885"
+    },
+    {
+      "path": "data/readable-crops-accepted-bundle-CDVz-sSl.js",
+      "sha256": "1150e6b3822b19b1e79edeff8c790af020b055f62d742a7d83209a25bbb1988b"
+    },
+    {
+      "path": "data/readable-crops-accepted-index.html",
+      "sha256": "f43e24f8b2efda702d10eaf9efaa91adce31476e090c405fc276a84911f8c431"
+    },
+    {
+      "path": "data/readable-crops-audit-20261024.log",
+      "sha256": "cf2be19c1b883c6e1bc1029439e6d576f791700deb4d6fea600ae44707ea88bf"
+    },
+    {
+      "path": "data/readable-crops-build-20261024.log",
+      "sha256": "bb39fb93a6dbcbfffa5f03e531fb4301a536a9e288e87c000b8b4089feaec9af"
+    },
+    {
+      "path": "data/readable-crops-build-accepted-20261024.log",
+      "sha256": "0362f7081dfae79111b208fad53b62d9b6c892a5e404a660eb5199b67ec3cc6e"
+    },
+    {
+      "path": "data/readable-crops-build-accepted-exit-20261024.json",
+      "sha256": "914737630c6d47f911403601d23d75c907586b7f990d20e43396fa630cac2fc9"
+    },
+    {
+      "path": "data/readable-crops-build-confirmed-20261024.log",
+      "sha256": "d938aafdabd13ff7f173e219e6f144613c7977fc37fd89167e684a691c361706"
+    },
+    {
+      "path": "data/readable-crops-build-exit-20261024.json",
+      "sha256": "327d507d15f0c3f1a511bfc9080e4a4e96b3f85334ec267946db8a8e21e7142f"
+    },
+    {
+      "path": "data/readable-crops-build-final-20261024.log",
+      "sha256": "2398f6541fab17111c4658014ed4a6445bab44f00d827bcd0664d61319bd58e7"
+    },
+    {
+      "path": "data/readable-crops-build-hud-exit-20261024.json",
+      "sha256": "8b9e8a8b216254b652486e6aaa9913965696739ec94dbdb8338cffc3d634aa05"
+    },
+    {
+      "path": "data/readable-crops-build-hud-final-20261024.log",
+      "sha256": "3e812bb3ef8fe56be07d7cea8e951e4cbf1dc4a094116d27ce8f6db802668d24"
+    },
+    {
+      "path": "data/readable-crops-cleanup-20261024.json",
+      "sha256": "2b19e4da4be8284439316aa385eec3a6d35f6697854287cc31fd741494f292fc"
+    },
+    {
+      "path": "data/readable-crops-delivery-bundle-sRvRlhzj.js",
+      "sha256": "26534814bdd1ae6bfb7563f6f84c1ed85c3d499a32f4f5bd680912a2e198bd7a"
+    },
+    {
+      "path": "data/readable-crops-delivery-index.html",
+      "sha256": "decf8a2acc387ad1e21e75591c4fd14819144d4d9efbb7930c58771ce7879181"
+    },
+    {
+      "path": "data/readable-crops-final-bundle-O91Mfj2Y.js",
+      "sha256": "ba6ddd29fcfc09189158733e58e6d9d2ba43fa495b3e8cc2d24588feb6e6e734"
+    },
+    {
+      "path": "data/readable-crops-final-index.html",
+      "sha256": "9bad63b6c490714efb16a431b74289b3f6ffa50b81271a0d24e949f3ba7c4575"
+    },
+    {
+      "path": "data/readable-crops-fixture-error-20261024.log",
+      "sha256": "e655d6ab4ffc8a6b0d81741c09a129cb7973eb6676de917e528e3d03e1455a18"
+    },
+    {
+      "path": "data/readable-crops-full-20261024.log",
+      "sha256": "1e7c6a683ddadfbdd586ae9e64292f625124fc7e609218e15453a96ccfaff2ac"
+    },
+    {
+      "path": "data/readable-crops-full-delivery-20261024.log",
+      "sha256": "0a51a161d1659a2a72048c6b9dafdb7ff7bfff1e84d97c1e5b97dc6a3f2d67d0"
+    },
+    {
+      "path": "data/readable-crops-full-final-20261024.log",
+      "sha256": "1bf69d13bd69f395b75981bbf9758656319191ec1c22d1e996e1df86851918ae"
+    },
+    {
+      "path": "data/readable-crops-full-hud-final-20261024.log",
+      "sha256": "5b9fcfa40d64db218368cdae02f7ad9b7fd82791f87e264d57b06a015eb3d4bc"
+    },
+    {
+      "path": "data/readable-crops-full-opaque-final-20261024.log",
+      "sha256": "6646c7dfd6e8b2847dd9a7f5674a39dcdbc98a7c7d03a3963a5d39b08b5d292a"
+    },
+    {
+      "path": "data/readable-crops-green-20261024.log",
+      "sha256": "fc8c9ad944c60c726ec1b4724d24afe8013f66948047412dafba02c3ae3ce523"
+    },
+    {
+      "path": "data/readable-crops-green-final-20261024.log",
+      "sha256": "024c505a464459da4453c04c5ddfb351a5656c98388e3cb16a9113ff977eeaa0"
+    },
+    {
+      "path": "data/readable-crops-green-hud-complete-20261024.log",
+      "sha256": "b9dc35cbaa7162486b73f154e3ecd2ba918f2b7cda164ba885679a2ff3b4945c"
+    },
+    {
+      "path": "data/readable-crops-green-hud-final-20261024.log",
+      "sha256": "bf8180289eb2bcb4761161f9591c36bf0c8778b386a7ce341ea8f18da228bd16"
+    },
+    {
+      "path": "data/readable-crops-initial-bundle-ub8M4Fvf.js",
+      "sha256": "059293f6ae4755cff6ff7db58b4a55dbbe4c15ac26b40fbe972bce0ff5c46d1e"
+    },
+    {
+      "path": "data/readable-crops-initial-index.html",
+      "sha256": "a5fbdc5727211068bf3f389bc3e14bcb3489c7a8e041142c460c374c2934803d"
+    },
+    {
+      "path": "data/readable-crops-intermediate-bundle-O91Mfj2Y.js",
+      "sha256": "ba6ddd29fcfc09189158733e58e6d9d2ba43fa495b3e8cc2d24588feb6e6e734"
+    },
+    {
+      "path": "data/readable-crops-intermediate-index.html",
+      "sha256": "9bad63b6c490714efb16a431b74289b3f6ffa50b81271a0d24e949f3ba7c4575"
+    },
+    {
+      "path": "data/readable-crops-label-refinement-red-20261024.log",
+      "sha256": "bf7b116798ce9ca04570b514b3083b24c4cdb07d193186bd90a8da90c2049f1c"
+    },
+    {
+      "path": "data/readable-crops-negative-20261024.log",
+      "sha256": "4f6624e03c47a4d0bef4c55bc6d313391111bde1edf76f199e177056b466833f"
+    },
+    {
+      "path": "data/readable-crops-negative-before-hud-20261024.log",
+      "sha256": "c582d9172f627320b591750c1456ef89bb5724f4a3ba91329d8585478273eb58"
+    },
+    {
+      "path": "data/readable-crops-negative-run-final-20261024.log",
+      "sha256": "1a14bfbb95576a528b5ade13a01bf31faccfa0da67ea85efd84e24fcc36d0f76"
+    },
+    {
+      "path": "data/readable-crops-negative-runner-error-20261024.log",
+      "sha256": "89e27f16a69016d049f745bdce9d29c39d87d7c691030a81c67bdc53e554f6e9"
+    },
+    {
+      "path": "data/readable-crops-overlay-red-20261024.log",
+      "sha256": "5f9cf4de34c004f29efc5a13d564aba9ee06401ca362c482f7ffddd42af05701"
+    },
+    {
+      "path": "data/readable-crops-player-layer-red-20261024.log",
+      "sha256": "64c3d546b397675751c23545f03cb6295d70df17230f00d19b27f23be9e077ff"
+    },
+    {
+      "path": "data/readable-crops-red-20261024.log",
+      "sha256": "9177e5aa12225b34318e679af335d7cd82944aa8def971fec43a221e4671a352"
+    },
+    {
+      "path": "data/readable-crops-review-20261024.json",
+      "sha256": "66c9c202743d11c3b4a255266634901df9b6c26495c2457980f73f75135e2929"
+    },
+    {
+      "path": "data/readable-crops-source-backup-20261024.json",
+      "sha256": "5e558dc9ad2e70afe174bd67fd1c36222f0f370c33597122ad001fef08bf4fd4"
+    },
+    {
+      "path": "data/readable-crops-types-20261024.log",
+      "sha256": "5d272a2d02ce0a2350e4811ecaa58e1ce7b786b325047d7405c44a8103f117d7"
+    },
+    {
+      "path": "data/readable-crops-types-accepted-20261024.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "data/readable-crops-types-allqa-final-20261024.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "data/readable-crops-types-delivery-20261024.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "data/readable-crops-types-final-20261024.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "data/readable-crops-types-fixture-errors-20261024.log",
+      "sha256": "5d272a2d02ce0a2350e4811ecaa58e1ce7b786b325047d7405c44a8103f117d7"
+    },
+    {
+      "path": "data/readable-crops-types-hud-final-20261024.log",
+      "sha256": "37603250df7735fd5072a2ab7f05b9947f78e2f07cc30826c4ed70549643bfea"
+    },
+    {
+      "path": "data/readable-crops-types-render-fixture-error-20261024.log",
+      "sha256": "37603250df7735fd5072a2ab7f05b9947f78e2f07cc30826c4ed70549643bfea"
+    },
+    {
+      "path": "dist/assets/index-CDVz-sSl.js",
+      "sha256": "1150e6b3822b19b1e79edeff8c790af020b055f62d742a7d83209a25bbb1988b"
+    },
+    {
+      "path": "dist/index.html",
+      "sha256": "f43e24f8b2efda702d10eaf9efaa91adce31476e090c405fc276a84911f8c431"
+    },
+    {
+      "path": "docs/superpowers/plans/2026-10-20-seamless-world-camps.md",
+      "sha256": "3070c0bb760876cbfbbac05cbc56fde76dd5db7d2945ebe416f14b55ee80543e"
+    },
+    {
+      "path": "docs/superpowers/plans/2026-10-24-readable-camp-crops.md",
+      "sha256": "61c293388941dbe99388634e2a730090a45f6dfe127b35e12f1362920569dd1b"
+    },
+    {
+      "path": "docs/superpowers/specs/2026-10-24-readable-camp-crops-design.md",
+      "sha256": "0b88460f617eb4507f824850e443538e6883fa1d6ef81b321fac4ceaa71eb968"
+    },
+    {
+      "path": "server/worldState.ts",
+      "sha256": "829140066d1e04a3521ba2286e4130b39ccdcdf825a7a4340dc34e416ff6f5f1"
+    },
+    {
+      "path": "src/game/IsometricEngine.test.ts",
+      "sha256": "13c14741a76bcdf01d735b3d8e3fffc069f164f87c90ffd23729db22c36749ad"
+    },
+    {
+      "path": "src/game/IsometricEngine.ts",
+      "sha256": "6b699cb4996c39b99c876569b41405b95f9b80fd4415445088b2856da6289d99"
+    },
+    {
+      "path": "src/game/equipmentRules.ts",
+      "sha256": "3db65447d65e43458a07e339e5e3ea5cc8cbff96f467b9f7fa6907bf176ed9e6"
+    },
+    {
+      "path": "src/game/farmRenderer.ts",
+      "sha256": "ddd8d5c8e4713ef856bd7205038b6be44bdbf66d143b8bae020160e6e3bba233"
+    }
+  ]
+}

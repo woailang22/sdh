@@ -9,6 +9,7 @@ import { worldThemeAt } from './world';
 import { createMemoryDb } from '../../server/db';
 import { GameWorld, type WorldRules } from '../../server/worldState';
 import { authoritativeDamageSince } from './combat';
+import type { BuildingEntity } from '../types/game';
 
 vi.mock('../audio/soundManager', () => ({ soundManager: { playLevelUp: vi.fn(), playHit: vi.fn(), playGunshot: vi.fn(), playReload: vi.fn() } }));
 
@@ -774,6 +775,96 @@ describe('authoritative survival values', () => {
     (engine as any).update(.5);
     expect(engine.player.hp).toBe(50.6);
     expect(engine.player.satiety).toBe(79.875);
+  });
+});
+
+describe('camp crop growth visibility', () => {
+  function farmView() {
+    const result = setup();
+    Object.assign(result.context, { createRadialGradient: () => ({ addColorStop: vi.fn() }) });
+    Object.assign(result.context, { roundRect: vi.fn() });
+    result.engine.localPlayerId = 'owner'; result.engine.currentMapId = 'home_owner';
+    Object.assign(result.engine.player, { x: 0, y: 0 });
+    const farm: BuildingEntity = { id: 'farm', type: 'farm_plot', name: '营地种植田', ownerId: 'owner', mapId: 'home_owner', x: 0, y: 0, hp: 250, maxHp: 250, level: 1,
+      production: { recipeId: 'grow_potato', resultItemId: 'crop_potato', resultCount: 4, readyAt: 1_060_000 } };
+    result.engine.nearestBuilding = farm;
+    const draw = () => { result.context.fillText.mockClear(); (result.engine as any).drawBuilding(farm); (result.engine as any).renderInteractionHUD(); return result.context.fillText.mock.calls.map(call => call[0]); };
+    return { ...result, farm, draw };
+  }
+
+  it('shows unplanted guidance only for the nearby owner after the job is collected', () => {
+    const { farm, draw } = farmView(); delete farm.production;
+    expect(draw()).toContain('待播种 · E/F');
+  });
+
+  it('shows a growing crop until the exact readyAt boundary, then ready yield without mutating the job or sending actions', () => {
+    const { farm, engine, callbacks, draw } = { ...farmView(), callbacks: { onGameAction: vi.fn() } };
+    (engine as any).callbacks.onGameAction = callbacks.onGameAction;
+    Object.freeze(farm.production); const before = JSON.stringify(farm);
+    const now = vi.spyOn(Date, 'now').mockReturnValue(farm.production!.readyAt - 1);
+    expect(draw()).toContain('土豆 · 生长中 · 1秒'); expect(draw()).not.toContain('土豆 ×4 · 可领取');
+    now.mockReturnValue(farm.production!.readyAt);
+    expect(draw()).toContain('土豆 ×4 · 可领取'); expect(draw()).not.toContain('土豆 · 生长中 · 1秒');
+    expect(JSON.stringify(farm)).toBe(before); expect(callbacks.onGameAction).not.toHaveBeenCalled();
+  });
+
+  it('keeps a matured job visible until server collection removes it and restores the empty field prompt', () => {
+    const { farm, draw } = farmView(); vi.spyOn(Date, 'now').mockReturnValue(farm.production!.readyAt + 600_000);
+    expect(draw()).toContain('土豆 ×4 · 可领取');
+    delete farm.production; expect(draw()).toContain('待播种 · E/F');
+    expect(draw()).not.toContain('土豆 ×4 · 可领取');
+  });
+
+  it('prioritizes a destroyed field over a mature crop, while a living damaged field remains productive', () => {
+    const { farm, draw } = farmView(); vi.spyOn(Date, 'now').mockReturnValue(farm.production!.readyAt);
+    farm.hp = 0; expect(draw()).toContain('已损坏 · 先修复'); expect(draw()).not.toContain('土豆 ×4 · 可领取');
+    farm.hp = 1; expect(draw()).toContain('土豆 ×4 · 可领取');
+  });
+
+  it('does not present another owners hidden job as a field the visitor can seed', () => {
+    const { farm, draw } = farmView(); farm.ownerId = 'other'; delete farm.production;
+    expect(draw()).not.toContain('待播种 · E/F');
+  });
+
+  it('shows the authorized crop job supplied to a member without requiring ownership', () => {
+    const { farm, draw } = farmView(); farm.ownerId = 'other'; vi.spyOn(Date, 'now').mockReturnValue(farm.production!.readyAt);
+    expect(draw()).toContain('土豆 ×4 · 可领取');
+  });
+
+  it('leaves distant plots free of production status labels', () => {
+    const { farm, engine, draw } = farmView(); engine.player.x = 10; vi.spyOn(Date, 'now').mockReturnValue(farm.production!.readyAt);
+    expect(draw().some(text => /生长中|可领取|待播种/.test(String(text)))).toBe(false);
+  });
+
+  it('shows status for the current interaction target instead of stacking labels on adjacent plots', () => {
+    const { engine, farm, draw } = farmView(); engine.nearestBuilding = { ...farm, id: 'other-field', x: 1, production: { ...farm.production!, resultItemId: 'crop_corn' } };
+    vi.spyOn(Date, 'now').mockReturnValue(farm.production!.readyAt);
+    expect(draw().filter(text => /可领取/.test(String(text)))).toEqual(['玉米 ×4 · 可领取']);
+    engine.nearestBuilding = null;
+    expect(draw().some(text => /生长中|可领取|待播种/.test(String(text)))).toBe(false);
+  });
+
+  it('keeps crop status inside the expanded interaction badge instead of underneath its background', () => {
+    const { farm, context, draw } = farmView(); vi.spyOn(Date, 'now').mockReturnValue(farm.production!.readyAt);
+    draw(); const statusY = context.fillText.mock.calls.find(call => call[0] === '土豆 ×4 · 可领取')![2];
+    const badge = (context as any).roundRect.mock.calls.at(-1);
+    expect(statusY).toBeGreaterThan(badge[1]); expect(statusY).toBeLessThan(badge[1] + badge[3]);
+  });
+
+  it('paints crop status after the southeast player in the complete render pipeline', () => {
+    const { engine, farm, context } = farmView(); vi.spyOn(Date, 'now').mockReturnValue(farm.production!.readyAt);
+    engine.buildings = [farm]; engine.interactables = []; engine.monsters = []; engine.teammates = []; engine.onlinePlayers.clear();
+    Object.assign(engine.player, { x: 1, y: 1 });
+    const keep = new Set(['render', 'drawBuilding', 'drawBuildingUncached', 'drawBuildingShape', 'drawBuildingDetails', 'renderInteractionHUD']);
+    for (const name of Object.getOwnPropertyNames(IsometricEngine.prototype)) {
+      if (/^(render|draw)/.test(name) && !keep.has(name)) vi.spyOn(engine as any, name).mockImplementation(() => {});
+    }
+    vi.spyOn(engine as any, 'currentHouseGroups').mockReturnValue([{ members: [farm], door: null }]);
+    (engine as any).drawPlayer.mockImplementation(() => context.fillText('player', 0, 0));
+    context.fillText.mockClear(); (engine as any).render();
+    const labels = context.fillText.mock.calls.map(call => call[0]);
+    expect(labels.indexOf('player')).toBeGreaterThanOrEqual(0);
+    expect(labels.indexOf('土豆 ×4 · 可领取')).toBeGreaterThan(labels.indexOf('player'));
   });
 });
 
