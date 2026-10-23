@@ -7,7 +7,7 @@ import { BUILD_RECIPES } from '../src/game/buildingRecipes';
 import { ACID_SHIELD_DRAIN } from '../src/game/weather';
 import { marketOffer } from '../src/game/market';
 import { campExitPosition } from '../src/game/home';
-import { hasLineOfSight, isPositionBlocked } from '../src/game/navigation';
+import { hasLineOfSight, isPositionBlocked, MAX_BUILDING_HALF_EXTENT, PLAYER_COLLISION_RADIUS } from '../src/game/navigation';
 import { BASE_INVENTORY_SLOTS, inventoryCapacity, resizeInventory, gatheringEffects } from '../src/game/equipmentRules';
 import type { DbHandle } from './db';
 import { TickUndo } from './tickUndo';
@@ -255,15 +255,23 @@ export class GameWorld {
     this.pendingDisconnects.clear();
   }
 
-  private buildingsFor(p: { mapId: MapZoneId; x: number; y: number }): BuildingEntity[] {
+  private buildingsFor(p: { mapId: MapZoneId; x: number; y: number }, to?: { x: number; y: number }): BuildingEntity[] {
     const persistent: BuildingEntity[] = [];
+    const known = p.mapId === 'world' ? new Set<string>() : undefined;
+    const padding = MAX_BUILDING_HALF_EXTENT + PLAYER_COLLISION_RADIUS + 1e-9; // Conservative rounding margin; exact checks below stay unchanged.
+    const minX = Math.min(p.x, to?.x ?? p.x) - padding, maxX = Math.max(p.x, to?.x ?? p.x) + padding;
+    const minY = Math.min(p.y, to?.y ?? p.y) - padding, maxY = Math.max(p.y, to?.y ?? p.y) + padding;
+    const inWindow = (b: BuildingEntity) => !(b.x < minX || b.x > maxX || b.y < minY || b.y > maxY)
+      || (b.type === 'door' || b.type === 'safe_door') && !Number.isFinite(b.doorWidth ?? 1);
     for (const id of Object.keys(this.state.buildings)) {
       const b = this.state.buildings[id];
-      if (b.mapId === p.mapId && (p.mapId !== 'world' || distance(p, b) < 80)) persistent.push(b);
+      if (b.mapId === p.mapId && (p.mapId !== 'world' || distance(p, b) < 80)) {
+        known?.add(b.id); // A culled override must still hide its generated definition.
+        if (!to || inWindow(b)) persistent.push(b);
+      }
     }
     if (p.mapId !== 'world') return persistent;
-    const known = new Set(persistent.map(b => b.id));
-    return persistent.concat(this.rules.buildingsNear(p.x, p.y).filter(b => !known.has(b.id)));
+    return persistent.concat(this.rules.buildingsNear(p.x, p.y).filter(b => !known!.has(b.id) && (!to || inWindow(b))));
   }
 
   private clearSpawn(p: Player) {
@@ -336,7 +344,7 @@ export class GameWorld {
     const travelled = distance(p, { x: packet.x, y: packet.y });
     if (travelled > p.moveBudget + 1e-6) return false;
     const to = { x: packet.x, y: packet.y };
-    const buildings = this.buildingsFor(p);
+    const buildings = this.buildingsFor(p, to);
     if (isPositionBlocked(to.x, to.y, buildings) || !hasLineOfSight(p, to, buildings)) return false;
     p.x = to.x; p.y = to.y; p.moveBudget = Math.max(0, p.moveBudget - travelled);
     p.onboarding.explored ||= p.mapId === 'world' && Math.hypot(p.x, p.y) > 2.5;

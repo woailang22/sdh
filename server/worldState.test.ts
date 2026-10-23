@@ -14,6 +14,40 @@ const rules: WorldRules = {
   monstersNear: () => [],
 };
 describe('cached public building definitions', () => {
+  it('keeps distant camp geometry out of exact movement checks without filtering its full snapshot', () => {
+    const { game, advance } = setup(); const p = game.state.players.owner; Object.assign(p, { mapId: 'home_owner', x: 0, y: 0 });
+    const hp = vi.fn(() => 300), base = { type: 'wood_floor' as const, name: '地板', hp: 300, maxHp: 300, level: 1, mapId: p.mapId };
+    for (let i = 0; i < 2000; i++) game.state.buildings['far_' + i] = Object.defineProperty({ ...base, id: 'far_' + i, x: 10 + i % 30, y: 10 + Math.floor(i / 30) }, 'hp', { enumerable: true, get: hp });
+    expect(game.snapshot('owner').buildings).toHaveLength(2000); hp.mockClear();
+    advance(500); expect(game.move('owner', { x: 1, y: 0 })).toBe(true);
+    expect(hp.mock.calls.length).toBe(0);
+  });
+  it.each(['ew', 'ns'] as const)('retains the full clamped %s door width plus player radius at the movement edge', facing => {
+    const { game, advance } = setup(); const p = game.state.players.owner; Object.assign(p, { mapId: 'home_owner', x: 0, y: 0 });
+    const target = facing === 'ew' ? { x: 0, y: 1.8 } : { x: 1.8, y: 0 };
+    const door = { id: 'edge', type: 'door' as const, name: '宽门', x: facing === 'ew' ? 2.2 : 1.8, y: facing === 'ew' ? 1.8 : 2.2, mapId: p.mapId, hp: 100, maxHp: 100, level: 1, isOpen: false, doorWidth: 99, facing };
+    game.state.buildings.edge = door; advance(500);
+    expect(game.move('owner', target)).toBe(false); door.isOpen = true; expect(game.move('owner', target)).toBe(true);
+  });
+  it('keeps a moved persistent public override shadowing its nearby generated ID', () => {
+    let time = 10000;
+    const door = { id: 'shadowed', type: 'door' as const, name: '旧门', x: 1, y: 0, mapId: 'world' as const, hp: 100, maxHp: 100, level: 1, isOpen: false };
+    const far = { ...door, id: 'far-generated', x: 30 }, hp = vi.fn(() => 100); Object.defineProperty(far, 'hp', { get: hp });
+    const game = new GameWorld(createMemoryDb(), { ...rules, buildingsNear: () => [door, far] }, () => time); game.connect('owner', '甲');
+    const p = game.state.players.owner; p.x = p.y = 0;
+    game.state.buildings[door.id] = { ...door, x: 50 }; hp.mockClear(); time += 500;
+    expect(game.move('owner', { x: 1, y: 0 })).toBe(true); expect(hp.mock.calls.length).toBe(0);
+    p.x = 0; game.state.buildings[door.id].x = 1; time += 500; expect(game.move('owner', { x: 1, y: 0 })).toBe(false);
+    game.state.buildings[door.id].mapId = 'home_elsewhere'; expect(game.move('owner', { x: 1, y: 0 })).toBe(false);
+    delete game.state.buildings[door.id]; expect(game.move('owner', { x: 1, y: 0 })).toBe(false);
+  });
+  it('retains swept wall checks and conservative malformed door geometry', () => {
+    const { game, advance } = setup(); const p = game.state.players.owner; Object.assign(p, { mapId: 'home_owner', x: 0, y: 0 });
+    const wall = { id: 'wall', type: 'wood_wall' as const, name: '墙', x: 0.9, y: 0, facing: 'ns' as const, mapId: p.mapId, hp: 100, maxHp: 100, level: 1 };
+    game.state.buildings.wall = wall; advance(500); expect(game.move('owner', { x: 1.8, y: 0 })).toBe(false);
+    game.state.buildings = { malformed: { ...wall, id: 'malformed', type: 'door', x: 40, y: 0, facing: 'ew', doorWidth: NaN } };
+    expect(game.move('owner', { x: 1.8, y: 0 })).toBe(false);
+  });
   it('uses fresh collision data after door changes and direct building insertion, replacement and deletion', () => {
     const { game, act, advance } = setup(); const p = game.state.players.owner;
     p.mapId = 'home_owner'; p.x = 0; p.y = 0;

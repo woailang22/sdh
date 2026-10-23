@@ -1,4 +1,6 @@
 export interface NavigationBuilding { id?: string; type: string; x: number; y: number; hp?: number; isOpen?: boolean; facing?: 'ew' | 'ns'; doorWidth?: number }
+export const MAX_BUILDING_HALF_EXTENT = 2;
+export const PLAYER_COLLISION_RADIUS = 0.22;
 type Point = { x: number; y: number };
 type Bounds = { minX: number; minY: number; maxX: number; maxY: number };
 
@@ -7,13 +9,13 @@ export function buildingBounds(building: NavigationBuilding): Bounds | null {
   const door = building.type === 'door' || building.type === 'safe_door';
   if (door && building.isOpen) return null;
   const thin = door || building.type.endsWith('_wall');
-  const halfLength = door ? Math.max(0.5, Math.min(2, (building.doorWidth ?? 1) / 2)) : 0.5;
+  const halfLength = door ? Math.max(0.5, Math.min(MAX_BUILDING_HALF_EXTENT, (building.doorWidth ?? 1) / 2)) : 0.5;
   const halfX = thin ? (building.facing === 'ns' ? 0.12 : halfLength) : 0.4;
   const halfY = thin ? (building.facing === 'ns' ? halfLength : 0.12) : 0.4;
   return { minX: building.x - halfX, minY: building.y - halfY, maxX: building.x + halfX, maxY: building.y + halfY };
 }
 
-export function isPositionBlocked(x: number, y: number, buildings: readonly NavigationBuilding[], radius = 0.22): boolean {
+export function isPositionBlocked(x: number, y: number, buildings: readonly NavigationBuilding[], radius = PLAYER_COLLISION_RADIUS): boolean {
   if (!Number.isFinite(x) || !Number.isFinite(y)) return true;
   return buildings.some(building => {
     const bounds = buildingBounds(building);
