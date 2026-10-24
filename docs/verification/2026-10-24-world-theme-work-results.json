@@ -1,0 +1,509 @@
+{
+  "kind": "world-theme-query-negative-experiment",
+  "base": "f547460f6819d3a7b379f387b073b97838bafbd0",
+  "planningCommit": "1f184f5",
+  "goalComplete": false,
+  "decision": "Do not change production: function-only improvement did not demonstrate consistent whole-ground Canvas benefit.",
+  "production": {
+    "changed": false,
+    "sourceFilesVerified": 22,
+    "noNewCacheOrQualityChange": true,
+    "noGameServerOrDatabase": true
+  },
+  "semantic": {
+    "integers": 4198401,
+    "additionalFractionalAndSpecialCases": 280331,
+    "integerOutputSha256": [
+      "2822c91ff98403d7910cb8a3285b34f2bdd6e216a98ec1d88ce40c420f3f673f",
+      "2822c91ff98403d7910cb8a3285b34f2bdd6e216a98ec1d88ce40c420f3f673f"
+    ],
+    "generatedChunksCompared": 484,
+    "fullWorldGenerationClaim": false
+  },
+  "nodeMicro": {
+    "trials": 48,
+    "callsPerTrial": 100000,
+    "order": "alternating forward/reverse; all trials retained including first",
+    "medians": [
+      {
+        "mode": "baseline",
+        "ms": 20.13175000000001
+      },
+      {
+        "mode": "candidate",
+        "ms": 11.579899999999952
+      }
+    ],
+    "notGamePerformance": true
+  },
+  "canvas": {
+    "trials": 96,
+    "fixtures": [
+      {
+        "id": "spawn-full",
+        "x": 0,
+        "y": 1,
+        "full": true
+      },
+      {
+        "id": "farm-wall-full",
+        "x": -181.3403438954739,
+        "y": 141.35351022373854,
+        "full": true
+      },
+      {
+        "id": "ruins-full",
+        "x": 760,
+        "y": 176,
+        "full": true
+      },
+      {
+        "id": "spawn-tile-invalidation",
+        "x": 0,
+        "y": 1,
+        "full": false
+      }
+    ],
+    "environment": {
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "dpr": 1.5,
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36"
+    },
+    "canvas": {
+      "width": 1920,
+      "height": 1080
+    },
+    "assets": [
+      {
+        "src": "/art/tile-forest-a.png",
+        "width": 512,
+        "height": 512
+      },
+      {
+        "src": "/art/tile-field-a.png",
+        "width": 512,
+        "height": 512
+      },
+      {
+        "src": "/art/tile-field-b.png",
+        "width": 512,
+        "height": 512
+      },
+      {
+        "src": "/art/tile-forest-b.png",
+        "width": 512,
+        "height": 512
+      },
+      {
+        "src": "/art/tile-camp-a.png",
+        "width": 512,
+        "height": 512
+      },
+      {
+        "src": "/art/tile-camp-b.png",
+        "width": 512,
+        "height": 512
+      },
+      {
+        "src": "/art/tile-quarry-a.png",
+        "width": 512,
+        "height": 512
+      },
+      {
+        "src": "/art/tile-quarry-b.png",
+        "width": 512,
+        "height": 512
+      },
+      {
+        "src": "/art/tile-plaza-a.png",
+        "width": 512,
+        "height": 512
+      },
+      {
+        "src": "/art/tile-plaza-b.png",
+        "width": 512,
+        "height": 512
+      },
+      {
+        "src": "/art/texture-ground.png",
+        "width": 1254,
+        "height": 1254
+      },
+      {
+        "src": "/art/tile-ruins-a.png",
+        "width": 512,
+        "height": 512
+      },
+      {
+        "src": "/art/tile-ruins-b.png",
+        "width": 512,
+        "height": 512
+      },
+      {
+        "src": "/art/tile-urban-b.png",
+        "width": 512,
+        "height": 512
+      },
+      {
+        "src": "/art/tile-urban-a.png",
+        "width": 512,
+        "height": 512
+      }
+    ],
+    "summary": [
+      {
+        "fixture": "spawn-full",
+        "mode": "baseline",
+        "trials": 12,
+        "medianSubmitMs": 30.99999998509884,
+        "medianWithReadbackMs": 153.24999998509884,
+        "minSubmitMs": 24.099999994039536,
+        "maxSubmitMs": 69.90000000596046
+      },
+      {
+        "fixture": "spawn-full",
+        "mode": "candidate",
+        "trials": 12,
+        "medianSubmitMs": 30.200000002980232,
+        "medianWithReadbackMs": 155.90000000596046,
+        "minSubmitMs": 23.69999998807907,
+        "maxSubmitMs": 32.900000005960464
+      },
+      {
+        "fixture": "farm-wall-full",
+        "mode": "baseline",
+        "trials": 12,
+        "medianSubmitMs": 24.30000001192093,
+        "medianWithReadbackMs": 140.75,
+        "minSubmitMs": 19.099999994039536,
+        "maxSubmitMs": 31.400000005960464
+      },
+      {
+        "fixture": "farm-wall-full",
+        "mode": "candidate",
+        "trials": 12,
+        "medianSubmitMs": 21.25,
+        "medianWithReadbackMs": 147.65000000596046,
+        "minSubmitMs": 16.099999994039536,
+        "maxSubmitMs": 27
+      },
+      {
+        "fixture": "ruins-full",
+        "mode": "baseline",
+        "trials": 12,
+        "medianSubmitMs": 20.549999997019768,
+        "medianWithReadbackMs": 92.6499999910593,
+        "minSubmitMs": 16.5,
+        "maxSubmitMs": 38.19999998807907
+      },
+      {
+        "fixture": "ruins-full",
+        "mode": "candidate",
+        "trials": 12,
+        "medianSubmitMs": 22.599999994039536,
+        "medianWithReadbackMs": 98.84999999403954,
+        "minSubmitMs": 16.400000005960464,
+        "maxSubmitMs": 26.099999994039536
+      },
+      {
+        "fixture": "spawn-tile-invalidation",
+        "mode": "baseline",
+        "trials": 12,
+        "medianSubmitMs": 30.350000008940697,
+        "medianWithReadbackMs": 153.40000000596046,
+        "minSubmitMs": 26.099999994039536,
+        "maxSubmitMs": 38.400000005960464
+      },
+      {
+        "fixture": "spawn-tile-invalidation",
+        "mode": "candidate",
+        "trials": 12,
+        "medianSubmitMs": 32.45000000298023,
+        "medianWithReadbackMs": 153.25,
+        "minSubmitMs": 25.400000005960464,
+        "maxSubmitMs": 37.400000005960464
+      }
+    ],
+    "allComparedRgbaIdentical": true,
+    "method": "New Engine/Canvas each mode; images decoded and fixture construction/fallback outside timing; fresh atlas per engine. Full art revision for three positions; tile invalidation at spawn.12 paired rounds; first trial always baseline. API wall-clock and forced getImageData readback reported separately.",
+    "limitations": [
+      "Synthetic all-ready image invalidation, already decoded images; fixture construction/fallback outside timing.",
+      "API-enclosed wall clock and separate artificial forced readback; neither is physical presentation or pure CPU/GPU.",
+      "No native gameplay, continuous walking, whole-world economy, total browser memory or overall performance acceptance."
+    ]
+  },
+  "verification": {
+    "newProductionTests": false,
+    "existing747Tests": "not rerun: production sources unchanged from f547460; no fresh full-test claim",
+    "allQaTypecheck": "passed",
+    "productionViteBuild": "not rerun: no production source change",
+    "isolatedEngineBundles": "built baseline/candidate using same source dependencies and world.ts-only replacement"
+  },
+  "toolFailures": [
+    "Initial non-PTY static server exited on stdin EOF; rerun in owned PTY was live. No game server or database involved.",
+    "Screenshot cleanup call referred to a filesystem binding that did not persist from a conditional REPL scope; failed before screenshot/close, then saved with a top-level binding and closed the same live tab."
+  ],
+  "cleanup": {
+    "port": 39144,
+    "pid": 25444,
+    "terminal": true,
+    "listenerCount": 0,
+    "tabs": [],
+    "viewportChanged": false,
+    "gameServerOrDatabase": false,
+    "nonPtyAttemptExitedOnStdinEof": true
+  },
+  "review": "passed-no-P1-P2",
+  "limits": [
+    "No observed native gameplay performance improvement or solution to cold-ground stalls.",
+    "No continuous60s walking, physical FPS, GPU, total browser memory or complete-world/economy acceptance.",
+    "Exhaustive integer terrain output only; fractional examples and484 generated chunks are finite samples.",
+    "Canvas API submit/readback may include scheduling/driver work; no pure CPU/GPU attribution."
+  ],
+  "next": "Do not ship terrain-query, atlas prewarm or direct-atlas changes on this evidence; resume representative legal-route gameplay/camp economy validation and investigate ground scheduling/render architecture before more cold-ground rewrites.",
+  "sources": [
+    {
+      "path": "docs/superpowers/specs/2026-10-24-world-theme-work-design.md",
+      "sha256": "824eb2b5a6859f61a09ab41e43e734f576f012bd24069e425c69acb71340f3df"
+    },
+    {
+      "path": "docs/superpowers/plans/2026-10-24-world-theme-work.md",
+      "sha256": "75a3399f4989c5257cb7617d3142d8355d9258cc3feb345d44dec32f2385a7ab"
+    },
+    {
+      "path": "data/world-theme-candidate-20261024.txt",
+      "sha256": "e2d55f961a1a1497eacd1ec8dd92ee1b123e24272882a3b616064348688f6914"
+    },
+    {
+      "path": "data/world-theme-baseline-source-20261024.txt",
+      "sha256": "9ad6447e3e2cce3f9f391856bd3008856a49c2849a35d71aa1368b1893510949"
+    },
+    {
+      "path": "data/world-theme-candidate-source-20261024.txt",
+      "sha256": "869bffdcaa08317454a029aa7d0b10cfa8afcea9b6d55a764402e78986b28bdf"
+    },
+    {
+      "path": "data/build-world-theme-bench-20261024.cjs",
+      "sha256": "d0d7743e4afe7c4c1c47041c3fad54af9f72b574082305b5900ca2297cb28b3c"
+    },
+    {
+      "path": "data/audit-world-theme-semantic-20261024.mjs",
+      "sha256": "cf9308e668ccf1a604c9e78153c4c75df5092989fb69b56247a9582cc76e1cb0"
+    },
+    {
+      "path": "data/publish-world-theme-experiment-20261024.cjs",
+      "sha256": "c87a6668c655ae405750e0762848fb0c491ec1adde59d9e645fa7cad75f30d92"
+    },
+    {
+      "path": "data/world-theme-baseline-20261024.js",
+      "sha256": "5ca2431fcabdb04bb17c626f3e454875ba15e1bdd117255aaf76059fba966d69"
+    },
+    {
+      "path": "data/world-theme-candidate-20261024.js",
+      "sha256": "f2a86e72fd256e00af9b7ff5479fc30444a95210cb0373854a4383a703530c49"
+    },
+    {
+      "path": "data/world-theme-baseline-20261024.mjs",
+      "sha256": "5920f8bc2b299c2a033f536450c2d6598aa992681d71758bf07c577864c213f6"
+    },
+    {
+      "path": "data/world-theme-candidate-20261024.mjs",
+      "sha256": "50eedf9da90d540f444c04814a2a5df7768f4c378ee02f3e271f0fd29a20107b"
+    },
+    {
+      "path": "data/world-theme-bundles-meta-20261024.json",
+      "sha256": "53616012252552f28f36d28039a236a0aaf69895913f27b4615d7d4e684b8852"
+    },
+    {
+      "path": "data/world-theme-semantics-20261024.json",
+      "sha256": "a2826796d0a4dedf09780a7d3b2ae54a95dc09ac2d9a1c9afc62689e293bb330"
+    },
+    {
+      "path": "data/world-theme-canvas-20261024.html",
+      "sha256": "1963dad61be32ebbb68a894c15ae105d91d77f091ea61d91d427c3934690db9a"
+    },
+    {
+      "path": "data/world-theme-canvas-20261024.ts",
+      "sha256": "e9753ae46e8c22d922750fef8dcaee53421185dce06b36a42af87fbf6255c166"
+    },
+    {
+      "path": "data/world-theme-canvas-20261024.js",
+      "sha256": "084b8ba588eceaa6bda9539df80aec384c9da60f8dbbb9b4a90b76ed647e7397"
+    },
+    {
+      "path": "data/serve-world-theme-canvas-20261024.cjs",
+      "sha256": "20ffd27fa43a21bdb91b64c52b817bd9b691c0cf9cdf2e832e062d2be83dd067"
+    },
+    {
+      "path": "data/world-theme-canvas-20261024-results.json",
+      "sha256": "d8d3a7471393f1aa3abf8391535353cdc6308a6611a7c94ff78d8cecefaa9016"
+    },
+    {
+      "path": "data/world-theme-canvas-20261024-proof.png",
+      "sha256": "4b3f3018bbf4499bef955f9e152c510ce443a95bb1e80a7a609e1e94e5307e2f"
+    },
+    {
+      "path": "data/world-theme-types-20261024.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "data/world-theme-cleanup-20261024.json",
+      "sha256": "fa4aa75f38b28fbb9d9400fc0770d13b697418b59ba914622c27bffdd2bde756"
+    },
+    {
+      "path": "public/art/tile-forest-a.png",
+      "sha256": "7ca5fb1f1b78bd6ece7cb793cba777cc9b2670e5a52b1b95ba82138a49a436df"
+    },
+    {
+      "path": "public/art/tile-field-a.png",
+      "sha256": "7ec3e12f0436b6588ac30b0ec6e0e51ff325e65c52ec0cf539c7a0ebea7dd78d"
+    },
+    {
+      "path": "public/art/tile-field-b.png",
+      "sha256": "36c87c2b15ce5cd0312de066a5c2c2eb67e3b8e4a097eff9e5f1a2aef3be3b57"
+    },
+    {
+      "path": "public/art/tile-forest-b.png",
+      "sha256": "d1d7088228d1718186b74dac8ea482d89cdc3c685744f9f04d8697422e5c5938"
+    },
+    {
+      "path": "public/art/tile-camp-a.png",
+      "sha256": "d5d963bf5e119ae5f842eeb0a17c570731f856ed71807fed419a1ed063eac4e5"
+    },
+    {
+      "path": "public/art/tile-camp-b.png",
+      "sha256": "285d1f5dc206ccb8d85ec83dccdb520f534a012756f451c81cc2aa3769cc8030"
+    },
+    {
+      "path": "public/art/tile-quarry-a.png",
+      "sha256": "86c081203e152e810527aae6cb3f782a48d21b51dde0e1cd30229eefcc2ea00e"
+    },
+    {
+      "path": "public/art/tile-quarry-b.png",
+      "sha256": "e96ff5d72441259269b56342d368eedca5d5512ab335d91c57cb6b881d26e032"
+    },
+    {
+      "path": "public/art/tile-plaza-a.png",
+      "sha256": "56ff90d000e15182af02f7918975fb570a3765d4a9aedc5a4fdc33790ebb372d"
+    },
+    {
+      "path": "public/art/tile-plaza-b.png",
+      "sha256": "ad3a3dc964b88d887804288d7478bdb027952687b720110d5c889b5f89f71f36"
+    },
+    {
+      "path": "public/art/texture-ground.png",
+      "sha256": "2b20a710912ff42470ba6ac32c1c0970018f7d25ae03b2f0ac53794c6269d2be"
+    },
+    {
+      "path": "public/art/tile-ruins-a.png",
+      "sha256": "ebb6622521301c9f34337695543db17234ae958d729b459a60f84f00d0f86213"
+    },
+    {
+      "path": "public/art/tile-ruins-b.png",
+      "sha256": "6689f95c0d67397a1f2a806ae1d43d76191bb50bba8432b6fae2db2f8f6820d2"
+    },
+    {
+      "path": "public/art/tile-urban-b.png",
+      "sha256": "553489df2ee0669284612664ec1d8c1c46cefc8f10ba360a3d5704addfdcfa56"
+    },
+    {
+      "path": "public/art/tile-urban-a.png",
+      "sha256": "d8345d5a0ddfb8ea44265463b7855e127aa04519bedf79f0b5fb229f08283d54"
+    },
+    {
+      "path": "src/game/compound.ts",
+      "sha256": "a8a37ecce5383d06671e4fe57b54f8ec0fc7b0ebc14525d51110b2722e122a7f"
+    },
+    {
+      "path": "src/game/equipmentRules.ts",
+      "sha256": "7add9af028a73655c1da136dc90fe21075bef19ef04f3316f507795ee3466f62"
+    },
+    {
+      "path": "src/game/items.ts",
+      "sha256": "96337485eff172cbc3936f742af827a4c975275f800d8445b232f050649317f0"
+    },
+    {
+      "path": "src/game/maps.ts",
+      "sha256": "99a68c1d73068e11bd3a52ad1d0542102384822dbbb68310c8d20a7af34897f6"
+    },
+    {
+      "path": "src/game/house.ts",
+      "sha256": "91508bd33748db9a40295bd44e9ecc2d51b6ede024dc068bced7613b57f3e612"
+    },
+    {
+      "path": "src/game/worldRoutes.ts",
+      "sha256": "11b54c112ae4c37b0cf2dd0e16a7937c0b293e0bd4d04225eb4b2c4e2858ea81"
+    },
+    {
+      "path": "src/game/world.ts",
+      "sha256": "9ad6447e3e2cce3f9f391856bd3008856a49c2849a35d71aa1368b1893510949"
+    },
+    {
+      "path": "src/audio/soundManager.ts",
+      "sha256": "acf148dad84c3ea1f3f64fc796dab445c75c236ee3de2bd989a61c18cfdc1309"
+    },
+    {
+      "path": "src/game/combat.ts",
+      "sha256": "d9f4155b8e4ecfe3158e90ecc5b6910823af4de6ac198397dd8c57c8b51c20b3"
+    },
+    {
+      "path": "src/game/weather.ts",
+      "sha256": "cb9ca518619740889713bbadaf0dab31a37daff4f35383ed14340a9805dd2dda"
+    },
+    {
+      "path": "src/game/visualTheme.ts",
+      "sha256": "1107c9e537577995d051804ea36c84581c01a9f5743ae2d2de24f3a771277a48"
+    },
+    {
+      "path": "src/game/houseRenderer.ts",
+      "sha256": "6cc8fe7d30219cc837d5abcfd3d3d0fe363f96066b6d8cd87ce2eacf3edec35c"
+    },
+    {
+      "path": "src/game/farmRenderer.ts",
+      "sha256": "ddd8d5c8e4713ef856bd7205038b6be44bdbf66d143b8bae020160e6e3bba233"
+    },
+    {
+      "path": "src/game/art.ts",
+      "sha256": "29a93ab2d72633ffd80af4d848c373a3e2e13c7d95df6aab32fcb546190bbf4f"
+    },
+    {
+      "path": "src/game/diplomacy.ts",
+      "sha256": "dc393d34f69628c8f7243310e4415d92eebe1d20fbc39032fe5a388db8f6c247"
+    },
+    {
+      "path": "src/game/navigation.ts",
+      "sha256": "defeedf6c1670922f76b115c5da0a1bdce4f64afa8fb5b7eca0ee5c48065b662"
+    },
+    {
+      "path": "src/game/home.ts",
+      "sha256": "d5e609f91b1c702f8c3605e27137ad2d3d21ebfc14d98a4301dfebdd0f3c6c11"
+    },
+    {
+      "path": "src/game/buildingRecipes.ts",
+      "sha256": "4514d33da6faf0d91fe9c41c095816a6559f8d335894acbcf31ab853d949df13"
+    },
+    {
+      "path": "src/game/renderDiagnostics.ts",
+      "sha256": "39670a730cb08aab1cee523e3ac5695f334552bc0acc1ced79afb7acc40f607b"
+    },
+    {
+      "path": "src/game/frameDiagnostics.ts",
+      "sha256": "9ecba9e7fd499dbead2649d6fa0979df7a5ca345d8cffad19c8ce15bda276fa2"
+    },
+    {
+      "path": "src/game/worldScenery.ts",
+      "sha256": "b08d785982fce260a911e4e9e0b4c788f00c1a386b0a19c5d2c7297086f44bfa"
+    },
+    {
+      "path": "src/game/IsometricEngine.ts",
+      "sha256": "6dac46d8982f455b01e61420bfff58b141101672c8fbbe45c1e83aac8acac2f0"
+    },
+    {
+      "path": "data/world-theme-review-20261024.json",
+      "sha256": "350a9146a23498549b27534186033858eea598c958e6d041b8ed5042bce0360a"
+    }
+  ]
+}
