@@ -2064,15 +2064,18 @@ export class IsometricEngine {
     this.ctx = this.canvas.getContext('2d')!;
   }
 
-  public readFrameDiagnostics(): string {
+  public startFrameCapture() { this.frameDiagnostics.startCapture(performance.now()); }
+
+  public readFrameDiagnostics(includeCaptureRows = false): string {
     const memory = (performance as Performance & { memory?: { usedJSHeapSize: number; totalJSHeapSize: number } }).memory;
     const moduleSrc = document.querySelector?.('script[type="module"][src]')?.getAttribute('src');
     let modulePath: string | null = null;
     try { if (moduleSrc) modulePath = new URL(moduleSrc, 'http://local.invalid').pathname; } catch { /* Unknown build. */ }
     return JSON.stringify({
-      kind: 'local-frame-diagnostics', version: 1, capturedAt: new Date().toISOString(),
+      kind: 'local-frame-diagnostics', version: 2, capturedAt: new Date().toISOString(),
       timing: 'JavaScript-enclosed wall milliseconds, possibly including scheduling/GC/browser-driver waits; not GPU/CPU attribution or physical displayed frames. Render stages are non-overlapping coarse spans: setup, ground, queue (including markers/underlays), entities, overlays. Ground flags describe this draw; texture means pending invalidation, terrain-region count may overlap. Latest20 visible successful slow samples (>50ms), including initial loading. Refresh clears records.',
-      ...this.frameDiagnostics.snapshot(),
+      captureTiming: 'Opt-in60s full callback capture, up to16384rows/1.125MiB numeric storage, plus the first callback crossing the deadline so late stalls remain. Reset/hidden/error/stop interrupts. Snapshot copying/sorting occurs only on export. localUpdateMoved is displacement inside that update, not server-authorized travel. Recording itself has bounded overhead; no physical-frame or GPU claim.',
+      ...this.frameDiagnostics.snapshot(includeCaptureRows),
       environment: {
         userAgent: typeof navigator === 'undefined' ? null : navigator.userAgent,
         viewport: { width: window.innerWidth, height: window.innerHeight },
@@ -2103,6 +2106,8 @@ export class IsometricEngine {
       if (!document.hidden && !this.contextLost && time >= this.renderRetryAt) {
         let phase = 'update';
         try {
+          const tracking = this.frameDiagnostics.capturing;
+          const beforeX = tracking ? this.player.x : 0, beforeY = tracking ? this.player.y : 0;
           const updateAt = performance.now();
           this.update(dt);
           const updateMs = performance.now() - updateAt;
@@ -2116,7 +2121,10 @@ export class IsometricEngine {
             drawMs = performance.now() - drawAt;
             this.setRenderStatus(null);
           }
-          const sample = this.frameDiagnostics.observe(callbackAt, true, updateMs, drawAt, drawMs);
+          const groundFlags = drawAt === null ? 0 : Number(this.groundFrame.full) | Number(this.groundFrame.scroll) << 1 | Number(this.groundFrame.texture) << 2 | Number(this.groundFrame.fallback) << 3;
+          const sample = this.frameDiagnostics.observe(callbackAt, true, updateMs, drawAt, drawMs,
+            tracking && (this.player.x !== beforeX || this.player.y !== beforeY), this.inputBlocked,
+            drawAt === null ? null : this.renderStagesMs.ground, groundFlags);
           if (sample) {
             sample.scene = {
               map: this.currentMapId.startsWith('home_') ? 'camp' : this.currentMapId,

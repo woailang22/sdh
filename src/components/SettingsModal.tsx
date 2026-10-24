@@ -11,9 +11,10 @@ interface SettingsModalProps {
   onGMLogout: () => void;
   onOpenRenderDiagnostics: () => void;
   onOpenFrameDiagnostics: () => void;
+  onStartFrameCapture: () => void;
 }
 
-export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose, onResetGame, isGM, onGMLogin, onGMLogout, onOpenRenderDiagnostics, onOpenFrameDiagnostics }) => {
+export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose, onResetGame, isGM, onGMLogin, onGMLogout, onOpenRenderDiagnostics, onOpenFrameDiagnostics, onStartFrameCapture }) => {
   const [vol, setVol] = useState(soundManager.getVolume() * 100);
   const [gmToken, setGmToken] = useState('');
 
@@ -107,6 +108,8 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose, o
           {/* Reset button */}
           <button onClick={onOpenRenderDiagnostics} className="w-full rounded-xl border border-slate-700 bg-slate-800 py-2.5 text-xs text-slate-300">查看最近画面错误</button>
           <button onClick={onOpenFrameDiagnostics} className="w-full rounded-xl border border-slate-700 bg-slate-800 py-2.5 text-xs text-slate-300">查看卡顿记录</button>
+          <button onClick={onStartFrameCapture} className="w-full rounded-xl border border-cyan-800 bg-cyan-950 py-2.5 text-xs text-cyan-200">记录接下来60秒</button>
+          <p className="text-xs text-slate-400">开始后会关闭面板，请按平时方式走动。稍后打开“查看卡顿记录”可复制完整记录；切到后台会中断，新记录会替换上一次，仅保存在本地。</p>
           <button
             onClick={() => {
               soundManager.playClick();

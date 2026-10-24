@@ -1253,8 +1253,16 @@ export default function App() {
             {!renderIssue && <button className="rounded bg-emerald-700 px-4 py-2" onClick={() => setRenderDetailsOpen(false)}>继续游戏</button>}
             <button className="rounded bg-amber-600 px-4 py-2" onClick={() => window.location.reload()}>重新载入</button>
             <button className="rounded bg-slate-700 px-4 py-2" onClick={async () => setRenderCopyResult(await copyDiagnosticText(frameDetailsText ?? readRenderDiagnostics()) ? '已复制记录' : '复制未成功，请在下方长按或选中文字复制')}>{frameDetailsText !== null ? '复制卡顿记录' : '复制错误信息'}</button>
+            {frameDetailsText !== null && <button className="rounded bg-slate-700 px-4 py-2" onClick={() => {
+              const text = engineRef.current?.readFrameDiagnostics(true);
+              if (!text) return;
+              const url = URL.createObjectURL(new Blob([text], { type: 'application/json' }));
+              const link = document.createElement('a'); link.href = url; link.download = `riftwalker-frames-${Date.now()}.json`;
+              link.click(); URL.revokeObjectURL(url);
+            }}>导出完整卡顿记录</button>}
           </div>
           {renderCopyResult && <p role="status" className="text-sm text-amber-200">{renderCopyResult}</p>}
+          {frameDetailsText !== null && <p className="text-xs text-slate-400">下方是统计摘要。完整逐帧记录可单独导出文件；以点击导出时的当前记录为准。</p>}
           <textarea aria-label={frameDetailsText !== null ? '卡顿记录' : '错误信息'} readOnly value={frameDetailsText ?? readRenderDiagnostics()} className="h-40 w-full select-text rounded bg-slate-950 p-3 text-left font-mono text-xs text-slate-300" onFocus={event => event.currentTarget.select()} />
         </div>
       </div>}
@@ -1582,6 +1590,7 @@ export default function App() {
         onGMLogout={handleGMLogout}
         onOpenRenderDiagnostics={() => { setFrameDetailsText(null); setActiveModal(null); setRenderCopyResult(''); setRenderDetailsOpen(true); }}
         onOpenFrameDiagnostics={() => { setFrameDetailsText(engineRef.current?.readFrameDiagnostics() ?? '{"status":"引擎尚未启动"}'); setActiveModal(null); setRenderCopyResult(''); setRenderDetailsOpen(true); }}
+        onStartFrameCapture={() => { engineRef.current?.startFrameCapture(); setActiveModal(null); }}
       />
 
       <InventoryModal

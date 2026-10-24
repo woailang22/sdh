@@ -84,6 +84,29 @@ describe('current-frame render stage diagnostics', () => {
   });
 });
 
+describe('whole walking capture in the actual engine loop', () => {
+  it('captures real update displacement and ground work without reusing stages on a callback that did not draw', () => {
+    const {engine}=setup();let clock=1000;vi.spyOn(performance,'now').mockImplementation(()=>clock);
+    vi.spyOn(engine as any,'update').mockImplementation(()=>{clock+=2;engine.player.x+=1;});
+    vi.spyOn(engine as any,'render').mockImplementation(()=>{clock+=3;Object.assign((engine as any).renderStagesMs,{ground:2});Object.assign((engine as any).groundFrame,{full:false,scroll:true,texture:true,fallback:false});});
+    engine.start();(engine as any).startFrameCapture();
+    const at=(stamp:number)=>{clock=stamp;vi.mocked(requestAnimationFrame).mock.calls.at(-1)![0](stamp);};
+    at(1020);at(1026);const report=JSON.parse(engine.readFrameDiagnostics(true)).capture;
+    expect(report.rows[0]).toEqual([20,2,3,null,null,2,1,0,6]);
+    expect(report.rows[1]).toEqual([26,2,null,6,null,null,1,0,0]);
+    const summary=JSON.parse(engine.readFrameDiagnostics()).capture;
+    expect(summary.rowCount).toBe(2);expect(summary.rows).toBeUndefined();expect(summary.metrics).toEqual(report.metrics);
+    expect(report.localUpdateMovedFrames).toBe(2);engine.stop();expect(JSON.parse(engine.readFrameDiagnostics()).capture.reason).toBe('interrupted');
+  });
+  it('retains a partial capture as interrupted if actual rendering fails', () => {
+    const {engine}=setup();let clock=1000;vi.spyOn(performance,'now').mockImplementation(()=>clock);
+    vi.spyOn(engine as any,'update').mockImplementation(()=>{});vi.spyOn(engine as any,'render').mockImplementation(()=>{throw Error('capture-render');});
+    vi.spyOn(console,'error').mockImplementation(()=>{});vi.spyOn(renderDiagnostics,'recordRenderFailure').mockReturnValue({at:'2026-10-24T00:00:00Z',message:'capture-render',stack:undefined});
+    engine.start();(engine as any).startFrameCapture();clock=1020;vi.mocked(requestAnimationFrame).mock.calls.at(-1)![0](1020);
+    expect(JSON.parse(engine.readFrameDiagnostics(true)).capture).toMatchObject({status:'stopped',reason:'interrupted',rows:[]});engine.stop();
+  });
+});
+
 describe('world road texture alignment', () => {
   it.each([
     [255, 0, 'urban'], [256, 0, 'urban'], [257, 0, 'urban'],

@@ -1,0 +1,711 @@
+{
+  "status": "implemented-bounded-opt-in-full-frame-diagnostics",
+  "overallGoalComplete": false,
+  "base": "2a4a6abf34b0c29d591b9b6404de12034711f298",
+  "production": {
+    "files": [
+      "src/game/frameDiagnostics.ts",
+      "src/game/IsometricEngine.ts",
+      "src/components/SettingsModal.tsx",
+      "src/App.tsx"
+    ],
+    "capture": {
+      "requestedMs": 60000,
+      "maxRows": 16384,
+      "columns": 9,
+      "retainedNumericBytes": 1179648,
+      "firstOverDeadlineCallbackIncluded": true,
+      "capacityOrContinuityStopExplicit": true,
+      "summaryOnlyByDefault": true,
+      "fullJsonDownload": true
+    },
+    "rendererAssetsInputSimulationServerResourcesChanged": false
+  },
+  "verification": {
+    "newTests": 8,
+    "focused": 195,
+    "red": {
+      "initial": 7,
+      "oldSlowContinuity": 1,
+      "summaryContract": 1
+    },
+    "negative": {
+      "failedAsExpected": 8,
+      "passed": 187,
+      "originalBytesRestored": true,
+      "sources": [
+        {
+          "path": "src/game/IsometricEngine.ts",
+          "sha256": "6dac46d8982f455b01e61420bfff58b141101672c8fbbe45c1e83aac8acac2f0"
+        },
+        {
+          "path": "src/game/frameDiagnostics.ts",
+          "sha256": "9ecba9e7fd499dbead2649d6fa0979df7a5ca345d8cffad19c8ce15bda276fa2"
+        }
+      ]
+    },
+    "full": {
+      "files": 46,
+      "tests": 747
+    },
+    "typesIncludingOwnedQa": "passed",
+    "build": {
+      "exitCode": 0,
+      "bundle": "index-BOQ-1Tqa.js",
+      "existingWarning": "chunk over500kB"
+    },
+    "native": {
+      "passed": true,
+      "sourceRulesUnchanged": true,
+      "sameEarnedCharacter": true,
+      "noStateEdits": true,
+      "normalRulesAndClocks": true,
+      "phases": [
+        {
+          "phase": "a1",
+          "capture": {
+            "rows": 9895,
+            "status": "completed",
+            "observedMs": 60002.30000001192,
+            "overrunMs": 2.300000011920929,
+            "firstCallbackDelayMs": 5.5,
+            "localUpdateMovedFrames": 8334,
+            "inputBlockedFrames": 0,
+            "metrics": {
+              "updateMs": {
+                "count": 9895,
+                "p50": 0.09999999403953552,
+                "p95": 0.29999998211860657,
+                "max": 2.4000000059604645,
+                "over22": 0,
+                "over50": 0
+              },
+              "drawMs": {
+                "count": 3599,
+                "p50": 0.7999999821186066,
+                "p95": 1.5,
+                "max": 12.099999994039536,
+                "over22": 0,
+                "over50": 0
+              },
+              "rafGapMs": {
+                "count": 9894,
+                "p50": 6.0999999940395355,
+                "p95": 6.799999982118607,
+                "max": 24.400000005960464,
+                "over22": 1,
+                "over50": 0
+              },
+              "drawGapMs": {
+                "count": 3598,
+                "p50": 18.099999994039536,
+                "p95": 18.69999998807907,
+                "max": 31.200000017881393,
+                "over22": 6,
+                "over50": 0
+              },
+              "groundMs": {
+                "count": 3599,
+                "p50": 0.09999999403953552,
+                "p95": 0.19999998807907104,
+                "max": 3.2000000178813934,
+                "over22": 0,
+                "over50": 0
+              }
+            },
+            "longestLocalMovementSpans": [
+              {
+                "from": 339.19999998807907,
+                "to": 30347.59999999404,
+                "durationMs": 30008.40000000596
+              },
+              {
+                "from": 30612.80000001192,
+                "to": 51125.30000001192,
+                "durationMs": 20512.5
+              }
+            ],
+            "percentilesIndependentlyRecomputed": true
+          },
+          "environment": {
+            "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
+            "viewport": {
+              "width": 1280,
+              "height": 720
+            },
+            "canvas": {
+              "width": 1280,
+              "height": 720
+            },
+            "devicePixelRatio": 1.5,
+            "modulePath": "/assets/index-DStmpzHF.js",
+            "jsHeap": {
+              "used": 13917099,
+              "total": 42652463
+            },
+            "graphicsBackend": "unknown"
+          },
+          "movement": {
+            "packets": 3090,
+            "rejected": 0,
+            "corrections": 3,
+            "overflow": 0
+          },
+          "actions": {
+            "new": 2,
+            "unique": true,
+            "errors": 0,
+            "sourceHandled": 100,
+            "finalHandled": 102
+          },
+          "final": {
+            "x": -194.6566070830509,
+            "y": 154.65606968189616,
+            "hp": 100,
+            "shield": 0,
+            "satiety": 14.536250000000324,
+            "wood": 3,
+            "items": [
+              [
+                "food",
+                1
+              ],
+              [
+                "water",
+                6
+              ],
+              [
+                "pickaxe_stone",
+                1
+              ],
+              [
+                "crop_potato",
+                8
+              ]
+            ],
+            "tool": "axe_stone"
+          },
+          "persistence": {
+            "integrity": "ok",
+            "savedMatches": true,
+            "backupRestored": true,
+            "stopTickMs": 0,
+            "savedSatiety": 14.536250000000324
+          },
+          "errors": "not-exported",
+          "nativeRequiredWalkingAcceptance": false
+        },
+        {
+          "phase": "a2",
+          "capture": {
+            "rows": 9880,
+            "status": "completed",
+            "observedMs": 60012.09999999404,
+            "overrunMs": 12.099999994039536,
+            "firstCallbackDelayMs": 2.199999988079071,
+            "localUpdateMovedFrames": 813,
+            "inputBlockedFrames": 0,
+            "metrics": {
+              "updateMs": {
+                "count": 9880,
+                "p50": 0.10000002384185791,
+                "p95": 0.4000000059604645,
+                "max": 1.4000000059604645,
+                "over22": 0,
+                "over50": 0
+              },
+              "drawMs": {
+                "count": 3601,
+                "p50": 1.699999988079071,
+                "p95": 3,
+                "max": 6.5,
+                "over22": 0,
+                "over50": 0
+              },
+              "rafGapMs": {
+                "count": 9879,
+                "p50": 6.0999999940395355,
+                "p95": 7.4000000059604645,
+                "max": 29.600000023841858,
+                "over22": 1,
+                "over50": 0
+              },
+              "drawGapMs": {
+                "count": 3600,
+                "p50": 18,
+                "p95": 19.200000017881393,
+                "max": 29.30000001192093,
+                "over22": 12,
+                "over50": 0
+              },
+              "groundMs": {
+                "count": 3601,
+                "p50": 0.09999999403953552,
+                "p95": 0.20000001788139343,
+                "max": 4.200000017881393,
+                "over22": 0,
+                "over50": 0
+              }
+            },
+            "longestLocalMovementSpans": [
+              {
+                "from": 347.2999999821186,
+                "to": 5291.0999999940395,
+                "durationMs": 4943.800000011921
+              },
+              {
+                "from": 14889.59999999404,
+                "to": 14889.59999999404,
+                "durationMs": 0
+              }
+            ],
+            "percentilesIndependentlyRecomputed": true
+          },
+          "environment": {
+            "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
+            "viewport": {
+              "width": 1920,
+              "height": 1080
+            },
+            "canvas": {
+              "width": 1920,
+              "height": 1080
+            },
+            "devicePixelRatio": 1.0000000298023224,
+            "modulePath": "/assets/index-BOQ-1Tqa.js",
+            "jsHeap": {
+              "used": 18674903,
+              "total": 70338743
+            },
+            "graphicsBackend": "unknown"
+          },
+          "movement": {
+            "packets": 2877,
+            "rejected": 0,
+            "corrections": 1,
+            "overflow": 0
+          },
+          "actions": {
+            "new": 2,
+            "unique": true,
+            "errors": 0,
+            "sourceHandled": 102,
+            "finalHandled": 104
+          },
+          "final": {
+            "x": -181.3403438954739,
+            "y": 141.35351022373854,
+            "hp": 100,
+            "shield": 0,
+            "satiety": 25.157250000000303,
+            "wood": 3,
+            "items": [
+              [
+                "water",
+                6
+              ],
+              [
+                "pickaxe_stone",
+                1
+              ],
+              [
+                "crop_potato",
+                7
+              ]
+            ],
+            "tool": "axe_stone"
+          },
+          "persistence": {
+            "integrity": "ok",
+            "savedMatches": true,
+            "backupRestored": true,
+            "stopTickMs": 0,
+            "savedSatiety": 25.157250000000303
+          },
+          "errors": [],
+          "nativeRequiredWalkingAcceptance": false
+        }
+      ],
+      "fullDownloadAndSummaryVerified": true,
+      "normalCampAndStoredAssetsUnchanged": true,
+      "overallPerformanceAccepted": false,
+      "strictContinuous60sWalkingAccepted": false,
+      "overallGoalComplete": false
+    }
+  },
+  "cleanup": {
+    "ownedServerPidsTerminal": [
+      48032,
+      45632
+    ],
+    "portsReleased": [
+      39142,
+      39143
+    ],
+    "listeners": 0,
+    "tabs": 0,
+    "viewportRestored": true,
+    "productionSaveOpened": false
+  },
+  "review": {
+    "source": "Independent read-only source review: shared slow-baseline P2 corrected; final summary/download source noP1/P2",
+    "finalEvidence": "passed-no-P1-P2"
+  },
+  "limits": [
+    "This adds needed bounded full-distribution evidence. It does not optimize the terrain renderer or declare the original user stutter/black-screen fixed.",
+    "Both raw files independently recompute exact nearest-rank counts/P50/P95/max/threshold counts, elapsed gaps/nulls/flags and summary consistency. Wall-clock JavaScript spans and draw-submit intervals are not physical displayed frames, GPU time or whole-browser memory.",
+    "A1 candidate DStmpzHF actually ran1280x720/DPR1.5, failed intended1080p gate, and had a75s tool timeout plus AX timeout while reading1.744MB textarea. Visible DOM chunks recovered full9895rows; first200k-truncated text remains. Input receipt was lost on kernel reset, and error panel was not exported. No retry/restart solely due timeout; existing live service was checkpointed and intentionally stopped.",
+    "A2 final BOQ-1Tqa ran verified1920x1080/DPRabout1.0, exported9880rows and9039-character summary normally. Existing dpad60000ms is also rejected by0..30000 guard. Native keyD30 only: movement hit a house corner near(-181,141), with813moving-update callbacks out of9880. Therefore19.2ms draw-gapP95 and3ms drawP95 mostly reflect standing; no strict continuous60s walking acceptance.",
+    "Startup before the a2 capture still contains ground63.8ms/draw68.4ms full redraw. Prior121.6ms has different environment/region and cannot be presented as an improvement comparison; renderer unchanged.",
+    "Recording samples include its own bounded bookkeeping overhead in callback gaps. Node90-trial microbenchmark times observe only, excluding allocation/export and actual browser/update/render, and is not end-to-end performance evidence.",
+    "Downloaded full file is generated at click time, while the summary is the earlier open-time snapshot. Completed captures match; live captures may have advanced, as UI explains. No additional persistent raw history or upload.",
+    "Normal resource use only: two potatoes and one carried food across both phases; waiting during tool recovery consumed satiety. No HP, shields, identity, positions, weather, clocks, inventories or source rule edits; all save/backup checks passed.",
+    "Only final a2 page errors[] is available. No all-pages error-free, physical60fps, GPU50%, browser800MB, long-memory, full-map exploration/economy or defensive-readiness claim. Ordinary push is not external website deployment."
+  ],
+  "sources": [
+    {
+      "path": "data/audit-walk-capture-20261024.ts",
+      "sha256": "e3976e3a82ee43e277b19631c242f1e8144652a26416687e32b7e83005d07c9b"
+    },
+    {
+      "path": "data/benchmark-walk-capture-20261024.ts",
+      "sha256": "e42c51eb920b37c77a1448272ed733eabd0b1078546e5263eba385c58f9874c9"
+    },
+    {
+      "path": "data/capture-cua-walk-capture-20261024-a2.ts",
+      "sha256": "e5ba606d79a35421776445f2e3f813f2f27e729007b7d96901993f72722867d9"
+    },
+    {
+      "path": "data/capture-cua-walk-capture-20261024.ts",
+      "sha256": "cd04f3f80933f1c7de99c9a76ade86ec6cfc958a6b19a53e9db93ddd255b06e5"
+    },
+    {
+      "path": "data/control-cua-walk-capture-20261024-a2.cjs",
+      "sha256": "d3e33dbb5d4a5e21bdd0e3aa6e253877bad0ccd6715689cd3dd31237c3ddb4d7"
+    },
+    {
+      "path": "data/control-cua-walk-capture-20261024.cjs",
+      "sha256": "1ced7533616a98b16cfcd91750deea0f4c26215f36ab63c8aa04a6ecc2de974b"
+    },
+    {
+      "path": "data/cua-walk-capture-20261024-a1-accepted-frames-private.json",
+      "sha256": "743d0b2de2483cb2547bbc36e72f0d7f7860a0880d3ca1dbef00848403e952ae"
+    },
+    {
+      "path": "data/cua-walk-capture-20261024-a1-after-walk.png",
+      "sha256": "b18d3a47112a3cdb0834ea2d877ea136444ec16d4b07ed7c3bee2d04942ee6cf"
+    },
+    {
+      "path": "data/cua-walk-capture-20261024-a1-native-connected-world-private.json",
+      "sha256": "18241f22915fcc6ddee884ff1bd64958a06ef6a33ad0160bb8b8fe2d500a78c3"
+    },
+    {
+      "path": "data/cua-walk-capture-20261024-a1-native-final-events.json",
+      "sha256": "fa847a4979ee9a8043285c132b98f0eaf13c0382357e8635b340a774c10b3919"
+    },
+    {
+      "path": "data/cua-walk-capture-20261024-a1-native-final-world-private.json",
+      "sha256": "e78ec37e71fa69cef4f5a48de2699e1b37033e0161ae490f6f71f275adc64176"
+    },
+    {
+      "path": "data/cua-walk-capture-20261024-a1-native-long-input-timeout-events.json",
+      "sha256": "aa7c759e8e7b08a339abbdbfe9458cee9d0526e935a13c2ede024d9b27f8c811"
+    },
+    {
+      "path": "data/cua-walk-capture-20261024-a1-native-long-input-timeout-world-private.json",
+      "sha256": "e75235ce91c321fbee07739559efef85d2b72ffef96bcfbdc027d7d5c73e101e"
+    },
+    {
+      "path": "data/cua-walk-capture-20261024-a1-native-server.log",
+      "sha256": "a00c9ad75df34270f92708bfe224e71f8c42c9b631170c276db4fd088e85151a"
+    },
+    {
+      "path": "data/cua-walk-capture-20261024-a1-prep-stages-private.json",
+      "sha256": "f07838f4181e77db26dd738be068c157a81b8858a922adb6500c47a5a9fdad6b"
+    },
+    {
+      "path": "data/cua-walk-capture-20261024-a1-settings.png",
+      "sha256": "a67357d7e791a25465fd9fd03f28b749c1e4b2f7f5191e2d2783b516d6a6f01a"
+    },
+    {
+      "path": "data/cua-walk-capture-20261024-a1-truncated-read-private.txt",
+      "sha256": "b4d42422b0f7ac8e2b87a63ee547d97e4f5bae213ee6e512aec68b59c0dfcc5a"
+    },
+    {
+      "path": "data/cua-walk-capture-20261024-a2-accepted-errors.json",
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "path": "data/cua-walk-capture-20261024-a2-accepted-frames-private.json",
+      "sha256": "7315a22a4943a981e682fd13c44f5737b622b2194699d5fbc4cfa703305960db"
+    },
+    {
+      "path": "data/cua-walk-capture-20261024-a2-before-frames-private.json",
+      "sha256": "899a9e5ad0a8a5e6cf615e21b663a4409a0a38e3f3845f96233f0f80e0bd4cd8"
+    },
+    {
+      "path": "data/cua-walk-capture-20261024-a2-diagnostics.png",
+      "sha256": "2f2d41144a1c6c0ef8b14bf9f857188549c2f4f0ffbeaedb3ec892ec97581616"
+    },
+    {
+      "path": "data/cua-walk-capture-20261024-a2-input-receipt.json",
+      "sha256": "f7dc5619f505fc5532e0d466cdd7e9f26002ccfa174e54fefb9c58cb5dec8176"
+    },
+    {
+      "path": "data/cua-walk-capture-20261024-a2-native-connected-world-private.json",
+      "sha256": "2c443a0ef1b337a812146ea87cbebc7f058a9c3854b70c1119ac22cbf11c2c4b"
+    },
+    {
+      "path": "data/cua-walk-capture-20261024-a2-native-final-events.json",
+      "sha256": "ed2b651ca6d38309bcfd9c4223effdfe4e5ccafce817c53a6584f092cd1ebda3"
+    },
+    {
+      "path": "data/cua-walk-capture-20261024-a2-native-final-world-private.json",
+      "sha256": "d23316622b6d1b69c861a6fe177ac895e563ba527941b45d41fe6ad053967448"
+    },
+    {
+      "path": "data/cua-walk-capture-20261024-a2-native-server.log",
+      "sha256": "f86cb69e62f49344b616a0738a354e11c110951a2da7e3cea0c70f24ca3caca5"
+    },
+    {
+      "path": "data/cua-walk-capture-20261024-a2-settings.png",
+      "sha256": "e4ccf93761d66b0f6f292fa78c58f5aa80be4bf76a2d6c78ad71f34429972ff8"
+    },
+    {
+      "path": "data/cua-walk-capture-20261024-a2-stages-private.json",
+      "sha256": "1045d0ad70e803e45dca8c882cdc3ff62e14ce64f6ccba86170c35e8022500c9"
+    },
+    {
+      "path": "data/cua-walk-capture-20261024-a2-summary-private.json",
+      "sha256": "57646d23d8835724bd11f47ff661a1403d41011fecfc5f7d1016b1a0cbed4c88"
+    },
+    {
+      "path": "data/negative-walk-capture-20261024.cjs",
+      "sha256": "5925cdd6c6c5897af7708a667e99a746686d838c3786884e55cac64c36fb94c7"
+    },
+    {
+      "path": "data/negative-walk-capture-all-20261024.cjs",
+      "sha256": "3dc9b9708dffbc178dd9c1811c60c257d2a0ca08b66eeaf437bb8834d623acf9"
+    },
+    {
+      "path": "data/prepare-walk-capture-20261024.ts",
+      "sha256": "81b2ada5751fe662cf6c540113a70f61c5e5e09a05fe859fb2b9be1209fda18d"
+    },
+    {
+      "path": "data/prepare-walk-capture-a2-20261024.ts",
+      "sha256": "23b749172de0fac01d42ea259f5cfbf5b156d46be9a294fab504aa62121681b3"
+    },
+    {
+      "path": "data/publish-walk-capture-20261024.cjs",
+      "sha256": "9c8c3155f070c60db1a0934cb5f2784f3ed316118bcf04d9ae3d611317fa9396"
+    },
+    {
+      "path": "data/walk-capture-a1-read-failures-20261024.json",
+      "sha256": "51b8ae1547952ffd71d3c9afc2ff881e6360d09f2ae6d35edbb43655e91ea99a"
+    },
+    {
+      "path": "data/walk-capture-a2-source-backup-20261024.json",
+      "sha256": "3d954ab9fd30379febd0ca2428f4aeaeb78821f2fc758e504331f064ca23ecc0"
+    },
+    {
+      "path": "data/walk-capture-accepted-bundle-BOQ-1Tqa.js",
+      "sha256": "3b7eeee1843804538914ce83d85735e5e2ee30d622ca988930802e29317ee81d"
+    },
+    {
+      "path": "data/walk-capture-accepted-index.html",
+      "sha256": "4f98b4e48b8f5e48bba9bf17c75cfc88a650d57ba7a52d1f1933e6b144c5d0a4"
+    },
+    {
+      "path": "data/walk-capture-baseline-20261024.ts",
+      "sha256": "ae00db37d16abd4eb2752f2510ddad89684b4e2bddc9973c34443c23cc1b33dc"
+    },
+    {
+      "path": "data/walk-capture-build-exit-20261024.json",
+      "sha256": "c3121ab1758efb795041a4ad9d247a036a90cecc1f41b237edf558b8d54ca595"
+    },
+    {
+      "path": "data/walk-capture-build-export-exit-20261024.json",
+      "sha256": "4d173fbba6e59c397cecfdaf8dee0293f0f97b30b84fa7963a5699cb8d35c8ea"
+    },
+    {
+      "path": "data/walk-capture-build-export-final-20261024.log",
+      "sha256": "a6309191517e9d93803b698f51b47efbb58fb2e7a1339132a475538624b5314b"
+    },
+    {
+      "path": "data/walk-capture-build-final-20261024.log",
+      "sha256": "8b2d8da17023ff849e5313f3050fa06e7096efcc312e0ac34fdc39b10cc32ddf"
+    },
+    {
+      "path": "data/walk-capture-candidate-bundle-DStmpzHF.js",
+      "sha256": "96978202a1afc5b28f2e9023ec4f4160f47b200782fab88d05bac70d68bcc0b6"
+    },
+    {
+      "path": "data/walk-capture-candidate-index.html",
+      "sha256": "7968937c88c0850075e9ece1a822e97586e2050a358a0648ce293e161fcd3cf1"
+    },
+    {
+      "path": "data/walk-capture-cleanup-20261024.json",
+      "sha256": "61e4f37584a869a293e011e751d814cf3c4c471f7b6c74484fc9ed30181ac4ba"
+    },
+    {
+      "path": "data/walk-capture-continuity-final-green-20261024.log",
+      "sha256": "7811e37b96935639c1a3fdfb96d00f662c78bebc3665c22a8d916a5e33c0a9a6"
+    },
+    {
+      "path": "data/walk-capture-continuity-green-20261024.log",
+      "sha256": "f793f28bc1cea931c80088f7d2da37bf00ceec61c2fc05dd3aa55494abda7099"
+    },
+    {
+      "path": "data/walk-capture-continuity-red-20261024.log",
+      "sha256": "0a16f831709ab96072ecdd820221616eb3695374f5437bd59c90e310fbfd773e"
+    },
+    {
+      "path": "data/walk-capture-full-20261024.log",
+      "sha256": "0e481b47d5aa487ac017883991413fa22ed7ebc1884fa4341fe0b2ba1ff415da"
+    },
+    {
+      "path": "data/walk-capture-full-export-final-20261024.log",
+      "sha256": "cd697509962a91ccdfead56f34621c02c39248e61fe144018689b5ca32a332ee"
+    },
+    {
+      "path": "data/walk-capture-full-final-20261024.log",
+      "sha256": "c95abdbaf6d34d069be76995038b12438829da4fea68b93daf580fe3ee75531c"
+    },
+    {
+      "path": "data/walk-capture-green-20261024.log",
+      "sha256": "40f5047aef2893df3d633e8bb660d19466a24e40cb85ad133e3c6422477839fa"
+    },
+    {
+      "path": "data/walk-capture-microbenchmark-20261024.json",
+      "sha256": "f3cf475354c4a99d1e47ea76f02740d3fd7dd9dcff1681740a7615ddd9b0ed5f"
+    },
+    {
+      "path": "data/walk-capture-microbenchmark-pre-export-20261024.json",
+      "sha256": "3e645b33185b4e2f1793e4740d5b28ed70ebf0a6f9807883febb197916953541"
+    },
+    {
+      "path": "data/walk-capture-native-audit-20261024.json",
+      "sha256": "a21e96b2d3c3d2f635ee9fc347da0074a115291d057ae3504b2d833be432c644"
+    },
+    {
+      "path": "data/walk-capture-native-audit-20261024.log",
+      "sha256": "c9d704c0d3df5a668d39b3cca1fedd7e23ae88bffb5ca694a564d30e48587858"
+    },
+    {
+      "path": "data/walk-capture-negative-20261024.log",
+      "sha256": "f415594988fd7452ce58e131bccf6751cf19a5b1cac5db778e6b97b4f8df4beb"
+    },
+    {
+      "path": "data/walk-capture-negative-all-20261024.log",
+      "sha256": "b890564384f35faed023c006f8497b25201228eedd7a0473eb61f08d35554420"
+    },
+    {
+      "path": "data/walk-capture-negative-all-pre-summary-20261024.log",
+      "sha256": "d433d254703b9eab5ba924523320ea01cf0b37b3214e8dacd9def965621182d3"
+    },
+    {
+      "path": "data/walk-capture-negative-all-receipt-20261024.json",
+      "sha256": "81d1d03e9037ab65f6b654dd6d8ff3dedf651990fb3fa8547774d0b2f7c1abac"
+    },
+    {
+      "path": "data/walk-capture-negative-all-receipt-pre-summary-20261024.json",
+      "sha256": "aecfc963528ec9b4b7eeaf8568663d59bc42d1ed72d1c63655597762e5e91505"
+    },
+    {
+      "path": "data/walk-capture-negative-receipt-20261024.json",
+      "sha256": "986a029e22c8ade5287ec28895194315ca84fa333a4224cae1a3c44cc23ca856"
+    },
+    {
+      "path": "data/walk-capture-red-20261024.log",
+      "sha256": "18e1ed280e19f5da6e35039ef7dfe3e7a8f01acbd4624d005e8168a712ad8c97"
+    },
+    {
+      "path": "data/walk-capture-review-20261024.json",
+      "sha256": "17828a18207b3b929d66a12f99f4146ec760b6fef407f52be1ca60715902c0ad"
+    },
+    {
+      "path": "data/walk-capture-source-backup-20261024.json",
+      "sha256": "2d603a567b293fce07fe0ab60bc1c5e25a83e2f8ef2d6db2c72170a828a7ed46"
+    },
+    {
+      "path": "data/walk-capture-summary-final-green-20261024.log",
+      "sha256": "92f316873592aaf2644711f4b7714695421c01d36ebfd4ce316c2b0752e69693"
+    },
+    {
+      "path": "data/walk-capture-summary-green-20261024.log",
+      "sha256": "ae122c060ab610e558af19e3d78ac23fc5a66d4cb438fc38ec7369cded168bfe"
+    },
+    {
+      "path": "data/walk-capture-summary-red-20261024.log",
+      "sha256": "699a11280d3c25db303011b12d8acd66342baf703a04d6f326ad198f614ec0ec"
+    },
+    {
+      "path": "data/walk-capture-types-allqa-accepted-20261024.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "data/walk-capture-types-allqa-audit-20261024.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "data/walk-capture-types-export-final-20261024.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "data/walk-capture-types-final-20261024.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "data/walk-capture-types-initial-20261024.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "data/walk-capture-types-summary-20261024.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "dist/assets/index-BOQ-1Tqa.js",
+      "sha256": "3b7eeee1843804538914ce83d85735e5e2ee30d622ca988930802e29317ee81d"
+    },
+    {
+      "path": "dist/index.html",
+      "sha256": "4f98b4e48b8f5e48bba9bf17c75cfc88a650d57ba7a52d1f1933e6b144c5d0a4"
+    },
+    {
+      "path": "docs/superpowers/plans/2026-10-20-seamless-world-camps.md",
+      "sha256": "e7dc4adb2d04cf8ce84f840094044c489199c4df24bb801f6e7ece8b6e9cf2a5"
+    },
+    {
+      "path": "docs/superpowers/plans/2026-10-24-bounded-walk-capture.md",
+      "sha256": "eacbcba8d604fce0b4979a01664419aff17238f1162dc331523000a9fd1fd145"
+    },
+    {
+      "path": "docs/superpowers/specs/2026-10-24-bounded-walk-capture-design.md",
+      "sha256": "99d31eb838e61d1fad202ffad980f1928532ece4fc1578e396d188aee46858c3"
+    },
+    {
+      "path": "src/App.tsx",
+      "sha256": "83e9dae7839ce291f4dd0ad920151ac46595a4666a8ed264506aedcc981b2170"
+    },
+    {
+      "path": "src/components/SettingsModal.tsx",
+      "sha256": "60970eb73918621fed71968f4bf97629161399dcbf5c462246dd96dbd4f94a06"
+    },
+    {
+      "path": "src/game/IsometricEngine.test.ts",
+      "sha256": "22da86d44e73c2fd294984d3fd53721d143444fe8d190a94f22c3300a76f4eb6"
+    },
+    {
+      "path": "src/game/IsometricEngine.ts",
+      "sha256": "6dac46d8982f455b01e61420bfff58b141101672c8fbbe45c1e83aac8acac2f0"
+    },
+    {
+      "path": "src/game/frameDiagnostics.test.ts",
+      "sha256": "46e1e5fa9fe0e2db91bce2ca68fbedaf436c773ef86fc322311589002cc41a66"
+    },
+    {
+      "path": "src/game/frameDiagnostics.ts",
+      "sha256": "9ecba9e7fd499dbead2649d6fa0979df7a5ca345d8cffad19c8ce15bda276fa2"
+    }
+  ]
+}
