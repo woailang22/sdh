@@ -1,0 +1,1029 @@
+{
+  "kind": "existing-forest-room-supplies-and-discoverable-route",
+  "base": "ee73a03e037598fb76388147788e6e413f2c1f91",
+  "planningCommit": "af1d3d1",
+  "goalComplete": false,
+  "problem": "Generic mountain rooms all repeated workshop stock; the existing western map route stopped at logging grounds and offered no deeper woodland supply loop.",
+  "change": "Reuse three existing10x6 south-door rooms as a farmhouse, forest clinic and sawmill workshop, and map them together with the existing old hemlock. Keep the southern five stops separate. Focus the woodland route and enlarge only its active labels; older route label sizes stay unchanged.",
+  "productionFiles": [
+    "src/game/worldRoutes.ts",
+    "src/components/WorldMapModal.tsx"
+  ],
+  "gates": {
+    "initialRed": {
+      "failed": 6,
+      "total": 61
+    },
+    "targetedGreen": 61,
+    "stockAndRefreshTests": 22,
+    "negativeControl": {
+      "exitCode": 1,
+      "restoredExactBytes": true
+    },
+    "focusLayoutRed": true,
+    "full": {
+      "files": 49,
+      "tests": 784,
+      "exitCode": 0
+    },
+    "typesExit": 0,
+    "buildExit": 0,
+    "bundle": "/assets/index-D4Zbspb4.js",
+    "existingLargeChunkWarning": true,
+    "review": "No P1/P2. Independent175 pre-review source hashes, per-action/phase asset ledger and final desktop/mobile proofs matched; forest-only text scope concern resolved. Review record included in final manifest."
+  },
+  "world": {
+    "passed": true,
+    "chunks": 4096,
+    "changedChunks": [
+      "world:-17:-5",
+      "world:-14:-4",
+      "world:-10:-4"
+    ],
+    "unchangedNormalizedGeometryAndEntities": true,
+    "counts": {
+      "buildings": 57255,
+      "nodes": 32525,
+      "monsters": 850
+    },
+    "themeSamplePoints": 65536,
+    "themeSampleHash": "8e7459234c79654fa06c36773624db9c2de249ad158080b81914d440666e7a61",
+    "productionFiles": [
+      "src/game/worldRoutes.ts"
+    ]
+  },
+  "native": {
+    "passed": true,
+    "sameEarnedCharacter": true,
+    "noStateEdits": true,
+    "noRollback": true,
+    "phases": [
+      {
+        "phase": "out-a",
+        "packets": 864,
+        "rejected": 0,
+        "corrections": 1,
+        "errors": 0,
+        "overflow": 0,
+        "actions": 0
+      },
+      {
+        "phase": "out-b",
+        "packets": 887,
+        "rejected": 0,
+        "corrections": 1,
+        "errors": 0,
+        "overflow": 0,
+        "actions": 0
+      },
+      {
+        "phase": "farm",
+        "packets": 242,
+        "rejected": 0,
+        "corrections": 1,
+        "errors": 0,
+        "overflow": 0,
+        "actions": 5
+      },
+      {
+        "phase": "clinic",
+        "packets": 29,
+        "rejected": 0,
+        "corrections": 1,
+        "errors": 0,
+        "overflow": 0,
+        "actions": 0
+      },
+      {
+        "phase": "clinic-walk",
+        "packets": 909,
+        "rejected": 0,
+        "corrections": 1,
+        "errors": 0,
+        "overflow": 0,
+        "actions": 0
+      },
+      {
+        "phase": "clinic-loot",
+        "packets": 265,
+        "rejected": 0,
+        "corrections": 1,
+        "errors": 0,
+        "overflow": 0,
+        "actions": 3
+      },
+      {
+        "phase": "repair",
+        "packets": 755,
+        "rejected": 0,
+        "corrections": 1,
+        "errors": 0,
+        "overflow": 0,
+        "actions": 0
+      },
+      {
+        "phase": "repair-loot",
+        "packets": 828,
+        "rejected": 0,
+        "corrections": 1,
+        "errors": 0,
+        "overflow": 0,
+        "actions": 4
+      },
+      {
+        "phase": "return-a",
+        "packets": 920,
+        "rejected": 0,
+        "corrections": 1,
+        "errors": 0,
+        "overflow": 0,
+        "actions": 0
+      },
+      {
+        "phase": "return-b",
+        "packets": 956,
+        "rejected": 0,
+        "corrections": 1,
+        "errors": 0,
+        "overflow": 0,
+        "actions": 0
+      },
+      {
+        "phase": "return-c",
+        "packets": 922,
+        "rejected": 0,
+        "corrections": 1,
+        "errors": 0,
+        "overflow": 0,
+        "actions": 0
+      },
+      {
+        "phase": "persist",
+        "packets": 757,
+        "rejected": 0,
+        "corrections": 3,
+        "errors": 0,
+        "overflow": 0,
+        "actions": 3
+      },
+      {
+        "phase": "map-only",
+        "packets": 59,
+        "rejected": 0,
+        "corrections": 1,
+        "errors": 0,
+        "overflow": 0,
+        "actions": 0
+      },
+      {
+        "phase": "map-focused",
+        "packets": 96,
+        "rejected": 0,
+        "corrections": 2,
+        "errors": 0,
+        "overflow": 0,
+        "actions": 0
+      },
+      {
+        "phase": "map-readable",
+        "packets": 102,
+        "rejected": 0,
+        "corrections": 2,
+        "errors": 0,
+        "overflow": 0,
+        "actions": 0
+      },
+      {
+        "phase": "map-forest-only",
+        "packets": 112,
+        "rejected": 0,
+        "corrections": 2,
+        "errors": 0,
+        "overflow": 0,
+        "actions": 0
+      }
+    ],
+    "totalPackets": 8703,
+    "corrections": 21,
+    "uniqueActions": 15,
+    "successfulTakes": 7,
+    "foodConsumed": 3,
+    "returnedToOwnedCamp": true,
+    "mapMarkersDoNotTeleport": true,
+    "nativeVisitedRooms": 3,
+    "nativeTimberHarvestVerified": false,
+    "layouts": [
+      {
+        "dialog": {
+          "height": 600.3333740234375,
+          "width": 1024,
+          "x": 128,
+          "y": 59.83333587646485
+        },
+        "hasTargets": true,
+        "module": "/assets/index-D4Zbspb4.js",
+        "viewport": {
+          "height": 720,
+          "width": 1280
+        },
+        "routeLabelHeight": 18
+      },
+      {
+        "dialog": {
+          "height": 776.4791870117188,
+          "width": 366,
+          "x": 12,
+          "y": 33.76041793823242
+        },
+        "hasTargets": true,
+        "module": "/assets/index-D4Zbspb4.js",
+        "viewport": {
+          "height": 844,
+          "width": 390
+        },
+        "routeLabelHeight": 15.333333969116213
+      }
+    ],
+    "persistence": {
+      "integrity": "ok",
+      "consistentBackup": "data/cua-forest-route-20261024-a1.sqlite.backup-2026-10-24T06-05-37-213Z",
+      "actualGameWorldRestoreIntoMemory": true,
+      "assetsConserved": true,
+      "sharedCampAssetsUnchanged": true,
+      "finalOwner": {
+        "hp": 100,
+        "shield": 50,
+        "satiety": 35.41800000000023,
+        "resources": {
+          "wood": 1,
+          "stone": 1,
+          "scrap": 9,
+          "parts": 6,
+          "food": 0,
+          "ammo": 10,
+          "c4": 0,
+          "medical": 0,
+          "credits": 0,
+          "shard": 0
+        },
+        "items": [
+          [
+            "water",
+            3
+          ],
+          [
+            "seed_potato",
+            3
+          ],
+          [
+            "axe_stone",
+            1
+          ],
+          [
+            "bandage",
+            3
+          ],
+          [
+            "antidote",
+            1
+          ]
+        ],
+        "tool": "pickaxe_stone"
+      }
+    },
+    "deviations": [
+      "First clinic exit navigation was projected onto HUD; helper refused before click. Normal S650 movement then a valid click exited the house; failure phase retained.",
+      "Two long manual return key holds met existing houses and covered less distance. Normal detours continued from actual position; no save reset or geometry changes.",
+      "First narrow map showed clustered targets and tiny route labels. Tighter route view improved spacing, but font still scaled to about7px. Increased active-route label size and rechecked real DOM/screenshot in both widths."
+    ],
+    "limitations": [
+      "Known route with QA phase restarts does not prove blind novice timing, uninterrupted full-trip exposure, multiplayer competition or long-term food economy.",
+      "The fourth timber target is statically real and mapped; native harvest and its guarding risk remain unverified this stage.",
+      "No render error diagnostics exported from earlier gameplay pages; final mobile console errors[] cover only that page.",
+      "No strict continuous60s, physical GPU, browser total memory or whole-world acceptance."
+    ],
+    "goalComplete": false
+  },
+  "proofs": [
+    "data/forest-route-farm-approach-20261024.png",
+    "data/forest-route-farm-loot-20261024.png",
+    "data/forest-route-clinic-loot-20261024.png",
+    "data/forest-route-repair-loot-20261024.png",
+    "data/forest-route-returned-camp-20261024.png",
+    "data/forest-route-map-desktop-forest-only-20261024.png",
+    "data/forest-route-map-mobile-forest-only-20261024.png"
+  ],
+  "cleanup": {
+    "nativeTabsClosed": true,
+    "viewportReset": true,
+    "ownedServersExited": true,
+    "port39150Released": true,
+    "productionDatabaseOpened": false
+  },
+  "sources": [
+    {
+      "path": "data/audit-forest-native-20261024.ts",
+      "sha256": "b91dccf1d6636a629def84b51e7c6854b9028c175fd3b52c5b324a90ba2aa249"
+    },
+    {
+      "path": "data/audit-forest-route-20261024.ts",
+      "sha256": "b3a1c666d1883a30053116f5f5cf4a6ea119bb59c170ee0113e69930ca771334"
+    },
+    {
+      "path": "data/baseline-forest-route-20261024.ts",
+      "sha256": "5e0a18b237b29035b4eeb82a718c009556b105b66d227b3e6611bf46dcc4a2a8"
+    },
+    {
+      "path": "data/capture-cua-forest-route-20261024-a1.ts",
+      "sha256": "20f911bd109996d3b39746ec8fce95117b22909c6c90f33e2d7ba9fa7bc2dff5"
+    },
+    {
+      "path": "data/control-cua-forest-route-20261024-a1.cjs",
+      "sha256": "acc312790ddf7766a14b55220607848051993fac4ee6c7f523a1ba46232e24c7"
+    },
+    {
+      "path": "data/cua-forest-route-20261024-a1-clinic-connected-world-private.json",
+      "sha256": "aac108c532e25e5648d60eca62142deb9fd3a0d16d31d9067601b66bc81cf4ff"
+    },
+    {
+      "path": "data/cua-forest-route-20261024-a1-clinic-final-events.json",
+      "sha256": "dda11fd0c149fc9919a5a2ddbd0b315e60554156596bad16c978f690325f12eb"
+    },
+    {
+      "path": "data/cua-forest-route-20261024-a1-clinic-final-world-private.json",
+      "sha256": "0e37cf69658e8a24356f5578c8ca423c293c82fc45b481196bb131159bfeb45e"
+    },
+    {
+      "path": "data/cua-forest-route-20261024-a1-clinic-loot-connected-world-private.json",
+      "sha256": "d70a985b7a786448ff3d31a03e13b28b6741ec2a821abba4bb7e16184fe9c94d"
+    },
+    {
+      "path": "data/cua-forest-route-20261024-a1-clinic-loot-final-events.json",
+      "sha256": "7f0f84b7648ae68a364dc1194fa53d762e99499fc1bba0550ee1aac3fd92010c"
+    },
+    {
+      "path": "data/cua-forest-route-20261024-a1-clinic-loot-final-world-private.json",
+      "sha256": "fdfb9891f4d9c37a12ec430b5a50bb7c8190a54c62362e08557cb8059f73f22b"
+    },
+    {
+      "path": "data/cua-forest-route-20261024-a1-clinic-loot-server.log",
+      "sha256": "6271a2d55abdc5c33c95a0112caf677943936b1d8ae0d26f15b931f117634f2d"
+    },
+    {
+      "path": "data/cua-forest-route-20261024-a1-clinic-server.log",
+      "sha256": "6271a2d55abdc5c33c95a0112caf677943936b1d8ae0d26f15b931f117634f2d"
+    },
+    {
+      "path": "data/cua-forest-route-20261024-a1-clinic-walk-connected-world-private.json",
+      "sha256": "26e13f18821fccd554f2c53c8275b5bdd6385b42ab535405792cb9b2fccd5345"
+    },
+    {
+      "path": "data/cua-forest-route-20261024-a1-clinic-walk-final-events.json",
+      "sha256": "018e75f07e43a399e19fc768634b971190382315564700b00e15f22e6d8a8d95"
+    },
+    {
+      "path": "data/cua-forest-route-20261024-a1-clinic-walk-final-world-private.json",
+      "sha256": "ff52cca7ca5b50c0be876697634ef7fb7905c650556d4eb1c397bf758259532c"
+    },
+    {
+      "path": "data/cua-forest-route-20261024-a1-clinic-walk-server.log",
+      "sha256": "6271a2d55abdc5c33c95a0112caf677943936b1d8ae0d26f15b931f117634f2d"
+    },
+    {
+      "path": "data/cua-forest-route-20261024-a1-farm-connected-world-private.json",
+      "sha256": "80b66ba6f4d260a8c7b8d64785bc4b583f6ae4bcd4a36aa39fa55e7f2f8c31ba"
+    },
+    {
+      "path": "data/cua-forest-route-20261024-a1-farm-final-events.json",
+      "sha256": "49f9025fa037cdf11cad59235d00741686ee40a37f9967ccb5a445afe6ca3421"
+    },
+    {
+      "path": "data/cua-forest-route-20261024-a1-farm-final-world-private.json",
+      "sha256": "9f36bcd1c8134ce2c9af2d8fd9309ed13c8138553a37574bc6670a2a43ca9b24"
+    },
+    {
+      "path": "data/cua-forest-route-20261024-a1-farm-server.log",
+      "sha256": "6271a2d55abdc5c33c95a0112caf677943936b1d8ae0d26f15b931f117634f2d"
+    },
+    {
+      "path": "data/cua-forest-route-20261024-a1-map-focused-connected-world-private.json",
+      "sha256": "3b0ec93de19effcf4a83ad8596172bcadee1a5d378e8c5423cc4b311676f3375"
+    },
+    {
+      "path": "data/cua-forest-route-20261024-a1-map-focused-final-events.json",
+      "sha256": "b66fca6d3c4af2db2d7a0f423d506dac9021749e0f939d4a7391151b30347857"
+    },
+    {
+      "path": "data/cua-forest-route-20261024-a1-map-focused-final-world-private.json",
+      "sha256": "04799a79f161a180d21f86b24852f71345992e07f294b76e16a28bb1e7cefb4b"
+    },
+    {
+      "path": "data/cua-forest-route-20261024-a1-map-focused-server.log",
+      "sha256": "6271a2d55abdc5c33c95a0112caf677943936b1d8ae0d26f15b931f117634f2d"
+    },
+    {
+      "path": "data/cua-forest-route-20261024-a1-map-forest-only-connected-world-private.json",
+      "sha256": "a0a2b475792fc43ccf5221619894397289057506ae9be0db9d656de3bda60b06"
+    },
+    {
+      "path": "data/cua-forest-route-20261024-a1-map-forest-only-final-events.json",
+      "sha256": "8487719b375fffc9c3e3c69733c7a8295d2b2f8e0207c2b67be69ecd2ed87d1f"
+    },
+    {
+      "path": "data/cua-forest-route-20261024-a1-map-forest-only-final-world-private.json",
+      "sha256": "b5515f99d25e79805f5adf777cb94ac9978b89f6fc90574ef27345245f5020cb"
+    },
+    {
+      "path": "data/cua-forest-route-20261024-a1-map-forest-only-server.log",
+      "sha256": "6271a2d55abdc5c33c95a0112caf677943936b1d8ae0d26f15b931f117634f2d"
+    },
+    {
+      "path": "data/cua-forest-route-20261024-a1-map-only-connected-world-private.json",
+      "sha256": "b316cdac3507f89ffe452509156f6b4c5b12fd7aab51b4ad6b663b579cf6df30"
+    },
+    {
+      "path": "data/cua-forest-route-20261024-a1-map-only-final-events.json",
+      "sha256": "dc9211f552664c061837a22dbe0f804eaddbcf31eb3c3f5ffa574bbf48be8c23"
+    },
+    {
+      "path": "data/cua-forest-route-20261024-a1-map-only-final-world-private.json",
+      "sha256": "a52f5ca064eec4317e0c03ce188f51ea7ecb74ee3126bc1f1bd1f93e6d24456a"
+    },
+    {
+      "path": "data/cua-forest-route-20261024-a1-map-only-server.log",
+      "sha256": "6271a2d55abdc5c33c95a0112caf677943936b1d8ae0d26f15b931f117634f2d"
+    },
+    {
+      "path": "data/cua-forest-route-20261024-a1-map-readable-connected-world-private.json",
+      "sha256": "5caedd11aa03d798da54f387bd491b34a9a9de0aa6352677ba7dc280182bc347"
+    },
+    {
+      "path": "data/cua-forest-route-20261024-a1-map-readable-final-events.json",
+      "sha256": "0b31fa0b486208c9315e441e269a7288ad1b5cd04e786f2dcd7dac04c3180c01"
+    },
+    {
+      "path": "data/cua-forest-route-20261024-a1-map-readable-final-world-private.json",
+      "sha256": "52f459250884b5544c2e2be5d22093302f87ddc255f069948b20d14839f309d6"
+    },
+    {
+      "path": "data/cua-forest-route-20261024-a1-map-readable-server.log",
+      "sha256": "6271a2d55abdc5c33c95a0112caf677943936b1d8ae0d26f15b931f117634f2d"
+    },
+    {
+      "path": "data/cua-forest-route-20261024-a1-out-a-connected-world-private.json",
+      "sha256": "6949a35cbc2789f178aa22d420ed5143008a8be02403582550bf3bd514357ac2"
+    },
+    {
+      "path": "data/cua-forest-route-20261024-a1-out-a-final-events.json",
+      "sha256": "29e3e212ddbff145a3dfb1b8993baf1f679ffd47b081fa8d76786ba0284bfd61"
+    },
+    {
+      "path": "data/cua-forest-route-20261024-a1-out-a-final-world-private.json",
+      "sha256": "1dadab6ab624ee5397116dd9a1a6d4489ae79cb7a1b3473e58635e5cb46f900f"
+    },
+    {
+      "path": "data/cua-forest-route-20261024-a1-out-a-server.log",
+      "sha256": "6271a2d55abdc5c33c95a0112caf677943936b1d8ae0d26f15b931f117634f2d"
+    },
+    {
+      "path": "data/cua-forest-route-20261024-a1-out-b-connected-world-private.json",
+      "sha256": "3f7d01bc77ef49f8982e2280e69ce259d1ef70ee11a08627785186df94bda0ae"
+    },
+    {
+      "path": "data/cua-forest-route-20261024-a1-out-b-final-events.json",
+      "sha256": "b2d05d4eaa812c1f94cc8dcf882a1e8e61902580348735a4d66cbc0044839cc3"
+    },
+    {
+      "path": "data/cua-forest-route-20261024-a1-out-b-final-world-private.json",
+      "sha256": "1680259af8746c5b022b2c882deccbc55a923028d6236d98216f5a8179d23af5"
+    },
+    {
+      "path": "data/cua-forest-route-20261024-a1-out-b-server.log",
+      "sha256": "6271a2d55abdc5c33c95a0112caf677943936b1d8ae0d26f15b931f117634f2d"
+    },
+    {
+      "path": "data/cua-forest-route-20261024-a1-persist-connected-world-private.json",
+      "sha256": "fc2f2a21de83db7b4fc7d123cc94450c9f7c9be04aca6c24926e41603d5035b0"
+    },
+    {
+      "path": "data/cua-forest-route-20261024-a1-persist-final-events.json",
+      "sha256": "42fc32d2abb271e4437224f11d5052478144e872cf6577e526be46bb0ff32822"
+    },
+    {
+      "path": "data/cua-forest-route-20261024-a1-persist-final-world-private.json",
+      "sha256": "fad2429e8999c7b35c5e42f3ed8ff04b460c5011acc6a7988911e0a3172eb64f"
+    },
+    {
+      "path": "data/cua-forest-route-20261024-a1-persist-server.log",
+      "sha256": "6271a2d55abdc5c33c95a0112caf677943936b1d8ae0d26f15b931f117634f2d"
+    },
+    {
+      "path": "data/cua-forest-route-20261024-a1-repair-connected-world-private.json",
+      "sha256": "f1e4f36b2d684e9c5a583671b3650596e64931ab0be99d74ab867f400c8cbfe3"
+    },
+    {
+      "path": "data/cua-forest-route-20261024-a1-repair-final-events.json",
+      "sha256": "bbdc4626c80aed9a1ecbc28c987376a3607796bc19a52d255ff0ecad0e2677e0"
+    },
+    {
+      "path": "data/cua-forest-route-20261024-a1-repair-final-world-private.json",
+      "sha256": "d8c1b78435ff8fc3c2ab8bffd917a7ab9a182085976bb46a57f7f0aac9638d7a"
+    },
+    {
+      "path": "data/cua-forest-route-20261024-a1-repair-loot-connected-world-private.json",
+      "sha256": "59079cc66a4db11d50b408967b2549369f192bdc4cc1b90ff3375649858b7f43"
+    },
+    {
+      "path": "data/cua-forest-route-20261024-a1-repair-loot-final-events.json",
+      "sha256": "06a0ed4db2a5a4a20c2cd3da2176020632fa6e03577d4479d9f0232fc8b51aed"
+    },
+    {
+      "path": "data/cua-forest-route-20261024-a1-repair-loot-final-world-private.json",
+      "sha256": "e5ff8796b76858cd39e30b22e43ca757e670e1513075a3bdfcc23f8a3de8a5fe"
+    },
+    {
+      "path": "data/cua-forest-route-20261024-a1-repair-loot-server.log",
+      "sha256": "6271a2d55abdc5c33c95a0112caf677943936b1d8ae0d26f15b931f117634f2d"
+    },
+    {
+      "path": "data/cua-forest-route-20261024-a1-repair-server.log",
+      "sha256": "6271a2d55abdc5c33c95a0112caf677943936b1d8ae0d26f15b931f117634f2d"
+    },
+    {
+      "path": "data/cua-forest-route-20261024-a1-return-a-connected-world-private.json",
+      "sha256": "1fdbac7d3581cf8866a01bb7c2bdcb43dfdd6081ecc3aa1f6116dfe2d3453a99"
+    },
+    {
+      "path": "data/cua-forest-route-20261024-a1-return-a-final-events.json",
+      "sha256": "e4bb0bad2063d48d2344b9a005c04d2d430f8be16cbe61f29fe09fd3dfb14962"
+    },
+    {
+      "path": "data/cua-forest-route-20261024-a1-return-a-final-world-private.json",
+      "sha256": "0b9df9225a9c36bf46c6b8097da950124c8eaf34a642a32da9d6c5b861ccbaf0"
+    },
+    {
+      "path": "data/cua-forest-route-20261024-a1-return-a-server.log",
+      "sha256": "6271a2d55abdc5c33c95a0112caf677943936b1d8ae0d26f15b931f117634f2d"
+    },
+    {
+      "path": "data/cua-forest-route-20261024-a1-return-b-connected-world-private.json",
+      "sha256": "233ada2bc5a22ec743b83fd5814165767ac2fdf2ab78c71284c140db1b25410d"
+    },
+    {
+      "path": "data/cua-forest-route-20261024-a1-return-b-final-events.json",
+      "sha256": "3dd26125f83ab6e0703cf05ba756a86c7a9c93b82cbd7edd950b802f423daa73"
+    },
+    {
+      "path": "data/cua-forest-route-20261024-a1-return-b-final-world-private.json",
+      "sha256": "bb742376aeae370fd1a34d1d470a326debf290f02b8e4929a7aa79c239a2bf5e"
+    },
+    {
+      "path": "data/cua-forest-route-20261024-a1-return-b-server.log",
+      "sha256": "6271a2d55abdc5c33c95a0112caf677943936b1d8ae0d26f15b931f117634f2d"
+    },
+    {
+      "path": "data/cua-forest-route-20261024-a1-return-c-connected-world-private.json",
+      "sha256": "f4974a03bf36316ee3a94b95b6d849ee2d949beb320a1a7e344789d9c80d6f2f"
+    },
+    {
+      "path": "data/cua-forest-route-20261024-a1-return-c-final-events.json",
+      "sha256": "35a4045a72c83262ece9184e9ad70e673cd1bbfe4581b1084caeab612b87093f"
+    },
+    {
+      "path": "data/cua-forest-route-20261024-a1-return-c-final-world-private.json",
+      "sha256": "fa35b72c052945ee203582a2d72caa07f558452ae7c5ff4f932a2bbb89a2ca02"
+    },
+    {
+      "path": "data/cua-forest-route-20261024-a1-return-c-server.log",
+      "sha256": "6271a2d55abdc5c33c95a0112caf677943936b1d8ae0d26f15b931f117634f2d"
+    },
+    {
+      "path": "data/cua-forest-route-20261024-a1.sqlite.backup-2026-10-24T06-05-37-213Z",
+      "sha256": "7449ea4bf95dd9d42f6257547379b310865b06fca25270a361b3dd210af7ff87"
+    },
+    {
+      "path": "data/cua-native-defense-20261024-a1.sqlite.backup-2026-10-24T05-27-22-365Z",
+      "sha256": "2898a53d8cc0a39578fa9df8da49e60e3abc7fc64357904cf27e7ce0361d49bf"
+    },
+    {
+      "path": "data/forest-route-accepted-bundle-D4Zbspb4.js",
+      "sha256": "f889f1a99398885ba7bdf8009b31593a720052f7ae398b5fcc0cd100c33ef51c"
+    },
+    {
+      "path": "data/forest-route-accepted-bundle-vP40Jk77.js",
+      "sha256": "322c7b37d994e6add4299ea3add9309f39561f8c8f4d48a8a970e7b0f92546cc"
+    },
+    {
+      "path": "data/forest-route-baseline-20261024.json",
+      "sha256": "87681b9ea9905a0989b7c5d8d408c9d42a15f8ce2536e090b8c754ffb2d1dd80"
+    },
+    {
+      "path": "data/forest-route-build-20261024.log",
+      "sha256": "4543d8beffac66bec5164d2f3b8166e024e4be69027e03310421c6f54187d475"
+    },
+    {
+      "path": "data/forest-route-build-accepted-20261024.log",
+      "sha256": "8cd0f69b973657df04c94e0ae14dacaebec4e4de9807e1fb152ea57ea8d928ab"
+    },
+    {
+      "path": "data/forest-route-build-accepted-exit-20261024.json",
+      "sha256": "ea61d7736f0b7ecb9b35158f03de77013db6b100cf1d36c957e78e6c8817c5b6"
+    },
+    {
+      "path": "data/forest-route-build-exit-20261024.json",
+      "sha256": "ea61d7736f0b7ecb9b35158f03de77013db6b100cf1d36c957e78e6c8817c5b6"
+    },
+    {
+      "path": "data/forest-route-build-final-20261024.log",
+      "sha256": "1c9b00ec5405c667f2cb9e59df3c6f27279014f7e2fe4645f704d803d0ccda55"
+    },
+    {
+      "path": "data/forest-route-build-final-exit-20261024.json",
+      "sha256": "ea61d7736f0b7ecb9b35158f03de77013db6b100cf1d36c957e78e6c8817c5b6"
+    },
+    {
+      "path": "data/forest-route-build-scoped-20261024.log",
+      "sha256": "93d483c3aabcdadd6a10c01ff803ce5edae6ccfb6dd6f9f2194fcf15ffe6e456"
+    },
+    {
+      "path": "data/forest-route-build-scoped-exit-20261024.json",
+      "sha256": "ea61d7736f0b7ecb9b35158f03de77013db6b100cf1d36c957e78e6c8817c5b6"
+    },
+    {
+      "path": "data/forest-route-clinic-ax-private-20261024.json",
+      "sha256": "76e139558202b22accdf317eb265a3ce671a89ec1d3818e2157344f6b9c03a71"
+    },
+    {
+      "path": "data/forest-route-clinic-loot-20261024.png",
+      "sha256": "7efcf2ced45cbfb78f280b2b5a21b5a09eac0579e50c098743692047fd9de126"
+    },
+    {
+      "path": "data/forest-route-clinic-loot-ax-private-20261024.json",
+      "sha256": "5d4b0973b0c5c4f5a3efd3848b31681a9d1724e4e7a9b1315f9154628491b7eb"
+    },
+    {
+      "path": "data/forest-route-clinic-walk-ax-private-20261024.json",
+      "sha256": "075cbec7d81a61822d308f910283ff981f964344b25808e3f5f86197b7bcb4f7"
+    },
+    {
+      "path": "data/forest-route-farm-approach-20261024.png",
+      "sha256": "0f7b8167a357437daef1506f4c14ff5e8fe38f125b6f829ae57c28771407e577"
+    },
+    {
+      "path": "data/forest-route-farm-ax-private-20261024.json",
+      "sha256": "922f2321e3e0100d275665b865a97d47f4a873d62c14aafc612c78cc64ebd8ca"
+    },
+    {
+      "path": "data/forest-route-farm-loot-20261024.png",
+      "sha256": "c30417d531c60e6e3618e4ad258da743c543eee508e4e95da3bc08081abcf911"
+    },
+    {
+      "path": "data/forest-route-final-review-20261024.json",
+      "sha256": "af7bde89527f6026b0c86fcb0ebca03ec64219541c05599dc89592a51756663e"
+    },
+    {
+      "path": "data/forest-route-focus-red-20261024.log",
+      "sha256": "fb194eecb3f19c1d116dca12e451a1dd3411adad40d40a09bb876df5f160f195"
+    },
+    {
+      "path": "data/forest-route-full-20261024.log",
+      "sha256": "56a279cb7860067d64b20589162cb590da1eed41e65169ff3cb57b0c134e9c4c"
+    },
+    {
+      "path": "data/forest-route-full-accepted-20261024.log",
+      "sha256": "af091133257d207167a6e23c539e1160b2f41a6ee6431857aeed5df0d3979bec"
+    },
+    {
+      "path": "data/forest-route-full-accepted-exit-20261024.json",
+      "sha256": "ea61d7736f0b7ecb9b35158f03de77013db6b100cf1d36c957e78e6c8817c5b6"
+    },
+    {
+      "path": "data/forest-route-full-exit-20261024.json",
+      "sha256": "ea61d7736f0b7ecb9b35158f03de77013db6b100cf1d36c957e78e6c8817c5b6"
+    },
+    {
+      "path": "data/forest-route-full-final-20261024.log",
+      "sha256": "7bda9e4d66c0074c27594ae7b53aaec1a3b4fd0c779e3ec1456594c1c9d59a63"
+    },
+    {
+      "path": "data/forest-route-full-final-exit-20261024.json",
+      "sha256": "ea61d7736f0b7ecb9b35158f03de77013db6b100cf1d36c957e78e6c8817c5b6"
+    },
+    {
+      "path": "data/forest-route-full-scoped-20261024.log",
+      "sha256": "d262cb5e8edc23b25d900cc4785260c76dea43f6dcc27313bc95a853fb8b688d"
+    },
+    {
+      "path": "data/forest-route-full-scoped-exit-20261024.json",
+      "sha256": "ea61d7736f0b7ecb9b35158f03de77013db6b100cf1d36c957e78e6c8817c5b6"
+    },
+    {
+      "path": "data/forest-route-green-20261024.log",
+      "sha256": "a80cb25f8acd4cf25ced372b5587c8bf0c2c5316348e52640915f3f050dce610"
+    },
+    {
+      "path": "data/forest-route-legacy-east-20261024.png",
+      "sha256": "40bd67e2cb7b8674c530b590ca1e8893b3ec57c737d95d9b2063bcfbc1e166a5"
+    },
+    {
+      "path": "data/forest-route-legacy-label-sizes-20261024.json",
+      "sha256": "4e57bcde8a7ba92b6ea607bcda2967fc67d3eb32b1781e1bafce74b46e35887f"
+    },
+    {
+      "path": "data/forest-route-legacy-north-20261024.png",
+      "sha256": "8ce2eaa389eb5939afcbf154d7b33c5df1abf50d1d6d1e2806a87a82321b0285"
+    },
+    {
+      "path": "data/forest-route-map-desktop-20261024.png",
+      "sha256": "f021b65137fb622527f17828248b68aeb127dcb3f3a3a7c521232b390bfa7090"
+    },
+    {
+      "path": "data/forest-route-map-desktop-focused-20261024-layout.json",
+      "sha256": "adc7aab35dd9303a861ace52ecaa29b07c72b4c86e8f57de6ad745f8b900acd9"
+    },
+    {
+      "path": "data/forest-route-map-desktop-focused-20261024.png",
+      "sha256": "b190008aa9e9a481bc9d25660f69b8a6c902fbad1a2fc21b7653381de8e0fb56"
+    },
+    {
+      "path": "data/forest-route-map-desktop-forest-only-20261024-layout.json",
+      "sha256": "65621a361188c83a4621c704da2ad0865b0d8c0f88edc6d4e81b021f7e40505b"
+    },
+    {
+      "path": "data/forest-route-map-desktop-forest-only-20261024.png",
+      "sha256": "e8f3c6682965522db488dbdf2b3704612d24e3c11b7ed7ab9e3630f4aecf6823"
+    },
+    {
+      "path": "data/forest-route-map-desktop-readable-20261024-layout.json",
+      "sha256": "b69ee0ecf78b5c6b607a4501924f85599a74a75d131c0eccf58c109a8da9356c"
+    },
+    {
+      "path": "data/forest-route-map-desktop-readable-20261024.png",
+      "sha256": "12fa25af8080504ad3c1d5b689344c808dd11dd23c0e94c25cc5dae870ad6604"
+    },
+    {
+      "path": "data/forest-route-map-focused-ax-private-20261024.json",
+      "sha256": "56252efef30dd2f67c7e67c18ec58a562dff01941dbf34cec4149b10d240cd54"
+    },
+    {
+      "path": "data/forest-route-map-focused-console-private-20261024.json",
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "path": "data/forest-route-map-forest-only-ax-private-20261024.json",
+      "sha256": "d09e18730d1791be34b644b924c48c90bb8595e683be14f8fd507542eac29bab"
+    },
+    {
+      "path": "data/forest-route-map-mobile-20261024.png",
+      "sha256": "a76db838683bbdb4cfc86d47b86c06c7a16318037b0fb191fbe0f30149e75ffc"
+    },
+    {
+      "path": "data/forest-route-map-mobile-focused-20261024-layout.json",
+      "sha256": "3569df242053df14023d9dc81ece71ea30044932136cf10cf620164d98ecf653"
+    },
+    {
+      "path": "data/forest-route-map-mobile-focused-20261024.png",
+      "sha256": "e0e5b1ac37444172da4a35cbe5f18993fceccfc265cc26ca01095101c5fa81ae"
+    },
+    {
+      "path": "data/forest-route-map-mobile-forest-only-20261024-layout.json",
+      "sha256": "b65e649ac23b7c2c346412a43707e2393fec6769c80e97dcef13284bc873b26e"
+    },
+    {
+      "path": "data/forest-route-map-mobile-forest-only-20261024.png",
+      "sha256": "001b76b40f45ec6d3c7e4b18d964dc40ab4326bc2c51f9e01bdc03bd98a9fa8a"
+    },
+    {
+      "path": "data/forest-route-map-mobile-layout-20261024.json",
+      "sha256": "1dae8d1568bb0e47de72524bef3263b56f2aa78acc34c3fdd8eac0152f00fbc7"
+    },
+    {
+      "path": "data/forest-route-map-mobile-readable-20261024-layout.json",
+      "sha256": "42303c1004c95991c3204dd539f51b06e743e0330b65d4c576d28c9cc7d813ce"
+    },
+    {
+      "path": "data/forest-route-map-mobile-readable-20261024.png",
+      "sha256": "001b76b40f45ec6d3c7e4b18d964dc40ab4326bc2c51f9e01bdc03bd98a9fa8a"
+    },
+    {
+      "path": "data/forest-route-map-only-ax-private-20261024.json",
+      "sha256": "959dd5cbdeca99ad35b9df17e66e31c2ee5b4ca657eeca1437d4214575b90949"
+    },
+    {
+      "path": "data/forest-route-map-only-console-private-20261024.json",
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "path": "data/forest-route-map-readable-ax-private-20261024.json",
+      "sha256": "fc22726a3d3b05f3558345e2b926eb2ae0cb7e0ca77de795280ebdf3a996cce7"
+    },
+    {
+      "path": "data/forest-route-map-readable-console-private-20261024.json",
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "path": "data/forest-route-map-scoped-console-private-20261024.json",
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "path": "data/forest-route-native-audit-20261024.json",
+      "sha256": "7f110cd927cb7bfc6ca35ccf38f39bacde1b7a245309da7fbec73fe2559fb1f0"
+    },
+    {
+      "path": "data/forest-route-native-audit-20261024.log",
+      "sha256": "b5600e90a031bd61b02439081f4b766e22bdcbfb23874c7a6552481df39de149"
+    },
+    {
+      "path": "data/forest-route-native-audit-final-20261024.log",
+      "sha256": "a3dd089fb64ad8ad289531e9eb9bf2258a14839c50f3efad5064938312891c63"
+    },
+    {
+      "path": "data/forest-route-native-source-backup-20261024.json",
+      "sha256": "ba648eea30dd8abe363d0a5731d026041dee33a97c923a317684bbc3f0ddc99f"
+    },
+    {
+      "path": "data/forest-route-negative-20261024.json",
+      "sha256": "01b53b2b9e863e9b562dd8edd9bf2b95bc71d9cee70a4cdee8a8b60b8a4133a4"
+    },
+    {
+      "path": "data/forest-route-negative-20261024.log",
+      "sha256": "1c4fc307810127379145a70707396a41f0df1c35312af6261a907919b2a668d7"
+    },
+    {
+      "path": "data/forest-route-negative-run-20261024.log",
+      "sha256": "efafaed4c24d2091dfb95ccdc62661a4df37054f5dd1413115fa0850f2e3c7ed"
+    },
+    {
+      "path": "data/forest-route-out-a-ax-private-20261024.json",
+      "sha256": "a65acd5fb6a69b996335149f0a963136866f3b9a2929ff36eba71a50b02d7661"
+    },
+    {
+      "path": "data/forest-route-out-b-ax-private-20261024.json",
+      "sha256": "4e17c739742ca8252caa7a470bb72fe01a4ed1e279920d203243c7cf998fedf4"
+    },
+    {
+      "path": "data/forest-route-persist-ax-private-20261024.json",
+      "sha256": "997f7c374ea4ac35fe735f0184858745dc89cc380c10e3099dbe9e56fc428c87"
+    },
+    {
+      "path": "data/forest-route-red-20261024.log",
+      "sha256": "3e61a80523ab0f3aa0e910c685d5c58130cbd1ac7b5a6ba26e885b1bb3519886"
+    },
+    {
+      "path": "data/forest-route-repair-approach-20261024.png",
+      "sha256": "5dc34bbafae8a72e826d67b9fa44ee0c04d7e3ae3a8dfcc23f5a76174900fc42"
+    },
+    {
+      "path": "data/forest-route-repair-ax-private-20261024.json",
+      "sha256": "717f504fa00a54b2e6634a3af4f15d4b4f8d78d8337850a23565f3825211d00f"
+    },
+    {
+      "path": "data/forest-route-repair-loot-20261024.png",
+      "sha256": "78ab54fb601390c86cafe2dfb9505db145babd9bacca0737588810515533e7a1"
+    },
+    {
+      "path": "data/forest-route-repair-loot-ax-private-20261024.json",
+      "sha256": "5473f2ed626b441181c2580f3edbe1c9725177024675cb9034b0de5b0b9f0b07"
+    },
+    {
+      "path": "data/forest-route-return-a-ax-private-20261024.json",
+      "sha256": "71ac154099aef65e7a37c3030208c8c234d7b88c0bb60e411539d465b63dad6e"
+    },
+    {
+      "path": "data/forest-route-return-b-ax-private-20261024.json",
+      "sha256": "7fea5e7c0d93f3ab4719493cdc3d118571c7dc14ebff958b6b965675a3eea898"
+    },
+    {
+      "path": "data/forest-route-return-c-ax-private-20261024.json",
+      "sha256": "cb28704c11cf74d456d2132dc01e4f1cd7eaee6215a4adfe67bc8a665e6258fd"
+    },
+    {
+      "path": "data/forest-route-returned-camp-20261024.png",
+      "sha256": "21a0d068864d4f1c42cf6fce64db4d1da0894456c24da174c1b82ab3554f29cc"
+    },
+    {
+      "path": "data/forest-route-scout-before-20261024.json",
+      "sha256": "ce0774d4a35b682fa55a841458335040346866335abcaa2cdcc4f8d84c4a57a4"
+    },
+    {
+      "path": "data/forest-route-stock-tests-20261024.log",
+      "sha256": "584f21a09cd6a1698d2dd8cb3b20c1e9e1bd35d49a98f1d2b8f46533b748aa86"
+    },
+    {
+      "path": "data/forest-route-types-20261024.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "data/forest-route-types-accepted-20261024.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "data/forest-route-types-accepted-exit-20261024.json",
+      "sha256": "ea61d7736f0b7ecb9b35158f03de77013db6b100cf1d36c957e78e6c8817c5b6"
+    },
+    {
+      "path": "data/forest-route-types-allqa-20261024.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "data/forest-route-types-allqa-exit-20261024.json",
+      "sha256": "ea61d7736f0b7ecb9b35158f03de77013db6b100cf1d36c957e78e6c8817c5b6"
+    },
+    {
+      "path": "data/forest-route-types-allqa-final-20261024.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "data/forest-route-types-allqa-final-exit-20261024.json",
+      "sha256": "ea61d7736f0b7ecb9b35158f03de77013db6b100cf1d36c957e78e6c8817c5b6"
+    },
+    {
+      "path": "data/forest-route-types-exit-20261024.json",
+      "sha256": "ea61d7736f0b7ecb9b35158f03de77013db6b100cf1d36c957e78e6c8817c5b6"
+    },
+    {
+      "path": "data/forest-route-types-final-20261024.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "data/forest-route-types-final-exit-20261024.json",
+      "sha256": "ea61d7736f0b7ecb9b35158f03de77013db6b100cf1d36c957e78e6c8817c5b6"
+    },
+    {
+      "path": "data/forest-route-types-scoped-20261024.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "data/forest-route-types-scoped-exit-20261024.json",
+      "sha256": "ea61d7736f0b7ecb9b35158f03de77013db6b100cf1d36c957e78e6c8817c5b6"
+    },
+    {
+      "path": "data/forest-route-world-audit-20261024.json",
+      "sha256": "54020a218a0bbf633fdb4bf30623416f3756905fcffec1bf9a82aa5ba8fd2d8a"
+    },
+    {
+      "path": "data/forest-route-world-audit-20261024.log",
+      "sha256": "993c28b99500e6819c59ca304be806584d7fd9a2b06de3be94e3754aca53a7fa"
+    },
+    {
+      "path": "data/negative-forest-route-20261024.cjs",
+      "sha256": "c0139873539777e91d5bb9d93ef4a88f4ad8293f6d274fcce2045e380d7a94ee"
+    },
+    {
+      "path": "data/prepare-forest-route-native-20261024.ts",
+      "sha256": "db7557d4bd5ae565c0e9154645aa21d730730c08a75b1a2f34b16c1315144f03"
+    },
+    {
+      "path": "data/report-forest-route-20261024.cjs",
+      "sha256": "10d615c4cb020c83be6451152bc117bf657cfffaef8b0506c280191250c91f0d"
+    },
+    {
+      "path": "data/scout-forest-route-20261024.ts",
+      "sha256": "f6de868934d96fcce7ddd4030dcf380a637a447702bf10b54758f55ad95e1895"
+    },
+    {
+      "path": "docs/superpowers/plans/2026-10-20-seamless-world-camps.md",
+      "sha256": "988bc0cd4256b2474913f873fbf896b9cae08b6e92fdbdb1b5b2392c278a1409"
+    },
+    {
+      "path": "docs/superpowers/plans/2026-10-24-forest-supply-route.md",
+      "sha256": "cf0aa9138a9b8c0f3302b104050e6a662c2072b89e4b2f3c36498bbf7c3ceb49"
+    },
+    {
+      "path": "docs/superpowers/specs/2026-10-24-forest-supply-route-design.md",
+      "sha256": "57eaa4940b3d03d999bbb4ba9669501889970c8e3b501b6bbf4fb9ee30e25324"
+    },
+    {
+      "path": "server/db.ts",
+      "sha256": "9cf91e65d64e6372bb897d98b8bdda843a03f42f409240f272abc4ed09d83f0f"
+    },
+    {
+      "path": "server/exploration.test.ts",
+      "sha256": "5db1ed0b3ffa198b8928a1f032e0dc3115affb495cb43e2c220bbbbfa32238ef"
+    },
+    {
+      "path": "server/worldState.ts",
+      "sha256": "829140066d1e04a3521ba2286e4130b39ccdcdf825a7a4340dc34e416ff6f5f1"
+    },
+    {
+      "path": "src/components/WorldMapModal.tsx",
+      "sha256": "f02abc9fc305cb6c4d35d149518ff34e2620e62ab5a8299370d7f995158abd95"
+    },
+    {
+      "path": "src/game/navigation.test.ts",
+      "sha256": "ec2e9a64914c48b2be7561e6e8b66358776f0d2440ecba5b9191675323ede725"
+    },
+    {
+      "path": "src/game/world.test.ts",
+      "sha256": "d0cfd8669f182e19c08a0b70373823e22d3199f65eb00d50e5fd39000f12a6d9"
+    },
+    {
+      "path": "src/game/worldRoutes.test.ts",
+      "sha256": "5573ed4fdfc85c161765aba614bee87b4ec09272f4881ec4a301ae252050326c"
+    },
+    {
+      "path": "src/game/worldRoutes.ts",
+      "sha256": "f802c4a6348bc5211912d0e16066120bc4152500ef7871db088d8ac4ad1346c5"
+    }
+  ]
+}

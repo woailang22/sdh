@@ -19,6 +19,37 @@ const caches = [
   { nodeId: 'world:5:28:i:marsh_abyss:aby_cache', guardSuffix: ':ab_cache_guard' },
 ];
 describe('high-risk exploration rewards', () => {
+  it.each(['world:-10:-4:poi:supplies', 'world:-14:-4:poi:supplies'])('preserves old forest stock at %s until emptied and naturally renewed', nodeId => {
+    const { game, db, rules, node, now, setTime } = setup(nodeId);
+    game.state.nodes[node.id] = { stock: 3, respawnAt: 0, items: [{ itemId: 'scrap', name: '旧废铁', count: 5 }, { itemId: 'part', name: '旧零件', count: 1 }] };
+    game.persist(); const restored = new GameWorld(db, rules, now), p = restored.state.players.p;
+    const act = (requestId: string, action: string, extra = {}) => restored.action('p', { requestId, action, targetId: node.id, ...extra });
+    expect(act('old-open', 'search').loot?.items.map(i => [i.itemId, i.count])).toEqual([['scrap', 5], ['part', 1]]);
+    expect(act('old-partial', 'take_loot', { itemId: 'scrap', count: 2 }).error).toBeUndefined();
+    expect(act('old-open-again', 'search').loot?.items.map(i => [i.itemId, i.count])).toEqual([['scrap', 3], ['part', 1]]);
+    expect(act('old-rest', 'take_loot', { itemId: 'scrap', count: 3 }).error).toBeUndefined();
+    expect(act('old-parts', 'take_loot', { itemId: 'part', count: 1 }).error).toBeUndefined();
+    expect(restored.state.nodes[node.id]).toMatchObject({ stock: 0, respawnAt: now() + 300000, items: [] });
+    expect(act('empty-old', 'search').error).toContain('耗尽');
+    p.x = node.x + 46; setTime(now() + 300000); restored.tick(); p.x = node.x + 2.5;
+    const refreshed = act('new-open', 'search'); expect(refreshed.error).toBeUndefined();
+    expect(refreshed.loot?.items).toEqual(node.lootTable); expect(p.resources).toMatchObject({ scrap: 5, parts: 1 });
+  });
+
+  it('keeps forest food in the shared cabinet when the backpack is full and makes one successful claim idempotent', () => {
+    const { game, p, node } = setup('world:-10:-4:poi:supplies');
+    p.inventory = p.inventory.map(() => makeItem('axe_stone', 1));
+    const searched = game.action('p', { requestId: 'full-open', action: 'search', targetId: node.id });
+    expect(searched.loot?.items.find(i => i.itemId === 'food')?.count).toBe(3);
+    const request = { requestId: 'food-full', action: 'take_loot', targetId: node.id, itemId: 'food', count: 3 };
+    expect(game.action('p', request).error).toContain('背包');
+    expect(game.state.nodes[node.id].items?.find(i => i.itemId === 'food')?.count).toBe(3);
+    game.state.players.p.inventory[0] = null;
+    const success = { ...request, requestId: 'food-ok' };
+    expect(game.action('p', success).error).toBeUndefined(); expect(game.action('p', success).error).toBeUndefined();
+    expect(game.state.players.p.inventory.filter(i => i?.id === 'food').reduce((n, i) => n + i!.count, 0)).toBe(3);
+    expect(game.state.nodes[node.id].items?.map(i => [i.itemId, i.count])).toEqual([['water', 2], ['seed_potato', 1]]);
+  });
   it('retains an old roadside container remainder when its room becomes a clinic', () => {
     const { game, db, rules, node, now } = setup('world:-1:10:poi:supplies');
     game.state.nodes[node.id] = { stock: 3, respawnAt: 0, items: [{ itemId: 'fuel', name: '旧库存燃油', count: 2 }, { itemId: 'battery', name: '旧库存电池', count: 1 }] };

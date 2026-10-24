@@ -5,6 +5,26 @@ import { craftingRecipe } from './crafting';
 import { BUILD_RECIPES } from './buildingRecipes';
 
 describe('world supply route intelligence', () => {
+  it('offers a forest supply route through distinct existing rooms before the guarded timber target', () => {
+    const forest = WORLD_SUPPLY_ROUTES.find(route => route.id === 'forest');
+    expect(forest, 'deep woodland needs a discoverable supply route').toBeDefined();
+    const span = Math.max(...forest!.stops.map(stop => stop.x)) - Math.min(...forest!.stops.map(stop => stop.x));
+    expect(span / forest!.view.size, 'the woodland targets should occupy most of the route view, including on a narrow map').toBeGreaterThan(.5);
+    expect(forest!.stops.map(stop => stop.id)).toEqual(['world:-10:-4:poi:supplies', 'world:-14:-4:poi:supplies', 'world:-17:-5:poi:supplies', 'world:-18:-6:i:mtn_deep:deep_tree']);
+    const expected = [[['food', 3], ['water', 2], ['seed_potato', 1]], [['bandage', 3], ['antidote', 1]], [['scrap', 8], ['part', 2]]];
+    for (const [index, stop] of forest!.stops.entries()) {
+      const node = getWorldInteractable(stop.id)!; expect(node, stop.name).toBeDefined();
+      expect({ x: stop.x, y: stop.y }).toEqual({ x: node.x, y: node.y });
+      expect(stop.x).toBeGreaterThanOrEqual(forest!.view.x); expect(stop.x).toBeLessThanOrEqual(forest!.view.x + forest!.view.size);
+      expect(stop.y).toBeGreaterThanOrEqual(forest!.view.y); expect(stop.y).toBeLessThanOrEqual(forest!.view.y + forest!.view.size);
+      if (index < 3) expect(node.lootTable!.map(item => [item.itemId, item.count])).toEqual(expected[index]);
+    }
+    expect(forest!.stops[0].description).toContain('南侧'); expect(forest!.stops[0].description).toContain('返程');
+    expect(forest!.stops[1].description).toContain('怪物'); expect(forest!.stops[3].description).toContain('斧');
+    expect(getWorldInteractable(forest!.stops[3].id)!.type).toBe('tree');
+    const south = WORLD_SUPPLY_ROUTES.find(route => route.id === 'south')!;
+    expect(south.stops.map(stop => stop.id)).toEqual(['world:-1:3:poi','world:0:6:poi','world:-1:10:poi','world:0:14:poi','world:0:18:poi']);
+  });
   it('offers an eastern route to seven existing nodes with exact coordinates and a complete view', () => {
     const east = WORLD_SUPPLY_ROUTES.find(route => route.id === 'east');
     expect(east, 'eastern industrial exploration must be discoverable').toBeDefined();
@@ -75,7 +95,7 @@ describe('world supply route intelligence', () => {
 
   it('keeps southern room definitions separate from western map-only targets', () => {
     const south = WORLD_SUPPLY_ROUTES.find(route => route.id === 'south')!;
-    expect(south.stops.map(point => point.id)).toEqual(WORLD_ROADSIDE_STOPS.map(point => point.id));
+    expect(south.stops.map(point => point.id)).toEqual(WORLD_ROADSIDE_STOPS.filter(point => point.route === 'south').map(point => point.id));
     const west = WORLD_SUPPLY_ROUTES.find(route => route.id === 'west')!;
     expect(west.name).toBe('西行材料线');
     expect(west.stops).toHaveLength(4);

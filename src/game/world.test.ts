@@ -11,6 +11,20 @@ import {
 
 describe('continuous world coordinates', () => {
   it.each([
+    { cx: -10, cy: -4, name: '林场农舍', x: -304, y: -112, type: 'shelves', items: [['food', 3], ['water', 2], ['seed_potato', 1]] },
+    { cx: -14, cy: -4, name: '护林诊所', x: -424, y: -104, type: 'med_cabinet', items: [['bandage', 3], ['antidote', 1]] },
+    { cx: -17, cy: -5, name: '锯木维修间', x: -528, y: -144, type: 'shelves', items: [['scrap', 8], ['part', 2]] },
+  ])('gives the existing $name a usable supply purpose without moving its shell', ({ cx, cy, name, x, y, type, items }) => {
+    const chunk = generateWorldChunk(cx, cy), prefix = `world:${cx}:${cy}:poi`;
+    const house = groupBuildingsIntoHouses(chunk.buildings).find(h => h.key === prefix)!;
+    expect(house.door).toMatchObject({ name: name + '入口', x, y: y + 3, doorWidth: 3, isOpen: true });
+    expect(houseCorners(house.members)).toEqual({ x0: x - 5, x1: x + 5, y0: y - 3, y1: y + 3 });
+    const cabinet = getWorldInteractable(prefix + ':supplies')!;
+    expect(cabinet).toMatchObject({ type, x: x - 2, y: y - 2, respawnSec: 300 });
+    expect(cabinet.lootTable!.map(item => [item.itemId, item.count])).toEqual(items);
+    expect(findPath({ x, y: y + 5 }, cabinet, chunk.buildings).length).toBeGreaterThan(0);
+  });
+  it.each([
     { cx: -1, cy: 3, name: '麦穗农舍', x: -16, y: 112, width: 8, height: 6, items: [['food', 3], ['water', 2], ['seed_potato', 1]] },
     { cx: 0, cy: 6, name: '渡口维修工棚', x: 24, y: 216, width: 12, height: 8, items: [['scrap', 8], ['part', 2]] },
     { cx: -1, cy: 10, name: '芦湾诊所', x: -24, y: 344, width: 12, height: 8, items: [['bandage', 3], ['antidote', 1]] },

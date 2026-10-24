@@ -6,16 +6,19 @@ export const ROADSIDE_USES = {
 } as const;
 
 export interface RoadsideStop {
-  id: string; name: string; x: number; y: number; kind: keyof typeof ROADSIDE_USES; description: string;
+  id: string; name: string; x: number; y: number; kind: keyof typeof ROADSIDE_USES; route: 'south' | 'forest'; description: string;
 }
 
 /** Existing rooms and container IDs: this route does not add buildings or loot nodes. */
 export const WORLD_ROADSIDE_STOPS: RoadsideStop[] = [
-  { id: 'world:-1:3:poi', name: '麦穗农舍', x: -16, y: 112, kind: 'farm', description: '南下前的口粮补给。厨房物资柜有饮水与土豆种子，可带回营地种植。' },
-  { id: 'world:0:6:poi', name: '渡口维修工棚', x: 24, y: 216, kind: 'workshop', description: '渡口北侧的旧维修间。搜取废铁与零件，供营地设施制造和修复使用。' },
-  { id: 'world:-1:10:poi', name: '芦湾诊所', x: -24, y: 344, kind: 'clinic', description: '离开渡口后可绕进废弃诊所搜药，补充绷带与解毒剂，再向泥沼深入。' },
-  { id: 'world:0:14:poi', name: '泥岸补给仓库', x: 24, y: 472, kind: 'warehouse', description: '深入湿地的物资中转点。废铁、燃油和电池用于营地加工与建设。' },
-  { id: 'world:0:18:poi', name: '裂隙前哨诊所', x: 16, y: 592, kind: 'clinic', description: '裂隙外围的最后一处沿路药柜。先整理医疗物资，再决定深入红区或带物资返回。' },
+  { id: 'world:-1:3:poi', name: '麦穗农舍', x: -16, y: 112, kind: 'farm', route: 'south', description: '南下前的口粮补给。厨房物资柜有饮水与土豆种子，可带回营地种植。' },
+  { id: 'world:0:6:poi', name: '渡口维修工棚', x: 24, y: 216, kind: 'workshop', route: 'south', description: '渡口北侧的旧维修间。搜取废铁与零件，供营地设施制造和修复使用。' },
+  { id: 'world:-1:10:poi', name: '芦湾诊所', x: -24, y: 344, kind: 'clinic', route: 'south', description: '离开渡口后可绕进废弃诊所搜药，补充绷带与解毒剂，再向泥沼深入。' },
+  { id: 'world:0:14:poi', name: '泥岸补给仓库', x: 24, y: 472, kind: 'warehouse', route: 'south', description: '深入湿地的物资中转点。废铁、燃油和电池用于营地加工与建设。' },
+  { id: 'world:0:18:poi', name: '裂隙前哨诊所', x: 16, y: 592, kind: 'clinic', route: 'south', description: '裂隙外围的最后一处沿路药柜。先整理医疗物资，再决定深入红区或带物资返回。' },
+  { id: 'world:-10:-4:poi', name: '林场农舍', x: -304, y: -112, kind: 'farm', route: 'forest', description: '从南侧宽门进入补充口粮、饮水与种子。先留返程补给，再决定继续深入；房屋周围仍有怪物，物资可能已被搜取。' },
+  { id: 'world:-14:-4:poi', name: '护林诊所', x: -424, y: -104, kind: 'clinic', route: 'forest', description: '深林路边的旧护林诊所，药柜有绷带与解毒剂。附近有怪物，先观察门外；药品不能替代口粮，补给不足就从这里返营。' },
+  { id: 'world:-17:-5:poi', name: '锯木维修间', x: -528, y: -144, kind: 'workshop', route: 'forest', description: '搜刮锯木机械的废铁与零件，带回营地制造和修复。接近深林佣兵活动区，先检查补给与工具，材料够用可以撤返。' },
 ];
 
 interface SupplyRouteStop {
@@ -30,7 +33,14 @@ interface SupplyRoute {
 export const WORLD_SUPPLY_ROUTES: SupplyRoute[] = [
   {
     id: 'south', name: '南下补给线', view: { x: -320, y: 48, size: 640 }, axis: 'y',
-    stops: WORLD_ROADSIDE_STOPS.map(point => ({ ...point, ...ROADSIDE_USES[point.kind] })),
+    stops: WORLD_ROADSIDE_STOPS.filter(point => point.route === 'south').map(point => ({ ...point, ...ROADSIDE_USES[point.kind] })),
+  },
+  {
+    id: 'forest', name: '深林补给线', view: { x: -640, y: -320, size: 448 }, axis: 'x',
+    stops: [
+      ...WORLD_ROADSIDE_STOPS.filter(point => point.route === 'forest').map((point, index) => ({ ...point, id: point.id + ':supplies', x: point.x - 2, y: point.y - 2, ...ROADSIDE_USES[point.kind], labelOffset: { x: 26, y: index % 2 === 0 ? 48 : -42 } })),
+      { id: 'world:-18:-6:i:mtn_deep:deep_tree', name: '千年铁杉王', x: -554, y: -174, supplies: '原木', color: '#7ca98a', labelOffset: { x: -26, y: -42 }, description: '深林现有的铁杉采集点，装备斧后采木更快。附近有深林佣兵，先备护具、口粮和撤离路线；不必为了走完整线冒险，材料够用即可回营。' },
+    ],
   },
   {
     id: 'west', name: '西行材料线', view: { x: -320, y: -160, size: 384 }, axis: 'x',
