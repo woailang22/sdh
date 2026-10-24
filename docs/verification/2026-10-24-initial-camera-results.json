@@ -1,0 +1,1665 @@
+{
+  "kind": "native-open-route-investigation-and-initial-camera-fix",
+  "base": "8dda67625578b4e632775001cba62388f0a006eb",
+  "planningCommits": [
+    "9d1082e",
+    "bca94be"
+  ],
+  "goalComplete": false,
+  "problem": "An engine starts at world(0,9). The first same-map authoritative state, including state received before engine creation, previously assigned the remote player position without initializing its camera/window. Camera interpolation then scrolled and redrew ground while the player remained stationary.",
+  "change": "Reuse the existing applied-building projection engine identity to enter the normal warp initialization on the first successful application to each engine. Keep later same-map snapshots/corrections on their existing path. No new state or camera projection formula.",
+  "productionFiles": [
+    "src/App.tsx"
+  ],
+  "unchanged": "Engine renderer, movement dt, server, map/resource geometry, recipes, art and image quality.",
+  "gates": {
+    "red": "Three App initial/lifecycle cases fail on old source; real Engine centering invariant already passes.",
+    "targetedTests": 205,
+    "negativeControls": {
+      "results": [
+        {
+          "case": "old",
+          "exitCode": 1
+        },
+        {
+          "case": "naive-prev",
+          "exitCode": 1
+        }
+      ],
+      "restoredExactBytes": true
+    },
+    "full": {
+      "files": 49,
+      "tests": 776,
+      "exitCode": 0
+    },
+    "types": "passed including QA sources",
+    "build": {
+      "exitCode": 0,
+      "bundle": "index-BfVuIukN.js",
+      "existingWarnings": [
+        "Vite native config __dirname",
+        "chunk over500kB"
+      ]
+    },
+    "review": {
+      "reviewer": "quality_review independent read-only source and evidence review",
+      "source": "passed-no-new-P1-P2",
+      "finalEvidence": "passed-no-new-P1-P2",
+      "scope": "First authoritative view initialization only; not overall performance acceptance"
+    }
+  },
+  "native": {
+    "passed": true,
+    "sameEarnedCharacter": true,
+    "noStateEdits": true,
+    "noRollback": true,
+    "phases": [
+      {
+        "phase": "native",
+        "packets": 0,
+        "rejected": 0,
+        "corrections": 1,
+        "errors": 0,
+        "overflow": 0,
+        "actions": 0,
+        "worldMovingPackets": 0,
+        "worldDistance": 0,
+        "worldChunks": 0,
+        "regions": [],
+        "requestedDashPackets": 0,
+        "end": {
+          "x": 1.269610225620447,
+          "y": 25.75285707579584,
+          "map": "camp",
+          "hp": 100,
+          "shield": 50,
+          "satiety": 76.68100000000004
+        }
+      },
+      {
+        "phase": "capture",
+        "packets": 1495,
+        "rejected": 0,
+        "corrections": 3,
+        "errors": 0,
+        "overflow": 0,
+        "actions": 1,
+        "worldMovingPackets": 1103,
+        "worldDistance": 228.10412000000218,
+        "worldChunks": 11,
+        "regions": [
+          "camp",
+          "mountain"
+        ],
+        "requestedDashPackets": 0,
+        "end": {
+          "x": -221.293970068588,
+          "y": -141.2939700685942,
+          "map": "world",
+          "hp": 100,
+          "shield": 50,
+          "satiety": 51.74600000000008
+        }
+      },
+      {
+        "phase": "capture1080",
+        "packets": 1447,
+        "rejected": 0,
+        "corrections": 1,
+        "errors": 0,
+        "overflow": 0,
+        "actions": 1,
+        "worldMovingPackets": 1102,
+        "worldDistance": 226.57873861365792,
+        "worldChunks": 11,
+        "regions": [
+          "mountain"
+        ],
+        "requestedDashPackets": 0,
+        "end": {
+          "x": -59.99999999999335,
+          "y": -298.9403298064224,
+          "map": "world",
+          "hp": 100,
+          "shield": 50,
+          "satiety": 66.99150000000006
+        }
+      },
+      {
+        "phase": "spawn-before",
+        "packets": 54,
+        "rejected": 0,
+        "corrections": 1,
+        "errors": 0,
+        "overflow": 0,
+        "actions": 0,
+        "worldMovingPackets": 0,
+        "worldDistance": 0,
+        "worldChunks": 0,
+        "regions": [],
+        "requestedDashPackets": 0,
+        "end": {
+          "x": -59.99999999999335,
+          "y": -298.9403298064224,
+          "map": "world",
+          "hp": 100,
+          "shield": 50,
+          "satiety": 66.20100000000005
+        }
+      },
+      {
+        "phase": "spawn-after",
+        "packets": 74,
+        "rejected": 0,
+        "corrections": 1,
+        "errors": 0,
+        "overflow": 0,
+        "actions": 0,
+        "worldMovingPackets": 0,
+        "worldDistance": 0,
+        "worldChunks": 0,
+        "regions": [],
+        "requestedDashPackets": 0,
+        "end": {
+          "x": -59.99999999999335,
+          "y": -298.9403298064224,
+          "map": "world",
+          "hp": 100,
+          "shield": 50,
+          "satiety": 65.17200000000005
+        }
+      }
+    ],
+    "captures": [
+      {
+        "phase": "capture",
+        "environment": {
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
+          "viewport": {
+            "width": 1280,
+            "height": 720
+          },
+          "canvas": {
+            "width": 1280,
+            "height": 720
+          },
+          "devicePixelRatio": 1.5,
+          "modulePath": "/assets/index-XJsiO6j_.js",
+          "jsHeap": {
+            "used": 16345856,
+            "total": 47526888
+          },
+          "graphicsBackend": "unknown"
+        },
+        "status": "completed",
+        "observedMs": 60003.09999999404,
+        "rowCount": 9894,
+        "localMovedCallbacks": 7365,
+        "localMovedFraction": 0.7443905397210431,
+        "longestLocalMovingSpanMs": 30013.69999998808,
+        "inputGapMs": 15036,
+        "metrics": {
+          "updateMs": {
+            "count": 9894,
+            "p50": 0.09999999403953552,
+            "p95": 0.29999998211860657,
+            "p99": 0.4000000059604645,
+            "max": 2.5999999940395355,
+            "over22": 0,
+            "over50": 0
+          },
+          "drawMs": {
+            "count": 3600,
+            "p50": 0.9000000059604645,
+            "p95": 1.5999999940395355,
+            "p99": 2.4000000059604645,
+            "max": 4.5,
+            "over22": 0,
+            "over50": 0
+          },
+          "rafGapMs": {
+            "count": 9893,
+            "p50": 6.0999999940395355,
+            "p95": 6.699999988079071,
+            "p99": 7.9000000059604645,
+            "max": 17.599999994039536,
+            "over22": 0,
+            "over50": 0
+          },
+          "drawGapMs": {
+            "count": 3599,
+            "p50": 18.099999994039536,
+            "p95": 18.69999998807907,
+            "p99": 19.799999982118607,
+            "max": 27.69999998807907,
+            "over22": 6,
+            "over50": 0
+          },
+          "groundMs": {
+            "count": 3600,
+            "p50": 0.09999999403953552,
+            "p95": 0.19999998807907104,
+            "p99": 0.20000001788139343,
+            "max": 3.800000011920929,
+            "over22": 0,
+            "over50": 0
+          }
+        },
+        "movingOnlyMetrics": {
+          "updateMs": {
+            "count": 7365,
+            "p50": 0.09999999403953552,
+            "p95": 0.30000001192092896,
+            "p99": 0.4000000059604645,
+            "max": 2.5999999940395355,
+            "over22": 0,
+            "over50": 0
+          },
+          "drawMs": {
+            "count": 2680,
+            "p50": 0.800000011920929,
+            "p95": 1.5,
+            "p99": 2.5999999940395355,
+            "max": 4.5,
+            "over22": 0,
+            "over50": 0
+          },
+          "rafGapMs": {
+            "count": 7365,
+            "p50": 6.0999999940395355,
+            "p95": 6.700000017881393,
+            "p99": 8,
+            "max": 17.599999994039536,
+            "over22": 0,
+            "over50": 0
+          },
+          "drawGapMs": {
+            "count": 2680,
+            "p50": 18.099999994039536,
+            "p95": 18.700000017881393,
+            "p99": 19.900000005960464,
+            "max": 27.69999998807907,
+            "over22": 4,
+            "over50": 0
+          },
+          "groundMs": {
+            "count": 2680,
+            "p50": 0.09999999403953552,
+            "p95": 0.19999998807907104,
+            "p99": 1.7999999821186066,
+            "max": 3.800000011920929,
+            "over22": 0,
+            "over50": 0
+          }
+        },
+        "groundDraws": {
+          "full": 0,
+          "scroll": 29,
+          "texture": 0
+        },
+        "latestSlowSamples": [
+          {
+            "atMs": 898.5,
+            "updateMs": 0.20000001788139343,
+            "drawMs": 41.599999994039536,
+            "rafGapMs": 55.39999997615814,
+            "drawGapMs": 55.30000001192093,
+            "scene": {
+              "map": "camp",
+              "x": 1.269610225620447,
+              "y": 25.75285707579584,
+              "chunks": 25,
+              "buildings": 4,
+              "interactables": 0,
+              "monsters": 0,
+              "players": 0,
+              "inputBlocked": false,
+              "groundFullRedraw": true,
+              "groundScrolled": false,
+              "groundTextureDirty": false,
+              "groundFallback": false,
+              "groundTerrainRegions": 1
+            },
+            "renderStagesMs": {
+              "setup": 0,
+              "ground": 40.69999998807907,
+              "queue": 0.30000001192092896,
+              "entities": 0.5,
+              "overlays": 0.09999999403953552
+            }
+          },
+          {
+            "atMs": 978.5,
+            "updateMs": 0.30000001192092896,
+            "drawMs": 0.5999999940395355,
+            "rafGapMs": 80,
+            "drawGapMs": 80.19999998807907,
+            "scene": {
+              "map": "camp",
+              "x": 1.269610225620447,
+              "y": 25.75285707579584,
+              "chunks": 25,
+              "buildings": 4,
+              "interactables": 0,
+              "monsters": 0,
+              "players": 0,
+              "inputBlocked": false,
+              "groundFullRedraw": false,
+              "groundScrolled": false,
+              "groundTextureDirty": false,
+              "groundFallback": false,
+              "groundTerrainRegions": 0
+            },
+            "renderStagesMs": {
+              "setup": 0,
+              "ground": 0,
+              "queue": 0.09999999403953552,
+              "entities": 0.30000001192092896,
+              "overlays": 0.19999998807907104
+            }
+          },
+          {
+            "atMs": 3167.5,
+            "updateMs": 0.09999999403953552,
+            "drawMs": 1.699999988079071,
+            "rafGapMs": 64.39999997615814,
+            "drawGapMs": 64.5,
+            "scene": {
+              "map": "world",
+              "x": -60,
+              "y": 20,
+              "chunks": 35,
+              "buildings": 388,
+              "interactables": 164,
+              "monsters": 0,
+              "players": 0,
+              "inputBlocked": false,
+              "groundFullRedraw": false,
+              "groundScrolled": false,
+              "groundTextureDirty": false,
+              "groundFallback": false,
+              "groundTerrainRegions": 0
+            },
+            "renderStagesMs": {
+              "setup": 0,
+              "ground": 0.09999999403953552,
+              "queue": 0.30000001192092896,
+              "entities": 1.199999988079071,
+              "overlays": 0.09999999403953552
+            }
+          },
+          {
+            "atMs": 3277.300000011921,
+            "updateMs": 0.19999998807907104,
+            "drawMs": 1.300000011920929,
+            "rafGapMs": 53.099999994039536,
+            "drawGapMs": 58.099999994039536,
+            "scene": {
+              "map": "world",
+              "x": -60,
+              "y": 20,
+              "chunks": 35,
+              "buildings": 388,
+              "interactables": 164,
+              "monsters": 0,
+              "players": 0,
+              "inputBlocked": false,
+              "groundFullRedraw": false,
+              "groundScrolled": false,
+              "groundTextureDirty": false,
+              "groundFallback": false,
+              "groundTerrainRegions": 0
+            },
+            "renderStagesMs": {
+              "setup": 0,
+              "ground": 0,
+              "queue": 0.20000001788139343,
+              "entities": 0.9000000059604645,
+              "overlays": 0.19999998807907104
+            }
+          },
+          {
+            "atMs": 3736.100000023842,
+            "updateMs": 0.09999999403953552,
+            "drawMs": 1,
+            "rafGapMs": 37.70000001788139,
+            "drawGapMs": 50.400000005960464,
+            "scene": {
+              "map": "world",
+              "x": -60,
+              "y": 20,
+              "chunks": 35,
+              "buildings": 388,
+              "interactables": 164,
+              "monsters": 0,
+              "players": 0,
+              "inputBlocked": true,
+              "groundFullRedraw": false,
+              "groundScrolled": false,
+              "groundTextureDirty": false,
+              "groundFallback": false,
+              "groundTerrainRegions": 0
+            },
+            "renderStagesMs": {
+              "setup": 0,
+              "ground": 0.09999999403953552,
+              "queue": 0.19999998807907104,
+              "entities": 0.7000000178813934,
+              "overlays": 0
+            }
+          },
+          {
+            "atMs": 80182.30000001192,
+            "updateMs": 0.20000001788139343,
+            "drawMs": null,
+            "rafGapMs": 60.099999994039536,
+            "drawGapMs": null,
+            "scene": {
+              "map": "world",
+              "x": -221.293970068588,
+              "y": -141.2939700685942,
+              "chunks": 64,
+              "buildings": 210,
+              "interactables": 238,
+              "monsters": 0,
+              "players": 0,
+              "inputBlocked": true
+            }
+          },
+          {
+            "atMs": 80187,
+            "updateMs": 0.19999998807907104,
+            "drawMs": 0.5,
+            "rafGapMs": 4.699999988079071,
+            "drawGapMs": 70.69999998807907,
+            "scene": {
+              "map": "world",
+              "x": -221.293970068588,
+              "y": -141.2939700685942,
+              "chunks": 64,
+              "buildings": 210,
+              "interactables": 238,
+              "monsters": 0,
+              "players": 0,
+              "inputBlocked": true,
+              "groundFullRedraw": false,
+              "groundScrolled": false,
+              "groundTextureDirty": false,
+              "groundFallback": false,
+              "groundTerrainRegions": 0
+            },
+            "renderStagesMs": {
+              "setup": 0,
+              "ground": 0,
+              "queue": 0.09999999403953552,
+              "entities": 0.4000000059604645,
+              "overlays": 0
+            }
+          }
+        ],
+        "errors": [],
+        "strictContinuous60sAccepted": false
+      },
+      {
+        "phase": "capture1080",
+        "environment": {
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
+          "viewport": {
+            "width": 1920,
+            "height": 1080
+          },
+          "canvas": {
+            "width": 1920,
+            "height": 1080
+          },
+          "devicePixelRatio": 1.0000000298023224,
+          "modulePath": "/assets/index-XJsiO6j_.js",
+          "jsHeap": {
+            "used": 19781347,
+            "total": 45985911
+          },
+          "graphicsBackend": "unknown"
+        },
+        "status": "completed",
+        "observedMs": 60005.09999999404,
+        "rowCount": 9855,
+        "localMovedCallbacks": 7661,
+        "localMovedFraction": 0.7773718924403856,
+        "longestLocalMovingSpanMs": 30007.29999998212,
+        "inputGapMs": 13084,
+        "metrics": {
+          "updateMs": {
+            "count": 9855,
+            "p50": 0.19999998807907104,
+            "p95": 0.4000000059604645,
+            "p99": 0.5999999940395355,
+            "max": 2.5,
+            "over22": 0,
+            "over50": 0
+          },
+          "drawMs": {
+            "count": 3599,
+            "p50": 1.4000000059604645,
+            "p95": 2.5999999940395355,
+            "p99": 3.699999988079071,
+            "max": 23.5,
+            "over22": 1,
+            "over50": 0
+          },
+          "rafGapMs": {
+            "count": 9854,
+            "p50": 6.0999999940395355,
+            "p95": 7.4000000059604645,
+            "p99": 9.599999994039536,
+            "max": 39.599999994039536,
+            "over22": 4,
+            "over50": 0
+          },
+          "drawGapMs": {
+            "count": 3598,
+            "p50": 18,
+            "p95": 19.30000001192093,
+            "p99": 21,
+            "max": 39.80000001192093,
+            "over22": 18,
+            "over50": 0
+          },
+          "groundMs": {
+            "count": 3599,
+            "p50": 0.09999999403953552,
+            "p95": 0.20000001788139343,
+            "p99": 2.0999999940395355,
+            "max": 11.199999988079071,
+            "over22": 0,
+            "over50": 0
+          }
+        },
+        "movingOnlyMetrics": {
+          "updateMs": {
+            "count": 7661,
+            "p50": 0.19999998807907104,
+            "p95": 0.4000000059604645,
+            "p99": 0.5999999940395355,
+            "max": 2.5,
+            "over22": 0,
+            "over50": 0
+          },
+          "drawMs": {
+            "count": 2796,
+            "p50": 1.4000000059604645,
+            "p95": 2.600000023841858,
+            "p99": 4,
+            "max": 23.5,
+            "over22": 1,
+            "over50": 0
+          },
+          "rafGapMs": {
+            "count": 7661,
+            "p50": 6.0999999940395355,
+            "p95": 7.5,
+            "p99": 9.5,
+            "max": 24.5,
+            "over22": 2,
+            "over50": 0
+          },
+          "drawGapMs": {
+            "count": 2796,
+            "p50": 18,
+            "p95": 19.400000005960464,
+            "p99": 21,
+            "max": 28,
+            "over22": 11,
+            "over50": 0
+          },
+          "groundMs": {
+            "count": 2796,
+            "p50": 0.09999999403953552,
+            "p95": 0.20000001788139343,
+            "p99": 2.4000000059604645,
+            "max": 11.199999988079071,
+            "over22": 0,
+            "over50": 0
+          }
+        },
+        "groundDraws": {
+          "full": 0,
+          "scroll": 60,
+          "texture": 2
+        },
+        "latestSlowSamples": [
+          {
+            "atMs": 923.5999999940395,
+            "updateMs": 0.5,
+            "drawMs": 59.10000002384186,
+            "rafGapMs": 7.799999982118607,
+            "drawGapMs": null,
+            "scene": {
+              "map": "world",
+              "x": -221.293970068588,
+              "y": -141.2939700685942,
+              "chunks": 50,
+              "buildings": 210,
+              "interactables": 238,
+              "monsters": 0,
+              "players": 0,
+              "inputBlocked": false,
+              "groundFullRedraw": true,
+              "groundScrolled": false,
+              "groundTextureDirty": false,
+              "groundFallback": false,
+              "groundTerrainRegions": 1
+            },
+            "renderStagesMs": {
+              "setup": 0.19999998807907104,
+              "ground": 25.400000005960464,
+              "queue": 1.699999988079071,
+              "entities": 21,
+              "overlays": 10.100000023841858
+            }
+          },
+          {
+            "atMs": 1010.5,
+            "updateMs": 0.30000001192092896,
+            "drawMs": 16.69999998807907,
+            "rafGapMs": 86.90000000596046,
+            "drawGapMs": 86.80000001192093,
+            "scene": {
+              "map": "world",
+              "x": -221.293970068588,
+              "y": -141.2939700685942,
+              "chunks": 50,
+              "buildings": 210,
+              "interactables": 238,
+              "monsters": 0,
+              "players": 0,
+              "inputBlocked": false,
+              "groundFullRedraw": false,
+              "groundScrolled": true,
+              "groundTextureDirty": false,
+              "groundFallback": false,
+              "groundTerrainRegions": 2
+            },
+            "renderStagesMs": {
+              "setup": 0,
+              "ground": 13.400000005960464,
+              "queue": 0.5999999940395355,
+              "entities": 2.5999999940395355,
+              "overlays": 0.09999999403953552
+            }
+          },
+          {
+            "atMs": 1155.300000011921,
+            "updateMs": 0.5999999940395355,
+            "drawMs": 64.59999999403954,
+            "rafGapMs": 126.40000000596046,
+            "drawGapMs": 145.09999999403954,
+            "scene": {
+              "map": "world",
+              "x": -221.293970068588,
+              "y": -141.2939700685942,
+              "chunks": 50,
+              "buildings": 210,
+              "interactables": 238,
+              "monsters": 0,
+              "players": 0,
+              "inputBlocked": false,
+              "groundFullRedraw": false,
+              "groundScrolled": true,
+              "groundTextureDirty": false,
+              "groundFallback": false,
+              "groundTerrainRegions": 2
+            },
+            "renderStagesMs": {
+              "setup": 0.20000001788139343,
+              "ground": 57,
+              "queue": 0.3999999761581421,
+              "entities": 6.9000000059604645,
+              "overlays": 0.09999999403953552
+            }
+          },
+          {
+            "atMs": 1278.5,
+            "updateMs": 0.20000001788139343,
+            "drawMs": 38.39999997615814,
+            "rafGapMs": 123.19999998807907,
+            "drawGapMs": 122.7000000178814,
+            "scene": {
+              "map": "world",
+              "x": -221.293970068588,
+              "y": -141.2939700685942,
+              "chunks": 50,
+              "buildings": 210,
+              "interactables": 238,
+              "monsters": 0,
+              "players": 0,
+              "inputBlocked": false,
+              "groundFullRedraw": true,
+              "groundScrolled": false,
+              "groundTextureDirty": true,
+              "groundFallback": false,
+              "groundTerrainRegions": 1
+            },
+            "renderStagesMs": {
+              "setup": 0,
+              "ground": 36.89999997615814,
+              "queue": 0.20000001788139343,
+              "entities": 1.199999988079071,
+              "overlays": 0.09999999403953552
+            }
+          },
+          {
+            "atMs": 1356.4000000059605,
+            "updateMs": 0.30000001192092896,
+            "drawMs": 1.399999976158142,
+            "rafGapMs": 77.90000000596046,
+            "drawGapMs": 78,
+            "scene": {
+              "map": "world",
+              "x": -221.293970068588,
+              "y": -141.2939700685942,
+              "chunks": 50,
+              "buildings": 210,
+              "interactables": 238,
+              "monsters": 0,
+              "players": 0,
+              "inputBlocked": false,
+              "groundFullRedraw": false,
+              "groundScrolled": false,
+              "groundTextureDirty": false,
+              "groundFallback": false,
+              "groundTerrainRegions": 0
+            },
+            "renderStagesMs": {
+              "setup": 0,
+              "ground": 0.09999999403953552,
+              "queue": 0.29999998211860657,
+              "entities": 0.9000000059604645,
+              "overlays": 0.09999999403953552
+            }
+          },
+          {
+            "atMs": 1451.800000011921,
+            "updateMs": 0.4000000059604645,
+            "drawMs": 5.799999982118607,
+            "rafGapMs": 95.40000000596046,
+            "drawGapMs": 95.5,
+            "scene": {
+              "map": "world",
+              "x": -221.293970068588,
+              "y": -141.2939700685942,
+              "chunks": 50,
+              "buildings": 210,
+              "interactables": 238,
+              "monsters": 0,
+              "players": 0,
+              "inputBlocked": false,
+              "groundFullRedraw": false,
+              "groundScrolled": true,
+              "groundTextureDirty": false,
+              "groundFallback": false,
+              "groundTerrainRegions": 2
+            },
+            "renderStagesMs": {
+              "setup": 0,
+              "ground": 4.899999976158142,
+              "queue": 0.10000002384185791,
+              "entities": 0.7999999821186066,
+              "overlays": 0
+            }
+          },
+          {
+            "atMs": 3362,
+            "updateMs": 0.09999999403953552,
+            "drawMs": 1,
+            "rafGapMs": 55.5,
+            "drawGapMs": 65.7999999821186,
+            "scene": {
+              "map": "world",
+              "x": -221.293970068588,
+              "y": -141.2939700685942,
+              "chunks": 50,
+              "buildings": 210,
+              "interactables": 238,
+              "monsters": 0,
+              "players": 0,
+              "inputBlocked": true,
+              "groundFullRedraw": false,
+              "groundScrolled": false,
+              "groundTextureDirty": false,
+              "groundFallback": false,
+              "groundTerrainRegions": 0
+            },
+            "renderStagesMs": {
+              "setup": 0,
+              "ground": 0.10000002384185791,
+              "queue": 0,
+              "entities": 0.7999999821186066,
+              "overlays": 0.09999999403953552
+            }
+          },
+          {
+            "atMs": 78070.09999999404,
+            "updateMs": 0.09999999403953552,
+            "drawMs": null,
+            "rafGapMs": 70.39999997615814,
+            "drawGapMs": null,
+            "scene": {
+              "map": "world",
+              "x": -59.99999999999335,
+              "y": -298.9403298064224,
+              "chunks": 64,
+              "buildings": 510,
+              "interactables": 200,
+              "monsters": 0,
+              "players": 0,
+              "inputBlocked": true
+            }
+          },
+          {
+            "atMs": 78078.5,
+            "updateMs": 0.5,
+            "drawMs": 2.2000000178813934,
+            "rafGapMs": 8.400000005960464,
+            "drawGapMs": 85.7999999821186,
+            "scene": {
+              "map": "world",
+              "x": -59.99999999999335,
+              "y": -298.9403298064224,
+              "chunks": 64,
+              "buildings": 510,
+              "interactables": 200,
+              "monsters": 0,
+              "players": 0,
+              "inputBlocked": true,
+              "groundFullRedraw": false,
+              "groundScrolled": false,
+              "groundTextureDirty": false,
+              "groundFallback": false,
+              "groundTerrainRegions": 0
+            },
+            "renderStagesMs": {
+              "setup": 0,
+              "ground": 0,
+              "queue": 0.6000000238418579,
+              "entities": 1.5999999940395355,
+              "overlays": 0
+            }
+          }
+        ],
+        "errors": [],
+        "strictContinuous60sAccepted": false
+      }
+    ],
+    "initialization": {
+      "samePosition": {
+        "x": -59.99999999999335,
+        "y": -298.9403298064224
+      },
+      "before": {
+        "environment": {
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
+          "viewport": {
+            "width": 1920,
+            "height": 1080
+          },
+          "canvas": {
+            "width": 1920,
+            "height": 1080
+          },
+          "devicePixelRatio": 1.0000000298023224,
+          "modulePath": "/assets/index-XJsiO6j_.js",
+          "jsHeap": {
+            "used": 11850046,
+            "total": 31782042
+          },
+          "graphicsBackend": "unknown"
+        },
+        "samples": [
+          {
+            "atMs": 894.5,
+            "updateMs": 0.4000000059604645,
+            "drawMs": 45,
+            "rafGapMs": 74.59999999403954,
+            "drawGapMs": null,
+            "scene": {
+              "map": "world",
+              "x": -59.99999999999335,
+              "y": -298.9403298064224,
+              "chunks": 50,
+              "buildings": 510,
+              "interactables": 200,
+              "monsters": 0,
+              "players": 0,
+              "inputBlocked": false,
+              "groundFullRedraw": true,
+              "groundScrolled": false,
+              "groundTextureDirty": false,
+              "groundFallback": false,
+              "groundTerrainRegions": 1
+            },
+            "renderStagesMs": {
+              "setup": 0.19999998807907104,
+              "ground": 24.600000023841858,
+              "queue": 1.399999976158142,
+              "entities": 9.100000023841858,
+              "overlays": 9.099999994039536
+            }
+          },
+          {
+            "atMs": 949.1999999880791,
+            "updateMs": 0.4000000059604645,
+            "drawMs": 16,
+            "rafGapMs": 54.69999998807907,
+            "drawGapMs": 54.69999998807907,
+            "scene": {
+              "map": "world",
+              "x": -59.99999999999335,
+              "y": -298.9403298064224,
+              "chunks": 50,
+              "buildings": 510,
+              "interactables": 200,
+              "monsters": 0,
+              "players": 0,
+              "inputBlocked": false,
+              "groundFullRedraw": false,
+              "groundScrolled": true,
+              "groundTextureDirty": false,
+              "groundFallback": false,
+              "groundTerrainRegions": 2
+            },
+            "renderStagesMs": {
+              "setup": 0,
+              "ground": 13.200000017881393,
+              "queue": 0.5999999940395355,
+              "entities": 2,
+              "overlays": 0.19999998807907104
+            }
+          },
+          {
+            "atMs": 994.0999999940395,
+            "updateMs": 0.20000001788139343,
+            "drawMs": 95.2999999821186,
+            "rafGapMs": 44.900000005960464,
+            "drawGapMs": 44.70000001788139,
+            "scene": {
+              "map": "world",
+              "x": -59.99999999999335,
+              "y": -298.9403298064224,
+              "chunks": 50,
+              "buildings": 510,
+              "interactables": 200,
+              "monsters": 0,
+              "players": 0,
+              "inputBlocked": false,
+              "groundFullRedraw": false,
+              "groundScrolled": true,
+              "groundTextureDirty": true,
+              "groundFallback": false,
+              "groundTerrainRegions": 3
+            },
+            "renderStagesMs": {
+              "setup": 0,
+              "ground": 93.2999999821186,
+              "queue": 0.4000000059604645,
+              "entities": 1.300000011920929,
+              "overlays": 0.19999998807907104
+            }
+          },
+          {
+            "atMs": 1168.9000000059605,
+            "updateMs": 0.4000000059604645,
+            "drawMs": 55.79999998211861,
+            "rafGapMs": 174.80000001192093,
+            "drawGapMs": 175,
+            "scene": {
+              "map": "world",
+              "x": -59.99999999999335,
+              "y": -298.9403298064224,
+              "chunks": 50,
+              "buildings": 510,
+              "interactables": 200,
+              "monsters": 0,
+              "players": 0,
+              "inputBlocked": false,
+              "groundFullRedraw": true,
+              "groundScrolled": false,
+              "groundTextureDirty": false,
+              "groundFallback": false,
+              "groundTerrainRegions": 1
+            },
+            "renderStagesMs": {
+              "setup": 0.09999999403953552,
+              "ground": 26.5,
+              "queue": 0.29999998211860657,
+              "entities": 28.80000001192093,
+              "overlays": 0.09999999403953552
+            }
+          },
+          {
+            "atMs": 1322,
+            "updateMs": 0.30000001192092896,
+            "drawMs": 6.199999988079071,
+            "rafGapMs": 153.09999999403954,
+            "drawGapMs": 153,
+            "scene": {
+              "map": "world",
+              "x": -59.99999999999335,
+              "y": -298.9403298064224,
+              "chunks": 50,
+              "buildings": 510,
+              "interactables": 200,
+              "monsters": 0,
+              "players": 0,
+              "inputBlocked": false,
+              "groundFullRedraw": false,
+              "groundScrolled": true,
+              "groundTextureDirty": false,
+              "groundFallback": false,
+              "groundTerrainRegions": 2
+            },
+            "renderStagesMs": {
+              "setup": 0,
+              "ground": 4.5,
+              "queue": 0.19999998807907104,
+              "entities": 1.4000000059604645,
+              "overlays": 0.09999999403953552
+            }
+          }
+        ]
+      },
+      "after": {
+        "environment": {
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
+          "viewport": {
+            "width": 1920,
+            "height": 1080
+          },
+          "canvas": {
+            "width": 1920,
+            "height": 1080
+          },
+          "devicePixelRatio": 1.0000000298023224,
+          "modulePath": "/assets/index-BfVuIukN.js",
+          "jsHeap": {
+            "used": 13355085,
+            "total": 32336985
+          },
+          "graphicsBackend": "unknown"
+        },
+        "samples": [
+          {
+            "atMs": 992.9000000059605,
+            "updateMs": 0.699999988079071,
+            "drawMs": 3.800000011920929,
+            "rafGapMs": 51,
+            "drawGapMs": 51.19999998807907,
+            "scene": {
+              "map": "world",
+              "x": -59.99999999999335,
+              "y": -298.9403298064224,
+              "chunks": 50,
+              "buildings": 510,
+              "interactables": 200,
+              "monsters": 0,
+              "players": 0,
+              "inputBlocked": false,
+              "groundFullRedraw": false,
+              "groundScrolled": false,
+              "groundTextureDirty": false,
+              "groundFallback": false,
+              "groundTerrainRegions": 0
+            },
+            "renderStagesMs": {
+              "setup": 0,
+              "ground": 0.30000001192092896,
+              "queue": 0.8999999761581421,
+              "entities": 2.4000000059604645,
+              "overlays": 0.20000001788139343
+            }
+          },
+          {
+            "atMs": 1080.199999988079,
+            "updateMs": 0.30000001192092896,
+            "drawMs": 50.099999994039536,
+            "rafGapMs": 74.09999999403954,
+            "drawGapMs": 74.2000000178814,
+            "scene": {
+              "map": "world",
+              "x": -59.99999999999335,
+              "y": -298.9403298064224,
+              "chunks": 50,
+              "buildings": 510,
+              "interactables": 200,
+              "monsters": 0,
+              "players": 0,
+              "inputBlocked": false,
+              "groundFullRedraw": false,
+              "groundScrolled": false,
+              "groundTextureDirty": false,
+              "groundFallback": false,
+              "groundTerrainRegions": 0
+            },
+            "renderStagesMs": {
+              "setup": 0,
+              "ground": 0.09999999403953552,
+              "queue": 0.19999998807907104,
+              "entities": 49.60000002384186,
+              "overlays": 0.19999998807907104
+            }
+          },
+          {
+            "atMs": 1175.199999988079,
+            "updateMs": 0.30000001192092896,
+            "drawMs": 38.69999998807907,
+            "rafGapMs": 95,
+            "drawGapMs": 95.09999999403954,
+            "scene": {
+              "map": "world",
+              "x": -59.99999999999335,
+              "y": -298.9403298064224,
+              "chunks": 50,
+              "buildings": 510,
+              "interactables": 200,
+              "monsters": 0,
+              "players": 0,
+              "inputBlocked": false,
+              "groundFullRedraw": true,
+              "groundScrolled": false,
+              "groundTextureDirty": false,
+              "groundFallback": false,
+              "groundTerrainRegions": 1
+            },
+            "renderStagesMs": {
+              "setup": 0,
+              "ground": 37.400000005960464,
+              "queue": 0.19999998807907104,
+              "entities": 1,
+              "overlays": 0.09999999403953552
+            }
+          },
+          {
+            "atMs": 1285.5999999940395,
+            "updateMs": 0.5999999940395355,
+            "drawMs": 1.9000000059604645,
+            "rafGapMs": 68.69999998807907,
+            "drawGapMs": 69.19999998807907,
+            "scene": {
+              "map": "world",
+              "x": -59.99999999999335,
+              "y": -298.9403298064224,
+              "chunks": 50,
+              "buildings": 510,
+              "interactables": 200,
+              "monsters": 0,
+              "players": 0,
+              "inputBlocked": false,
+              "groundFullRedraw": false,
+              "groundScrolled": false,
+              "groundTextureDirty": false,
+              "groundFallback": false,
+              "groundTerrainRegions": 0
+            },
+            "renderStagesMs": {
+              "setup": 0,
+              "ground": 0.10000002384185791,
+              "queue": 0.29999998211860657,
+              "entities": 1.300000011920929,
+              "overlays": 0.09999999403953552
+            }
+          },
+          {
+            "atMs": 3283.2999999821186,
+            "updateMs": 0.20000001788139343,
+            "drawMs": 0.5,
+            "rafGapMs": 6.5,
+            "drawGapMs": 55.30000001192093,
+            "scene": {
+              "map": "world",
+              "x": -59.99999999999335,
+              "y": -298.9403298064224,
+              "chunks": 50,
+              "buildings": 510,
+              "interactables": 200,
+              "monsters": 0,
+              "players": 0,
+              "inputBlocked": true,
+              "groundFullRedraw": false,
+              "groundScrolled": false,
+              "groundTextureDirty": false,
+              "groundFallback": false,
+              "groundTerrainRegions": 0
+            },
+            "renderStagesMs": {
+              "setup": 0,
+              "ground": 0,
+              "queue": 0,
+              "entities": 0.5,
+              "overlays": 0
+            }
+          }
+        ],
+        "errors": []
+      },
+      "allRetainedSlowSamplesHaveNoScrollAfter": true,
+      "notAnAllFramesTimingComparison": true,
+      "remainingStartupDrawOver50": true
+    },
+    "persistence": {
+      "integrity": "ok",
+      "consistentBackup": "data/cua-open-route-20261024-a1.sqlite.backup-2026-10-24T04-31-02-251Z",
+      "actualGameWorldRestoreIntoMemory": true,
+      "assetsConserved": true,
+      "normalRationsConsumed": 1,
+      "buildings": 7,
+      "final": {
+        "hp": 100,
+        "shield": 50,
+        "satiety": 65.17200000000005,
+        "resources": {
+          "wood": 1,
+          "stone": 1,
+          "scrap": 0,
+          "parts": 2,
+          "food": 0,
+          "ammo": 20,
+          "c4": 0,
+          "medical": 0,
+          "credits": 0,
+          "shard": 0
+        },
+        "items": [
+          [
+            "water",
+            4
+          ],
+          [
+            "seed_potato",
+            2
+          ],
+          [
+            "axe_stone",
+            1
+          ]
+        ],
+        "tool": "pickaxe_stone"
+      }
+    },
+    "deviations": [
+      "Initial preparation did not leave boot screen because a REPL helper captured stale variables; second helper captured closed tab89. Failed attempts and unchanged assets retained, no save rollback.",
+      "First viewport override applied to old blank tab; new gameplay page was1280x720. Correct1920x1080 applied to the same blank tab before navigation for the next run.",
+      "Two30s key holds separated by15036ms and13084ms, so captures contain stationary callbacks and do not satisfy strict continuous60s.",
+      "1080 action used D instead of reverse W direction S; reached northern quarry rather than returning to camp. Second leg departs ideal diagonal; not accepted as fully collision-free or matched-route A/B.",
+      "Initialization slow-frame snapshots preserve up to20>50ms samples, not all frames. Camera semantics have deterministic regression coverage; timing is not a complete startup/GPU comparison."
+    ],
+    "goalComplete": false
+  },
+  "conclusion": "Deterministic initial camera semantics are fixed and native retained slow samples no longer show stationary camera scrolling. Startup still contains50.1ms draw (entities wall span49.6ms) and37.4ms full ground work, so overall startup and walking performance are not accepted.",
+  "evidence": {
+    "proof": "data/native-spawn-camera-after-20261024.png",
+    "raw": "Full frames, UI snapshots, player/world observations and consistent QA backup remain local ignored data. Only sanitized fields and hashes are published."
+  },
+  "limits": [
+    "Route recordings include13–15second pauses and only74–78% local-moving callbacks; strict continuous60s remains unaccepted. Different directions, resolution and changing environment prevent matched before/after performance claims.",
+    "The same-coordinate initialization comparison uses latest20>50ms samples,not all startup callbacks. New page contains a50.1ms draw. Correctness tests and source establish camera initialization; one native pair does not establish broad speed or zero GPU cost.",
+    "JavaScript submit/stage wall spans can include scheduling,GC and driver waits. Graphics backend is unknown. JS heap point readings cannot represent whole-browser800MB, GPU or three-route memory trends.",
+    "No complete black-screen reproduction, earned paid offline defense, full world economy or whole-goal acceptance. Final character remains alive at northern quarry with normal saved satiety; no rollback or healing injection."
+  ],
+  "cleanup": {
+    "tabs": 0,
+    "ownedTestTabs": 0,
+    "temporaryViewportReset": true,
+    "port": 39148,
+    "listeners": 0,
+    "ownedControllersTerminal": true,
+    "productionDatabaseOpened": false
+  },
+  "review": {
+    "reviewer": "quality_review independent read-only source and evidence review",
+    "source": "passed-no-new-P1-P2",
+    "finalEvidence": "passed-no-new-P1-P2",
+    "scope": "First authoritative view initialization only; not overall performance acceptance"
+  },
+  "sources": [
+    {
+      "path": "src/App.tsx",
+      "sha256": "76f08c2f8676f5f0fc722c933a4f94622222ca241c155c70ffb66ef6a6b72299"
+    },
+    {
+      "path": "src/App.hotbar.test.tsx",
+      "sha256": "512ce91313b98ba1bad4ca7b4401ba4fe31841746b1a6fef523702cfaf7beaa3"
+    },
+    {
+      "path": "src/game/IsometricEngine.test.ts",
+      "sha256": "a72beae75c7dd7e30aaa4c9006d6a2089499a79ee71fff9b7f5a815067b768bc"
+    },
+    {
+      "path": "src/game/IsometricEngine.ts",
+      "sha256": "4795e485b09b63c32be3d12a835dbcb6a1b933605cff53cf537bcd4853330a86"
+    },
+    {
+      "path": "docs/superpowers/specs/2026-10-24-initial-authoritative-camera-design.md",
+      "sha256": "074e2f5ea11230cd70517ccd397d32c797956c28acb5b3f7c9cd53dffef0188a"
+    },
+    {
+      "path": "docs/superpowers/plans/2026-10-24-initial-authoritative-camera.md",
+      "sha256": "3e1f7cd41abe15476fd1df9a937759e26f2acf5f75a15f87db48dcb4c27149f5"
+    },
+    {
+      "path": "docs/superpowers/plans/2026-10-24-native-open-route-capture.md",
+      "sha256": "52dc5c937bc963209525440ba7fd6115a09d96d2e483e9ba67f58759b3d7e333"
+    },
+    {
+      "path": "docs/superpowers/plans/2026-10-20-seamless-world-camps.md",
+      "sha256": "fa513850456aea912b78b6fc2cdb5588a583b568a2420b830d79169870e2a664"
+    },
+    {
+      "path": "data/initial-camera-red-20261024.log",
+      "sha256": "46b025e71c05cd397a44a7e5e4f0348841b657860ff893956010af762fc64a85"
+    },
+    {
+      "path": "data/initial-camera-green-20261024.log",
+      "sha256": "bd9169549f7f8308ca185e698fd5e13d37c4171cc621ea3adafb333b14eddd1b"
+    },
+    {
+      "path": "data/initial-camera-negative-old-20261024.log",
+      "sha256": "cde558f29e53f25c679589d0f58056c5037b6ef81bc44ed9a78fedd461bf7b60"
+    },
+    {
+      "path": "data/initial-camera-negative-naive-prev-20261024.log",
+      "sha256": "f92b6dfbb83730127b878a82a46c4b68de7db9be9d50b98b3bb97ebbb558ebc8"
+    },
+    {
+      "path": "data/initial-camera-negative-20261024.json",
+      "sha256": "48cb8d8a54756dfc3f8cc173f328a5e3253047db347cccf8717ea966714b4ed1"
+    },
+    {
+      "path": "data/initial-camera-full-20261024.log",
+      "sha256": "19203e917415d6d9fb8f82ba030b9d69c5159677970176f2e8d2777e39dfa3f6"
+    },
+    {
+      "path": "data/initial-camera-full-exit-20261024.json",
+      "sha256": "420d0b86662fc0dc3d1e287aaca3ac7117756ff7ce8b6b72238d3f92e9a4a48b"
+    },
+    {
+      "path": "data/initial-camera-types-20261024.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "data/initial-camera-types-exit-20261024.json",
+      "sha256": "420d0b86662fc0dc3d1e287aaca3ac7117756ff7ce8b6b72238d3f92e9a4a48b"
+    },
+    {
+      "path": "data/initial-camera-types-final-20261024.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "data/initial-camera-types-final-exit-20261024.json",
+      "sha256": "420d0b86662fc0dc3d1e287aaca3ac7117756ff7ce8b6b72238d3f92e9a4a48b"
+    },
+    {
+      "path": "data/initial-camera-build-20261024.log",
+      "sha256": "2e91ad236edacad73ba657f10e8028ac8044d8421989bb6b2a8b4374de7a877b"
+    },
+    {
+      "path": "data/initial-camera-build-exit-20261024.json",
+      "sha256": "420d0b86662fc0dc3d1e287aaca3ac7117756ff7ce8b6b72238d3f92e9a4a48b"
+    },
+    {
+      "path": "data/initial-camera-accepted-bundle-BfVuIukN.js",
+      "sha256": "1b3f35b5443f67ac4d7e5802b12fac9b6592db79221c1b453697681aa6855a5c"
+    },
+    {
+      "path": "data/initial-camera-accepted-index.html",
+      "sha256": "e9a86b40a74317b3dda211fbec21227a3319e820e9c84bdd9495e330d101a790"
+    },
+    {
+      "path": "data/initial-camera-native-audit-20261024.json",
+      "sha256": "de09ddb367f70aeea31952513638525b784e649441a6a480b74739a1d0e292b5"
+    },
+    {
+      "path": "data/initial-camera-native-audit-20261024.log",
+      "sha256": "7e3531fdc21dd25184ccd9e60e21c31a87f4697b1e5333172c6c7ad9e90716aa"
+    },
+    {
+      "path": "data/initial-camera-browser-cleanup-20261024.json",
+      "sha256": "011efd190c375178bb54b4141de285be7e0aff9cda0a016e49964f471bbbac02"
+    },
+    {
+      "path": "data/initial-camera-service-cleanup-20261024.json",
+      "sha256": "87f50ad66fa75e93f7eb85037ff05736f676e6c200ab83b520c72ac980fe40a0"
+    },
+    {
+      "path": "data/initial-camera-review-20261024.json",
+      "sha256": "41782dafa27d23101e8f53563d474342f15426a872c62934e24c14670f41c5b6"
+    },
+    {
+      "path": "data/negative-initial-camera-20261024.cjs",
+      "sha256": "8b8c1c2f46539f3c47ead0176581022d8c385660adb2fedad555af63bebdeeec"
+    },
+    {
+      "path": "data/audit-initial-camera-20261024.ts",
+      "sha256": "fd3f9b92874f65709af4377833f9ea1eba251ff265a0ae76749ffc179e37774f"
+    },
+    {
+      "path": "data/publish-initial-camera-20261024.cjs",
+      "sha256": "874f57d2b148a4f5f9b874b0facfe520f39449f07c3f1b615d9d679f57cd92e3"
+    },
+    {
+      "path": "data/inspect-open-route-20261024.ts",
+      "sha256": "9b33bcf7c9fa9e3f2852a0920edb8984e436ec45bb8424b18922b13635966e39"
+    },
+    {
+      "path": "data/prepare-open-route-20261024.ts",
+      "sha256": "9c5742cd820741d3b55617e71b0cead1cbfe8213f607689adfece401b7b4b5c0"
+    },
+    {
+      "path": "data/control-cua-open-route-20261024-a1.cjs",
+      "sha256": "3c5dbf9a78a2855d83609837b17c934039a536b0069905aa5b18d63f4b917a39"
+    },
+    {
+      "path": "data/capture-cua-open-route-20261024-a1.ts",
+      "sha256": "2e26feb00aa410c37f74c2673d53d518e190541234a724ff99ebff5302a65c97"
+    },
+    {
+      "path": "data/native-open-route-geometry-20261024.json",
+      "sha256": "9fc8f8f243c22b7f72fe1ea4dd660b5d7464886e23786a428cee54a3c577464b"
+    },
+    {
+      "path": "data/native-open-route-source-backup-20261024.json",
+      "sha256": "977bc25a5bde858b16d1f86ba1e9504a0d52c8f912810ea5e492f63009c40083"
+    },
+    {
+      "path": "data/native-open-route-prepare-20261024.log",
+      "sha256": "42ac74ef5d42c853ba7a98b8390e161f7e6977e91a789decd896c6dd2553c8dd"
+    },
+    {
+      "path": "data/native-open-route-types-20261024.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "data/cua-open-route-20261024-a1-native-connected-world-private.json",
+      "sha256": "791c15917e1762d1b22be6e1dd5681989d31cf7d3e1ec6e0277da601bee58375"
+    },
+    {
+      "path": "data/cua-open-route-20261024-a1-native-final-world-private.json",
+      "sha256": "1b15d130db34abfaefec40210ca277443355e0dd298f4f97b04425894a35195e"
+    },
+    {
+      "path": "data/cua-open-route-20261024-a1-native-final-events.json",
+      "sha256": "93da6946a2e6b5aa56dc1559da630155e8a5b21de161a276c070b2337e4abef0"
+    },
+    {
+      "path": "data/cua-open-route-20261024-a1-native-server.log",
+      "sha256": "881b6569fd47581970a135e6c9b58621e77151bc51389887648ca498ab1b6ed1"
+    },
+    {
+      "path": "data/cua-open-route-20261024-a1-capture-connected-world-private.json",
+      "sha256": "c3f0e3b67556653c694e36fa52d527847af8e91a46f7a2981c6e46d092600943"
+    },
+    {
+      "path": "data/cua-open-route-20261024-a1-capture-final-world-private.json",
+      "sha256": "5958a31a12b1ccddcea821bf823f66d5eb68cace28e759dac8d402fb8b4712f5"
+    },
+    {
+      "path": "data/cua-open-route-20261024-a1-capture-final-events.json",
+      "sha256": "212e7d7e4b302b33f667fe05ab0c849b2ba3dbec05f2ceda35041100b113edd5"
+    },
+    {
+      "path": "data/cua-open-route-20261024-a1-capture-server.log",
+      "sha256": "881b6569fd47581970a135e6c9b58621e77151bc51389887648ca498ab1b6ed1"
+    },
+    {
+      "path": "data/cua-open-route-20261024-a1-capture1080-connected-world-private.json",
+      "sha256": "8a620de45f47175354bc720d67a35e080959b7cfe8a334d3536a5c8af36f5e05"
+    },
+    {
+      "path": "data/cua-open-route-20261024-a1-capture1080-final-world-private.json",
+      "sha256": "38b0b3ba1e48bd89419d353e328889cad0c831ade19ed60fc7b72214bafe4218"
+    },
+    {
+      "path": "data/cua-open-route-20261024-a1-capture1080-final-events.json",
+      "sha256": "75d13faf88606cce228f5ed4fa76ecadc0d2cee7794a67bdda51318ccb2513b5"
+    },
+    {
+      "path": "data/cua-open-route-20261024-a1-capture1080-server.log",
+      "sha256": "881b6569fd47581970a135e6c9b58621e77151bc51389887648ca498ab1b6ed1"
+    },
+    {
+      "path": "data/cua-open-route-20261024-a1-spawn-before-connected-world-private.json",
+      "sha256": "dfe9e21a3e28e709c7664b318a8c946c5442f4b8ef62faab6418ebb2bea08c9f"
+    },
+    {
+      "path": "data/cua-open-route-20261024-a1-spawn-before-final-world-private.json",
+      "sha256": "2ad49a06b46c251f9b5c5ef12832dfc084d2c0c503f732fa07637dcbb94e505d"
+    },
+    {
+      "path": "data/cua-open-route-20261024-a1-spawn-before-final-events.json",
+      "sha256": "3c3df0fa806cdcd9ee709cb5424176a2cd61a9e8e88026ddf8102505f1504945"
+    },
+    {
+      "path": "data/cua-open-route-20261024-a1-spawn-before-server.log",
+      "sha256": "881b6569fd47581970a135e6c9b58621e77151bc51389887648ca498ab1b6ed1"
+    },
+    {
+      "path": "data/cua-open-route-20261024-a1-spawn-after-connected-world-private.json",
+      "sha256": "a454051ddb41da9a33710be240eb45df786fb1f7c8aa0e678433cfa7d1a2d96a"
+    },
+    {
+      "path": "data/cua-open-route-20261024-a1-spawn-after-final-world-private.json",
+      "sha256": "f367558c5ea27525c27c5038ac8c9cab7ffe1fe181b6cf3d0b4dad633d7eb0fa"
+    },
+    {
+      "path": "data/cua-open-route-20261024-a1-spawn-after-final-events.json",
+      "sha256": "0ee79c96b69a126b6792837e9f8a4ba87009ceaaa63ee7cb249799acbf2c2b1c"
+    },
+    {
+      "path": "data/cua-open-route-20261024-a1-spawn-after-server.log",
+      "sha256": "881b6569fd47581970a135e6c9b58621e77151bc51389887648ca498ab1b6ed1"
+    },
+    {
+      "path": "data/native-open-route-frames-private-20261024.json",
+      "sha256": "a02e3d4222877bd87f8136267d5e0cb2ee82ccbb67f7284fac939921a674eefa"
+    },
+    {
+      "path": "data/native-open-route-summary-private-20261024.json",
+      "sha256": "19f3350f4323f1361cfd40bf83b4dbc1ba297cf994b019fb79f25d8a18a3d81c"
+    },
+    {
+      "path": "data/native-open-route-ax-private-20261024.json",
+      "sha256": "f11d31cac5b95abf881fa57650d543c2aff3daf68c749a0fbf1404787618a0c6"
+    },
+    {
+      "path": "data/native-open-route-inputs-private-20261024.json",
+      "sha256": "3b44bebbc3afee9e90d6d0f1b9ed901de99fb0c35cadbd504b3a14a2e004043c"
+    },
+    {
+      "path": "data/native-open-route-errors-20261024.json",
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "path": "data/native-open-route-start-20261024.png",
+      "sha256": "0bce9ba3a90b238a8fd251626bd1a073ff41522790efc0a477dc6a8591fa3775"
+    },
+    {
+      "path": "data/native-open-route-end-20261024.png",
+      "sha256": "734ff5d291a0e09b709aad9de704f1ab43624c4d400cdd870c8928902e9d6597"
+    },
+    {
+      "path": "data/native-open-route-diagnostics-20261024.png",
+      "sha256": "b7b16b5a9951fec2b299e362f2efad5e3cde94a5ada82ea538e818f2d5851877"
+    },
+    {
+      "path": "data/native-open-route-1080-frames-private-20261024.json",
+      "sha256": "ac8840b3a59a510592e84debb9765fc261b6db73ae0329ba9ee71d8d1e7ce287"
+    },
+    {
+      "path": "data/native-open-route-1080-summary-private-20261024.json",
+      "sha256": "9d6a0496c9fe541d0c62da16c1c23ca5cbcda84df702638154aae51008e55447"
+    },
+    {
+      "path": "data/native-open-route-1080-ax-private-20261024.json",
+      "sha256": "786e8342c5ee61dd83feaf0dedb67f63fa9116747d3ee93b6b5fff43c87ab1b9"
+    },
+    {
+      "path": "data/native-open-route-1080-inputs-private-20261024.json",
+      "sha256": "dcb19e24b4c451b3b2128e82683c1076ca9ec53b2e854f874072894961eabb8d"
+    },
+    {
+      "path": "data/native-open-route-1080-errors-20261024.json",
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "path": "data/native-open-route-1080-start-20261024.png",
+      "sha256": "959eadad507b8ed08df7650e9c6671f240baa998366ae84bdd9a1b772a5add3e"
+    },
+    {
+      "path": "data/native-open-route-1080-end-20261024.png",
+      "sha256": "6c93dcb5dc9c731225044b9f381c9e84ff92df887a82287b2a48c2f01e2d828d"
+    },
+    {
+      "path": "data/native-open-route-1080-diagnostics-20261024.png",
+      "sha256": "bdbc7fa053e3a2dacd2e204c6130617ebf69350481fe7f440025b6a6bc0b79fb"
+    },
+    {
+      "path": "data/native-open-route-prep-failure-inputs-private-20261024.json",
+      "sha256": "496f1535cb978641faef348cdf737f6053fa3a2c84199a3d66dca990b1e783ee"
+    },
+    {
+      "path": "data/native-open-route-prep-failure-ax-private-20261024.json",
+      "sha256": "a7580d5e342e0e5dd5cd0df83c8521495417b47f9a0b2994d4c92a1d3aa39bab"
+    },
+    {
+      "path": "data/native-spawn-camera-before-frames-private-20261024.json",
+      "sha256": "9e51c2bf81b4ab500c57c87c34c84718b8ecc2e3bd5cb51f29fcc4877e1e6d8f"
+    },
+    {
+      "path": "data/native-spawn-camera-before-ax-private-20261024.json",
+      "sha256": "67b5f797e4e38386e21d2556612bf0a4e2eba107976050b874fd5b0d2ecfa5d4"
+    },
+    {
+      "path": "data/native-spawn-camera-after-frames-private-20261024.json",
+      "sha256": "2d2fecbbc7a453cbe7418535d589f0ac3b2bc89756cd0cd7ece074d4db296d81"
+    },
+    {
+      "path": "data/native-spawn-camera-after-ax-private-20261024.json",
+      "sha256": "6ad8b9a6d35ba2a0320e9fdc5b5fafcc7e975742f384a5369ae75bbe8103f372"
+    },
+    {
+      "path": "data/native-spawn-camera-after-20261024.png",
+      "sha256": "61474b4c577fceb4ebbb0714ca1fae18913bc82d39d1de1749a1fa0e01dcad1d"
+    },
+    {
+      "path": "data/native-spawn-camera-after-errors-20261024.json",
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "path": "data/cua-open-route-20261024-a1.sqlite.backup-2026-10-24T04-31-02-251Z",
+      "sha256": "2d51208e734c9969cd6bb339b708d42c08736b6ad6f64c3986ab7838f24f19fd"
+    },
+    {
+      "path": "data/hotbar-equipment-accepted-bundle-XJsiO6j_.js",
+      "sha256": "a4fcb0afdcd1ce53e960be320d7db298ef305983ac340097a3b2cd8b3d2e223f"
+    }
+  ]
+}

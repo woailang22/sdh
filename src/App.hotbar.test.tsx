@@ -30,7 +30,7 @@ function find(node: React.ReactNode, type: unknown): React.ReactElement<any> | u
   if (!React.isValidElement<{ children?: React.ReactNode }>(node)) return;
   return node.type === type ? node : find(node.props.children, type);
 }
-function setup() {
+function setup(initialPosition?: { x: number; y: number }, stateBeforeEngine = false) {
   let now = 1000;
   const tree = { id: 'unit-tree', name: '树', type: 'tree' as const, x: 1, y: 1, available: true, radius: 3, prompt: '', stock: 3, maxStock: 3 };
   const rock = { ...tree, id: 'unit-rock', name: '石', type: 'boulder' as const };
@@ -39,14 +39,17 @@ function setup() {
     migrate: (_mapId, x, y) => ({ mapId: 'world', x, y }) };
   const db = createMemoryDb(), game = new GameWorld(db, rules, () => now); game.connect('unit-owner', '测试');
   const player = game.state.players['unit-owner']; player.equipment.tool = makeItem('axe_stone', 1);
+  if (initialPosition) Object.assign(player, initialPosition);
   player.inventory[0] = makeItem('water', 3); player.inventory[2] = makeItem('pickaxe_stone', 1); player.satiety = 20; game.persist();
   const engine: any = { inputBlocked: false, activeSlot: 1, currentMapId: 'world', buildings: [], player: {}, getMapName: () => '测试地图', setAuthoritativeAmmo() {},
     setAuthoritativeBuildings(buildings: unknown[]) { this.buildings = buildings; }, setResourceStates() {}, setAuthoritativeMonsters() {}, setAuthoritativeDrops() {} };
+  engine.warpToMap = vi.fn((mapId: string, x: number, y: number) => { engine.currentMapId = mapId; Object.assign(engine.player, { x, y }); });
   const render = () => { hooks.stateCursor = hooks.refCursor = 0; hooks.effects = []; return App(); };
-  render(); hooks.refs[1].current = engine; // App's existing engine ref; no engine/frame loop is started.
+  render(); if (!stateBeforeEngine) hooks.refs[1].current = engine; // App's existing engine ref; no engine/frame loop is started.
   const networkEffect = hooks.effects.find(effect => effect.toString().includes('onGameState:'));
   expect(networkEffect, 'run the real App network registration effect').toBeDefined(); networkEffect!();
   net.callbacks.onConnectionChange(true, 0); net.callbacks.onGameState(game.snapshot(player.id));
+  if (stateBeforeEngine) { hooks.refs[1].current = engine; net.callbacks.onGameState({ ...game.snapshot(player.id), correction: true }); }
   const hotbar = () => find(render(), Hotbar)!.props;
   const deliver = (state: ReturnType<GameWorld['snapshot']>) => { net.callbacks.onGameState(state); };
   const flush = (index = net.sent.length - 1) => { now += 2000; const state = game.action(player.id, net.sent[index]); deliver(state); return state; };
@@ -54,6 +57,24 @@ function setup() {
 }
 
 beforeEach(() => { hooks.states = []; hooks.refs = []; hooks.effects = []; hooks.stateCursor = hooks.refCursor = 0; net.callbacks = net.manager = null; net.sent = []; net.sequence = 0; });
+
+describe('first authoritative view initialization', () => {
+  it.each([false, true])('loads the first same-world position once, including a state received before the engine (%s)', early => {
+    const f = setup({ x: -60, y: -298.94 }, early);
+    expect(f.engine.warpToMap).toHaveBeenCalledExactlyOnceWith('world', -60, -298.94);
+    f.deliver(f.game.snapshot(f.player.id));
+    f.player.x += 1; f.deliver({ ...f.game.snapshot(f.player.id), correction: true });
+    expect(f.engine.warpToMap).toHaveBeenCalledTimes(1);
+    expect(f.engine.player.x).toBe(-59); expect(f.engine.player.y).toBe(-298.94);
+  });
+  it('initializes a replacement engine from the existing authoritative snapshot without treating it as a new server state', () => {
+    const f = setup({ x: -60, y: -298.94 });
+    const replacement = { ...f.engine, player: {}, warpToMap: vi.fn() };
+    hooks.refs[1].current = replacement;
+    f.deliver({ ...f.game.snapshot(f.player.id), correction: true });
+    expect(replacement.warpToMap).toHaveBeenCalledExactlyOnceWith('world', -60, -298.94);
+  });
+});
 
 describe('App authoritative hotbar activation', () => {
   it.each(['water', 'bandage'])('keeps normal %s consumption available while equipment is awaiting confirmation', id => {

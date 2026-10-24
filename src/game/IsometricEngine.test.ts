@@ -41,6 +41,17 @@ function setup() {
 
 afterEach(() => { vi.restoreAllMocks(); vi.unstubAllGlobals(); });
 
+describe('authoritative spawn camera', () => {
+  it('centers a remote world spawn immediately and does not scroll the camera on a stationary update', () => {
+    const { engine } = setup(); engine.warpToMap('world', -60, -298.94);
+    const view = engine as any;
+    expect(view.toScreen(engine.player.x, engine.player.y)).toEqual({ x: 320, y: 180 });
+    const camera = { ...view.camera }; view.update(1 / 60);
+    expect(view.camera).toEqual(camera);
+    expect(view.toScreen(engine.player.x, engine.player.y)).toEqual({ x: 320, y: 180 });
+  });
+});
+
 describe('hotbar keyboard activation', () => {
   function press(win: EventTarget, key: string, repeat = false, target?: unknown) {
     const event = new Event('keydown'); Object.assign(event, { key, code: `Digit${key}`, repeat });

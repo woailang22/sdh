@@ -584,7 +584,8 @@ export default function App() {
     const currentCamp = state.camps.find(c => c.id === p.mapId);
     eng.campSize = currentCamp?.size ?? 64;
     eng.friendlyPlayerIds = currentCamp && (currentCamp.ownerId === p.id || currentCamp.members?.includes(p.id)) ? new Set([currentCamp.ownerId, ...(currentCamp.members ?? [])]) : new Set();
-    if (eng.currentMapId !== p.mapId) {
+    const applied = appliedBuildingsRef.current;
+    if (applied?.engine !== eng || eng.currentMapId !== p.mapId) {
       eng.warpToMap(p.mapId, p.x, p.y);
       setCampOpen(false); setLootPanel(null);
     } else if (state.correction || !prev) {
@@ -601,7 +602,6 @@ export default function App() {
     eng.setAuthoritativeAmmo(p.resources.ammo);
     // Omitted delta lists retain their decoded reference; only rebuild the
     // projection for a new list, lifecycle or local editor/window reset.
-    const applied = appliedBuildingsRef.current;
     if (applied?.engine !== eng || applied.mapId !== p.mapId || applied.buildings !== state.buildings
       || applied.projection !== eng.buildings || applied.count !== eng.buildings.length) {
       eng.setAuthoritativeBuildings(state.buildings);
