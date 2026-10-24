@@ -1,0 +1,204 @@
+{
+  "asset": "world-environment-v2.png",
+  "mode": "built-in image_gen",
+  "size": [
+    1536,
+    1024
+  ],
+  "transparent_background": true,
+  "layout": "3 columns,2 rows;512x512 cells",
+  "frames": [
+    "understory",
+    "outcrop",
+    "reeds",
+    "tank",
+    "rubble",
+    "fence"
+  ],
+  "prompt": "Use case: stylized-concept. Asset type: production sprite atlas for an existing 2.5D isometric post-apocalyptic survival game. Create ONE 1536x1024 PNG image, exactly THREE equal columns and TWO equal rows, six separate 512x512 cells, genuine transparent background. Each cell contains one isolated low environment cluster, centered horizontally, entire object strictly within its cell, bottom ground contact at y=450 within its 512px cell, at least 32px completely clear alpha padding around all cell edges. No grid or labels. TOP LEFT: compact fern bed with broad layered olive fronds, a small dark evergreen shrub and mossy stones, NO fallen log and no tall tree. TOP MIDDLE: LOW wide weathered slate rock ledge, tilted horizontal layered slabs and scattered pale pebbles, no tall vertical cliff, no ore crystals. TOP RIGHT: low wetland sedges and bent marsh grass with tiny smooth shore pebbles, no driftwood, no water patch. BOTTOM LEFT: low abandoned industrial pipe fragment on two broken concrete saddles with a corroded elbow fitting, dusty rust and gray, no intact usable machine or container. BOTTOM MIDDLE: low collapsed concrete footing with exposed bent rebar and scattered brick fragments, no intact standing wall or room. BOTTOM RIGHT: short broken rural split-rail fence remnant with two leaning posts, dry grasses and weathered twigs, no wheel and no intact blocking fence line. Style: detailed hand-painted game art, readable restrained realistic materials, muted dusty olive #5b6748, fern green #677950, stone gray #858779, earth beige #a08c68, oxidized rust #946748. Consistent orthographic isometric camera from southeast, 2:1 ground plane, 30 degree elevation, soft daylight upper left, only short subtle contact shadows. These are decorative LOW clusters, all silhouette heights less than their widths, airy empty spaces through foliage. Constraints: actual transparent alpha around every object, NO opaque color or gradient backdrop, no checkerboard pattern, no ground tiles or square bases, no floating islands, no people or animals, no loot crates, no harvestable tree trunks, no text or symbols, no watermark. All six objects must be complete, individually separated, no overlap across cells.",
+  "measuredAcceptance": {
+    "selected": {
+      "sha256": "e0296bf9cf08baba9aa47eb1d4a679958474c89f8a12ac4005dcafd9bcbd6b86",
+      "bytes": 2512547,
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGBA",
+      "alphaExtrema": [
+        0,
+        254
+      ],
+      "fullyTransparentPixels": 831813,
+      "totalPixels": 1572864,
+      "decodedRgbaBytes": 6291456,
+      "frames": [
+        {
+          "kind": "understory",
+          "solidBounds": [
+            22,
+            119,
+            506,
+            462
+          ],
+          "groundContactY": 462,
+          "minimumSolidPadding": 6,
+          "edgeAlphaMax": 2
+        },
+        {
+          "kind": "outcrop",
+          "solidBounds": [
+            13,
+            168,
+            498,
+            453
+          ],
+          "groundContactY": 453,
+          "minimumSolidPadding": 13,
+          "edgeAlphaMax": 3
+        },
+        {
+          "kind": "reeds",
+          "solidBounds": [
+            6,
+            123,
+            490,
+            457
+          ],
+          "groundContactY": 457,
+          "minimumSolidPadding": 6,
+          "edgeAlphaMax": 3
+        },
+        {
+          "kind": "tank",
+          "solidBounds": [
+            22,
+            131,
+            506,
+            422
+          ],
+          "groundContactY": 422,
+          "minimumSolidPadding": 6,
+          "edgeAlphaMax": 2
+        },
+        {
+          "kind": "rubble",
+          "solidBounds": [
+            14,
+            101,
+            499,
+            434
+          ],
+          "groundContactY": 434,
+          "minimumSolidPadding": 13,
+          "edgeAlphaMax": 2
+        },
+        {
+          "kind": "fence",
+          "solidBounds": [
+            7,
+            82,
+            489,
+            432
+          ],
+          "groundContactY": 432,
+          "minimumSolidPadding": 7,
+          "edgeAlphaMax": 2
+        }
+      ]
+    },
+    "rejectedAlignmentEdit": {
+      "sha256": "7f31d121ab53b198008190e5c2d6f5de3f3715b61c5363312cbb20f2767fb948",
+      "bytes": 2555080,
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGBA",
+      "alphaExtrema": [
+        0,
+        254
+      ],
+      "fullyTransparentPixels": 886493,
+      "totalPixels": 1572864,
+      "decodedRgbaBytes": 6291456,
+      "frames": [
+        {
+          "kind": "understory",
+          "solidBounds": [
+            25,
+            136,
+            505,
+            497
+          ],
+          "groundContactY": 497,
+          "minimumSolidPadding": 7,
+          "edgeAlphaMax": 1
+        },
+        {
+          "kind": "outcrop",
+          "solidBounds": [
+            17,
+            205,
+            501,
+            503
+          ],
+          "groundContactY": 503,
+          "minimumSolidPadding": 9,
+          "edgeAlphaMax": 1
+        },
+        {
+          "kind": "reeds",
+          "solidBounds": [
+            16,
+            140,
+            490,
+            500
+          ],
+          "groundContactY": 500,
+          "minimumSolidPadding": 12,
+          "edgeAlphaMax": 1
+        },
+        {
+          "kind": "tank",
+          "solidBounds": [
+            25,
+            142,
+            510,
+            424
+          ],
+          "groundContactY": 424,
+          "minimumSolidPadding": 2,
+          "edgeAlphaMax": 10
+        },
+        {
+          "kind": "rubble",
+          "solidBounds": [
+            19,
+            102,
+            510,
+            435
+          ],
+          "groundContactY": 435,
+          "minimumSolidPadding": 2,
+          "edgeAlphaMax": 2
+        },
+        {
+          "kind": "fence",
+          "solidBounds": [
+            11,
+            80,
+            491,
+            436
+          ],
+          "groundContactY": 436,
+          "minimumSolidPadding": 11,
+          "edgeAlphaMax": 1
+        }
+      ]
+    },
+    "acceptance": "First generation selected: all solid silhouettes stay inside cells and alpha border remains negligible. Requested 32px fully-clear padding and uniform y450 were not achieved; use measured contacts, not prompt claims.",
+    "imageEditingByScript": false
+  },
+  "alignmentEditPrompt": "Preserve the six subjects/style/order and 1536x1024 layout, shrink each subject into x48..464 of its 512px cell, align ground contact y450, clear surrounding alpha; no new subjects or grid. The edit failed exact spacing/alignment and was discarded."
+}

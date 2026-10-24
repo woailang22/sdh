@@ -41,6 +41,47 @@ function setup() {
 
 afterEach(() => { vi.restoreAllMocks(); vi.unstubAllGlobals(); });
 
+describe('alternate world scenery sprites', () => {
+  it('draws one alternate sprite at its measured ground contact and preserves the player fade', () => {
+    const { engine, context } = setup();
+    const saved: number[] = []; (context as any).globalAlpha = 0.8;
+    (context as any).save = () => saved.push((context as any).globalAlpha);
+    (context as any).restore = () => { (context as any).globalAlpha = saved.pop(); };
+    const alpha: number[] = [];
+    const draw = vi.spyOn(engine as any, 'drawArtFrame').mockImplementation(() => { alpha.push((context as any).globalAlpha); return true; });
+    const prop = { kind: 'understory', x: engine.player.x, y: engine.player.y, scale: 1, variant: 1 };
+    const point = (engine as any).toScreen(prop.x, prop.y);
+    (engine as any).drawWorldScenery(prop);
+    expect(draw).toHaveBeenCalledExactlyOnceWith('world-environment-v2.png', 'understory', point.x - 89, point.y - 178 * 462 / 512, 178, 178);
+    expect(alpha).toEqual([0.24]);
+    expect((context as any).globalAlpha).toBe(0.8);
+  });
+
+  it('uses the existing sprite while the alternate is unavailable and retains the old geometry fallback', () => {
+    const { engine } = setup();
+    const draw = vi.spyOn(engine as any, 'drawArtFrame').mockReturnValueOnce(false).mockReturnValueOnce(true);
+    const fallback = vi.spyOn(engine as any, 'drawWastelandShrub').mockImplementation(() => {});
+    const prop = { kind: 'understory', x: 20, y: 20, scale: 1, variant: 1 };
+    (engine as any).drawWorldScenery(prop);
+    expect(draw.mock.calls.map(call => call[0])).toEqual(['world-environment-v2.png', 'world-environment-v1.png']);
+    expect(fallback).not.toHaveBeenCalled();
+    draw.mockClear(); draw.mockReturnValue(false);
+    (engine as any).drawWorldScenery(prop);
+    expect(fallback).toHaveBeenCalledExactlyOnceWith(20, 20);
+  });
+
+  it('keeps old scenery and small grass on the existing lazy art paths', () => {
+    const { engine } = setup();
+    const draw = vi.spyOn(engine as any, 'drawArtFrame').mockReturnValue(true);
+    (engine as any).drawWorldScenery({ kind: 'outcrop', x: 20, y: 20, scale: 1 });
+    expect(draw.mock.calls.map(call => call[0])).toEqual(['world-environment-v1.png']);
+    draw.mockClear();
+    const grass = vi.spyOn(engine as any, 'drawWorldSprite').mockReturnValue(true);
+    (engine as any).drawWorldScenery({ kind: 'grass', x: 20, y: 20, scale: 1, variant: 1 });
+    expect(draw).not.toHaveBeenCalled(); expect(grass.mock.calls[0][0]).toBe('nature-trees.png');
+  });
+});
+
 describe('current-frame render stage diagnostics', () => {
   function timedRender() {
     const result = setup(), { engine, context } = result;
@@ -1267,18 +1308,18 @@ describe('ground rendering cost', () => {
     }
   });
 
-  it('shows a newly loaded scenery sprite without repainting cached terrain', () => {
+  it.each(['world-environment-v1.png', 'world-environment-v2.png'])('shows newly loaded %s without repainting cached terrain', file => {
     const { engine, context } = setup();
     stubImageLoading();
     (engine as any).renderMapGround();
     const cached = context.drawImage.mock.calls.at(-1)?.[0];
     expect(cached).toBeDefined();
     const fills = cached.getContext('2d').fillRect.mock.calls.length;
-    const sprite = (engine as any).artImage('world-environment-v1.png');
+    const sprite = (engine as any).artImage(file);
     sprite.complete = true; sprite.dispatchEvent(new Event('load'));
     (engine as any).renderMapGround();
     expect(cached.getContext('2d').fillRect.mock.calls.length).toBe(fills);
-    expect((engine as any).drawArtFrame('world-environment-v1.png', 'understory', 0, 0, 100, 100)).toBe(true);
+    expect((engine as any).drawArtFrame(file, 'understory', 0, 0, 100, 100)).toBe(true);
     expect(context.drawImage.mock.calls.at(-1)?.[0]).toBe(sprite);
   });
 

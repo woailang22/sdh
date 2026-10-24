@@ -2,7 +2,7 @@ import { groupBuildingsIntoHouses, houseCorners } from './house';
 import { CHUNK_SIZE, worldIsRoad, worldThemeAt, type WorldChunk } from './world';
 
 export type WorldSceneryKind = 'understory' | 'outcrop' | 'reeds' | 'tank' | 'rubble' | 'fence' | 'grass' | 'shrub';
-export interface WorldScenery { id: string; x: number; y: number; kind: WorldSceneryKind; scale: number }
+export interface WorldScenery { id: string; x: number; y: number; kind: WorldSceneryKind; scale: number; variant?: 0 | 1 }
 
 function noise(x: number, y: number, salt: number) {
   let h = Math.imul(x + 8192, 374761393) ^ Math.imul(y + 8192, 668265263) ^ Math.imul(salt, 1274126177);
@@ -38,7 +38,7 @@ export function generateWorldScenery(chunk: WorldChunk): WorldScenery[] {
       kind = n % 5 === 0 ? 'rubble' : n % 2 === 0 ? 'fence' : 'understory';
     }
     if (['understory', 'outcrop', 'tank', 'rubble'].includes(kind) && scenery.filter(e => ['understory', 'outcrop', 'tank', 'rubble'].includes(e.kind)).length >= 4) continue;
-    scenery.push({ id: `${chunk.key}:scenery:${i}`, x, y, kind, scale: 0.7 + (n % 61) / 100 });
+    scenery.push({ id: `${chunk.key}:scenery:${i}`, x, y, kind, scale: 0.7 + (n % 61) / 100, variant: (n >>> 16 & 1) as 0 | 1 });
   }
   return scenery;
 }

@@ -1,0 +1,1720 @@
+{
+  "kind": "bounded-world-scenery-silhouette-variants",
+  "base": "b18199e9e6e3e367bb04a43fac9dd30ce8ae52c9",
+  "planningCommit": "5b272c6",
+  "goalComplete": false,
+  "change": "Mix old and six new low environment silhouettes with deterministic existing hash high bits; retain all gameplay entities and scenery anchors/counts. Grass/shrub retain prior drawing. Optional missing variant keeps old sprite; alternate failure falls back to old sprite then existing geometry.",
+  "productionFiles": [
+    "src/game/worldScenery.ts",
+    "src/game/art.ts",
+    "src/game/IsometricEngine.ts",
+    "public/art/world-environment-v2.png",
+    "public/art/generation-prompts-world-environment-v2.json"
+  ],
+  "world": {
+    "passed": true,
+    "base": "b18199e9e6e3e367bb04a43fac9dd30ce8ae52c9",
+    "chunks": 4096,
+    "scenery": 17007,
+    "gameplayUnchanged": true,
+    "anchorsAndCountsUnchanged": true,
+    "maxPerChunk": 15,
+    "maxLarge": 4,
+    "counts": {
+      "grass": [
+        2314,
+        2240
+      ],
+      "outcrop": [
+        1622,
+        1562
+      ],
+      "shrub": [
+        878,
+        890
+      ],
+      "understory": [
+        903,
+        911
+      ],
+      "reeds": [
+        988,
+        969
+      ],
+      "fence": [
+        69,
+        54
+      ],
+      "rubble": [
+        1362,
+        1372
+      ],
+      "tank": [
+        432,
+        441
+      ]
+    }
+  },
+  "image": {
+    "selected": {
+      "sha256": "e0296bf9cf08baba9aa47eb1d4a679958474c89f8a12ac4005dcafd9bcbd6b86",
+      "bytes": 2512547,
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGBA",
+      "alphaExtrema": [
+        0,
+        254
+      ],
+      "fullyTransparentPixels": 831813,
+      "totalPixels": 1572864,
+      "decodedRgbaBytes": 6291456,
+      "frames": [
+        {
+          "kind": "understory",
+          "solidBounds": [
+            22,
+            119,
+            506,
+            462
+          ],
+          "groundContactY": 462,
+          "minimumSolidPadding": 6,
+          "edgeAlphaMax": 2
+        },
+        {
+          "kind": "outcrop",
+          "solidBounds": [
+            13,
+            168,
+            498,
+            453
+          ],
+          "groundContactY": 453,
+          "minimumSolidPadding": 13,
+          "edgeAlphaMax": 3
+        },
+        {
+          "kind": "reeds",
+          "solidBounds": [
+            6,
+            123,
+            490,
+            457
+          ],
+          "groundContactY": 457,
+          "minimumSolidPadding": 6,
+          "edgeAlphaMax": 3
+        },
+        {
+          "kind": "tank",
+          "solidBounds": [
+            22,
+            131,
+            506,
+            422
+          ],
+          "groundContactY": 422,
+          "minimumSolidPadding": 6,
+          "edgeAlphaMax": 2
+        },
+        {
+          "kind": "rubble",
+          "solidBounds": [
+            14,
+            101,
+            499,
+            434
+          ],
+          "groundContactY": 434,
+          "minimumSolidPadding": 13,
+          "edgeAlphaMax": 2
+        },
+        {
+          "kind": "fence",
+          "solidBounds": [
+            7,
+            82,
+            489,
+            432
+          ],
+          "groundContactY": 432,
+          "minimumSolidPadding": 7,
+          "edgeAlphaMax": 2
+        }
+      ]
+    },
+    "rejectedAlignmentEdit": {
+      "sha256": "7f31d121ab53b198008190e5c2d6f5de3f3715b61c5363312cbb20f2767fb948",
+      "bytes": 2555080,
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGBA",
+      "alphaExtrema": [
+        0,
+        254
+      ],
+      "fullyTransparentPixels": 886493,
+      "totalPixels": 1572864,
+      "decodedRgbaBytes": 6291456,
+      "frames": [
+        {
+          "kind": "understory",
+          "solidBounds": [
+            25,
+            136,
+            505,
+            497
+          ],
+          "groundContactY": 497,
+          "minimumSolidPadding": 7,
+          "edgeAlphaMax": 1
+        },
+        {
+          "kind": "outcrop",
+          "solidBounds": [
+            17,
+            205,
+            501,
+            503
+          ],
+          "groundContactY": 503,
+          "minimumSolidPadding": 9,
+          "edgeAlphaMax": 1
+        },
+        {
+          "kind": "reeds",
+          "solidBounds": [
+            16,
+            140,
+            490,
+            500
+          ],
+          "groundContactY": 500,
+          "minimumSolidPadding": 12,
+          "edgeAlphaMax": 1
+        },
+        {
+          "kind": "tank",
+          "solidBounds": [
+            25,
+            142,
+            510,
+            424
+          ],
+          "groundContactY": 424,
+          "minimumSolidPadding": 2,
+          "edgeAlphaMax": 10
+        },
+        {
+          "kind": "rubble",
+          "solidBounds": [
+            19,
+            102,
+            510,
+            435
+          ],
+          "groundContactY": 435,
+          "minimumSolidPadding": 2,
+          "edgeAlphaMax": 2
+        },
+        {
+          "kind": "fence",
+          "solidBounds": [
+            11,
+            80,
+            491,
+            436
+          ],
+          "groundContactY": 436,
+          "minimumSolidPadding": 11,
+          "edgeAlphaMax": 1
+        }
+      ]
+    },
+    "acceptance": "First generation selected: all solid silhouettes stay inside cells and alpha border remains negligible. Requested 32px fully-clear padding and uniform y450 were not achieved; use measured contacts, not prompt claims.",
+    "imageEditingByScript": false
+  },
+  "canvas": {
+    "kind": "isolated-actual-engine-scenery-variants",
+    "base": "b18199e",
+    "fixtures": [
+      {
+        "id": "woodland",
+        "name": "林地",
+        "kind": "understory",
+        "near": {
+          "x": -55,
+          "y": 25
+        },
+        "x": -63,
+        "y": -3,
+        "target": {
+          "id": "world:-2:-1:scenery:12",
+          "x": -61,
+          "y": -5,
+          "kind": "understory",
+          "scale": 1.18,
+          "variant": 1
+        }
+      },
+      {
+        "id": "quarry",
+        "name": "岩地",
+        "kind": "outcrop",
+        "near": {
+          "x": -128,
+          "y": -352
+        },
+        "x": -95,
+        "y": -329,
+        "target": {
+          "id": "world:-3:-11:scenery:8",
+          "x": -93,
+          "y": -331,
+          "kind": "outcrop",
+          "scale": 1.1199999999999999,
+          "variant": 1
+        }
+      },
+      {
+        "id": "wetland",
+        "name": "湿地",
+        "kind": "reeds",
+        "near": {
+          "x": 0,
+          "y": 344
+        },
+        "x": -7,
+        "y": 399,
+        "target": {
+          "id": "world:-1:12:scenery:7",
+          "x": -5,
+          "y": 397,
+          "kind": "reeds",
+          "scale": 1.0899999999999999,
+          "variant": 1
+        }
+      },
+      {
+        "id": "industrial",
+        "name": "工业",
+        "kind": "tank",
+        "near": {
+          "x": 448,
+          "y": 32
+        },
+        "x": 433,
+        "y": -26,
+        "target": {
+          "id": "world:13:-1:scenery:2",
+          "x": 435,
+          "y": -28,
+          "kind": "tank",
+          "scale": 1.18,
+          "variant": 1
+        }
+      }
+    ],
+    "assets": [
+      {
+        "url": "/art/tile-forest-b.png",
+        "width": 512,
+        "height": 512
+      },
+      {
+        "url": "/art/tile-forest-a.png",
+        "width": 512,
+        "height": 512
+      },
+      {
+        "url": "/art/tile-field-a.png",
+        "width": 512,
+        "height": 512
+      },
+      {
+        "url": "/art/tile-field-b.png",
+        "width": 512,
+        "height": 512
+      },
+      {
+        "url": "/art/texture-ground.png",
+        "width": 1254,
+        "height": 1254
+      },
+      {
+        "url": "/art/nature-trees.png",
+        "width": 2172,
+        "height": 724
+      },
+      {
+        "url": "/art/world-environment-v1.png",
+        "width": 1536,
+        "height": 1024
+      },
+      {
+        "url": "/art/char-survivor.png",
+        "width": 2172,
+        "height": 724
+      },
+      {
+        "url": "/art/world-environment-v2.png",
+        "width": 1536,
+        "height": 1024
+      },
+      {
+        "url": "/art/tile-quarry-a.png",
+        "width": 512,
+        "height": 512
+      },
+      {
+        "url": "/art/tile-quarry-b.png",
+        "width": 512,
+        "height": 512
+      },
+      {
+        "url": "/art/monster-pack.png",
+        "width": 2021,
+        "height": 778
+      },
+      {
+        "url": "/art/tile-marsh-a.png",
+        "width": 512,
+        "height": 512
+      },
+      {
+        "url": "/art/tile-marsh-b.png",
+        "width": 512,
+        "height": 512
+      },
+      {
+        "url": "/art/prop-wreck.png",
+        "width": 2172,
+        "height": 724
+      },
+      {
+        "url": "/art/tile-ruins-a.png",
+        "width": 512,
+        "height": 512
+      },
+      {
+        "url": "/art/tile-ruins-b.png",
+        "width": 512,
+        "height": 512
+      },
+      {
+        "url": "/art/prop-scrap.png",
+        "width": 1024,
+        "height": 1024
+      }
+    ],
+    "additionalDecodedRgbaBytes": 6291456,
+    "environment": {
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "dpr": 1.5,
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36"
+    },
+    "trials": [
+      {
+        "fixture": "woodland",
+        "mode": "baseline",
+        "round": 0,
+        "drawSubmitMs": 0.699999988079071,
+        "canvas": {
+          "width": 600,
+          "height": 360
+        },
+        "visiblePixelBytes": 864000,
+        "scenery": 124,
+        "actors": 0,
+        "resources": 168,
+        "buildings": 388
+      },
+      {
+        "fixture": "woodland",
+        "mode": "candidate",
+        "round": 0,
+        "drawSubmitMs": 0.7000000178813934,
+        "canvas": {
+          "width": 600,
+          "height": 360
+        },
+        "visiblePixelBytes": 864000,
+        "scenery": 124,
+        "actors": 0,
+        "resources": 168,
+        "buildings": 388
+      },
+      {
+        "fixture": "woodland",
+        "mode": "candidate",
+        "round": 1,
+        "drawSubmitMs": 0.5999999940395355,
+        "canvas": {
+          "width": 600,
+          "height": 360
+        },
+        "visiblePixelBytes": 864000,
+        "scenery": 124,
+        "actors": 0,
+        "resources": 168,
+        "buildings": 388
+      },
+      {
+        "fixture": "woodland",
+        "mode": "baseline",
+        "round": 1,
+        "drawSubmitMs": 0.800000011920929,
+        "canvas": {
+          "width": 600,
+          "height": 360
+        },
+        "visiblePixelBytes": 864000,
+        "scenery": 124,
+        "actors": 0,
+        "resources": 168,
+        "buildings": 388
+      },
+      {
+        "fixture": "woodland",
+        "mode": "baseline",
+        "round": 2,
+        "drawSubmitMs": 1.300000011920929,
+        "canvas": {
+          "width": 600,
+          "height": 360
+        },
+        "visiblePixelBytes": 864000,
+        "scenery": 124,
+        "actors": 0,
+        "resources": 168,
+        "buildings": 388
+      },
+      {
+        "fixture": "woodland",
+        "mode": "candidate",
+        "round": 2,
+        "drawSubmitMs": 1,
+        "canvas": {
+          "width": 600,
+          "height": 360
+        },
+        "visiblePixelBytes": 864000,
+        "scenery": 124,
+        "actors": 0,
+        "resources": 168,
+        "buildings": 388
+      },
+      {
+        "fixture": "woodland",
+        "mode": "candidate",
+        "round": 3,
+        "drawSubmitMs": 1.2000000178813934,
+        "canvas": {
+          "width": 600,
+          "height": 360
+        },
+        "visiblePixelBytes": 864000,
+        "scenery": 124,
+        "actors": 0,
+        "resources": 168,
+        "buildings": 388
+      },
+      {
+        "fixture": "woodland",
+        "mode": "baseline",
+        "round": 3,
+        "drawSubmitMs": 1,
+        "canvas": {
+          "width": 600,
+          "height": 360
+        },
+        "visiblePixelBytes": 864000,
+        "scenery": 124,
+        "actors": 0,
+        "resources": 168,
+        "buildings": 388
+      },
+      {
+        "fixture": "woodland",
+        "mode": "baseline",
+        "round": 4,
+        "drawSubmitMs": 1.4000000059604645,
+        "canvas": {
+          "width": 600,
+          "height": 360
+        },
+        "visiblePixelBytes": 864000,
+        "scenery": 124,
+        "actors": 0,
+        "resources": 168,
+        "buildings": 388
+      },
+      {
+        "fixture": "woodland",
+        "mode": "candidate",
+        "round": 4,
+        "drawSubmitMs": 1.7000000178813934,
+        "canvas": {
+          "width": 600,
+          "height": 360
+        },
+        "visiblePixelBytes": 864000,
+        "scenery": 124,
+        "actors": 0,
+        "resources": 168,
+        "buildings": 388
+      },
+      {
+        "fixture": "woodland",
+        "mode": "candidate",
+        "round": 5,
+        "drawSubmitMs": 1.300000011920929,
+        "canvas": {
+          "width": 600,
+          "height": 360
+        },
+        "visiblePixelBytes": 864000,
+        "scenery": 124,
+        "actors": 0,
+        "resources": 168,
+        "buildings": 388
+      },
+      {
+        "fixture": "woodland",
+        "mode": "baseline",
+        "round": 5,
+        "drawSubmitMs": 1.5,
+        "canvas": {
+          "width": 600,
+          "height": 360
+        },
+        "visiblePixelBytes": 864000,
+        "scenery": 124,
+        "actors": 0,
+        "resources": 168,
+        "buildings": 388
+      },
+      {
+        "fixture": "woodland",
+        "mode": "baseline",
+        "round": 6,
+        "drawSubmitMs": 0.9000000059604645,
+        "canvas": {
+          "width": 600,
+          "height": 360
+        },
+        "visiblePixelBytes": 864000,
+        "scenery": 124,
+        "actors": 0,
+        "resources": 168,
+        "buildings": 388
+      },
+      {
+        "fixture": "woodland",
+        "mode": "candidate",
+        "round": 6,
+        "drawSubmitMs": 0.7999999821186066,
+        "canvas": {
+          "width": 600,
+          "height": 360
+        },
+        "visiblePixelBytes": 864000,
+        "scenery": 124,
+        "actors": 0,
+        "resources": 168,
+        "buildings": 388
+      },
+      {
+        "fixture": "woodland",
+        "mode": "candidate",
+        "round": 7,
+        "drawSubmitMs": 0.9000000059604645,
+        "canvas": {
+          "width": 600,
+          "height": 360
+        },
+        "visiblePixelBytes": 864000,
+        "scenery": 124,
+        "actors": 0,
+        "resources": 168,
+        "buildings": 388
+      },
+      {
+        "fixture": "woodland",
+        "mode": "baseline",
+        "round": 7,
+        "drawSubmitMs": 0.9000000059604645,
+        "canvas": {
+          "width": 600,
+          "height": 360
+        },
+        "visiblePixelBytes": 864000,
+        "scenery": 124,
+        "actors": 0,
+        "resources": 168,
+        "buildings": 388
+      },
+      {
+        "fixture": "quarry",
+        "mode": "baseline",
+        "round": 0,
+        "drawSubmitMs": 1.100000023841858,
+        "canvas": {
+          "width": 600,
+          "height": 360
+        },
+        "visiblePixelBytes": 864000,
+        "scenery": 51,
+        "actors": 3,
+        "resources": 199,
+        "buildings": 420
+      },
+      {
+        "fixture": "quarry",
+        "mode": "candidate",
+        "round": 0,
+        "drawSubmitMs": 1.7000000178813934,
+        "canvas": {
+          "width": 600,
+          "height": 360
+        },
+        "visiblePixelBytes": 864000,
+        "scenery": 51,
+        "actors": 3,
+        "resources": 199,
+        "buildings": 420
+      },
+      {
+        "fixture": "quarry",
+        "mode": "candidate",
+        "round": 1,
+        "drawSubmitMs": 0.7000000178813934,
+        "canvas": {
+          "width": 600,
+          "height": 360
+        },
+        "visiblePixelBytes": 864000,
+        "scenery": 51,
+        "actors": 3,
+        "resources": 199,
+        "buildings": 420
+      },
+      {
+        "fixture": "quarry",
+        "mode": "baseline",
+        "round": 1,
+        "drawSubmitMs": 0.8999999761581421,
+        "canvas": {
+          "width": 600,
+          "height": 360
+        },
+        "visiblePixelBytes": 864000,
+        "scenery": 51,
+        "actors": 3,
+        "resources": 199,
+        "buildings": 420
+      },
+      {
+        "fixture": "quarry",
+        "mode": "baseline",
+        "round": 2,
+        "drawSubmitMs": 1,
+        "canvas": {
+          "width": 600,
+          "height": 360
+        },
+        "visiblePixelBytes": 864000,
+        "scenery": 51,
+        "actors": 3,
+        "resources": 199,
+        "buildings": 420
+      },
+      {
+        "fixture": "quarry",
+        "mode": "candidate",
+        "round": 2,
+        "drawSubmitMs": 1.4000000059604645,
+        "canvas": {
+          "width": 600,
+          "height": 360
+        },
+        "visiblePixelBytes": 864000,
+        "scenery": 51,
+        "actors": 3,
+        "resources": 199,
+        "buildings": 420
+      },
+      {
+        "fixture": "quarry",
+        "mode": "candidate",
+        "round": 3,
+        "drawSubmitMs": 1.300000011920929,
+        "canvas": {
+          "width": 600,
+          "height": 360
+        },
+        "visiblePixelBytes": 864000,
+        "scenery": 51,
+        "actors": 3,
+        "resources": 199,
+        "buildings": 420
+      },
+      {
+        "fixture": "quarry",
+        "mode": "baseline",
+        "round": 3,
+        "drawSubmitMs": 1.7000000178813934,
+        "canvas": {
+          "width": 600,
+          "height": 360
+        },
+        "visiblePixelBytes": 864000,
+        "scenery": 51,
+        "actors": 3,
+        "resources": 199,
+        "buildings": 420
+      },
+      {
+        "fixture": "quarry",
+        "mode": "baseline",
+        "round": 4,
+        "drawSubmitMs": 2.0999999940395355,
+        "canvas": {
+          "width": 600,
+          "height": 360
+        },
+        "visiblePixelBytes": 864000,
+        "scenery": 51,
+        "actors": 3,
+        "resources": 199,
+        "buildings": 420
+      },
+      {
+        "fixture": "quarry",
+        "mode": "candidate",
+        "round": 4,
+        "drawSubmitMs": 1.4000000059604645,
+        "canvas": {
+          "width": 600,
+          "height": 360
+        },
+        "visiblePixelBytes": 864000,
+        "scenery": 51,
+        "actors": 3,
+        "resources": 199,
+        "buildings": 420
+      },
+      {
+        "fixture": "quarry",
+        "mode": "candidate",
+        "round": 5,
+        "drawSubmitMs": 1.9000000059604645,
+        "canvas": {
+          "width": 600,
+          "height": 360
+        },
+        "visiblePixelBytes": 864000,
+        "scenery": 51,
+        "actors": 3,
+        "resources": 199,
+        "buildings": 420
+      },
+      {
+        "fixture": "quarry",
+        "mode": "baseline",
+        "round": 5,
+        "drawSubmitMs": 1.5,
+        "canvas": {
+          "width": 600,
+          "height": 360
+        },
+        "visiblePixelBytes": 864000,
+        "scenery": 51,
+        "actors": 3,
+        "resources": 199,
+        "buildings": 420
+      },
+      {
+        "fixture": "quarry",
+        "mode": "baseline",
+        "round": 6,
+        "drawSubmitMs": 3.100000023841858,
+        "canvas": {
+          "width": 600,
+          "height": 360
+        },
+        "visiblePixelBytes": 864000,
+        "scenery": 51,
+        "actors": 3,
+        "resources": 199,
+        "buildings": 420
+      },
+      {
+        "fixture": "quarry",
+        "mode": "candidate",
+        "round": 6,
+        "drawSubmitMs": 5.699999988079071,
+        "canvas": {
+          "width": 600,
+          "height": 360
+        },
+        "visiblePixelBytes": 864000,
+        "scenery": 51,
+        "actors": 3,
+        "resources": 199,
+        "buildings": 420
+      },
+      {
+        "fixture": "quarry",
+        "mode": "candidate",
+        "round": 7,
+        "drawSubmitMs": 1.699999988079071,
+        "canvas": {
+          "width": 600,
+          "height": 360
+        },
+        "visiblePixelBytes": 864000,
+        "scenery": 51,
+        "actors": 3,
+        "resources": 199,
+        "buildings": 420
+      },
+      {
+        "fixture": "quarry",
+        "mode": "baseline",
+        "round": 7,
+        "drawSubmitMs": 2.699999988079071,
+        "canvas": {
+          "width": 600,
+          "height": 360
+        },
+        "visiblePixelBytes": 864000,
+        "scenery": 51,
+        "actors": 3,
+        "resources": 199,
+        "buildings": 420
+      },
+      {
+        "fixture": "wetland",
+        "mode": "baseline",
+        "round": 0,
+        "drawSubmitMs": 0.7000000178813934,
+        "canvas": {
+          "width": 600,
+          "height": 360
+        },
+        "visiblePixelBytes": 864000,
+        "scenery": 51,
+        "actors": 4,
+        "resources": 170,
+        "buildings": 433
+      },
+      {
+        "fixture": "wetland",
+        "mode": "candidate",
+        "round": 0,
+        "drawSubmitMs": 0.800000011920929,
+        "canvas": {
+          "width": 600,
+          "height": 360
+        },
+        "visiblePixelBytes": 864000,
+        "scenery": 51,
+        "actors": 4,
+        "resources": 170,
+        "buildings": 433
+      },
+      {
+        "fixture": "wetland",
+        "mode": "candidate",
+        "round": 1,
+        "drawSubmitMs": 1.100000023841858,
+        "canvas": {
+          "width": 600,
+          "height": 360
+        },
+        "visiblePixelBytes": 864000,
+        "scenery": 51,
+        "actors": 4,
+        "resources": 170,
+        "buildings": 433
+      },
+      {
+        "fixture": "wetland",
+        "mode": "baseline",
+        "round": 1,
+        "drawSubmitMs": 0.800000011920929,
+        "canvas": {
+          "width": 600,
+          "height": 360
+        },
+        "visiblePixelBytes": 864000,
+        "scenery": 51,
+        "actors": 4,
+        "resources": 170,
+        "buildings": 433
+      },
+      {
+        "fixture": "wetland",
+        "mode": "baseline",
+        "round": 2,
+        "drawSubmitMs": 1.2000000178813934,
+        "canvas": {
+          "width": 600,
+          "height": 360
+        },
+        "visiblePixelBytes": 864000,
+        "scenery": 51,
+        "actors": 4,
+        "resources": 170,
+        "buildings": 433
+      },
+      {
+        "fixture": "wetland",
+        "mode": "candidate",
+        "round": 2,
+        "drawSubmitMs": 1.300000011920929,
+        "canvas": {
+          "width": 600,
+          "height": 360
+        },
+        "visiblePixelBytes": 864000,
+        "scenery": 51,
+        "actors": 4,
+        "resources": 170,
+        "buildings": 433
+      },
+      {
+        "fixture": "wetland",
+        "mode": "candidate",
+        "round": 3,
+        "drawSubmitMs": 1.0999999940395355,
+        "canvas": {
+          "width": 600,
+          "height": 360
+        },
+        "visiblePixelBytes": 864000,
+        "scenery": 51,
+        "actors": 4,
+        "resources": 170,
+        "buildings": 433
+      },
+      {
+        "fixture": "wetland",
+        "mode": "baseline",
+        "round": 3,
+        "drawSubmitMs": 1.300000011920929,
+        "canvas": {
+          "width": 600,
+          "height": 360
+        },
+        "visiblePixelBytes": 864000,
+        "scenery": 51,
+        "actors": 4,
+        "resources": 170,
+        "buildings": 433
+      },
+      {
+        "fixture": "wetland",
+        "mode": "baseline",
+        "round": 4,
+        "drawSubmitMs": 1.5,
+        "canvas": {
+          "width": 600,
+          "height": 360
+        },
+        "visiblePixelBytes": 864000,
+        "scenery": 51,
+        "actors": 4,
+        "resources": 170,
+        "buildings": 433
+      },
+      {
+        "fixture": "wetland",
+        "mode": "candidate",
+        "round": 4,
+        "drawSubmitMs": 1.199999988079071,
+        "canvas": {
+          "width": 600,
+          "height": 360
+        },
+        "visiblePixelBytes": 864000,
+        "scenery": 51,
+        "actors": 4,
+        "resources": 170,
+        "buildings": 433
+      },
+      {
+        "fixture": "wetland",
+        "mode": "candidate",
+        "round": 5,
+        "drawSubmitMs": 1.300000011920929,
+        "canvas": {
+          "width": 600,
+          "height": 360
+        },
+        "visiblePixelBytes": 864000,
+        "scenery": 51,
+        "actors": 4,
+        "resources": 170,
+        "buildings": 433
+      },
+      {
+        "fixture": "wetland",
+        "mode": "baseline",
+        "round": 5,
+        "drawSubmitMs": 2,
+        "canvas": {
+          "width": 600,
+          "height": 360
+        },
+        "visiblePixelBytes": 864000,
+        "scenery": 51,
+        "actors": 4,
+        "resources": 170,
+        "buildings": 433
+      },
+      {
+        "fixture": "wetland",
+        "mode": "baseline",
+        "round": 6,
+        "drawSubmitMs": 2,
+        "canvas": {
+          "width": 600,
+          "height": 360
+        },
+        "visiblePixelBytes": 864000,
+        "scenery": 51,
+        "actors": 4,
+        "resources": 170,
+        "buildings": 433
+      },
+      {
+        "fixture": "wetland",
+        "mode": "candidate",
+        "round": 6,
+        "drawSubmitMs": 1.0999999940395355,
+        "canvas": {
+          "width": 600,
+          "height": 360
+        },
+        "visiblePixelBytes": 864000,
+        "scenery": 51,
+        "actors": 4,
+        "resources": 170,
+        "buildings": 433
+      },
+      {
+        "fixture": "wetland",
+        "mode": "candidate",
+        "round": 7,
+        "drawSubmitMs": 1.300000011920929,
+        "canvas": {
+          "width": 600,
+          "height": 360
+        },
+        "visiblePixelBytes": 864000,
+        "scenery": 51,
+        "actors": 4,
+        "resources": 170,
+        "buildings": 433
+      },
+      {
+        "fixture": "wetland",
+        "mode": "baseline",
+        "round": 7,
+        "drawSubmitMs": 0.9000000059604645,
+        "canvas": {
+          "width": 600,
+          "height": 360
+        },
+        "visiblePixelBytes": 864000,
+        "scenery": 51,
+        "actors": 4,
+        "resources": 170,
+        "buildings": 433
+      },
+      {
+        "fixture": "industrial",
+        "mode": "baseline",
+        "round": 0,
+        "drawSubmitMs": 0.7999999821186066,
+        "canvas": {
+          "width": 600,
+          "height": 360
+        },
+        "visiblePixelBytes": 864000,
+        "scenery": 68,
+        "actors": 6,
+        "resources": 171,
+        "buildings": 466
+      },
+      {
+        "fixture": "industrial",
+        "mode": "candidate",
+        "round": 0,
+        "drawSubmitMs": 1.0999999940395355,
+        "canvas": {
+          "width": 600,
+          "height": 360
+        },
+        "visiblePixelBytes": 864000,
+        "scenery": 68,
+        "actors": 6,
+        "resources": 171,
+        "buildings": 466
+      },
+      {
+        "fixture": "industrial",
+        "mode": "candidate",
+        "round": 1,
+        "drawSubmitMs": 0.9000000059604645,
+        "canvas": {
+          "width": 600,
+          "height": 360
+        },
+        "visiblePixelBytes": 864000,
+        "scenery": 68,
+        "actors": 6,
+        "resources": 171,
+        "buildings": 466
+      },
+      {
+        "fixture": "industrial",
+        "mode": "baseline",
+        "round": 1,
+        "drawSubmitMs": 1.4000000059604645,
+        "canvas": {
+          "width": 600,
+          "height": 360
+        },
+        "visiblePixelBytes": 864000,
+        "scenery": 68,
+        "actors": 6,
+        "resources": 171,
+        "buildings": 466
+      },
+      {
+        "fixture": "industrial",
+        "mode": "baseline",
+        "round": 2,
+        "drawSubmitMs": 1.5,
+        "canvas": {
+          "width": 600,
+          "height": 360
+        },
+        "visiblePixelBytes": 864000,
+        "scenery": 68,
+        "actors": 6,
+        "resources": 171,
+        "buildings": 466
+      },
+      {
+        "fixture": "industrial",
+        "mode": "candidate",
+        "round": 2,
+        "drawSubmitMs": 1.300000011920929,
+        "canvas": {
+          "width": 600,
+          "height": 360
+        },
+        "visiblePixelBytes": 864000,
+        "scenery": 68,
+        "actors": 6,
+        "resources": 171,
+        "buildings": 466
+      },
+      {
+        "fixture": "industrial",
+        "mode": "candidate",
+        "round": 3,
+        "drawSubmitMs": 1.4000000059604645,
+        "canvas": {
+          "width": 600,
+          "height": 360
+        },
+        "visiblePixelBytes": 864000,
+        "scenery": 68,
+        "actors": 6,
+        "resources": 171,
+        "buildings": 466
+      },
+      {
+        "fixture": "industrial",
+        "mode": "baseline",
+        "round": 3,
+        "drawSubmitMs": 1.9000000059604645,
+        "canvas": {
+          "width": 600,
+          "height": 360
+        },
+        "visiblePixelBytes": 864000,
+        "scenery": 68,
+        "actors": 6,
+        "resources": 171,
+        "buildings": 466
+      },
+      {
+        "fixture": "industrial",
+        "mode": "baseline",
+        "round": 4,
+        "drawSubmitMs": 1.0999999940395355,
+        "canvas": {
+          "width": 600,
+          "height": 360
+        },
+        "visiblePixelBytes": 864000,
+        "scenery": 68,
+        "actors": 6,
+        "resources": 171,
+        "buildings": 466
+      },
+      {
+        "fixture": "industrial",
+        "mode": "candidate",
+        "round": 4,
+        "drawSubmitMs": 1.800000011920929,
+        "canvas": {
+          "width": 600,
+          "height": 360
+        },
+        "visiblePixelBytes": 864000,
+        "scenery": 68,
+        "actors": 6,
+        "resources": 171,
+        "buildings": 466
+      },
+      {
+        "fixture": "industrial",
+        "mode": "candidate",
+        "round": 5,
+        "drawSubmitMs": 2.300000011920929,
+        "canvas": {
+          "width": 600,
+          "height": 360
+        },
+        "visiblePixelBytes": 864000,
+        "scenery": 68,
+        "actors": 6,
+        "resources": 171,
+        "buildings": 466
+      },
+      {
+        "fixture": "industrial",
+        "mode": "baseline",
+        "round": 5,
+        "drawSubmitMs": 2.199999988079071,
+        "canvas": {
+          "width": 600,
+          "height": 360
+        },
+        "visiblePixelBytes": 864000,
+        "scenery": 68,
+        "actors": 6,
+        "resources": 171,
+        "buildings": 466
+      },
+      {
+        "fixture": "industrial",
+        "mode": "baseline",
+        "round": 6,
+        "drawSubmitMs": 1.0999999940395355,
+        "canvas": {
+          "width": 600,
+          "height": 360
+        },
+        "visiblePixelBytes": 864000,
+        "scenery": 68,
+        "actors": 6,
+        "resources": 171,
+        "buildings": 466
+      },
+      {
+        "fixture": "industrial",
+        "mode": "candidate",
+        "round": 6,
+        "drawSubmitMs": 1.300000011920929,
+        "canvas": {
+          "width": 600,
+          "height": 360
+        },
+        "visiblePixelBytes": 864000,
+        "scenery": 68,
+        "actors": 6,
+        "resources": 171,
+        "buildings": 466
+      },
+      {
+        "fixture": "industrial",
+        "mode": "candidate",
+        "round": 7,
+        "drawSubmitMs": 1.5,
+        "canvas": {
+          "width": 600,
+          "height": 360
+        },
+        "visiblePixelBytes": 864000,
+        "scenery": 68,
+        "actors": 6,
+        "resources": 171,
+        "buildings": 466
+      },
+      {
+        "fixture": "industrial",
+        "mode": "baseline",
+        "round": 7,
+        "drawSubmitMs": 1.399999976158142,
+        "canvas": {
+          "width": 600,
+          "height": 360
+        },
+        "visiblePixelBytes": 864000,
+        "scenery": 68,
+        "actors": 6,
+        "resources": 171,
+        "buildings": 466
+      }
+    ],
+    "summary": [
+      {
+        "fixture": "woodland",
+        "mode": "baseline",
+        "medianDrawSubmitMs": 0.9500000029802322,
+        "min": 0.699999988079071,
+        "max": 1.5
+      },
+      {
+        "fixture": "woodland",
+        "mode": "candidate",
+        "medianDrawSubmitMs": 0.9500000029802322,
+        "min": 0.5999999940395355,
+        "max": 1.7000000178813934
+      },
+      {
+        "fixture": "quarry",
+        "mode": "baseline",
+        "medianDrawSubmitMs": 1.6000000089406967,
+        "min": 0.8999999761581421,
+        "max": 3.100000023841858
+      },
+      {
+        "fixture": "quarry",
+        "mode": "candidate",
+        "medianDrawSubmitMs": 1.5499999970197678,
+        "min": 0.7000000178813934,
+        "max": 5.699999988079071
+      },
+      {
+        "fixture": "wetland",
+        "mode": "baseline",
+        "medianDrawSubmitMs": 1.2500000149011612,
+        "min": 0.7000000178813934,
+        "max": 2
+      },
+      {
+        "fixture": "wetland",
+        "mode": "candidate",
+        "medianDrawSubmitMs": 1.1500000059604645,
+        "min": 0.800000011920929,
+        "max": 1.300000011920929
+      },
+      {
+        "fixture": "industrial",
+        "mode": "baseline",
+        "medianDrawSubmitMs": 1.3999999910593033,
+        "min": 0.7999999821186066,
+        "max": 2.199999988079071
+      },
+      {
+        "fixture": "industrial",
+        "mode": "candidate",
+        "medianDrawSubmitMs": 1.3500000089406967,
+        "min": 0.9000000059604645,
+        "max": 2.300000011920929
+      }
+    ],
+    "limits": [
+      "Fixed-camera warm-ground drawings,not physical presentation or pure CPU/GPU cost.",
+      "No gameplay,food clock,server,database,continuous walking or whole-browser memory acceptance."
+    ],
+    "initialAndSecondRunsRetained": true
+  },
+  "gates": {
+    "red": 4,
+    "targetedGreen": 206,
+    "negativeControl": "Disabling alternate renderer path fails two selection/fallback tests; exact bytes restored,206 green again",
+    "full": {
+      "files": 47,
+      "tests": 756
+    },
+    "types": "passed including local QA sources",
+    "build": {
+      "exitCode": 0,
+      "bundle": "index-DAKYpUWo.js",
+      "existingWarnings": [
+        "Vite native config __dirname",
+        "chunk over500kB"
+      ]
+    },
+    "sourceReview": "passed-no-P1-P2"
+  },
+  "visualEvidence": {
+    "screenshots": [
+      "data/scenery-variants-woodland-20261024.png",
+      "data/scenery-variants-quarry-20261024.png",
+      "data/scenery-variants-wetland-20261024.png",
+      "data/scenery-variants-industrial-20261024.png",
+      "data/scenery-variants-player-fade-20261024.png",
+      "data/scenery-variants-fallback-20261024.png"
+    ],
+    "scope": "Isolated actual old/new Engine Canvas with fixed scene coordinates and clear weather,not native live gameplay.",
+    "fallback": "Native fixture button supplies an unavailable image for v2; actual renderer displays old sprite. Unit test covers both-missing geometric fallback.",
+    "fade": "Native fixture moves its synthetic scene center to the decorative anchor; same actual renderer applies0.24 alpha. Unit verifies alpha at draw and restore."
+  },
+  "failuresAndDeviations": [
+    "Generated art did not meet exact requested32px alpha padding or uniformy450. Alignment edit did not improve; first version selected after measurable cell-boundary/alpha and real Canvas inspection; contacts measured per frame.",
+    "First Canvas fixture parent made actual drawing600x388 and initial warp banner obscured art. Corrected only QA parent to600x360 and cleared fixture banner; initial and second raw runs retained.",
+    "Art adds2512547 download bytes and6291456 RGBA decoded bytes,plus possible browser copies; not a memory optimization."
+  ],
+  "limits": [
+    "Four stationary warm-ground Canvas fixtures and small wall-time differences cannot establish consistent performance improvement,CPU/GPU cost,physical presented frames,long memory or whole-browser800MB fixes.",
+    "No native new-art walking or server gameplay was run this stage; prior earned assets and hunger/death state untouched.",
+    "Whole-world route/economy,earned paid offline defense and strict continuous60s walking remain incomplete."
+  ],
+  "cleanup": {
+    "listeners": 0,
+    "port": 39146,
+    "noGameServerOrDatabase": true,
+    "pid": 27024,
+    "terminal": true,
+    "tabs": [],
+    "viewportChanged": false
+  },
+  "review": "passed-no-P1-P2",
+  "sources": [
+    {
+      "path": "src/game/worldScenery.ts",
+      "sha256": "7f0d13181a184205edbed7a94331f1d75ef44d1e42e75b5e7553ca54ddf5afcc"
+    },
+    {
+      "path": "src/game/worldScenery.test.ts",
+      "sha256": "18fca47dfc738a38350cfe62ccd233516fe66f1e51b56238bda2642514106217"
+    },
+    {
+      "path": "src/game/IsometricEngine.ts",
+      "sha256": "91d0e03af11666abf9fd9089f648ae0345ed21060e3f9aa8efefbce4dc67083a"
+    },
+    {
+      "path": "src/game/IsometricEngine.test.ts",
+      "sha256": "b4535afde1f42a9cbcb5d9c6f1a866dbcdae280e6c531efab5ab641a5593fc43"
+    },
+    {
+      "path": "src/game/art.ts",
+      "sha256": "f24fe1a3329a750ae956a1b1c35f5a8a6ccd78423d99233b625dac6c491af1f1"
+    },
+    {
+      "path": "src/game/art.test.ts",
+      "sha256": "a45b2407f39c69f777fe87c3a964a53f3163dcb1cffa9f179d1b5af0bae1e519"
+    },
+    {
+      "path": "src/game/world.ts",
+      "sha256": "9ad6447e3e2cce3f9f391856bd3008856a49c2849a35d71aa1368b1893510949"
+    },
+    {
+      "path": "public/art/world-environment-v2.png",
+      "sha256": "e0296bf9cf08baba9aa47eb1d4a679958474c89f8a12ac4005dcafd9bcbd6b86"
+    },
+    {
+      "path": "public/art/generation-prompts-world-environment-v2.json",
+      "sha256": "509b16c8e2dc5da974051ae195aa8b391eabe03207b775ab33c4ef396238e558"
+    },
+    {
+      "path": "public/art/world-environment-v1.png",
+      "sha256": "fc951993caafe34b9c8fd5027a54a5d143c68f09f6a31434f201cc2fa28fb177"
+    },
+    {
+      "path": "docs/superpowers/specs/2026-10-24-world-scenery-variants-design.md",
+      "sha256": "34b27e06c77f6108cf1bb292cfda1f254475d8e8f88c2c1adc639fddb086b5aa"
+    },
+    {
+      "path": "docs/superpowers/plans/2026-10-24-world-scenery-variants.md",
+      "sha256": "bc0cd7ee45720bea6c7d621e7d0fb01a8043ac2c97af403023f22e630562a721"
+    },
+    {
+      "path": "docs/superpowers/plans/2026-10-20-seamless-world-camps.md",
+      "sha256": "14c71bce9bef3401802dbd7138543b7f9a2ef832c273cc3d8e613e46e08b99c3"
+    },
+    {
+      "path": "data/scenery-variants-baseline-20261024.ts",
+      "sha256": "ed585710ff13293b3a3b31cabd0fd2891434c8c07cf5170ac03fb2cf3efe42b1"
+    },
+    {
+      "path": "data/scenery-variants-baseline-20261024.json",
+      "sha256": "cf115b1538f2367b0bc538b9d9e4a9b7f02f5000b821e16a1702d3d3df8ede56"
+    },
+    {
+      "path": "data/scenery-variants-baseline-20261024.log",
+      "sha256": "7e3149155711f5b69bda9827780c83aa4b00d4ee0331d82dd224b3968f46027b"
+    },
+    {
+      "path": "data/scenery-variants-world-audit-20261024.json",
+      "sha256": "17d77af93e984d2c0fd9f042e9462a917be58454bb7be35180635f13e60fcee0"
+    },
+    {
+      "path": "data/scenery-variants-world-audit-20261024.log",
+      "sha256": "f3ec11bca57d05efe501d32cdb82303a9c3c22722550f3588c1d8ea0b7258be3"
+    },
+    {
+      "path": "data/scenery-variants-image-inspection-20261024.json",
+      "sha256": "4f47e9109f8d62f20e8ae4b6999200b6221b292b9c3aaf58864cac31fef39db8"
+    },
+    {
+      "path": "data/scenery-variants-image-inspection-20261024.log",
+      "sha256": "1b947a2b257db1ed7aa6f2295ce36ff11e9feaa7d098574fd691610cac96af31"
+    },
+    {
+      "path": "data/scenery-variants-red-20261024.log",
+      "sha256": "61fdbf785fe6b7d25666772d4acc35489a4c451db8fca6c3ed6c83b4081115aa"
+    },
+    {
+      "path": "data/scenery-variants-green-20261024.log",
+      "sha256": "e43854fe19316f0ee420201afdc24a3962968d36391546d53341709c340e5251"
+    },
+    {
+      "path": "data/scenery-variants-negative-20261024.log",
+      "sha256": "38a75ee9738ddf424ae6c20cec2a2ca26a78507e1d4280013d5f2ee5bd5ab5f9"
+    },
+    {
+      "path": "data/scenery-variants-green-final-20261024.log",
+      "sha256": "d52e878cb20dda8cac46dca39a80678db45a17d089c0266f6fc350d43ab3a1a7"
+    },
+    {
+      "path": "data/scenery-variants-full-20261024.log",
+      "sha256": "47210276e9c851bad5cbdd1ebc3565ebc72715aed7b2bb93daa33b3c40342c30"
+    },
+    {
+      "path": "data/scenery-variants-types-20261024.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "data/scenery-variants-build-20261024.log",
+      "sha256": "f6e60ecab617a2c31f5efe948a3db2b93b092b2c453059a74247b40870897bb2"
+    },
+    {
+      "path": "data/scenery-variants-build-exit-20261024.json",
+      "sha256": "ea61d7736f0b7ecb9b35158f03de77013db6b100cf1d36c957e78e6c8817c5b6"
+    },
+    {
+      "path": "data/scenery-variants-canvas-20261024.ts",
+      "sha256": "3ac0f8fe71b21fe196de9d0aa10ca626b8dc3bd8014a00101362a40c3193d4b2"
+    },
+    {
+      "path": "data/scenery-variants-canvas-20261024.html",
+      "sha256": "9eddd567bb19e763ec2000f2e433d224c161a277e6cde12408a57b1c36da889d"
+    },
+    {
+      "path": "data/scenery-variants-canvas-20261024.js",
+      "sha256": "62953270581cbb1e5aaf3c342855569a820f16611f4d1206d2aecd966ad9fbee"
+    },
+    {
+      "path": "data/scenery-variants-baseline-20261024.js",
+      "sha256": "f4bdb7c311ff10fbb90a4561a23d8cf664a1a1bd0a74e5ada2abed06b36d31ef"
+    },
+    {
+      "path": "data/scenery-variants-candidate-20261024.js",
+      "sha256": "ac1cc74800cec34f01f9850070a78119c8d79b5aa04e67d816da216f155b8cbd"
+    },
+    {
+      "path": "data/scenery-variants-canvas-build-20261024.log",
+      "sha256": "b5c59d99c72ae87ec93fdc0440277072ee1b36a9e8c2e62528037dc626c72e08"
+    },
+    {
+      "path": "data/scenery-variants-canvas-initial-20261024.json",
+      "sha256": "914d04b7279356f02523a138316b04a6557d0b5aa31de6e6088bef4a63ed964c"
+    },
+    {
+      "path": "data/scenery-variants-canvas-second-20261024.json",
+      "sha256": "3d4521177e65a6297a5ce25329649e5e8574966b1f88bf443c364d4202e9106c"
+    },
+    {
+      "path": "data/scenery-variants-canvas-20261024.json",
+      "sha256": "fa95fa9fa527f6375cf4693250ed981ecb2052feafc46d585d63fc67742eb8e0"
+    },
+    {
+      "path": "data/scenery-variants-woodland-initial-20261024.png",
+      "sha256": "ccf60160460759306234ffad4bc504665219ec4c862f5c670aaf5ccab3061310"
+    },
+    {
+      "path": "data/scenery-variants-woodland-20261024.png",
+      "sha256": "463aa79b8e67acdfaa7aaa6a1bcfe753aa7fad29045d237806d1c4262fff8979"
+    },
+    {
+      "path": "data/scenery-variants-quarry-20261024.png",
+      "sha256": "7d3a33ecfd64d31ac25fd073fb8ad93c4bde9db39ee35328e9f50d3a14457e1c"
+    },
+    {
+      "path": "data/scenery-variants-wetland-20261024.png",
+      "sha256": "9ee06f53c7ab2adefe0d22a4925243355b216ab70911954522b6b19e593a4985"
+    },
+    {
+      "path": "data/scenery-variants-industrial-20261024.png",
+      "sha256": "239162794a5086944b55a71a12ec443dea036d4f2ae524c0d065ab57d58516c4"
+    },
+    {
+      "path": "data/scenery-variants-player-fade-20261024.png",
+      "sha256": "236ec6a9d49ad9fc5d41b4b209ca587484b71384350b4414d7ac950bb15a22d8"
+    },
+    {
+      "path": "data/scenery-variants-fallback-20261024.png",
+      "sha256": "8997cbcb3d636cdb207d8519dd7290b3da39a0fc489fe1c90c83d5d3f5c9c31b"
+    },
+    {
+      "path": "data/scenery-variants-cleanup-20261024.json",
+      "sha256": "1f99263e1546b37bd6afab653f3ecaac631a93d1cfa33d613b311a208877f5d3"
+    },
+    {
+      "path": "data/scenery-variants-accepted-bundle-DAKYpUWo.js",
+      "sha256": "18a34bc99d95cef06bcabd55499d782b0f08c5fdbcefc602917a550a4b8f658d"
+    },
+    {
+      "path": "data/scenery-variants-accepted-index.html",
+      "sha256": "195260991db826c4c1473723106e7fd5944d077eea00eb53f217a7e444f91df7"
+    },
+    {
+      "path": "data/audit-scenery-variants-20261024.ts",
+      "sha256": "c894319a59c3575b8204ac998e8401a29d148ecd68b5155d313ce7e36d89b1ef"
+    },
+    {
+      "path": "data/negative-scenery-variants-20261024.cjs",
+      "sha256": "8d1e41a80288bd04c6abccc3b9018740d98495154a930cf51ca0fc71d26cb856"
+    },
+    {
+      "path": "data/inspect-scenery-variants-20261024.py",
+      "sha256": "f33842e82f207d63cfb08bcfabb764dcfb19fdce7b3e939b53521cb5be52fc0d"
+    },
+    {
+      "path": "data/build-scenery-variants-canvas-20261024.cjs",
+      "sha256": "7ecc51eb292ffe6039ff3c00121151ab5b667dbc3a1e1eef473e61228085b0e5"
+    },
+    {
+      "path": "data/serve-scenery-variants-canvas-20261024.cjs",
+      "sha256": "0afbff055fafdc1bf5dff1c67f82ead5ebedc59707a8ae5fb36ac5b9102b6d1d"
+    },
+    {
+      "path": "data/publish-scenery-variants-20261024.cjs",
+      "sha256": "e7960c36f1416e0ea7e7a3d4c0202c6040d27a18d2841facc2cdb135886664fc"
+    },
+    {
+      "path": "data/scenery-variants-review-20261024.json",
+      "sha256": "db921303a5c83b4b786db2b9262ce393823f9f52961f1aef1ece1e75a4198ff9"
+    }
+  ]
+}

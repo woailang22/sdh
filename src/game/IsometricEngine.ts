@@ -4430,7 +4430,11 @@ export class IsometricEngine {
     const player = this.toScreen(this.player.x, this.player.y);
     const overlapsPlayer = s.y >= player.y - 8 && Math.abs(s.x - player.x) < size * 0.4 && player.y - 38 >= s.y - size * 0.94 && player.y - 38 <= s.y;
     if (overlapsPlayer || Math.hypot(prop.x - this.player.x, prop.y - this.player.y) < 2.5) this.ctx.globalAlpha = 0.24;
-    if (!this.drawArtFrame('world-environment-v1.png', prop.kind, s.x - size / 2, s.y - size * 0.94, size, size)) {
+    // Measured alpha>=64 ground contacts within each 512px alternate cell.
+    const contact = prop.kind === 'understory' ? 462 : prop.kind === 'outcrop' ? 453 : prop.kind === 'reeds' ? 457
+      : prop.kind === 'tank' ? 422 : prop.kind === 'rubble' ? 434 : 432;
+    const alternate = prop.variant === 1 && this.drawArtFrame('world-environment-v2.png', prop.kind, s.x - size / 2, s.y - size * contact / 512, size, size);
+    if (!alternate && !this.drawArtFrame('world-environment-v1.png', prop.kind, s.x - size / 2, s.y - size * 0.94, size, size)) {
       if (prop.kind === 'understory' || prop.kind === 'fence') this.drawWastelandShrub(prop.x, prop.y);
       else if (prop.kind === 'reeds') this.drawReedsAndLilies(prop.x, prop.y);
       else this.drawQuarryBoulders(prop.x, prop.y);

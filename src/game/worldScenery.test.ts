@@ -4,6 +4,26 @@ import { groupBuildingsIntoHouses, houseCorners } from './house';
 import { generateWorldScenery } from './worldScenery';
 
 describe('world environment placement', () => {
+  it('uses stable alternate silhouettes across woodland, rock, wetland and industrial scenery without adding anchors', () => {
+    const variants = new Map<string, Set<number>>();
+    for (const [left, top] of [[-4, -3], [-8, -12], [18, -4], [-2, 7]]) {
+      for (let cx = left; cx < left + 8; cx++) for (let cy = top; cy < top + 8; cy++) {
+        const chunk = generateWorldChunk(cx, cy), before = structuredClone(chunk);
+        const scenery = generateWorldScenery(chunk);
+        expect(generateWorldScenery(chunk)).toEqual(scenery);
+        expect(chunk).toEqual(before);
+        for (const prop of scenery) {
+          expect([0, 1]).toContain(prop.variant);
+          if (prop.kind === 'grass' || prop.kind === 'shrub') continue;
+          const seen = variants.get(prop.kind) ?? new Set<number>();
+          seen.add(prop.variant!); variants.set(prop.kind, seen);
+        }
+      }
+    }
+    for (const kind of ['understory', 'outcrop', 'reeds', 'tank', 'rubble', 'fence']) {
+      expect([...variants.get(kind) ?? []].sort(), kind).toEqual([0, 1]);
+    }
+  });
   it('recreates bounded scenery across the world without changing gameplay resources', () => {
     for (const [cx, cy] of [[-2, 0], [0, -2], [2, 1], [18, 1], [-20, -10], [-31, 30]]) {
       const chunk = generateWorldChunk(cx, cy), before = structuredClone(chunk);
