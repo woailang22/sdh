@@ -1093,7 +1093,6 @@ export default function App() {
       });
       setRifleOwned((v) => v || hotbarSlotsRef.current.some((s) => s?.id === 'rifle'));
       setDarkCoreGot((v) => v || playerStatsRef.current.shards >= 12);
-      setClaimedPlot((v) => v || String(currentMapIdRef.current).startsWith('home_'));
 
       setSquadMembers((prev) => [
         {

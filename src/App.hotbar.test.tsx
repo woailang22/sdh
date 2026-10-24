@@ -1,15 +1,20 @@
 import React from 'react';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import App from './App';
 import { Hotbar } from './components/Hotbar';
 import { InventoryModal } from './components/InventoryModal';
 import { createMemoryDb } from '../server/db';
 import { GameWorld, type WorldRules } from '../server/worldState';
 import { makeItem } from './game/items';
+import { QuestPanel } from './components/QuestPanel';
 
 // Exercise real App callbacks and server transactions, not browser layout or transport timing.
 const hooks = vi.hoisted(() => ({ states: [] as any[], refs: [] as any[], effects: [] as (() => unknown)[], stateCursor: 0, refCursor: 0 }));
 const net = vi.hoisted(() => ({ callbacks: null as any, manager: null as any, sent: [] as any[], sequence: 0 }));
+const engineView = vi.hoisted(() => ({ engine: null as any, callbacks: null as any }));
+vi.mock('./game/IsometricEngine', () => ({ IsometricEngine: class {
+  constructor(_canvas: unknown, callbacks: unknown) { engineView.callbacks = callbacks; return engineView.engine; }
+} }));
 vi.mock('react', async original => ({ ...await original<typeof import('react')>(),
   useState(initial: any) { const index = hooks.stateCursor++; if (!(index in hooks.states)) hooks.states[index] = typeof initial === 'function' ? initial() : initial;
     return [hooks.states[index], (next: any) => { hooks.states[index] = typeof next === 'function' ? next(hooks.states[index]) : next; }]; },
@@ -42,8 +47,10 @@ function setup(initialPosition?: { x: number; y: number }, stateBeforeEngine = f
   if (initialPosition) Object.assign(player, initialPosition);
   player.inventory[0] = makeItem('water', 3); player.inventory[2] = makeItem('pickaxe_stone', 1); player.satiety = 20; game.persist();
   const engine: any = { inputBlocked: false, activeSlot: 1, currentMapId: 'world', buildings: [], player: {}, getMapName: () => '测试地图', setAuthoritativeAmmo() {},
+    monsters: [], teammates: [], interactables: [], mapWaypoints: [], setWeather() {}, start() {}, stop() {}, dispose() {},
     setAuthoritativeBuildings(buildings: unknown[]) { this.buildings = buildings; }, setResourceStates() {}, setAuthoritativeMonsters() {}, setAuthoritativeDrops() {} };
-  engine.warpToMap = vi.fn((mapId: string, x: number, y: number) => { engine.currentMapId = mapId; Object.assign(engine.player, { x, y }); });
+  engineView.engine = engine;
+  engine.warpToMap = vi.fn((mapId: string, x: number, y: number) => { engine.currentMapId = mapId; Object.assign(engine.player, { x, y }); engineView.callbacks?.onMapZoneChange(mapId); });
   const render = () => { hooks.stateCursor = hooks.refCursor = 0; hooks.effects = []; return App(); };
   render(); if (!stateBeforeEngine) hooks.refs[1].current = engine; // App's existing engine ref; no engine/frame loop is started.
   const networkEffect = hooks.effects.find(effect => effect.toString().includes('onGameState:'));
@@ -56,7 +63,36 @@ function setup(initialPosition?: { x: number; y: number }, stateBeforeEngine = f
   return { db, game, player, engine, render, hotbar, deliver, flush, advance: () => { now += 2000; } };
 }
 
-beforeEach(() => { hooks.states = []; hooks.refs = []; hooks.effects = []; hooks.stateCursor = hooks.refCursor = 0; net.callbacks = net.manager = null; net.sent = []; net.sequence = 0; });
+beforeEach(() => { hooks.states = []; hooks.refs = []; hooks.effects = []; hooks.stateCursor = hooks.refCursor = 0; net.callbacks = net.manager = null; net.sent = []; net.sequence = 0; engineView.engine = engineView.callbacks = null; });
+afterEach(() => { vi.useRealTimers(); vi.restoreAllMocks(); vi.unstubAllGlobals(); });
+
+describe('authoritative camp ownership guide', () => {
+  it('does not claim another camp during real view-sync ticks, and retains the owner progress in the public world', () => {
+    vi.useFakeTimers(); vi.stubGlobal('document', { hidden: false });
+    const f = setup();
+    // Close the real boot overlay, then run the existing engine/view effect with a controlled projection.
+    const boot = (f.render().props.children as React.ReactNode[]).find(node => React.isValidElement<any>(node) && node.type === 'div' && typeof (node as React.ReactElement<any>).props.onClick === 'function') as React.ReactElement<any>;
+    expect(boot).toBeDefined(); boot.props.onClick(); hooks.refs[0].current = {};
+    f.render(); const effect = hooks.effects.find(callback => callback.toString().includes('setRadarEntities'));
+    expect(effect).toBeDefined(); const cleanup = effect!() as (() => void);
+    const claim = () => find(f.render(), QuestPanel)!.props.steps.find((step: any) => step.id === 'claim');
+    try {
+      f.game.connect('unit-other', '另一营地主人'); const other = f.game.state.players['unit-other']; other.resources.wood = 20; other.resources.stone = 10;
+      Object.assign(other, { x: 10, y: 10 }); Object.assign(f.player, { x: 10, y: 10 });
+      expect(f.game.action(other.id, { requestId: 'unit-other-camp', action: 'create_camp', x: 10, y: 10 }).error).toBeUndefined();
+      expect(f.game.action(f.player.id, { requestId: 'unit-visit', action: 'enter_camp', campId: other.campId! }).error).toBeUndefined();
+      f.deliver(f.game.snapshot(f.player.id)); expect(f.player.campId).toBeNull();
+      expect(claim().done).toBe(false); vi.advanceTimersByTime(240);
+      expect(claim().done).toBe(false); expect(claim().progressText).not.toBe('1/1');
+      expect(f.game.action(f.player.id, { requestId: 'unit-leave', action: 'leave_camp' }).error).toBeUndefined();
+      f.deliver(f.game.snapshot(f.player.id)); vi.advanceTimersByTime(120); expect(claim().done).toBe(false);
+      Object.assign(f.player, { x: 100, y: 100 }); f.player.resources.wood = 20; f.player.resources.stone = 10;
+      expect(f.game.action(f.player.id, { requestId: 'unit-own-camp', action: 'create_camp', x: 100, y: 100 }).error).toBeUndefined();
+      f.deliver(f.game.snapshot(f.player.id)); vi.advanceTimersByTime(240);
+      expect(f.player.mapId).toBe('world'); expect(claim()).toMatchObject({ done: true, progressText: '1/1' });
+    } finally { cleanup(); }
+  });
+});
 
 describe('first authoritative view initialization', () => {
   it.each([false, true])('loads the first same-world position once, including a state received before the engine (%s)', early => {
