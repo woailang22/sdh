@@ -79,6 +79,8 @@ export default function App() {
   const [currentMapId, setCurrentMapId] = useState<MapZoneId>('world');
   const [gameState, setGameState] = useState<GameStateSnapshot | null>(null);
   const gameStateRef = useRef<GameStateSnapshot | null>(null);
+  const pendingEquipRef = useRef<string | null>(null);
+  const [equipPending, setEquipPending] = useState(false);
   const [campOpen, setCampOpen] = useState(false);
   const [managedBuilding, setManagedBuilding] = useState<BuildingEntity | null>(null);
   const [actionNotice, setActionNotice] = useState('');
@@ -305,7 +307,10 @@ export default function App() {
     if (gameStateRef.current) {
       const item = hotbarSlotsRef.current[idx];
       if (!item || !isEquipment(item)) return false;
-      netManagerRef.current?.gameAction('equip', { slot: item.category, index: idx });
+      const net = netManagerRef.current;
+      if (!net?.isConnected || pendingEquipRef.current) return false;
+      pendingEquipRef.current = net.gameAction('equip', { slot: item.category, index: idx });
+      setEquipPending(true);
       return true;
     }
     const cur = [...hotbarSlotsRef.current];
@@ -361,7 +366,12 @@ export default function App() {
 
   // 脱装备：装备栏 → 背包（空间不足时拒绝缩容）
   const unequipSlot = useCallback((slot: 'weapon' | 'armor' | 'tool' | 'pack') => {
-    if (gameStateRef.current) { netManagerRef.current?.gameAction('unequip', { slot }); return; }
+    if (pendingEquipRef.current) return;
+    if (gameStateRef.current) {
+      const net = netManagerRef.current;
+      if (!net?.isConnected) return;
+      pendingEquipRef.current = net.gameAction('unequip', { slot }); setEquipPending(true); return;
+    }
     const eq = { ...equipmentRef.current };
     const item = eq[slot];
     if (!item) return;
@@ -409,6 +419,7 @@ export default function App() {
 
   // 丢弃整叠
   const dropItem = useCallback((idx: number) => {
+    if (pendingEquipRef.current) return;
     if (gameStateRef.current) { netManagerRef.current?.gameAction('drop', { index: idx }); return; }
     const cur = [...hotbarSlotsRef.current];
     const item = cur[idx];
@@ -524,7 +535,20 @@ export default function App() {
     netManagerRef.current.gameAction(action, payload);
   }, [pushSystemMsg]);
 
+  const handleSelectSlot = useCallback((slotIdx: number) => {
+    const engine = engineRef.current;
+    if (!engine || engine.inputBlocked || !Number.isInteger(slotIdx) || slotIdx < 1 || slotIdx > 6) return;
+    const index = slotIdx - 1, item = hotbarSlotsRef.current[index];
+    const selected = item && isEquipment(item) ? 0 : slotIdx;
+    setActiveSlot(selected); engine.activeSlot = selected;
+    if (item && isEquipment(item)) equipItem(index);
+    else if (item?.category === 'food' || item?.category === 'medical') sendGameAction('use_item', { index });
+  }, [equipItem, sendGameAction]);
+
   const applyGameState = useCallback((state: GameStateSnapshot) => {
+    if (pendingEquipRef.current && state.requestId === pendingEquipRef.current) {
+      pendingEquipRef.current = null; setEquipPending(false);
+    }
     const prev = gameStateRef.current;
     gameStateRef.current = state;
     setGameState(state);
@@ -898,6 +922,7 @@ export default function App() {
       onConnectionChange: (connected, pingMs) => {
         setIsConnected(connected);
         setPing(pingMs);
+        if (!connected) { pendingEquipRef.current = null; setEquipPending(false); }
         if (!connected && engineRef.current) {
           engineRef.current.inputBlocked = true;
         }
@@ -946,6 +971,7 @@ export default function App() {
         }
       },
       onGameAction: sendGameAction,
+      onSelectHotbarSlot: handleSelectSlot,
       onCampInteract: () => {
         const eng = engineRef.current;
         if (!eng) return false;
@@ -1091,13 +1117,6 @@ export default function App() {
     if (!engine) return;
     engine.inputBlocked = !isConnected || !!activeModal || campOpen || !!raidDoor || !!lootPanel || isOnlinePlayersOpen || renderDetailsOpen;
   }, [isConnected, activeModal, campOpen, raidDoor, lootPanel, isOnlinePlayersOpen, renderDetailsOpen]);
-
-  const handleSelectSlot = useCallback((slotIdx: number) => {
-    setActiveSlot(slotIdx);
-    if (engineRef.current) {
-      engineRef.current.activeSlot = slotIdx;
-    }
-  }, []);
 
   // Item effects and consumption are committed by the server.
   const handleUseItem = useCallback((index: number) => {
@@ -1419,8 +1438,10 @@ export default function App() {
           slots={hotbarSlots.slice(0, 6)}
           activeSlotIndex={activeSlot}
           ammo={ammo}
+          equippedTool={equipment.tool}
+          equipPending={equipPending}
+          disabled={!isConnected}
           onSelectSlot={handleSelectSlot}
-          onUseItem={handleUseItem}
         />
       </div>
 
@@ -1598,6 +1619,7 @@ export default function App() {
         onClose={() => setActiveModal(null)}
         hotbar={hotbarSlots}
         equipment={equipment}
+        equipmentPending={equipPending}
         materials={{ wood: playerWood, stone: playerStone, scrap: playerScrap, parts: playerParts }}
         onUseItem={handleUseItem}
         onEquip={equipItem}

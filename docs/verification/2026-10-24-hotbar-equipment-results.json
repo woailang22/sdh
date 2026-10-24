@@ -1,0 +1,539 @@
+{
+  "kind": "authoritative-hotbar-equipment-activation",
+  "base": "7af86d8cf5c82849d9c71d16092923edac0b00a7",
+  "planningCommit": "d882e3b",
+  "goalComplete": false,
+  "problem": "Hotbar clicks and number keys previously selected a bag slot without equipping the tool; gathering therefore used the previously equipped axe or pickaxe.",
+  "change": "Activate first six slots through existing server equip/use_item handlers. Show confirmed tool. Gate equip/unequip/drop until matching request acknowledgement or disconnection. Ignore numeric auto-repeat; keep editor, modal and typing guards. Food remains usable while awaiting equipment confirmation.",
+  "productionFiles": [
+    "src/App.tsx",
+    "src/components/Hotbar.tsx",
+    "src/components/InventoryModal.tsx",
+    "src/game/IsometricEngine.ts"
+  ],
+  "unchanged": "Server transactions, recipes, cooldowns, gathering yields, collision, world/resource layout and art.",
+  "gates": {
+    "targetedTests": 204,
+    "full": {
+      "files": 49,
+      "tests": 772,
+      "exitCode": 0
+    },
+    "negativeControls": [
+      {
+        "case": "ack",
+        "exitCode": 1,
+        "restoredExactBytes": true
+      },
+      {
+        "case": "repeat",
+        "exitCode": 1,
+        "restoredExactBytes": true
+      }
+    ],
+    "types": "passed including QA sources",
+    "build": {
+      "exitCode": 0,
+      "bundle": "index-XJsiO6j_.js",
+      "existingWarnings": [
+        "Vite native config __dirname",
+        "chunk over500kB"
+      ]
+    },
+    "review": {
+      "source": "quality_review independent read-only review",
+      "sourceResult": "no-new-P1-P2",
+      "evidenceResult": "passed-no-new-P1-P2; all76 source hashes, final gates, native counts, persistence and bounded claims checked; no public identities or credentials found",
+      "scope": "No execution by reviewer; static source and existing native records only; unsupported no-dash claim removed"
+    }
+  },
+  "native": {
+    "passed": true,
+    "sameEarnedCharacter": true,
+    "noStateInjection": true,
+    "noRollback": true,
+    "phases": [
+      {
+        "phase": "native",
+        "packets": 4267,
+        "rejected": 0,
+        "corrections": 3,
+        "errors": 0,
+        "overflow": 0,
+        "actions": 0
+      },
+      {
+        "phase": "resupply",
+        "packets": 271,
+        "rejected": 0,
+        "corrections": 2,
+        "errors": 0,
+        "overflow": 0,
+        "actions": 7
+      },
+      {
+        "phase": "return",
+        "packets": 346,
+        "rejected": 0,
+        "corrections": 1,
+        "errors": 0,
+        "overflow": 0,
+        "actions": 0
+      },
+      {
+        "phase": "return2",
+        "packets": 665,
+        "rejected": 1,
+        "corrections": 3,
+        "errors": 0,
+        "overflow": 0,
+        "actions": 11
+      },
+      {
+        "phase": "reconnect",
+        "packets": 24,
+        "rejected": 0,
+        "corrections": 1,
+        "errors": 0,
+        "overflow": 0,
+        "actions": 0
+      }
+    ],
+    "actions": {
+      "total": 18,
+      "uniqueRequests": true,
+      "uses": [
+        "food",
+        "food",
+        "water"
+      ],
+      "equipmentSwaps": 2,
+      "heldNumberKeyMs": 1500,
+      "inventoryOpenNumberKeyGeneratedNoAction": true,
+      "chatTypingNotExercised": true
+    },
+    "conservation": {
+      "allPhasesPlayerEquipmentStorageAndDrops": true,
+      "recoveredItems": [
+        {
+          "itemId": "water",
+          "count": 3
+        },
+        {
+          "itemId": "seed_potato",
+          "count": 1
+        },
+        {
+          "itemId": "axe_stone",
+          "count": 1
+        },
+        {
+          "itemId": "wood",
+          "count": 1
+        },
+        {
+          "itemId": "stone",
+          "count": 1
+        },
+        {
+          "itemId": "part",
+          "count": 2
+        },
+        {
+          "itemId": "ammo",
+          "count": 20
+        }
+      ],
+      "finalDropCount": 0,
+      "buildings": 7
+    },
+    "failuresAndBounds": {
+      "firstNativeEndedWithoutPlannedActions": true,
+      "observedHungerRespawnResets": 1,
+      "resetCountOnlyFromRecordedAdjacentPackets": true,
+      "initialBootClickAttemptDidNotEnter": true,
+      "nonTtyControllerEndedOnStdinEOF": true,
+      "firstReturnBlockedAtFarmWalls": true,
+      "oneRejectedMoveReasonNotInstrumented": true,
+      "allRawRecordsRetained": true,
+      "spaceDidNotProduceExtraUseAction": true,
+      "dashPacketFlagNotCaptured": true,
+      "noNativeHarvestInThisStage": true,
+      "noPerformanceAcceptance": true
+    },
+    "final": {
+      "x": 1.269610225620447,
+      "y": 25.75285707579584,
+      "map": "camp",
+      "hp": 100,
+      "shield": 50,
+      "satiety": 79.53250000000001,
+      "resources": {
+        "wood": 1,
+        "stone": 1,
+        "scrap": 0,
+        "parts": 2,
+        "food": 0,
+        "ammo": 20,
+        "c4": 0,
+        "medical": 0,
+        "credits": 0,
+        "shard": 0
+      },
+      "items": [
+        [
+          "food",
+          1
+        ],
+        [
+          "water",
+          4
+        ],
+        [
+          "seed_potato",
+          2
+        ],
+        [
+          "axe_stone",
+          1
+        ]
+      ],
+      "equippedTool": "pickaxe_stone"
+    },
+    "persistence": {
+      "integrity": "ok",
+      "consistentBackup": "data/cua-hotbar-equipment-20261024-a1.sqlite.backup-2026-10-24T04-06-29-467Z",
+      "restoredThroughActualGameWorldIntoMemory": true,
+      "satietyDifferenceSinceCheckpoint": 0
+    },
+    "goalComplete": false
+  },
+  "evidence": {
+    "screenshots": [
+      "data/hotbar-native-confirmed-20261024.png",
+      "data/hotbar-native-reconnected-20261024.png"
+    ],
+    "raw": "Local ignored data files contain private observer records; public report includes hashes and sanitized aggregates only."
+  },
+  "limits": [
+    "First native session ended without planned actions after natural hunger death; normal resupply and drop recovery followed without rollback. Recorded adjacent packets show one respawn reset; this is not a complete death census.",
+    "First return was blocked inside farm walls; second return used the actual doorway. One movement packet rejected and ten corrections remain; rejection reason was not instrumented.",
+    "Native observer omitted dash flags and stamina. No extra use_item is proven; no-dash is not established from these logs. Unit tests cover Space propagation. Chat typing was not exercised.",
+    "Native real tool switching and persistence verified; this stage did not perform a native harvest with the new shortcut. Memory GameWorld tests cover actual yields and conservation.",
+    "Hook/transport test fixture is not actual browser scheduling; native local ACKs do not establish high-latency behavior. Controlled tests cover pending, unrelated/failed ACK and disconnect.",
+    "No claim of fixed black screens, 60-second uninterrupted walking, GPU, browser total memory, complete world economy, earned paid offline defense or overall goal completion."
+  ],
+  "cleanup": {
+    "port": 39147,
+    "listeners": 0,
+    "ownedControllerSessionsTerminal": true,
+    "tabs": 0,
+    "productionDatabaseOpened": false
+  },
+  "sources": [
+    {
+      "path": "src/App.tsx",
+      "sha256": "a75732b3cc13c85e7d08279291f6f70c89be9a7c9607af7b3af208f24ff7e48b"
+    },
+    {
+      "path": "src/App.hotbar.test.tsx",
+      "sha256": "b3ee522fba1964afdaa74cdf6f74269a595a0d983f6aedee4d8b8f62fd0b1be0"
+    },
+    {
+      "path": "src/components/Hotbar.tsx",
+      "sha256": "8a6d7cf26752c88fecf55c4bba81e5d8ed447772b06d752c20eaf9fe54fefdcd"
+    },
+    {
+      "path": "src/components/Hotbar.test.tsx",
+      "sha256": "fd53b4dd32a6e6e9eab889f78099d7b833b2bf8d77c5bc3a728db4196d70efd7"
+    },
+    {
+      "path": "src/components/InventoryModal.tsx",
+      "sha256": "b7ce53856b43a54a722e8fb06e226a85b6bcd46ea6dbdfeb7b80edc1f90bde9a"
+    },
+    {
+      "path": "src/game/IsometricEngine.ts",
+      "sha256": "4795e485b09b63c32be3d12a835dbcb6a1b933605cff53cf537bcd4853330a86"
+    },
+    {
+      "path": "src/game/IsometricEngine.test.ts",
+      "sha256": "ac45160e87b3cdce4ff74eb41d74aedc91b6b39538c3682f31244fbcdfe3b69a"
+    },
+    {
+      "path": "docs/superpowers/specs/2026-10-24-hotbar-authoritative-equipment-design.md",
+      "sha256": "6bf90e323b99f2ae90fbe5775c2e3e3a22fd4e1f336a93ba9c0855125079d584"
+    },
+    {
+      "path": "docs/superpowers/plans/2026-10-24-hotbar-authoritative-equipment.md",
+      "sha256": "de380d3daf9b8141213129cbbefbcef7fb4933cde070d08a4bc049dcf8d031ab"
+    },
+    {
+      "path": "docs/superpowers/plans/2026-10-20-seamless-world-camps.md",
+      "sha256": "2e7e98eb5856755433bd77ba23c199c374aa3b8a20cae09f08e79817fa49c843"
+    },
+    {
+      "path": "data/prepare-hotbar-equipment-20261024.ts",
+      "sha256": "dfabbb4be12adbec9cf85298966262d4ac632d839453a07d958eb032b4b004b5"
+    },
+    {
+      "path": "data/capture-cua-hotbar-equipment-20261024-a1.ts",
+      "sha256": "bc52a107528395da1c4f00f711ee156b75e513a95d1904d73f50851925b6d834"
+    },
+    {
+      "path": "data/control-cua-hotbar-equipment-20261024-a1.cjs",
+      "sha256": "ace28e03f82d907b812f7a0e49d1dfbc56ffd79fcebb37a8a6037da61046d535"
+    },
+    {
+      "path": "data/negative-hotbar-equipment-20261024.cjs",
+      "sha256": "3ee38f8a1eb6b5148363955db2147ecac8906f60b240fb1394d3d40d3bce86a9"
+    },
+    {
+      "path": "data/audit-hotbar-equipment-20261024.ts",
+      "sha256": "5a4e271f5740ece637f09ad1deabe1ac05e37f264918ed159880158914927582"
+    },
+    {
+      "path": "data/publish-hotbar-equipment-20261024.cjs",
+      "sha256": "10f052e52e7dd2c1512808bc04ca376ed278750d4564c8f468943ad7268ad95e"
+    },
+    {
+      "path": "data/hotbar-equipment-source-backup-20261024.json",
+      "sha256": "297b1d523b016698fc407ba51c0d65f864a9a2c9f2bffede827b720b81866d9a"
+    },
+    {
+      "path": "data/hotbar-equipment-prepare-20261024.log",
+      "sha256": "6e052a4b90918a965a84e162e29551151bf06513463e7c9093353ab211ccef76"
+    },
+    {
+      "path": "data/hotbar-equipment-red-helper-failure-20261024.log",
+      "sha256": "e3c21aa871ccaa609934db6965b93737a7058a7ccded83ca6bf2dc2729514692"
+    },
+    {
+      "path": "data/hotbar-equipment-red-20261024.log",
+      "sha256": "0fb8751ec66fcff3e85fae7606624f268e2b263414583fa59b5abda8d6e26ef2"
+    },
+    {
+      "path": "data/hotbar-equipment-pending-red-20261024.log",
+      "sha256": "7cc5d9679bda0eeef5b41d576e292a94c73796d01889b66b5eedb6fb255c4ee1"
+    },
+    {
+      "path": "data/hotbar-equipment-green-20261024.log",
+      "sha256": "0e31012e19970c36948d79c625be53e7bb10185cb5deaf964dcfcaea06305bdc"
+    },
+    {
+      "path": "data/hotbar-equipment-green-before-clock-fix-20261024.log",
+      "sha256": "32f3cd01ff08993ea2cc6a0e8ce84b2918f79a7b546c53bca37ff60d3d3b1d6e"
+    },
+    {
+      "path": "data/hotbar-equipment-green-final-20261024.log",
+      "sha256": "79a993ce68f1410aa30fd7f62bffa95b0c1fdb6f6eff5f707a0fefc35ce8c598"
+    },
+    {
+      "path": "data/hotbar-equipment-negative-20261024.json",
+      "sha256": "cf353c5c8d3022e5c097a2d536be7f954501fa3c88dfa28107ff1b60c0d6203f"
+    },
+    {
+      "path": "data/hotbar-equipment-negative-ack-20261024.log",
+      "sha256": "c83faebd250eccc041800f43546636132501a6f81a80c0ec39dbd3cef8df6451"
+    },
+    {
+      "path": "data/hotbar-equipment-negative-repeat-20261024.log",
+      "sha256": "5d8bb55c6e5dd900531b7e81368b370025a1cf010fe1e8ee119f8a2b642d193b"
+    },
+    {
+      "path": "data/hotbar-equipment-full-20261024.log",
+      "sha256": "1b78fc908e072a9ad2b1db4e2c6fa5ea1570fb6a2d736111cdc65daf704a1c0f"
+    },
+    {
+      "path": "data/hotbar-equipment-full-final-20261024.log",
+      "sha256": "f8e092058e36a6212e5d5e59df47511095c16213651c64ea6343bd0b6aca7a6b"
+    },
+    {
+      "path": "data/hotbar-equipment-full-final-exit-20261024.json",
+      "sha256": "420d0b86662fc0dc3d1e287aaca3ac7117756ff7ce8b6b72238d3f92e9a4a48b"
+    },
+    {
+      "path": "data/hotbar-equipment-component-final-20261024.log",
+      "sha256": "15ab820132b629461549705bb045c8403dd2116d6126354d972f3d6ed5c3e8a3"
+    },
+    {
+      "path": "data/hotbar-equipment-types-script-failure-20261024.log",
+      "sha256": "a7c084df4a467a7305e7e0ee74dbfd9f6131127910e028e75fac7bef1d0c470f"
+    },
+    {
+      "path": "data/hotbar-equipment-types-react-failure-20261024.log",
+      "sha256": "50a78bb3fec86d4508429f8d0fe3a6368efdd6ca7e2d7b9423025b45d5992419"
+    },
+    {
+      "path": "data/hotbar-equipment-types-audit-failure-20261024.log",
+      "sha256": "d86c0145115e794c077d2686fcf83e540c527b4118f2a03317e1279451edc800"
+    },
+    {
+      "path": "data/hotbar-equipment-types-delivery-20261024.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "data/hotbar-equipment-types-delivery-exit-20261024.json",
+      "sha256": "420d0b86662fc0dc3d1e287aaca3ac7117756ff7ce8b6b72238d3f92e9a4a48b"
+    },
+    {
+      "path": "data/hotbar-equipment-build-delivery-20261024.log",
+      "sha256": "05e1ff1deb9a178326b96890de07ef009c44022a7f66e01ee8e9de1f05f2217b"
+    },
+    {
+      "path": "data/hotbar-equipment-build-delivery-exit-20261024.json",
+      "sha256": "420d0b86662fc0dc3d1e287aaca3ac7117756ff7ce8b6b72238d3f92e9a4a48b"
+    },
+    {
+      "path": "data/hotbar-equipment-native-audit-20261024.json",
+      "sha256": "c4ebfa57b58be6303c0549c95d77fb25b6e43341ae85d5338b059fc4b0e9db21"
+    },
+    {
+      "path": "data/hotbar-equipment-native-audit-20261024.log",
+      "sha256": "fa187bff808764914d10ca94254f03d04c7443e138fcbac92d02ffbb5b67e947"
+    },
+    {
+      "path": "data/hotbar-equipment-browser-cleanup-20261024.json",
+      "sha256": "8529cea8440c9f54cb36cb1c62e389d03222e52639280ad31420c0e41dcbc220"
+    },
+    {
+      "path": "data/hotbar-equipment-cleanup-20261024.json",
+      "sha256": "9767ce65f6ac6b619565d0984255de9c711080b04dafe4805ffe34c04ddaf1c4"
+    },
+    {
+      "path": "data/hotbar-equipment-review-20261024.json",
+      "sha256": "1a3a3483d1451d384a363aa9bb224aaca4aa5cf2cb9a37da632bdb2f9a158140"
+    },
+    {
+      "path": "data/hotbar-equipment-accepted-bundle-XJsiO6j_.js",
+      "sha256": "a4fcb0afdcd1ce53e960be320d7db298ef305983ac340097a3b2cd8b3d2e223f"
+    },
+    {
+      "path": "data/hotbar-equipment-accepted-index.html",
+      "sha256": "64146e8df4a39f88385c9d817f4eb3f5f7c8074da24d085e6d96e30bb0db9ac3"
+    },
+    {
+      "path": "data/cua-hotbar-equipment-20261024-a1-native-connected-world-private.json",
+      "sha256": "e590f2ef83c1f7c883ae1ecab8e35bc7f12cb0e05c4247a2ab4a566114a91693"
+    },
+    {
+      "path": "data/cua-hotbar-equipment-20261024-a1-native-final-events.json",
+      "sha256": "93512afd2758972f3515c5b1e9bdb9c457beb8385d4b76092949d447b8d9c5f9"
+    },
+    {
+      "path": "data/cua-hotbar-equipment-20261024-a1-native-final-world-private.json",
+      "sha256": "3d19ab4d91a26d46618adcfc1308369cea1597b67daa2c91b8c3ad814641e77e"
+    },
+    {
+      "path": "data/cua-hotbar-equipment-20261024-a1-native-server.log",
+      "sha256": "e1f34cfe2667e4eebddafadc7136cbc1980be18b1a23d3a0a67015e3a774a2c9"
+    },
+    {
+      "path": "data/cua-hotbar-equipment-20261024-a1-resupply-connected-world-private.json",
+      "sha256": "869d0f57064a09207079d03f2ca0e663d7b5f5c984daa0bec69b6cafbe78e2e0"
+    },
+    {
+      "path": "data/cua-hotbar-equipment-20261024-a1-resupply-final-events.json",
+      "sha256": "9fa8f4390f337d2c1ff36e68b8deab6af0067166e6ef8804b1205f8fad19865b"
+    },
+    {
+      "path": "data/cua-hotbar-equipment-20261024-a1-resupply-final-world-private.json",
+      "sha256": "29db9aef4a3e80b3b00755e03c68e4623bc1dcb7a073f011b0487510cfe16f85"
+    },
+    {
+      "path": "data/cua-hotbar-equipment-20261024-a1-resupply-server.log",
+      "sha256": "e1f34cfe2667e4eebddafadc7136cbc1980be18b1a23d3a0a67015e3a774a2c9"
+    },
+    {
+      "path": "data/cua-hotbar-equipment-20261024-a1-return-connected-world-private.json",
+      "sha256": "bd67f8c954649821352422c4f07aa5f6c4d4ae1bd4a2acdf03db756729de983f"
+    },
+    {
+      "path": "data/cua-hotbar-equipment-20261024-a1-return-final-events.json",
+      "sha256": "a6b5c889d5a1354aec7d2bee60521d22a242097f830a99d6e9e8d9bea1948b97"
+    },
+    {
+      "path": "data/cua-hotbar-equipment-20261024-a1-return-final-world-private.json",
+      "sha256": "e2e33b12f03ceba2a7346378b16eda211781af19cc975e871f1257509c4e87cc"
+    },
+    {
+      "path": "data/cua-hotbar-equipment-20261024-a1-return-server.log",
+      "sha256": "e1f34cfe2667e4eebddafadc7136cbc1980be18b1a23d3a0a67015e3a774a2c9"
+    },
+    {
+      "path": "data/cua-hotbar-equipment-20261024-a1-return2-connected-world-private.json",
+      "sha256": "4ae32a4aef764d36b78fd62a731070dec6c0fd597e35cff6182a44c566891a76"
+    },
+    {
+      "path": "data/cua-hotbar-equipment-20261024-a1-return2-final-events.json",
+      "sha256": "f6c9bece4d0fc63d18b88f92492a244636224f9a444ba8af9fdfe43caf26f8a6"
+    },
+    {
+      "path": "data/cua-hotbar-equipment-20261024-a1-return2-final-world-private.json",
+      "sha256": "b2742ff5aa7b6a4d586c75f7219eefd1ec9d9ece1ae29536c0c1bee9e620d78b"
+    },
+    {
+      "path": "data/cua-hotbar-equipment-20261024-a1-return2-server.log",
+      "sha256": "e1f34cfe2667e4eebddafadc7136cbc1980be18b1a23d3a0a67015e3a774a2c9"
+    },
+    {
+      "path": "data/cua-hotbar-equipment-20261024-a1-reconnect-connected-world-private.json",
+      "sha256": "0e823df0504fb6cf6739b612fc59c960e73e952ccbe784415646a466aba96cc3"
+    },
+    {
+      "path": "data/cua-hotbar-equipment-20261024-a1-reconnect-final-events.json",
+      "sha256": "3abfdb2b1a8909cdfad4a8cdf276b1c2dd39eef021e31538b1378f95f95b4b4b"
+    },
+    {
+      "path": "data/cua-hotbar-equipment-20261024-a1-reconnect-final-world-private.json",
+      "sha256": "73f44ac197335a5c509d877609f1b86380167c0dc85a71b64efc763602c0c7eb"
+    },
+    {
+      "path": "data/cua-hotbar-equipment-20261024-a1-reconnect-server.log",
+      "sha256": "e1f34cfe2667e4eebddafadc7136cbc1980be18b1a23d3a0a67015e3a774a2c9"
+    },
+    {
+      "path": "data/cua-hotbar-equipment-20261024-a1-native-initial-events.json",
+      "sha256": "d626d0521f58414ae5b069e7099e8637a918eb502a6e164cee30bb6b3b74b5eb"
+    },
+    {
+      "path": "data/cua-hotbar-equipment-20261024-a1-native-initial-world-private.json",
+      "sha256": "15a20924f47527010e9aac269b5282c3716513538dc9ee35fa504e4a76c089a5"
+    },
+    {
+      "path": "data/cua-hotbar-equipment-20261024-a1-recovery-server.log",
+      "sha256": "e1f34cfe2667e4eebddafadc7136cbc1980be18b1a23d3a0a67015e3a774a2c9"
+    },
+    {
+      "path": "data/hotbar-resupply-native-ax-private-20261024.json",
+      "sha256": "f33c36b92f83b0c74de9bbf58b52030ccffdd05ec1e14210e35cc031cf798caa"
+    },
+    {
+      "path": "data/hotbar-resupply-native-ax-private-second-20261024.json",
+      "sha256": "a3874920cf88e92b294b1412a4be9a5d1a25ad0fa3e7f9e1453416a92b055ef7"
+    },
+    {
+      "path": "data/hotbar-return-native-ax-private-20261024.json",
+      "sha256": "c07943d0bcf1cfe0cd89c45b2e9b0edb0aaa8b0fc691182c7df2ed68886294eb"
+    },
+    {
+      "path": "data/hotbar-return2-native-ax-private-20261024.json",
+      "sha256": "229ae24e1d03770597b3c0bfff1ab28114b0c2dd0adc6cddcc4e685953be3507"
+    },
+    {
+      "path": "data/hotbar-reconnect-native-ax-private-20261024.json",
+      "sha256": "64851feded3f8ecd8feff8ab9f9491f266a86a46db1814eee628681b30d7173b"
+    },
+    {
+      "path": "data/hotbar-native-confirmed-20261024.png",
+      "sha256": "6a6406611f51a26207f6cee0fdf87e318bd5e961e0b6ccfcd0995ef5caf07c93"
+    },
+    {
+      "path": "data/hotbar-native-reconnected-20261024.png",
+      "sha256": "3b0c249bc25304f99d8fbb13b7ae7a15fb7db4c164e326b3196a12d02779de21"
+    },
+    {
+      "path": "data/cua-hotbar-equipment-20261024-a1.sqlite.backup-2026-10-24T04-06-29-467Z",
+      "sha256": "e6bb27106b5024cde98541040124e06d91d2abc69a1a5e419d080293db25ef38"
+    }
+  ]
+}

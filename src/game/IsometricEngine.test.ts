@@ -11,7 +11,7 @@ import { GameWorld, type WorldRules } from '../../server/worldState';
 import { authoritativeDamageSince } from './combat';
 import type { BuildingEntity } from '../types/game';
 
-vi.mock('../audio/soundManager', () => ({ soundManager: { playLevelUp: vi.fn(), playHit: vi.fn(), playGunshot: vi.fn(), playReload: vi.fn() } }));
+vi.mock('../audio/soundManager', () => ({ soundManager: { playLevelUp: vi.fn(), playHit: vi.fn(), playGunshot: vi.fn(), playReload: vi.fn(), playClick: vi.fn() } }));
 
 function makeCanvas() {
   const context = new Proxy({
@@ -40,6 +40,34 @@ function setup() {
 }
 
 afterEach(() => { vi.restoreAllMocks(); vi.unstubAllGlobals(); });
+
+describe('hotbar keyboard activation', () => {
+  function press(win: EventTarget, key: string, repeat = false, target?: unknown) {
+    const event = new Event('keydown'); Object.assign(event, { key, code: `Digit${key}`, repeat });
+    if (target) Object.defineProperty(event, 'target', { value: target });
+    win.dispatchEvent(event);
+  }
+  it('activates visible slots once per physical press while retaining hidden-slot selection only', () => {
+    const { engine, win } = setup(); const activate = vi.fn(); (engine as any).callbacks.onSelectHotbarSlot = activate;
+    press(win, '3'); for (let i = 0; i < 5; i++) press(win, '3', true);
+    press(win, '1'); press(win, '7'); press(win, '0');
+    expect(activate.mock.calls).toEqual([[3], [1]]); expect(engine.activeSlot).toBe(10);
+  });
+  it('does not activate slots while blocked or typing and retains old standalone selection without a callback', () => {
+    const { engine, win } = setup(); const activate = vi.fn(); (engine as any).callbacks.onSelectHotbarSlot = activate;
+    engine.inputBlocked = true; press(win, '3'); engine.inputBlocked = false;
+    press(win, '3', false, new HTMLInputElement()); press(win, '3', false, new HTMLTextAreaElement());
+    expect(activate).not.toHaveBeenCalled(); delete (engine as any).callbacks.onSelectHotbarSlot;
+    press(win, '2'); expect(engine.activeSlot).toBe(2);
+  });
+  it('does not consume or equip from modified browser shortcuts or editor input', () => {
+    const { engine, win } = setup(); const activate = vi.fn(); (engine as any).callbacks.onSelectHotbarSlot = activate;
+    for (const modifier of ['ctrlKey', 'metaKey', 'altKey']) {
+      const event = new Event('keydown'); Object.assign(event, { key: '1', code: 'Digit1', [modifier]: true }); win.dispatchEvent(event);
+    }
+    engine.editMode = true; press(win, '3'); expect(activate).not.toHaveBeenCalled();
+  });
+});
 
 describe('alternate world scenery sprites', () => {
   it('draws one alternate sprite at its measured ground contact and preserves the player fade', () => {

@@ -12,6 +12,7 @@ interface InventoryModalProps {
   onClose: () => void;
   hotbar: (Item | null)[];
   equipment: Equipment;
+  equipmentPending?: boolean;
   materials: { wood: number; stone: number; scrap: number; parts: number };
   onUseItem: (idx: number) => void;
   onEquip: (idx: number) => void;
@@ -77,6 +78,7 @@ export const InventoryModal: React.FC<InventoryModalProps> = ({
   onClose,
   hotbar,
   equipment,
+  equipmentPending = false,
   materials,
   onUseItem,
   onEquip,
@@ -101,6 +103,7 @@ export const InventoryModal: React.FC<InventoryModalProps> = ({
             <div>
               <h2 className="text-base font-bold text-slate-100">背包与装备 <span className="text-xs font-mono text-amber-400 font-normal">[I]</span></h2>
               <p className="text-xs text-slate-400">战斗属性只看装备栏，背包只管存东西</p>
+              {equipmentPending && <p role="status" className="text-xs text-cyan-300">装备确认中… 食物和药品仍可使用</p>}
             </div>
           </div>
           <button
@@ -141,8 +144,9 @@ export const InventoryModal: React.FC<InventoryModalProps> = ({
                     </div>
                     {it && (
                       <button
+                        disabled={equipmentPending}
                         onClick={() => onUnequip(slot)}
-                        className="mt-0.5 flex items-center gap-1 px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-[11px] font-bold transition-colors"
+                        className="mt-0.5 flex items-center gap-1 px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-[11px] font-bold transition-colors disabled:opacity-50 disabled:cursor-wait"
                       >
                         <ArrowDownToLine className="w-3 h-3" />
                         卸下
@@ -185,15 +189,17 @@ export const InventoryModal: React.FC<InventoryModalProps> = ({
                         )}
                         {canEquip(it) && (
                           <button
+                            disabled={equipmentPending}
                             onClick={() => onEquip(idx)}
-                            className="px-1.5 py-0.5 rounded bg-cyan-700 hover:bg-cyan-600 text-white text-[10px] font-bold"
+                            className="px-1.5 py-0.5 rounded bg-cyan-700 hover:bg-cyan-600 text-white text-[10px] font-bold disabled:opacity-50 disabled:cursor-wait"
                           >
                             装备
                           </button>
                         )}
                         <button
+                          disabled={equipmentPending}
                           onClick={() => onDrop(idx)}
-                          className="flex items-center gap-0.5 px-1.5 py-0.5 rounded bg-slate-800 hover:bg-rose-900 text-slate-400 hover:text-rose-300 text-[10px]"
+                          className="flex items-center gap-0.5 px-1.5 py-0.5 rounded bg-slate-800 hover:bg-rose-900 text-slate-400 hover:text-rose-300 text-[10px] disabled:opacity-50 disabled:cursor-wait"
                         >
                           <Trash2 className="w-3 h-3" />丢弃
                         </button>

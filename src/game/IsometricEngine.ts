@@ -30,6 +30,7 @@ import {
 } from '../types/game';
 
 export interface GameCallbacks {
+  onSelectHotbarSlot?: (slot: number) => void;
   onRenderStatus?: (message: string | null) => void;
   onGameAction?: (action: string, payload?: Record<string, unknown>) => void;
   onCampInteract?: () => boolean;
@@ -1389,9 +1390,10 @@ export class IsometricEngine {
       }
 
       // 快捷栏 1-10（0 = 第10格，背包扩容后可用）
-      if (['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'].includes(e.key)) {
+      if (!e.repeat && ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'].includes(e.key)) {
         this.activeSlot = e.key === '0' ? 10 : parseInt(e.key);
         soundManager.playClick();
+        if (this.activeSlot <= 6 && !this.editMode && !e.ctrlKey && !e.metaKey && !e.altKey) this.callbacks.onSelectHotbarSlot?.(this.activeSlot);
       }
 
       if (key === 'r' || code === 'keyr') {

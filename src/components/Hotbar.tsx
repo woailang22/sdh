@@ -1,6 +1,6 @@
 import React from 'react';
 import { Item } from '../types/game';
-import { soundManager } from '../audio/soundManager';
+import { gatheringDescription } from '../game/equipmentRules';
 import { ItemIcon } from './ItemIcon';
 import { RarityFrame } from './RarityFrame';
 
@@ -8,19 +8,26 @@ interface HotbarProps {
   slots: (Item | null)[];
   activeSlotIndex: number;
   ammo: { current: number; max: number; reserve: number };
+  equippedTool?: Item | null;
+  equipPending?: boolean;
+  disabled?: boolean;
   onSelectSlot: (index: number) => void;
-  onUseItem: (index: number) => void;
 }
 
 export const Hotbar: React.FC<HotbarProps> = ({
   slots,
   activeSlotIndex,
   ammo,
+  equippedTool = null,
+  equipPending = false,
+  disabled = false,
   onSelectSlot,
-  onUseItem,
 }) => {
   return (
     <div className="flex flex-col items-center select-none">
+      <div role="status" className="mb-1 max-w-[430px] text-[10px] text-cyan-200" title={equippedTool ? gatheringDescription(equippedTool.id) : '装备斧或镐可提高对应采集效率'}>
+        手持工具：{equippedTool?.name ?? '徒手'}{equipPending ? ' · 装备确认中…' : ' · [1–6] 或点击使用 / 装备'}
+      </div>
       {/* Top Experience / Ammo Status Gauge */}
       <div className="flex items-center gap-2 mb-1.5 px-2">
         <div className="flex items-center gap-1.5 text-[10px] font-mono">
@@ -45,19 +52,19 @@ export const Hotbar: React.FC<HotbarProps> = ({
         {slots.map((item, idx) => {
           const slotNum = idx + 1;
           const isActive = activeSlotIndex === slotNum;
+          const equipment = item && ['weapon', 'armor', 'tool', 'pack'].includes(item.category);
+          const action = equipment ? '装备' : item?.category === 'food' || item?.category === 'medical' ? '使用' : '选择';
 
           return (
-            <div
+            <button
+              type="button"
               key={idx}
-              onClick={() => {
-                onSelectSlot(slotNum);
-                // 消耗品：任意槽位的食物/药品点一下直接使用
-                if (item && (item.category === 'food' || item.category === 'medical')) {
-                  onUseItem(idx);
-                }
-              }}
-              title={item ? `${item.name} (${item.desc || ''})` : `快捷槽位 ${slotNum}`}
-              className={`relative w-12 h-12 rounded-lg border flex flex-col items-center justify-center cursor-pointer transition-all ${
+              disabled={disabled || !!(equipPending && equipment)}
+              onClick={() => onSelectSlot(slotNum)}
+              onKeyDown={event => { if (event.key === ' ' || event.key === 'Enter') event.stopPropagation(); }}
+              aria-label={`快捷栏${slotNum}：${item?.name ?? '空格'}，${action}`}
+              title={item ? `${item.name} · 点击${action} (${item.desc || ''})` : `快捷槽位 ${slotNum}`}
+              className={`relative w-12 h-12 rounded-lg border flex flex-col items-center justify-center cursor-pointer transition-all disabled:cursor-wait disabled:opacity-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-cyan-300 ${
                 isActive
                   ? 'bg-slate-800/90 border-amber-400 shadow-[0_0_12px_rgba(251,191,36,0.5)] ring-1 ring-amber-400 scale-105'
                   : 'bg-slate-900/70 border-slate-700/80 hover:border-cyan-500/50 hover:bg-slate-800/50'
@@ -115,7 +122,7 @@ export const Hotbar: React.FC<HotbarProps> = ({
               <div className="absolute top-0.5 left-1 text-[9px] font-mono font-bold text-cyan-400/80">
                 {slotNum}
               </div>
-            </div>
+            </button>
           );
         })}
       </div>
