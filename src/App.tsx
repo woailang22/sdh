@@ -1367,7 +1367,7 @@ export default function App() {
       </div>
 
       {/* Bottom Center 6-Slot Tactical Hotbar, Tier-1 Gathering Material Pack & Territory Building Bar */}
-      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-1.5 pointer-events-auto">
+      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-1.5 pointer-events-none [&>*]:pointer-events-auto">
         {/* Tier-1 Survival Gathering Materials Bar (参考 《裂隙拾荒者》 逻辑) */}
         <div className="flex items-center gap-2 px-3 py-1 rounded-xl bg-slate-950/85 backdrop-blur-md border border-cyan-500/40 shadow-lg text-[11px] font-mono text-slate-200">
           <span className="text-[10px] text-cyan-400 font-bold uppercase tracking-wider">一级搜集物资:</span>

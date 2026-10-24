@@ -1,0 +1,754 @@
+{
+  "kind": "earned-camp-workshop-storage-and-placement-space-fix",
+  "base": "c2a70fbd76c7246dd3fe3344f280fe3c850a4818",
+  "planningCommits": [
+    "d345ad1",
+    "adb703c"
+  ],
+  "goalComplete": false,
+  "production": {
+    "files": [
+      "src/components/BuildingBar.tsx",
+      "src/App.tsx"
+    ],
+    "problem": "At1280x720 the full palette remained over placement ground; its bottom HUD parent intercepted gaps.",
+    "change": "Selecting a structure collapses to a compact name/actual price/material warning/reselect/exit bar. Parent HUD gaps pass input; direct panels remain interactive. Selecting UI controls does not place buildings.",
+    "preserved": [
+      "Server build range3,ownership,collision and exit/core clearance",
+      "All recipe prices,resources,inventory,world layout,art,renderer and simulation"
+    ],
+    "native": "Old608,280 hitDIV; new same point hitCANVAS but (-3,26) was correctly rejected as too far. Legal544,312 was menuSPAN while expanded, then actual paid workbench(-3,28) after select/collapse. Actual box(3,28) also paid; no bypass of server limits."
+  },
+  "verification": {
+    "regressions": 3,
+    "red": 3,
+    "green": 3,
+    "negativeControl": "Original BuildingBar yields3 failures; exact candidate bytes restored",
+    "testHelperCorrection": "Initial green had1 failure because helper ignored aria-label; corrected accessible-name lookup, log retained",
+    "full": {
+      "files": 47,
+      "tests": 750
+    },
+    "allQaTypes": "passed",
+    "build": {
+      "bundle": "index-h4IZsC18.js",
+      "exitCode": 0,
+      "existingWarnings": [
+        "Vite native config __dirname warning",
+        "chunk over500kB"
+      ]
+    },
+    "sourceReview": "passed-no-P1-P2; real browser coverage remains separate from mocked hook/React tree tests"
+  },
+  "native": {
+    "passed": true,
+    "sameEarnedCharacter": true,
+    "noStateEdits": true,
+    "normalRules": true,
+    "phases": [
+      {
+        "phase": "native",
+        "packets": 12453,
+        "rejected": 0,
+        "corrections": 2,
+        "errors": 0,
+        "overflow": 0,
+        "actions": 25,
+        "successes": 25,
+        "handledWindow": 128,
+        "final": {
+          "x": 0,
+          "y": 28,
+          "map": "camp",
+          "hp": 100,
+          "shield": 50,
+          "satiety": 21.29625000000023
+        },
+        "actionCounts": {
+          "use_item": 7,
+          "search": 2,
+          "take_loot": 4,
+          "gather": 10,
+          "equip": 1,
+          "enter_camp": 1
+        }
+      },
+      {
+        "phase": "before",
+        "packets": 816,
+        "rejected": 0,
+        "corrections": 1,
+        "errors": 0,
+        "overflow": 0,
+        "actions": 0,
+        "successes": 0,
+        "handledWindow": 128,
+        "final": {
+          "x": 0,
+          "y": 28,
+          "map": "camp",
+          "hp": 100,
+          "shield": 50,
+          "satiety": 2.2242500000002283
+        },
+        "actionCounts": {}
+      },
+      {
+        "phase": "after",
+        "packets": 7649,
+        "rejected": 0,
+        "corrections": 2,
+        "errors": 1,
+        "overflow": 0,
+        "actions": 10,
+        "successes": 9,
+        "handledWindow": 128,
+        "final": {
+          "x": 0,
+          "y": 1,
+          "map": "world",
+          "hp": 100,
+          "shield": 50,
+          "satiety": 25.700750000000014
+        },
+        "actionCounts": {
+          "use_item": 5,
+          "build": 3,
+          "craft": 1,
+          "search": 1
+        }
+      },
+      {
+        "phase": "recovery",
+        "packets": 7380,
+        "rejected": 0,
+        "corrections": 2,
+        "errors": 0,
+        "overflow": 0,
+        "actions": 22,
+        "successes": 22,
+        "handledWindow": 128,
+        "final": {
+          "x": 1.9387518303175921,
+          "y": 27.91035805905443,
+          "map": "camp",
+          "hp": 100,
+          "shield": 50,
+          "satiety": 24.20424999999997
+        },
+        "actionCounts": {
+          "search": 6,
+          "take_loot": 9,
+          "use_item": 3,
+          "enter_camp": 1,
+          "deposit": 2,
+          "withdraw": 1
+        }
+      },
+      {
+        "phase": "reconnect",
+        "packets": 1213,
+        "rejected": 0,
+        "corrections": 1,
+        "errors": 0,
+        "overflow": 0,
+        "actions": 1,
+        "successes": 1,
+        "handledWindow": 128,
+        "final": {
+          "x": 1.9387518303175921,
+          "y": 27.91035805905443,
+          "map": "camp",
+          "hp": 90.56,
+          "shield": 0,
+          "satiety": 0
+        },
+        "actionCounts": {
+          "search": 1
+        }
+      }
+    ],
+    "actions": {
+      "total": 58,
+      "successful": 57,
+      "uniqueRequests": true,
+      "errors": 1,
+      "handledWindow": 128,
+      "windowIsNotLifetimeHistory": true
+    },
+    "gathered": {
+      "wood": 18,
+      "stone": 6,
+      "stoneWithAxe": 3,
+      "stoneWithPickaxe": 3,
+      "toolQuickslotDidNotEquip": true
+    },
+    "publicLoot": {
+      "workshops": {
+        "scrap": 16,
+        "parts": 4
+      },
+      "farmAlreadyAvailableInSource": {
+        "food": 3,
+        "water": 2,
+        "seed_potato": 1,
+        "initialStock": 3,
+        "respawnTransitionNotObservedThisRun": true
+      }
+    },
+    "paidBuilds": [
+      {
+        "type": "workbench",
+        "x": -3,
+        "y": 28,
+        "cost": {
+          "wood": 10,
+          "stone": 5,
+          "scrap": 4,
+          "parts": 1
+        }
+      },
+      {
+        "type": "storage_box",
+        "x": 3,
+        "y": 28,
+        "cost": {
+          "wood": 8,
+          "scrap": 2
+        }
+      }
+    ],
+    "craft": {
+      "recipe": "ammo_pack",
+      "cost": {
+        "scrap": 10,
+        "parts": 1
+      },
+      "result": {
+        "ammo": 30
+      }
+    },
+    "storage": {
+      "wood": 2,
+      "ammo": 10,
+      "playerWood": 1,
+      "playerAmmo": 20,
+      "conservationAcrossPlayerStorageAndDeathDrops": true,
+      "restartNativeUiVerified": true
+    },
+    "death": {
+      "naturalDuringNativeUiWait": true,
+      "atCamp": true,
+      "dropItems": [
+        {
+          "itemId": "water",
+          "count": 1
+        },
+        {
+          "itemId": "axe_stone",
+          "count": 1
+        },
+        {
+          "itemId": "wood",
+          "count": 3
+        },
+        {
+          "itemId": "stone",
+          "count": 1
+        },
+        {
+          "itemId": "part",
+          "count": 2
+        },
+        {
+          "itemId": "ammo",
+          "count": 30
+        }
+      ],
+      "allRecoveredThroughNormalActions": true,
+      "noManualRollbackOrStatReset": true,
+      "normalDeathRespawn": true
+    },
+    "final": {
+      "x": 1.9387518303175921,
+      "y": 27.91035805905443,
+      "hp": 90.56,
+      "shield": 0,
+      "satiety": 0,
+      "resources": {
+        "wood": 1,
+        "stone": 1,
+        "scrap": 0,
+        "parts": 2,
+        "food": 0,
+        "ammo": 20,
+        "c4": 0,
+        "medical": 0,
+        "credits": 0,
+        "shard": 0
+      },
+      "items": [
+        [
+          "water",
+          3
+        ],
+        [
+          "seed_potato",
+          1
+        ],
+        [
+          "axe_stone",
+          1
+        ]
+      ],
+      "equippedTool": "pickaxe_stone"
+    },
+    "persistence": {
+      "integrity": "ok",
+      "savedMatches": true,
+      "backupRestoredThroughGameWorld": true,
+      "tickMs": 0
+    },
+    "diagnostics": {
+      "page": "reconnect-only",
+      "errors": [],
+      "slowSamples": 8,
+      "maxDrawMs": 39.79999998211861,
+      "maxRafGapMs": 84,
+      "environment": {
+        "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
+        "viewport": {
+          "width": 1280,
+          "height": 720
+        },
+        "canvas": {
+          "width": 1280,
+          "height": 720
+        },
+        "devicePixelRatio": 1.5,
+        "modulePath": "/assets/index-h4IZsC18.js",
+        "jsHeap": {
+          "used": 13603511,
+          "total": 27499647
+        },
+        "graphicsBackend": "unknown"
+      }
+    },
+    "limitations": [
+      "One natural hunger death and later reconnect starvation remain in the evidence; final HP90.56/shield0/satiety0,3 water carried, no injected recovery.",
+      "Known-route QA with operator waits, failed input and a recovered death is not blind-novice or long-term economy acceptance.",
+      "Earlier pages did not export frame/error diagnostics; final-page errors[] is not whole-session proof.",
+      "Not performance, GPU, whole-browser memory, continuous60s walking or paid offline-defense acceptance."
+    ],
+    "goalComplete": false
+  },
+  "toolFailures": [
+    "One initial combined CUA call exceeded its30s execution window during D30000ms; kernel reset left the key held. Same live server/page were inspected, native unstuck and short D release used, overshoot retained, normal walking returned. No restart solely because timeout.",
+    "Parsing a diff AX tree as a full tree once failed before further input; refreshed full tree.",
+    "A stale close-button index after natural death failed before input; inspected actual respawn state and retained death.",
+    "AX classified aria-pressed quantity buttons as checkboxes; initial filtered output omitted them; native screenshot/full tree resolved, normal controls used.",
+    "Audit initial incorrect assumptions about negative zero,SPAN vs DIV hit and an already-ready source farm were corrected from authoritative evidence; all failure logs retained."
+  ],
+  "limits": [
+    "One earned functional loop with known route and normal materials,not new-player blind play or sustained balance.",
+    "One normal starvation death with full drop recovery,plus final reconnect starvation; finalHP90.56/shield0/satiety0 with3water carried,no manual stat reset.",
+    "Farm was already stocked in source; this run does not establish respawn interval or infinite seed supply.",
+    "No native request replay race acceptance; new requests unique,existing handled window limited128.",
+    "Only final reconnect page errors[]/8slow exported,not whole-session no-error or performance acceptance.",
+    "Full world,economy,paid offline-defense continuation,GPU/physical frames/total browser memory/continuous60s walking remain incomplete."
+  ],
+  "cleanup": {
+    "port": 39145,
+    "pids": [
+      45640,
+      37944,
+      4564,
+      29916,
+      40484
+    ],
+    "terminal": true,
+    "listeners": 0,
+    "tabs": [],
+    "viewportChanged": false,
+    "formalDatabaseOpened": false
+  },
+  "review": "passed-no-P1-P2",
+  "sources": [
+    {
+      "path": "src/components/BuildingBar.tsx",
+      "sha256": "a4034325a7db21936ccb06442ce5439035e290ece42a320b6d5ffbb7809556ec"
+    },
+    {
+      "path": "src/components/BuildingBar.test.tsx",
+      "sha256": "97088abecd73873de6944e8bb38cfc1aeaa8328501c6d5161d88225060240ffa"
+    },
+    {
+      "path": "src/App.tsx",
+      "sha256": "05dc7462d36040fbc03ea5ff3f7add18aef448cc08ad538e50182d8a4d67d773"
+    },
+    {
+      "path": "src/game/buildingRecipes.ts",
+      "sha256": "4514d33da6faf0d91fe9c41c095816a6559f8d335894acbcf31ab853d949df13"
+    },
+    {
+      "path": "src/game/crafting.ts",
+      "sha256": "eb43bd22c9ee159759a1b23a76d64bbbdaeaf0c3a89cbc22fa7df87c90d34105"
+    },
+    {
+      "path": "src/game/equipmentRules.ts",
+      "sha256": "7add9af028a73655c1da136dc90fe21075bef19ef04f3316f507795ee3466f62"
+    },
+    {
+      "path": "src/game/home.ts",
+      "sha256": "d5e609f91b1c702f8c3605e27137ad2d3d21ebfc14d98a4301dfebdd0f3c6c11"
+    },
+    {
+      "path": "src/game/items.ts",
+      "sha256": "96337485eff172cbc3936f742af827a4c975275f800d8445b232f050649317f0"
+    },
+    {
+      "path": "src/game/navigation.ts",
+      "sha256": "defeedf6c1670922f76b115c5da0a1bdce4f64afa8fb5b7eca0ee5c48065b662"
+    },
+    {
+      "path": "src/game/IsometricEngine.ts",
+      "sha256": "6dac46d8982f455b01e61420bfff58b141101672c8fbbe45c1e83aac8acac2f0"
+    },
+    {
+      "path": "src/components/CampPanel.tsx",
+      "sha256": "7c467530fb97ebf15291f041d02cb8361f6643cac58ee1d05063b731c72d4a1b"
+    },
+    {
+      "path": "src/components/WorkbenchModal.tsx",
+      "sha256": "d234aa21db051aa80b295e0b9736bb8146cfc59314dc1a9151723f36225d63b6"
+    },
+    {
+      "path": "server/worldState.ts",
+      "sha256": "829140066d1e04a3521ba2286e4130b39ccdcdf825a7a4340dc34e416ff6f5f1"
+    },
+    {
+      "path": "server/db.ts",
+      "sha256": "9cf91e65d64e6372bb897d98b8bdda843a03f42f409240f272abc4ed09d83f0f"
+    },
+    {
+      "path": "server/worldQueries.ts",
+      "sha256": "0bdc8625d63d959f1baaceba232702dba7bfc7f7612dcf720757fd8268898822"
+    },
+    {
+      "path": "server.ts",
+      "sha256": "550676757754175a4482ce81da1f581f4ab3b0254478b3fa846d3f9479ca0ff1"
+    },
+    {
+      "path": "docs/superpowers/specs/2026-10-24-build-placement-space-design.md",
+      "sha256": "80afdf6d1a149f705e0dd1650f5d3cafc03aeb4d4a60284b3a076e57afc35311"
+    },
+    {
+      "path": "docs/superpowers/plans/2026-10-24-build-placement-space.md",
+      "sha256": "28f2331f9df675ee5577b2727b978a3ab4dd94cb3dc78996c06175dc61fd3e3e"
+    },
+    {
+      "path": "docs/superpowers/plans/2026-10-24-earned-camp-workshop-storage.md",
+      "sha256": "5455169390c238f080a59e44cc5417dc31831b6502a22be286cbdd16fa9adc3e"
+    },
+    {
+      "path": "docs/superpowers/plans/2026-10-20-seamless-world-camps.md",
+      "sha256": "5d7755d06abc8bf1b46ae313ab7664fd3ddaf92414ef2a6ba5429000abf73cb1"
+    },
+    {
+      "path": "data/prepare-workshop-storage-20261024.ts",
+      "sha256": "413ae6c547b52af09c8e2cacd9b6e559874448a782b4c4082419230cb9aac156"
+    },
+    {
+      "path": "data/plan-workshop-storage-route-20261024.ts",
+      "sha256": "d665733c6854c08c0e8a924dd1895ac2af4971e05ce1a72b78b3c6c237d63f80"
+    },
+    {
+      "path": "data/workshop-storage-route-20261024.json",
+      "sha256": "d0ba295d4697378e87853a251e8ffdc79718eb3a4624fd304a27e3fa9c248605"
+    },
+    {
+      "path": "data/workshop-storage-source-backup-20261024.json",
+      "sha256": "89139c9a50f9114fb16b46d89f846ca7f3f4fe2c7a5d1fc69f16eba7c7da3aef"
+    },
+    {
+      "path": "data/capture-cua-workshop-storage-20261024-a1.ts",
+      "sha256": "2bdb7eeea8a8a5f87db6f63247ae4e627dd93d14185a9720a0c6d635d6a275ec"
+    },
+    {
+      "path": "data/control-cua-workshop-storage-20261024-a1.cjs",
+      "sha256": "3a025d88e84e49d69db01dd0a730e45886fd846f7903d104d8a06d5471d67a2f"
+    },
+    {
+      "path": "data/audit-workshop-storage-20261024.ts",
+      "sha256": "fc07642e0c802d7b548aa7cb6efbc460fd4b570af37e5a507ea23546b836b0f1"
+    },
+    {
+      "path": "data/publish-workshop-storage-20261024.cjs",
+      "sha256": "74a8338f77c4bf930044e2c882b6832689912ae351e3576fc5c8e1430d7f8e9e"
+    },
+    {
+      "path": "data/negative-build-placement-20261024.cjs",
+      "sha256": "fefaf0ebcc1a23f090a4197e36d22de899921b6024a57af37296e0ef4efeae1c"
+    },
+    {
+      "path": "data/workshop-storage-native-audit-20261024.json",
+      "sha256": "f8840e8e2694172433a9682d8d41c7e18699d099860922bf1fdf99bdf0983df5"
+    },
+    {
+      "path": "data/workshop-storage-audit-20261024.log",
+      "sha256": "c0bd318622f72f74c13b15eda2bac3e69cbed809ce393d7e040b69d06185abb2"
+    },
+    {
+      "path": "data/workshop-storage-audit-initial-failed-20261024.log",
+      "sha256": "2f9348fdd44d8beebbe262f8f3fd88283eff86d70c98707d0c9797e12f9143c1"
+    },
+    {
+      "path": "data/workshop-storage-audit-hit-failed-20261024.log",
+      "sha256": "d44cfda253a3a5b4d66749e25686087b14195b2af9cde5f00fdc9aa77f7efc66"
+    },
+    {
+      "path": "data/workshop-storage-audit-respawn-failed-20261024.log",
+      "sha256": "41a2c56b46bb75803666d223b317ce9ecc3aabf51f931b785fe0801813886f3a"
+    },
+    {
+      "path": "data/build-placement-red-20261024.log",
+      "sha256": "b1b0028860c4d855d8d4f8500452f0cd0c5e98dac3445d2934e761bb6fdf131c"
+    },
+    {
+      "path": "data/build-placement-green-20261024.log",
+      "sha256": "b1ed7706b19b03b39b19d779e3c86df823c825c039a1dcac63da413fb9a51a94"
+    },
+    {
+      "path": "data/build-placement-green-final-20261024.log",
+      "sha256": "85a77dae69dda21b1a954a7344231d2db2b019ebcf58cd317bdf26ad228cf2a8"
+    },
+    {
+      "path": "data/build-placement-negative-20261024.log",
+      "sha256": "c831d555fd77106a9af2940f07ddaeac8eb1b511d7b5844fcf41418bde10a537"
+    },
+    {
+      "path": "data/build-placement-full-20261024.log",
+      "sha256": "ffa5648f7e8ae03f7f9eaf1df55305e9854d666ec0335b8bdfe66c4e492bb4cf"
+    },
+    {
+      "path": "data/build-placement-types-20261024.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "data/workshop-storage-types-final-20261024.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "data/build-placement-build-20261024.log",
+      "sha256": "fca615bf3c2313d58cc26c1a57600fa22047083c3bea22e6a88b9b925714f531"
+    },
+    {
+      "path": "data/build-placement-build-exit-20261024.json",
+      "sha256": "ea61d7736f0b7ecb9b35158f03de77013db6b100cf1d36c957e78e6c8817c5b6"
+    },
+    {
+      "path": "data/build-placement-accepted-bundle-h4IZsC18.js",
+      "sha256": "4970c99034574b186d8944cf66ba9d159f39d6e696ad9c7faa90f7cdf3b1d638"
+    },
+    {
+      "path": "data/build-placement-accepted-index.html",
+      "sha256": "d3ada93b6ef480fe77c831c36e317d86e7dab9db4e053858269c20a93241980a"
+    },
+    {
+      "path": "data/workshop-storage-cleanup-20261024.json",
+      "sha256": "18816c523a7c02033051b63addbf80c22402b0f9562c36aa1dd441f0c51b7694"
+    },
+    {
+      "path": "data/cua-workshop-storage-20261024-a1.sqlite",
+      "sha256": "b4d74f39ef3988c9c58f2734fd32dc96e333ea1e124334941a35d62816c35b61"
+    },
+    {
+      "path": "data/cua-walk-capture-20261024-a2.sqlite",
+      "sha256": "38ff241d3153701b424ae2162ff486f82b7f3d7066df5a0d03195d9463b1f80c"
+    },
+    {
+      "path": "data/cua-walk-capture-20261024-a2.sqlite.backup-2026-10-24T00-16-58-010Z",
+      "sha256": "9f32db696016e18d1b91b22401691eaacec7009674938f1b626d2690d14679ee"
+    },
+    {
+      "path": "data/cua-workshop-storage-20261024-a1-before-workbench-private.txt",
+      "sha256": "cb01b1cea6c066efa4ff7ff8507370aef41f2b903e03a074ba68d1bc28d548ec"
+    },
+    {
+      "path": "data/cua-workshop-storage-20261024-a1-before-workbench.png",
+      "sha256": "1e59e0e97f87ac5e3a6f0a73d02a7ccfbd324abc3e51be89f9a13717d062af71"
+    },
+    {
+      "path": "data/cua-workshop-storage-20261024-a1-return-input.json",
+      "sha256": "b2570b13ca86741b7917bad0676e0de80612360d6059164cd766baf2950606c6"
+    },
+    {
+      "path": "data/cua-workshop-storage-20261024-a1-return-input-2.json",
+      "sha256": "c716de3c1788904eb525ade06ac08bfdda94f311cdd7314bf355ee064da814d8"
+    },
+    {
+      "path": "data/cua-workshop-storage-20261024-a1-before-obstruction.png",
+      "sha256": "6da30e696b8ec0a5456527c71ed63e733c9f05a85581f3413d08f9b844766f5e"
+    },
+    {
+      "path": "data/cua-workshop-storage-20261024-a1-before-hit.json",
+      "sha256": "a62adf60ee326113f32160342c7773740e1ae2429dfbea31bd78fb978981f365"
+    },
+    {
+      "path": "data/cua-workshop-storage-20261024-a1-after-hit.json",
+      "sha256": "9a11b313e89dbf851047c449e5396bed0098494cf8f54c43100a39014a997eb0"
+    },
+    {
+      "path": "data/cua-workshop-storage-20261024-a1-expanded-legal-hit.json",
+      "sha256": "5e68ba84acc4ce5daa2a7a8518739ded424593a34f5dd591013fc1167cd47dec"
+    },
+    {
+      "path": "data/cua-workshop-storage-20261024-a1-craft-start-private.txt",
+      "sha256": "c18f5d52d665c364d2d87ff30067883ac801ee49d18c3478b6417d3efef80bfe"
+    },
+    {
+      "path": "data/cua-workshop-storage-20261024-a1-craft-result-private.txt",
+      "sha256": "ec8e176137415a247e8d5a7f996194fcea594fbc5dd15eabea1a34e85d76f04c"
+    },
+    {
+      "path": "data/cua-workshop-storage-20261024-a1-workbench.png",
+      "sha256": "9153d872795bd3a85ced8d035d4b1483e953a07f6b404935bbe4a1dc8506599c"
+    },
+    {
+      "path": "data/cua-workshop-storage-20261024-a1-storage-empty-private.txt",
+      "sha256": "dd90dcf99ece3c54e2f26d87aac1f58690c1edb3ed03072bf9055e056fb3eb6e"
+    },
+    {
+      "path": "data/cua-workshop-storage-20261024-a1-after-death-private.txt",
+      "sha256": "55891df34e40f71cf5e006bd5feb08f384d98fe174962b47f4be45186ff398b4"
+    },
+    {
+      "path": "data/cua-workshop-storage-20261024-a1-deposited-private.txt",
+      "sha256": "96cd176eca651e44767677209464e57daa832571d686d96a8e634855067b3fca"
+    },
+    {
+      "path": "data/cua-workshop-storage-20261024-a1-stored-private.txt",
+      "sha256": "43d07c7d10fce715b3acaf9c765814657c37fdcdd4be82bd7cac9335408467ce"
+    },
+    {
+      "path": "data/cua-workshop-storage-20261024-a1-stored-ui.png",
+      "sha256": "4e74fd056f3affdfb8fb482883eea22681e309698e3670c02a2787dca5bac288"
+    },
+    {
+      "path": "data/cua-workshop-storage-20261024-a1-built-camp.png",
+      "sha256": "5c10f60ca576fd582be0537640079359da5ecef7f5cebb3e80342377165e0288"
+    },
+    {
+      "path": "data/cua-workshop-storage-20261024-a1-reconnected-ui-private.txt",
+      "sha256": "10999c3efee222626886396e1a2c2909f995945919544e098623d56de664627e"
+    },
+    {
+      "path": "data/cua-workshop-storage-20261024-a1-reconnected-storage.png",
+      "sha256": "4e74fd056f3affdfb8fb482883eea22681e309698e3670c02a2787dca5bac288"
+    },
+    {
+      "path": "data/cua-workshop-storage-20261024-a1-reconnect-errors.json",
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "path": "data/cua-workshop-storage-20261024-a1-reconnect-frames-private.json",
+      "sha256": "62e8193929db56447d5482fa94c48b40399eba0a67766606f703fdfb5da37ac1"
+    },
+    {
+      "path": "data/cua-workshop-storage-20261024-a1-native-connected-world-private.json",
+      "sha256": "81731d24aa40d2b5bbd4146a9e0c520c85f6970e67c4dede5bf1c249419512cb"
+    },
+    {
+      "path": "data/cua-workshop-storage-20261024-a1-native-final-world-private.json",
+      "sha256": "77811faaea5876cd3f10c79e3e842051bc8f4fbe774c812e5f10d3acb7cfb026"
+    },
+    {
+      "path": "data/cua-workshop-storage-20261024-a1-native-final-events.json",
+      "sha256": "eebd3b9c83135ce52695ac16297a91b143e2690e9879d2c096b966e08a491dfd"
+    },
+    {
+      "path": "data/cua-workshop-storage-20261024-a1-native-server.log",
+      "sha256": "0728d190c74163590089e263d4299bcd7bb49bfeb4c1f3d3f1660858365ff272"
+    },
+    {
+      "path": "data/cua-workshop-storage-20261024-a1-before-connected-world-private.json",
+      "sha256": "76588921fcae8313e5b786692a79ac8c5ce9a40b20ecfb9474fba80a0afcab3f"
+    },
+    {
+      "path": "data/cua-workshop-storage-20261024-a1-before-final-world-private.json",
+      "sha256": "79da95460f4d1def47b2a1e5ce79c94d28f85627a92c96a38c802a1da646f626"
+    },
+    {
+      "path": "data/cua-workshop-storage-20261024-a1-before-final-events.json",
+      "sha256": "b72a90e9f72e5bf29614bc3b2af7babb953f93965397154b435775a6131f26cd"
+    },
+    {
+      "path": "data/cua-workshop-storage-20261024-a1-before-server.log",
+      "sha256": "0728d190c74163590089e263d4299bcd7bb49bfeb4c1f3d3f1660858365ff272"
+    },
+    {
+      "path": "data/cua-workshop-storage-20261024-a1-after-connected-world-private.json",
+      "sha256": "2066a8d03a07f93fdfc63723e972dccb55d4fdd68f0fd9f9c9f3859cad8c1b03"
+    },
+    {
+      "path": "data/cua-workshop-storage-20261024-a1-after-final-world-private.json",
+      "sha256": "a41db5a5431c00d4e0206554c46588d6a29b54e2a8a056df0526d54f7f034b39"
+    },
+    {
+      "path": "data/cua-workshop-storage-20261024-a1-after-final-events.json",
+      "sha256": "5123509259de6cd9a365bba0a18d2435a1e3b738a7b2dc6cfebc331173828a75"
+    },
+    {
+      "path": "data/cua-workshop-storage-20261024-a1-after-server.log",
+      "sha256": "0728d190c74163590089e263d4299bcd7bb49bfeb4c1f3d3f1660858365ff272"
+    },
+    {
+      "path": "data/cua-workshop-storage-20261024-a1-recovery-connected-world-private.json",
+      "sha256": "2c163fc53fd4d9413b26cf8a46a29ecd1766e6510ed9dcc44f34f59411cf0cec"
+    },
+    {
+      "path": "data/cua-workshop-storage-20261024-a1-recovery-final-world-private.json",
+      "sha256": "e3268b44e7643413013f85fdc5f2892a0e5269aedfcfa78bdc98d59fe6365149"
+    },
+    {
+      "path": "data/cua-workshop-storage-20261024-a1-recovery-final-events.json",
+      "sha256": "f6da0281034b8420ead88d9466cd1f6121886be96ae483525fbf69d912eb486a"
+    },
+    {
+      "path": "data/cua-workshop-storage-20261024-a1-recovery-server.log",
+      "sha256": "0728d190c74163590089e263d4299bcd7bb49bfeb4c1f3d3f1660858365ff272"
+    },
+    {
+      "path": "data/cua-workshop-storage-20261024-a1-reconnect-connected-world-private.json",
+      "sha256": "c189fb8b114be1d1c1dd0a23df85c1a396d0c628c545fbb6e2e001273e6b25fc"
+    },
+    {
+      "path": "data/cua-workshop-storage-20261024-a1-reconnect-final-world-private.json",
+      "sha256": "a4ba9050a4a967c89606ff721c175f1fea89acf2b569b0a9ae6eb17aee2ba11e"
+    },
+    {
+      "path": "data/cua-workshop-storage-20261024-a1-reconnect-final-events.json",
+      "sha256": "44d9a07e1af19881b198d8372ce8a32a66e0054fa10eae11c244226f7198c5bb"
+    },
+    {
+      "path": "data/cua-workshop-storage-20261024-a1-reconnect-server.log",
+      "sha256": "0728d190c74163590089e263d4299bcd7bb49bfeb4c1f3d3f1660858365ff272"
+    },
+    {
+      "path": "data/cua-workshop-storage-20261024-a1.sqlite.backup-2026-10-24T00-57-32-829Z",
+      "sha256": "c04589fa07f4da9cc14ac07b519034c5bb8ebe3ce6e44df05cc50d83bc8518c5"
+    },
+    {
+      "path": "data/cua-workshop-storage-20261024-a1.sqlite.backup-2026-10-24T01-00-51-362Z",
+      "sha256": "94001aa8c05f31068b24066aa392918f87b5f0e32f42bf712af3e307a578aa9e"
+    },
+    {
+      "path": "data/cua-workshop-storage-20261024-a1.sqlite.backup-2026-10-24T01-03-20-635Z",
+      "sha256": "1298999ce1f5100748767cb213aa5d27ed9dfc3c7570bd6b7479851b4d992bd7"
+    },
+    {
+      "path": "data/workshop-storage-review-20261024.json",
+      "sha256": "c6c09316ebe951cbef0fa1e8fca0853fcb7625cd395cb4a0e688f4b684d6d525"
+    }
+  ]
+}

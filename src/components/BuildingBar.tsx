@@ -39,6 +39,7 @@ export const BuildingBar: React.FC<BuildingBarProps> = ({
   playerStone = 0,
 }) => {
   const [activeCategory, setActiveCategory] = useState<'floor' | 'wall' | 'utility'>('floor');
+  const [paletteExpanded, setPaletteExpanded] = useState(true);
 
   const definitions: BuildableStructure[] = [
     // 1. 地板系列 (Floors)
@@ -213,6 +214,28 @@ export const BuildingBar: React.FC<BuildingBarProps> = ({
     );
   }
 
+  if (!paletteExpanded) {
+    const affordable = playerWood >= (currentSelected.costWood || 0) && playerStone >= (currentSelected.costStone || 0)
+      && playerScrap >= currentSelected.costScrap && playerParts >= currentSelected.costParts;
+    return (
+      <div className="flex max-w-xl flex-wrap items-center justify-between gap-2 rounded-xl border border-cyan-500/60 bg-slate-950/95 px-3 py-2 text-xs">
+        <div className="flex items-center gap-2">
+          {currentSelected.icon}
+          <div>
+            <p className="font-bold text-cyan-200">{currentSelected.name}</p>
+            <p className={affordable ? 'text-amber-200' : 'text-rose-300'}>
+              木 {currentSelected.costWood || 0} · 石 {currentSelected.costStone || 0} · 铁 {currentSelected.costScrap} · 件 {currentSelected.costParts}
+              {!affordable && ' · 材料不足'}
+            </p>
+            <p className="text-[10px] text-slate-400">点击地面摆放 · [B] 退出</p>
+          </div>
+        </div>
+        <button onClick={() => { soundManager.playClick(); setPaletteExpanded(true); }} className="rounded border border-slate-600 px-2 py-1 text-slate-200 hover:bg-slate-800">选择建筑</button>
+        <button onClick={() => { soundManager.playClick(); onToggleBuildMode(); }} title="退出建造模式 [B]" aria-label="退出建造模式 [B]" className="rounded p-1 text-slate-400 hover:bg-slate-800 hover:text-white"><X className="h-4 w-4" /></button>
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col items-center select-none bg-slate-950/95 backdrop-blur-md p-2.5 rounded-2xl border border-cyan-500/60 shadow-[0_10px_35px_rgba(0,0,0,0.8)] animate-in fade-in slide-in-from-bottom-2 max-w-xl">
       {/* Header & Tabs */}
@@ -303,6 +326,7 @@ export const BuildingBar: React.FC<BuildingBarProps> = ({
               onClick={() => {
                 soundManager.playClick();
                 onSelectType(s.type);
+                setPaletteExpanded(false);
               }}
               className={`flex flex-col items-center p-2 rounded-xl border text-center transition-all ${
                 isSelected
