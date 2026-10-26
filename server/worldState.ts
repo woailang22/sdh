@@ -940,8 +940,15 @@ export class GameWorld {
         else if (p.satiety > 0 && shieldRegenTime > 0) p.shield = Math.min(p.maxShield, p.shield + shieldRegenTime * 8);
       }
       const maps = new Set(activePlayers.filter(p => p.mapId.startsWith('home_')).map(p => p.mapId));
-      for (const mapId of maps) {
-        const buildings = Object.values(this.state.buildings).filter(b => b.mapId === mapId && b.hp > 0);
+      const buildingsByMap = new Map<MapZoneId, BuildingEntity[]>([...maps].map(mapId => [mapId, []]));
+      if (maps.size === 1) {
+        const mapId = maps.values().next().value!;
+        buildingsByMap.set(mapId, Object.values(this.state.buildings).filter(b => b.mapId === mapId && b.hp > 0));
+      } else if (maps.size > 1) for (const b of Object.values(this.state.buildings)) {
+        const mapId = b.mapId, buildings = mapId && buildingsByMap.get(mapId);
+        if (buildings && b.hp > 0) buildings.push(b);
+      }
+      for (const [mapId, buildings] of buildingsByMap) {
         for (const defense of buildings.filter(b => b.type === 'turret' || b.type === 'spikes')) {
           if (time - (this.state.defenseAt[defense.id] ?? -Infinity) < 1000 || defense.type === 'turret' && !(this.state.ammo[defense.id] > 0)) continue;
           const target = activePlayers.find(p => p.mapId === mapId && !this.canUse(p.id, defense) && distance(p, defense) <= (defense.type === 'turret' ? 8 : 1) && hasLineOfSight(defense, p, buildings, defense.id));

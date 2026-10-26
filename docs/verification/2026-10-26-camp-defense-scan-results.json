@@ -1,0 +1,790 @@
+{
+  "kind": "multi-camp-defense-scan-verification",
+  "base": "a23d77922c212b49b9a82c4410304e3ebe7cbde9",
+  "goalComplete": false,
+  "productionChanges": [
+    "server/worldState.ts"
+  ],
+  "rules": "Preserves active-space order, live-building order/references, current target lookup, LOS, ammunition, trap durability, cooldown and undo/persistence. Single camp retains original filter; no active camps do not enumerate buildings.",
+  "verification": {
+    "red": "After removing an erroneous test-only close() on the plain in-memoryDbHandle, baseline fails the12-versus1 scan guard; functional defense test passes.",
+    "regressionsAdded": 5,
+    "fullTests": 789,
+    "testFiles": 50,
+    "typesPassed": true,
+    "buildPassed": true,
+    "frontendBundleUnchanged": "index-D4Zbspb4.js",
+    "existingLargeBundleWarning": true,
+    "independentReadOnlyReview": {
+      "p1": 0,
+      "p2": 0,
+      "preGroupedLivenessChecked": true,
+      "statisticsRecomputed": true
+    },
+    "baselineSourceHashVerified": true,
+    "baselineDependencyChanges": [
+      "server/worldState.ts"
+    ]
+  },
+  "benchmark": {
+    "kind": "multi-camp-defense-scan",
+    "base": "a23d779",
+    "sampledOn": "2026-10-26",
+    "nodeVersion": "v24.15.0",
+    "buildingFixture": "20000 offline floor pieces plus2 per active camp; owners present, empty magazines; fixed clock prevents survival/cooldown changes",
+    "first": [
+      {
+        "activeCamps": 0,
+        "mode": "before",
+        "ms": 0.5111999999999881,
+        "changed": false
+      },
+      {
+        "activeCamps": 0,
+        "mode": "after",
+        "ms": 0.42959999999999354,
+        "changed": false
+      },
+      {
+        "activeCamps": 1,
+        "mode": "before",
+        "ms": 10.073500000000024,
+        "changed": false
+      },
+      {
+        "activeCamps": 1,
+        "mode": "after",
+        "ms": 6.244199999999978,
+        "changed": false
+      },
+      {
+        "activeCamps": 8,
+        "mode": "before",
+        "ms": 36.657299999999964,
+        "changed": false
+      },
+      {
+        "activeCamps": 8,
+        "mode": "after",
+        "ms": 6.6474000000000615,
+        "changed": false
+      },
+      {
+        "activeCamps": 32,
+        "mode": "before",
+        "ms": 196.93830000000003,
+        "changed": false
+      },
+      {
+        "activeCamps": 32,
+        "mode": "after",
+        "ms": 6.435899999999947,
+        "changed": false
+      }
+    ],
+    "rows": [
+      {
+        "activeCamps": 0,
+        "buildings": 20000,
+        "round": 0,
+        "mode": "before",
+        "iterations": 2,
+        "durationMs": 0.04770000000000607,
+        "perTickMs": 0.023850000000003035
+      },
+      {
+        "activeCamps": 0,
+        "buildings": 20000,
+        "round": 0,
+        "mode": "after",
+        "iterations": 2,
+        "durationMs": 0.05700000000001637,
+        "perTickMs": 0.028500000000008185
+      },
+      {
+        "activeCamps": 0,
+        "buildings": 20000,
+        "round": 1,
+        "mode": "after",
+        "iterations": 2,
+        "durationMs": 0.04759999999998854,
+        "perTickMs": 0.02379999999999427
+      },
+      {
+        "activeCamps": 0,
+        "buildings": 20000,
+        "round": 1,
+        "mode": "before",
+        "iterations": 2,
+        "durationMs": 0.09309999999999263,
+        "perTickMs": 0.04654999999999632
+      },
+      {
+        "activeCamps": 0,
+        "buildings": 20000,
+        "round": 2,
+        "mode": "before",
+        "iterations": 2,
+        "durationMs": 0.03869999999997731,
+        "perTickMs": 0.019349999999988654
+      },
+      {
+        "activeCamps": 0,
+        "buildings": 20000,
+        "round": 2,
+        "mode": "after",
+        "iterations": 2,
+        "durationMs": 0.04769999999999186,
+        "perTickMs": 0.02384999999999593
+      },
+      {
+        "activeCamps": 0,
+        "buildings": 20000,
+        "round": 3,
+        "mode": "after",
+        "iterations": 2,
+        "durationMs": 0.07570000000001187,
+        "perTickMs": 0.037850000000005934
+      },
+      {
+        "activeCamps": 0,
+        "buildings": 20000,
+        "round": 3,
+        "mode": "before",
+        "iterations": 2,
+        "durationMs": 0.06860000000000355,
+        "perTickMs": 0.034300000000001774
+      },
+      {
+        "activeCamps": 0,
+        "buildings": 20000,
+        "round": 4,
+        "mode": "before",
+        "iterations": 2,
+        "durationMs": 0.06200000000001182,
+        "perTickMs": 0.03100000000000591
+      },
+      {
+        "activeCamps": 0,
+        "buildings": 20000,
+        "round": 4,
+        "mode": "after",
+        "iterations": 2,
+        "durationMs": 0.06680000000000064,
+        "perTickMs": 0.03340000000000032
+      },
+      {
+        "activeCamps": 0,
+        "buildings": 20000,
+        "round": 5,
+        "mode": "after",
+        "iterations": 2,
+        "durationMs": 0.020699999999976626,
+        "perTickMs": 0.010349999999988313
+      },
+      {
+        "activeCamps": 0,
+        "buildings": 20000,
+        "round": 5,
+        "mode": "before",
+        "iterations": 2,
+        "durationMs": 0.021700000000009823,
+        "perTickMs": 0.010850000000004911
+      },
+      {
+        "activeCamps": 1,
+        "buildings": 20002,
+        "round": 0,
+        "mode": "before",
+        "iterations": 2,
+        "durationMs": 11.495600000000024,
+        "perTickMs": 5.747800000000012
+      },
+      {
+        "activeCamps": 1,
+        "buildings": 20002,
+        "round": 0,
+        "mode": "after",
+        "iterations": 2,
+        "durationMs": 11.85899999999998,
+        "perTickMs": 5.92949999999999
+      },
+      {
+        "activeCamps": 1,
+        "buildings": 20002,
+        "round": 1,
+        "mode": "after",
+        "iterations": 2,
+        "durationMs": 10.576999999999998,
+        "perTickMs": 5.288499999999999
+      },
+      {
+        "activeCamps": 1,
+        "buildings": 20002,
+        "round": 1,
+        "mode": "before",
+        "iterations": 2,
+        "durationMs": 10.921100000000024,
+        "perTickMs": 5.460550000000012
+      },
+      {
+        "activeCamps": 1,
+        "buildings": 20002,
+        "round": 2,
+        "mode": "before",
+        "iterations": 2,
+        "durationMs": 9.916200000000003,
+        "perTickMs": 4.958100000000002
+      },
+      {
+        "activeCamps": 1,
+        "buildings": 20002,
+        "round": 2,
+        "mode": "after",
+        "iterations": 2,
+        "durationMs": 11.679699999999912,
+        "perTickMs": 5.839849999999956
+      },
+      {
+        "activeCamps": 1,
+        "buildings": 20002,
+        "round": 3,
+        "mode": "after",
+        "iterations": 2,
+        "durationMs": 10.74369999999999,
+        "perTickMs": 5.371849999999995
+      },
+      {
+        "activeCamps": 1,
+        "buildings": 20002,
+        "round": 3,
+        "mode": "before",
+        "iterations": 2,
+        "durationMs": 11.994499999999903,
+        "perTickMs": 5.997249999999951
+      },
+      {
+        "activeCamps": 1,
+        "buildings": 20002,
+        "round": 4,
+        "mode": "before",
+        "iterations": 2,
+        "durationMs": 10.915100000000052,
+        "perTickMs": 5.457550000000026
+      },
+      {
+        "activeCamps": 1,
+        "buildings": 20002,
+        "round": 4,
+        "mode": "after",
+        "iterations": 2,
+        "durationMs": 10.981400000000008,
+        "perTickMs": 5.490700000000004
+      },
+      {
+        "activeCamps": 1,
+        "buildings": 20002,
+        "round": 5,
+        "mode": "after",
+        "iterations": 2,
+        "durationMs": 9.776299999999992,
+        "perTickMs": 4.888149999999996
+      },
+      {
+        "activeCamps": 1,
+        "buildings": 20002,
+        "round": 5,
+        "mode": "before",
+        "iterations": 2,
+        "durationMs": 10.764999999999986,
+        "perTickMs": 5.382499999999993
+      },
+      {
+        "activeCamps": 8,
+        "buildings": 20016,
+        "round": 0,
+        "mode": "before",
+        "iterations": 2,
+        "durationMs": 81.26650000000006,
+        "perTickMs": 40.63325000000003
+      },
+      {
+        "activeCamps": 8,
+        "buildings": 20016,
+        "round": 0,
+        "mode": "after",
+        "iterations": 2,
+        "durationMs": 10.952499999999986,
+        "perTickMs": 5.476249999999993
+      },
+      {
+        "activeCamps": 8,
+        "buildings": 20016,
+        "round": 1,
+        "mode": "after",
+        "iterations": 2,
+        "durationMs": 9.908799999999928,
+        "perTickMs": 4.954399999999964
+      },
+      {
+        "activeCamps": 8,
+        "buildings": 20016,
+        "round": 1,
+        "mode": "before",
+        "iterations": 2,
+        "durationMs": 82.24620000000004,
+        "perTickMs": 41.12310000000002
+      },
+      {
+        "activeCamps": 8,
+        "buildings": 20016,
+        "round": 2,
+        "mode": "before",
+        "iterations": 2,
+        "durationMs": 86.46900000000005,
+        "perTickMs": 43.234500000000025
+      },
+      {
+        "activeCamps": 8,
+        "buildings": 20016,
+        "round": 2,
+        "mode": "after",
+        "iterations": 2,
+        "durationMs": 11.639799999999923,
+        "perTickMs": 5.819899999999961
+      },
+      {
+        "activeCamps": 8,
+        "buildings": 20016,
+        "round": 3,
+        "mode": "after",
+        "iterations": 2,
+        "durationMs": 10.36999999999989,
+        "perTickMs": 5.184999999999945
+      },
+      {
+        "activeCamps": 8,
+        "buildings": 20016,
+        "round": 3,
+        "mode": "before",
+        "iterations": 2,
+        "durationMs": 93.32099999999991,
+        "perTickMs": 46.660499999999956
+      },
+      {
+        "activeCamps": 8,
+        "buildings": 20016,
+        "round": 4,
+        "mode": "before",
+        "iterations": 2,
+        "durationMs": 84.07169999999996,
+        "perTickMs": 42.03584999999998
+      },
+      {
+        "activeCamps": 8,
+        "buildings": 20016,
+        "round": 4,
+        "mode": "after",
+        "iterations": 2,
+        "durationMs": 11.181100000000015,
+        "perTickMs": 5.5905500000000075
+      },
+      {
+        "activeCamps": 8,
+        "buildings": 20016,
+        "round": 5,
+        "mode": "after",
+        "iterations": 2,
+        "durationMs": 9.917000000000144,
+        "perTickMs": 4.958500000000072
+      },
+      {
+        "activeCamps": 8,
+        "buildings": 20016,
+        "round": 5,
+        "mode": "before",
+        "iterations": 2,
+        "durationMs": 132.62009999999987,
+        "perTickMs": 66.31004999999993
+      },
+      {
+        "activeCamps": 32,
+        "buildings": 20064,
+        "round": 0,
+        "mode": "before",
+        "iterations": 2,
+        "durationMs": 341.2893999999999,
+        "perTickMs": 170.64469999999994
+      },
+      {
+        "activeCamps": 32,
+        "buildings": 20064,
+        "round": 0,
+        "mode": "after",
+        "iterations": 2,
+        "durationMs": 12.809099999999944,
+        "perTickMs": 6.404549999999972
+      },
+      {
+        "activeCamps": 32,
+        "buildings": 20064,
+        "round": 1,
+        "mode": "after",
+        "iterations": 2,
+        "durationMs": 10.852600000000166,
+        "perTickMs": 5.426300000000083
+      },
+      {
+        "activeCamps": 32,
+        "buildings": 20064,
+        "round": 1,
+        "mode": "before",
+        "iterations": 2,
+        "durationMs": 376.46839999999975,
+        "perTickMs": 188.23419999999987
+      },
+      {
+        "activeCamps": 32,
+        "buildings": 20064,
+        "round": 2,
+        "mode": "before",
+        "iterations": 2,
+        "durationMs": 584.0239000000001,
+        "perTickMs": 292.01195000000007
+      },
+      {
+        "activeCamps": 32,
+        "buildings": 20064,
+        "round": 2,
+        "mode": "after",
+        "iterations": 2,
+        "durationMs": 17.59920000000011,
+        "perTickMs": 8.799600000000055
+      },
+      {
+        "activeCamps": 32,
+        "buildings": 20064,
+        "round": 3,
+        "mode": "after",
+        "iterations": 2,
+        "durationMs": 15.124099999999999,
+        "perTickMs": 7.562049999999999
+      },
+      {
+        "activeCamps": 32,
+        "buildings": 20064,
+        "round": 3,
+        "mode": "before",
+        "iterations": 2,
+        "durationMs": 376.93139999999994,
+        "perTickMs": 188.46569999999997
+      },
+      {
+        "activeCamps": 32,
+        "buildings": 20064,
+        "round": 4,
+        "mode": "before",
+        "iterations": 2,
+        "durationMs": 407.76309999999967,
+        "perTickMs": 203.88154999999983
+      },
+      {
+        "activeCamps": 32,
+        "buildings": 20064,
+        "round": 4,
+        "mode": "after",
+        "iterations": 2,
+        "durationMs": 13.874899999999798,
+        "perTickMs": 6.937449999999899
+      },
+      {
+        "activeCamps": 32,
+        "buildings": 20064,
+        "round": 5,
+        "mode": "after",
+        "iterations": 2,
+        "durationMs": 15.659899999999652,
+        "perTickMs": 7.829949999999826
+      },
+      {
+        "activeCamps": 32,
+        "buildings": 20064,
+        "round": 5,
+        "mode": "before",
+        "iterations": 2,
+        "durationMs": 394.78890000000047,
+        "perTickMs": 197.39445000000023
+      }
+    ],
+    "summary": [
+      {
+        "activeCamps": 0,
+        "before": {
+          "medianPerTickMs": 0.027425000000004474,
+          "maxPerTickMs": 0.04654999999999632
+        },
+        "after": {
+          "medianPerTickMs": 0.026175000000002058,
+          "maxPerTickMs": 0.037850000000005934
+        }
+      },
+      {
+        "activeCamps": 1,
+        "before": {
+          "medianPerTickMs": 5.459050000000019,
+          "maxPerTickMs": 5.997249999999951
+        },
+        "after": {
+          "medianPerTickMs": 5.431274999999999,
+          "maxPerTickMs": 5.92949999999999
+        }
+      },
+      {
+        "activeCamps": 8,
+        "before": {
+          "medianPerTickMs": 42.635175000000004,
+          "maxPerTickMs": 66.31004999999993
+        },
+        "after": {
+          "medianPerTickMs": 5.330624999999969,
+          "maxPerTickMs": 5.819899999999961
+        }
+      },
+      {
+        "activeCamps": 32,
+        "before": {
+          "medianPerTickMs": 192.9300750000001,
+          "maxPerTickMs": 292.01195000000007
+        },
+        "after": {
+          "medianPerTickMs": 7.249749999999949,
+          "maxPerTickMs": 8.799600000000055
+        }
+      }
+    ],
+    "stateComparisons": [
+      {
+        "activeCamps": 0,
+        "allStatesEqual": true,
+        "sha256": "741a55e367bdd1c1030e4c0d7724f02dac737a7bc77ae4295e0e6d2740621590"
+      },
+      {
+        "activeCamps": 1,
+        "allStatesEqual": true,
+        "sha256": "79b7d4d34860dd7d084a8a39a013ee1de2b6e70046c8e4f8bfc27d54adc3371a"
+      },
+      {
+        "activeCamps": 8,
+        "allStatesEqual": true,
+        "sha256": "d31865439103a8072bc4a4809184cd576c64b2f9c48c17f82ea2f5964c2a40a8"
+      },
+      {
+        "activeCamps": 32,
+        "allStatesEqual": true,
+        "sha256": "682421126f781824863c80dfcf61801c33f590adea4ad46865dea7419da3b77a"
+      }
+    ],
+    "limitations": [
+      "Isolated actual GameWorld.tick with owned in-memory databases and synthetic scale, not a live-player capacity test.",
+      "No browser/GPU/memory or native walking acceptance.",
+      "No save triggered in timed idle runs; real attack, visibility, cooldown and persistence behaviors are covered separately by regression tests.",
+      "Alternating order and all first calls retained; wall times include scheduling/runtime overhead."
+    ]
+  },
+  "earlierCandidate": {
+    "reasonRejected": "Single-camp generic grouping path regressed in this sample; final candidate retains original single-camp filter.",
+    "summary": [
+      {
+        "activeCamps": 0,
+        "before": {
+          "medianPerTickMs": 0.029325000000000045,
+          "maxPerTickMs": 0.04054999999999609
+        },
+        "after": {
+          "medianPerTickMs": 0.025199999999998113,
+          "maxPerTickMs": 0.04925000000000068
+        }
+      },
+      {
+        "activeCamps": 1,
+        "before": {
+          "medianPerTickMs": 5.285124999999994,
+          "maxPerTickMs": 6.017799999999994
+        },
+        "after": {
+          "medianPerTickMs": 6.154699999999991,
+          "maxPerTickMs": 6.970699999999994
+        }
+      },
+      {
+        "activeCamps": 8,
+        "before": {
+          "medianPerTickMs": 37.702325,
+          "maxPerTickMs": 39.46339999999998
+        },
+        "after": {
+          "medianPerTickMs": 4.502900000000011,
+          "maxPerTickMs": 4.9153499999999894
+        }
+      },
+      {
+        "activeCamps": 32,
+        "before": {
+          "medianPerTickMs": 172.48932500000012,
+          "maxPerTickMs": 195.07370000000014
+        },
+        "after": {
+          "medianPerTickMs": 5.330850000000169,
+          "maxPerTickMs": 8.064750000000004
+        }
+      }
+    ],
+    "rawPreserved": "data/camp-defense-scan-bench-a1-results-20261026.json"
+  },
+  "browserDiagnostic": {
+    "executed": false,
+    "reason": "Computer Use could not determine current browser URL confidently enough to enforce policy; stopped without retry or navigation.",
+    "ownedStaticServiceClosed": true,
+    "resultFilePresent": false,
+    "newTabCreationUnverified": true
+  },
+  "limits": [
+    "No browser walking/GPU/whole-browser memory acceptance; the previous startup long frames remain unproven as fixed.",
+    "Synthetic fixed-clock empty-magazine scale excludes saving and is not measured online-player capacity or combat throughput.",
+    "Full tests exercise owned QA databases; the real data/sdc.sqlite was not opened."
+  ],
+  "sources": [
+    {
+      "path": "data/camp-defense-after-20261026.cjs",
+      "sha256": "b3077aa3ccc5657d8d42f9eb7e04d54d2c4174716c569c3ffd8b93adb0e8bd62"
+    },
+    {
+      "path": "data/camp-defense-before-20261026.cjs",
+      "sha256": "b3c1aeef18891f8bf43448f0fcd908a0179bcb4510de7489ef7716e68e12b06f"
+    },
+    {
+      "path": "data/camp-defense-before-build-20261026.json",
+      "sha256": "c272bfdcad7cfd39ba943490c0191066cab5636455e39985a534768580127cd2"
+    },
+    {
+      "path": "data/camp-defense-scan-bench-20261026.cjs",
+      "sha256": "1722a0466da2a4e6e11b033f81e53bfbf995dd71a4e192a6d881e78e4a840a22"
+    },
+    {
+      "path": "data/camp-defense-scan-bench-a1-results-20261026.json",
+      "sha256": "fe5e5d80f58fb965b018da1ed45c08064cf163ad5d02e35fed633888964efe64"
+    },
+    {
+      "path": "data/camp-defense-scan-bench-results-20261026.json",
+      "sha256": "59dc2a9f0e71d3c62cef04d538614746fe236c2d8a906cfc862b3050b3d65443"
+    },
+    {
+      "path": "data/camp-defense-scan-build-20261026.log",
+      "sha256": "9c602689f722bec936133a019646cf4547f2389574cbd5dcf709d537d39674d0"
+    },
+    {
+      "path": "data/camp-defense-scan-full-20261026.log",
+      "sha256": "770daefb7ad1cf978313b602ac515ad7d9d416e39b079ccc80531a10af157918"
+    },
+    {
+      "path": "data/camp-defense-scan-red-20261026.log",
+      "sha256": "1c78f12f4714f25d20a377c62dd745f645b6a13ba90fc21ce01f62e40c5dafbf"
+    },
+    {
+      "path": "data/camp-defense-scan-target-20261026.log",
+      "sha256": "4b03f75a9a3d4b54fb52fd62ccfc77936fccb35bccc6e7a2fc041a0d741eb4d0"
+    },
+    {
+      "path": "data/camp-defense-scan-types-20261026.log",
+      "sha256": "7f3594d7a965c703e6361ae50c0ef50cf9c344c621d801592b074b48554f4235"
+    },
+    {
+      "path": "data/report-camp-defense-scan-20261026.cjs",
+      "sha256": "cc05d84bde1aacf25f4e35a892a8f92e2f9063392093a51747772c335400b81b"
+    },
+    {
+      "path": "docs/superpowers/plans/2026-10-20-seamless-world-camps.md",
+      "sha256": "7d6563bfc38d43a02f160306c8aaf7046f26d4536dbd9227fabeb1db12ada55b"
+    },
+    {
+      "path": "docs/superpowers/plans/2026-10-26-camp-defense-scan.md",
+      "sha256": "76188a695b9e7cecd4cd147843684290e57a6aad11ba0009347eca4d3c4801b5"
+    },
+    {
+      "path": "docs/superpowers/plans/2026-10-26-warm-ground-cache-profile.md",
+      "sha256": "4a26d16fb90c86d840b99c51b35c4349344340ac5c3b77ae67b5418e56496497"
+    },
+    {
+      "path": "server/campDefenseScan.test.ts",
+      "sha256": "26dca68c67a0cc25455577f5209a03c6e2422e4fe67991e87a6753ffd4207bcc"
+    },
+    {
+      "path": "server/db.ts",
+      "sha256": "9cf91e65d64e6372bb897d98b8bdda843a03f42f409240f272abc4ed09d83f0f"
+    },
+    {
+      "path": "server/tickUndo.ts",
+      "sha256": "3fecad4e35c362f3dacb67e9e96cfbc127f2e29cc857315078009aa1fdd0c4c3"
+    },
+    {
+      "path": "server/worldState.ts",
+      "sha256": "bcf20d618fcf9979f076ff31dc2517ad98524a7595b2683a7a8ce00e44e6613b"
+    },
+    {
+      "path": "src/game/buildingRecipes.ts",
+      "sha256": "4514d33da6faf0d91fe9c41c095816a6559f8d335894acbcf31ab853d949df13"
+    },
+    {
+      "path": "src/game/combat.ts",
+      "sha256": "d9f4155b8e4ecfe3158e90ecc5b6910823af4de6ac198397dd8c57c8b51c20b3"
+    },
+    {
+      "path": "src/game/compound.ts",
+      "sha256": "a8a37ecce5383d06671e4fe57b54f8ec0fc7b0ebc14525d51110b2722e122a7f"
+    },
+    {
+      "path": "src/game/crafting.ts",
+      "sha256": "eb43bd22c9ee159759a1b23a76d64bbbdaeaf0c3a89cbc22fa7df87c90d34105"
+    },
+    {
+      "path": "src/game/equipmentRules.ts",
+      "sha256": "7add9af028a73655c1da136dc90fe21075bef19ef04f3316f507795ee3466f62"
+    },
+    {
+      "path": "src/game/home.ts",
+      "sha256": "d5e609f91b1c702f8c3605e27137ad2d3d21ebfc14d98a4301dfebdd0f3c6c11"
+    },
+    {
+      "path": "src/game/house.ts",
+      "sha256": "91508bd33748db9a40295bd44e9ecc2d51b6ede024dc068bced7613b57f3e612"
+    },
+    {
+      "path": "src/game/items.ts",
+      "sha256": "96337485eff172cbc3936f742af827a4c975275f800d8445b232f050649317f0"
+    },
+    {
+      "path": "src/game/maps.ts",
+      "sha256": "99a68c1d73068e11bd3a52ad1d0542102384822dbbb68310c8d20a7af34897f6"
+    },
+    {
+      "path": "src/game/market.ts",
+      "sha256": "3060e8932a1d59349c9dc783f335b21a1ce6eab98a3d69549ca32b1b59bc59d4"
+    },
+    {
+      "path": "src/game/navigation.ts",
+      "sha256": "defeedf6c1670922f76b115c5da0a1bdce4f64afa8fb5b7eca0ee5c48065b662"
+    },
+    {
+      "path": "src/game/weather.ts",
+      "sha256": "cb9ca518619740889713bbadaf0dab31a37daff4f35383ed14340a9805dd2dda"
+    },
+    {
+      "path": "src/game/world.ts",
+      "sha256": "9ad6447e3e2cce3f9f391856bd3008856a49c2849a35d71aa1368b1893510949"
+    },
+    {
+      "path": "src/game/worldRoutes.ts",
+      "sha256": "f802c4a6348bc5211912d0e16066120bc4152500ef7871db088d8ac4ad1346c5"
+    }
+  ]
+}
