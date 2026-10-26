@@ -11,6 +11,20 @@ import {
 
 describe('continuous world coordinates', () => {
   it.each([
+    { x: -576, y: -152, prefix: 'forest_post', ownerId: 'npc_forest_syndicate', hp: 600 },
+    { x: 782, y: 170, prefix: 'rebel_post', ownerId: 'npc_raider_boss', hp: 850 },
+  ])('assigns the locked $prefix walls to their existing gate faction without changing durability', ({ x, y, prefix, ownerId, hp }) => {
+    const c = worldToChunk(x, y), buildings = [];
+    for (let dx = -1; dx <= 1; dx++) for (let dy = -1; dy <= 1; dy++) buildings.push(...generateWorldChunk(c.x + dx, c.y + dy).buildings);
+    const walls = buildings.filter(b => b.id.includes(`:${prefix}_`) && b.type.endsWith('_wall'));
+    expect(walls).toHaveLength(11);
+    for (const wall of walls) expect(wall).toMatchObject({ ownerId, hp, maxHp: hp });
+    const gate = buildings.find(b => b.id.endsWith(`:${prefix}_door`))!;
+    expect(gate).toMatchObject({ ownerId, isOpen: false, isLocked: true });
+    expect(SUBMAPS[prefix === 'forest_post' ? 'mtn_deep' : 'town_ruins'].buildings.filter(b => b.id.startsWith(prefix + '_') && b.type.endsWith('_wall')).every(b => !b.ownerId)).toBe(true);
+  });
+
+  it.each([
     { cx: -10, cy: -4, name: '林场农舍', x: -304, y: -112, type: 'shelves', items: [['food', 3], ['water', 2], ['seed_potato', 1]] },
     { cx: -14, cy: -4, name: '护林诊所', x: -424, y: -104, type: 'med_cabinet', items: [['bandage', 3], ['antidote', 1]] },
     { cx: -17, cy: -5, name: '锯木维修间', x: -528, y: -144, type: 'shelves', items: [['scrap', 8], ['part', 2]] },

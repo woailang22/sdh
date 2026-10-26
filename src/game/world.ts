@@ -140,6 +140,12 @@ function publicContainerLoot(original: BuildingEntity, location: WorldLocation):
 function publicBuildings(location: WorldLocation): BuildingEntity[] {
   if (location.sourceMapId === 'camp_outskirts') return [];
   let buildings = SUBMAPS[location.sourceMapId].buildings.filter((b) => b.type !== 'storage_box');
+  // NPC compound walls share the gate's faction so the existing breach UI
+  // offers both approaches. Ordinary unowned public scenery stays neutral.
+  for (const door of buildings.filter(b => b.type === 'safe_door' && b.ownerId?.startsWith('npc_'))) {
+    const prefix = door.id.replace(/_door$/, '') + '_';
+    buildings = buildings.map(b => b.type.endsWith('_wall') && !b.ownerId && b.id.startsWith(prefix) ? { ...b, ownerId: door.ownerId } : b);
+  }
   for (const door of buildings.filter((b) => b.type === 'door')) {
     const prefix = door.id.replace(/_door$/, '');
     const shell = buildings.filter((b) => b.id.startsWith(`${prefix}_`) && (b.type.includes('wall') || b.type === 'door'));

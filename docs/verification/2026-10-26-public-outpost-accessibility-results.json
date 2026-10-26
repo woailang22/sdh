@@ -1,0 +1,588 @@
+{
+  "date": "2026-10-26",
+  "sourceCommit": "193fbe7a6c726455381e431bb5907091e454343b plus the source changes hashed below",
+  "method": "4096 fresh immutable chunks; half-cell four-neighbor flood, shared AABBs + .22 player radius, actual LOS interaction approaches <=3; ordinary gates also checked with actual findPath; locked gates separately paid-breached and searched via memory GameWorld",
+  "limits": [
+    "No persistent world overrides or player camps in static flood",
+    "Half-cell sampling may miss narrower passages; every accepted cardinal edge is safe because each expanded obstacle spans more than .5 on both axes",
+    "Breach starts a seeded isolated fixture outside the gate with exactly enough C4; no NPC/survival ticks, overworld travel, native UI, economy balance or performance acceptance",
+    "No real SQLite opened"
+  ],
+  "worldCells": 16777216,
+  "reachableCells": 16648841,
+  "blockedCells": 128333,
+  "minimumExpandedSpan": 0.6799999999999948,
+  "buildings": 57255,
+  "nodes": 32525,
+  "ordinaryHouses": 1864,
+  "ordinaryFailures": [],
+  "inaccessible": [
+    {
+      "id": "world:-19:-5:container:mtn_deep:deep_parts_box",
+      "name": "佣兵零件箱",
+      "x": -577,
+      "y": -152,
+      "lockedHouse": "world:mtn_deep:forest_post"
+    },
+    {
+      "id": "world:-18:-5:container:mtn_deep:deep_cache_box",
+      "name": "佣兵前哨补给箱",
+      "x": -576,
+      "y": -152,
+      "lockedHouse": "world:mtn_deep:forest_post"
+    },
+    {
+      "id": "world:-18:-5:container:mtn_deep:deep_food_box",
+      "name": "佣兵口粮箱",
+      "x": -575,
+      "y": -152,
+      "lockedHouse": "world:mtn_deep:forest_post"
+    },
+    {
+      "id": "world:24:5:container:town_ruins:rebel_chest",
+      "name": "掠夺者军火大储物箱",
+      "x": 782,
+      "y": 170,
+      "lockedHouse": "world:town_ruins:rebel_post"
+    },
+    {
+      "id": "world:24:5:container:town_ruins:rebel_med",
+      "name": "掠夺者医疗箱",
+      "x": 781,
+      "y": 170,
+      "lockedHouse": "world:town_ruins:rebel_post"
+    },
+    {
+      "id": "world:24:5:container:town_ruins:rebel_credits",
+      "name": "掠夺者赃款箱",
+      "x": 783,
+      "y": 170,
+      "lockedHouse": "world:town_ruins:rebel_post"
+    }
+  ],
+  "pockets": [
+    {
+      "x": -577.5,
+      "y": -152.5,
+      "house": "world:mtn_deep:forest_post"
+    },
+    {
+      "x": -577,
+      "y": -152.5,
+      "house": "world:mtn_deep:forest_post"
+    },
+    {
+      "x": -576.5,
+      "y": -152.5,
+      "house": "world:mtn_deep:forest_post"
+    },
+    {
+      "x": -576,
+      "y": -152.5,
+      "house": "world:mtn_deep:forest_post"
+    },
+    {
+      "x": -575.5,
+      "y": -152.5,
+      "house": "world:mtn_deep:forest_post"
+    },
+    {
+      "x": -575,
+      "y": -152.5,
+      "house": "world:mtn_deep:forest_post"
+    },
+    {
+      "x": -574.5,
+      "y": -152.5,
+      "house": "world:mtn_deep:forest_post"
+    },
+    {
+      "x": -577.5,
+      "y": -152,
+      "house": "world:mtn_deep:forest_post"
+    },
+    {
+      "x": -577,
+      "y": -152,
+      "house": "world:mtn_deep:forest_post"
+    },
+    {
+      "x": -576.5,
+      "y": -152,
+      "house": "world:mtn_deep:forest_post"
+    },
+    {
+      "x": -576,
+      "y": -152,
+      "house": "world:mtn_deep:forest_post"
+    },
+    {
+      "x": -575.5,
+      "y": -152,
+      "house": "world:mtn_deep:forest_post"
+    },
+    {
+      "x": -575,
+      "y": -152,
+      "house": "world:mtn_deep:forest_post"
+    },
+    {
+      "x": -574.5,
+      "y": -152,
+      "house": "world:mtn_deep:forest_post"
+    },
+    {
+      "x": -577.5,
+      "y": -151.5,
+      "house": "world:mtn_deep:forest_post"
+    },
+    {
+      "x": -577,
+      "y": -151.5,
+      "house": "world:mtn_deep:forest_post"
+    },
+    {
+      "x": -576.5,
+      "y": -151.5,
+      "house": "world:mtn_deep:forest_post"
+    },
+    {
+      "x": -576,
+      "y": -151.5,
+      "house": "world:mtn_deep:forest_post"
+    },
+    {
+      "x": -575.5,
+      "y": -151.5,
+      "house": "world:mtn_deep:forest_post"
+    },
+    {
+      "x": -575,
+      "y": -151.5,
+      "house": "world:mtn_deep:forest_post"
+    },
+    {
+      "x": -574.5,
+      "y": -151.5,
+      "house": "world:mtn_deep:forest_post"
+    },
+    {
+      "x": 780.5,
+      "y": 169.5,
+      "house": "world:town_ruins:rebel_post"
+    },
+    {
+      "x": 781,
+      "y": 169.5,
+      "house": "world:town_ruins:rebel_post"
+    },
+    {
+      "x": 781.5,
+      "y": 169.5,
+      "house": "world:town_ruins:rebel_post"
+    },
+    {
+      "x": 782,
+      "y": 169.5,
+      "house": "world:town_ruins:rebel_post"
+    },
+    {
+      "x": 782.5,
+      "y": 169.5,
+      "house": "world:town_ruins:rebel_post"
+    },
+    {
+      "x": 783,
+      "y": 169.5,
+      "house": "world:town_ruins:rebel_post"
+    },
+    {
+      "x": 783.5,
+      "y": 169.5,
+      "house": "world:town_ruins:rebel_post"
+    },
+    {
+      "x": 780.5,
+      "y": 170,
+      "house": "world:town_ruins:rebel_post"
+    },
+    {
+      "x": 781,
+      "y": 170,
+      "house": "world:town_ruins:rebel_post"
+    },
+    {
+      "x": 781.5,
+      "y": 170,
+      "house": "world:town_ruins:rebel_post"
+    },
+    {
+      "x": 782,
+      "y": 170,
+      "house": "world:town_ruins:rebel_post"
+    },
+    {
+      "x": 782.5,
+      "y": 170,
+      "house": "world:town_ruins:rebel_post"
+    },
+    {
+      "x": 783,
+      "y": 170,
+      "house": "world:town_ruins:rebel_post"
+    },
+    {
+      "x": 783.5,
+      "y": 170,
+      "house": "world:town_ruins:rebel_post"
+    },
+    {
+      "x": 780.5,
+      "y": 170.5,
+      "house": "world:town_ruins:rebel_post"
+    },
+    {
+      "x": 781,
+      "y": 170.5,
+      "house": "world:town_ruins:rebel_post"
+    },
+    {
+      "x": 781.5,
+      "y": 170.5,
+      "house": "world:town_ruins:rebel_post"
+    },
+    {
+      "x": 782,
+      "y": 170.5,
+      "house": "world:town_ruins:rebel_post"
+    },
+    {
+      "x": 782.5,
+      "y": 170.5,
+      "house": "world:town_ruins:rebel_post"
+    },
+    {
+      "x": 783,
+      "y": 170.5,
+      "house": "world:town_ruins:rebel_post"
+    },
+    {
+      "x": 783.5,
+      "y": 170.5,
+      "house": "world:town_ruins:rebel_post"
+    }
+  ],
+  "landmarks": [
+    {
+      "id": "camp_plaza",
+      "approach": {
+        "x": 0,
+        "y": -1,
+        "distance": 1
+      }
+    },
+    {
+      "id": "camp_workshop",
+      "approach": {
+        "x": 64,
+        "y": 0,
+        "distance": 0
+      }
+    },
+    {
+      "id": "camp_outskirts",
+      "approach": {
+        "x": 0,
+        "y": 72,
+        "distance": 0
+      }
+    },
+    {
+      "id": "mtn_logging",
+      "approach": {
+        "x": -240,
+        "y": 0,
+        "distance": 0
+      }
+    },
+    {
+      "id": "mtn_deep",
+      "approach": {
+        "x": -560,
+        "y": -160,
+        "distance": 0
+      }
+    },
+    {
+      "id": "mtn_quarry",
+      "approach": {
+        "x": -128,
+        "y": -352,
+        "distance": 0
+      }
+    },
+    {
+      "id": "mtn_peak",
+      "approach": {
+        "x": -160,
+        "y": -720,
+        "distance": 0
+      }
+    },
+    {
+      "id": "town_gas",
+      "approach": {
+        "x": 240,
+        "y": 0,
+        "distance": 0
+      }
+    },
+    {
+      "id": "town_street",
+      "approach": {
+        "x": 448,
+        "y": 32,
+        "distance": 0
+      }
+    },
+    {
+      "id": "town_factory",
+      "approach": {
+        "x": 640,
+        "y": -64,
+        "distance": 0
+      }
+    },
+    {
+      "id": "town_ruins",
+      "approach": {
+        "x": 760,
+        "y": 176,
+        "distance": 0
+      }
+    },
+    {
+      "id": "marsh_docks",
+      "approach": {
+        "x": 0,
+        "y": 256,
+        "distance": 0
+      }
+    },
+    {
+      "id": "marsh_bog",
+      "approach": {
+        "x": -80,
+        "y": 480,
+        "distance": 0
+      }
+    },
+    {
+      "id": "marsh_rift",
+      "approach": {
+        "x": 96,
+        "y": 688,
+        "distance": 0
+      }
+    },
+    {
+      "id": "marsh_abyss",
+      "approach": {
+        "x": 160,
+        "y": 880,
+        "distance": 0
+      }
+    }
+  ],
+  "breachResults": [
+    {
+      "house": "world:mtn_deep:forest_post",
+      "route": "gate",
+      "targetHp": 5500,
+      "targetOwner": "npc_forest_syndicate",
+      "gateHp": 5500,
+      "charges": 7,
+      "closedSearchRejected": 3,
+      "containers": [
+        "world:-19:-5:container:mtn_deep:deep_parts_box",
+        "world:-18:-5:container:mtn_deep:deep_cache_box",
+        "world:-18:-5:container:mtn_deep:deep_food_box"
+      ],
+      "lootTotals": {
+        "part": 5,
+        "ammo": 4,
+        "medkit": 3,
+        "food": 10
+      },
+      "moves": {
+        "accepted": 14,
+        "rejected": 0
+      },
+      "exited": true,
+      "gatePreserved": false,
+      "restartPreserved": true,
+      "lootReplayPreserved": true
+    },
+    {
+      "house": "world:mtn_deep:forest_post",
+      "route": "wall",
+      "targetHp": 600,
+      "targetOwner": "npc_forest_syndicate",
+      "gateHp": 5500,
+      "charges": 1,
+      "closedSearchRejected": 3,
+      "containers": [
+        "world:-19:-5:container:mtn_deep:deep_parts_box",
+        "world:-18:-5:container:mtn_deep:deep_cache_box",
+        "world:-18:-5:container:mtn_deep:deep_food_box"
+      ],
+      "lootTotals": {
+        "part": 5,
+        "ammo": 4,
+        "medkit": 3,
+        "food": 10
+      },
+      "moves": {
+        "accepted": 14,
+        "rejected": 0
+      },
+      "exited": true,
+      "gatePreserved": true,
+      "restartPreserved": true,
+      "lootReplayPreserved": true
+    },
+    {
+      "house": "world:town_ruins:rebel_post",
+      "route": "gate",
+      "targetHp": 4200,
+      "targetOwner": "npc_raider_boss",
+      "gateHp": 4200,
+      "charges": 5,
+      "closedSearchRejected": 3,
+      "containers": [
+        "world:24:5:container:town_ruins:rebel_chest",
+        "world:24:5:container:town_ruins:rebel_med",
+        "world:24:5:container:town_ruins:rebel_credits"
+      ],
+      "lootTotals": {
+        "scrap": 5,
+        "medkit": 3,
+        "bandage": 3,
+        "credits": 50
+      },
+      "moves": {
+        "accepted": 14,
+        "rejected": 0
+      },
+      "exited": true,
+      "gatePreserved": false,
+      "restartPreserved": true,
+      "lootReplayPreserved": true
+    },
+    {
+      "house": "world:town_ruins:rebel_post",
+      "route": "wall",
+      "targetHp": 850,
+      "targetOwner": "npc_raider_boss",
+      "gateHp": 4200,
+      "charges": 1,
+      "closedSearchRejected": 3,
+      "containers": [
+        "world:24:5:container:town_ruins:rebel_chest",
+        "world:24:5:container:town_ruins:rebel_med",
+        "world:24:5:container:town_ruins:rebel_credits"
+      ],
+      "lootTotals": {
+        "scrap": 5,
+        "medkit": 3,
+        "bandage": 3,
+        "credits": 50
+      },
+      "moves": {
+        "accepted": 14,
+        "rejected": 0
+      },
+      "exited": true,
+      "gatePreserved": true,
+      "restartPreserved": true,
+      "lootReplayPreserved": true
+    }
+  ],
+  "sourceHashes": {
+    "src/game/world.ts": "72084a8e566097a6ca04504728def51c3c83ac7ee426edf8e92096f1b24e8be5",
+    "src/game/worldRoutes.ts": "f802c4a6348bc5211912d0e16066120bc4152500ef7871db088d8ac4ad1346c5",
+    "src/game/navigation.ts": "defeedf6c1670922f76b115c5da0a1bdce4f64afa8fb5b7eca0ee5c48065b662",
+    "src/game/house.ts": "91508bd33748db9a40295bd44e9ecc2d51b6ede024dc068bced7613b57f3e612",
+    "src/game/maps.ts": "99a68c1d73068e11bd3a52ad1d0542102384822dbbb68310c8d20a7af34897f6",
+    "src/game/compound.ts": "a8a37ecce5383d06671e4fe57b54f8ec0fc7b0ebc14525d51110b2722e122a7f",
+    "src/game/items.ts": "4c9fdf817ed92b33aa6210ef05b6a69dfb5d9e18105e8faeb43dbed4efd824db",
+    "src/game/combat.ts": "ba03d05d852cd9ea560b0d708460ac90d65e2fe5f6fde81c3d45a3d03d761998",
+    "src/game/equipmentRules.ts": "7add9af028a73655c1da136dc90fe21075bef19ef04f3316f507795ee3466f62",
+    "server/worldQueries.ts": "0bdc8625d63d959f1baaceba232702dba7bfc7f7612dcf720757fd8268898822",
+    "server/worldState.ts": "68b2c98016850e9431b84690e1cadefa9415359320fe8eca9b774c2e85d7ac5d",
+    "server/db.ts": "9cf91e65d64e6372bb897d98b8bdda843a03f42f409240f272abc4ed09d83f0f",
+    "src/game/IsometricEngine.ts": "4795e485b09b63c32be3d12a835dbcb6a1b933605cff53cf537bcd4853330a86",
+    "src/game/world.test.ts": "0d6d9562e571c45e6c7f6805b48f7abdb83517d5770817656b9247ac88e714ca",
+    "src/game/IsometricEngine.test.ts": "ff17e3e6ce8dd3f4157112097d1a11ccfc30c1f9d1707a73ef811a8a3d298ede",
+    "server/publicOutpostAccess.test.ts": "a9161bee83edff859381132e110e53f5095fe23b3dbfb8a9f34e1abdc327a737"
+  },
+  "elapsedMs": 5636.2907,
+  "productionChange": "Only world.ts derives the existing NPC gate faction for its 22 unowned compound walls; worldState restores missing ownership on saved public NPC-wall overrides without healing or changing explicit ownership. Ordinary scenery and private assets unaffected.",
+  "verification": {
+    "red": {
+      "failed": 8,
+      "passed": 226
+    },
+    "targetedPassed": 234,
+    "realEngineSelectionPassed": 2,
+    "fullFiles": 55,
+    "fullPassed": 836,
+    "typeCheckExit": 0,
+    "buildExit": 0,
+    "buildAsset": "index-BgY8mVUf.js",
+    "review": "Independent readonly source and evidence review; no P1/P2"
+  },
+  "worldComparison": {
+    "chunkCount": 4096,
+    "changedChunks": [
+      "world:-19:-5",
+      "world:-18:-5",
+      "world:24:5"
+    ],
+    "targetWalls": 22,
+    "owners": {
+      "npc_forest_syndicate": 11,
+      "npc_raider_boss": 11
+    },
+    "normalizedEveryChunkEqual": true,
+    "includes": "Complete generated buildings, interactables and monsters; only the 22 target walls ownerId removed for comparison. No geometry, HP, names, node loot/stock/refresh, monster or other building changes."
+  },
+  "failedAttempts": [
+    "a1 restart assertion incorrectly required survivalAt to stay at the old accounting baseline; existing constructor intentionally resumes accounting from now. Corrected QA assertion, retained failed script/log; no product fix for this.",
+    "First type check rejected optional ownerId used as an index in the ignored comparison script. Narrowed the local string value, retained failed log; production source unchanged."
+  ],
+  "interpretation": [
+    "Gate route needs 7/5 C4 in these fixtures; the existing 600/850-HP wall route needs 1 C4 and retains the closed gate. Gate costs are not minimum breach costs.",
+    "Loot remains unchanged, including a military-labelled chest that currently gives 5 scrap; naming and long-term reward balance are not accepted by this accessibility proof.",
+    "Public damage persists while containers use their own respawn rules. A one-time breach cost cannot be charged to every subsequent loot cycle when analysing economy."
+  ],
+  "warnings": [
+    "Existing large-bundle and Vite __dirname warnings retained"
+  ],
+  "nativePlayVerified": false,
+  "overallGoalAccepted": false,
+  "evidenceHashes": {
+    "data/world-accessibility-20261026-a3-results.json": "879d9dc7eecd559e5364e6c9dc868d2df326a8d38fc43d7ea593f7597698682e",
+    "data/world-accessibility-20261026-a1.log": "1dd951e86ee8610dbc246297208d303374320b69d01567b231c1d3cd9d40cdb2",
+    "data/world-accessibility-20261026-a2-results.json": "1b8f06a28a7b5555863c0a84af01c0ff50dbe96d45940cc20088d1390e606239",
+    "data/public-outpost-baseline-20261026.json": "d3153e6301f4f26656939842bebf305972556c864854ceabab3b704b7f35dfc5",
+    "data/public-outpost-world-comparison-20261026.json": "54fea4298e22e4772c45ca000d0fdbc55df41bbf5956f0c18ed0ee15e4540f35",
+    "data/public-outpost-wall-red-20261026.log": "1dd9c795ffcf7ceb07e6a13f7be8ac3952209b5cfa222c50efa52be81afb95c4",
+    "data/public-outpost-wall-green-20261026.log": "a35e43bed8684ae7bb63b24020c8c1102cffb6775367f191549d181b1285019a",
+    "data/public-outpost-wall-selection-20261026.log": "0adc5b442b407a68c8216b27943cb74f35fa5c6a7c1278ce1c55aa047342c0d2",
+    "data/public-outpost-wall-full-20261026.log": "578ca7a4ce735d28685b0ec4077b1208927c02cfc30bfdb13fa0e95a34523feb",
+    "data/public-outpost-wall-types-a1-20261026.log": "bebe0f4c32585ac51e0ec623acf4ffcfc4d7f752e4bd93e0358234a66f195e8b",
+    "data/public-outpost-wall-types-20261026.log": "7f3594d7a965c703e6361ae50c0ef50cf9c344c621d801592b074b48554f4235",
+    "data/public-outpost-wall-build-20261026.log": "6f435d33132ea1cf048af947cbb92d418601ce1fd6591da965f4ec3805f35ff2"
+  }
+}

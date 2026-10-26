@@ -161,6 +161,7 @@ export class GameWorld {
       savedBuilding.x = definition.x; savedBuilding.y = definition.y;
       savedBuilding.name = definition.name;
       savedBuilding.facing = definition.facing; savedBuilding.doorWidth = definition.doorWidth;
+      if (!savedBuilding.ownerId && definition.type.endsWith('_wall') && definition.ownerId?.startsWith('npc_')) savedBuilding.ownerId = definition.ownerId;
     }
     // Old instances sometimes contained walls but no core; retain a paid-repair ruin instead of trapping their owner forever.
     for (const camp of Object.values(this.state.camps)) {

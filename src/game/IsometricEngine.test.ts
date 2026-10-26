@@ -1635,6 +1635,22 @@ describe('engine lifetime', () => {
 });
 
 describe('camp interaction priority', () => {
+  it.each([
+    { x: -576, y: -155, suffix: ':forest_post_n_-16' },
+    { x: 782, y: 167, suffix: ':rebel_post_n_22' },
+  ])('offers the existing breach interaction on an authored hostile outpost wall $suffix', ({ x, y, suffix }) => {
+    const { engine, context } = setup(); const raid = vi.fn(), manage = vi.fn();
+    Object.assign((engine as any).callbacks, { onGameAction: vi.fn(), onOpenRaidModal: raid, onOpenStorageBox: manage });
+    engine.localPlayerId = 'self'; engine.warpToMap('world', x, y);
+    const wall = engine.buildings.find(b => b.id.endsWith(suffix))!; expect(wall).toBeDefined();
+    (engine as any).update(0);
+    expect(engine.nearestBuilding?.id).toBe(wall.id);
+    engine.triggerInteraction(); (engine as any).renderInteractionHUD();
+    expect(raid).toHaveBeenCalledWith(wall); expect(manage).not.toHaveBeenCalled();
+    expect((context as any).fillText.mock.calls.some(([label]: string[]) => label.includes('破拆建筑'))).toBe(true);
+    engine.dispose();
+  });
+
   it.each(['owner', 'enemy', 'member'])('uses the closer %s storage instead of leaving camp', role => {
     const { engine } = setup();
     const portal = vi.fn(() => true), raid = vi.fn(), manage = vi.fn();
