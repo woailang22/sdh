@@ -1,0 +1,78 @@
+{
+  "date": "2026-10-26",
+  "sourceCommit": "a7e4574868d44127d85d8092844390be33895f2c plus the source changes hashed below",
+  "request": "User explicitly selected relocation costing twice initial camp creation",
+  "costs": {
+    "creation": {
+      "wood": 20,
+      "stone": 10
+    },
+    "relocation": {
+      "wood": 40,
+      "stone": 20
+    }
+  },
+  "scope": "Only authoritative action cost and CampPanel text/affordability changed. No geometry, assets, combat restrictions, saved player state, recipes or rewards changed.",
+  "regression": {
+    "before": {
+      "failed": 9,
+      "passed": 22
+    },
+    "targetedPassed": 32,
+    "fullFiles": 54,
+    "fullPassed": 827,
+    "typesExit": 0,
+    "buildExit": 0,
+    "buildAsset": "index-ryQYA_9j.js",
+    "cases": [
+      "Creation still costs 20 wood/10 stone",
+      "Relocation with exactly 40 wood/20 stone spends all",
+      "39 wood/20 stone and 40 wood/19 stone reject without state change",
+      "Initial and confirmation UI use the new threshold",
+      "Replay/restart do not charge again",
+      "Checkpoint failure rolls back; retry pays once"
+    ]
+  },
+  "protocol": {
+    "passed": true,
+    "fixture": "Owned isolatedSQLite, seeded baseline and frozen simulation clock; actual production server/protocol, not native play",
+    "oldObserverUpdated": true,
+    "newObserverUpdated": true,
+    "oldEntryRejected": true,
+    "newEntryAndExit": true,
+    "exitY": 44,
+    "cost": {
+      "wood": 40,
+      "stone": 20
+    },
+    "storageWoodPreserved": 7,
+    "replayAndRestartPreserved": true,
+    "actorCount": 3,
+    "stderrEmpty": true
+  },
+  "review": {
+    "mode": "Independent readonly source review",
+    "p1": 0,
+    "p2": 0
+  },
+  "limits": [
+    "Protocol actors start with seeded test resources and a frozen clock; not earned gameplay or native UI validation",
+    "Historical 20/10 report retained; no retrospective charge for completed relocations",
+    "Existing bundle-size and Vite __dirname warnings remain",
+    "No new world-connectivity, native walking, GPU or whole-browser memory measurements; overall goal remains active"
+  ],
+  "sourceHashes": {
+    "server/worldState.ts": "69311f829862503fcd6c7e4fa7b1e3a13830f64298975d4916ab1dd334307cd5",
+    "src/components/CampPanel.tsx": "ee38c05b2fba812718962d1a845cf3295e4b6ef3e76cbd60caa2776f28b2842f",
+    "server/campRelocation.test.ts": "0f7ed617c6dad80093bc4c45dce845b3b118cf4a5b5979567c4eaafd08319321",
+    "src/components/CampPanel.test.tsx": "43ecaf28b070ea2e0ea1e21f41318da6f6d03ee57a30623fd5775e285ed1c09e",
+    "server/campRelocationSync.test.ts": "481e52833fabefc12f2c154cec320d4ef3e304a72101788ba5fadcf7590b8342"
+  },
+  "evidenceHashes": {
+    "camp-relocation-double-cost-red-20261026.log": "eb3b95476866e8caf8a4b7a905a6aed5ed03ca26d1044c1aafa4b3ea273b0ff3",
+    "camp-relocation-double-cost-green-20261026.log": "b7ffbc54abbca0ab7c7bff9c8b3fd5a5f2c88ca0bbe8f5c358f9f81fa5b3f2e0",
+    "camp-relocation-double-cost-full-20261026.log": "d4dc901eb1f5afa39f4e4532f6ef28ac2cf9ffad3b442645e2c7b2b493e1f31f",
+    "camp-relocation-double-cost-types-20261026.log": "7f3594d7a965c703e6361ae50c0ef50cf9c344c621d801592b074b48554f4235",
+    "camp-relocation-double-cost-build-20261026.log": "d1f7ff56257a72ca63aecbefa2baca7b805f075f9e475d271798669d99e8e800"
+  }
+}

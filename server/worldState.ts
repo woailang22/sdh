@@ -622,7 +622,8 @@ export class GameWorld {
       requireRule(this.rules.campSiteAllowed(a.x, a.y), '避难点、道路、河流或地标保护范围内不能建营');
       requireRule(!isPositionBlocked(a.x, a.y, this.buildingsFor(p), 1.5) && this.rules.nodesNear(a.x, a.y).every(n => distance(n, { x: a.x as number, y: a.y as number }) >= 2), '营地入口不能占用建筑或资源');
       requireRule(Object.values(this.state.camps).every(other => other.id === camp?.id || distance(other, { x: a.x as number, y: a.y as number }) >= 12), '距离其他营地过近');
-      this.checkCost(p, { wood: 20, stone: 10 }); this.spend(p, { wood: 20, stone: 10 });
+      const cost = relocating ? { wood: 40, stone: 20 } : { wood: 20, stone: 10 };
+      this.checkCost(p, cost); this.spend(p, cost);
       if (camp) {
         camp.x = a.x; camp.y = a.y;
         this.report(p.id, `营地入口迁移至 (${camp.x}, ${camp.y})，建筑与物资保留`); return;

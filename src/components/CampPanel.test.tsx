@@ -21,7 +21,7 @@ function text(node: React.ReactNode): string {
   return typeof node === 'string' || typeof node === 'number' ? String(node) : '';
 }
 function setup() {
-  const props: Parameters<typeof CampPanel>[0] = { isOpen: true, onClose() {}, onNavigate() {}, onAction: vi.fn(), selfId: 'owner', campId: 'home_owner', currentMapId: 'world', playerPos: { x: 200, y: 100 }, resources: { wood: 20, stone: 10 }, inventory: [], camps: [{ id: 'home_owner', ownerId: 'owner', ownerName: '主人', x: 100, y: 100, mapId: 'world', state: 'active' }] };
+  const props: Parameters<typeof CampPanel>[0] = { isOpen: true, onClose() {}, onNavigate() {}, onAction: vi.fn(), selfId: 'owner', campId: 'home_owner', currentMapId: 'world', playerPos: { x: 200, y: 100 }, resources: { wood: 40, stone: 20 }, inventory: [], camps: [{ id: 'home_owner', ownerId: 'owner', ownerName: '主人', x: 100, y: 100, mapId: 'world', state: 'active' }] };
   const render = () => { hooks.cursor = 0; return CampPanel(props); };
   const button = (label: string) => nodes(render()).find(node => node.type === 'button' && text(node) === label);
   return { props, render, button };
@@ -31,7 +31,8 @@ beforeEach(() => { hooks.values = []; hooks.cursor = 0; });
 it('requires a second confirmation at the chosen site and sends relocation rather than creating a camp', () => {
   const f = setup(); expect(f.button('在脚下迁移入口')).toBeDefined();
   f.button('在脚下迁移入口')!.props.onClick(); expect(f.props.onAction).not.toHaveBeenCalled();
-  expect(text(f.render())).toContain('木材 20 / 石料 10'); expect(text(f.render())).toContain('建筑与物资保留');
+  expect(text(f.render())).toContain('木材40、石料20');
+  expect(text(f.render())).toContain('木材 40 / 石料 20'); expect(text(f.render())).toContain('建筑与物资保留');
   f.button('确认迁移')!.props.onClick();
   expect(f.props.onAction).toHaveBeenCalledWith('relocate_camp', { x: 200, y: 100 });
   expect(f.button('确认迁移')).toBeUndefined();
@@ -39,9 +40,26 @@ it('requires a second confirmation at the chosen site and sends relocation rathe
 
 it('rechecks resources and distance after confirmation, and cancellation sends no action', () => {
   const f = setup(); f.button('在脚下迁移入口')!.props.onClick();
-  f.props.resources.wood = 19; expect(f.button('确认迁移')!.props.disabled).toBe(true);
-  f.props.resources.wood = 20; f.props.playerPos.x = 210; expect(f.button('确认迁移')!.props.disabled).toBe(true);
+  f.props.resources.wood = 39; expect(f.button('确认迁移')!.props.disabled).toBe(true);
+  f.props.resources.wood = 40; f.props.resources.stone = 19; expect(f.button('确认迁移')!.props.disabled).toBe(true);
+  f.props.resources.stone = 20; expect(f.button('确认迁移')!.props.disabled).toBe(false);
+  f.props.playerPos.x = 210; expect(f.button('确认迁移')!.props.disabled).toBe(true);
   f.button('取消')!.props.onClick(); expect(f.props.onAction).not.toHaveBeenCalled(); expect(f.button('确认迁移')).toBeUndefined();
+});
+
+it.each([{ wood: 39, stone: 20 }, { wood: 40, stone: 19 }])('disables the initial relocation action when materials are %j', resources => {
+  const f = setup(); f.props.resources = resources;
+  expect(f.button('在脚下迁移入口')!.props.disabled).toBe(true);
+});
+
+it('still permits first camp creation with 20 wood and 10 stone', () => {
+  const f = setup(); f.props.campId = null; f.props.camps = []; f.props.resources = { wood: 20, stone: 10 };
+  expect(f.button('在脚下插旗建营')!.props.disabled).toBe(false);
+  f.button('在脚下插旗建营')!.props.onClick();
+  expect(text(f.render())).toContain('木材 20 / 石料 10');
+  expect(f.button('确认建立')!.props.disabled).toBe(false);
+  f.button('确认建立')!.props.onClick();
+  expect(f.props.onAction).toHaveBeenCalledWith('create_camp', { x: 200, y: 100 });
 });
 
 it.each(['member', 'inside', 'breached', 'combat'] as const)('does not offer an executable migration for %s', reason => {

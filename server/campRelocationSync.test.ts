@@ -30,7 +30,7 @@ it('broadcasts a paid relocation to old and new observers, rejects the old entra
   const original = site(-80), destination = site(original.x - 160);
   const game = new GameWorld(db, rules, () => 10_000);
   actors.forEach((a, i) => game.connect(a.playerId, ['主人', '旧址观察者', '新址观察者'][i]));
-  const owner = game.state.players[actors[0].playerId]; Object.assign(owner, original); owner.resources.wood = 40; owner.resources.stone = 20;
+  const owner = game.state.players[actors[0].playerId]; Object.assign(owner, original); owner.resources.wood = 60; owner.resources.stone = 30;
   expect(game.action(owner.id, { action: 'create_camp', requestId: 'fixture-create', ...original }).error).toBeUndefined();
   const campId = owner.campId!; game.state.camps[campId].size = 96; game.state.camps[campId].level = 2;
   Object.assign(owner, destination, { hp: 73, shield: 12, satiety: 60 }); Object.assign(game.state.players[actors[1].playerId], original); Object.assign(game.state.players[actors[2].playerId], destination);
@@ -73,6 +73,6 @@ it('broadcasts a paid relocation to old and new observers, rejects the old entra
     const restored = new GameWorld(db, rules, () => 10_000);
     expect(restored.state.camps[campId]).toMatchObject({ ...destination, size: 96, level: 2 }); expect(restored.state.storage.storage).toEqual({ wood: 7 });
     expect(restored.state.players[owner.id].resources).toMatchObject({ wood: 0, stone: 0 }); expect(stderr).toBe('');
-    writeFileSync('data/camp-relocation-protocol-results-20261026.json', JSON.stringify({ passed: true, fixture: 'Owned isolatedSQLite, seeded baseline and frozen simulation clock; actual production server/protocol, not native play', oldObserverUpdated: true, newObserverUpdated: true, oldEntryRejected: true, newEntryAndExit: true, exitY: 44, cost: { wood: 20, stone: 10 }, storageWoodPreserved: 7, replayAndRestartPreserved: true, actorCount: 3, stderrEmpty: true }, null, 2));
+    writeFileSync('data/camp-relocation-double-cost-protocol-results-20261026.json', JSON.stringify({ passed: true, fixture: 'Owned isolatedSQLite, seeded baseline and frozen simulation clock; actual production server/protocol, not native play', oldObserverUpdated: true, newObserverUpdated: true, oldEntryRejected: true, newEntryAndExit: true, exitY: 44, cost: { wood: 40, stone: 20 }, storageWoodPreserved: 7, replayAndRestartPreserved: true, actorCount: 3, stderrEmpty: true }, null, 2));
   } finally { for (const peer of peers) peer.ws.terminate(); if (child.exitCode === null && child.signalCode === null) { child.kill('SIGKILL'); await exited; } }
 }, 20_000);

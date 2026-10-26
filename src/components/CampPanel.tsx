@@ -51,8 +51,9 @@ export function CampPanel({ isOpen, onClose, camps, campId, currentMapId, player
   const exit = campExitPosition(currentCamp?.size);
   const canExit = inside && nearby(exit);
   const affordable = (resources.wood || 0) >= 20 && (resources.stone || 0) >= 10;
+  const relocationAffordable = (resources.wood || 0) >= 40 && (resources.stone || 0) >= 20;
   const combatSeconds = Math.max(0, Math.ceil(((ownCamp?.combatUntil || 0) - now) / 1000));
-  const canRelocate = currentMapId === 'world' && ownCamp?.ownerId === selfId && ownCamp.state !== 'breached' && combatSeconds === 0 && affordable;
+  const canRelocate = currentMapId === 'world' && ownCamp?.ownerId === selfId && ownCamp.state !== 'breached' && combatSeconds === 0 && relocationAffordable;
   const ownedBuilding = building?.ownerId === selfId;
   const canUseBuilding = ownedBuilding || friendly && building?.ownerId === currentCamp?.ownerId;
   const buildingNear = !!building && building.mapId === currentMapId && nearby(building);
@@ -106,12 +107,12 @@ export function CampPanel({ isOpen, onClose, camps, campId, currentMapId, player
           </section>}
           {!inside && ownCamp?.ownerId === selfId && <section className="space-y-3 rounded-lg border border-slate-700 bg-slate-950/60 p-4">
             <h3 className="font-semibold text-slate-100">迁移营地入口</h3>
-            <p className="text-xs text-slate-400">先步行到新址，再花费木材20、石料10迁移入口。建筑与物资保留；新址需离原入口3格以上，并避开道路、水域、地标、资源和其他营地。</p>
+            <p className="text-xs text-slate-400">先步行到新址，再花费木材40、石料20迁移入口（建营费用的两倍）。建筑与物资保留；新址需离原入口3格以上，并避开道路、水域、地标、资源和其他营地。</p>
             <p className="text-xs text-slate-400">核心失守、角色交战、营地内仍有人（含断线保留角色）时不能迁移；营地攻防结束后还需等待30秒。最终状态由服务器检查。</p>
             {ownCamp.state === 'breached' && <p className="text-xs text-amber-300">请先修复营地核心。</p>}
             {combatSeconds > 0 && <p className="text-xs text-amber-300">距可迁移还需约{combatSeconds}秒，营地仍全天可被攻击。</p>}
             {confirmSite?.action !== 'relocate_camp' ? <button className={buttonClass} disabled={!canRelocate} onClick={() => setConfirmSite({ x: Math.round(playerPos.x), y: Math.round(playerPos.y), action: 'relocate_camp' })}>在脚下迁移入口</button> : <div className="flex flex-wrap items-center gap-2 text-xs">
-              <span>迁移至 ({confirmSite.x}, {confirmSite.y})，消耗木材 20 / 石料 10；建筑与物资保留。</span>
+              <span>迁移至 ({confirmSite.x}, {confirmSite.y})，消耗木材 40 / 石料 20；建筑与物资保留。</span>
               <button className={buttonClass} disabled={!canRelocate || !nearby(confirmSite)} onClick={() => { onAction('relocate_camp', { x: confirmSite.x, y: confirmSite.y }); setConfirmSite(null); }}>确认迁移</button>
               <button className={buttonClass} onClick={() => setConfirmSite(null)}>取消</button>
             </div>}

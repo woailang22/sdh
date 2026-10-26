@@ -27,15 +27,30 @@ describe('camp entrance relocation', () => {
     const player = structuredClone(f.owner);
     expect(f.relocate({ campId: 'home_someone_else', cost: {} }, 'relocate-once').error).toBeUndefined();
     expect(f.camp).toMatchObject({ x: 200, y: 100, level: 2, size: 96, members: ['member'], state: 'active' });
-    expect(f.owner.resources).toMatchObject({ wood: player.resources.wood - 20, stone: player.resources.stone - 10 });
+    expect(f.owner.resources).toMatchObject({ wood: player.resources.wood - 40, stone: player.resources.stone - 20 });
     expect(f.owner).toMatchObject({ x: player.x, y: player.y, mapId: 'world', hp: 73, shield: 12, satiety: 60, campId: 'home_owner' });
     expect({ buildings: f.game.state.buildings, storage: f.game.state.storage, ammo: f.game.state.ammo, production: f.game.state.production }).toEqual(assets);
     const restored = new GameWorld(f.db, f.rules, () => 10_000);
     expect(restored.action('owner', { action: 'relocate_camp', requestId: 'relocate-once', x: 400, y: 100 }).error).toBeUndefined();
     expect(restored.state.camps.home_owner.x).toBe(200);
-    expect(restored.state.players.owner.resources.wood).toBe(player.resources.wood - 20);
+    expect(restored.state.players.owner.resources.wood).toBe(player.resources.wood - 40);
     expect(restored.state.storage).toEqual(assets.storage); expect(restored.state.ammo).toEqual(assets.ammo); expect(restored.state.production).toEqual(assets.production);
     expect(f.relocate().error).toContain('原入口');
+  });
+
+  it('keeps creation at 20 wood and 10 stone, and spends exactly twice that on relocation', () => {
+    const f = setup();
+    expect(f.owner.resources).toMatchObject({ wood: 80, stone: 90 });
+    f.owner.resources.wood = 40; f.owner.resources.stone = 20;
+    expect(f.relocate().error).toBeUndefined();
+    expect(f.owner.resources).toMatchObject({ wood: 0, stone: 0 });
+  });
+
+  it.each([{ wood: 39, stone: 20 }, { wood: 40, stone: 19 }])('rejects insufficient relocation materials %j without partial payment', resources => {
+    const f = setup(); Object.assign(f.owner.resources, resources);
+    const before = structuredClone(f.game.state);
+    expect(f.relocate().error).toContain('材料不足');
+    expect(f.game.state).toEqual(before);
   });
 
   it.each(['outsider', 'inside', 'far', 'protected', 'overlap', 'resource', 'poor', 'breached', 'occupied', 'disconnected', 'player-combat', 'camp-combat'] as const)('rejects %s relocation without changing materials, entrance or stored contents', reason => {
@@ -63,7 +78,7 @@ describe('camp entrance relocation', () => {
     expect(f.relocate({}, 'retry-relocate').error).toContain('relocation checkpoint rejected'); expect(f.game.state).toEqual(before);
     f.db.checkpointWorld = save;
     expect(f.relocate({}, 'retry-relocate').error).toBeUndefined();
-    expect(f.game.state.players.owner.resources.wood).toBe(before.players.owner.resources.wood - 20);
+    expect(f.game.state.players.owner.resources.wood).toBe(before.players.owner.resources.wood - 40);
     expect(f.game.state.camps.home_owner.x).toBe(200);
   });
 
