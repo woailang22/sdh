@@ -1,0 +1,238 @@
+{
+  "kind": "camp-relocation-and-combat-lock-verification",
+  "base": "17d673693ed8d8da7fe9289049a92d4760412eef",
+  "date": "2026-10-26",
+  "goalComplete": false,
+  "productionFiles": [
+    "server.ts",
+    "server/worldState.ts",
+    "src/components/CampPanel.tsx"
+  ],
+  "behavior": {
+    "cost": {
+      "wood": 20,
+      "stone": 10,
+      "basis": "Uses the existing camp-flag cost; user preference requested asynchronously, default retained after no reply."
+    },
+    "relocation": "Owner physically reaches a valid new wilderness site and confirms twice. Moves the existing entrance only; preserves camp identity, members, level, buildings, storage, ammunition, production and player state.",
+    "guards": [
+      "World space, camp ownership and intact core",
+      "New site within3 of authoritative player and over3 from old entrance",
+      "Existing terrain/road/landmark/building/resource/other-camp protections",
+      "No active character in camp, including retained disconnected bodies",
+      "No personal combat or camp combat within the last30seconds"
+    ],
+    "combat": "Raid, hostile actual warehouse withdrawal and actual PvP/defense damage advance the persisted optional camp deadline. Starvation does not. The same camp attack restrictions prevent dismantling; paid repairs remain available.",
+    "migrationCompatibility": "Old saves without a camp combat deadline default to no recorded camp deadline; no retrospective reconstruction of old attacks.",
+    "alwaysAttackable": true
+  },
+  "verification": {
+    "serviceRed": 17,
+    "uiRed": 2,
+    "uiInitiallyPassing": 4,
+    "newServiceCases": 19,
+    "newUiCases": 6,
+    "newProtocolCases": 1,
+    "full": {
+      "files": 53,
+      "tests": 815,
+      "exitCode": 0
+    },
+    "typeCheck": {
+      "exitCode": 0
+    },
+    "productionBuild": {
+      "exitCode": 0,
+      "bundle": "index-Et_RZ46S.js",
+      "warnings": [
+        "Chunk exceeds500kB",
+        "Vite native-config future compatibility: __dirname"
+      ]
+    },
+    "broadcastNegative": "Removing only the relocate broadcast makes the old observer time out with simulation clock frozen; original server.ts bytes restored before the passing full run.",
+    "independentReadOnlyReview": {
+      "p1": 0,
+      "p2": 0,
+      "rollbackAndSharedCommitChecked": true,
+      "uiLifecycleStaticallyReviewed": true
+    }
+  },
+  "protocol": {
+    "passed": true,
+    "fixture": "Owned isolatedSQLite, seeded baseline and frozen simulation clock; actual production server/protocol, not native play",
+    "oldObserverUpdated": true,
+    "newObserverUpdated": true,
+    "oldEntryRejected": true,
+    "newEntryAndExit": true,
+    "exitY": 44,
+    "cost": {
+      "wood": 20,
+      "stone": 10
+    },
+    "storageWoodPreserved": 7,
+    "replayAndRestartPreserved": true,
+    "actorCount": 3,
+    "stderrEmpty": true
+  },
+  "limits": [
+    "No new native browser gameplay or visual/mobile acceptance; component callbacks use existing mocked-hook tests and SSR coverage, not a browser React lifecycle test.",
+    "Protocol uses seeded ownedSQLite and a frozen simulation clock to isolate action broadcasts; it is not a paid native player walkthrough or performance measurement.",
+    "UI countdown uses the client clock; personal combat and camp occupancy are authoritatively checked on submit. Camp deadline hints retain the existing shared-state refresh cadence, including after optimized private PvP replies.",
+    "No renderer, terrain, resource-table or balance changes beyond the stated relocation fee and combat-management restriction. Browser startup/walking/GPU/whole-browser memory and full-goal acceptance remain outstanding.",
+    "Only owned QA databases were used. Real data/sdc.sqlite was not opened."
+  ],
+  "sources": [
+    {
+      "path": "server.ts",
+      "sha256": "9b82086e46d79b8e778587806a1c01af0c2ec92897d250f28f2d7a0e83b7ac53"
+    },
+    {
+      "path": "server/worldState.ts",
+      "sha256": "0845b616485a6010151213b63dd054d0ce67576438b7633d28ae0f3de6e49772"
+    },
+    {
+      "path": "server/tickUndo.ts",
+      "sha256": "3fecad4e35c362f3dacb67e9e96cfbc127f2e29cc857315078009aa1fdd0c4c3"
+    },
+    {
+      "path": "server/db.ts",
+      "sha256": "9cf91e65d64e6372bb897d98b8bdda843a03f42f409240f272abc4ed09d83f0f"
+    },
+    {
+      "path": "server/identity.ts",
+      "sha256": "9142fc4db6244894e722268d2e64f2b0f955cab28faf1d55b87e8d5960e783ba"
+    },
+    {
+      "path": "server/worldQueries.ts",
+      "sha256": "0bdc8625d63d959f1baaceba232702dba7bfc7f7612dcf720757fd8268898822"
+    },
+    {
+      "path": "server/campRelocation.test.ts",
+      "sha256": "0471f523d047c7db45185d032fe673153cb3862efcce68f23307023019e7c68e"
+    },
+    {
+      "path": "server/campRelocationSync.test.ts",
+      "sha256": "fe7bc4b3c7073a13a2b091d3c838cb0224fa5d7545dcabcf1585bcae4c9f5a96"
+    },
+    {
+      "path": "src/components/CampPanel.tsx",
+      "sha256": "e7859dc764694e25c544350ebfbf9de27e05e86d2070dcc0196ff6c7462f9ccf"
+    },
+    {
+      "path": "src/components/CampPanel.test.tsx",
+      "sha256": "8ec5b473b1d6dc9409af2574870d1181223931cf3d41403e0f5590c105e7730b"
+    },
+    {
+      "path": "src/game/home.ts",
+      "sha256": "d5e609f91b1c702f8c3605e27137ad2d3d21ebfc14d98a4301dfebdd0f3c6c11"
+    },
+    {
+      "path": "src/game/NetworkManager.ts",
+      "sha256": "f0ba5b04ad2dd34bc5c65e37343bf546b1f385d088d0c68a60f55c348c3fd882"
+    },
+    {
+      "path": "src/game/stateSync.ts",
+      "sha256": "cfb25fc761a622ab0f90077849adc9e0375f800f315af9dca0a09560926b28a0"
+    },
+    {
+      "path": "src/game/navigation.ts",
+      "sha256": "defeedf6c1670922f76b115c5da0a1bdce4f64afa8fb5b7eca0ee5c48065b662"
+    },
+    {
+      "path": "src/game/world.ts",
+      "sha256": "9ad6447e3e2cce3f9f391856bd3008856a49c2849a35d71aa1368b1893510949"
+    },
+    {
+      "path": "src/game/items.ts",
+      "sha256": "96337485eff172cbc3936f742af827a4c975275f800d8445b232f050649317f0"
+    },
+    {
+      "path": "src/game/crafting.ts",
+      "sha256": "eb43bd22c9ee159759a1b23a76d64bbbdaeaf0c3a89cbc22fa7df87c90d34105"
+    },
+    {
+      "path": "src/types/game.ts",
+      "sha256": "7066ee68912ef7fa99602a2866137a2c87244974e751d16ff8cc1a0615a51337"
+    },
+    {
+      "path": "package.json",
+      "sha256": "4f60e0ee104666dec3bf4569c1b1fa95d8c256ccece0469c128d9d73db91c937"
+    },
+    {
+      "path": "package-lock.json",
+      "sha256": "de4621d96db13e7293c86bef17c44dec6f634d5476e4d2b3c82a406cea7de0f0"
+    },
+    {
+      "path": "tsconfig.json",
+      "sha256": "6624845b5855cb0c547da44d56785371aaf4f77920440f93b685484456952468"
+    },
+    {
+      "path": "vite.config.ts",
+      "sha256": "a7aa711292e5ad7eb10f7a17f5f34fbbf75c7b7c24d59cb0212c60bc493c3208"
+    },
+    {
+      "path": "docs/superpowers/specs/2026-10-20-seamless-world-camps-design.md",
+      "sha256": "caf2b939c9e914bc5d026985503d8a37435ece82e19a58775e76eed77c8e1b78"
+    },
+    {
+      "path": "docs/superpowers/plans/2026-10-26-camp-relocation.md",
+      "sha256": "371a31eff1b5c641567f877635791133cba785dd3702de5aa7f28df69a2918cb"
+    },
+    {
+      "path": "docs/superpowers/plans/2026-10-20-seamless-world-camps.md",
+      "sha256": "9c16e1d35f7190caa119059748a8d93da7cc36239c1e3edb41f89b510e2611a8"
+    },
+    {
+      "path": "data/report-camp-relocation-20261026.cjs",
+      "sha256": "256900825f7174a449b482551d6dafed371a652f551121bbd744d3635d4c91a2"
+    },
+    {
+      "path": "data/camp-relocation-broadcast-negative-20261026.cjs",
+      "sha256": "5c25450432f71005e94a459058e4ccff9f03a4f3ad588ee2c40d8d7b7dd3b817"
+    },
+    {
+      "path": "data/camp-relocation-protocol-results-20261026.json",
+      "sha256": "199e1b631bf4211b700d1938908a102ef5411594adf989496a640cbed1dabc53"
+    },
+    {
+      "path": "data/camp-relocation-red-20261026.log",
+      "sha256": "d769ac1005d35f219d3471ec66ad208504141cfd37c86d96998d362f6d55feb0"
+    },
+    {
+      "path": "data/camp-relocation-red-final-20261026.log",
+      "sha256": "8c0da383ff9bf7195fbaaefda1b642ada02c550fafd2ee7addfca0423c11e729"
+    },
+    {
+      "path": "data/camp-relocation-target-20261026.log",
+      "sha256": "2db5e8d578e9787875ddecd01f3ededb7d5d5733c7c917cf1caaa6afa13b0f2f"
+    },
+    {
+      "path": "data/camp-relocation-ui-red-20261026.log",
+      "sha256": "343f21846863982267ec238ad976e84a31e26783391b480a3371d245f529f969"
+    },
+    {
+      "path": "data/camp-relocation-ui-target-20261026.log",
+      "sha256": "d7322312fafb1b8d3b4edda780c1fe606be59bbf8a29e685ae29f7a5c4f2776a"
+    },
+    {
+      "path": "data/camp-relocation-complete-target-20261026.log",
+      "sha256": "384b0cd6627a6392a3f4effaaaf42680e5631b425191521c4e6be9057ebb2822"
+    },
+    {
+      "path": "data/camp-relocation-broadcast-negative-20261026.log",
+      "sha256": "5fdecc8716d5531ff5b3f7a7f669367989ae2521ba844b328055cb62ac9299e5"
+    },
+    {
+      "path": "data/camp-relocation-full-20261026.log",
+      "sha256": "867561b2bbd2d54466b744dc90b177dffcc1360a1ad95299ff838481e4318ed1"
+    },
+    {
+      "path": "data/camp-relocation-types-20261026.log",
+      "sha256": "7f3594d7a965c703e6361ae50c0ef50cf9c344c621d801592b074b48554f4235"
+    },
+    {
+      "path": "data/camp-relocation-build-20261026.log",
+      "sha256": "40c7169a2a5b3ee3e8fa34ece106fe54326b2a028d0eeb5d143e1ce48ce596a6"
+    }
+  ]
+}

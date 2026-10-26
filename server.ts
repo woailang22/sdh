@@ -147,7 +147,7 @@ function executeGameAction(client: Client, payload: GameAction) {
           if (c.id === client.id) continue;
           const p = game.state.players[c.id];
           const targetNeedsSync = c.id === payload.targetId && c.respawnVersion !== game.respawnVersion(c.id);
-          if (targetNeedsSync || p.mapId === state.player.mapId && (p.mapId !== 'world' || Math.hypot(p.x - state.player.x, p.y - state.player.y) <= 80) || payload.action === 'create_camp') stateTo(c);
+          if (targetNeedsSync || p.mapId === state.player.mapId && (p.mapId !== 'world' || Math.hypot(p.x - state.player.x, p.y - state.player.y) <= 80) || payload.action === 'create_camp' || payload.action === 'relocate_camp') stateTo(c);
         }
       }
     }

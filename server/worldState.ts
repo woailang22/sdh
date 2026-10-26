@@ -17,7 +17,7 @@ export type ResourceKey = 'wood' | 'stone' | 'scrap' | 'parts' | 'food' | 'ammo'
 export type Resources = Record<ResourceKey, number>;
 export interface OnboardingProgress { wood: number; stone: number; explored: boolean; toolEquipped: boolean; ateFood: boolean; workbenchBuilt: boolean; turretBuilt: boolean; storageUsed: boolean; turretLoaded: boolean }
 const emptyOnboarding = (): OnboardingProgress => ({ wood: 0, stone: 0, explored: false, toolEquipped: false, ateFood: false, workbenchBuilt: false, turretBuilt: false, storageUsed: false, turretLoaded: false });
-export interface CampSummary { id: string; ownerId: string; ownerName: string; x: number; y: number; mapId: MapZoneId; members?: string[]; level?: number; size?: number; state?: 'active' | 'breached' }
+export interface CampSummary { id: string; ownerId: string; ownerName: string; x: number; y: number; mapId: MapZoneId; members?: string[]; level?: number; size?: number; state?: 'active' | 'breached'; combatUntil?: number }
 interface Player extends OnlinePlayer {
   inventory: (Item | null)[]; equipment: Equipment; resources: Resources; campId: string | null;
   onboarding: OnboardingProgress;
@@ -606,14 +606,27 @@ export class GameWorld {
       if (node) { node.items = remaining; if (!remaining.length) { node.stock = 0; node.respawnAt = this.now() + (def!.respawnSec || 180) * 1000; } }
       return { id: targetId, name: drop?.name || def!.name, items: remaining };
     }
-    if (a.action === 'create_camp') {
-      requireRule(p.mapId === 'world' && !p.campId, '每人只能建立一个营地');
+    if (a.action === 'create_camp' || a.action === 'relocate_camp') {
+      const relocating = a.action === 'relocate_camp';
+      const camp = relocating && p.campId ? this.state.camps[p.campId] : undefined;
+      if (relocating) {
+        requireRule(camp && camp.ownerId === p.id, '只有营地主人可迁移入口');
+        requireRule(p.mapId === 'world', '请先回到公共野外，再步行到新址');
+        const core = this.core(camp); requireRule(core && core.hp > 0 && camp.state !== 'breached', '请先修复营地核心');
+        requireRule(p.combatUntil <= this.now() && (camp.combatUntil || 0) <= this.now(), '角色或营地仍在交战，结束后30秒才能迁移');
+        requireRule(![...this.active].some(([id, until]) => until > this.now() && this.state.players[id]?.mapId === camp.id), '营地内仍有人，请先撤离；断线保留的角色也需等待离场');
+      } else requireRule(p.mapId === 'world' && !p.campId, '每人只能建立一个营地');
       requireRule(finite(a.x) && finite(a.y) && a.x >= -1020 && a.x < 1020 && a.y >= -1020 && a.y < 1020, '营地坐标无效');
       this.near(p, { x: a.x, y: a.y });
+      if (camp) requireRule(distance(camp, { x: a.x, y: a.y }) > 3, '新址需离原入口3格以上');
       requireRule(this.rules.campSiteAllowed(a.x, a.y), '避难点、道路、河流或地标保护范围内不能建营');
       requireRule(!isPositionBlocked(a.x, a.y, this.buildingsFor(p), 1.5) && this.rules.nodesNear(a.x, a.y).every(n => distance(n, { x: a.x as number, y: a.y as number }) >= 2), '营地入口不能占用建筑或资源');
-      requireRule(Object.values(this.state.camps).every(camp => distance(camp, { x: a.x as number, y: a.y as number }) >= 12), '距离其他营地过近');
+      requireRule(Object.values(this.state.camps).every(other => other.id === camp?.id || distance(other, { x: a.x as number, y: a.y as number }) >= 12), '距离其他营地过近');
       this.checkCost(p, { wood: 20, stone: 10 }); this.spend(p, { wood: 20, stone: 10 });
+      if (camp) {
+        camp.x = a.x; camp.y = a.y;
+        this.report(p.id, `营地入口迁移至 (${camp.x}, ${camp.y})，建筑与物资保留`); return;
+      }
       const id = `home_${p.id}` as const; p.campId = id;
       this.state.camps[id] = { id, ownerId: p.id, ownerName: p.name, x: a.x, y: a.y, mapId: 'world', members: [], level: 1, size: 64, state: 'active' };
       const core: BuildingEntity = { id: id + '_core', type: 'anchor_core', name: '营地核心', x: 0, y: 0, hp: 1200, maxHp: 1200, level: 1, mapId: id, ownerId: p.id, ownerName: p.name };
@@ -645,7 +658,7 @@ export class GameWorld {
       const b = this.state.buildings[targetId]; requireRule(b && b.hp > 0, '设施不存在或已损坏'); this.near(p, b);
       requireRule(this.canUse(p.id, b), '未获得设施使用授权');
       if (a.action === 'remove_building') {
-        requireRule(b.ownerId === p.id && b.type !== 'anchor_core' && p.combatUntil <= this.now(), '交战中或无权拆除');
+        requireRule(b.ownerId === p.id && b.type !== 'anchor_core' && p.combatUntil <= this.now() && (this.state.camps[p.mapId]?.combatUntil || 0) <= this.now() && !this.hasHostile(p.mapId), '交战中或无权拆除');
         delete this.state.buildings[b.id]; delete this.state.production[b.id]; delete this.state.storage[b.id]; delete this.state.ammo[b.id]; delete this.state.defenseAt[b.id]; return;
       }
       if (a.action === 'rest') {
@@ -712,7 +725,7 @@ export class GameWorld {
         } else {
           requireRule((storage[a.itemId] || 0) >= a.count, '仓库物资不足');
           this.add(p, a.itemId, a.count); storage[a.itemId] -= a.count;
-          if (!this.canUse(p.id, b)) this.report(b.ownerId!, `${p.name} 从仓库取走 ${ITEM_DEFS[a.itemId].name} ×${a.count}`);
+          if (!this.canUse(p.id, b)) { this.markCampCombat(p.mapId); this.report(b.ownerId!, `${p.name} 从仓库取走 ${ITEM_DEFS[a.itemId].name} ×${a.count}`); }
         }
         return this.storageLoot(b);
       }
@@ -738,6 +751,7 @@ export class GameWorld {
       if (target.hp <= 0) { target.isOpen = true; target.isLocked = false; }
       if (target.type === 'anchor_core' && target.hp <= 0 && this.state.camps[p.mapId]) this.state.camps[p.mapId].state = 'breached';
       this.state.buildings[target.id] = target; p.actionAt.attack = this.now(); p.combatUntil = this.now() + 30_000;
+      this.markCampCombat(p.mapId);
       if (this.state.camps[p.mapId]) this.report(target.ownerId!, `${p.name} 攻击 ${target.name}，剩余耐久 ${target.hp}/${target.maxHp}`); return;
     }
     if (a.action === 'equip' || a.action === 'unequip') {
@@ -839,6 +853,12 @@ export class GameWorld {
   private isNeutral(p: { x: number; y: number }): boolean { return [{ x: 0, y: 0 }, { x: 64, y: 0 }, { x: 0, y: 72 }].some(center => distance(p, center) <= 48); }
   private friendly(playerId: string, mapId: MapZoneId) { const camp = this.state.camps[mapId]; return !!camp && (camp.ownerId === playerId || camp.members?.includes(playerId)); }
   private hasHostile(mapId: MapZoneId) { return [...this.active].some(([id, until]) => until > this.now() && this.state.players[id]?.mapId === mapId && !this.friendly(id, mapId)); }
+  private markCampCombat(mapId: MapZoneId, undo?: TickUndo) {
+    const camp = this.state.camps[mapId];
+    if (!camp) return;
+    undo?.entry(camp, 'combatUntil');
+    camp.combatUntil = Math.max(camp.combatUntil || 0, this.now() + 30_000);
+  }
   private pvpAllowed(a: Player, b: Player): boolean { return a.mapId.startsWith('home_') ? !(this.friendly(a.id, a.mapId) && this.friendly(b.id, b.mapId)) : a.mapId === 'world' && !this.isNeutral(a) && !this.isNeutral(b); }
   private storageLoot(b: BuildingEntity) {
     return { id: b.id, name: b.name, items: Object.entries(this.state.storage[b.id] || {}).filter(([, count]) => count > 0).map(([itemId, count]) => ({ itemId, name: ITEM_DEFS[itemId]?.name || itemId, count })) };
@@ -849,6 +869,7 @@ export class GameWorld {
     if (reduction > 0) amount = Math.max(1, Math.floor(amount * (1 - reduction)));
     p.lastDamageAt = this.now();
     if (interruptsSearch) p.lastCombatDamageAt = p.lastDamageAt;
+    if (interruptsSearch) this.markCampCombat(p.mapId, undo);
     const shield = Math.min(p.shield, amount); p.shield -= shield; p.hp -= amount - shield; p.combatUntil = this.now() + 30_000;
     if (p.hp > 0) return;
     undo?.map(this.respawns, p.id); this.respawns.set(p.id, (this.respawns.get(p.id) || 0) + 1);
