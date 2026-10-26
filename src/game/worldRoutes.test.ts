@@ -73,7 +73,7 @@ describe('world supply route intelligence', () => {
     expect(shelves.description).toContain('炮塔'); expect(shelves.description).toContain('装弹'); expect(diner.description).toContain('返程');
   });
 
-  it('marks real northern food before the guarded powder store without inventing loot', () => {
+  it('marks real northern food before the open powder store without inventing loot', () => {
     const north = WORLD_SUPPLY_ROUTES.find(route => route.id === 'north')!;
     const food = north.stops.find(stop => stop.id === 'world:-1:-6:poi:supplies');
     const powder = north.stops.find(stop => stop.id === 'world:-5:-11:i:mtn_quarry:q_powder');
@@ -85,7 +85,7 @@ describe('world supply route intelligence', () => {
     }
     const supplies = (id: string) => getWorldInteractable(id)!.lootTable!.map(item => [item.itemId, item.count]);
     expect(supplies(food!.id)).toEqual([['food', 3], ['water', 2], ['seed_potato', 1]]);
-    expect(supplies(powder!.id)).toContainEqual(['c4_explosive', 3]);
+    expect(supplies(powder!.id)).toContainEqual(['c4_explosive', 1]);
     expect(supplies(powder!.id)).toContainEqual(['ammo', 20]);
     expect(north.stops.indexOf(food!)).toBeLessThan(north.stops.indexOf(powder!));
     expect(food!.description).toContain('南侧'); expect(food!.description).toContain('食物');

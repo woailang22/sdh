@@ -1,0 +1,167 @@
+{
+  "date": "2026-10-26",
+  "baseCommit": "b9a7ea6bfc296dace8328ba9557ae3f1f2beaf24",
+  "overallGoalAccepted": false,
+  "productionChange": "Only fresh q_powder C4 count3→1. Existing saved item arrays and earned player inventory remain unchanged.",
+  "decision": "Conservative trial under the user-approved exploration/survival/camp-building priority after the optional pace question remained unanswered; not a user selection of the numeric1 and not a proven optimum.",
+  "method": "Earned4C4 character consistent continuation after the baseline cycle. A separate normal server run samples the candidate fresh1C4 yield without changing saved player assets or clocks. Not an equal-duration economic A/B, native browser or multiplayer balance acceptance.",
+  "elapsedMs": 307705.4188,
+  "world": {
+    "chunks": 4096,
+    "rawChangedChunks": [
+      "world:-5:-11"
+    ],
+    "allMaskedChunksEqual": true,
+    "changedNode": {
+      "id": "world:-5:-11:i:mtn_quarry:q_powder",
+      "x": -140,
+      "y": -344,
+      "count": 1
+    },
+    "buildings": 57255,
+    "nodes": 32525,
+    "monsters": 850
+  },
+  "earned": {
+    "initialC4": 4,
+    "finalC4": 5,
+    "initialAmmo": 20,
+    "finalAmmo": 40,
+    "foodConsumed": 2,
+    "initialInventory": {
+      "food": 5,
+      "water": 2,
+      "throw_frag": 2,
+      "throw_smoke": 2,
+      "throw_flash": 2
+    },
+    "finalInventory": {
+      "food": 3,
+      "water": 2,
+      "throw_frag": 3,
+      "throw_smoke": 3,
+      "throw_flash": 3
+    },
+    "woodPreserved": 7,
+    "otherPlayerAndCampAssetsPreserved": true,
+    "sourceGameWorldLogicalStateUnchanged": true,
+    "actions": 9,
+    "liveReplays": 1,
+    "movesAccepted": 2882,
+    "movesRejected": 0,
+    "deaths": 0,
+    "totalCorrectionMessages": 1,
+    "correctionsDuringWalk": 0,
+    "decodeFailures": 0,
+    "renewedByBegin": false,
+    "renewal": {
+      "due": 1792990945842,
+      "observedAt": 1792992047744,
+      "delayPastDueMs": 1101902,
+      "stockAfterRenewal": 3
+    },
+    "sqliteBackupAndFinalLiveEqual": true,
+    "restoredReplayUncharged": true
+  },
+  "limits": [
+    "The prior source deadline came from the earlier completed run. This separate server startup renews normally when eligible; a late first tick after time offline is not server latency or a new uninterrupted300second experiment.",
+    "Counter stock3 indicates the reusable container state, not three C4. Fresh loot and accepted pickup are explicitly1 C4.",
+    "The earlier13.2minute baseline sold ammunition/bought food and waited a full renewal; this candidate only samples fresh yield with carried food. Do not compare trip times or economic profit as a controlled A/B.",
+    "Legacy full/partial3C4 contents are covered by controlled-clock in-memory tests; the earned runtime continued an already empty due source while preserving4 carried C4.",
+    "One candidate pickup plus tests is not8–16player competition, long-term balance, real risk or native/frame/GPU/browser-memory acceptance. Browser URL safety remains blocked; no UI bypass."
+  ],
+  "sourceHashes": {
+    "server.ts": "9b82086e46d79b8e778587806a1c01af0c2ec92897d250f28f2d7a0e83b7ac53",
+    "server/worldState.ts": "f9270815832cf3b3cb6ce929cfaa69d42158025da1355194d25464ac6322d511",
+    "server/db.ts": "9cf91e65d64e6372bb897d98b8bdda843a03f42f409240f272abc4ed09d83f0f",
+    "server/identity.ts": "9142fc4db6244894e722268d2e64f2b0f955cab28faf1d55b87e8d5960e783ba",
+    "server/worldQueries.ts": "0bdc8625d63d959f1baaceba232702dba7bfc7f7612dcf720757fd8268898822",
+    "src/game/world.ts": "72084a8e566097a6ca04504728def51c3c83ac7ee426edf8e92096f1b24e8be5",
+    "src/game/maps.ts": "a24e9170fdf256226d8c1d6fd0820e497a1abd4ef887f7192f99bf068a5b7c56",
+    "src/game/items.ts": "4c9fdf817ed92b33aa6210ef05b6a69dfb5d9e18105e8faeb43dbed4efd824db",
+    "src/game/market.ts": "3060e8932a1d59349c9dc783f335b21a1ce6eab98a3d69549ca32b1b59bc59d4",
+    "src/game/navigation.ts": "defeedf6c1670922f76b115c5da0a1bdce4f64afa8fb5b7eca0ee5c48065b662",
+    "src/game/stateSync.ts": "cfb25fc761a622ab0f90077849adc9e0375f800f315af9dca0a09560926b28a0",
+    "data/prepare-quarry-c4-trial-20261026.ts": "2cf7e4d1fba1a7dbaa9f84e34469c0fe7ce86c5a5f35f3a7e493824d80982a2a",
+    "data/capture-quarry-c4-trial-20261026.ts": "52da8fa63941fcf074119e18601e2ce655742aea2152a618da96c0f94ec1e993",
+    "data/validate-quarry-c4-trial-20261026.ts": "922947fb12435ab390b558e5e8b6f5f84a882e66b580236c370f0cfbd22f9b09",
+    "data/audit-quarry-c4-trial-20261026.ts": "bb620c20e15fe3f8ecefc1da6e37feb18f7b503ec227bd8199eea1dcd90e2009",
+    "data/check-quarry-c4-world-20261026.ts": "d8d5f061474aafd07c052260ee9b6b50bd273b51b5a5dfaf410346aa7bdea2c2",
+    "server/quarrySupply.test.ts": "9da4f761efed1ac94544290e90d84396d61a5d046922056d77b01fe24ec47d06",
+    "src/game/worldRoutes.test.ts": "755215e2f1ffe7ca3cb8e062da6799d56e6108c8622e7337435d6563fbe0d8f3",
+    "data/finalize-quarry-c4-trial-20261026.py": "1c3c52c818b9bc2fc5e99483bab5017c177946ad0ee28c9becb60350b4d50099"
+  },
+  "evidenceHashes": {
+    "data/quarry-c4-trial-20261026-a1-prepare.log": "a353d9697c7cea4d12ed2ae77c0931e632f3978d81f846ff628b3c4d881c4a29",
+    "data/quarry-c4-trial-20261026-a1-driver.log": "4ea2fb6a6313b1cea46ab3346300b9e0b2e7ae524701f7e4b16fee9d839324e9",
+    "data/quarry-c4-trial-20261026-a1-server.log": "e008e28c0a11c85b3730ef15bbf3f3af286e9222c527ded4379dd9166e289cb4",
+    "data/quarry-c4-trial-20261026-a1-results.json": "ab3fdfbffdf5ac40392962c0abba1323e932be2b1954ba2a226ea57a191f5f8a",
+    "data/quarry-c4-trial-20261026-a1-capture-private.json": "1567792cf102c688617908dd51f202127b938aa72c7a19f2b0ae7c5a0e591e5b",
+    "data/quarry-c4-trial-20261026-a1-initial-world-private.json": "acf2a13d3ea9059807f01c23d60c9ab4e5efce612f26400889ac7feecafdfb4c",
+    "data/quarry-c4-trial-20261026-a1-runtime-initial-private.json": "0b113175cb586062a0f97cc3068c9b745e122073e20318de6f250aad537a0e28",
+    "data/quarry-c4-trial-20261026-a1-final-world-private.json": "dd748ffa8ab081972245ddfc039f13b08da909ca501008e024a2395362bc7895",
+    "data/quarry-c4-trial-20261026-a1-private.json": "81f0f9600d1ab2e948f1412b34a1907c9294bcecbd080ba64c0f8f65d5c1df2e",
+    "data/quarry-c4-trial-20261026-a1-replay-private.json": "4a038a9388980483ce438de8ec6887fde46db933bec84c31f6dc7fa2aacd4297",
+    "data/quarry-c4-trial-20261026-baseline.json": "42c5cc627e6029ad52d2b9db89dfadbca7cb5bb3884ce0120f7c3405b830fa6d",
+    "data/quarry-c4-trial-20261026-candidate.json": "f6b04c4c289adb7a48845121b6d825cd775241d21b8ee1d570990447d1f99ca2",
+    "data/quarry-c4-trial-20261026-baseline.log": "224315710c0b704739995b70ca743160c86bb7921b49993192455765230ae5a6",
+    "data/quarry-c4-trial-20261026-candidate.log": "f5121095e61b29f24566a67f2d5246d3e70f4c9334c8e7914f5f5f5cdc1cf8c1",
+    "data/quarry-c4-trial-20261026-red.log": "9a83b411e17348f3e3a4a9ceec643adf32c69fcee948483e6fe4095bd8002fe2",
+    "data/quarry-c4-trial-20261026-targeted.log": "81db1f13cc49d698868bd22ce9b62ccfb32ecdb77b132801582f5fc24a9bb0a4",
+    "data/quarry-c4-trial-20261026-full.log": "3d78384c46fae53763a6c8321b0de671176629c0749489b9cf53e0ed3ed08a01",
+    "data/quarry-c4-trial-20261026-recheck.log": "5b7af24439d8e5dfc4db48e1cf0b712a6b82aeeb0c7e61075df91a65de5ff123",
+    "data/quarry-c4-trial-20261026-full-final.log": "b313bea86dfe88862a37844cddab76351210245fd9f301191f267a237219102e",
+    "data/quarry-c4-trial-20261026-types.log": "7f3594d7a965c703e6361ae50c0ef50cf9c344c621d801592b074b48554f4235",
+    "data/quarry-c4-trial-20261026-types-final.log": "7f3594d7a965c703e6361ae50c0ef50cf9c344c621d801592b074b48554f4235",
+    "data/quarry-c4-trial-20261026-build.log": "ef8bf48d77ac86238d560d6eb63765d3e470900138f48a5635f6a01b8018e8b1",
+    "data/quarry-c4-trial-20261026-cleanup.log": "a9d7aa443e61feb6c052a2d04e2634b95ab219dd151efc89cdd269c6612468aa",
+    "data/quarry-c4-trial-20261026-a1-audit.log": "4a5ef97530a14e317c2830cd076c3697e9611e8300bbbfd2e08ded36d1bb1db9",
+    "docs/verification/2026-10-26-earned-powder-renewal-results.json": "ee0499c193554f75d72769be039beeda2ba48f44429d866f3edb1fd4d2df294b"
+  },
+  "sourceState": "Measured candidate working tree on baseCommit; source hashes pin the actual implementation. Baseline fingerprint was captured before the single count edit.",
+  "verification": {
+    "newRegressionTests": 2,
+    "initialRedFailures": 2,
+    "targetedFiles": 3,
+    "targetedTests": 44,
+    "targetedExit": 0,
+    "firstFullFailures": {
+      "legacyRouteCountExpectation": 1,
+      "protocolStartupTimeouts": 8,
+      "passed": 841,
+      "total": 850
+    },
+    "relatedRouteExpectationUpdated": true,
+    "startupTimeoutOrServerSourceChanges": false,
+    "timeoutCause": "Unconfirmed. Initial full run overlapped type/build validation; recheck and a separate full run passed without relaxing deadlines. Do not infer causal host or production conclusions.",
+    "recheckFiles": 9,
+    "recheckTests": 36,
+    "fullFiles": 57,
+    "fullTests": 850,
+    "fullExit": 0,
+    "finalTypesExit": 0,
+    "buildExit": 0,
+    "buildJs": "index-BrHPyKwB.js",
+    "existingBuildWarnings": [
+      "Vite native configLoader __dirname",
+      "chunk exceeds500kB"
+    ],
+    "earnedAuditExit": 0,
+    "independentReadOnlyReview": {
+      "p1": 0,
+      "p2": 0,
+      "hashesVerified": 44,
+      "worldFingerprintAndLedgerRecomputed": true,
+      "testLogsAndScopeReviewed": true,
+      "noDatabaseReadsOrReruns": true,
+      "privacyChecked": true
+    }
+  },
+  "cleanup": {
+    "ownedRunnerCompleted": true,
+    "childExitCode0AfterIpcFinishConfirmed": true,
+    "health0AndServerSocketsEmptyBeforeFinalExport": true,
+    "exclusivePortReleased": 39155,
+    "formalDatabaseOpened": false
+  }
+}

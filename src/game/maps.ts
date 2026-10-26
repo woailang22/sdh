@@ -621,7 +621,7 @@ export const SUBMAPS: Record<string, SubMapDef> = {
         { itemId: 'part', name: '液压千斤顶活塞', count: 5 },
       ], 2.2),
       I('q_powder', '采石炸药库', 'ammo_crate', -12, 8, '[E/F 搜刮炸药库]', [
-        { itemId: 'c4_explosive', name: '采石乳化炸药', count: 3 },
+        { itemId: 'c4_explosive', name: '采石乳化炸药', count: 1 },
         { itemId: 'ammo', name: '信号枪弹', count: 20 },
         { itemId: 'throw_frag', name: '破片手雷×2', count: 1 },
         { itemId: 'throw_smoke', name: '烟雾弹×2', count: 1 },
