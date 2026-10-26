@@ -1,0 +1,2694 @@
+{
+  "date": "2026-10-26",
+  "sourceCommit": "710563ae8105e5dc9a58f17d93749d7dd5d4349d",
+  "userTarget": "8–16 concurrent players, small-server experience",
+  "driverCompleted": true,
+  "protocolControlGateAccepted": true,
+  "capacityAccepted": false,
+  "overallGoalAccepted": false,
+  "productionChanged": false,
+  "timing": {
+    "pairedRequests": 1928,
+    "serverEventCount": 13546,
+    "clientEventCount": 5784,
+    "timestampedSamples": 81687,
+    "noDroppedEvents": true,
+    "firePeers": [
+      {
+        "index": 12,
+        "sent": 411,
+        "sendGapsMs": {
+          "count": 410,
+          "p50": 206.41479999999865,
+          "p95": 213.1242000000002,
+          "p99": 215.5469000000012,
+          "max": 5156.912099999994,
+          "min": 199.52489999998943
+        },
+        "ingressGapsMs": {
+          "count": 410,
+          "p50": 206.59290000000328,
+          "p95": 240.89510000000155,
+          "p99": 339.2733999999982,
+          "max": 5156.906300000002,
+          "min": 36.085299999998824
+        },
+        "authoritativeAttackClockGapsMs": {
+          "count": 410,
+          "p50": 206,
+          "p95": 241,
+          "p99": 339,
+          "max": 5137,
+          "min": 120
+        }
+      },
+      {
+        "index": 13,
+        "sent": 411,
+        "sendGapsMs": {
+          "count": 410,
+          "p50": 206.38709999999992,
+          "p95": 213.22209999999995,
+          "p99": 215.58859999999913,
+          "max": 5156.910499999998,
+          "min": 199.45780000000377
+        },
+        "ingressGapsMs": {
+          "count": 410,
+          "p50": 206.79459999999926,
+          "p95": 242.3652000000002,
+          "p99": 339.16020000000026,
+          "max": 5157.794299999994,
+          "min": 27.607700000000477
+        },
+        "authoritativeAttackClockGapsMs": {
+          "count": 410,
+          "p50": 207,
+          "p95": 243,
+          "p99": 339,
+          "max": 5131,
+          "min": 120
+        }
+      },
+      {
+        "index": 14,
+        "sent": 411,
+        "sendGapsMs": {
+          "count": 410,
+          "p50": 206.39080000000104,
+          "p95": 213.22060000000056,
+          "p99": 215.59490000000005,
+          "max": 5156.920600000005,
+          "min": 199.44120000000112
+        },
+        "ingressGapsMs": {
+          "count": 410,
+          "p50": 207.0622000000003,
+          "p95": 243.42410000000018,
+          "p99": 339.8096999999998,
+          "max": 5159.380499999999,
+          "min": 5.690099999999802
+        },
+        "authoritativeAttackClockGapsMs": {
+          "count": 410,
+          "p50": 207,
+          "p95": 243,
+          "p99": 340,
+          "max": 5132,
+          "min": 120
+        }
+      },
+      {
+        "index": 15,
+        "sent": 411,
+        "sendGapsMs": {
+          "count": 410,
+          "p50": 206.39300000000003,
+          "p95": 213.21920000000682,
+          "p99": 215.59670000000006,
+          "max": 5156.926800000001,
+          "min": 199.4366000000009
+        },
+        "ingressGapsMs": {
+          "count": 410,
+          "p50": 207.10220000000004,
+          "p95": 244.6978999999992,
+          "p99": 340.48699999999917,
+          "max": 5161.214500000002,
+          "min": 2.7714000000050873
+        },
+        "authoritativeAttackClockGapsMs": {
+          "count": 410,
+          "p50": 207,
+          "p95": 244,
+          "p99": 340,
+          "max": 5132,
+          "min": 120
+        }
+      }
+    ],
+    "fireSlotRefusals": [],
+    "sharedActionTimesMs": {
+      "fire": {
+        "count": 1644,
+        "p50": 1.6945999999988999,
+        "p95": 4.209900000001653,
+        "p99": 5.661599999999453,
+        "max": 13.209199999997509,
+        "min": 1.428299999999581
+      },
+      "gather": {
+        "count": 40,
+        "p50": 9.830199999999422,
+        "p95": 26.39280000000008,
+        "p99": 27.63110000000006,
+        "max": 27.63110000000006,
+        "min": 0.5675999999994019
+      },
+      "craft": {
+        "count": 68,
+        "p50": 4.161499999987427,
+        "p95": 8.394999999996799,
+        "p99": 12.64890000000014,
+        "max": 12.64890000000014,
+        "min": 3.6327000000019325
+      },
+      "deposit": {
+        "count": 68,
+        "p50": 23.62430000000313,
+        "p95": 29.74430000000575,
+        "p99": 35.79740000000311,
+        "max": 35.79740000000311,
+        "min": 20.395000000004075
+      },
+      "withdraw": {
+        "count": 68,
+        "p50": 23.027700000006007,
+        "p95": 29.766899999998714,
+        "p99": 31.85099999999511,
+        "max": 31.85099999999511,
+        "min": 20.384600000004866
+      },
+      "use_item": {
+        "count": 36,
+        "p50": 3.044800000003306,
+        "p95": 6.22780000000057,
+        "p99": 6.786099999997532,
+        "max": 6.786099999997532,
+        "min": 2.693199999997887
+      },
+      "raid": {
+        "count": 4,
+        "p50": 25.75749999999971,
+        "p95": 27.39379999999801,
+        "p99": 27.39379999999801,
+        "max": 27.39379999999801,
+        "min": 22.667499999995925
+      }
+    },
+    "interpretation": [
+      "No fire-slot refusals in this90-second cross-chunk protocol run;12 expected depleted-source refusals include8 return checks. This does not prove native browser experience, long-run reliability or internet capacity.",
+      "ws.send callback is not network delivery. WS ingress is after ws decoding, not OS packet receipt.",
+      "500ms windows and shared/full-persist times overlap and are nested; temporal pressure supports investigating this path but does not prove exclusive CPU or network cause.",
+      "This is a new movement-coverage run on unchanged710563a, not a before/after optimization comparison. Do not attribute differences from earlier local controls to a code change."
+    ]
+  },
+  "crossChunk": {
+    "actors": [
+      {
+        "index": 0,
+        "actualDistance": 128,
+        "maxAcceptedStep": 0.30000000000001137,
+        "acceptedMoveSamples": 861,
+        "centerSequence": [
+          "-8:-1",
+          "-7:-1",
+          "-6:-1",
+          "-7:-1",
+          "-8:-1"
+        ],
+        "boundaryCrossings": 4,
+        "distinctCenters": 3,
+        "themes": [
+          "forest"
+        ],
+        "returnedAtSeconds": 61.5623529,
+        "authoritativeFinalPositionMatchesStart": true,
+        "returnDepletionAndReplayChecked": true,
+        "receivedNodeDefinitions": 107,
+        "receivedMonsterDefinitions": 3,
+        "receivedWorldSnapshots": 440,
+        "nonzeroMoveSamples": 512,
+        "stationaryMoveSamples": 349
+      },
+      {
+        "index": 1,
+        "actualDistance": 128,
+        "maxAcceptedStep": 0.3000000000000007,
+        "acceptedMoveSamples": 861,
+        "centerSequence": [
+          "-8:-1",
+          "-8:0",
+          "-8:1",
+          "-8:0",
+          "-8:-1"
+        ],
+        "boundaryCrossings": 4,
+        "distinctCenters": 3,
+        "themes": [
+          "forest",
+          "field"
+        ],
+        "returnedAtSeconds": 61.5623529,
+        "authoritativeFinalPositionMatchesStart": true,
+        "returnDepletionAndReplayChecked": true,
+        "receivedNodeDefinitions": 102,
+        "receivedMonsterDefinitions": 2,
+        "receivedWorldSnapshots": 441,
+        "nonzeroMoveSamples": 512,
+        "stationaryMoveSamples": 349
+      },
+      {
+        "index": 2,
+        "actualDistance": 128,
+        "maxAcceptedStep": 0.2999999999999545,
+        "acceptedMoveSamples": 861,
+        "centerSequence": [
+          "-18:-6",
+          "-19:-6",
+          "-20:-6",
+          "-19:-6",
+          "-18:-6"
+        ],
+        "boundaryCrossings": 4,
+        "distinctCenters": 3,
+        "themes": [
+          "forest"
+        ],
+        "returnedAtSeconds": 61.5623529,
+        "authoritativeFinalPositionMatchesStart": true,
+        "returnDepletionAndReplayChecked": true,
+        "receivedNodeDefinitions": 114,
+        "receivedMonsterDefinitions": 5,
+        "receivedWorldSnapshots": 440,
+        "nonzeroMoveSamples": 512,
+        "stationaryMoveSamples": 349
+      },
+      {
+        "index": 3,
+        "actualDistance": 144,
+        "maxAcceptedStep": 0.30000000000001137,
+        "acceptedMoveSamples": 861,
+        "centerSequence": [
+          "-18:-6",
+          "-18:-7",
+          "-18:-8",
+          "-18:-7",
+          "-18:-6"
+        ],
+        "boundaryCrossings": 4,
+        "distinctCenters": 3,
+        "themes": [
+          "forest"
+        ],
+        "returnedAtSeconds": 68.23329480000001,
+        "authoritativeFinalPositionMatchesStart": true,
+        "returnDepletionAndReplayChecked": true,
+        "receivedNodeDefinitions": 109,
+        "receivedMonsterDefinitions": 4,
+        "receivedWorldSnapshots": 441,
+        "nonzeroMoveSamples": 576,
+        "stationaryMoveSamples": 285
+      },
+      {
+        "index": 4,
+        "actualDistance": 128,
+        "maxAcceptedStep": 0.29999999999999716,
+        "acceptedMoveSamples": 861,
+        "centerSequence": [
+          "-4:-12",
+          "-3:-12",
+          "-2:-12",
+          "-3:-12",
+          "-4:-12"
+        ],
+        "boundaryCrossings": 4,
+        "distinctCenters": 3,
+        "themes": [
+          "quarry"
+        ],
+        "returnedAtSeconds": 61.5623529,
+        "authoritativeFinalPositionMatchesStart": true,
+        "returnDepletionAndReplayChecked": true,
+        "receivedNodeDefinitions": 88,
+        "receivedMonsterDefinitions": 2,
+        "receivedWorldSnapshots": 436,
+        "nonzeroMoveSamples": 512,
+        "stationaryMoveSamples": 349
+      },
+      {
+        "index": 5,
+        "actualDistance": 136,
+        "maxAcceptedStep": 0.30000000000001137,
+        "acceptedMoveSamples": 861,
+        "centerSequence": [
+          "-4:-12",
+          "-4:-11",
+          "-4:-10",
+          "-4:-11",
+          "-4:-12"
+        ],
+        "boundaryCrossings": 4,
+        "distinctCenters": 3,
+        "themes": [
+          "quarry",
+          "field"
+        ],
+        "returnedAtSeconds": 64.8599248,
+        "authoritativeFinalPositionMatchesStart": true,
+        "returnDepletionAndReplayChecked": true,
+        "receivedNodeDefinitions": 90,
+        "receivedMonsterDefinitions": 3,
+        "receivedWorldSnapshots": 437,
+        "nonzeroMoveSamples": 544,
+        "stationaryMoveSamples": 317
+      },
+      {
+        "index": 6,
+        "actualDistance": 168,
+        "maxAcceptedStep": 0.30000000000001137,
+        "acceptedMoveSamples": 861,
+        "centerSequence": [
+          "0:7",
+          "-1:7",
+          "-2:7",
+          "-1:7",
+          "0:7"
+        ],
+        "boundaryCrossings": 4,
+        "distinctCenters": 3,
+        "themes": [
+          "lake",
+          "field"
+        ],
+        "returnedAtSeconds": 78.2256087,
+        "authoritativeFinalPositionMatchesStart": true,
+        "returnDepletionAndReplayChecked": true,
+        "receivedNodeDefinitions": 77,
+        "receivedMonsterDefinitions": 3,
+        "receivedWorldSnapshots": 436,
+        "nonzeroMoveSamples": 672,
+        "stationaryMoveSamples": 189
+      },
+      {
+        "index": 7,
+        "actualDistance": 162,
+        "maxAcceptedStep": 0.30000000000001137,
+        "acceptedMoveSamples": 861,
+        "centerSequence": [
+          "0:7",
+          "0:6",
+          "0:5",
+          "0:6",
+          "0:7"
+        ],
+        "boundaryCrossings": 4,
+        "distinctCenters": 3,
+        "themes": [
+          "lake"
+        ],
+        "returnedAtSeconds": 75.7546193,
+        "authoritativeFinalPositionMatchesStart": true,
+        "returnDepletionAndReplayChecked": true,
+        "receivedNodeDefinitions": 77,
+        "receivedMonsterDefinitions": 2,
+        "receivedWorldSnapshots": 437,
+        "nonzeroMoveSamples": 648,
+        "stationaryMoveSamples": 213
+      }
+    ],
+    "totalActualDistance": 1122,
+    "totalBoundaryCrossings": 32,
+    "distinctCenterChunks": 20,
+    "actualMoveGeometryVerified": true,
+    "clientAndServerCenterSequencesMatch": true,
+    "allReturnedBeforeReal300SecondRenewal": true,
+    "observerRouteSampleCap": 30000,
+    "acceptedWildMoveCalls": 6888,
+    "nonzeroWildMoveCalls": 4488,
+    "stationaryWildMoveCalls": 2400
+  },
+  "fixture": {
+    "actors": 16,
+    "offlineOwners": 2,
+    "camps": 4,
+    "floors": 4096,
+    "buildings": 4240,
+    "sources": [
+      {
+        "id": "world:-8:-1:i:mtn_logging:log_tree_1",
+        "type": "tree",
+        "stock": 3
+      },
+      {
+        "id": "world:-18:-6:i:mtn_deep:deep_tree",
+        "type": "tree",
+        "stock": 3
+      },
+      {
+        "id": "world:-4:-12:i:mtn_quarry:q_stone_1",
+        "type": "boulder",
+        "stock": 3
+      },
+      {
+        "id": "world:0:7:i:marsh_docks:dock_poplar",
+        "type": "tree",
+        "stock": 3
+      }
+    ],
+    "seededAssets": "Normal vest_t5 shield160/HP100,20 finite medkits each; builders100wood/100stone/200scrap/30parts; raiders1000ammo/1C4; each turret200ammo, each warehouse20wood. Explicit synthetic setup, not earned.",
+    "routePlans": [
+      {
+        "index": 0,
+        "from": {
+          "x": -244.5,
+          "y": -8
+        },
+        "to": {
+          "x": -180.5,
+          "y": -8
+        },
+        "oneWayLength": 64,
+        "plannedChunks": [
+          "-8:-1",
+          "-7:-1",
+          "-6:-1"
+        ],
+        "plannedThemes": [
+          "forest"
+        ]
+      },
+      {
+        "index": 1,
+        "from": {
+          "x": -246,
+          "y": -6.5
+        },
+        "to": {
+          "x": -246,
+          "y": 57.5
+        },
+        "oneWayLength": 64,
+        "plannedChunks": [
+          "-8:-1",
+          "-8:0",
+          "-8:1"
+        ],
+        "plannedThemes": [
+          "forest",
+          "field"
+        ]
+      },
+      {
+        "index": 2,
+        "from": {
+          "x": -552.5,
+          "y": -174
+        },
+        "to": {
+          "x": -616.5,
+          "y": -174
+        },
+        "oneWayLength": 64,
+        "plannedChunks": [
+          "-18:-6",
+          "-19:-6",
+          "-20:-6"
+        ],
+        "plannedThemes": [
+          "forest"
+        ]
+      },
+      {
+        "index": 3,
+        "from": {
+          "x": -554,
+          "y": -172.5
+        },
+        "to": {
+          "x": -554,
+          "y": -236.5
+        },
+        "oneWayLength": 72,
+        "plannedChunks": [
+          "-18:-6",
+          "-18:-7",
+          "-18:-8"
+        ],
+        "plannedThemes": [
+          "forest"
+        ]
+      },
+      {
+        "index": 4,
+        "from": {
+          "x": -114.5,
+          "y": -362
+        },
+        "to": {
+          "x": -50.5,
+          "y": -362
+        },
+        "oneWayLength": 64,
+        "plannedChunks": [
+          "-4:-12",
+          "-3:-12",
+          "-2:-12"
+        ],
+        "plannedThemes": [
+          "quarry"
+        ]
+      },
+      {
+        "index": 5,
+        "from": {
+          "x": -116,
+          "y": -360.5
+        },
+        "to": {
+          "x": -116,
+          "y": -296.5
+        },
+        "oneWayLength": 68,
+        "plannedChunks": [
+          "-4:-12",
+          "-4:-11",
+          "-4:-10"
+        ],
+        "plannedThemes": [
+          "quarry",
+          "field"
+        ]
+      },
+      {
+        "index": 6,
+        "from": {
+          "x": 10.5,
+          "y": 247
+        },
+        "to": {
+          "x": -53.5,
+          "y": 247
+        },
+        "oneWayLength": 84,
+        "plannedChunks": [
+          "0:7",
+          "-1:7",
+          "-2:7"
+        ],
+        "plannedThemes": [
+          "lake",
+          "field"
+        ]
+      },
+      {
+        "index": 7,
+        "from": {
+          "x": 9,
+          "y": 248.5
+        },
+        "to": {
+          "x": 9,
+          "y": 184.5
+        },
+        "oneWayLength": 81,
+        "plannedChunks": [
+          "0:7",
+          "0:6",
+          "0:5"
+        ],
+        "plannedThemes": [
+          "lake"
+        ]
+      }
+    ]
+  },
+  "method": "16 real WebSocket roles, real production server/SQLite/clock/NPC/survival. Synthetic initial assets and positions; not native browsers, earned progression, internet capacity or economics acceptance.",
+  "phase": {
+    "durationMs": 90278.3024,
+    "actors": [
+      {
+        "index": 0,
+        "role": "explorer",
+        "sent": 9,
+        "accepted": 8,
+        "pending": 0,
+        "errors": [
+          {
+            "action": "gather",
+            "error": "资源已耗尽"
+          }
+        ],
+        "actionCounts": {
+          "gather": 5,
+          "use_item": 4
+        },
+        "corrections": 1,
+        "decodeFailures": 0,
+        "receivedBytes": 7233525,
+        "rtt": {
+          "count": 9,
+          "p50": 7.665999999997439,
+          "p95": 53.17020000000002,
+          "p99": 53.17020000000002,
+          "max": 53.17020000000002,
+          "total": 169.69259999999076
+        },
+        "final": {
+          "hp": 100,
+          "shield": 0,
+          "satiety": 77.46425000000008,
+          "resources": {
+            "wood": 6,
+            "stone": 0,
+            "scrap": 0,
+            "parts": 0,
+            "food": 0,
+            "ammo": 0,
+            "c4": 0,
+            "medical": 16,
+            "credits": 0,
+            "shard": 0
+          }
+        }
+      },
+      {
+        "index": 1,
+        "role": "explorer",
+        "sent": 5,
+        "accepted": 3,
+        "pending": 0,
+        "errors": [
+          {
+            "action": "gather",
+            "error": "资源已耗尽"
+          },
+          {
+            "action": "gather",
+            "error": "资源已耗尽"
+          }
+        ],
+        "actionCounts": {
+          "gather": 5
+        },
+        "corrections": 1,
+        "decodeFailures": 0,
+        "receivedBytes": 5926198,
+        "rtt": {
+          "count": 5,
+          "p50": 33.48729999999978,
+          "p95": 76.94370000000026,
+          "p99": 76.94370000000026,
+          "max": 76.94370000000026,
+          "total": 188.1656000000071
+        },
+        "final": {
+          "hp": 100,
+          "shield": 160,
+          "satiety": 77.47125000000001,
+          "resources": {
+            "wood": 3,
+            "stone": 0,
+            "scrap": 0,
+            "parts": 0,
+            "food": 0,
+            "ammo": 0,
+            "c4": 0,
+            "medical": 20,
+            "credits": 0,
+            "shard": 0
+          }
+        }
+      },
+      {
+        "index": 2,
+        "role": "explorer",
+        "sent": 9,
+        "accepted": 8,
+        "pending": 0,
+        "errors": [
+          {
+            "action": "gather",
+            "error": "资源已耗尽"
+          }
+        ],
+        "actionCounts": {
+          "gather": 5,
+          "use_item": 4
+        },
+        "corrections": 1,
+        "decodeFailures": 0,
+        "receivedBytes": 8774084,
+        "rtt": {
+          "count": 9,
+          "p50": 4.566100000000006,
+          "p95": 103.18719999999985,
+          "p99": 103.18719999999985,
+          "max": 103.18719999999985,
+          "total": 258.0985999999898
+        },
+        "final": {
+          "hp": 82,
+          "shield": 0,
+          "satiety": 77.47650000000002,
+          "resources": {
+            "wood": 6,
+            "stone": 0,
+            "scrap": 0,
+            "parts": 0,
+            "food": 0,
+            "ammo": 0,
+            "c4": 0,
+            "medical": 16,
+            "credits": 0,
+            "shard": 0
+          }
+        }
+      },
+      {
+        "index": 3,
+        "role": "explorer",
+        "sent": 5,
+        "accepted": 3,
+        "pending": 0,
+        "errors": [
+          {
+            "action": "gather",
+            "error": "资源已耗尽"
+          },
+          {
+            "action": "gather",
+            "error": "资源已耗尽"
+          }
+        ],
+        "actionCounts": {
+          "gather": 5
+        },
+        "corrections": 1,
+        "decodeFailures": 0,
+        "receivedBytes": 8638902,
+        "rtt": {
+          "count": 5,
+          "p50": 27.964799999987008,
+          "p95": 132.34540000000015,
+          "p99": 132.34540000000015,
+          "max": 132.34540000000015,
+          "total": 242.43619999998464
+        },
+        "final": {
+          "hp": 100,
+          "shield": 160,
+          "satiety": 77.48350000000002,
+          "resources": {
+            "wood": 3,
+            "stone": 0,
+            "scrap": 0,
+            "parts": 0,
+            "food": 0,
+            "ammo": 0,
+            "c4": 0,
+            "medical": 20,
+            "credits": 0,
+            "shard": 0
+          }
+        }
+      },
+      {
+        "index": 4,
+        "role": "explorer",
+        "sent": 5,
+        "accepted": 4,
+        "pending": 0,
+        "errors": [
+          {
+            "action": "gather",
+            "error": "资源已耗尽"
+          }
+        ],
+        "actionCounts": {
+          "gather": 5
+        },
+        "corrections": 1,
+        "decodeFailures": 0,
+        "receivedBytes": 10788838,
+        "rtt": {
+          "count": 5,
+          "p50": 68.2783999999956,
+          "p95": 157.2837999999997,
+          "p99": 157.2837999999997,
+          "max": 157.2837999999997,
+          "total": 339.387999999994
+        },
+        "final": {
+          "hp": 100,
+          "shield": 160,
+          "satiety": 77.48875000000002,
+          "resources": {
+            "wood": 0,
+            "stone": 6,
+            "scrap": 0,
+            "parts": 0,
+            "food": 0,
+            "ammo": 0,
+            "c4": 0,
+            "medical": 20,
+            "credits": 0,
+            "shard": 0
+          }
+        }
+      },
+      {
+        "index": 5,
+        "role": "explorer",
+        "sent": 5,
+        "accepted": 3,
+        "pending": 0,
+        "errors": [
+          {
+            "action": "gather",
+            "error": "资源已耗尽"
+          },
+          {
+            "action": "gather",
+            "error": "资源已耗尽"
+          }
+        ],
+        "actionCounts": {
+          "gather": 5
+        },
+        "corrections": 1,
+        "decodeFailures": 0,
+        "receivedBytes": 11238541,
+        "rtt": {
+          "count": 5,
+          "p50": 12.366699999998673,
+          "p95": 180.02010000000018,
+          "p99": 180.02010000000018,
+          "max": 180.02010000000018,
+          "total": 312.6270999999956
+        },
+        "final": {
+          "hp": 100,
+          "shield": 160,
+          "satiety": 77.49475000000001,
+          "resources": {
+            "wood": 0,
+            "stone": 3,
+            "scrap": 0,
+            "parts": 0,
+            "food": 0,
+            "ammo": 0,
+            "c4": 0,
+            "medical": 20,
+            "credits": 0,
+            "shard": 0
+          }
+        }
+      },
+      {
+        "index": 6,
+        "role": "explorer",
+        "sent": 5,
+        "accepted": 4,
+        "pending": 0,
+        "errors": [
+          {
+            "action": "gather",
+            "error": "资源已耗尽"
+          }
+        ],
+        "actionCounts": {
+          "gather": 5
+        },
+        "corrections": 1,
+        "decodeFailures": 0,
+        "receivedBytes": 11413559,
+        "rtt": {
+          "count": 5,
+          "p50": 12.562900000004447,
+          "p95": 202.70270000000028,
+          "p99": 202.70270000000028,
+          "max": 202.70270000000028,
+          "total": 353.6845999999964
+        },
+        "final": {
+          "hp": 100,
+          "shield": 160,
+          "satiety": 77.50150000000002,
+          "resources": {
+            "wood": 6,
+            "stone": 0,
+            "scrap": 0,
+            "parts": 0,
+            "food": 0,
+            "ammo": 0,
+            "c4": 0,
+            "medical": 20,
+            "credits": 0,
+            "shard": 0
+          }
+        }
+      },
+      {
+        "index": 7,
+        "role": "explorer",
+        "sent": 5,
+        "accepted": 3,
+        "pending": 0,
+        "errors": [
+          {
+            "action": "gather",
+            "error": "资源已耗尽"
+          },
+          {
+            "action": "gather",
+            "error": "资源已耗尽"
+          }
+        ],
+        "actionCounts": {
+          "gather": 5
+        },
+        "corrections": 1,
+        "decodeFailures": 0,
+        "receivedBytes": 10727884,
+        "rtt": {
+          "count": 5,
+          "p50": 12.612600000000384,
+          "p95": 230.47119999999995,
+          "p99": 230.47119999999995,
+          "max": 230.47119999999995,
+          "total": 392.60170000000835
+        },
+        "final": {
+          "hp": 100,
+          "shield": 160,
+          "satiety": 77.50775000000002,
+          "resources": {
+            "wood": 3,
+            "stone": 0,
+            "scrap": 0,
+            "parts": 0,
+            "food": 0,
+            "ammo": 0,
+            "c4": 0,
+            "medical": 20,
+            "credits": 0,
+            "shard": 0
+          }
+        }
+      },
+      {
+        "index": 8,
+        "role": "builder",
+        "sent": 51,
+        "accepted": 51,
+        "pending": 0,
+        "errors": [],
+        "actionCounts": {
+          "craft": 17,
+          "deposit": 17,
+          "withdraw": 17
+        },
+        "corrections": 1,
+        "decodeFailures": 0,
+        "receivedBytes": 19460655,
+        "rtt": {
+          "count": 51,
+          "p50": 24.360399999999572,
+          "p95": 58.309800000002724,
+          "p99": 116.42930000000342,
+          "max": 116.42930000000342,
+          "total": 1263.0684999999576
+        },
+        "final": {
+          "hp": 100,
+          "shield": 160,
+          "satiety": 77.51700000000002,
+          "resources": {
+            "wood": 100,
+            "stone": 100,
+            "scrap": 30,
+            "parts": 13,
+            "food": 0,
+            "ammo": 425,
+            "c4": 0,
+            "medical": 20,
+            "credits": 0,
+            "shard": 0
+          }
+        }
+      },
+      {
+        "index": 9,
+        "role": "builder",
+        "sent": 51,
+        "accepted": 51,
+        "pending": 0,
+        "errors": [],
+        "actionCounts": {
+          "craft": 17,
+          "deposit": 17,
+          "withdraw": 17
+        },
+        "corrections": 1,
+        "decodeFailures": 0,
+        "receivedBytes": 18943232,
+        "rtt": {
+          "count": 51,
+          "p50": 69.04620000000432,
+          "p95": 117.5486000000019,
+          "p99": 120.50890000000072,
+          "max": 120.50890000000072,
+          "total": 3623.270900000025
+        },
+        "final": {
+          "hp": 100,
+          "shield": 160,
+          "satiety": 77.47250000000007,
+          "resources": {
+            "wood": 100,
+            "stone": 100,
+            "scrap": 30,
+            "parts": 13,
+            "food": 0,
+            "ammo": 425,
+            "c4": 0,
+            "medical": 20,
+            "credits": 0,
+            "shard": 0
+          }
+        }
+      },
+      {
+        "index": 10,
+        "role": "builder",
+        "sent": 51,
+        "accepted": 51,
+        "pending": 0,
+        "errors": [],
+        "actionCounts": {
+          "craft": 17,
+          "deposit": 17,
+          "withdraw": 17
+        },
+        "corrections": 1,
+        "decodeFailures": 0,
+        "receivedBytes": 18925165,
+        "rtt": {
+          "count": 51,
+          "p50": 79.75419999999576,
+          "p95": 127.34590000000026,
+          "p99": 161.04369999999471,
+          "max": 161.04369999999471,
+          "total": 4322.719499999987
+        },
+        "final": {
+          "hp": 100,
+          "shield": 160,
+          "satiety": 77.47975000000007,
+          "resources": {
+            "wood": 100,
+            "stone": 100,
+            "scrap": 30,
+            "parts": 13,
+            "food": 0,
+            "ammo": 425,
+            "c4": 0,
+            "medical": 20,
+            "credits": 0,
+            "shard": 0
+          }
+        }
+      },
+      {
+        "index": 11,
+        "role": "builder",
+        "sent": 51,
+        "accepted": 51,
+        "pending": 0,
+        "errors": [],
+        "actionCounts": {
+          "craft": 17,
+          "deposit": 17,
+          "withdraw": 17
+        },
+        "corrections": 1,
+        "decodeFailures": 0,
+        "receivedBytes": 18925440,
+        "rtt": {
+          "count": 51,
+          "p50": 87.52130000000034,
+          "p95": 166.53190000000177,
+          "p99": 184.85640000000421,
+          "max": 184.85640000000421,
+          "total": 4864.137900000011
+        },
+        "final": {
+          "hp": 100,
+          "shield": 160,
+          "satiety": 77.48600000000008,
+          "resources": {
+            "wood": 100,
+            "stone": 100,
+            "scrap": 30,
+            "parts": 13,
+            "food": 0,
+            "ammo": 425,
+            "c4": 0,
+            "medical": 20,
+            "credits": 0,
+            "shard": 0
+          }
+        }
+      },
+      {
+        "index": 12,
+        "role": "raider",
+        "sent": 419,
+        "accepted": 419,
+        "pending": 0,
+        "errors": [],
+        "actionCounts": {
+          "fire": 411,
+          "use_item": 7,
+          "raid": 1
+        },
+        "corrections": 1,
+        "decodeFailures": 0,
+        "receivedBytes": 20018343,
+        "rtt": {
+          "count": 419,
+          "p50": 3.7551000000021304,
+          "p95": 112.91320000000269,
+          "p99": 152.33810000000085,
+          "max": 196.59500000000116,
+          "total": 7254.18589999992
+        },
+        "final": {
+          "hp": 94.61079999999998,
+          "shield": 160,
+          "satiety": 77.49150000000007,
+          "resources": {
+            "wood": 0,
+            "stone": 0,
+            "scrap": 0,
+            "parts": 0,
+            "food": 0,
+            "ammo": 589,
+            "c4": 0,
+            "medical": 13,
+            "credits": 0,
+            "shard": 0
+          }
+        }
+      },
+      {
+        "index": 13,
+        "role": "raider",
+        "sent": 419,
+        "accepted": 419,
+        "pending": 0,
+        "errors": [],
+        "actionCounts": {
+          "fire": 411,
+          "use_item": 7,
+          "raid": 1
+        },
+        "corrections": 1,
+        "decodeFailures": 0,
+        "receivedBytes": 19499786,
+        "rtt": {
+          "count": 419,
+          "p50": 5.814599999997881,
+          "p95": 115.9256000000023,
+          "p99": 155.29929999999877,
+          "max": 202.2725999999966,
+          "total": 8331.686400000008
+        },
+        "final": {
+          "hp": 94.61079999999998,
+          "shield": 160,
+          "satiety": 77.49650000000007,
+          "resources": {
+            "wood": 0,
+            "stone": 0,
+            "scrap": 0,
+            "parts": 0,
+            "food": 0,
+            "ammo": 589,
+            "c4": 0,
+            "medical": 13,
+            "credits": 0,
+            "shard": 0
+          }
+        }
+      },
+      {
+        "index": 14,
+        "role": "raider",
+        "sent": 419,
+        "accepted": 419,
+        "pending": 0,
+        "errors": [],
+        "actionCounts": {
+          "fire": 411,
+          "use_item": 7,
+          "raid": 1
+        },
+        "corrections": 1,
+        "decodeFailures": 0,
+        "receivedBytes": 20021933,
+        "rtt": {
+          "count": 419,
+          "p50": 8.137799999996787,
+          "p95": 119.12189999999828,
+          "p99": 157.9277000000002,
+          "max": 208.05309999999736,
+          "total": 9392.089699999884
+        },
+        "final": {
+          "hp": 94.61079999999998,
+          "shield": 160,
+          "satiety": 77.50175000000007,
+          "resources": {
+            "wood": 0,
+            "stone": 0,
+            "scrap": 0,
+            "parts": 0,
+            "food": 0,
+            "ammo": 589,
+            "c4": 0,
+            "medical": 13,
+            "credits": 0,
+            "shard": 0
+          }
+        }
+      },
+      {
+        "index": 15,
+        "role": "raider",
+        "sent": 419,
+        "accepted": 419,
+        "pending": 0,
+        "errors": [],
+        "actionCounts": {
+          "fire": 411,
+          "use_item": 7,
+          "raid": 1
+        },
+        "corrections": 1,
+        "decodeFailures": 0,
+        "receivedBytes": 20021633,
+        "rtt": {
+          "count": 419,
+          "p50": 10.557700000004843,
+          "p95": 121.35360000000219,
+          "p99": 161.01250000000073,
+          "max": 211.39500000000407,
+          "total": 10428.21499999989
+        },
+        "final": {
+          "hp": 94.61079999999998,
+          "shield": 160,
+          "satiety": 77.50700000000006,
+          "resources": {
+            "wood": 0,
+            "stone": 0,
+            "scrap": 0,
+            "parts": 0,
+            "food": 0,
+            "ammo": 589,
+            "c4": 0,
+            "medical": 13,
+            "credits": 0,
+            "shard": 0
+          }
+        }
+      }
+    ],
+    "loop": {
+      "p50": 15.204351,
+      "p95": 46.399487,
+      "p99": 64.815103,
+      "max": 283.639807
+    },
+    "cpu": {
+      "user": 25812000,
+      "system": 2579000
+    },
+    "memory": [
+      {
+        "elapsedMs": 380.8126,
+        "rss": 138186752,
+        "heapTotal": 100909056,
+        "heapUsed": 44437208,
+        "external": 6246687,
+        "arrayBuffers": 2145101
+      },
+      {
+        "elapsedMs": 1408.5581,
+        "rss": 181248000,
+        "heapTotal": 112300032,
+        "heapUsed": 59272072,
+        "external": 6251600,
+        "arrayBuffers": 2149974
+      },
+      {
+        "elapsedMs": 2418.3043,
+        "rss": 194961408,
+        "heapTotal": 189816832,
+        "heapUsed": 56411440,
+        "external": 6264409,
+        "arrayBuffers": 2162783
+      },
+      {
+        "elapsedMs": 3417.9818000000005,
+        "rss": 198684672,
+        "heapTotal": 168652800,
+        "heapUsed": 25703688,
+        "external": 6244374,
+        "arrayBuffers": 2142748
+      },
+      {
+        "elapsedMs": 4427.7258,
+        "rss": 216895488,
+        "heapTotal": 177446912,
+        "heapUsed": 52389840,
+        "external": 6256670,
+        "arrayBuffers": 2155044
+      },
+      {
+        "elapsedMs": 5472.1083,
+        "rss": 294281216,
+        "heapTotal": 217903104,
+        "heapUsed": 116479616,
+        "external": 6251075,
+        "arrayBuffers": 2149449
+      },
+      {
+        "elapsedMs": 6505.4214,
+        "rss": 284401664,
+        "heapTotal": 208711680,
+        "heapUsed": 107300600,
+        "external": 6261929,
+        "arrayBuffers": 2160303
+      },
+      {
+        "elapsedMs": 7512.307400000001,
+        "rss": 289234944,
+        "heapTotal": 214343680,
+        "heapUsed": 110138120,
+        "external": 6271159,
+        "arrayBuffers": 2169525
+      },
+      {
+        "elapsedMs": 8515.336,
+        "rss": 299311104,
+        "heapTotal": 226127872,
+        "heapUsed": 126953408,
+        "external": 6267724,
+        "arrayBuffers": 2166090
+      },
+      {
+        "elapsedMs": 9518.426899999999,
+        "rss": 318861312,
+        "heapTotal": 245280768,
+        "heapUsed": 163286928,
+        "external": 6274616,
+        "arrayBuffers": 2172982
+      },
+      {
+        "elapsedMs": 10662.3894,
+        "rss": 294719488,
+        "heapTotal": 219729920,
+        "heapUsed": 73492616,
+        "external": 6244972,
+        "arrayBuffers": 2143338
+      },
+      {
+        "elapsedMs": 11663.597399999999,
+        "rss": 295473152,
+        "heapTotal": 221368320,
+        "heapUsed": 98810960,
+        "external": 6263649,
+        "arrayBuffers": 2162015
+      },
+      {
+        "elapsedMs": 12675.756399999998,
+        "rss": 311693312,
+        "heapTotal": 237858816,
+        "heapUsed": 135777736,
+        "external": 6276927,
+        "arrayBuffers": 2175293
+      },
+      {
+        "elapsedMs": 13681.6991,
+        "rss": 300445696,
+        "heapTotal": 226336768,
+        "heapUsed": 86966192,
+        "external": 6259344,
+        "arrayBuffers": 2157710
+      },
+      {
+        "elapsedMs": 14685.899899999999,
+        "rss": 321732608,
+        "heapTotal": 247349248,
+        "heapUsed": 132529128,
+        "external": 6266763,
+        "arrayBuffers": 2165129
+      },
+      {
+        "elapsedMs": 15786.542699999998,
+        "rss": 322199552,
+        "heapTotal": 248905728,
+        "heapUsed": 115374184,
+        "external": 6269153,
+        "arrayBuffers": 2157957
+      },
+      {
+        "elapsedMs": 16810.157499999998,
+        "rss": 342847488,
+        "heapTotal": 268656640,
+        "heapUsed": 151002488,
+        "external": 6264334,
+        "arrayBuffers": 2162700
+      },
+      {
+        "elapsedMs": 17860.7761,
+        "rss": 299782144,
+        "heapTotal": 221102080,
+        "heapUsed": 78792160,
+        "external": 6251932,
+        "arrayBuffers": 2150298
+      },
+      {
+        "elapsedMs": 18886.5534,
+        "rss": 314912768,
+        "heapTotal": 236306432,
+        "heapUsed": 116442328,
+        "external": 6270159,
+        "arrayBuffers": 2168525
+      },
+      {
+        "elapsedMs": 19936.5903,
+        "rss": 299839488,
+        "heapTotal": 224256000,
+        "heapUsed": 71175768,
+        "external": 6274944,
+        "arrayBuffers": 2153108
+      },
+      {
+        "elapsedMs": 21008.558399999998,
+        "rss": 356536320,
+        "heapTotal": 281698304,
+        "heapUsed": 168518472,
+        "external": 6259253,
+        "arrayBuffers": 2157619
+      },
+      {
+        "elapsedMs": 22067.0894,
+        "rss": 345804800,
+        "heapTotal": 271233024,
+        "heapUsed": 183147312,
+        "external": 6274963,
+        "arrayBuffers": 2173329
+      },
+      {
+        "elapsedMs": 23110.083899999998,
+        "rss": 338526208,
+        "heapTotal": 263774208,
+        "heapUsed": 142994688,
+        "external": 6259811,
+        "arrayBuffers": 2158177
+      },
+      {
+        "elapsedMs": 24130.1084,
+        "rss": 304771072,
+        "heapTotal": 225828864,
+        "heapUsed": 76444320,
+        "external": 6251775,
+        "arrayBuffers": 2150141
+      },
+      {
+        "elapsedMs": 25153.9742,
+        "rss": 319848448,
+        "heapTotal": 241324032,
+        "heapUsed": 111466944,
+        "external": 6259293,
+        "arrayBuffers": 2157659
+      },
+      {
+        "elapsedMs": 26166.9434,
+        "rss": 313114624,
+        "heapTotal": 236007424,
+        "heapUsed": 84485480,
+        "external": 6251639,
+        "arrayBuffers": 2150005
+      },
+      {
+        "elapsedMs": 27181.098299999998,
+        "rss": 326852608,
+        "heapTotal": 250503168,
+        "heapUsed": 119653680,
+        "external": 6256655,
+        "arrayBuffers": 2155021
+      },
+      {
+        "elapsedMs": 28210.89,
+        "rss": 340008960,
+        "heapTotal": 264613888,
+        "heapUsed": 152170352,
+        "external": 6261743,
+        "arrayBuffers": 2160109
+      },
+      {
+        "elapsedMs": 29245.1696,
+        "rss": 333512704,
+        "heapTotal": 258691072,
+        "heapUsed": 112986672,
+        "external": 6274989,
+        "arrayBuffers": 2153111
+      },
+      {
+        "elapsedMs": 30291.4956,
+        "rss": 294445056,
+        "heapTotal": 209502208,
+        "heapUsed": 49989880,
+        "external": 6241346,
+        "arrayBuffers": 2145112
+      },
+      {
+        "elapsedMs": 31320.3325,
+        "rss": 351727616,
+        "heapTotal": 265834496,
+        "heapUsed": 146872576,
+        "external": 6251309,
+        "arrayBuffers": 2155075
+      },
+      {
+        "elapsedMs": 32367.769699999997,
+        "rss": 308293632,
+        "heapTotal": 224579584,
+        "heapUsed": 69720144,
+        "external": 6243769,
+        "arrayBuffers": 2147535
+      },
+      {
+        "elapsedMs": 33394.3868,
+        "rss": 323239936,
+        "heapTotal": 240074752,
+        "heapUsed": 104008736,
+        "external": 6248817,
+        "arrayBuffers": 2152583
+      },
+      {
+        "elapsedMs": 34436.2082,
+        "rss": 337637376,
+        "heapTotal": 254914560,
+        "heapUsed": 136571208,
+        "external": 6251277,
+        "arrayBuffers": 2155043
+      },
+      {
+        "elapsedMs": 35448.8772,
+        "rss": 349585408,
+        "heapTotal": 267501568,
+        "heapUsed": 166860968,
+        "external": 6265137,
+        "arrayBuffers": 2168903
+      },
+      {
+        "elapsedMs": 36489.792499999996,
+        "rss": 292401152,
+        "heapTotal": 207204352,
+        "heapUsed": 41246816,
+        "external": 6243577,
+        "arrayBuffers": 2148748
+      },
+      {
+        "elapsedMs": 37491.2106,
+        "rss": 301285376,
+        "heapTotal": 216563712,
+        "heapUsed": 54252440,
+        "external": 6268887,
+        "arrayBuffers": 2146953
+      },
+      {
+        "elapsedMs": 38534.321599999996,
+        "rss": 317247488,
+        "heapTotal": 233291776,
+        "heapUsed": 89244120,
+        "external": 6241885,
+        "arrayBuffers": 2147056
+      },
+      {
+        "elapsedMs": 39581.5882,
+        "rss": 328970240,
+        "heapTotal": 245112832,
+        "heapUsed": 122532024,
+        "external": 6248945,
+        "arrayBuffers": 2154116
+      },
+      {
+        "elapsedMs": 40627.385,
+        "rss": 343072768,
+        "heapTotal": 259952640,
+        "heapUsed": 154713960,
+        "external": 6251988,
+        "arrayBuffers": 2157159
+      },
+      {
+        "elapsedMs": 41699.6421,
+        "rss": 340860928,
+        "heapTotal": 258842624,
+        "heapUsed": 132796288,
+        "external": 6254322,
+        "arrayBuffers": 2159493
+      },
+      {
+        "elapsedMs": 42701.7406,
+        "rss": 294862848,
+        "heapTotal": 214409216,
+        "heapUsed": 50987880,
+        "external": 6239914,
+        "arrayBuffers": 2145085
+      },
+      {
+        "elapsedMs": 43735.6707,
+        "rss": 307965952,
+        "heapTotal": 227471360,
+        "heapUsed": 84346160,
+        "external": 6249702,
+        "arrayBuffers": 2154873
+      },
+      {
+        "elapsedMs": 44768.6424,
+        "rss": 322535424,
+        "heapTotal": 243204096,
+        "heapUsed": 120271824,
+        "external": 6254763,
+        "arrayBuffers": 2159934
+      },
+      {
+        "elapsedMs": 45801.659,
+        "rss": 313573376,
+        "heapTotal": 235495424,
+        "heapUsed": 79818152,
+        "external": 6259821,
+        "arrayBuffers": 2144756
+      },
+      {
+        "elapsedMs": 46832.7949,
+        "rss": 343293952,
+        "heapTotal": 266342400,
+        "heapUsed": 139689408,
+        "external": 6246546,
+        "arrayBuffers": 2151717
+      },
+      {
+        "elapsedMs": 47852.9208,
+        "rss": 346853376,
+        "heapTotal": 270409728,
+        "heapUsed": 168018872,
+        "external": 6262667,
+        "arrayBuffers": 2167838
+      },
+      {
+        "elapsedMs": 48890.9641,
+        "rss": 339939328,
+        "heapTotal": 264847360,
+        "heapUsed": 130682456,
+        "external": 6267163,
+        "arrayBuffers": 2161985
+      },
+      {
+        "elapsedMs": 49913.0951,
+        "rss": 302882816,
+        "heapTotal": 226009088,
+        "heapUsed": 66402752,
+        "external": 6242111,
+        "arrayBuffers": 2147282
+      },
+      {
+        "elapsedMs": 50924.2042,
+        "rss": 312963072,
+        "heapTotal": 236703744,
+        "heapUsed": 99427856,
+        "external": 6251591,
+        "arrayBuffers": 2156762
+      },
+      {
+        "elapsedMs": 51959.9287,
+        "rss": 337256448,
+        "heapTotal": 260964352,
+        "heapUsed": 113341552,
+        "external": 6242976,
+        "arrayBuffers": 2148147
+      },
+      {
+        "elapsedMs": 52966.9284,
+        "rss": 328957952,
+        "heapTotal": 252948480,
+        "heapUsed": 126605952,
+        "external": 6252563,
+        "arrayBuffers": 2157734
+      },
+      {
+        "elapsedMs": 53969.4956,
+        "rss": 338141184,
+        "heapTotal": 262066176,
+        "heapUsed": 154530536,
+        "external": 6265851,
+        "arrayBuffers": 2171022
+      },
+      {
+        "elapsedMs": 54981.8804,
+        "rss": 334589952,
+        "heapTotal": 258637824,
+        "heapUsed": 113950880,
+        "external": 6268207,
+        "arrayBuffers": 2153095
+      },
+      {
+        "elapsedMs": 55986.3033,
+        "rss": 344154112,
+        "heapTotal": 268107776,
+        "heapUsed": 141541304,
+        "external": 6252995,
+        "arrayBuffers": 2158166
+      },
+      {
+        "elapsedMs": 57199.6688,
+        "rss": 322363392,
+        "heapTotal": 246722560,
+        "heapUsed": 81030896,
+        "external": 6239096,
+        "arrayBuffers": 2144267
+      },
+      {
+        "elapsedMs": 58202.0287,
+        "rss": 312905728,
+        "heapTotal": 237453312,
+        "heapUsed": 93348184,
+        "external": 6259434,
+        "arrayBuffers": 2164605
+      },
+      {
+        "elapsedMs": 59209.6081,
+        "rss": 307380224,
+        "heapTotal": 198131712,
+        "heapUsed": 93847592,
+        "external": 6260238,
+        "arrayBuffers": 2165409
+      },
+      {
+        "elapsedMs": 60210.3121,
+        "rss": 301449216,
+        "heapTotal": 195751936,
+        "heapUsed": 53888624,
+        "external": 6247845,
+        "arrayBuffers": 2153016
+      },
+      {
+        "elapsedMs": 61223.6418,
+        "rss": 311181312,
+        "heapTotal": 207704064,
+        "heapUsed": 84082880,
+        "external": 6254475,
+        "arrayBuffers": 2159646
+      },
+      {
+        "elapsedMs": 62299.632,
+        "rss": 322260992,
+        "heapTotal": 220852224,
+        "heapUsed": 91466112,
+        "external": 6260935,
+        "arrayBuffers": 2153319
+      },
+      {
+        "elapsedMs": 63323.8131,
+        "rss": 326930432,
+        "heapTotal": 228384768,
+        "heapUsed": 106749848,
+        "external": 6252487,
+        "arrayBuffers": 2157658
+      },
+      {
+        "elapsedMs": 64353.9122,
+        "rss": 336691200,
+        "heapTotal": 241909760,
+        "heapUsed": 132081152,
+        "external": 6254863,
+        "arrayBuffers": 2160034
+      },
+      {
+        "elapsedMs": 65372.979900000006,
+        "rss": 346099712,
+        "heapTotal": 255131648,
+        "heapUsed": 159721560,
+        "external": 6266015,
+        "arrayBuffers": 2171186
+      },
+      {
+        "elapsedMs": 66386.7556,
+        "rss": 356384768,
+        "heapTotal": 271413248,
+        "heapUsed": 185399744,
+        "external": 6272838,
+        "arrayBuffers": 2178009
+      },
+      {
+        "elapsedMs": 67432.7041,
+        "rss": 356331520,
+        "heapTotal": 278089728,
+        "heapUsed": 157364408,
+        "external": 6256650,
+        "arrayBuffers": 2161821
+      },
+      {
+        "elapsedMs": 68464.7023,
+        "rss": 308518912,
+        "heapTotal": 228597760,
+        "heapUsed": 75701064,
+        "external": 6245300,
+        "arrayBuffers": 2150471
+      },
+      {
+        "elapsedMs": 69500.0969,
+        "rss": 309616640,
+        "heapTotal": 229904384,
+        "heapUsed": 79967528,
+        "external": 6250212,
+        "arrayBuffers": 2155383
+      },
+      {
+        "elapsedMs": 70544.3883,
+        "rss": 317865984,
+        "heapTotal": 238043136,
+        "heapUsed": 91541024,
+        "external": 6258126,
+        "arrayBuffers": 2163297
+      },
+      {
+        "elapsedMs": 71566.6791,
+        "rss": 319356928,
+        "heapTotal": 239874048,
+        "heapUsed": 97284928,
+        "external": 6260765,
+        "arrayBuffers": 2165936
+      },
+      {
+        "elapsedMs": 72585.4903,
+        "rss": 369401856,
+        "heapTotal": 289697792,
+        "heapUsed": 169262784,
+        "external": 6257557,
+        "arrayBuffers": 2162728
+      },
+      {
+        "elapsedMs": 73585.5516,
+        "rss": 343195648,
+        "heapTotal": 264155136,
+        "heapUsed": 152553544,
+        "external": 6270991,
+        "arrayBuffers": 2176162
+      },
+      {
+        "elapsedMs": 74592.4982,
+        "rss": 347176960,
+        "heapTotal": 268374016,
+        "heapUsed": 159914160,
+        "external": 6268635,
+        "arrayBuffers": 2173806
+      },
+      {
+        "elapsedMs": 75599.34879999999,
+        "rss": 353697792,
+        "heapTotal": 275775488,
+        "heapUsed": 170775008,
+        "external": 6270711,
+        "arrayBuffers": 2175882
+      },
+      {
+        "elapsedMs": 76605.3305,
+        "rss": 358449152,
+        "heapTotal": 281223168,
+        "heapUsed": 181390896,
+        "external": 6279095,
+        "arrayBuffers": 2184266
+      },
+      {
+        "elapsedMs": 77752.5235,
+        "rss": 355020800,
+        "heapTotal": 277499904,
+        "heapUsed": 147071016,
+        "external": 6257211,
+        "arrayBuffers": 2162382
+      },
+      {
+        "elapsedMs": 78781.5829,
+        "rss": 358854656,
+        "heapTotal": 281296896,
+        "heapUsed": 164837368,
+        "external": 6266338,
+        "arrayBuffers": 2171509
+      },
+      {
+        "elapsedMs": 79789.9766,
+        "rss": 361820160,
+        "heapTotal": 284274688,
+        "heapUsed": 160111392,
+        "external": 6263945,
+        "arrayBuffers": 2169116
+      },
+      {
+        "elapsedMs": 80799.0471,
+        "rss": 304939008,
+        "heapTotal": 227721216,
+        "heapUsed": 57810224,
+        "external": 6242756,
+        "arrayBuffers": 2147927
+      },
+      {
+        "elapsedMs": 81811.1759,
+        "rss": 308768768,
+        "heapTotal": 231026688,
+        "heapUsed": 63655536,
+        "external": 6247105,
+        "arrayBuffers": 2152276
+      },
+      {
+        "elapsedMs": 82928.5761,
+        "rss": 361795584,
+        "heapTotal": 284004352,
+        "heapUsed": 150512064,
+        "external": 6256881,
+        "arrayBuffers": 2162052
+      },
+      {
+        "elapsedMs": 83939.57029999999,
+        "rss": 336293888,
+        "heapTotal": 258572288,
+        "heapUsed": 131884040,
+        "external": 6272980,
+        "arrayBuffers": 2178151
+      },
+      {
+        "elapsedMs": 84949.456,
+        "rss": 338452480,
+        "heapTotal": 260562944,
+        "heapUsed": 130269072,
+        "external": 6270928,
+        "arrayBuffers": 2176099
+      },
+      {
+        "elapsedMs": 85952.4681,
+        "rss": 340267008,
+        "heapTotal": 262361088,
+        "heapUsed": 129396480,
+        "external": 6265690,
+        "arrayBuffers": 2170861
+      },
+      {
+        "elapsedMs": 86963.3634,
+        "rss": 345731072,
+        "heapTotal": 267821056,
+        "heapUsed": 135947648,
+        "external": 6263052,
+        "arrayBuffers": 2168223
+      },
+      {
+        "elapsedMs": 88064.6233,
+        "rss": 387584000,
+        "heapTotal": 309563392,
+        "heapUsed": 205975544,
+        "external": 6272048,
+        "arrayBuffers": 2177219
+      },
+      {
+        "elapsedMs": 89097.989,
+        "rss": 341819392,
+        "heapTotal": 264507392,
+        "heapUsed": 105298504,
+        "external": 6282694,
+        "arrayBuffers": 2166144
+      }
+    ],
+    "samples": 81687,
+    "cap": 200000,
+    "overflow": 0,
+    "methodTimes": {
+      "move": {
+        "count": 13776,
+        "p50": 0.47049999999580905,
+        "p95": 0.6863000000012107,
+        "p99": 0.8840000000018335,
+        "max": 5.1395000000002256,
+        "total": 5877.169099999837
+      },
+      "dispatch:player_sync": {
+        "count": 13776,
+        "p50": 0.4776000000001659,
+        "p95": 0.7010000000009313,
+        "p99": 0.8977000000013504,
+        "max": 5.148400000000038,
+        "total": 5989.262299999825
+      },
+      "buildingsFor": {
+        "count": 22474,
+        "p50": 0.4665000000022701,
+        "p95": 0.6739000000000033,
+        "p99": 0.8957000000000335,
+        "max": 5.195100000000821,
+        "total": 11138.222600000077
+      },
+      "persist": {
+        "count": 377,
+        "p50": 11.61869999999999,
+        "p95": 17.772299999996903,
+        "p99": 21.507599999997183,
+        "max": 24.338099999993574,
+        "total": 4899.463100000046
+      },
+      "tick": {
+        "count": 426,
+        "p50": 14.412799999998242,
+        "p95": 22.972200000003795,
+        "p99": 26.746800000000803,
+        "max": 29.524899999996705,
+        "total": 5206.346699999889
+      },
+      "snapshot": {
+        "count": 7365,
+        "p50": 1.0143000000025495,
+        "p95": 1.4501000000018394,
+        "p99": 1.7467999999998938,
+        "max": 10.295899999997346,
+        "total": 7199.081400000328
+      },
+      "encode": {
+        "count": 7365,
+        "p50": 0.5849999999918509,
+        "p95": 0.7726999999995314,
+        "p99": 0.9293000000034226,
+        "max": 4.860400000005029,
+        "total": 2986.7630999997155
+      },
+      "serialize": {
+        "count": 8984,
+        "p50": 0.011800000000221189,
+        "p95": 0.09679999999934807,
+        "p99": 0.12309999999888532,
+        "max": 7.794200000000274,
+        "total": 173.69819999993047
+      },
+      "snapshotPlayer": {
+        "count": 1644,
+        "p50": 0.038800000000264845,
+        "p95": 0.07679999999891152,
+        "p99": 0.11069999999017455,
+        "max": 0.16770000000542495,
+        "total": 73.07020000002103
+      },
+      "actionPlayer": {
+        "count": 1644,
+        "p50": 1.6986999999935506,
+        "p95": 4.215500000005704,
+        "p99": 5.672599999998056,
+        "max": 13.223299999997835,
+        "total": 3391.725399999999
+      },
+      "encodePlayer": {
+        "count": 1644,
+        "p50": 0.0020000000004074536,
+        "p95": 0.005000000001018634,
+        "p99": 1.8736000000008062,
+        "max": 2.29309999999532,
+        "total": 52.40899999993712
+      },
+      "dispatch:game_action": {
+        "count": 1928,
+        "p50": 1.8484000000025844,
+        "p95": 24.884799999999814,
+        "p99": 30.95799999999872,
+        "max": 38.52780000000348,
+        "total": 8549.068000000056
+      },
+      "action": {
+        "count": 284,
+        "p50": 21.038699999999153,
+        "p95": 28.3158999999996,
+        "p99": 31.86009999999078,
+        "max": 35.80660000000353,
+        "total": 4277.109799999928
+      }
+    },
+    "routes": [
+      {
+        "index": 0,
+        "plannedWaypoints": 256,
+        "sentWaypoints": 256,
+        "returnedAtSeconds": 61.5623529,
+        "returnCheck": {
+          "freshError": "资源已耗尽",
+          "replayError": null,
+          "receivedStock": 0
+        },
+        "worldSnapshotCount": 440,
+        "snapshotCenters": [
+          "-8:-1",
+          "-7:-1",
+          "-6:-1",
+          "-7:-1",
+          "-8:-1"
+        ],
+        "distinctNodeDefinitionsReceived": 107,
+        "distinctMonsterDefinitionsReceived": 3
+      },
+      {
+        "index": 1,
+        "plannedWaypoints": 256,
+        "sentWaypoints": 256,
+        "returnedAtSeconds": 61.5623529,
+        "returnCheck": {
+          "freshError": "资源已耗尽",
+          "replayError": null,
+          "receivedStock": 0
+        },
+        "worldSnapshotCount": 441,
+        "snapshotCenters": [
+          "-8:-1",
+          "-8:0",
+          "-8:1",
+          "-8:0",
+          "-8:-1"
+        ],
+        "distinctNodeDefinitionsReceived": 102,
+        "distinctMonsterDefinitionsReceived": 2
+      },
+      {
+        "index": 2,
+        "plannedWaypoints": 256,
+        "sentWaypoints": 256,
+        "returnedAtSeconds": 61.5623529,
+        "returnCheck": {
+          "freshError": "资源已耗尽",
+          "replayError": null,
+          "receivedStock": 0
+        },
+        "worldSnapshotCount": 440,
+        "snapshotCenters": [
+          "-18:-6",
+          "-19:-6",
+          "-20:-6",
+          "-19:-6",
+          "-18:-6"
+        ],
+        "distinctNodeDefinitionsReceived": 114,
+        "distinctMonsterDefinitionsReceived": 5
+      },
+      {
+        "index": 3,
+        "plannedWaypoints": 288,
+        "sentWaypoints": 288,
+        "returnedAtSeconds": 68.23329480000001,
+        "returnCheck": {
+          "freshError": "资源已耗尽",
+          "replayError": null,
+          "receivedStock": 0
+        },
+        "worldSnapshotCount": 441,
+        "snapshotCenters": [
+          "-18:-6",
+          "-18:-7",
+          "-18:-8",
+          "-18:-7",
+          "-18:-6"
+        ],
+        "distinctNodeDefinitionsReceived": 109,
+        "distinctMonsterDefinitionsReceived": 4
+      },
+      {
+        "index": 4,
+        "plannedWaypoints": 256,
+        "sentWaypoints": 256,
+        "returnedAtSeconds": 61.5623529,
+        "returnCheck": {
+          "freshError": "资源已耗尽",
+          "replayError": null,
+          "receivedStock": 0
+        },
+        "worldSnapshotCount": 436,
+        "snapshotCenters": [
+          "-4:-12",
+          "-3:-12",
+          "-2:-12",
+          "-3:-12",
+          "-4:-12"
+        ],
+        "distinctNodeDefinitionsReceived": 88,
+        "distinctMonsterDefinitionsReceived": 2
+      },
+      {
+        "index": 5,
+        "plannedWaypoints": 272,
+        "sentWaypoints": 272,
+        "returnedAtSeconds": 64.8599248,
+        "returnCheck": {
+          "freshError": "资源已耗尽",
+          "replayError": null,
+          "receivedStock": 0
+        },
+        "worldSnapshotCount": 437,
+        "snapshotCenters": [
+          "-4:-12",
+          "-4:-11",
+          "-4:-10",
+          "-4:-11",
+          "-4:-12"
+        ],
+        "distinctNodeDefinitionsReceived": 90,
+        "distinctMonsterDefinitionsReceived": 3
+      },
+      {
+        "index": 6,
+        "plannedWaypoints": 336,
+        "sentWaypoints": 336,
+        "returnedAtSeconds": 78.2256087,
+        "returnCheck": {
+          "freshError": "资源已耗尽",
+          "replayError": null,
+          "receivedStock": 0
+        },
+        "worldSnapshotCount": 436,
+        "snapshotCenters": [
+          "0:7",
+          "-1:7",
+          "-2:7",
+          "-1:7",
+          "0:7"
+        ],
+        "distinctNodeDefinitionsReceived": 77,
+        "distinctMonsterDefinitionsReceived": 3
+      },
+      {
+        "index": 7,
+        "plannedWaypoints": 324,
+        "sentWaypoints": 324,
+        "returnedAtSeconds": 75.7546193,
+        "returnCheck": {
+          "freshError": "资源已耗尽",
+          "replayError": null,
+          "receivedStock": 0
+        },
+        "worldSnapshotCount": 437,
+        "snapshotCenters": [
+          "0:7",
+          "0:6",
+          "0:5",
+          "0:6",
+          "0:7"
+        ],
+        "distinctNodeDefinitionsReceived": 77,
+        "distinctMonsterDefinitionsReceived": 2
+      }
+    ]
+  },
+  "actorLedger": [
+    {
+      "index": 0,
+      "role": "explorer",
+      "freshCommittedActions": 6,
+      "medkitsUsed": 4,
+      "financialAndEquipmentPreserved": true,
+      "finalHp": 100,
+      "finalShield": 0
+    },
+    {
+      "index": 1,
+      "role": "explorer",
+      "freshCommittedActions": 1,
+      "medkitsUsed": 0,
+      "financialAndEquipmentPreserved": true,
+      "finalHp": 100,
+      "finalShield": 160
+    },
+    {
+      "index": 2,
+      "role": "explorer",
+      "freshCommittedActions": 6,
+      "medkitsUsed": 4,
+      "financialAndEquipmentPreserved": true,
+      "finalHp": 82,
+      "finalShield": 0
+    },
+    {
+      "index": 3,
+      "role": "explorer",
+      "freshCommittedActions": 1,
+      "medkitsUsed": 0,
+      "financialAndEquipmentPreserved": true,
+      "finalHp": 100,
+      "finalShield": 160
+    },
+    {
+      "index": 4,
+      "role": "explorer",
+      "freshCommittedActions": 2,
+      "medkitsUsed": 0,
+      "financialAndEquipmentPreserved": true,
+      "finalHp": 100,
+      "finalShield": 160
+    },
+    {
+      "index": 5,
+      "role": "explorer",
+      "freshCommittedActions": 1,
+      "medkitsUsed": 0,
+      "financialAndEquipmentPreserved": true,
+      "finalHp": 100,
+      "finalShield": 160
+    },
+    {
+      "index": 6,
+      "role": "explorer",
+      "freshCommittedActions": 2,
+      "medkitsUsed": 0,
+      "financialAndEquipmentPreserved": true,
+      "finalHp": 100,
+      "finalShield": 160
+    },
+    {
+      "index": 7,
+      "role": "explorer",
+      "freshCommittedActions": 1,
+      "medkitsUsed": 0,
+      "financialAndEquipmentPreserved": true,
+      "finalHp": 100,
+      "finalShield": 160
+    },
+    {
+      "index": 8,
+      "role": "builder",
+      "freshCommittedActions": 51,
+      "medkitsUsed": 0,
+      "financialAndEquipmentPreserved": true,
+      "finalHp": 100,
+      "finalShield": 160
+    },
+    {
+      "index": 9,
+      "role": "builder",
+      "freshCommittedActions": 51,
+      "medkitsUsed": 0,
+      "financialAndEquipmentPreserved": true,
+      "finalHp": 100,
+      "finalShield": 160
+    },
+    {
+      "index": 10,
+      "role": "builder",
+      "freshCommittedActions": 51,
+      "medkitsUsed": 0,
+      "financialAndEquipmentPreserved": true,
+      "finalHp": 100,
+      "finalShield": 160
+    },
+    {
+      "index": 11,
+      "role": "builder",
+      "freshCommittedActions": 51,
+      "medkitsUsed": 0,
+      "financialAndEquipmentPreserved": true,
+      "finalHp": 100,
+      "finalShield": 160
+    },
+    {
+      "index": 12,
+      "role": "raider",
+      "freshCommittedActions": 419,
+      "medkitsUsed": 7,
+      "financialAndEquipmentPreserved": true,
+      "finalHp": 94.61079999999998,
+      "finalShield": 160
+    },
+    {
+      "index": 13,
+      "role": "raider",
+      "freshCommittedActions": 419,
+      "medkitsUsed": 7,
+      "financialAndEquipmentPreserved": true,
+      "finalHp": 94.61079999999998,
+      "finalShield": 160
+    },
+    {
+      "index": 14,
+      "role": "raider",
+      "freshCommittedActions": 419,
+      "medkitsUsed": 7,
+      "financialAndEquipmentPreserved": true,
+      "finalHp": 94.61079999999998,
+      "finalShield": 160
+    },
+    {
+      "index": 15,
+      "role": "raider",
+      "freshCommittedActions": 419,
+      "medkitsUsed": 7,
+      "financialAndEquipmentPreserved": true,
+      "finalHp": 94.61079999999998,
+      "finalShield": 160
+    }
+  ],
+  "finances": {
+    "initialAmmo": 4800,
+    "craftedRounds": 2040,
+    "firedRounds": 1644,
+    "defendedRounds": 192,
+    "finalAmmo": 5004,
+    "medkitsUsed": 36,
+    "c4Used": 4,
+    "sharedFreshGatherSuccess": 12,
+    "sharedGatherReplays": 16,
+    "allAssetsReconciled": true
+  },
+  "errors": {
+    "gather: 资源已耗尽": 12
+  },
+  "moves": [
+    {
+      "accepted": 861,
+      "rejected": 0
+    },
+    {
+      "accepted": 861,
+      "rejected": 0
+    },
+    {
+      "accepted": 861,
+      "rejected": 0
+    },
+    {
+      "accepted": 861,
+      "rejected": 0
+    },
+    {
+      "accepted": 861,
+      "rejected": 0
+    },
+    {
+      "accepted": 861,
+      "rejected": 0
+    },
+    {
+      "accepted": 861,
+      "rejected": 0
+    },
+    {
+      "accepted": 861,
+      "rejected": 0
+    },
+    {
+      "accepted": 861,
+      "rejected": 0
+    },
+    {
+      "accepted": 861,
+      "rejected": 0
+    },
+    {
+      "accepted": 861,
+      "rejected": 0
+    },
+    {
+      "accepted": 861,
+      "rejected": 0
+    },
+    {
+      "accepted": 861,
+      "rejected": 0
+    },
+    {
+      "accepted": 861,
+      "rejected": 0
+    },
+    {
+      "accepted": 861,
+      "rejected": 0
+    },
+    {
+      "accepted": 861,
+      "rejected": 0
+    }
+  ],
+  "deaths": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "admissionCorrectionMessages": [
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1
+  ],
+  "interpretation": [
+    "This one90-second cross-chunk protocol run completed with12 expected resource-depletion refusals including8 return checks, no unexpected refusals; internet/native/long-run capacity gates remain unaccepted.",
+    "Move hook recorded 13776 accepted/0 rejected. Each peer counted one forced admission baseline correction; the counter was not reset at begin, so 16 must not be reported as measured movement failures.",
+    "Server event-loop histogram includes a maximum around284ms; timestamped method samples are nested and the loop maximum alone is not causal attribution. Do not assign it to a particular method or GPU.",
+    "Method timings contain nested work, observer overhead, scheduling and GC; do not add them as exclusive CPU.",
+    "Server memory samples are server-process RSS/heap with observation buffers, not browser memory or a proven leak."
+  ],
+  "persistence": {
+    "integrity": true,
+    "consistentBackupLogicalStateEqual": true,
+    "pendingPlayerRows": 0,
+    "recoveredByActualMemoryGameWorld": true,
+    "mostRecentCommittedReplayUncharged": 16,
+    "shutdown": "All16 client closes and health onlineCount0 confirmed before IPC finish; observer also required no server sockets. Persisted/exported, IPC ack flushed, normal exit0. Exact final runtime state equals merged SQLite and its consistent backup."
+  },
+  "coverageLimits": [
+    "Eight actual64–84tile outbound routes and returns across three32tile center chunks each, with ongoing shared state. Limited to four source areas in one90second protocol run; not whole-world/native streaming acceptance.",
+    "16 protocol connections, not16 native browsers; no physical GPU, whole-browser memory, native frame or internet acceptance.",
+    "90-second synthetic initial-asset fixture with four1024-floor camps, finite normal equipment/medicine; not earned growth, an absolute population cap, maximum camps or long-term economy.",
+    "Paths were known in advance and actors were prepositioned with explicit synthetic finite gear/supplies. This is not a blind or earned exploration economy, and protocol node delivery is not rendered map proof.",
+    "No server cache-eviction counter was instrumented;20 distinct player center chunks do not by themselves prove192-chunk/32-neighborhood cache eviction. This is an out-of-interest return test, not an asserted LRU pressure test.",
+    "Movement uses existing building collision rules;lake theme observations do not validate swimming, water obstacles or terrain hazard mechanics.",
+    "Route samples/capped timing buffers and parsed request tracing add overhead. Server RSS and nested method times remain observer-affected, not browser or exclusive CPU measurements."
+  ],
+  "next": "Preserve the actual cross-chunk evidence. Native continuous movement/frame, cold startup and whole-browser memory/GPU gates remain outstanding, as do longer competition/economy runs. Shared transfers still pay full checkpoints; do not infer16-person capacity from this90-second control.",
+  "sourceHashes": {
+    "src/game/navigation.ts": "defeedf6c1670922f76b115c5da0a1bdce4f64afa8fb5b7eca0ee5c48065b662",
+    "data/plan-cross-chunk-20261026.ts": "ea2baa173c05e34e758383cdfab32230ce5ce8566cff5d7dc5cc8741d614f6cd",
+    "server.ts": "9b82086e46d79b8e778587806a1c01af0c2ec92897d250f28f2d7a0e83b7ac53",
+    "server/worldState.ts": "f9270815832cf3b3cb6ce929cfaa69d42158025da1355194d25464ac6322d511",
+    "server/db.ts": "9cf91e65d64e6372bb897d98b8bdda843a03f42f409240f272abc4ed09d83f0f",
+    "server/identity.ts": "9142fc4db6244894e722268d2e64f2b0f955cab28faf1d55b87e8d5960e783ba",
+    "server/worldQueries.ts": "0bdc8625d63d959f1baaceba232702dba7bfc7f7612dcf720757fd8268898822",
+    "server/fireQueue.ts": "5897d3bc48fef4b338b634e386c7e63dbde95cdd43c79e570daff3b1e2f72f12",
+    "server/stateCheckQueue.ts": "228dafba281302150283a47733d71c9ca3f4267ff44f92c5ce1b4c91421c68b0",
+    "server/transport.ts": "a12c5982002f758d27208a3c8f4e2b15ec52bd0d06d71f97c57152a3ab7b5cf6",
+    "src/game/stateSync.ts": "cfb25fc761a622ab0f90077849adc9e0375f800f315af9dca0a09560926b28a0",
+    "src/game/world.ts": "72084a8e566097a6ca04504728def51c3c83ac7ee426edf8e92096f1b24e8be5",
+    "src/game/maps.ts": "d3b21e466adebc9d17b9966bcf22bc16c7862f409d58a981f13ffdbcfa2c9649",
+    "src/game/items.ts": "4c9fdf817ed92b33aa6210ef05b6a69dfb5d9e18105e8faeb43dbed4efd824db",
+    "src/game/combat.ts": "ba03d05d852cd9ea560b0d708460ac90d65e2fe5f6fde81c3d45a3d03d761998",
+    "src/game/crafting.ts": "eb43bd22c9ee159759a1b23a76d64bbbdaeaf0c3a89cbc22fa7df87c90d34105",
+    "src/game/equipmentRules.ts": "7add9af028a73655c1da136dc90fe21075bef19ef04f3316f507795ee3466f62",
+    "data/profile-cross-chunk-20261026.ts": "9e4fd0c74c0b21d9bc73cd70caff7815424af1d524a73f4bc142ef2a9573db23",
+    "data/capture-cross-chunk-20261026.ts": "c90a7db79ab6f5183ed7b93b1fb1e32a8303312e5997ed558d07a6d0fb7bf55b",
+    "data/audit-cross-chunk-20261026.ts": "298209ca80fcf7d277b0aa233593976603ab5cab7599b2112501d02814792ceb",
+    "data/analyze-cross-chunk-20261026.py": "5b38d92074eab4074a53ab34026eec990153f6353e60973bee60f0a664c62f41",
+    "data/finalize-cross-chunk-20261026.py": "c2092f9b9e10369f65aca76799a01daeb603d5934e4341235319f3ba40355ee3",
+    "data/audit-cross-chunk-boundary-20261026.py": "45b43e715e31b466c13efdce29c59dc0acef21f187a97a02fdbefcdb02b578c2"
+  },
+  "evidenceHashes": {
+    "data/small-server-cross-chunk-20261026-a4-results.json": "5b54df068db8d807c74fe82386ed685927ac34c672ecc7c79c908c814c9d2d2a",
+    "data/small-server-cross-chunk-20261026-a4-capture.json": "4282ae954f04969633c4622fa6252386eaf505925c83741e846a1a9cff721d35",
+    "data/small-server-cross-chunk-20261026-a4-driver.log": "3451bf4e01dac286fd641c0c83635fc4d646a57fa47360a35793b83f308cda44",
+    "data/small-server-cross-chunk-20261026-a4-server.log": "1b6eae63e2fcc13400b06fd1f4b799b805ed08bdd3db0189caad6dd20adb55e5",
+    "data/small-server-cross-chunk-20261026-a4-types.log": "7f3594d7a965c703e6361ae50c0ef50cf9c344c621d801592b074b48554f4235",
+    "data/small-server-cross-chunk-20261026-a4-client-events-private.json": "533d815a7c7e3232c4b774b02e2be9023c334a145385e8efd647c6097a376f24",
+    "data/small-server-cross-chunk-20261026-a4-timing-summary.json": "c4ec5e0dbccd9f3ca27e1a69c4c4eaf40716fb3f899b6ffda51db13224a8593a",
+    "data/small-server-cross-chunk-20261026-a4-pair-audit.log": "c2c0ca0ecbbc545810e9726716bbad0bf01d84140355a67bbf30411599d48ef5",
+    "data/small-server-cross-chunk-20261026-a4-route-preflight.json": "830951a2e84fcdd24f312d7816dc82adcb77e459c60929ac7378d795e6e5fc92",
+    "data/small-server-cross-chunk-20261026-a4-audit.log": "30a08d64e7d3d9e08b44a63cff178be2a431271d8712226ce1077692d283c806",
+    "data/small-server-cross-chunk-20261026-a4-types-final.log": "7f3594d7a965c703e6361ae50c0ef50cf9c344c621d801592b074b48554f4235",
+    "data/small-server-cross-chunk-20261026-a4-cleanup.log": "b5a2d227e6d72c6696d07df4554a0077855ecdd6e716464fed37d0e39c35720d",
+    "data/small-server-cross-chunk-20261026-a4-boundary-summary.json": "5942953b9a7f1f8b384cffed89a997ff6b321f39a50407ccb72201c4d4388eee",
+    "data/small-server-cross-chunk-20261026-a4-boundary-audit.log": "4a48f1b1afe0c67710046baaeb5759f2783d389a3226c2904d4da873193d438e"
+  },
+  "verification": {
+    "pairedAndGeometryFinanceAuditsExit": 0,
+    "finalTypesExit": 0,
+    "newProductionTestsRun": false,
+    "newProductionBuildRun": false,
+    "productionSourceUnchangedSinceCommit": "710563ae8105e5dc9a58f17d93749d7dd5d4349d",
+    "previous848TestsNotReclaimed": true,
+    "publicPrivacyScanned": true,
+    "independentReadOnlyReview": {
+      "p1": 0,
+      "p2": 0,
+      "pathsRequestsLedgerAndBoundaryRecomputed": true,
+      "sourceEvidenceHashesCheckedAtReview": 36,
+      "finalSourceEvidenceHashesChecked": 37,
+      "additionalBoundaryAuditLogBoundAfterReview": true,
+      "scopeLimitsConfirmed": true
+    }
+  },
+  "cleanup": {
+    "ownedDriverCompleted": true,
+    "ownedChildFinishAcknowledgedAndExited": true,
+    "forcedTerminationFallbackUsed": false,
+    "clientHealthOnlineAtFinish": 0,
+    "serverSocketSetRequiredEmpty": true,
+    "finalRuntimeMatchesMergedSqliteAndBackup": true,
+    "exclusivePortProbeReleased": 39153,
+    "formalDatabaseOpened": false
+  },
+  "measurementBoundary": {
+    "preparedToBeginFinancialAndPositionInputsUnchanged": true,
+    "admissionHealthChanges": [
+      {
+        "index": 12,
+        "preparedShield": 160,
+        "beginShield": 151
+      },
+      {
+        "index": 13,
+        "preparedShield": 160,
+        "beginShield": 151
+      },
+      {
+        "index": 14,
+        "preparedShield": 160,
+        "beginShield": 151
+      },
+      {
+        "index": 15,
+        "preparedShield": 160,
+        "beginShield": 151
+      }
+    ],
+    "defenseRoundsBeforeBegin": 4,
+    "defenseRoundsFromBeginUntilTurretsDestroyed": 188,
+    "defenseRoundsWholeFixtureLifecycle": 192,
+    "npcsNormallyLoadedByBegin": 9,
+    "interpretation": "192 defense rounds/4800 initial ammo belong to the full owned fixture lifecycle. Four natural turret rounds were spent during admission before begin, shield160→151 on four raiders;188 defense rounds occurred after begin. No reset/heal/injected compensation. Method/CPU/memory windows start at begin; cumulative shot/financial counters start with the prepared fixture."
+  }
+}
