@@ -507,7 +507,13 @@ export const SUBMAPS: Record<string, SubMapDef> = {
           ],
         },
       }),
-      { id: 'rebel_chest', type: 'storage_box', name: '掠夺者军火大储物箱', x: 22, y: -6, hp: 500, maxHp: 500, level: 1, ownerName: '掠夺者前哨' },
+      {
+        id: 'rebel_chest', type: 'storage_box', name: '掠夺者军火大储物箱', x: 22, y: -6, hp: 500, maxHp: 500, level: 1, ownerName: '掠夺者前哨',
+        storedLoot: [
+          { name: ITEM_DEFS.ammo.name, count: 20, icon: ITEM_DEFS.ammo.icon },
+          { name: ITEM_DEFS.part.name, count: 2, icon: ITEM_DEFS.part.icon },
+        ],
+      },
       {
         id: 'rebel_med', type: 'storage_box', name: '掠夺者医疗箱', x: 21, y: -6, hp: 500, maxHp: 500, level: 1, ownerName: '掠夺者前哨',
         storedLoot: [

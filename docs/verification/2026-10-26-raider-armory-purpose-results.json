@@ -1,0 +1,359 @@
+{
+  "date": "2026-10-26",
+  "sourceCommit": "c57feca73ad09b909dd1f3ddeffe799f33dd898e plus the source changes hashed below",
+  "purpose": "An existing locked-outpost military-labelled chest had no authored stock and fell back to 5 scrap. Explicitly configure 20 generic ammunition and 2 mechanical parts; no new node, weapon, explosive, blueprint or other rare reward.",
+  "nodeId": "world:24:5:container:town_ruins:rebel_chest",
+  "oldLoot": [
+    {
+      "itemId": "scrap",
+      "count": 5
+    }
+  ],
+  "newLoot": [
+    {
+      "itemId": "ammo",
+      "count": 20
+    },
+    {
+      "itemId": "part",
+      "count": 2
+    }
+  ],
+  "respawnSec": 900,
+  "worldComparison": {
+    "chunks": 4096,
+    "changedChunks": [
+      "world:24:5"
+    ],
+    "targets": 1,
+    "buildings": 57255,
+    "nodes": 32525,
+    "monsters": 850,
+    "normalizedEveryChunkEqual": true,
+    "explosivesUnchanged": 7,
+    "comparison": "Full generated chunk JSON differs only in this one existing node lootTable. All positions, IDs, buildings/HP/ownership, node stock and renewal, other loot and monsters identical.",
+    "estimateCorrection": "Initial a1 valuation treated ammo_* as distinct catalogue prices. Corrected a2 uses GameWorld generic ammo-counter sale pricing; source loot and rates unchanged."
+  },
+  "stateCompatibility": [
+    "Old 3-scrap remainder survives restart; partial claim leaves 2",
+    "After real depletion, due-time observer blocks renewal; ordinary server-accepted movement beyond 45 allows renewal",
+    "Walk back, take new 20 ammo/2 parts, retry request and restore keep exact materials, old 3 scrap and zero C4",
+    "Breach wall remains broken and gate remains intact; no combat or save rule change"
+  ],
+  "verification": {
+    "red": {
+      "failed": 3,
+      "passed": 39
+    },
+    "strengthenedRestartRed": 1,
+    "targetedPassed": 64,
+    "fullFiles": 55,
+    "fullPassed": 838,
+    "typesExit": 0,
+    "buildExit": 0,
+    "buildAsset": "index-CX72pX8-.js",
+    "review": "Independent readonly review, no P1/P2"
+  },
+  "firstFullAttempt": {
+    "failed": 1,
+    "passed": 837,
+    "failure": "Camp relocation protocol timed out waiting for startup",
+    "thresholdChanged": false,
+    "isolatedRecheckPassed": true,
+    "subsequentUnchangedFullSuitePassed": true,
+    "cause": "Unconfirmed; initial log retained. This change does not claim to fix the intermittent startup timeout."
+  },
+  "explosiveSourceEnumeration": {
+    "scope": "4096 fresh chunk explosive-source enumeration; static spawn distances, not threat simulation or earned/net profit. One complete loot set per renewal, NOT multiplied by default stock. Hourly figures are theoretical per-node steady ceilings excluding travel/competition, only when emptied and left unobserved.",
+    "sources": [
+      {
+        "id": "world:-18:-6:i:mtn_deep:deep_ammo",
+        "name": "深林佣兵战术军火箱",
+        "x": -574,
+        "y": -172,
+        "loot": [
+          {
+            "itemId": "c4_explosive",
+            "count": 3
+          },
+          {
+            "itemId": "thermite_charge",
+            "count": 4
+          },
+          {
+            "itemId": "vest",
+            "count": 1
+          },
+          {
+            "itemId": "wp_akm",
+            "count": 1
+          },
+          {
+            "itemId": "vest_t4",
+            "count": 1
+          }
+        ],
+        "refreshSeconds": 300,
+        "theoreticalSteadySetsPerHour": 12,
+        "nearestSpawn": {
+          "id": "world:-18:-6:m:mtn_deep:dp1",
+          "x": -570,
+          "y": -164,
+          "hp": 680,
+          "distance": 8.94427190999916
+        }
+      },
+      {
+        "id": "world:-6:-22:i:mtn_peak:peak_powder",
+        "name": "雪峰炸药棚",
+        "x": -176,
+        "y": -704,
+        "loot": [
+          {
+            "itemId": "c4_explosive",
+            "count": 3
+          },
+          {
+            "itemId": "ammo",
+            "count": 20
+          }
+        ],
+        "refreshSeconds": 300,
+        "theoreticalSteadySetsPerHour": 12,
+        "nearestSpawn": {
+          "id": "world:-5:-23:m:mtn_peak:pk3",
+          "x": -160,
+          "y": -706,
+          "hp": 260,
+          "distance": 16.1245154965971
+        }
+      },
+      {
+        "id": "world:-5:-12:container:mtn_quarry:q_office_powder",
+        "name": "值班室炸药箱",
+        "x": -135,
+        "y": -353,
+        "loot": [
+          {
+            "itemId": "c4_explosive",
+            "count": 2
+          },
+          {
+            "itemId": "ammo_signal",
+            "count": 10
+          }
+        ],
+        "refreshSeconds": 900,
+        "theoreticalSteadySetsPerHour": 4,
+        "nearestSpawn": {
+          "id": "world:-5:-12:m:mtn_quarry:q1",
+          "x": -138,
+          "y": -356,
+          "hp": 680,
+          "distance": 4.242640687119286
+        }
+      },
+      {
+        "id": "world:-5:-11:i:mtn_quarry:q_powder",
+        "name": "采石炸药库",
+        "x": -140,
+        "y": -344,
+        "loot": [
+          {
+            "itemId": "c4_explosive",
+            "count": 3
+          },
+          {
+            "itemId": "ammo",
+            "count": 20
+          },
+          {
+            "itemId": "throw_frag",
+            "count": 1
+          },
+          {
+            "itemId": "throw_smoke",
+            "count": 1
+          },
+          {
+            "itemId": "throw_flash",
+            "count": 1
+          }
+        ],
+        "refreshSeconds": 300,
+        "theoreticalSteadySetsPerHour": 12,
+        "nearestSpawn": {
+          "id": "world:-5:-12:m:mtn_quarry:q1",
+          "x": -138,
+          "y": -356,
+          "hp": 680,
+          "distance": 12.165525060596437
+        }
+      },
+      {
+        "id": "world:7:-1:i:town_gas:gas_van",
+        "name": "77号站长运载货车",
+        "x": 244,
+        "y": -10,
+        "loot": [
+          {
+            "itemId": "fuel",
+            "count": 4
+          },
+          {
+            "itemId": "c4_explosive",
+            "count": 2
+          },
+          {
+            "itemId": "scrap",
+            "count": 40
+          },
+          {
+            "itemId": "wp_m870",
+            "count": 1
+          }
+        ],
+        "refreshSeconds": 300,
+        "theoreticalSteadySetsPerHour": 12,
+        "nearestSpawn": {
+          "id": "world:7:-1:m:town_gas:tg1",
+          "x": 246,
+          "y": -4,
+          "hp": 450,
+          "distance": 6.324555320336759
+        }
+      },
+      {
+        "id": "world:7:-1:i:town_gas:gas_ammo",
+        "name": "路障军用弹药箱",
+        "x": 224,
+        "y": -4,
+        "loot": [
+          {
+            "itemId": "ammo",
+            "count": 60
+          },
+          {
+            "itemId": "c4_explosive",
+            "count": 2
+          },
+          {
+            "itemId": "rifle",
+            "count": 1
+          }
+        ],
+        "refreshSeconds": 300,
+        "theoreticalSteadySetsPerHour": 12,
+        "nearestSpawn": {
+          "id": "world:7:-1:m:town_gas:tg2",
+          "x": 232,
+          "y": -6,
+          "hp": 320,
+          "distance": 8.246211251235321
+        }
+      },
+      {
+        "id": "world:20:-2:i:town_factory:fac_ammo",
+        "name": "工厂警卫弹药库",
+        "x": 660,
+        "y": -50,
+        "loot": [
+          {
+            "itemId": "ammo",
+            "count": 60
+          },
+          {
+            "itemId": "c4_explosive",
+            "count": 2
+          },
+          {
+            "itemId": "ammo_556",
+            "count": 2
+          },
+          {
+            "itemId": "wp_p1911",
+            "count": 1
+          },
+          {
+            "itemId": "ammo_762",
+            "count": 2
+          },
+          {
+            "itemId": "ammo_9mm",
+            "count": 2
+          },
+          {
+            "itemId": "ammo_shell",
+            "count": 1
+          },
+          {
+            "itemId": "ammo_signal",
+            "count": 2
+          },
+          {
+            "itemId": "helmet_t3",
+            "count": 1
+          },
+          {
+            "itemId": "vest_t3",
+            "count": 1
+          }
+        ],
+        "refreshSeconds": 300,
+        "theoreticalSteadySetsPerHour": 12,
+        "nearestSpawn": {
+          "id": "world:20:-2:m:town_factory:fac3",
+          "x": 644,
+          "y": -46,
+          "hp": 320,
+          "distance": 16.492422502470642
+        }
+      }
+    ],
+    "runtimeSupplyRulesChanged": false
+  },
+  "auditCorrections": [
+    "Initial estimate used ammo_* catalogue prices, while GameWorld normalizes ammunition into one counter and generic sale price; a2 corrected this and a1 is retained. Neither estimate is earned/net profit.",
+    "Test helper strengthened to continue the restored instance via getter/restart, rather than using the old instance after a separate restore check."
+  ],
+  "limits": [
+    "Memory fixtures and a simulated clock; no earned native loot/travel or multiplayer risk/profit validation",
+    "80 ammo and 8 parts per hour are only this node theoretical steady ceilings, exclude initial loot, travel, observation and competition; not actual income",
+    "Static monster spawn distances do not establish real safety or threat",
+    "The seven explosive sources and weapon supply require further long-term calibration; no scarcity rules changed here",
+    "No new native UI, physical GPU, whole-browser memory or sustained-walking measurements",
+    "Existing bundle-size and Vite __dirname warnings remain"
+  ],
+  "overallGoalAccepted": false,
+  "sourceHashes": {
+    "src/game/maps.ts": "d3b21e466adebc9d17b9966bcf22bc16c7862f409d58a981f13ffdbcfa2c9649",
+    "src/game/world.ts": "72084a8e566097a6ca04504728def51c3c83ac7ee426edf8e92096f1b24e8be5",
+    "src/game/items.ts": "4c9fdf817ed92b33aa6210ef05b6a69dfb5d9e18105e8faeb43dbed4efd824db",
+    "src/game/market.ts": "3060e8932a1d59349c9dc783f335b21a1ce6eab98a3d69549ca32b1b59bc59d4",
+    "src/game/navigation.ts": "defeedf6c1670922f76b115c5da0a1bdce4f64afa8fb5b7eca0ee5c48065b662",
+    "src/game/compound.ts": "a8a37ecce5383d06671e4fe57b54f8ec0fc7b0ebc14525d51110b2722e122a7f",
+    "src/game/equipmentRules.ts": "7add9af028a73655c1da136dc90fe21075bef19ef04f3316f507795ee3466f62",
+    "src/game/world.test.ts": "b82f3d956302144e85bc61ccc48541f95c9313198ee29580fe1ac3b4e029a4bd",
+    "server/worldState.ts": "68b2c98016850e9431b84690e1cadefa9415359320fe8eca9b774c2e85d7ac5d",
+    "server/worldQueries.ts": "0bdc8625d63d959f1baaceba232702dba7bfc7f7612dcf720757fd8268898822",
+    "server/publicOutpostAccess.test.ts": "b97f5cb34403b063e3e7659be0dff6cb1cd6a540324dd058cc5b4537e2cc5148",
+    "server/exploration.test.ts": "5db1ed0b3ffa198b8928a1f032e0dc3115affb495cb43e2c220bbbbfa32238ef",
+    "server/resourceRefresh.test.ts": "fc848ca70228c8a6fe5e0021722d0394c65b9b8fb7b552df6abb85b53ff5ee16"
+  },
+  "evidenceHashes": {
+    "data/authored-container-purposes-20261026-a1.json": "5ab65576e17365d3a0cc2f1a3db90e766afa7477bfccca76cda8eb491757888e",
+    "data/authored-container-purposes-20261026-a2.json": "a655f335d2afde2962f1b1d94ede295bddc15f89aa5ae31e1de8dd1a27589b73",
+    "data/explosive-sources-20261026-a1.json": "23b7ff3d90e64c978a38637906464c26dcd53485257b8ed349808e9c138f546a",
+    "data/explosive-sources-20261026-a2.json": "e744ae29efea8f4e0fdf802ac119d11f55cf00c298924c3a56a79b68f7da5915",
+    "data/raider-armory-baseline-20261026.json": "639c401a645a1f9484465eb50c263180f07299a0450638f34274f234d104ab72",
+    "data/raider-armory-world-comparison-20261026.json": "1989666358ca2c279e04bcde5c23c5099723fa0cf135a6ecdf50a221e281a2a9",
+    "data/raider-armory-red-20261026.log": "9248c073146de72eb26d08cc9a79329e92def93671ad25f95cbe347fc9fa7bac",
+    "data/raider-armory-red-restart-20261026.log": "25f46258087d523e30d6d4d365345b02c3b196f5991f7bf6fa4baec32ab3c03c",
+    "data/raider-armory-green-20261026.log": "cfbf8ead6f1c981941a030ff0943ba95cdab6ff638e96f0a611fc97d5ccc2511",
+    "data/raider-armory-full-a1-20261026.log": "c81aea782e3fb487ba1d667ff5ac33b80f6daead433c51caae04d38e8c46fe0e",
+    "data/raider-armory-relocation-recheck-20261026.log": "68c8c2a1203f18fc07b3336eb0697fad7d21cb25c6223978d34febabca3e1af4",
+    "data/raider-armory-full-20261026.log": "69c356c481a5e741955671241d6c0e3ae050e60241e202ab2e76a1b7b4855388",
+    "data/raider-armory-types-20261026.log": "7f3594d7a965c703e6361ae50c0ef50cf9c344c621d801592b074b48554f4235",
+    "data/raider-armory-build-20261026.log": "656e4d1cd36b259930359d91c5d796c0282a5f4a22875892fb04d85e6ef38dbb"
+  }
+}

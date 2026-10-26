@@ -10,6 +10,14 @@ import {
 } from './world';
 
 describe('continuous world coordinates', () => {
+  it('gives the existing raider armory ammunition and mechanical supplies without new rare or explosive rewards', () => {
+    const node = getWorldInteractable('world:24:5:container:town_ruins:rebel_chest')!;
+    expect(node).toMatchObject({ name: '掠夺者军火大储物箱', type: 'box', x: 782, y: 170, stock: 1, maxStock: 1, respawnSec: 900 });
+    expect(node.lootTable!.map(i => [i.itemId, i.count])).toEqual([['ammo', 20], ['part', 2]]);
+    expect(getWorldInteractable('world:24:5:container:town_ruins:rebel_med')!.lootTable!.map(i => [i.itemId, i.count])).toEqual([['medkit', 3], ['bandage', 3]]);
+    expect(getWorldInteractable('world:24:5:container:town_ruins:rebel_credits')!.lootTable!.map(i => [i.itemId, i.count])).toEqual([['credits', 50]]);
+  });
+
   it.each([
     { x: -576, y: -152, prefix: 'forest_post', ownerId: 'npc_forest_syndicate', hp: 600 },
     { x: 782, y: 170, prefix: 'rebel_post', ownerId: 'npc_raider_boss', hp: 850 },
