@@ -1,0 +1,1878 @@
+{
+  "date": "2026-10-26",
+  "userTarget": "8–16 concurrent players, small-server experience",
+  "driverCompleted": true,
+  "protocolControlGateAccepted": true,
+  "capacityAccepted": false,
+  "overallGoalAccepted": false,
+  "productionChanged": true,
+  "timing": {
+    "pairedRequests": 1265,
+    "serverEventCount": 8894,
+    "clientEventCount": 3795,
+    "timestampedSamples": 56557,
+    "noDroppedEvents": true,
+    "firePeers": [
+      {
+        "index": 12,
+        "sent": 266,
+        "sendGapsMs": {
+          "count": 265,
+          "p50": 206.83619999999974,
+          "p95": 213.69160000000193,
+          "p99": 215.58819999999832,
+          "max": 5148.883099999999,
+          "min": 199.04759999999987
+        },
+        "ingressGapsMs": {
+          "count": 265,
+          "p50": 206.96559999999954,
+          "p95": 252.52999999999884,
+          "p99": 337.16280000000006,
+          "max": 5154.639799999997,
+          "min": 20.14240000000018
+        },
+        "authoritativeAttackClockGapsMs": {
+          "count": 265,
+          "p50": 206,
+          "p95": 253,
+          "p99": 337,
+          "max": 5154,
+          "min": 120
+        }
+      },
+      {
+        "index": 13,
+        "sent": 266,
+        "sendGapsMs": {
+          "count": 265,
+          "p50": 206.8689000000004,
+          "p95": 213.65570000000298,
+          "p99": 215.59539999999834,
+          "max": 5148.7966000000015,
+          "min": 199.07999999999993
+        },
+        "ingressGapsMs": {
+          "count": 265,
+          "p50": 207.34629999999743,
+          "p95": 253.0074999999997,
+          "p99": 333.5054,
+          "max": 5162.0841999999975,
+          "min": 2.693499999999858
+        },
+        "authoritativeAttackClockGapsMs": {
+          "count": 265,
+          "p50": 207,
+          "p95": 253,
+          "p99": 333,
+          "max": 5162,
+          "min": 120
+        }
+      },
+      {
+        "index": 14,
+        "sent": 266,
+        "sendGapsMs": {
+          "count": 265,
+          "p50": 206.85619999999835,
+          "p95": 213.65849999999773,
+          "p99": 215.58720000000176,
+          "max": 5148.777000000002,
+          "min": 199.07359999999971
+        },
+        "ingressGapsMs": {
+          "count": 265,
+          "p50": 207.2812999999951,
+          "p95": 253.00009999999747,
+          "p99": 330.96100000000115,
+          "max": 5159.144,
+          "min": 3.0882000000001426
+        },
+        "authoritativeAttackClockGapsMs": {
+          "count": 265,
+          "p50": 207,
+          "p95": 253,
+          "p99": 331,
+          "max": 5159,
+          "min": 120
+        }
+      },
+      {
+        "index": 15,
+        "sent": 266,
+        "sendGapsMs": {
+          "count": 265,
+          "p50": 206.86609999999928,
+          "p95": 213.66159999999945,
+          "p99": 215.58490000000165,
+          "max": 5148.776899999997,
+          "min": 199.0681000000004
+        },
+        "ingressGapsMs": {
+          "count": 265,
+          "p50": 207.42590000000018,
+          "p95": 253.13579999999638,
+          "p99": 328.01530000000093,
+          "max": 5157.638299999999,
+          "min": 2.7638999999999214
+        },
+        "authoritativeAttackClockGapsMs": {
+          "count": 265,
+          "p50": 207,
+          "p95": 253,
+          "p99": 328,
+          "max": 5157,
+          "min": 120
+        }
+      }
+    ],
+    "fireSlotRefusals": [],
+    "sharedActionTimesMs": {
+      "fire": {
+        "count": 1064,
+        "p50": 1.686599999993632,
+        "p95": 3.4716000000044005,
+        "p99": 5.724799999999959,
+        "max": 13.051900000005844,
+        "min": 1.4506000000037602
+      },
+      "gather": {
+        "count": 24,
+        "p50": 19.680399999999736,
+        "p95": 25.68329999999969,
+        "p99": 27.788700000000063,
+        "max": 27.788700000000063,
+        "min": 0.5325000000002547
+      },
+      "craft": {
+        "count": 44,
+        "p50": 3.9017000000021653,
+        "p95": 6.1533999999992375,
+        "p99": 7.9637000000002445,
+        "max": 7.9637000000002445,
+        "min": 3.5213000000003376
+      },
+      "deposit": {
+        "count": 44,
+        "p50": 22.044700000000375,
+        "p95": 27.978699999999662,
+        "p99": 28.40820000000167,
+        "max": 28.40820000000167,
+        "min": 19.831500000000233
+      },
+      "withdraw": {
+        "count": 44,
+        "p50": 21.646899999999732,
+        "p95": 27.902099999999336,
+        "p99": 31.102899999998044,
+        "max": 31.102899999998044,
+        "min": 19.491799999999785
+      },
+      "use_item": {
+        "count": 41,
+        "p50": 2.9290000000037253,
+        "p95": 5.705399999998917,
+        "p99": 6.915899999999965,
+        "max": 6.915899999999965,
+        "min": 2.5270000000018626
+      },
+      "raid": {
+        "count": 4,
+        "p50": 23.491399999998976,
+        "p95": 31.488400000002002,
+        "p99": 31.488400000002002,
+        "max": 31.488400000002002,
+        "min": 21.125200000002224
+      }
+    },
+    "interpretation": [
+      "No fire-slot refusals in this local control. This does not prove repeatability, native browser experience or internet capacity.",
+      "ws.send callback is not network delivery. WS ingress is after ws decoding, not OS packet receipt.",
+      "500ms windows and shared/full-persist times overlap and are nested; temporal pressure supports investigating this path but does not prove exclusive CPU or network cause.",
+      "a2 baseline and a3 candidate are separate runs with host/JIT/scheduling variation, not an isolated causal capacity comparison. Inspect transaction structure and relevant operation durations separately."
+    ]
+  },
+  "fixture": {
+    "actors": 16,
+    "offlineOwners": 2,
+    "camps": 4,
+    "floors": 4096,
+    "buildings": 4240,
+    "sources": [
+      {
+        "id": "world:-8:-1:i:mtn_logging:log_tree_1",
+        "type": "tree",
+        "stock": 3
+      },
+      {
+        "id": "world:-18:-6:i:mtn_deep:deep_tree",
+        "type": "tree",
+        "stock": 3
+      },
+      {
+        "id": "world:-4:-12:i:mtn_quarry:q_stone_1",
+        "type": "boulder",
+        "stock": 3
+      },
+      {
+        "id": "world:0:7:i:marsh_docks:dock_poplar",
+        "type": "tree",
+        "stock": 3
+      }
+    ],
+    "seededAssets": "Normal vest_t5 shield160/HP100,20 finite medkits each; builders100wood/100stone/200scrap/30parts; raiders1000ammo/1C4; each turret200ammo, each warehouse20wood. Explicit synthetic setup, not earned."
+  },
+  "method": "16 real WebSocket roles, real production server/SQLite/clock/NPC/survival. Synthetic initial assets and positions; not native browsers, earned progression, internet capacity or economics acceptance.",
+  "phase": {
+    "durationMs": 60184.1345,
+    "actors": [
+      {
+        "index": 0,
+        "role": "explorer",
+        "sent": 3,
+        "accepted": 3,
+        "pending": 0,
+        "errors": [],
+        "actionCounts": {
+          "gather": 3
+        },
+        "corrections": 1,
+        "decodeFailures": 0,
+        "receivedBytes": 2009825,
+        "rtt": {
+          "count": 3,
+          "p50": 21.430399999999736,
+          "p95": 26.645000000000437,
+          "p99": 26.645000000000437,
+          "max": 26.645000000000437,
+          "total": 49.49149999999963
+        },
+        "final": {
+          "hp": 100,
+          "shield": 160,
+          "satiety": 85.05250000000005,
+          "resources": {
+            "wood": 6,
+            "stone": 0,
+            "scrap": 0,
+            "parts": 0,
+            "food": 0,
+            "ammo": 0,
+            "c4": 0,
+            "medical": 20,
+            "credits": 0,
+            "shard": 0
+          }
+        }
+      },
+      {
+        "index": 1,
+        "role": "explorer",
+        "sent": 3,
+        "accepted": 2,
+        "pending": 0,
+        "errors": [
+          {
+            "action": "gather",
+            "error": "资源已耗尽"
+          }
+        ],
+        "actionCounts": {
+          "gather": 3
+        },
+        "corrections": 1,
+        "decodeFailures": 0,
+        "receivedBytes": 1421703,
+        "rtt": {
+          "count": 3,
+          "p50": 38.71030000000064,
+          "p95": 42.68489999999974,
+          "p99": 42.68489999999974,
+          "max": 42.68489999999974,
+          "total": 84.86470000000054
+        },
+        "final": {
+          "hp": 100,
+          "shield": 160,
+          "satiety": 84.95175000000003,
+          "resources": {
+            "wood": 3,
+            "stone": 0,
+            "scrap": 0,
+            "parts": 0,
+            "food": 0,
+            "ammo": 0,
+            "c4": 0,
+            "medical": 20,
+            "credits": 0,
+            "shard": 0
+          }
+        }
+      },
+      {
+        "index": 2,
+        "role": "explorer",
+        "sent": 16,
+        "accepted": 16,
+        "pending": 0,
+        "errors": [],
+        "actionCounts": {
+          "gather": 3,
+          "use_item": 13
+        },
+        "corrections": 1,
+        "decodeFailures": 0,
+        "receivedBytes": 4160464,
+        "rtt": {
+          "count": 16,
+          "p50": 4.094199999999546,
+          "p95": 69.52959999999985,
+          "p99": 69.52959999999985,
+          "max": 69.52959999999985,
+          "total": 198.28560000001107
+        },
+        "final": {
+          "hp": 82,
+          "shield": 0,
+          "satiety": 84.95625000000003,
+          "resources": {
+            "wood": 6,
+            "stone": 0,
+            "scrap": 0,
+            "parts": 0,
+            "food": 0,
+            "ammo": 0,
+            "c4": 0,
+            "medical": 7,
+            "credits": 0,
+            "shard": 0
+          }
+        }
+      },
+      {
+        "index": 3,
+        "role": "explorer",
+        "sent": 3,
+        "accepted": 2,
+        "pending": 0,
+        "errors": [
+          {
+            "action": "gather",
+            "error": "资源已耗尽"
+          }
+        ],
+        "actionCounts": {
+          "gather": 3
+        },
+        "corrections": 1,
+        "decodeFailures": 0,
+        "receivedBytes": 1599943,
+        "rtt": {
+          "count": 3,
+          "p50": 73.89379999999983,
+          "p95": 93.16659999999956,
+          "p99": 93.16659999999956,
+          "max": 93.16659999999956,
+          "total": 174.45100000000002
+        },
+        "final": {
+          "hp": 100,
+          "shield": 160,
+          "satiety": 84.96075000000003,
+          "resources": {
+            "wood": 3,
+            "stone": 0,
+            "scrap": 0,
+            "parts": 0,
+            "food": 0,
+            "ammo": 0,
+            "c4": 0,
+            "medical": 20,
+            "credits": 0,
+            "shard": 0
+          }
+        }
+      },
+      {
+        "index": 4,
+        "role": "explorer",
+        "sent": 3,
+        "accepted": 3,
+        "pending": 0,
+        "errors": [],
+        "actionCounts": {
+          "gather": 3
+        },
+        "corrections": 1,
+        "decodeFailures": 0,
+        "receivedBytes": 2984646,
+        "rtt": {
+          "count": 3,
+          "p50": 114.23569999999972,
+          "p95": 119.67259999999987,
+          "p99": 119.67259999999987,
+          "max": 119.67259999999987,
+          "total": 243.4679999999994
+        },
+        "final": {
+          "hp": 100,
+          "shield": 160,
+          "satiety": 84.96500000000003,
+          "resources": {
+            "wood": 0,
+            "stone": 6,
+            "scrap": 0,
+            "parts": 0,
+            "food": 0,
+            "ammo": 0,
+            "c4": 0,
+            "medical": 20,
+            "credits": 0,
+            "shard": 0
+          }
+        }
+      },
+      {
+        "index": 5,
+        "role": "explorer",
+        "sent": 3,
+        "accepted": 2,
+        "pending": 0,
+        "errors": [
+          {
+            "action": "gather",
+            "error": "资源已耗尽"
+          }
+        ],
+        "actionCounts": {
+          "gather": 3
+        },
+        "corrections": 1,
+        "decodeFailures": 0,
+        "receivedBytes": 2272550,
+        "rtt": {
+          "count": 3,
+          "p50": 106.41049999999996,
+          "p95": 135.93690000000015,
+          "p99": 135.93690000000015,
+          "max": 135.93690000000015,
+          "total": 253.80060000000003
+        },
+        "final": {
+          "hp": 100,
+          "shield": 160,
+          "satiety": 84.97050000000003,
+          "resources": {
+            "wood": 0,
+            "stone": 3,
+            "scrap": 0,
+            "parts": 0,
+            "food": 0,
+            "ammo": 0,
+            "c4": 0,
+            "medical": 20,
+            "credits": 0,
+            "shard": 0
+          }
+        }
+      },
+      {
+        "index": 6,
+        "role": "explorer",
+        "sent": 3,
+        "accepted": 3,
+        "pending": 0,
+        "errors": [],
+        "actionCounts": {
+          "gather": 3
+        },
+        "corrections": 1,
+        "decodeFailures": 0,
+        "receivedBytes": 2155768,
+        "rtt": {
+          "count": 3,
+          "p50": 128.1217000000006,
+          "p95": 165.45240000000013,
+          "p99": 165.45240000000013,
+          "max": 165.45240000000013,
+          "total": 307.09640000000127
+        },
+        "final": {
+          "hp": 100,
+          "shield": 160,
+          "satiety": 84.97500000000002,
+          "resources": {
+            "wood": 6,
+            "stone": 0,
+            "scrap": 0,
+            "parts": 0,
+            "food": 0,
+            "ammo": 0,
+            "c4": 0,
+            "medical": 20,
+            "credits": 0,
+            "shard": 0
+          }
+        }
+      },
+      {
+        "index": 7,
+        "role": "explorer",
+        "sent": 3,
+        "accepted": 2,
+        "pending": 0,
+        "errors": [
+          {
+            "action": "gather",
+            "error": "资源已耗尽"
+          }
+        ],
+        "actionCounts": {
+          "gather": 3
+        },
+        "corrections": 1,
+        "decodeFailures": 0,
+        "receivedBytes": 2143652,
+        "rtt": {
+          "count": 3,
+          "p50": 143.48520000000008,
+          "p95": 189.07799999999997,
+          "p99": 189.07799999999997,
+          "max": 189.07799999999997,
+          "total": 348.38030000000026
+        },
+        "final": {
+          "hp": 100,
+          "shield": 160,
+          "satiety": 84.97875000000002,
+          "resources": {
+            "wood": 3,
+            "stone": 0,
+            "scrap": 0,
+            "parts": 0,
+            "food": 0,
+            "ammo": 0,
+            "c4": 0,
+            "medical": 20,
+            "credits": 0,
+            "shard": 0
+          }
+        }
+      },
+      {
+        "index": 8,
+        "role": "builder",
+        "sent": 33,
+        "accepted": 33,
+        "pending": 0,
+        "errors": [],
+        "actionCounts": {
+          "craft": 11,
+          "deposit": 11,
+          "withdraw": 11
+        },
+        "corrections": 1,
+        "decodeFailures": 0,
+        "receivedBytes": 16784094,
+        "rtt": {
+          "count": 33,
+          "p50": 23.63539999999921,
+          "p95": 100.52339999999822,
+          "p99": 102.8827999999994,
+          "max": 102.8827999999994,
+          "total": 1034.1445000000058
+        },
+        "final": {
+          "hp": 100,
+          "shield": 160,
+          "satiety": 84.98250000000003,
+          "resources": {
+            "wood": 100,
+            "stone": 100,
+            "scrap": 90,
+            "parts": 19,
+            "food": 0,
+            "ammo": 275,
+            "c4": 0,
+            "medical": 20,
+            "credits": 0,
+            "shard": 0
+          }
+        }
+      },
+      {
+        "index": 9,
+        "role": "builder",
+        "sent": 33,
+        "accepted": 33,
+        "pending": 0,
+        "errors": [],
+        "actionCounts": {
+          "craft": 11,
+          "deposit": 11,
+          "withdraw": 11
+        },
+        "corrections": 1,
+        "decodeFailures": 0,
+        "receivedBytes": 17561818,
+        "rtt": {
+          "count": 33,
+          "p50": 74.02430000000095,
+          "p95": 103.61960000000545,
+          "p99": 114.0685999999987,
+          "max": 114.0685999999987,
+          "total": 2379.5538000000015
+        },
+        "final": {
+          "hp": 100,
+          "shield": 160,
+          "satiety": 84.98825000000002,
+          "resources": {
+            "wood": 100,
+            "stone": 100,
+            "scrap": 90,
+            "parts": 19,
+            "food": 0,
+            "ammo": 275,
+            "c4": 0,
+            "medical": 20,
+            "credits": 0,
+            "shard": 0
+          }
+        }
+      },
+      {
+        "index": 10,
+        "role": "builder",
+        "sent": 33,
+        "accepted": 33,
+        "pending": 0,
+        "errors": [],
+        "actionCounts": {
+          "craft": 11,
+          "deposit": 11,
+          "withdraw": 11
+        },
+        "corrections": 1,
+        "decodeFailures": 0,
+        "receivedBytes": 16771594,
+        "rtt": {
+          "count": 33,
+          "p50": 78.49490000000151,
+          "p95": 107.8150999999998,
+          "p99": 121.41860000000088,
+          "max": 121.41860000000088,
+          "total": 2665.377900000004
+        },
+        "final": {
+          "hp": 100,
+          "shield": 160,
+          "satiety": 84.99925000000003,
+          "resources": {
+            "wood": 100,
+            "stone": 100,
+            "scrap": 90,
+            "parts": 19,
+            "food": 0,
+            "ammo": 275,
+            "c4": 0,
+            "medical": 20,
+            "credits": 0,
+            "shard": 0
+          }
+        }
+      },
+      {
+        "index": 11,
+        "role": "builder",
+        "sent": 33,
+        "accepted": 33,
+        "pending": 0,
+        "errors": [],
+        "actionCounts": {
+          "craft": 11,
+          "deposit": 11,
+          "withdraw": 11
+        },
+        "corrections": 1,
+        "decodeFailures": 0,
+        "receivedBytes": 17031087,
+        "rtt": {
+          "count": 33,
+          "p50": 87.89730000000054,
+          "p95": 116.24930000000313,
+          "p99": 128.62710000000152,
+          "max": 128.62710000000152,
+          "total": 2949.326400000007
+        },
+        "final": {
+          "hp": 100,
+          "shield": 160,
+          "satiety": 85.00500000000004,
+          "resources": {
+            "wood": 100,
+            "stone": 100,
+            "scrap": 90,
+            "parts": 19,
+            "food": 0,
+            "ammo": 275,
+            "c4": 0,
+            "medical": 20,
+            "credits": 0,
+            "shard": 0
+          }
+        }
+      },
+      {
+        "index": 12,
+        "role": "raider",
+        "sent": 274,
+        "accepted": 274,
+        "pending": 0,
+        "errors": [],
+        "actionCounts": {
+          "fire": 266,
+          "use_item": 7,
+          "raid": 1
+        },
+        "corrections": 1,
+        "decodeFailures": 0,
+        "receivedBytes": 17570601,
+        "rtt": {
+          "count": 274,
+          "p50": 3.7972000000008848,
+          "p95": 109.85760000000118,
+          "p99": 140.70469999999932,
+          "max": 200.01580000000013,
+          "total": 4928.105000000012
+        },
+        "final": {
+          "hp": 82,
+          "shield": 44.088,
+          "satiety": 85.01025000000004,
+          "resources": {
+            "wood": 0,
+            "stone": 0,
+            "scrap": 0,
+            "parts": 0,
+            "food": 0,
+            "ammo": 734,
+            "c4": 0,
+            "medical": 13,
+            "credits": 0,
+            "shard": 0
+          }
+        }
+      },
+      {
+        "index": 13,
+        "role": "raider",
+        "sent": 274,
+        "accepted": 274,
+        "pending": 0,
+        "errors": [],
+        "actionCounts": {
+          "fire": 266,
+          "use_item": 7,
+          "raid": 1
+        },
+        "corrections": 1,
+        "decodeFailures": 0,
+        "receivedBytes": 17830441,
+        "rtt": {
+          "count": 274,
+          "p50": 5.6877000000022235,
+          "p95": 112.40589999999975,
+          "p99": 143.5625,
+          "max": 202.86369999999988,
+          "total": 5635.158299999963
+        },
+        "final": {
+          "hp": 82,
+          "shield": 44.08,
+          "satiety": 85.01525000000004,
+          "resources": {
+            "wood": 0,
+            "stone": 0,
+            "scrap": 0,
+            "parts": 0,
+            "food": 0,
+            "ammo": 734,
+            "c4": 0,
+            "medical": 13,
+            "credits": 0,
+            "shard": 0
+          }
+        }
+      },
+      {
+        "index": 14,
+        "role": "raider",
+        "sent": 274,
+        "accepted": 274,
+        "pending": 0,
+        "errors": [],
+        "actionCounts": {
+          "fire": 266,
+          "use_item": 7,
+          "raid": 1
+        },
+        "corrections": 1,
+        "decodeFailures": 0,
+        "receivedBytes": 17833046,
+        "rtt": {
+          "count": 274,
+          "p50": 7.841899999999441,
+          "p95": 115.09549999999945,
+          "p99": 146.22680000000037,
+          "max": 205.91930000000002,
+          "total": 6302.019099999954
+        },
+        "final": {
+          "hp": 82,
+          "shield": 44.08,
+          "satiety": 85.02325000000005,
+          "resources": {
+            "wood": 0,
+            "stone": 0,
+            "scrap": 0,
+            "parts": 0,
+            "food": 0,
+            "ammo": 734,
+            "c4": 0,
+            "medical": 13,
+            "credits": 0,
+            "shard": 0
+          }
+        }
+      },
+      {
+        "index": 15,
+        "role": "raider",
+        "sent": 274,
+        "accepted": 274,
+        "pending": 0,
+        "errors": [],
+        "actionCounts": {
+          "fire": 266,
+          "use_item": 7,
+          "raid": 1
+        },
+        "corrections": 1,
+        "decodeFailures": 0,
+        "receivedBytes": 17832893,
+        "rtt": {
+          "count": 274,
+          "p50": 9.975399999999354,
+          "p95": 117.84690000000046,
+          "p99": 148.90569999999934,
+          "max": 209.09670000000006,
+          "total": 6956.5233999999655
+        },
+        "final": {
+          "hp": 82,
+          "shield": 44.08,
+          "satiety": 85.02800000000005,
+          "resources": {
+            "wood": 0,
+            "stone": 0,
+            "scrap": 0,
+            "parts": 0,
+            "food": 0,
+            "ammo": 734,
+            "c4": 0,
+            "medical": 13,
+            "credits": 0,
+            "shard": 0
+          }
+        }
+      }
+    ],
+    "loop": {
+      "p50": 15.171583,
+      "p95": 48.955391,
+      "p99": 65.896447,
+      "max": 248.643583
+    },
+    "cpu": {
+      "user": 16797000,
+      "system": 2141000
+    },
+    "memory": [
+      {
+        "elapsedMs": 459.32900000000006,
+        "rss": 154234880,
+        "heapTotal": 99479552,
+        "heapUsed": 29887000,
+        "external": 6250700,
+        "arrayBuffers": 2143804
+      },
+      {
+        "elapsedMs": 1479.7238000000002,
+        "rss": 172597248,
+        "heapTotal": 100433920,
+        "heapUsed": 42614504,
+        "external": 6247415,
+        "arrayBuffers": 2145789
+      },
+      {
+        "elapsedMs": 2492.6138,
+        "rss": 186540032,
+        "heapTotal": 179765248,
+        "heapUsed": 45830912,
+        "external": 6255621,
+        "arrayBuffers": 2153995
+      },
+      {
+        "elapsedMs": 3498.6132000000002,
+        "rss": 219279360,
+        "heapTotal": 189698048,
+        "heapUsed": 70347520,
+        "external": 6260618,
+        "arrayBuffers": 2158992
+      },
+      {
+        "elapsedMs": 4498.552699999999,
+        "rss": 243773440,
+        "heapTotal": 181342208,
+        "heapUsed": 53543920,
+        "external": 6251869,
+        "arrayBuffers": 2150243
+      },
+      {
+        "elapsedMs": 5506.3492,
+        "rss": 242823168,
+        "heapTotal": 179974144,
+        "heapUsed": 47808328,
+        "external": 6256754,
+        "arrayBuffers": 2155128
+      },
+      {
+        "elapsedMs": 6520.6001,
+        "rss": 260640768,
+        "heapTotal": 197701632,
+        "heapUsed": 77696416,
+        "external": 6256862,
+        "arrayBuffers": 2155236
+      },
+      {
+        "elapsedMs": 7561.475,
+        "rss": 282996736,
+        "heapTotal": 215756800,
+        "heapUsed": 110421416,
+        "external": 6270325,
+        "arrayBuffers": 2168691
+      },
+      {
+        "elapsedMs": 8594.1507,
+        "rss": 298459136,
+        "heapTotal": 232550400,
+        "heapUsed": 140439968,
+        "external": 6275663,
+        "arrayBuffers": 2174029
+      },
+      {
+        "elapsedMs": 9627.4191,
+        "rss": 272969728,
+        "heapTotal": 205312000,
+        "heapUsed": 113469488,
+        "external": 6263059,
+        "arrayBuffers": 2161425
+      },
+      {
+        "elapsedMs": 10638.0788,
+        "rss": 268918784,
+        "heapTotal": 201023488,
+        "heapUsed": 81638400,
+        "external": 6252659,
+        "arrayBuffers": 2151025
+      },
+      {
+        "elapsedMs": 11647.5769,
+        "rss": 273055744,
+        "heapTotal": 205066240,
+        "heapUsed": 96560720,
+        "external": 6257560,
+        "arrayBuffers": 2155926
+      },
+      {
+        "elapsedMs": 12678.0416,
+        "rss": 291078144,
+        "heapTotal": 223092736,
+        "heapUsed": 132340288,
+        "external": 6262874,
+        "arrayBuffers": 2161240
+      },
+      {
+        "elapsedMs": 13724.0046,
+        "rss": 287195136,
+        "heapTotal": 219570176,
+        "heapUsed": 85224512,
+        "external": 6276347,
+        "arrayBuffers": 2153495
+      },
+      {
+        "elapsedMs": 14763.7845,
+        "rss": 304848896,
+        "heapTotal": 236892160,
+        "heapUsed": 115997544,
+        "external": 6258288,
+        "arrayBuffers": 2156654
+      },
+      {
+        "elapsedMs": 15833.108799999998,
+        "rss": 294985728,
+        "heapTotal": 228143104,
+        "heapUsed": 88921280,
+        "external": 6245815,
+        "arrayBuffers": 2144181
+      },
+      {
+        "elapsedMs": 16873.9515,
+        "rss": 292888576,
+        "heapTotal": 225759232,
+        "heapUsed": 108868240,
+        "external": 6265700,
+        "arrayBuffers": 2164066
+      },
+      {
+        "elapsedMs": 17910.9585,
+        "rss": 285102080,
+        "heapTotal": 217550848,
+        "heapUsed": 64909536,
+        "external": 6273590,
+        "arrayBuffers": 2155129
+      },
+      {
+        "elapsedMs": 18942.4534,
+        "rss": 299855872,
+        "heapTotal": 232017920,
+        "heapUsed": 98412144,
+        "external": 6265784,
+        "arrayBuffers": 2164150
+      },
+      {
+        "elapsedMs": 19971.293999999998,
+        "rss": 317718528,
+        "heapTotal": 250122240,
+        "heapUsed": 135575544,
+        "external": 6273553,
+        "arrayBuffers": 2171919
+      },
+      {
+        "elapsedMs": 20971.1547,
+        "rss": 315781120,
+        "heapTotal": 247840768,
+        "heapUsed": 109214936,
+        "external": 6263648,
+        "arrayBuffers": 2162014
+      },
+      {
+        "elapsedMs": 21971.5748,
+        "rss": 278147072,
+        "heapTotal": 203960320,
+        "heapUsed": 60485784,
+        "external": 6249871,
+        "arrayBuffers": 2153637
+      },
+      {
+        "elapsedMs": 23026.8207,
+        "rss": 294285312,
+        "heapTotal": 216780800,
+        "heapUsed": 90249400,
+        "external": 6252709,
+        "arrayBuffers": 2156475
+      },
+      {
+        "elapsedMs": 24059.0472,
+        "rss": 304615424,
+        "heapTotal": 227172352,
+        "heapUsed": 119594424,
+        "external": 6268686,
+        "arrayBuffers": 2172452
+      },
+      {
+        "elapsedMs": 25081.0798,
+        "rss": 325320704,
+        "heapTotal": 248315904,
+        "heapUsed": 157501840,
+        "external": 6274052,
+        "arrayBuffers": 2177818
+      },
+      {
+        "elapsedMs": 26111.5351,
+        "rss": 344748032,
+        "heapTotal": 265379840,
+        "heapUsed": 147797360,
+        "external": 6256491,
+        "arrayBuffers": 2160257
+      },
+      {
+        "elapsedMs": 27111.3651,
+        "rss": 329359360,
+        "heapTotal": 250163200,
+        "heapUsed": 150822232,
+        "external": 6266578,
+        "arrayBuffers": 2170344
+      },
+      {
+        "elapsedMs": 28111.5394,
+        "rss": 292225024,
+        "heapTotal": 215584768,
+        "heapUsed": 94115512,
+        "external": 6253834,
+        "arrayBuffers": 2159005
+      },
+      {
+        "elapsedMs": 29116.8456,
+        "rss": 285446144,
+        "heapTotal": 209661952,
+        "heapUsed": 53022504,
+        "external": 6258679,
+        "arrayBuffers": 2145151
+      },
+      {
+        "elapsedMs": 30128.2003,
+        "rss": 299278336,
+        "heapTotal": 223744000,
+        "heapUsed": 84937144,
+        "external": 6253483,
+        "arrayBuffers": 2158654
+      },
+      {
+        "elapsedMs": 31286.7846,
+        "rss": 363716608,
+        "heapTotal": 287875072,
+        "heapUsed": 203184920,
+        "external": 6259159,
+        "arrayBuffers": 2164330
+      },
+      {
+        "elapsedMs": 32316.1302,
+        "rss": 319107072,
+        "heapTotal": 244551680,
+        "heapUsed": 114972496,
+        "external": 6253482,
+        "arrayBuffers": 2158653
+      },
+      {
+        "elapsedMs": 33332.9279,
+        "rss": 331485184,
+        "heapTotal": 257372160,
+        "heapUsed": 145213280,
+        "external": 6258778,
+        "arrayBuffers": 2163949
+      },
+      {
+        "elapsedMs": 34344.0842,
+        "rss": 287879168,
+        "heapTotal": 210481152,
+        "heapUsed": 87954512,
+        "external": 6251031,
+        "arrayBuffers": 2156202
+      },
+      {
+        "elapsedMs": 35375.0924,
+        "rss": 282103808,
+        "heapTotal": 205930496,
+        "heapUsed": 49422648,
+        "external": 6264829,
+        "arrayBuffers": 2164682
+      },
+      {
+        "elapsedMs": 36466.9284,
+        "rss": 342708224,
+        "heapTotal": 265748480,
+        "heapUsed": 149963232,
+        "external": 6250703,
+        "arrayBuffers": 2155874
+      },
+      {
+        "elapsedMs": 37479.8161,
+        "rss": 321417216,
+        "heapTotal": 244789248,
+        "heapUsed": 139264768,
+        "external": 6266929,
+        "arrayBuffers": 2172100
+      },
+      {
+        "elapsedMs": 38491.9683,
+        "rss": 313663488,
+        "heapTotal": 237883392,
+        "heapUsed": 97326000,
+        "external": 6250993,
+        "arrayBuffers": 2156164
+      },
+      {
+        "elapsedMs": 39494.4555,
+        "rss": 327315456,
+        "heapTotal": 251703296,
+        "heapUsed": 130396144,
+        "external": 6258356,
+        "arrayBuffers": 2163527
+      },
+      {
+        "elapsedMs": 40507.7884,
+        "rss": 278663168,
+        "heapTotal": 201707520,
+        "heapUsed": 67546864,
+        "external": 6256291,
+        "arrayBuffers": 2161462
+      },
+      {
+        "elapsedMs": 41521.5378,
+        "rss": 287387648,
+        "heapTotal": 210722816,
+        "heapUsed": 65234032,
+        "external": 6253373,
+        "arrayBuffers": 2158544
+      },
+      {
+        "elapsedMs": 42531.5716,
+        "rss": 298311680,
+        "heapTotal": 222466048,
+        "heapUsed": 95754320,
+        "external": 6256310,
+        "arrayBuffers": 2161481
+      },
+      {
+        "elapsedMs": 43546.3529,
+        "rss": 318631936,
+        "heapTotal": 242806784,
+        "heapUsed": 138817232,
+        "external": 6264480,
+        "arrayBuffers": 2169651
+      },
+      {
+        "elapsedMs": 44564.7047,
+        "rss": 308547584,
+        "heapTotal": 233177088,
+        "heapUsed": 90764808,
+        "external": 6267002,
+        "arrayBuffers": 2152963
+      },
+      {
+        "elapsedMs": 45585.554299999996,
+        "rss": 322633728,
+        "heapTotal": 247754752,
+        "heapUsed": 123410880,
+        "external": 6253632,
+        "arrayBuffers": 2158803
+      },
+      {
+        "elapsedMs": 46606.5941,
+        "rss": 374493184,
+        "heapTotal": 299384832,
+        "heapUsed": 210928248,
+        "external": 6266083,
+        "arrayBuffers": 2171254
+      },
+      {
+        "elapsedMs": 47617.6301,
+        "rss": 281374720,
+        "heapTotal": 205275136,
+        "heapUsed": 46714200,
+        "external": 6244782,
+        "arrayBuffers": 2149953
+      },
+      {
+        "elapsedMs": 48627.3606,
+        "rss": 289198080,
+        "heapTotal": 214130688,
+        "heapUsed": 70768552,
+        "external": 6247245,
+        "arrayBuffers": 2152416
+      },
+      {
+        "elapsedMs": 49627.1051,
+        "rss": 307941376,
+        "heapTotal": 233132032,
+        "heapUsed": 105717496,
+        "external": 6252035,
+        "arrayBuffers": 2157206
+      },
+      {
+        "elapsedMs": 50628.9389,
+        "rss": 316489728,
+        "heapTotal": 241651712,
+        "heapUsed": 140276736,
+        "external": 6256907,
+        "arrayBuffers": 2162078
+      },
+      {
+        "elapsedMs": 51740.917199999996,
+        "rss": 325398528,
+        "heapTotal": 250949632,
+        "heapUsed": 124765544,
+        "external": 6251261,
+        "arrayBuffers": 2156432
+      },
+      {
+        "elapsedMs": 52770.150499999996,
+        "rss": 324272128,
+        "heapTotal": 249970688,
+        "heapUsed": 137021664,
+        "external": 6261177,
+        "arrayBuffers": 2166348
+      },
+      {
+        "elapsedMs": 53777.2524,
+        "rss": 327450624,
+        "heapTotal": 253935616,
+        "heapUsed": 145473328,
+        "external": 6263768,
+        "arrayBuffers": 2168939
+      },
+      {
+        "elapsedMs": 54786.3804,
+        "rss": 339247104,
+        "heapTotal": 266555392,
+        "heapUsed": 178885504,
+        "external": 6266358,
+        "arrayBuffers": 2171529
+      },
+      {
+        "elapsedMs": 55788.2147,
+        "rss": 278413312,
+        "heapTotal": 203870208,
+        "heapUsed": 33401560,
+        "external": 6237838,
+        "arrayBuffers": 2143009
+      },
+      {
+        "elapsedMs": 56956.5833,
+        "rss": 338247680,
+        "heapTotal": 263520256,
+        "heapUsed": 140874592,
+        "external": 6248746,
+        "arrayBuffers": 2153917
+      },
+      {
+        "elapsedMs": 57956.4178,
+        "rss": 291164160,
+        "heapTotal": 217251840,
+        "heapUsed": 56054200,
+        "external": 6253851,
+        "arrayBuffers": 2159022
+      },
+      {
+        "elapsedMs": 58963.1796,
+        "rss": 303267840,
+        "heapTotal": 228995072,
+        "heapUsed": 79830848,
+        "external": 6254177,
+        "arrayBuffers": 2159348
+      },
+      {
+        "elapsedMs": 59965.4585,
+        "rss": 309051392,
+        "heapTotal": 235102208,
+        "heapUsed": 91314712,
+        "external": 6256622,
+        "arrayBuffers": 2161793
+      }
+    ],
+    "samples": 56557,
+    "cap": 100000,
+    "overflow": 0,
+    "methodTimes": {
+      "buildingsFor": {
+        "count": 16947,
+        "p50": 0.4264000000039232,
+        "p95": 0.5292000000008557,
+        "p99": 0.690999999998894,
+        "max": 5.521899999999732,
+        "total": 7519.521799999484
+      },
+      "persist": {
+        "count": 274,
+        "p50": 11.037800000000061,
+        "p95": 18.19079999999667,
+        "p99": 24.11909999999625,
+        "max": 24.818099999996775,
+        "total": 3442.9713999999803
+      },
+      "tick": {
+        "count": 286,
+        "p50": 15.941299999998591,
+        "p95": 23.305599999999686,
+        "p99": 29.449899999999616,
+        "max": 30.43579999999929,
+        "total": 3708.988999999984
+      },
+      "snapshot": {
+        "count": 4993,
+        "p50": 0.9708000000027823,
+        "p95": 1.321700000000419,
+        "p99": 1.5564000000013039,
+        "max": 8.346400000002177,
+        "total": 4586.986499999782
+      },
+      "encode": {
+        "count": 4993,
+        "p50": 0.5510999999969499,
+        "p95": 0.7217000000000553,
+        "p99": 0.8591999999989639,
+        "max": 4.030000000000655,
+        "total": 1908.1977999999176
+      },
+      "serialize": {
+        "count": 6038,
+        "p50": 0.011299999999209831,
+        "p95": 0.10080000000016298,
+        "p99": 0.1330999999991036,
+        "max": 4.5351999999993495,
+        "total": 124.61380000002976
+      },
+      "move": {
+        "count": 9184,
+        "p50": 0.42770000000018626,
+        "p95": 0.5247999999992317,
+        "p99": 0.6863000000012107,
+        "max": 5.277000000001863,
+        "total": 4084.167900000215
+      },
+      "dispatch:player_sync": {
+        "count": 9184,
+        "p50": 0.4349000000001979,
+        "p95": 0.542700000005425,
+        "p99": 0.7108000000007451,
+        "max": 5.299699999999575,
+        "total": 4163.686400000175
+      },
+      "snapshotPlayer": {
+        "count": 1064,
+        "p50": 0.03840000000127475,
+        "p95": 0.07470000000466825,
+        "p99": 0.11750000000029104,
+        "max": 0.1606000000010681,
+        "total": 46.67219999992176
+      },
+      "actionPlayer": {
+        "count": 1064,
+        "p50": 1.6901999999972759,
+        "p95": 3.4818000000013853,
+        "p99": 5.730099999998856,
+        "max": 13.061900000000605,
+        "total": 2095.330099999974
+      },
+      "encodePlayer": {
+        "count": 1064,
+        "p50": 0.0020000000004074536,
+        "p95": 0.005799999999908323,
+        "p99": 1.6712999999999738,
+        "max": 2.2678999999989173,
+        "total": 35.48739999988379
+      },
+      "dispatch:game_action": {
+        "count": 1265,
+        "p50": 1.8468999999986409,
+        "p95": 23.723800000001575,
+        "p99": 28.84400000000096,
+        "max": 36.56020000000717,
+        "total": 5439.674400000074
+      },
+      "action": {
+        "count": 201,
+        "p50": 19.839999999996508,
+        "p95": 26.451199999999517,
+        "p99": 28.745899999999892,
+        "max": 31.49840000000404,
+        "total": 2743.2088999999964
+      }
+    }
+  },
+  "actorLedger": [
+    {
+      "index": 0,
+      "role": "explorer",
+      "freshCommittedActions": 2,
+      "medkitsUsed": 0,
+      "financialAndEquipmentPreserved": true,
+      "finalHp": 100,
+      "finalShield": 160
+    },
+    {
+      "index": 1,
+      "role": "explorer",
+      "freshCommittedActions": 1,
+      "medkitsUsed": 0,
+      "financialAndEquipmentPreserved": true,
+      "finalHp": 100,
+      "finalShield": 160
+    },
+    {
+      "index": 2,
+      "role": "explorer",
+      "freshCommittedActions": 15,
+      "medkitsUsed": 13,
+      "financialAndEquipmentPreserved": true,
+      "finalHp": 82,
+      "finalShield": 0
+    },
+    {
+      "index": 3,
+      "role": "explorer",
+      "freshCommittedActions": 1,
+      "medkitsUsed": 0,
+      "financialAndEquipmentPreserved": true,
+      "finalHp": 100,
+      "finalShield": 160
+    },
+    {
+      "index": 4,
+      "role": "explorer",
+      "freshCommittedActions": 2,
+      "medkitsUsed": 0,
+      "financialAndEquipmentPreserved": true,
+      "finalHp": 100,
+      "finalShield": 160
+    },
+    {
+      "index": 5,
+      "role": "explorer",
+      "freshCommittedActions": 1,
+      "medkitsUsed": 0,
+      "financialAndEquipmentPreserved": true,
+      "finalHp": 100,
+      "finalShield": 160
+    },
+    {
+      "index": 6,
+      "role": "explorer",
+      "freshCommittedActions": 2,
+      "medkitsUsed": 0,
+      "financialAndEquipmentPreserved": true,
+      "finalHp": 100,
+      "finalShield": 160
+    },
+    {
+      "index": 7,
+      "role": "explorer",
+      "freshCommittedActions": 1,
+      "medkitsUsed": 0,
+      "financialAndEquipmentPreserved": true,
+      "finalHp": 100,
+      "finalShield": 160
+    },
+    {
+      "index": 8,
+      "role": "builder",
+      "freshCommittedActions": 33,
+      "medkitsUsed": 0,
+      "financialAndEquipmentPreserved": true,
+      "finalHp": 100,
+      "finalShield": 160
+    },
+    {
+      "index": 9,
+      "role": "builder",
+      "freshCommittedActions": 33,
+      "medkitsUsed": 0,
+      "financialAndEquipmentPreserved": true,
+      "finalHp": 100,
+      "finalShield": 160
+    },
+    {
+      "index": 10,
+      "role": "builder",
+      "freshCommittedActions": 33,
+      "medkitsUsed": 0,
+      "financialAndEquipmentPreserved": true,
+      "finalHp": 100,
+      "finalShield": 160
+    },
+    {
+      "index": 11,
+      "role": "builder",
+      "freshCommittedActions": 33,
+      "medkitsUsed": 0,
+      "financialAndEquipmentPreserved": true,
+      "finalHp": 100,
+      "finalShield": 160
+    },
+    {
+      "index": 12,
+      "role": "raider",
+      "freshCommittedActions": 274,
+      "medkitsUsed": 7,
+      "financialAndEquipmentPreserved": true,
+      "finalHp": 82,
+      "finalShield": 44.088
+    },
+    {
+      "index": 13,
+      "role": "raider",
+      "freshCommittedActions": 274,
+      "medkitsUsed": 7,
+      "financialAndEquipmentPreserved": true,
+      "finalHp": 82,
+      "finalShield": 44.08
+    },
+    {
+      "index": 14,
+      "role": "raider",
+      "freshCommittedActions": 274,
+      "medkitsUsed": 7,
+      "financialAndEquipmentPreserved": true,
+      "finalHp": 82,
+      "finalShield": 44.08
+    },
+    {
+      "index": 15,
+      "role": "raider",
+      "freshCommittedActions": 274,
+      "medkitsUsed": 7,
+      "financialAndEquipmentPreserved": true,
+      "finalHp": 82,
+      "finalShield": 44.08
+    }
+  ],
+  "finances": {
+    "initialAmmo": 4800,
+    "craftedRounds": 1320,
+    "firedRounds": 1064,
+    "defendedRounds": 192,
+    "finalAmmo": 4864,
+    "medkitsUsed": 41,
+    "c4Used": 4,
+    "sharedFreshGatherSuccess": 12,
+    "sharedGatherReplays": 8,
+    "allAssetsReconciled": true
+  },
+  "errors": {
+    "gather: 资源已耗尽": 4
+  },
+  "moves": [
+    {
+      "accepted": 574,
+      "rejected": 0
+    },
+    {
+      "accepted": 574,
+      "rejected": 0
+    },
+    {
+      "accepted": 574,
+      "rejected": 0
+    },
+    {
+      "accepted": 574,
+      "rejected": 0
+    },
+    {
+      "accepted": 574,
+      "rejected": 0
+    },
+    {
+      "accepted": 574,
+      "rejected": 0
+    },
+    {
+      "accepted": 574,
+      "rejected": 0
+    },
+    {
+      "accepted": 574,
+      "rejected": 0
+    },
+    {
+      "accepted": 574,
+      "rejected": 0
+    },
+    {
+      "accepted": 574,
+      "rejected": 0
+    },
+    {
+      "accepted": 574,
+      "rejected": 0
+    },
+    {
+      "accepted": 574,
+      "rejected": 0
+    },
+    {
+      "accepted": 574,
+      "rejected": 0
+    },
+    {
+      "accepted": 574,
+      "rejected": 0
+    },
+    {
+      "accepted": 574,
+      "rejected": 0
+    },
+    {
+      "accepted": 574,
+      "rejected": 0
+    }
+  ],
+  "deaths": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "admissionCorrectionMessages": [
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1
+  ],
+  "interpretation": [
+    "This one60-second protocol control completed with only4 expected resource-depletion refusals, no unexpected refusals; internet/native/repeatability/capacity gates remain unaccepted.",
+    "Move hook recorded 9184 accepted/0 rejected. Each peer counted one forced admission baseline correction; the counter was not reset at begin, so 16 must not be reported as measured movement failures.",
+    "Server event-loop histogram includes a maximum around249ms; timestamped method samples are nested and the loop maximum alone is not causal attribution. Do not assign it to a particular method or GPU.",
+    "Method timings contain nested work, observer overhead, scheduling and GC; do not add them as exclusive CPU.",
+    "Server memory samples are server-process RSS/heap with observation buffers, not browser memory or a proven leak."
+  ],
+  "persistence": {
+    "integrity": true,
+    "consistentBackupLogicalStateEqual": true,
+    "pendingPlayerRows": 0,
+    "recoveredByActualMemoryGameWorld": true,
+    "mostRecentCommittedReplayUncharged": 16,
+    "shutdown": "All16 client closes and health onlineCount0 confirmed before IPC finish; observer also required no server sockets. Persisted/exported, IPC ack flushed, normal exit0. Exact final runtime state equals merged SQLite and its consistent backup."
+  },
+  "coverageLimits": [
+    "Only local oscillating movements around four real regions; no sustained regional/chunk streaming route. That remains required.",
+    "16 protocol connections, not16 native browsers; no physical GPU, whole-browser memory, native frame or internet acceptance.",
+    "60-second synthetic initial-asset fixture with four1024-floor camps, finite normal equipment/medicine; not earned growth, an absolute population cap, maximum camps or long-term economy.",
+    "One deep-forest role consumed13 medkits while another nearby role took no damage. That stationary pressure result is not an exploration-route risk estimate."
+  ],
+  "next": "Retain baseline2 fire-slot failures and this one no-unexpected-refusal control; do not declare16-person experience/capacity. Shared transfers still pay full checkpoints. Add repeated realistic cross-chunk movement and native render/memory coverage; preserve authoritative fire rate, ammo and bounded input.",
+  "sourceHashes": {
+    "server.ts": "9b82086e46d79b8e778587806a1c01af0c2ec92897d250f28f2d7a0e83b7ac53",
+    "server/worldState.ts": "f9270815832cf3b3cb6ce929cfaa69d42158025da1355194d25464ac6322d511",
+    "server/db.ts": "9cf91e65d64e6372bb897d98b8bdda843a03f42f409240f272abc4ed09d83f0f",
+    "server/identity.ts": "9142fc4db6244894e722268d2e64f2b0f955cab28faf1d55b87e8d5960e783ba",
+    "server/worldQueries.ts": "0bdc8625d63d959f1baaceba232702dba7bfc7f7612dcf720757fd8268898822",
+    "server/fireQueue.ts": "5897d3bc48fef4b338b634e386c7e63dbde95cdd43c79e570daff3b1e2f72f12",
+    "server/stateCheckQueue.ts": "228dafba281302150283a47733d71c9ca3f4267ff44f92c5ce1b4c91421c68b0",
+    "server/transport.ts": "a12c5982002f758d27208a3c8f4e2b15ec52bd0d06d71f97c57152a3ab7b5cf6",
+    "src/game/stateSync.ts": "cfb25fc761a622ab0f90077849adc9e0375f800f315af9dca0a09560926b28a0",
+    "src/game/world.ts": "72084a8e566097a6ca04504728def51c3c83ac7ee426edf8e92096f1b24e8be5",
+    "src/game/maps.ts": "d3b21e466adebc9d17b9966bcf22bc16c7862f409d58a981f13ffdbcfa2c9649",
+    "src/game/items.ts": "4c9fdf817ed92b33aa6210ef05b6a69dfb5d9e18105e8faeb43dbed4efd824db",
+    "src/game/combat.ts": "ba03d05d852cd9ea560b0d708460ac90d65e2fe5f6fde81c3d45a3d03d761998",
+    "src/game/crafting.ts": "eb43bd22c9ee159759a1b23a76d64bbbdaeaf0c3a89cbc22fa7df87c90d34105",
+    "src/game/equipmentRules.ts": "7add9af028a73655c1da136dc90fe21075bef19ef04f3316f507795ee3466f62",
+    "data/profile-small-server-optimized-20261026.ts": "3dc0eab681f47e283e7dc65f6ede067b4fbd38210904ac5a1758910f908e6c48",
+    "data/capture-small-server-optimized-20261026.ts": "5eadc75d2f967b2357964a14332386bb9c6ccc23f8beee892798209d3a471b52",
+    "data/audit-small-server-optimized-20261026.ts": "4dfb4fdb57b5db58fc3b34f81e06f287eb51b31a42e3fd30646812724dfea0d3",
+    "data/analyze-small-server-optimized-20261026.py": "21d71828f2fa4f9401af94eee1d6d02014a173f6648ccd3545175e2bd5a50542",
+    "data/finalize-player-only-craft-use-20261026.py": "913b9e84a4c1102c1e78defcfb759e8fa8cb8e4a8410997baebcfcbab0e1d189",
+    "server/playerOnlyCrafting.test.ts": "2424ef91ddae9a3214c6350cc64378aa7eaaa7a99475a58a5c8754c8ebfa8a6d",
+    "server/worldState.test.ts": "744779b922b86ecc8b7fcd3628ae29b386383711fbb6666973371384adc7f565"
+  },
+  "evidenceHashes": {
+    "data/small-server-timing-20261026-a3-results.json": "3c280c90ddf7807d7e6f3af94068542fbaeaed6cfb3a5d682a2746bdbc34c2ac",
+    "data/small-server-timing-20261026-a3-capture.json": "450f1030bf5bdbee2e692d8ad20a9bb142c751881b576b89119a11562413d5b0",
+    "data/small-server-timing-20261026-a3-driver.log": "02f9018be34dfec110c918903f3ede953635900b20361bff36edb2a5f794ee39",
+    "data/small-server-timing-20261026-a3-server.log": "1b6eae63e2fcc13400b06fd1f4b799b805ed08bdd3db0189caad6dd20adb55e5",
+    "data/small-server-timing-20261026-a3-types.log": "7f3594d7a965c703e6361ae50c0ef50cf9c344c621d801592b074b48554f4235",
+    "data/small-server-timing-20261026-a3-client-events-private.json": "4fb3c793f504ff9f964fcb88322d630406f27c131090760e7330effb28978457",
+    "data/small-server-timing-20261026-a3-timing-summary.json": "7d225e8c2c0050c3c488c59ab6f742a6406c08797c5ce39108f3a290b5a07c09",
+    "data/small-server-timing-20261026-a3-pair-audit.log": "ee08de33d57aad309ba21057041f2ffcf1e3163520b00216e87fd7d7a9632d80",
+    "data/small-server-timing-20261026-a3-audit.log": "1b35783edc587327708f0d55fe73c6a3dbab48358812b89eaf34c3fcf1da8403",
+    "data/player-only-craft-use-20261026-red.log": "b4fe5a14e10b75cbccf56e149e1a0a73e217f6fca2e3853de5d749b4c66b181e",
+    "data/player-only-craft-use-20261026-targeted.log": "fca04891ea22baa71e35f49d7734770a9c9d46a4df0b727005405d3aa6f43803",
+    "data/player-only-craft-use-20261026-targeted-fixed.log": "181a3763a132f9a2db7cae794a49c0168ed387eed741c26188c426c38f183faa",
+    "data/player-only-craft-use-20261026-targeted-final.log": "c590c347ea28aa5f39a3a511714937415c5d63891ca21e0632cb6cf0d20aed25",
+    "data/player-only-craft-use-20261026-targeted-green.log": "e22dfea6fa17fa933c85e4cbfd079e5f1ea4b7657de26497b87b0af588296407",
+    "data/player-only-craft-use-20261026-fixture-green.log": "0d551bfe3b805284659cc47ae60fee85a99c5ea126e701e340b42dd0ab9a41a0",
+    "data/player-only-craft-use-20261026-full.log": "2fe3e48410ef703ce3bd3dc8cec00cf406a05e93c71d763c9f2284fbb4da3523",
+    "data/player-only-craft-use-20261026-full-final.log": "588a302097f9c4be05620d28291cc7bd4d3dfd734c0b70c8d9110f690cf5dafa",
+    "data/player-only-craft-use-20261026-types.log": "7f3594d7a965c703e6361ae50c0ef50cf9c344c621d801592b074b48554f4235",
+    "data/player-only-craft-use-20261026-types-final.log": "7f3594d7a965c703e6361ae50c0ef50cf9c344c621d801592b074b48554f4235",
+    "data/player-only-craft-use-20261026-build.log": "516809bf24333979aba9697cda68b8e62a39ba46e4ae9c5e207a498a288761db"
+  },
+  "baseCommit": "4f4954a1ddaaa6b436a905d8e0db181a89f65e54",
+  "sourceState": "Measured from the working tree on baseCommit; exact source hashes are bound. No production frontend or protocol changes.",
+  "change": "Only runAction craft/use_item transaction scope now reuses atomic player+ledger commits. Full reply/broadcast, validation, cooldowns, ammunition, transfers and shared-action checkpoints retain their behavior.",
+  "comparison": {
+    "baselineReport": "docs/verification/2026-10-26-sixteen-player-request-timing-results.json",
+    "sameSyntheticShapeAndFinancialInputs": true,
+    "causalCapacityComparison": false,
+    "limits": "Separate60-second runs, observed overhead and host/JIT/scheduling variation; one zero-refusal control is not capacity/native acceptance. Operation action durations include full reply construction and nested work.",
+    "operationP50Ms": {
+      "craft": {
+        "baseline": 23.679400000000896,
+        "candidate": 3.9017000000021653
+      },
+      "use_item": {
+        "baseline": 22.143199999998615,
+        "candidate": 2.9290000000037253
+      },
+      "deposit": {
+        "baseline": 23.41870000000199,
+        "candidate": 22.044700000000375
+      },
+      "withdraw": {
+        "baseline": 23.08400000000256,
+        "candidate": 21.646899999999732
+      }
+    },
+    "fireRefusals": {
+      "baseline": 2,
+      "candidate": 0
+    }
+  },
+  "verification": {
+    "newTests": 10,
+    "initialRedFailures": 8,
+    "initialRedPasses": 1,
+    "targetedIntermediateFailuresPreserved": true,
+    "fixtureCorrections": "Synthetic storage moved into an actual camp; constructor onboarding migration facts initialized. Legacy craft fault injection moved to its actual player write. No production gameplay changes were made to satisfy fixture assumptions. Initial observer TypeScript and baseline final-export race failures also retained.",
+    "fullFiles": 56,
+    "fullTests": 848,
+    "fullExit": 0,
+    "typesExit": 0,
+    "buildExit": 0,
+    "buildJs": "index-CX72pX8-.js",
+    "existingBuildWarnings": [
+      "Vite native configLoader __dirname",
+      "chunk exceeds500kB"
+    ],
+    "independentReadOnlyReview": {
+      "p1": 0,
+      "p2": 0,
+      "sourceAndEvidenceHashesVerified": true,
+      "requestCountsAndLedgerRecomputed": true,
+      "scopeLimitsConfirmed": true
+    }
+  },
+  "cleanup": {
+    "ownedRunnerExited": true,
+    "ownedServerExited": true,
+    "gracefulIPCAndFinalLiveEquality": true,
+    "exclusivePortProbeReleased": 39153,
+    "formalDatabaseOpened": false
+  }
+}

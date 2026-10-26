@@ -1357,10 +1357,10 @@ describe('authoritative world', () => {
     const game = new GameWorld(db, ammoRules, () => 10000); game.connect('p', '行者');
     Object.assign(game.state.players.p.resources, { scrap: 10, parts: 1 }); game.persist();
     const request = { requestId: 'legacy-save-retry', action: 'craft', recipeId: 'ammo_reload' };
-    const save = db.setMeta; db.setMeta = () => { throw new Error('disk failure'); };
+    const save = db.saveWorldPlayerCommit; db.saveWorldPlayerCommit = () => { throw new Error('disk failure'); };
     expect(game.action('p', request).error).toBe('disk failure');
     expect(game.state.players.p.resources).toMatchObject({ scrap: 10, parts: 1, ammo: 0 });
-    db.setMeta = save;
+    db.saveWorldPlayerCommit = save;
     expect(new GameWorld(db, ammoRules).snapshot('p').player.resources).toMatchObject({ scrap: 10, parts: 1, ammo: 0 });
     expect(game.action('p', request).error).toBeUndefined();
     expect(game.action('p', request).player.resources).toMatchObject({ scrap: 0, parts: 0, ammo: 30 });

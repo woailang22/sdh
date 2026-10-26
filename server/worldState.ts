@@ -516,10 +516,11 @@ export class GameWorld {
     const requestId = typeof packet?.requestId === 'string' ? packet.requestId : '';
     if (!requestId || requestId.length > 120 || typeof packet?.action !== 'string') return reply(id, requestId, '无效操作请求');
     if (this.state.handled[id]?.includes(requestId)) return reply(id, requestId);
-    // Untargeted fire mutates only this player and their replay ledger. Shared
-    // combat (including every targeted shot) still needs the full rollback copy.
-    const beforeRespawns = isUntargetedFire(packet) ? undefined : new Map(this.respawns);
-    const before = isUntargetedFire(packet) ? {
+    // These branches only mutate the actor and their replay ledger. Transfers,
+    // facilities and targeted combat still need the full rollback/checkpoint.
+    const playerOnly = isUntargetedFire(packet) || packet.action === 'craft' || packet.action === 'use_item';
+    const beforeRespawns = playerOnly ? undefined : new Map(this.respawns);
+    const before = playerOnly ? {
       ...this.state,
       players: { ...this.state.players, [id]: clone(p) },
       handled: { ...this.state.handled, ...(this.state.handled[id] ? { [id]: [...this.state.handled[id]] } : {}) },
@@ -529,7 +530,7 @@ export class GameWorld {
       loot = this.perform(p, packet, receivedAt);
       (this.state.handled[id] ||= []).push(requestId);
       this.state.handled[id] = this.state.handled[id].slice(-128);
-      if (isUntargetedFire(packet)) {
+      if (playerOnly) {
         // This branch changes no shared entities. Player and replay guard commit
         // together before acknowledgement; full checkpoints absorb these rows.
         this.db.saveWorldPlayerCommit(id, JSON.stringify({ player: p, handled: this.state.handled[id] }));
