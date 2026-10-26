@@ -2052,3 +2052,15 @@ a2显式IPC导出先于15个服务端断线deadline，最终DB/backup财务和�
 源空箱deadline来自上轮，测试服务停过后首个正常资源tick于due后1101902ms恢复0→3；不是服务器延迟，也不是另一次完整300秒实验。stock3指容器状态，实际fresh C4与领取均1。旧满/部分测试为受控内存fixture，实赚验证为已空箱和已持4份；与前轮卖弹买粮792秒流程不同，不能比较时长/盈利当A/B。报告2026-10-26-quarry-c4-trial-results.json、计划同名，保留策划试调不确定性；其它据点风险、多人竞争、长期经济及原生性能仍待推进，总目标active。
 
 最终独立只读复核无P1/P2，44项来源/证据、全境指纹/终态账/850测试日志吻合，公开隐私扫描通过；复核未读DB或重跑，普通提交推送。一次实赚领取不作为1份最优或全局平衡结论。
+
+## 当前源码同实例地面缓存手动诊断准备（2026-10-26）
+
+上一轮6d0dc85采石试调为实质进展。本轮回到原始客户端卡顿，不再用资源单点调整替代性能验收。已批准spec§9要求的60秒原生步行/三轮浏览器总内存GPU仍未成立；旧首次地面慢样本和96个独立engine的ready样本不足以证明同实例稳定更新。自动原生工具因浏览器URL身份保护停止，未调用其它浏览器自动化绕过。
+
+把既有未执行warm-ground扫描做成可复现scripts/qa-ground-profile.mjs/.browser.ts/.html，只loopback、固定1920×1080内画布、四地点各240回调camera3/1.5，用户手动点开始，同实例解码后ground-only滚动。无engine.start/update、WS/账号/DB，不改变生产渲染。25输入/43图片/输出bundle与run绑定，静态及保存时核指纹；新目录、wx结果、5MiB/同源/顺序/两个时钟差值校验、失败部分保留，旧attempt不覆盖。
+
+关闭诊断计时P2：performance.now到达callback时间与rAF时间戳分开，接收端逐行复算。主/cache/overlay丢失在最后绘制或readback亦中断；编辑器覆盖只拒绝不清除，PO不存在兼容并takeRecords后disconnect。受控Node VM替换Engine的7场景通过（normal960、PO尾队列55ms、hidden6、override0、三末行loss959且全dispose），明确无真实浏览器/Canvas/性能数据；仅故障编译插件替换callbackAt为rafAt导致16≠80红1，恢复绿0，不当旧实测基线。编排检查脚本随代码提交，可运行node scripts/qa-ground-profile.check.mjs复盘。
+
+最终a4单独build/HTTP/指纹2正22负检查通过，CLI71950 ready→quit→exit0、39156独占释放，所有浏览器result.json仍不存在。初TS2454和a1/a2/a3中间方法保留，最终类型通过；未重新运行不涉及的850游戏测试或Vite构建。公报2026-10-26-manual-ground-profile-readiness.json明确actualPerformanceMeasurements=null；代码就绪不等于客户端性能改善。独立复核与真实用户执行按单独计划跟进，待拿到当前同实例数据后分析scroll/full/texture与回调延迟，再决定局部渲染修复。完整玩法/地图/营地/离线攻防目标保持，总目标active。
+
+最终独立只读复核无剩余P1/P2，105项来源/资源/证据哈希及两份a4 bundle/source fingerprint吻合；计时问题已关闭，未读DB/浏览器/复跑。手动入口代码普通推送，实际用户运行仍待发生，不能将合成960行、HTTP就绪或源代码检查作为性能实测。

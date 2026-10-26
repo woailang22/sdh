@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="zh-CN">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>地面缓存诊断</title>
+<style>
+  body{margin:24px;background:#152129;color:#eef4ed;font:18px/1.6 system-ui}
+  h1{font-size:28px}p{max-width:920px}button{font:inherit;padding:10px 24px;cursor:pointer}
+  #holder{width:1920px;height:1080px;transform-origin:top left;pointer-events:none}
+  #view{overflow:hidden;max-height:1080px}#status{color:#bce4c5}
+</style>
+<h1>地面缓存诊断</h1>
+<p>此页只测地面绘制，不连接游戏或读取存档。点击后保持此页在前台，等待四个场景完成；数据会自动保存。画面按窗口缩放，内部画布固定为1920×1080。</p>
+<button id="run">开始诊断</button>
+<p id="status">尚未开始。结果用于定位地面缓存，不能代表完整游戏帧率、显卡占用或总内存。</p>
+<div id="view"><div id="holder"></div></div>
+<script src="/profile.js"></script>
+</html>
