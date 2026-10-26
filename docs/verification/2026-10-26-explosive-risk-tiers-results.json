@@ -1,0 +1,278 @@
+{
+  "kind": "explosive-cache-risk-and-purpose-trial",
+  "date": "2026-10-26",
+  "baseCommit": "7b53c730d039f7a2a6b75eb4a55310e001d760b7",
+  "overallGoalComplete": false,
+  "productionFiles": [
+    "src/game/maps.ts"
+  ],
+  "baselineMapSourceHash": "a24e9170fdf256226d8c1d6fd0820e497a1abd4ef887f7192f99bf068a5b7c56",
+  "sourceHashes": {
+    "src/game/maps.ts": "27a6874e2b9a13602775fb97b4cbfce91243a2dc5d77866a34a12a194bf5fff1",
+    "src/game/world.ts": "72084a8e566097a6ca04504728def51c3c83ac7ee426edf8e92096f1b24e8be5",
+    "src/game/IsometricEngine.ts": "4795e485b09b63c32be3d12a835dbcb6a1b933605cff53cf537bcd4853330a86",
+    "src/game/IsometricEngine.test.ts": "87406048327b26e7065c41d0e554401cfe4fef50e18a5c8b7ee03a1fc312fd51",
+    "src/game/navigation.ts": "defeedf6c1670922f76b115c5da0a1bdce4f64afa8fb5b7eca0ee5c48065b662",
+    "src/game/combat.ts": "ba03d05d852cd9ea560b0d708460ac90d65e2fe5f6fde81c3d45a3d03d761998",
+    "src/game/items.ts": "4c9fdf817ed92b33aa6210ef05b6a69dfb5d9e18105e8faeb43dbed4efd824db",
+    "src/game/crafting.ts": "eb43bd22c9ee159759a1b23a76d64bbbdaeaf0c3a89cbc22fa7df87c90d34105",
+    "src/game/equipmentRules.ts": "7add9af028a73655c1da136dc90fe21075bef19ef04f3316f507795ee3466f62",
+    "src/game/art.ts": "f24fe1a3329a750ae956a1b1c35f5a8a6ccd78423d99233b625dac6c491af1f1",
+    "src/types/game.ts": "7066ee68912ef7fa99602a2866137a2c87244974e751d16ff8cc1a0615a51337",
+    "server/worldState.ts": "ec35198d92fb51429de8541282cf500283c57776b1d76e3c2bbc9a6cbba1b7e4",
+    "server/worldQueries.ts": "0bdc8625d63d959f1baaceba232702dba7bfc7f7612dcf720757fd8268898822",
+    "server/tickUndo.ts": "3fecad4e35c362f3dacb67e9e96cfbc127f2e29cc857315078009aa1fdd0c4c3",
+    "server/db.ts": "9cf91e65d64e6372bb897d98b8bdda843a03f42f409240f272abc4ed09d83f0f",
+    "server/explosiveRisk.test.ts": "f3dfe27696216c89c7aa17c6f9f00412150239d04b820b9eea20ca586c8718db",
+    "scripts/qa-ground-profile.mjs": "771baf3dcd51cbbf4e9b42be51ef276d8d27a4dfb25e0a2a40f98478a76ad46b",
+    "scripts/qa-ground-profile.browser.ts": "8e832bb2483f11a1e4cce5579868040334d7265551f3010efb8cfbd78d52b068"
+  },
+  "evidenceHashes": {
+    "data/audit-explosive-risk-20261026.py": "5fa94d3960b18b184e3cffd2e1d88fc709ccea875d35049d5705b75da66aae9f",
+    "data/survey-explosive-risk-20261026.ts": "a9e31b4b43369f48bc8158889da04cff955dff919805bfd964e0abb6f06079ad",
+    "data/fingerprint-explosive-risk-20261026.ts": "04e1c099cc338ff278db4ef3bdc7e2617c80269fb9f9bc1ef681f5924670ecd8",
+    "data/explosive-risk-baseline-maps-20261026.txt": "a24e9170fdf256226d8c1d6fd0820e497a1abd4ef887f7192f99bf068a5b7c56",
+    "data/explosive-risk-baseline-20261026.json": "5084526c477f54eae17dd0579fb5b6ef5d6a11b037d61aec7d7ebf7857802eba",
+    "data/explosive-risk-baseline-20261026.log": "9b3ad67df17df4f7c9d43bceda3f8dea6d2a0e38278bb60fa8b2d75db4aed837",
+    "data/explosive-risk-candidate-20261026.json": "44fdac02fcde3ad93bfbf5491ec9509fe94d65e6d004025738382107b06716f8",
+    "data/explosive-risk-candidate-20261026.log": "1cbf3d602acf5ef6382803c8345ed3d5809a763b70551f0c96aa1f24d9fbd116",
+    "data/explosive-risk-world-20261026-baseline.json": "8a48d23ea586a3048e0a3615faae8b67ffac7ab2746b32b69311d765302d8bca",
+    "data/explosive-risk-world-20261026-candidate.json": "cf38dd46bf33086d6f27f403c7391c55fb26d3a98d873d1e2dfd2f3f87bed31c",
+    "data/explosive-risk-world-baseline-20261026.log": "d78d617548a1053b79b987641de83211a0935df7e7318017e08d09e15620bae6",
+    "data/explosive-risk-world-candidate-20261026.log": "b5dd2d13b73d2a494e58307873d344c2451484e8e92283330eff2f7fca9124d5",
+    "data/explosive-risk-red-20261026.log": "ce214d693eed2adc807a57fd7b1e69a79b41993421ce90e7b6c8e89fb36a59e0",
+    "data/explosive-risk-red-v2-20261026.log": "4a9ba8f16e5e084610142a4132d116b5743fba49338a04b182269945b1c3e7c9",
+    "data/explosive-risk-green-20261026.log": "05e9341c0bf46b5e3665a4ef9f59752821178ba5e5d398eb2286be0683518849",
+    "data/explosive-risk-engine-20261026.log": "18288f48de8976ca70ec4edf336fcca2eb8d59f8fd5112ceabb2f86b0eb5a78b",
+    "data/explosive-risk-full-20261026.log": "9166337ff343356bb6916394dc093c94d06cb94ca8197c45a7922cd83d6d3879",
+    "data/explosive-risk-protocol-recheck-20261026.log": "fe1f4c5e4521b739410454a5ac792066ad37193f2098883f45972bce3195668d",
+    "data/explosive-risk-full-final-20261026.log": "3c3dcef08d5ad3815c66c39ffd3c7d15a533a7ba888ecfba75fbb5ea83506c5c",
+    "data/explosive-risk-types-20261026.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "data/explosive-risk-build-20261026.log": "1786f7b4444d420d306b9ef16bf5c37fec48297e3a6614bad257305bc8d2d574",
+    "data/manual-ground-user-20261026-a1/manifest.json": "ed5f58691ddf9d6439d7f418becfe7509e1622f240e28f51dc36d6696704ea38",
+    "data/manual-ground-user-20261026-a1/launch-verified.json": "ad74e51d8b4db0e26ac2b86a465ce68aef45b985202a8f5fccb963aacdc890e6",
+    "data/manual-ground-user-20261026-a1/superseded-source.json": "46437e1552cc3b7fbf4bcbe354354286e4f21602a597077dc3521f60ebc27057",
+    "data/manual-ground-user-20261026-a1/superseded-cleanup.json": "3d8880880e9b89771f600009590f78bc3b16c7d03c36a8bb3add6ae7dbd71b66"
+  },
+  "userDecision": "少量起步，高产出放在危险据点。Specific numeric choices are trial implementation, not a claim that the user selected those numbers.",
+  "change": {
+    "freshGasTruckC4": {
+      "before": 2,
+      "after": 0,
+      "retained": {
+        "fuel": 4,
+        "scrap": 40,
+        "wp_m870": 1
+      }
+    },
+    "freshGasAmmoC4": {
+      "before": 2,
+      "after": 1,
+      "retained": {
+        "ammo": 60,
+        "rifle": 1
+      }
+    },
+    "freshGasPairC4": {
+      "before": 4,
+      "after": 1
+    },
+    "refreshSecUnchanged": 300,
+    "higherRewardsUnchanged": {
+      "deep": "3C4+4thermite+existing equipment",
+      "peak": "3C4+20ammo",
+      "factory": "2C4+existing ammunition/gear"
+    },
+    "addedGuards": [
+      {
+        "id": "world:-18:-6:m:mtn_deep:dp_cache_guard",
+        "x": -574,
+        "y": -172,
+        "hp": 350,
+        "speed": 2.4,
+        "damage": 24,
+        "statsReusedFrom": "dp2"
+      },
+      {
+        "id": "world:-6:-22:m:mtn_peak:pk_powder_guard",
+        "x": -176,
+        "y": -704,
+        "hp": 260,
+        "speed": 2.3,
+        "damage": 16,
+        "statsReusedFrom": "pk3"
+      },
+      {
+        "id": "world:20:-2:m:town_factory:fac_ammo_guard",
+        "x": 660,
+        "y": -50,
+        "hp": 320,
+        "speed": 2.7,
+        "damage": 22,
+        "statsReusedFrom": "fac3"
+      }
+    ],
+    "designTradeoff": "Keep existing ammunition/material renewal rather than tripling whole-crate cooldown; use container purpose and actual local threat. No new walls, kill permission or mandatory kill gate."
+  },
+  "worldComparison": {
+    "chunks": 4096,
+    "changedChunks": [
+      "world:-18:-6",
+      "world:-6:-22",
+      "world:20:-2",
+      "world:7:-1"
+    ],
+    "normalization": "Detached JSON copies: remove only3 exact new guard IDs, remove only gas_van C4 row and zero only gas_ammo C4 count. Every other full chunk field identical.",
+    "allNormalizedChunksEqual": true,
+    "buildings": 57255,
+    "nodes": 32525,
+    "monstersBefore": 850,
+    "monstersAfter": 853,
+    "allOldMonstersUnchanged": true
+  },
+  "localRiskSurvey": {
+    "kind": "Synthetic fresh-memoryGameWorld controlled clock, not earned or native",
+    "casesBefore": 28,
+    "casesAfter": 28,
+    "pathAndArrivalOutcomesEqual": true,
+    "highSourceSummary": [
+      {
+        "id": "world:-18:-6:i:mtn_deep:deep_ammo",
+        "baselineCleanDirections": [
+          "west",
+          "north"
+        ],
+        "candidateReached": 4,
+        "candidateCombatDamage": 4,
+        "candidateSearchAccepted": 4,
+        "candidateCleanC4Claims": 0,
+        "candidateMinimumSampledHp": [
+          100,
+          42.400000000000006,
+          100,
+          40
+        ]
+      },
+      {
+        "id": "world:-6:-22:i:mtn_peak:peak_powder",
+        "baselineCleanDirections": [
+          "west",
+          "north",
+          "south"
+        ],
+        "candidateReached": 4,
+        "candidateCombatDamage": 4,
+        "candidateSearchAccepted": 4,
+        "candidateCleanC4Claims": 0,
+        "candidateMinimumSampledHp": [
+          100,
+          40.8,
+          100,
+          92
+        ]
+      },
+      {
+        "id": "world:20:-2:i:town_factory:fac_ammo",
+        "baselineCleanDirections": [
+          "east",
+          "south"
+        ],
+        "candidateReached": 3,
+        "candidateCombatDamage": 3,
+        "candidateSearchAccepted": 3,
+        "candidateCleanC4Claims": 0,
+        "candidateMinimumSampledHp": [
+          40.4,
+          100,
+          100
+        ]
+      }
+    ],
+    "normalMovement": ".25tile/100ms accepted GameWorld.move with200ms NPC ticks, initial fixture24tiles away, then stationary authored searchDuration",
+    "equipmentAndResourcesGrantedInSurvey": false,
+    "shield": "Normal server shield regeneration during walk is retained; combat damage may be shield-only. MinimumHP need not decrease.",
+    "claimMeaning": "Direct server search/take requests were accepted even after damage. Their loot is not proof of legitimate client-channel completion.",
+    "limits": [
+      "Starts a fresh test actor24tiles from a cache; not overworld travel or earned gameplay.",
+      "Follows findPath with server-accepted .25tile/100ms substeps, normal200ms ticks and stationary authored searchDuration.",
+      "Does not open ordinary doors or breach walls; missing path is not proof of absolute inaccessibility.",
+      "Server search does not prove client-channel completion after damage. Damage/targeting are local threat evidence, not a mandatory kill gate.",
+      "Fresh isolated NPCs; no PvP, prior aggro, competition, real weather, economics or rendering acceptance. No timing-speedup benchmark."
+    ]
+  },
+  "logicalClientIntegration": {
+    "environment": "Existing mock Canvas + actual GameWorld, seeded full-shield fixture; no real browser or earned assets",
+    "cases": 6,
+    "guardEnabledCases": 3,
+    "guardExcludedControls": 3,
+    "enabled": "HP remains100, actual shield hits reach authoritativeDamageSince/receiveAuthoritativeDamage and cancel search before a request is sent",
+    "controls": "Only this new guard excluded; no damage, exactly one successful search with C4",
+    "notNativePerformance": true
+  },
+  "compatibility": {
+    "oldFullAndPartialGasC4": "Saved2 and remaining1 retained across restart, already-held5 retained; replay adds no extra.",
+    "newContentsAfterRealFixtureDepletion": "Observer blocks due renewal; server-accepted movement beyond45 then5s tick and return uses new0/1C4. Timers and unrelated contents unchanged.",
+    "oldNpcs": "Existing hurt/dead/spawn/timer fields remain; only absent new guard IDs initialize, guard17HP survives later restart.",
+    "combat": "Paid normal weapon shots decrement ammo; last-shot replay and restart do not spend twice; guards use existing120s respawn and give no new C4 reward.",
+    "scope": "All compatibility/combat fixtures are explicitly synthetic memory DB; no actual player database or earned inventory modified."
+  },
+  "verification": {
+    "newServerCases": 12,
+    "newEngineCases": 6,
+    "initialRed": "12failed. First old-van fixture accidentally duplicated its C4 row; filter before inserting once and retain first log. Corrected red-v2 still12failed at intended reward/guard/risk assertions.",
+    "serverGreen": 12,
+    "targetedEngineAndServer": 212,
+    "firstFull": {
+      "files": 59,
+      "passed": 869,
+      "failed": 8,
+      "reason": "Protocol first-case startup/wait timeouts; cause unconfirmed."
+    },
+    "sameThresholdProtocolRecheck": {
+      "files": 8,
+      "tests": 28,
+      "exit": 0
+    },
+    "unchangedFinalFull": {
+      "files": 59,
+      "tests": 877,
+      "exit": 0
+    },
+    "timeoutsOrServerConfigChanged": false,
+    "typesExit": 0,
+    "buildExit": 0,
+    "buildJs": "index-Cg9pbzPw.js",
+    "existingBuildWarnings": [
+      "native configLoader __dirname",
+      "chunk exceeds500kB"
+    ],
+    "independentReadOnlyReview": {
+      "p1": 0,
+      "p2": 0,
+      "hashesMatched": 43,
+      "baselineSourceMatchesGit": true,
+      "worldAndLocalSurveyRecomputed": true,
+      "finalTestsAndLimitsReviewed": true,
+      "noBrowserDatabaseServiceOrReruns": true
+    }
+  },
+  "manualDiagnostic": {
+    "oldRun": "manual-ground-user-20261026-a1",
+    "sourceChanged": [
+      "src/game/maps.ts"
+    ],
+    "state": "Explicitly superseded after authorized content update, no report saved; whether a browser was in flight is unknown.",
+    "ownedOldSession": 7039,
+    "gracefulExit": 0,
+    "oldPortReleased": 39156,
+    "sourcesAndBundleRetained": true,
+    "newRunPlan": "After source/commit is final, create a new named run on39157; use a different port so an old loaded page cannot fetch a new manifest and misbind its old JS.",
+    "noTimeoutBasedRestartOrBrowserBypass": true
+  },
+  "remaining": [
+    "Full native movement/frame/GPU/whole-browser memory acceptance still pending.",
+    "Only local cardinal approaches sampled, not overworld travel, weather/PvP/competition, long-run economy or optimal enemy tuning. Guarded points can be approached by tactics, luring and cooperation.",
+    "Server search currently does not enforce client channel duration/interruption; direct packets can still request loot after damage. Client cancellation is tested, anti-script server-channel validation remains required follow-up.",
+    "Additional3 NPCs reuse existing art but actual rendering/capacity has not been measured. Small-server and real earned-route balance remain unaccepted."
+  ]
+}

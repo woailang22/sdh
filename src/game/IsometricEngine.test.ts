@@ -8,6 +8,7 @@ import { isPositionBlocked } from './navigation';
 import { worldThemeAt } from './world';
 import { createMemoryDb } from '../../server/db';
 import { GameWorld, type WorldRules } from '../../server/worldState';
+import { createWorldQueries } from '../../server/worldQueries';
 import { authoritativeDamageSince } from './combat';
 import type { BuildingEntity } from '../types/game';
 
@@ -1756,6 +1757,41 @@ describe('continuous public world', () => {
     engine.receiveAuthoritativeDamage(hit); expect(engine.isLooting).toBe(false);
     (engine as any).update(.1); expect(results).toHaveLength(1);
   });
+  it.each([
+    ['world:-18:-6:i:mtn_deep:deep_ammo', 'world:-18:-6:m:mtn_deep:dp_cache_guard', false],
+    ['world:-18:-6:i:mtn_deep:deep_ammo', 'world:-18:-6:m:mtn_deep:dp_cache_guard', true],
+    ['world:-6:-22:i:mtn_peak:peak_powder', 'world:-6:-22:m:mtn_peak:pk_powder_guard', false],
+    ['world:-6:-22:i:mtn_peak:peak_powder', 'world:-6:-22:m:mtn_peak:pk_powder_guard', true],
+    ['world:20:-2:i:town_factory:fac_ammo', 'world:20:-2:m:town_factory:fac_ammo_guard', false],
+    ['world:20:-2:i:town_factory:fac_ammo', 'world:20:-2:m:town_factory:fac_ammo_guard', true],
+  ] as const)('checks shield-hit search cancellation at %s with %s (enabled=%s)', (id, guardId, enabled) => {
+    // Controlled server + existing mock Canvas; not native browser or earned gameplay.
+    const { engine } = setup(); let time = 10_000;
+    const queries = createWorldQueries(), node = queries.nodeAt(id)!;
+    const game = new GameWorld(createMemoryDb(), { ...queries, monstersNear: (x, y) => queries.monstersNear(x, y).filter(m => enabled || m.id !== guardId), campSiteAllowed: () => false, migrate: (_map, x, y) => ({ mapId: 'world', x, y }) }, () => time);
+    game.connect('self', '测试角色'); const p = game.state.players.self;
+    Object.assign(p, { x: node.x + (id.includes('town_factory') ? 2.5 : -2.5), y: node.y, shield: 50 });
+    engine.warpToMap('world', p.x, p.y); engine.setAuthoritativeMonsters(game.snapshot('self').monsters);
+    const results: ReturnType<GameWorld['action']>[] = [];
+    (engine as any).callbacks.onGameAction = (action: string, params: object) => { results.push(game.action('self', { ...params, action, requestId: 'search-' + results.length })); };
+    Object.assign(engine.player, { hp: p.hp, shield: p.shield, satiety: p.satiety });
+    engine.nearestBuilding = null; engine.nearestInteractable = node;
+    (engine as any).triggerInteraction(); expect(engine.isLooting).toBe(true);
+    let previous = game.snapshot('self').player, hits = 0;
+    try {
+      for (let i = 0; i < 16; i++) {
+        time += 200; game.tick(); const current = game.snapshot('self').player;
+        const damage = authoritativeDamageSince(previous, current);
+        if (damage > 0) { hits++; engine.receiveAuthoritativeDamage(damage); }
+        Object.assign(engine.player, { hp: current.hp, shield: current.shield, satiety: current.satiety }); previous = current;
+        (engine as any).update(.2);
+      }
+      expect(p.hp).toBe(100);
+      if (enabled) { expect(hits).toBeGreaterThan(0); expect(results).toEqual([]); expect(engine.isLooting).toBe(false); }
+      else { expect(hits).toBe(0); expect(results).toHaveLength(1); expect(results[0].error).toBeUndefined(); expect(results[0].loot?.items.some(item => item.itemId === 'c4_explosive')).toBe(true); }
+    } finally { engine.dispose(); }
+  });
+
   it('does not flood the screen with depleted-resource notices while gathering is held', () => {
     const { engine } = setup();
     (engine as any).callbacks.onGameAction = vi.fn();

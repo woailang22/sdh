@@ -212,7 +212,6 @@ export const SUBMAPS: Record<string, SubMapDef> = {
     interactables: [
       I('gas_van', '77号站长运载货车', 'van', 4, -10, '[E/F 破拆搜刮站长货车]', [
         { itemId: 'fuel', name: '重载高纯度柴油罐', count: 4 },
-        { itemId: 'c4_explosive', name: '高爆C4塑胶炸药', count: 2 },
         { itemId: 'scrap', name: '精炼车身钢板', count: 40 },
         { itemId: 'wp_m870', name: 'M870霰弹枪', count: 1 },
       ], 2.2),
@@ -237,7 +236,7 @@ export const SUBMAPS: Record<string, SubMapDef> = {
       ], 2.0),
       I('gas_ammo', '路障军用弹药箱', 'ammo_crate', -16, -4, '[E/F 破译搜刮弹药箱]', [
         { itemId: 'ammo', name: '7.62mm 步枪穿甲弹药包', count: 60 },
-        { itemId: 'c4_explosive', name: '高爆C4炸药', count: 2 },
+        { itemId: 'c4_explosive', name: '高爆C4炸药', count: 1 },
         { itemId: 'rifle', name: '战术突击步枪', count: 1 },
       ], 1.8),
     ],
@@ -421,6 +420,7 @@ export const SUBMAPS: Record<string, SubMapDef> = {
       M('fac1', '变异公路漫游暴徒', -10, 0, 450, 2.0, 26),
       M('fac2', '蚀体·恶瘴魑精英', 12, -6, 620, 1.8, 34),
       M('fac3', '辐射畸变狂暴猎犬', 4, 18, 320, 2.7, 22),
+      M('fac_ammo_guard', '弹药库警戒猎犬', 20, 14, 320, 2.7, 22),
     ],
     buildings: [
       ...buildCompoundWalls({
@@ -694,6 +694,7 @@ export const SUBMAPS: Record<string, SubMapDef> = {
       M('dp1', '密林蚀化狂暴巨熊', -10, -4, 680, 1.9, 36),
       M('dp2', '密林暗影潜行兽', 6, -14, 350, 2.4, 24),
       M('dp3', '蚀化幼体', 14, 12, 260, 2.3, 16),
+      M('dp_cache_guard', '深林军火看守', -14, -12, 350, 2.4, 24),
     ],
     buildings: [
       {
@@ -898,6 +899,7 @@ export const SUBMAPS: Record<string, SubMapDef> = {
       M('pk1', '密林蚀化狂暴巨熊', -12, -6, 720, 1.9, 38),
       M('pk2', '蚀体·恶瘴魑精英', 10, -8, 620, 1.8, 34),
       M('pk3', '蚀化幼体', 0, 14, 260, 2.3, 16),
+      M('pk_powder_guard', '雪峰炸药看守', -16, 16, 260, 2.3, 16),
     ],
     buildings: [
       ...buildCompoundWalls({
