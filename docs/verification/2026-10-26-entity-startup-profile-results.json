@@ -1,0 +1,626 @@
+{
+  "kind": "entity-first-draw-attribution-checkpoint",
+  "base": "45313ca5f69580779b8c3589dd5d94cf7f4aac58",
+  "planningCommit": "265a6d6",
+  "measuredOn": "2026-10-24",
+  "auditedOn": "2026-10-26",
+  "goalComplete": false,
+  "productionFilesChanged": [],
+  "finding": "The4 initial requests retain startup long frames. The96 later fresh-engine diagnostic draws do not reproduce>50ms; this does not erase earlier99.8/128.7ms draws. Initial scene hotspots differ. No single renderer rewrite or CPU/GPU/decode cause has been proved.",
+  "environment": {
+    "viewport": {
+      "width": 1280,
+      "height": 720
+    },
+    "dpr": 1.5,
+    "canvas": {
+      "width": 1920,
+      "height": 1080
+    }
+  },
+  "firstRequests": [
+    {
+      "fixture": "spawn",
+      "submitMs": 99.80000001192093,
+      "stages": {
+        "setup": 1.7999999821186066,
+        "ground": 23.400000005960464,
+        "queue": 2.199999988079071,
+        "entities": 52.70000001788139,
+        "overlays": 18.900000005960464
+      },
+      "art": {
+        "success": 0,
+        "fallback": 35
+      },
+      "completeImages": 0,
+      "requestedImages": 17,
+      "methods": [
+        {
+          "method": "drawHouse",
+          "calls": 4,
+          "inclusiveMs": 24.599999994039536
+        },
+        {
+          "method": "drawInteractable",
+          "calls": 11,
+          "inclusiveMs": 20.60000005364418
+        },
+        {
+          "method": "drawPlayer",
+          "calls": 1,
+          "inclusiveMs": 3.5999999940395355
+        },
+        {
+          "method": "drawWorldScenery",
+          "calls": 14,
+          "inclusiveMs": 2.299999952316284
+        },
+        {
+          "method": "drawBuilding",
+          "calls": 2,
+          "inclusiveMs": 1.5
+        },
+        {
+          "method": "renderDynamicLighting",
+          "calls": 1,
+          "inclusiveMs": 0.20000001788139343
+        },
+        {
+          "method": "renderWeather",
+          "calls": 1,
+          "inclusiveMs": 0.09999999403953552
+        },
+        {
+          "method": "renderThemeAtmosphere",
+          "calls": 1,
+          "inclusiveMs": 0
+        }
+      ]
+    },
+    {
+      "fixture": "camp-entrance",
+      "submitMs": 21.700000017881393,
+      "stages": {
+        "setup": 0.20000001788139343,
+        "ground": 14,
+        "queue": 1.5,
+        "entities": 5.799999982118607,
+        "overlays": 0.20000001788139343
+      },
+      "art": {
+        "success": 0,
+        "fallback": 53
+      },
+      "completeImages": 0,
+      "requestedImages": 11,
+      "methods": [
+        {
+          "method": "drawInteractable",
+          "calls": 29,
+          "inclusiveMs": 4.000000029802322
+        },
+        {
+          "method": "drawHouse",
+          "calls": 4,
+          "inclusiveMs": 1.0999999940395355
+        },
+        {
+          "method": "drawWorldScenery",
+          "calls": 28,
+          "inclusiveMs": 0.3999999761581421
+        },
+        {
+          "method": "drawPlayer",
+          "calls": 1,
+          "inclusiveMs": 0.29999998211860657
+        },
+        {
+          "method": "renderDynamicLighting",
+          "calls": 1,
+          "inclusiveMs": 0
+        },
+        {
+          "method": "renderWeather",
+          "calls": 1,
+          "inclusiveMs": 0
+        },
+        {
+          "method": "renderThemeAtmosphere",
+          "calls": 1,
+          "inclusiveMs": 0
+        }
+      ]
+    },
+    {
+      "fixture": "forest-farm",
+      "submitMs": 128.7000000178814,
+      "stages": {
+        "setup": 0.5999999940395355,
+        "ground": 69.60000002384186,
+        "queue": 0.5,
+        "entities": 55.89999997615814,
+        "overlays": 2.100000023841858
+      },
+      "art": {
+        "success": 38,
+        "fallback": 3
+      },
+      "completeImages": 11,
+      "requestedImages": 12,
+      "methods": [
+        {
+          "method": "drawWorldScenery",
+          "calls": 18,
+          "inclusiveMs": 46.99999997019768
+        },
+        {
+          "method": "drawInteractable",
+          "calls": 34,
+          "inclusiveMs": 3.5999999940395355
+        },
+        {
+          "method": "drawHouse",
+          "calls": 4,
+          "inclusiveMs": 2.7999999821186066
+        },
+        {
+          "method": "drawMonster",
+          "calls": 3,
+          "inclusiveMs": 2.2000000178813934
+        },
+        {
+          "method": "drawPlayer",
+          "calls": 1,
+          "inclusiveMs": 0.30000001192092896
+        },
+        {
+          "method": "renderDynamicLighting",
+          "calls": 1,
+          "inclusiveMs": 0
+        },
+        {
+          "method": "renderWeather",
+          "calls": 1,
+          "inclusiveMs": 0
+        },
+        {
+          "method": "renderThemeAtmosphere",
+          "calls": 1,
+          "inclusiveMs": 0
+        }
+      ]
+    },
+    {
+      "fixture": "factory",
+      "submitMs": 48.900000005960464,
+      "stages": {
+        "setup": 0,
+        "ground": 14.200000017881393,
+        "queue": 0.699999988079071,
+        "entities": 33.400000005960464,
+        "overlays": 0.5999999940395355
+      },
+      "art": {
+        "success": 27,
+        "fallback": 6
+      },
+      "completeImages": 8,
+      "requestedImages": 13,
+      "methods": [
+        {
+          "method": "drawWorldScenery",
+          "calls": 7,
+          "inclusiveMs": 17.000000029802322
+        },
+        {
+          "method": "drawMonster",
+          "calls": 6,
+          "inclusiveMs": 6.800000011920929
+        },
+        {
+          "method": "drawInteractable",
+          "calls": 19,
+          "inclusiveMs": 5.5999999940395355
+        },
+        {
+          "method": "drawHouse",
+          "calls": 8,
+          "inclusiveMs": 3.4999999403953552
+        },
+        {
+          "method": "drawPlayer",
+          "calls": 1,
+          "inclusiveMs": 0.4000000059604645
+        },
+        {
+          "method": "renderDynamicLighting",
+          "calls": 1,
+          "inclusiveMs": 0
+        },
+        {
+          "method": "renderWeather",
+          "calls": 1,
+          "inclusiveMs": 0
+        },
+        {
+          "method": "renderThemeAtmosphere",
+          "calls": 1,
+          "inclusiveMs": 0
+        }
+      ]
+    }
+  ],
+  "subsequentFreshEngineDraws": [
+    {
+      "fixture": "spawn",
+      "mode": "natural",
+      "submitMedianMs": 35.29999999701977,
+      "submitMaxMs": 38.79999998211861,
+      "stages": {
+        "setup": 0.09999999403953552,
+        "ground": 32.6499999910593,
+        "queue": 0.45000000298023224,
+        "entities": 1.699999988079071,
+        "overlays": 0.29999998211860657
+      }
+    },
+    {
+      "fixture": "spawn",
+      "mode": "fallback",
+      "submitMedianMs": 10.900000005960464,
+      "submitMaxMs": 14.900000005960464,
+      "stages": {
+        "setup": 0.10000000894069672,
+        "ground": 8.299999997019768,
+        "queue": 0.3500000089406967,
+        "entities": 1.5,
+        "overlays": 0.20000000298023224
+      }
+    },
+    {
+      "fixture": "spawn",
+      "mode": "ready",
+      "submitMedianMs": 33.25,
+      "submitMaxMs": 38,
+      "stages": {
+        "setup": 0.09999999403953552,
+        "ground": 30.950000002980232,
+        "queue": 0.45000000298023224,
+        "entities": 1.4500000029802322,
+        "overlays": 0.19999998807907104
+      }
+    },
+    {
+      "fixture": "camp-entrance",
+      "mode": "natural",
+      "submitMedianMs": 28.599999994039536,
+      "submitMaxMs": 37.5,
+      "stages": {
+        "setup": 0.09999999403953552,
+        "ground": 26.650000005960464,
+        "queue": 0.3999999910593033,
+        "entities": 1.4500000029802322,
+        "overlays": 0.29999999701976776
+      }
+    },
+    {
+      "fixture": "camp-entrance",
+      "mode": "fallback",
+      "submitMedianMs": 12.900000005960464,
+      "submitMaxMs": 16,
+      "stages": {
+        "setup": 0.10000000894069672,
+        "ground": 10.149999991059303,
+        "queue": 0.3499999940395355,
+        "entities": 1.7999999970197678,
+        "overlays": 0.20000000298023224
+      }
+    },
+    {
+      "fixture": "camp-entrance",
+      "mode": "ready",
+      "submitMedianMs": 29.69999998807907,
+      "submitMaxMs": 35.19999998807907,
+      "stages": {
+        "setup": 0.10000000894069672,
+        "ground": 27.30000001192093,
+        "queue": 0.45000000298023224,
+        "entities": 1.6000000089406967,
+        "overlays": 0.14999999105930328
+      }
+    },
+    {
+      "fixture": "forest-farm",
+      "mode": "natural",
+      "submitMedianMs": 24.049999997019768,
+      "submitMaxMs": 37.19999998807907,
+      "stages": {
+        "setup": 0.14999999105930328,
+        "ground": 21.25,
+        "queue": 0.25,
+        "entities": 1.6499999910593033,
+        "overlays": 0.19999998807907104
+      }
+    },
+    {
+      "fixture": "forest-farm",
+      "mode": "fallback",
+      "submitMedianMs": 11.949999988079071,
+      "submitMaxMs": 14.699999988079071,
+      "stages": {
+        "setup": 0.09999999403953552,
+        "ground": 9.449999988079071,
+        "queue": 0.30000001192092896,
+        "entities": 1.5999999940395355,
+        "overlays": 0.19999998807907104
+      }
+    },
+    {
+      "fixture": "forest-farm",
+      "mode": "ready",
+      "submitMedianMs": 25.350000008940697,
+      "submitMaxMs": 30.80000001192093,
+      "stages": {
+        "setup": 0.10000000894069672,
+        "ground": 23.150000005960464,
+        "queue": 0.30000001192092896,
+        "entities": 1.4500000029802322,
+        "overlays": 0.20000001788139343
+      }
+    },
+    {
+      "fixture": "factory",
+      "mode": "natural",
+      "submitMedianMs": 29.200000002980232,
+      "submitMaxMs": 37.30000001192093,
+      "stages": {
+        "setup": 0.04999999701976776,
+        "ground": 25.900000005960464,
+        "queue": 0.5,
+        "entities": 2.1499999910593033,
+        "overlays": 0.19999998807907104
+      }
+    },
+    {
+      "fixture": "factory",
+      "mode": "fallback",
+      "submitMedianMs": 10.050000011920929,
+      "submitMaxMs": 15.800000011920929,
+      "stages": {
+        "setup": 0.10000000894069672,
+        "ground": 7.750000014901161,
+        "queue": 0.45000000298023224,
+        "entities": 2.199999988079071,
+        "overlays": 0.2499999850988388
+      }
+    },
+    {
+      "fixture": "factory",
+      "mode": "ready",
+      "submitMedianMs": 25.44999998807907,
+      "submitMaxMs": 31.80000001192093,
+      "stages": {
+        "setup": 0.09999999403953552,
+        "ground": 22.600000008940697,
+        "queue": 0.4000000059604645,
+        "entities": 2.0499999970197678,
+        "overlays": 0.20000000298023224
+      }
+    }
+  ],
+  "distinction": "Ready shares decoded images but creates a new Engine/Canvas/cache for every trial. These cold-instance ground timings do not represent normal warmed walking. Forced no-image fallback changes visual content and is not an accepted optimization.",
+  "verification": {
+    "sourceInputsMatched": 22,
+    "subsequentTrials": 96,
+    "firstRequests": 4,
+    "decodedAssets": 23,
+    "pixelPairs": 8,
+    "bytesPerPair": 8294400,
+    "pixelsIdentical": true,
+    "allQaTypesExit": 0,
+    "productionRendererUnchanged": true,
+    "newFullTestOrProductionBuildRun": false,
+    "independentReview": {
+      "reviewer": "quality_review",
+      "blockingP1P2": false,
+      "sourceHashesMatched": 22,
+      "completeDomCharacters": 409139,
+      "independentlyRecomputedTrials": 96,
+      "pixelPairs": 8,
+      "bytesPerPair": 8294400,
+      "differentBytes": 0,
+      "firstLongFramesRetained": true,
+      "requiredBoundary": "Every trial creates a fresh Engine and Canvas. Ready means shared decoded images only, not a warm ground cache or stable walking. Method timings are inclusive and do not prove a unique CPU/GPU/decode cause.",
+      "cleanupBoundary": "Old static IAB tab closure unverified after interruption and browser tool change. Do not claim cleanup complete.",
+      "supportsPerformanceFixedClaim": false
+    }
+  },
+  "export": {
+    "originalSingleDomReadTruncatedAtAbout200k": true,
+    "retained": "data/entity-startup-profile-results-truncated-20261024.json",
+    "fullDomChunkExportCharacters": 409139
+  },
+  "interruption": {
+    "previousOwnedExecHandleMissing": true,
+    "port39151NoListener": true,
+    "previousIabTabClosureRevalidationUnavailable": true,
+    "newComputerUseCannotControlCodexApp": true,
+    "noGameplayOrDatabaseWasStarted": true
+  },
+  "limits": [
+    "QA-only fixed scene state and seeded Math.random for repeatable rendering; engine RAF/update/gameplay never started.",
+    "natural creates fresh HTMLImage objects; URLs may already be browser cached, including after initial decode warmup. It is not a guaranteed cold-network sample.",
+    "fallback explicitly disables all images; ready shares actual decoded requested images. Their different images are diagnostic modes, not optimization A/B or equal-quality alternatives.",
+    "Method spans are inclusive and instrumentation has overhead. Existing five render stages are non-overlapping. Readback is artificial and separate. No pure CPU/GPU attribution.",
+    "No native gameplay/server/database, strict continuous60s, browser total memory or whole-goal acceptance.",
+    "Each measure constructs a fresh Engine and Canvas. Ready means shared decoded images only; ground cache/atlases are cold in that instance. These timings are not warm same-engine walking costs."
+  ],
+  "next": "Keep startup first use, ready-image first ground draw and warm walking separate. Further evidence must distinguish first vector/text/image submission and scheduling before accepting a candidate; no texture removal or quality reduction.",
+  "sources": [
+    {
+      "path": "data/audit-entity-startup-profile-20261026.cjs",
+      "sha256": "d34340018b9bab9d7e7c35c7f494e55609f8405bce11c39be2b3bfefe761840c"
+    },
+    {
+      "path": "data/build-entity-startup-profile-20261024.cjs",
+      "sha256": "e6cebc6a79e07fd68bd80f417c20b0b7bfd4e7206448474dcb151373e4920ef9"
+    },
+    {
+      "path": "data/entity-startup-engine-20261024.js",
+      "sha256": "a8959c46f652450184328a4b72c1a2c43c25e66c7148368c939081aa8dc3a07c"
+    },
+    {
+      "path": "data/entity-startup-profile-20261024.html",
+      "sha256": "fa988fb62b25a08defa6eb178b2a6a256c73ead04d6d0c03bf47cfb19d133d4e"
+    },
+    {
+      "path": "data/entity-startup-profile-20261024.js",
+      "sha256": "d458eda4563fd1edf5d7d69b04d78c05ca54fef2c52429a05a42fadfef48cedb"
+    },
+    {
+      "path": "data/entity-startup-profile-20261024.ts",
+      "sha256": "620d9b86337fb75ec6e16932d9a4ad20c75608d22b38774443a0f4e3e327c995"
+    },
+    {
+      "path": "data/entity-startup-profile-audit-20261026.json",
+      "sha256": "b60eead81428801594560b3b5b317b931ab426abc4948757a18e1197aabd2d76"
+    },
+    {
+      "path": "data/entity-startup-profile-build-20261024.json",
+      "sha256": "f2ea0c5a5b368ad60dda3b4ccb09cca4825b225848057b2e09595f51b147c6a3"
+    },
+    {
+      "path": "data/entity-startup-profile-results-20261024.json",
+      "sha256": "52fe30d7352d3bbaf4dada02afd429d87c7c117a27bc7d2ab8148ec37d530bcc"
+    },
+    {
+      "path": "data/entity-startup-profile-results-truncated-20261024.json",
+      "sha256": "98b34dc1557ca24738b30d94ec436b2a0c3ff78c0266e09fef722f92eb73cc16"
+    },
+    {
+      "path": "data/entity-startup-profile-review-20261026.json",
+      "sha256": "d463fbd457111f338882629f36eb919867f80141f985853acdcf0a1149e7edba"
+    },
+    {
+      "path": "data/entity-startup-profile-types-20261024.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "data/entity-startup-profile-types-exit-20261024.json",
+      "sha256": "ea61d7736f0b7ecb9b35158f03de77013db6b100cf1d36c957e78e6c8817c5b6"
+    },
+    {
+      "path": "data/entity-startup-profile-types-final-20261026.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "data/entity-startup-profile-types-final-exit-20261026.json",
+      "sha256": "ea61d7736f0b7ecb9b35158f03de77013db6b100cf1d36c957e78e6c8817c5b6"
+    },
+    {
+      "path": "data/report-entity-startup-profile-20261026.cjs",
+      "sha256": "e09a2cc91ecc6b7743a5e9338450cdd96662c1957f9f5793617f2269fe3863d3"
+    },
+    {
+      "path": "data/serve-entity-startup-profile-20261024.cjs",
+      "sha256": "9314e60aa44f41318369e825ba980ccaddfe1bc17330bebd008bfc02868ce648"
+    },
+    {
+      "path": "docs/superpowers/plans/2026-10-20-seamless-world-camps.md",
+      "sha256": "04422159ec9db97f4328e222a10c4b8f4c334d6ddb15dbc7090c31953538ca9e"
+    },
+    {
+      "path": "docs/superpowers/plans/2026-10-24-entity-startup-profile.md",
+      "sha256": "1d56870a621a701fabedbad0a99a93935a773cfe5b5c974c0284670a49a0fde6"
+    },
+    {
+      "path": "src/audio/soundManager.ts",
+      "sha256": "acf148dad84c3ea1f3f64fc796dab445c75c236ee3de2bd989a61c18cfdc1309"
+    },
+    {
+      "path": "src/game/IsometricEngine.ts",
+      "sha256": "4795e485b09b63c32be3d12a835dbcb6a1b933605cff53cf537bcd4853330a86"
+    },
+    {
+      "path": "src/game/art.ts",
+      "sha256": "f24fe1a3329a750ae956a1b1c35f5a8a6ccd78423d99233b625dac6c491af1f1"
+    },
+    {
+      "path": "src/game/buildingRecipes.ts",
+      "sha256": "4514d33da6faf0d91fe9c41c095816a6559f8d335894acbcf31ab853d949df13"
+    },
+    {
+      "path": "src/game/combat.ts",
+      "sha256": "d9f4155b8e4ecfe3158e90ecc5b6910823af4de6ac198397dd8c57c8b51c20b3"
+    },
+    {
+      "path": "src/game/compound.ts",
+      "sha256": "a8a37ecce5383d06671e4fe57b54f8ec0fc7b0ebc14525d51110b2722e122a7f"
+    },
+    {
+      "path": "src/game/diplomacy.ts",
+      "sha256": "dc393d34f69628c8f7243310e4415d92eebe1d20fbc39032fe5a388db8f6c247"
+    },
+    {
+      "path": "src/game/equipmentRules.ts",
+      "sha256": "7add9af028a73655c1da136dc90fe21075bef19ef04f3316f507795ee3466f62"
+    },
+    {
+      "path": "src/game/farmRenderer.ts",
+      "sha256": "ddd8d5c8e4713ef856bd7205038b6be44bdbf66d143b8bae020160e6e3bba233"
+    },
+    {
+      "path": "src/game/frameDiagnostics.ts",
+      "sha256": "9ecba9e7fd499dbead2649d6fa0979df7a5ca345d8cffad19c8ce15bda276fa2"
+    },
+    {
+      "path": "src/game/home.ts",
+      "sha256": "d5e609f91b1c702f8c3605e27137ad2d3d21ebfc14d98a4301dfebdd0f3c6c11"
+    },
+    {
+      "path": "src/game/house.ts",
+      "sha256": "91508bd33748db9a40295bd44e9ecc2d51b6ede024dc068bced7613b57f3e612"
+    },
+    {
+      "path": "src/game/houseRenderer.ts",
+      "sha256": "6cc8fe7d30219cc837d5abcfd3d3d0fe363f96066b6d8cd87ce2eacf3edec35c"
+    },
+    {
+      "path": "src/game/items.ts",
+      "sha256": "96337485eff172cbc3936f742af827a4c975275f800d8445b232f050649317f0"
+    },
+    {
+      "path": "src/game/maps.ts",
+      "sha256": "99a68c1d73068e11bd3a52ad1d0542102384822dbbb68310c8d20a7af34897f6"
+    },
+    {
+      "path": "src/game/navigation.ts",
+      "sha256": "defeedf6c1670922f76b115c5da0a1bdce4f64afa8fb5b7eca0ee5c48065b662"
+    },
+    {
+      "path": "src/game/renderDiagnostics.ts",
+      "sha256": "39670a730cb08aab1cee523e3ac5695f334552bc0acc1ced79afb7acc40f607b"
+    },
+    {
+      "path": "src/game/visualTheme.ts",
+      "sha256": "1107c9e537577995d051804ea36c84581c01a9f5743ae2d2de24f3a771277a48"
+    },
+    {
+      "path": "src/game/weather.ts",
+      "sha256": "cb9ca518619740889713bbadaf0dab31a37daff4f35383ed14340a9805dd2dda"
+    },
+    {
+      "path": "src/game/world.ts",
+      "sha256": "9ad6447e3e2cce3f9f391856bd3008856a49c2849a35d71aa1368b1893510949"
+    },
+    {
+      "path": "src/game/worldRoutes.ts",
+      "sha256": "f802c4a6348bc5211912d0e16066120bc4152500ef7871db088d8ac4ad1346c5"
+    },
+    {
+      "path": "src/game/worldScenery.ts",
+      "sha256": "7f0d13181a184205edbed7a94331f1d75ef44d1e42e75b5e7553ca54ddf5afcc"
+    }
+  ]
+}
