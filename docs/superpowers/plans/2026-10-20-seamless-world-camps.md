@@ -2064,3 +2064,17 @@ a2显式IPC导出先于15个服务端断线deadline，最终DB/backup财务和�
 最终a4单独build/HTTP/指纹2正22负检查通过，CLI71950 ready→quit→exit0、39156独占释放，所有浏览器result.json仍不存在。初TS2454和a1/a2/a3中间方法保留，最终类型通过；未重新运行不涉及的850游戏测试或Vite构建。公报2026-10-26-manual-ground-profile-readiness.json明确actualPerformanceMeasurements=null；代码就绪不等于客户端性能改善。独立复核与真实用户执行按单独计划跟进，待拿到当前同实例数据后分析scroll/full/texture与回调延迟，再决定局部渲染修复。完整玩法/地图/营地/离线攻防目标保持，总目标active。
 
 最终独立只读复核无剩余P1/P2，105项来源/资源/证据哈希及两份a4 bundle/source fingerprint吻合；计时问题已关闭，未读DB/浏览器/复跑。手动入口代码普通推送，实际用户运行仍待发生，不能将合成960行、HTTP就绪或源代码检查作为性能实测。
+
+## 爆破节奏选择与NPC阶段建筑复用（2026-10-26）
+
+上一轮88f744a为实质进展：可手动运行的同实例地面诊断工具已推送、owned7039/PID13212/39156启动就绪。当前HTTP仍ready但无result，未重启或换浏览器自动化；用户不清楚是否运行，直接以服务结果为准，不把无结果推断为已完成或已终止。68项客户端/图片源码绑定保持。
+
+用户补答此前爆破问题，明确选择“少量起步，高产出放在危险据点”，已补入设计§4.3。之前采石新C4从3试调1符合方向，但不把偏好答复写成逐字批准数字1或全局平衡通过；其它高产点须看真实守卫/门禁/运输成本。
+
+独立确认服务器每只NPC重读全部持久建筑，含无关离线营地。没有重复已证较慢的Object.values/for-in替换，也没有引入公开可变状态与rollback失效难以保证的长期空间索引；只在一次同步simulateMonsters、确有查询且全state多monster时，按own keys收集world引用字典，再交原buildingsFor按各NPC坐标筛选。默认source仍每次取当前state，单总monster走旧路径，下一phase重建。保留HP0覆盖、known/80半径/顺序/引用/generated合并；NPC调用链不改建筑，死亡的bed/clearSpawn和后续防御仍各自实时查询。
+
+新9例：初1红6绿（16→预期1），现常规0/1/16读数0/1/1，远处/等待重生0；两地点closed/dead覆盖、继承/错图、开门/字典替换/敏感删除、save拒绝完整undo/关门重试/后续一次hit重启、公共与床复活/掉落一次/出生碰撞/后续远NPC跳过。定向180绿，首58文件857绿。首types TS18048修local candidates；额外测试house函数导入错误改navigation，日志均保留。最终58文件859绿、types0进程退出后build0，JS n4x6Auw2；旧__dirname/大包与插件timing备注保留。
+
+首types观察超10秒仍在运行、随后build与其短暂重叠，已披露，最后按终态顺序重验。未做大型负载或不受控墙钟提速对比；检查时间窗口记录，未来manual采样如重叠要披露其它主机工作。公报2026-10-26-npc-building-phase-results.json绑定14source/18证据；读取计数是逻辑结果，不能称16倍提速、16人容量、GPU/总内存或原生行走通过。其它move/snapshot/core与死亡等全局扫描仍在，完整空间查询/游戏目标继续active。
+
+最终独立只读复核无P1/P2，32项哈希和Git88 baseline一致，新增致死/床出生碰撞及敏感delete断言有效，859/最终types/build日志吻合；manual68客户端/图片源码保持且result尚不存在，review未读DB/调用浏览器/复跑。普通推送本次服务器阶段减扫与用户节奏决策，未部署；原始完整目标继续。

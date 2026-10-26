@@ -257,7 +257,7 @@ export class GameWorld {
     this.pendingDisconnects.clear();
   }
 
-  private buildingsFor(p: { mapId: MapZoneId; x: number; y: number }, to?: { x: number; y: number }): BuildingEntity[] {
+  private buildingsFor(p: { mapId: MapZoneId; x: number; y: number }, to?: { x: number; y: number }, source = this.state.buildings): BuildingEntity[] {
     const persistent: BuildingEntity[] = [];
     const known = p.mapId === 'world' ? new Set<string>() : undefined;
     const padding = MAX_BUILDING_HALF_EXTENT + PLAYER_COLLISION_RADIUS + 1e-9; // Conservative rounding margin; exact checks below stay unchanged.
@@ -265,8 +265,8 @@ export class GameWorld {
     const minY = Math.min(p.y, to?.y ?? p.y) - padding, maxY = Math.max(p.y, to?.y ?? p.y) + padding;
     const inWindow = (b: BuildingEntity) => !(b.x < minX || b.x > maxX || b.y < minY || b.y > maxY)
       || (b.type === 'door' || b.type === 'safe_door') && !Number.isFinite(b.doorWidth ?? 1);
-    for (const id of Object.keys(this.state.buildings)) {
-      const b = this.state.buildings[id];
+    for (const id of Object.keys(source)) {
+      const b = source[id];
       if (b.mapId === p.mapId && (p.mapId !== 'world' || distance(p, b) < 80)) {
         known?.add(b.id); // A culled override must still hide its generated definition.
         if (!to || inWindow(b)) persistent.push(b);
@@ -894,7 +894,9 @@ export class GameWorld {
     const publicPlayers = players.filter(p => p.mapId === 'world');
     for (const p of publicPlayers) this.ensureMonsters(p, undo);
     let changed = false, dirty = false, simulated = false;
-    for (const monster of Object.values(this.state.monsters)) {
+    const monsters = Object.values(this.state.monsters);
+    let publicBuildings: PersistedWorld['buildings'] | undefined;
+    for (const monster of monsters) {
       if (!publicPlayers.some(p => distance(p, monster) <= 40)) continue;
       simulated = true;
       const dead = monster.hp <= 0 || monster.state === 'dead';
@@ -905,7 +907,17 @@ export class GameWorld {
         monster.windup = 0; monster.attackCooldown = 0; delete monster.respawnAt; delete monster.targetId; changed = dirty = true;
       }
       const spawn = { x: monster.spawnX ?? monster.x, y: monster.spawnY ?? monster.y };
-      const buildings = this.buildingsFor({ mapId: 'world', x: monster.x, y: monster.y });
+      // This synchronous NPC phase does not change buildings. Reuse public refs,
+      // while keeping the original per-monster window, overrides and static query.
+      if (monsters.length > 1 && !publicBuildings) {
+        const candidates: PersistedWorld['buildings'] = Object.create(null);
+        for (const id of Object.keys(this.state.buildings)) {
+          const b = this.state.buildings[id];
+          if (b.mapId === 'world') candidates[id] = b;
+        }
+        publicBuildings = candidates;
+      }
+      const buildings = this.buildingsFor({ mapId: 'world', x: monster.x, y: monster.y }, undefined, publicBuildings);
       const reachable = (p: Player) => p.mapId === 'world' && p.hp > 0 && distance(p, spawn) <= 14 && hasLineOfSight(monster, p, buildings);
       const previous = publicPlayers.find(p => p.id === monster.targetId && reachable(p));
       const target = previous || publicPlayers.filter(p => reachable(p) && distance(p, monster) <= 6).sort((a, b) => distance(a, monster) - distance(b, monster))[0];

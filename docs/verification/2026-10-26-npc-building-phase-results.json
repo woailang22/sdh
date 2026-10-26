@@ -1,0 +1,142 @@
+{
+  "kind": "npc-phase-public-building-reference-reuse",
+  "date": "2026-10-26",
+  "baseCommit": "88f744a578885fdc6606fdde35d4b68dcddbd9e6",
+  "overallGoalComplete": false,
+  "productionFiles": [
+    "server/worldState.ts"
+  ],
+  "baselineSourceHash": "5ccb60581b9d8c4b09969714e1413da4f37429b396db5f67858200ad655710b6",
+  "sourceHashes": {
+    "server/worldState.ts": "ec35198d92fb51429de8541282cf500283c57776b1d76e3c2bbc9a6cbba1b7e4",
+    "server/npcBuildingPhase.test.ts": "9dbf2294b4bab3bdc2f2f19ec91c649aac62541e5fbf6fbc02ce67801e02ea5c",
+    "server/tickUndo.ts": "3fecad4e35c362f3dacb67e9e96cfbc127f2e29cc857315078009aa1fdd0c4c3",
+    "server/db.ts": "9cf91e65d64e6372bb897d98b8bdda843a03f42f409240f272abc4ed09d83f0f",
+    "server/worldQueries.ts": "0bdc8625d63d959f1baaceba232702dba7bfc7f7612dcf720757fd8268898822",
+    "src/game/navigation.ts": "defeedf6c1670922f76b115c5da0a1bdce4f64afa8fb5b7eca0ee5c48065b662",
+    "src/game/world.ts": "72084a8e566097a6ca04504728def51c3c83ac7ee426edf8e92096f1b24e8be5",
+    "src/game/items.ts": "4c9fdf817ed92b33aa6210ef05b6a69dfb5d9e18105e8faeb43dbed4efd824db",
+    "src/game/home.ts": "d5e609f91b1c702f8c3605e27137ad2d3d21ebfc14d98a4301dfebdd0f3c6c11",
+    "src/game/crafting.ts": "eb43bd22c9ee159759a1b23a76d64bbbdaeaf0c3a89cbc22fa7df87c90d34105",
+    "src/game/combat.ts": "ba03d05d852cd9ea560b0d708460ac90d65e2fe5f6fde81c3d45a3d03d761998",
+    "src/game/buildingRecipes.ts": "4514d33da6faf0d91fe9c41c095816a6559f8d335894acbcf31ab853d949df13",
+    "src/game/equipmentRules.ts": "7add9af028a73655c1da136dc90fe21075bef19ef04f3316f507795ee3466f62",
+    "src/types/game.ts": "7066ee68912ef7fa99602a2866137a2c87244974e751d16ff8cc1a0615a51337"
+  },
+  "evidenceHashes": {
+    "data/npc-building-phase-baseline-source-20261026.txt": "5ccb60581b9d8c4b09969714e1413da4f37429b396db5f67858200ad655710b6",
+    "data/audit-npc-building-phase-20261026.py": "2ce0545ce8c04fdaa4b3e91fcc68dce5a1d8262de9bb9cd84afc98070ead1a8a",
+    "data/npc-building-phase-red-20261026.log": "c95ff09aed131324e4c442a7344488dfc67da76006b71afd6d3a0bf9852ba85b",
+    "data/npc-building-phase-targeted-20261026.log": "f2808fefe5a68c5e1b02721c7456189648fa786373897934f79fdc5eee7e2a80",
+    "data/npc-building-phase-full-20261026.log": "07035ae1f12a854aafeb06e4f2a04caa272056200676a7cbc62960192bbd95a6",
+    "data/npc-building-phase-full-final-20261026.log": "40b2a34184f4f477dcea0f2b0fcfd4b28fc334a0e3d615eed93ae8ad720f370e",
+    "data/npc-building-phase-types-20261026.log": "722f831eea3a2ef32b89f58088c73c96ddce4e49b333cfe70a0bd273c6706754",
+    "data/npc-building-phase-types-final-20261026.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "data/npc-building-phase-types-final2-20261026.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "data/npc-building-phase-build-20261026.log": "7d4abf971fdd8e13286a35fa1c47784a8ab342e81053628a3a37b8bf9f7efc6d",
+    "data/npc-building-phase-build-final-20261026.log": "f01423d5b5c9ad45fdae4b9753890c1363ae0ba47ecb350b828377efb8e5d101",
+    "data/npc-building-phase-lethal-20261026.log": "75a6cdaf93bcdebc0bc5e87cfa812c42a5ac1c3d8878ef51dd44ea37a6cb5741",
+    "data/npc-building-phase-check-window-start-20261026.json": "a6c74733c850fc0177e04e0568aebbeeadf47f14546fc84ca82b43094e5f44c5",
+    "data/npc-building-phase-check-window-20261026.json": "f7cfda131a9ef9da30fc9035133250913ac72b58b5258aae189c78ab260206af",
+    "data/npc-building-phase-check-window-final-20261026.json": "fa5ae60f140f867b0b48796f6f7dbae04bd88e9a58cb656655459c1ba9de8006",
+    "data/manual-ground-user-20261026-a1/manifest.json": "ed5f58691ddf9d6439d7f418becfe7509e1622f240e28f51dc36d6696704ea38",
+    "data/manual-ground-user-20261026-a1/launch-verified.json": "ad74e51d8b4db0e26ac2b86a465ce68aef45b985202a8f5fccb963aacdc890e6",
+    "docs/verification/2026-10-26-manual-ground-profile-readiness.json": "577a2563a6d7d56f311eb554311d50ee6038fabfa20580a4ec7d9951749ca3f6"
+  },
+  "change": {
+    "lifetime": "Only one synchronous simulateMonsters call; no state field or persistent index.",
+    "selection": "Lazily collect own-key world-map building references once when a query is needed and total stored monsters exceed one. One total monster keeps old path.",
+    "perNpcRules": "Original <80 distance, own-key order, live references, HP0 overrides, known-ID suppression, generated query at actual NPC coordinates retained. Default source evaluated afresh for every other caller.",
+    "mutations": "No buildings changed during this synchronous NPC call chain. Damage/death may change players, drops and camp fields. Respawn clearSpawn still uses full current default source; future ticks rebuild the temporary view."
+  },
+  "verification": {
+    "newCases": 9,
+    "firstRed": {
+      "failed": 1,
+      "passed": 6,
+      "observedSleepingMapReads": 16,
+      "expected": 1
+    },
+    "currentReadCountsRegularNpcQueries": {
+      "npc0": 0,
+      "npc1": 1,
+      "npc16": 1,
+      "allDistant": 0,
+      "allDeadWaiting": 0
+    },
+    "initialTargetedFiles": 4,
+    "initialTargetedTests": 180,
+    "firstFullFiles": 58,
+    "firstFullTests": 857,
+    "extendedTestFirstFailure": "Wrong test-only import of isPositionBlocked from house; imported navigation instead. 1failed/8passed log retained. Not a production respawn failure.",
+    "finalFullFiles": 58,
+    "finalFullTests": 859,
+    "firstTypesFailure": "TS18048 temporary dictionary possibly undefined; fill explicitly typed local candidates then assign. Log retained.",
+    "finalTypesExit": 0,
+    "initialTypeBuildOverlap": true,
+    "finalTypeThenBuildSequential": true,
+    "buildExit": 0,
+    "buildJs": "index-n4x6Auw2.js",
+    "buildWarnings": [
+      "Existing native configLoader __dirname",
+      "Chunk larger than500kB",
+      "Final build plugin timing note; not gameplay timings"
+    ],
+    "covered": [
+      "Multiple NPC locations and open/generated versus closed/persistent door",
+      "Destroyed override still suppresses original closed generated door",
+      "Inherited and wrong-map buildings excluded",
+      "Direct door edit, whole dictionary replacement and sensitive delete honored next phase",
+      "Lethal hit followed by public/bed respawn, single actual inventory/counter drop and later distant monster skip",
+      "Bed spawn checks current camp collisions through default source",
+      "Shared-save rejection restores whole logical state, changed door affects retry, later hit persists once across restart"
+    ],
+    "independentReadOnlyReview": {
+      "p1": 0,
+      "p2": 0,
+      "hashesMatched": 32,
+      "baselineSourceComparedToGit": true,
+      "lethalAndSensitiveDeleteAssertionsReviewed": true,
+      "manualClientAndAssetHashesMatched": 68,
+      "browserOrDatabaseOrTestsRunByReviewer": false,
+      "limitsReviewed": true
+    }
+  },
+  "manualDiagnostic": {
+    "ownedSession": 7039,
+    "serverPid": 13212,
+    "port": 39156,
+    "sameInstanceReady": true,
+    "resultSavedAtCheck": false,
+    "clientAndAssetHashesStillMatch": 68,
+    "nativePerformanceAccepted": false,
+    "hostWorkWindow": {
+      "kind": "regression-check-window",
+      "potentialHostInterferenceMustBeDisclosed": true,
+      "startedAt": "2026-10-26T06:12:09.0682340Z",
+      "manualRun": "manual-ground-user-20261026-a1",
+      "loadBenchmarkRun": false,
+      "endedAt": "2026-10-26T06:24:35.572Z",
+      "manualReady": true,
+      "manualResultSaved": false,
+      "manualClientAndAssetsCurrentHashes": 68,
+      "note": "Coarse potential host-work window, not continuous load. Full regression followed by tsc then build in final pass. Earlier first tsc/build overlapped and first type failure retained. No load benchmark or wall-clock performance comparison. Any manual sample overlapping this window must disclose other host work."
+    },
+    "note": "No real browser output yet at checked time. A future sample overlapping validation must disclose possible other host work. No browser automation or new game server/database launched for this change."
+  },
+  "userPaceDecision": {
+    "source": "Direct user reply received this goal turn",
+    "selected": "少量起步，高产出放在危险据点",
+    "existingFreshQuarryC4": 1,
+    "numericOneExplicitlySelectedByUser": false,
+    "otherExplosiveSourcesAdjustedThisTurn": false,
+    "followup": "Audit actual guards, access/entry costs and return logistics before treating a high-output source as dangerous; labels alone do not prove risk."
+  },
+  "limitations": [
+    "Read-count reduction is structural logical evidence, not wall-clock speedup or16-player capacity. No load benchmark run.",
+    "If total stored monsters exceed one but only one needs buildings, a projection is still built; not universally faster.",
+    "Player death/bed lookup/clearSpawn and later camp defense can still scan the full dictionary; measured1 is the ordinary NPC-query fixture, not every whole tick.",
+    "Movement, snapshots, core lookup and other calls retain existing global scans; this does not finish every spatial-query requirement.",
+    "Client rendering, GPU/whole-browser memory/native60s walk and long-term multi-player economy remain unverified. Existing manual run is retained."
+  ]
+}
