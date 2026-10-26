@@ -2,7 +2,7 @@ import { randomUUID } from 'node:crypto';
 import type { BuildingEntity, BuildableType, Equipment, InteractableEntity, Item, MapZoneId, MonsterEntity, OnlinePlayer, WeatherType } from '../src/types/game';
 import { ARMOR_BONUS_TABLE, ITEM_DEFS, makeItem, WEAPON_DAMAGE } from '../src/game/items';
 import { CRAFT_RECIPES, craftingRecipe, findCraftingWorkbench, recipeFacility, recipeRequiresWorkbench } from '../src/game/crafting';
-import { ARMOR_REDUCTION, killReward, MELEE, WEAPONS } from '../src/game/combat';
+import { ARMOR_REDUCTION, killReward, MELEE, RAID_DAMAGE, WEAPONS } from '../src/game/combat';
 import { BUILD_RECIPES } from '../src/game/buildingRecipes';
 import { ACID_SHIELD_DRAIN } from '../src/game/weather';
 import { marketOffer } from '../src/game/market';
@@ -747,7 +747,7 @@ export class GameWorld {
       requireRule(this.count(p, String(a.supplyId)) >= 1, '破拆物资不足');
       this.remove(p, String(a.supplyId), 1);
       const target = clone(b);
-      target.hp = Math.max(0, target.hp - (a.supplyId === 'c4_explosive' ? 900 : 750));
+      target.hp = Math.max(0, target.hp - RAID_DAMAGE[a.supplyId]);
       if (target.hp <= 0) { target.isOpen = true; target.isLocked = false; }
       if (target.type === 'anchor_core' && target.hp <= 0 && this.state.camps[p.mapId]) this.state.camps[p.mapId].state = 'breached';
       this.state.buildings[target.id] = target; p.actionAt.attack = this.now(); p.combatUntil = this.now() + 30_000;

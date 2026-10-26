@@ -1,0 +1,155 @@
+{
+  "kind": "raid-cost-information-verification",
+  "base": "da45e02ac3b8892713b8bdb4defa5a7abbb244be",
+  "date": "2026-10-26",
+  "goalComplete": false,
+  "damage": {
+    "c4_explosive": 900,
+    "thermite_charge": 750
+  },
+  "actualServerDamageUnchanged": true,
+  "recipes": 0,
+  "merchantOffers": 0,
+  "sourcesVerified": [
+    {
+      "id": "world:-5:-11:i:mtn_quarry:q_powder",
+      "name": "采石炸药库",
+      "x": -140,
+      "y": -344,
+      "demolitionItems": [
+        {
+          "itemId": "c4_explosive",
+          "count": 3
+        }
+      ]
+    },
+    {
+      "id": "world:-18:-6:i:mtn_deep:deep_ammo",
+      "name": "深林佣兵战术军火箱",
+      "x": -574,
+      "y": -172,
+      "demolitionItems": [
+        {
+          "itemId": "c4_explosive",
+          "count": 3
+        },
+        {
+          "itemId": "thermite_charge",
+          "count": 4
+        }
+      ]
+    }
+  ],
+  "ui": {
+    "currentHpEstimate": true,
+    "carriedShortfall": true,
+    "partialBreachStillAllowed": true,
+    "noCraftOrMerchantPromise": true,
+    "noSilentDefenseEvasionPromise": true,
+    "modalViewportHeightBounded": true
+  },
+  "verification": {
+    "initiallyFailing": 6,
+    "targetedTests": 211,
+    "fullTests": 821,
+    "fullTestFiles": 54,
+    "typesExit": 0,
+    "buildExit": 0,
+    "bundle": "index-Cb_smGou.js",
+    "independentReadOnlyReview": {
+      "p1": 0,
+      "p2": 0,
+      "noDependencyCycle": true,
+      "fixedDamageAndPartialAttackChecked": true
+    },
+    "dataAndRecipeFilesUnchanged": true
+  },
+  "limitations": [
+    "Actual GameWorld actions and SSR information tests, not native browser rendering/mobile layout or performance acceptance.",
+    "The2026-10-23 earned offline-raid walkthrough was inspected as existing evidence; no new earned route was run this turn.",
+    "One test-only disabled check initially matched a CSS variant rather than a DOM attribute; corrected and failed log retained.",
+    "No full audit of all equipment descriptions, long-run economy, GPU, total browser memory or whole-goal completion. Only owned QA databases are used by tests; the real data/sdc.sqlite was not opened."
+  ],
+  "sources": [
+    {
+      "path": "server/worldState.ts",
+      "sha256": "e3ff90b2b89b3b7c96501b368ae0c273a32b7ee3dfff307fdc67f7cf43efbe33"
+    },
+    {
+      "path": "server/raidPlanning.test.tsx",
+      "sha256": "66a201d922885b1572bdb635e3a883a9083c3f7cddca5ada2d09d1b908512d2b"
+    },
+    {
+      "path": "src/game/combat.ts",
+      "sha256": "ba03d05d852cd9ea560b0d708460ac90d65e2fe5f6fde81c3d45a3d03d761998"
+    },
+    {
+      "path": "src/game/items.ts",
+      "sha256": "4c9fdf817ed92b33aa6210ef05b6a69dfb5d9e18105e8faeb43dbed4efd824db"
+    },
+    {
+      "path": "src/game/crafting.ts",
+      "sha256": "eb43bd22c9ee159759a1b23a76d64bbbdaeaf0c3a89cbc22fa7df87c90d34105"
+    },
+    {
+      "path": "src/game/maps.ts",
+      "sha256": "99a68c1d73068e11bd3a52ad1d0542102384822dbbb68310c8d20a7af34897f6"
+    },
+    {
+      "path": "src/game/world.ts",
+      "sha256": "9ad6447e3e2cce3f9f391856bd3008856a49c2849a35d71aa1368b1893510949"
+    },
+    {
+      "path": "src/game/market.ts",
+      "sha256": "3060e8932a1d59349c9dc783f335b21a1ce6eab98a3d69549ca32b1b59bc59d4"
+    },
+    {
+      "path": "src/components/InventoryModal.tsx",
+      "sha256": "4f3320fa1e0dd99f0cbbb77cfe6bdbcd650b68858504651feea34d6f1c50c9b4"
+    },
+    {
+      "path": "src/components/RaidModal.tsx",
+      "sha256": "4916a69bae940e129d02c0d8ebeb6dc35628136fbcc9cde85cfa18c0dcf3a2ba"
+    },
+    {
+      "path": "docs/verification/2026-10-23-earned-offline-raid-results.json",
+      "sha256": "74f1683fe1b0ebb715365858a415552d93b4822249e6bceb0ec77597e1bc0d8f"
+    },
+    {
+      "path": "docs/superpowers/plans/2026-10-26-raid-cost-information.md",
+      "sha256": "64b465e10f31a5aaf359eb4844914d78bc5609302832db93724f6e95fd227dcf"
+    },
+    {
+      "path": "docs/superpowers/plans/2026-10-20-seamless-world-camps.md",
+      "sha256": "3f96328817db2ccc68b00a7550e45aa0176ed3863144c535d39971b674a8f837"
+    },
+    {
+      "path": "data/audit-raid-cost-information-20261026.ts",
+      "sha256": "4725ea1e5205e0cbc653680049a631e433b9f7474b8e3e0eee8cfc7a9df6d769"
+    },
+    {
+      "path": "data/raid-cost-information-red-20261026.log",
+      "sha256": "cee6d23c4e49510d80201ee4536a044617b48e040b3196727f85e6f0b23cdeb7"
+    },
+    {
+      "path": "data/raid-cost-information-target-20261026.log",
+      "sha256": "b89006bc9c2aab8e69c488c562f8457512e6f9c50542e86442c02fff87518cd0"
+    },
+    {
+      "path": "data/raid-cost-information-target-final-20261026.log",
+      "sha256": "4751df0024e004c3049e2250e32a4889b21ce8fae891ba24d32ae930c69c01cb"
+    },
+    {
+      "path": "data/raid-cost-information-full-20261026.log",
+      "sha256": "b9cc6ae5803fca2b65a9ae76afc0a158045dee60e4a874b8bf3d7fb40257b779"
+    },
+    {
+      "path": "data/raid-cost-information-types-20261026.log",
+      "sha256": "7f3594d7a965c703e6361ae50c0ef50cf9c344c621d801592b074b48554f4235"
+    },
+    {
+      "path": "data/raid-cost-information-build-20261026.log",
+      "sha256": "74172fd398ab0bbd1e040a970880000dec37ec719ad8ca9f6dd13f53782cb37c"
+    }
+  ]
+}

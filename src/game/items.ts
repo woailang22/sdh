@@ -1,5 +1,6 @@
 import type { Item } from '../types/game';
 import { gatheringDescription } from './equipmentRules';
+import { RAID_DAMAGE } from './combat';
 
 export type ItemQuality = 0 | 1 | 2 | 3;
 
@@ -40,8 +41,8 @@ export const ITEM_DEFS: Record<string, ItemDef> = {
   fish2: { id: 'fish2', name: '裂隙荧光金鳟', category: 'food', icon: '🐟', rarity: 2, maxCount: 99, desc: '裂隙水域荧光鱼，售价更高。', buyPrice: 45, sellPrice: 32, satiety: 40, heal: 10 },
   water: { id: 'water', name: '高纯度饮用水', category: 'food', icon: '💧', rarity: 2, maxCount: 99, desc: '水井/餐馆产出，恢复15点饱食。', buyPrice: 8, sellPrice: 5, satiety: 15, heal: 0 },
   ammo: { id: 'ammo', name: '7.62mm步枪弹药包', category: 'material', icon: '🎯', rarity: 3, maxCount: 999, desc: '通用步枪备弹，按R装填。', buyPrice: 10, sellPrice: 6 },
-  c4_explosive: { id: 'c4_explosive', name: '高爆C4塑胶炸药', category: 'tool', icon: '💣', rarity: 4, maxCount: 20, desc: '突袭破拆高耐久安全门。', buyPrice: 150, sellPrice: 100 },
-  thermite_charge: { id: 'thermite_charge', name: '微型铝热熔切弹', category: 'tool', icon: '🔥', rarity: 4, maxCount: 20, desc: '无声熔切，破拆不拉警报。', buyPrice: 180, sellPrice: 120 },
+  c4_explosive: { id: 'c4_explosive', name: '高爆C4塑胶炸药', category: 'tool', icon: '💣', rarity: 4, maxCount: 20, desc: `攻营破拆物资，每份破拆${RAID_DAMAGE.c4_explosive}耐久。破门不产生战利品，需搜取实际仓库。`, buyPrice: 150, sellPrice: 100 },
+  thermite_charge: { id: 'thermite_charge', name: '微型铝热熔切弹', category: 'tool', icon: '🔥', rarity: 4, maxCount: 20, desc: `攻营破拆物资，每份破拆${RAID_DAMAGE.thermite_charge}耐久。无法避开营地自动防御或陷阱。`, buyPrice: 180, sellPrice: 120 },
   medkit: { id: 'medkit', name: '纳米急救箱', category: 'medical', icon: '💉', rarity: 4, maxCount: 10, desc: '点击使用，恢复60点生命。', buyPrice: 120, sellPrice: 95, heal: 60 },
   bandage: { id: 'bandage', name: '草药绷带', category: 'medical', icon: '🩹', rarity: 2, maxCount: 10, desc: '点击使用，恢复30点生命。', buyPrice: 30, sellPrice: 20, heal: 30 },
   antidote: { id: 'antidote', name: '抗酸蚀解毒剂', category: 'medical', icon: '💊', rarity: 3, maxCount: 10, desc: '解除酸雨/毒雾持续掉血。', buyPrice: 80, sellPrice: 55, heal: 10 },

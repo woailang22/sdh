@@ -1,5 +1,7 @@
 import type { WeatherType } from '../types/game';
 
+export const RAID_DAMAGE = { c4_explosive: 900, thermite_charge: 750 } as const;
+
 interface DamageSnapshot {
   hp: number; shield: number; maxShield: number; lastDamageAt: number; lastCombatDamageAt?: number;
 }

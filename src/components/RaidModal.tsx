@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import type { BuildingEntity, Equipment, Item } from '../types/game';
 import { ShieldAlert, Bomb, X } from 'lucide-react';
+import { RAID_DAMAGE } from '../game/combat';
 
 interface RaidModalProps {
   door: BuildingEntity;
@@ -17,8 +18,8 @@ export function RaidModal({ door, onClose, onRaidAttempt, resources, inventory =
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
   useEffect(() => () => { if (timer.current) clearTimeout(timer.current); }, []);
   const supplies = [
-    { id: 'c4_explosive', name: '高爆C4塑胶炸药', icon: '💣', count: resources?.c4 ?? 0 },
-    { id: 'thermite_charge', name: '微型铝热熔切弹', icon: '🔥', count: inventory.reduce((count, item) => count + (item?.id === 'thermite_charge' ? item.count : 0), 0) },
+    { id: 'c4_explosive', name: '高爆C4塑胶炸药', icon: '💣', damage: RAID_DAMAGE.c4_explosive, count: resources?.c4 ?? 0 },
+    { id: 'thermite_charge', name: '微型铝热熔切弹', icon: '🔥', damage: RAID_DAMAGE.thermite_charge, count: inventory.reduce((count, item) => count + (item?.id === 'thermite_charge' ? item.count : 0), 0) },
   ];
   const breached = door.hp <= 0;
   const hpPercent = door.maxHp > 0 ? Math.max(0, Math.min(100, door.hp / door.maxHp * 100)) : 0;
@@ -31,7 +32,7 @@ export function RaidModal({ door, onClose, onRaidAttempt, resources, inventory =
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4">
-      <div role="dialog" aria-modal="true" aria-label="营地破拆" className="w-full max-w-xl bg-slate-900 border border-red-500/40 rounded-xl shadow-2xl overflow-hidden">
+      <div role="dialog" aria-modal="true" aria-label="营地破拆" className="w-full max-w-xl max-h-[90vh] bg-slate-900 border border-red-500/40 rounded-xl shadow-2xl overflow-y-auto">
         <div className="px-5 py-4 border-b border-red-500/30 flex items-center justify-between bg-red-950/30">
           <div className="flex items-center gap-3"><ShieldAlert className="w-6 h-6 text-red-400" /><div><h2 className="font-bold text-slate-100">营地破拆</h2><p className="text-xs text-slate-400">所属：{door.ownerName || '未知行者'}</p></div></div>
           <button onClick={onClose} aria-label="关闭破拆" className="p-2 text-slate-400 hover:text-white"><X className="w-5 h-5" /></button>
@@ -43,10 +44,11 @@ export function RaidModal({ door, onClose, onRaidAttempt, resources, inventory =
           </div>
           {breached ? <div className="rounded-lg bg-emerald-950/30 border border-emerald-700/50 p-4 text-sm text-emerald-200">建筑已被攻破。进入营地寻找真实储物箱，靠近后搜查并取出其中物资；破门本身不会产生战利品。</div> : <>
             <p className="text-xs text-slate-400">靠近目标后使用携带的破拆物资。每次消耗 1 份，耐久与扣除结果以服务器同步为准。</p>
-            <div className="space-y-2">{supplies.map(supply => <button key={supply.id} disabled={pending || supply.count <= 0} onClick={() => attack(supply)} className="w-full flex items-center justify-between gap-3 rounded-lg border border-red-800/50 bg-red-950/30 px-4 py-3 text-left text-sm text-slate-100 hover:bg-red-900/40 disabled:opacity-40 disabled:cursor-not-allowed">
-              <span>{supply.icon} {supply.name}<span className="block mt-1 text-xs text-slate-400">携带：{supply.count}</span></span><span className="flex items-center gap-1 text-red-300"><Bomb className="w-4 h-4" />{pending ? '等待同步' : '使用 1 份'}</span>
+            <p className="text-xs text-slate-500">按当前耐久估算，其他玩家进攻或修复会改变所需数量。物资不足时仍可分次破拆。</p>
+            <div className="space-y-2">{supplies.map(supply => <button key={supply.id} aria-label={`使用${supply.name}`} disabled={pending || supply.count <= 0} onClick={() => attack(supply)} className="w-full flex items-center justify-between gap-3 rounded-lg border border-red-800/50 bg-red-950/30 px-4 py-3 text-left text-sm text-slate-100 hover:bg-red-900/40 disabled:opacity-40 disabled:cursor-not-allowed">
+              <span>{supply.icon} {supply.name}<span className="block mt-1 text-xs text-slate-400">单份破拆 {supply.damage} · 预计还需 {Math.ceil(door.hp / supply.damage)} 份</span><span className="block mt-1 text-xs text-slate-400">携带：{supply.count}{supply.count < Math.ceil(door.hp / supply.damage) && ` · 仍缺 ${Math.ceil(door.hp / supply.damage) - supply.count} 份`}</span></span><span className="flex shrink-0 items-center gap-1 text-red-300"><Bomb className="w-4 h-4" />{pending ? '等待同步' : '使用 1 份'}</span>
             </button>)}</div>
-            {supplies.every(supply => supply.count <= 0) && <p className="text-xs text-amber-300">没有可用破拆物资，请先搜刮或制造。</p>}
+            {supplies.every(supply => supply.count <= 0) && <p className="text-xs text-amber-300">没有可用破拆物资。可搜刮北岭采石炸药库（C4）或深林佣兵战术军火箱（C4、铝热弹）；当前没有制造配方。</p>}
           </>}
           <button onClick={onClose} className="w-full rounded-lg bg-slate-800 py-2 text-sm text-slate-200 hover:bg-slate-700">返回营地</button>
         </div>

@@ -6,6 +6,7 @@ import { COLLECT_DEFS, COLLECT_SETS, TIER_COLOR, setProgress } from '../game/col
 import { ItemIcon } from './ItemIcon';
 import { RarityFrame } from './RarityFrame';
 import { gatheringDescription, inventoryCapacity } from '../game/equipmentRules';
+import { RAID_DAMAGE } from '../game/combat';
 
 interface InventoryModalProps {
   isOpen: boolean;
@@ -61,8 +62,8 @@ const EQUIP_META: Record<'weapon' | 'armor' | 'tool' | 'pack', { name: string; i
       if (it.id === 'throw_molly') return '燃烧 · 持续120';
       if (it.id === 'throw_smoke') return '烟雾 · 遮蔽脱战';
       if (it.id === 'throw_flash') return '闪光 · 致盲3秒';
-      if (it.id === 'thermite_charge') return '铝热 · 无声熔切';
-      if (it.id === 'c4_explosive') return 'C4 · 破拆400';
+      if (it.id === 'thermite_charge') return `铝热 · 破拆${RAID_DAMAGE.thermite_charge}`;
+      if (it.id === 'c4_explosive') return `C4 · 破拆${RAID_DAMAGE.c4_explosive}`;
       return gatheringDescription(it.id) ?? it.desc;
     },
   },
